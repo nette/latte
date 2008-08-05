@@ -273,8 +273,8 @@ final class TemplateFilters
 	public static function relativeLinks($template, $s)
 	{
 		return preg_replace(
-			'#(src|href|action)\s*=\s*"(?![a-z]+:|/|<)#',
-			'$1="' . /*Nette::*/Environment::getVariable('baseUri'),
+			'#(src|href|action)\s*=\s*"(?![a-z]+:|/|<|\\#)#',
+			'$1="' . $template->baseUri,
 			$s
 		);
 	}
