@@ -56,47 +56,47 @@ final class CurlyBracketsFilter
 
 	/** @var array */
 	public static $macros = array(
-		'block' => '<?php ob_start(); try { ?>',
-		'/block' => '<?php } catch (Exception $_e) { ob_end_clean(); throw $_e; } # ?>',
+		'block' => '<?php %:macroBlock% ?>',
+		'/block' => '<?php %:macroBlockEnd% ?>',
 
-		'snippet' => '<?php } if ($_cb->foo = $template->snippet($control#)) { $_cb->snippets[] = $_cb->foo; ?>',
+		'snippet' => '<?php } if ($_cb->foo = $template->snippet($control%:macroSnippet%)) { $_cb->snippets[] = $_cb->foo; ?>',
 		'/snippet' => '<?php array_pop($_cb->snippets)->finish(); } if (SnippetHelper::$outputAllowed) { ?>',
 
-		'cache' => '<?php if ($_cb->foo = $template->cache($_cb->key = md5(__FILE__) . __LINE__, $template->getFile(), array(#))) { $_cb->caches[] = $_cb->foo; ?>',
+		'cache' => '<?php if ($_cb->foo = $template->cache($_cb->key = md5(__FILE__) . __LINE__, $template->getFile(), array(%%))) { $_cb->caches[] = $_cb->foo; ?>',
 		'/cache' => '<?php array_pop($_cb->caches)->save(); } if (!empty($_cb->caches)) end($_cb->caches)->addItem($_cb->key); ?>',
 
-		'if' => '<?php if (#): ?>',
-		'elseif' => '<?php elseif (#): ?>',
+		'if' => '<?php if (%%): ?>',
+		'elseif' => '<?php elseif (%%): ?>',
 		'else' => '<?php else: ?>',
 		'/if' => '<?php endif ?>',
-		'foreach' => '<?php $_cb->iterators[] = $iterator; foreach (#): ?>',
-		'/foreach' => '<?php endforeach; $iterator = array_pop($_cb->iterators); ?>',
-		'for' => '<?php for (#): ?>',
+		'foreach' => '<?php foreach (%:macroForeach%): ?>',
+		'/foreach' => '<?php endforeach; array_pop($_cb->its); $iterator = end($_cb->its) ?>',
+		'for' => '<?php for (%%): ?>',
 		'/for' => '<?php endfor ?>',
-		'while' => '<?php while (#): ?>',
+		'while' => '<?php while (%%): ?>',
 		'/while' => '<?php endwhile ?>',
 
-		'include' => '<?php $template->subTemplate(#)->render() ?>',
-		'extends' => '<?php $template->subTemplate(#)->render() ?>',
+		'include' => '<?php %:macroInclude% ?>',
+		'extends' => '<?php %:macroExtends% ?>',
 
-		'ajaxlink' => '<?php echo $template->{$_cb->escape}(#) ?>',
-		'plink' => '<?php echo $template->{$_cb->escape}(#) ?>',
-		'link' => '<?php echo $template->{$_cb->escape}(#) ?>',
-		'ifCurrent' => '<?php #if ($presenter->getLastCreatedRequestFlag("current")): ?>',
+		'ajaxlink' => '<?php echo $template->{$_cb->escape}(%:macroAjaxlink%) ?>',
+		'plink' => '<?php echo $template->{$_cb->escape}(%:macroPlink%) ?>',
+		'link' => '<?php echo $template->{$_cb->escape}(%:macroLink%) ?>',
+		'ifCurrent' => '<?php %:macroIfCurrent%; if ($presenter->getLastCreatedRequestFlag("current")): ?>',
 
-		'attr' => '<?php echo Html::el(NULL)->#attributes() ?>',
-		'contentType' => '<?php Environment::getHttpResponse()->setHeader("Content-Type", "#") ?>',
-		/*'contentType' => '<?php \Nette\Environment::getHttpResponse()->setHeader("Content-Type", "#") ?>',*/
+		'attr' => '<?php echo Html::el(NULL)->%:macroAttr%attributes() ?>',
+		'contentType' => '<?php Environment::getHttpResponse()->setHeader("Content-Type", "%%") ?>',
+		/*'contentType' => '<?php \Nette\Environment::getHttpResponse()->setHeader("Content-Type", "%%") ?>',*/
 		'debugbreak' => '<?php if (function_exists("debugbreak")) debugbreak() ?>',
 
-		'!_' => '<?php echo $template->translate(#) ?>',
-		'!=' => '<?php echo # ?>',
-		'_' => '<?php echo $template->{$_cb->escape}($template->translate(#)) ?>',
-		'=' => '<?php echo $template->{$_cb->escape}(#) ?>',
-		'!$' => '<?php echo # ?>',
-		'!' => '<?php echo # ?>',
-		'$' => '<?php echo $template->{$_cb->escape}(#) ?>',
-		'?' => '<?php # ?>',
+		'!_' => '<?php echo $template->translate(%:macroModifiers%) ?>',
+		'!=' => '<?php echo %:macroModifiers% ?>',
+		'_' => '<?php echo $template->{$_cb->escape}($template->translate(%:macroModifiers%)) ?>',
+		'=' => '<?php echo $template->{$_cb->escape}(%:macroModifiers%) ?>',
+		'!$' => '<?php echo %:macroVar% ?>',
+		'!' => '<?php echo %:macroVar% ?>',
+		'$' => '<?php echo $template->{$_cb->escape}(%:macroVar%) ?>',
+		'?' => '<?php %:macroModifiers% ?>',
 	);
 
 	/** @var array */
@@ -106,7 +106,7 @@ final class CurlyBracketsFilter
 	private static $file;
 
 	/** @var string */
-	private static $extends;
+	private static $extends, $var, $modifiers;
 
 
 
@@ -141,14 +141,10 @@ final class CurlyBracketsFilter
 			$s
 		);
 
-		// internal variable
-		$s = "<?php\n"
-			/*. "use Exception, Nette\\SmartCachingIterator, Nette\\Environment, Nette\\Web\\Html, Nette\\Templates\\SnippetHelper;\n"*/
-			. "if (!isset(\$_cb)) \$_cb = \$template->_cb = (object) NULL;\n"  // internal variable
-			. "if (empty(\$_cb->escape)) \$_cb->escape = 'escape';\n"  // content sensitive escaping
-			. "if (!empty(\$_cb->caches)) end(\$_cb->caches)->addFile(\$template->getFile());\n" // cache support
-			. "\$iterator = NULL;\n" // iterator support
-			. "?>" . $s;
+		// internal state holder
+		$s = "<?php "
+			/*. "use Nette\\Templates\\CurlyBracketsFilter, Exception, Nette\\SmartCachingIterator, Nette\\Environment, Nette\\Web\\Html, Nette\\Templates\\SnippetHelper;\n"*/
+			. "\$_cb = CurlyBracketsFilter::initState(\$template) ?>" . $s;
 
 		// add local content escaping switcher
 		$s = preg_replace(array(
@@ -169,7 +165,7 @@ final class CurlyBracketsFilter
 		{
 			$key = preg_quote($key, '#');
 			if (preg_match('#[a-zA-Z0-9]$#', $key)) {
-				$key .= '(?=[|}\s])';
+				$key .= '(?=[^a-zA-Z0-9._-])';
 			}
 			$k[] = $key;
 		}
@@ -187,99 +183,249 @@ final class CurlyBracketsFilter
 
 
 	/**
-	 * Callback.
+	 * Callback for replacing text.
 	 */
 	private static function cb($m)
 	{
-		list(, $stat, $var, $modifiers) = $m;
-		$var = trim($var);
-		$var2 = NULL;
+		list(, $macro, self::$var, self::$modifiers) = $m;
+		return preg_replace_callback('#%(.*?)%#', array(__CLASS__, 'cb2'), self::$macros[$macro]);
+	}
 
-		if ($stat === 'block') {
-			if (substr($var, 0, 1) === ':') {
-				$func = '__cbblock' . md5(self::$file . "\00" . $var);
-				$call = self::$extends ? '' : "\ncall_user_func(array_shift(\$_cb->blocks['$var']), get_defined_vars())";
-				self::$blocks[] = array("<?php\n}\n\$_cb->blocks['$var'][] = '$func'; $call?>");
-				return "<?php\nfunction $func(\$params) { extract(\$params);\n?>";
+
+
+	/**
+	 * Callback for replacing text.
+	 */
+	private static function cb2($m)
+	{
+		if ($m[1]) {
+			$method = $m[1][0] === ':' ? __CLASS__ . ':' . $m[1] : $m[1];
+			/**/fixCallback($method);/**/
+			return call_user_func($method, trim(self::$var), self::$modifiers);
+		} else {
+			return trim(self::$var);
+		}
+	}
+
+
+
+	/**
+	 * {$var |modifiers}
+	 */
+	private static function macroVar($var, $modifiers)
+	{
+		return self::macroModifiers('$' . $var, $modifiers);
+	}
+
+
+
+	/**
+	 * {include ...}
+	 */
+	private static function macroInclude($var, $modifiers)
+	{
+		if (substr($var, 0, 1) === '#' || substr($var, 0, 1) === ':') {
+			preg_match('#^([^\s,]+),?\s*(.*)$#', $var, $m);
+			$var = '$template->getParams()'; // get_defined_vars()
+			if ($m[2]) $var = strncmp($m[2], 'array', 5) === 0 ? "$m[2] + $var" : "array($m[2]) + $var";
+			$var = 'call_user_func($_cb->cs[0], ' . $var. ')';
+			if ($m[1] === ':parent') {
+				return '$_cb->csX = array_shift($_cb->cs); ' . $var . '; array_unshift($_cb->cs, $_cb->csX)';
+
+			} elseif ($m[1] === ':this') {
+				return $var;
+
+			} else {
+				return '$_cb->cs = $_cb->f[' . var_export(substr($m[1], 1), TRUE) . ']; ' . $var;
 			}
-			$tmp = $var === '' ? 'echo ' : $var . '=';
-			$var = 'ob_get_clean()';
-
-		} elseif ($stat === '/block') {
-			$var = array_pop(self::$blocks);
-			if (is_array($var)) return $var[0];
-
-		} elseif ($stat === 'foreach') {
-			$var = '$iterator = new SmartCachingIterator(' . preg_replace('# +as +#i', ') as ', $var, 1);
-
-		} elseif ($stat === 'attr') {
-			$var = str_replace(') ', ')->', $var . ' ');
-
-		} elseif ($stat === 'snippet') {
-			if (preg_match('#^([^\s,]+),?\s*(.*)$#', $var, $m)) {
-				$var = ', "' . $m[1] . '"';
-				if ($m[2]) $var .= ', ' . var_export($m[2], TRUE);
-			}
-
-		} elseif ($stat === '/snippet') {
-			$var = ', "' . $var . '"';
-
-		} elseif ($stat === '$' || $stat === '!' || $stat === '!$') {
-			$var = '$' . $var;
-
-		} elseif ($stat === 'link' || $stat === 'plink' || $stat === 'ajaxlink' || $stat ===  'ifCurrent' || $stat ===  'include' || $stat ===  'extends') {
-			if ($stat === 'include' && substr($var, 0, 1) === ':') {
-				$func = '__cbblock' . md5(self::$file . "\00" . $var);
-				return "<?php call_user_func(array_shift(\$_cb->blocks['$var']), get_defined_vars()) ?>";
-			}
-
-			if (preg_match('#^([^\s,]+),?\s*(.*)$#', $var, $m)) {
-				$var = $stat === 'include' ? (strspn($m[1], '\'"$') ? $m[1] : "'$m[1]'") : (strspn($m[1], '\'"') ? $m[1] : '"' . $m[1] . '"');
-				if ($m[2]) $var .= strncmp($m[2], 'array', 5) === 0 ? ", $m[2]" : ", array($m[2])";
-				if ($stat === 'ifCurrent') $var = '$presenter->link(' . $var . '); ';
-			}
-			if ($stat === 'link') $var = '$control->link(' . $var .')';
-			elseif ($stat === 'plink') $var = '$presenter->link(' . $var .')';
-			elseif ($stat === 'ajaxlink') $var = '$control->ajaxlink(' . $var .')';
-			elseif ($stat === 'extends') { self::$extends = strtr(self::$macros[$stat], array('#' => $var)); return ''; }
 		}
 
-		if ($modifiers) {
-			preg_match_all(
-				'#[^\'"}\s|:]+|[|:]|\'[^\']*\'|"[^"]*"#s',
-				$modifiers . '|',
-				$tokens
-			);
-			$state = FALSE;
-			foreach ($tokens[0] as $token) {
-				if ($token === ':' || $token === '|') {
-					if (!isset($prev)) {
-						continue;
+		return 'echo ' . self::macroModifiers('$template->subTemplate(' . self::formatVars($var) . ')->__toString(TRUE)', $modifiers);
+	}
 
-					} elseif ($state === FALSE) {
-						$var = "\$template->$prev($var";
 
-					} else {
-						$var .= ', ' . $prev;
-					}
 
-					if ($token === '|') {
-						$var .= ')';
+	/**
+	 * {extends ...}
+	 */
+	private static function macroExtends($var)
+	{
+		self::$extends = '<?php ob_end_clean(); ' . self::macroInclude($var, NULL) . '?>';
+		return 'ob_start()';
+	}
 
-					} else {
-						$state = TRUE;
-					}
+
+
+	/**
+	 * {block ...}
+	 */
+	private static function macroBlock($var, $modifiers)
+	{
+		if (substr($var, 0, 1) === '#') {
+			$var = var_export(substr($var, 1), TRUE);
+			$func = '_cbb' . substr(md5(self::$file . "\00" . $var), 0, 15);
+			$call = self::$extends ? '' : "\n\$_cb->cs = \$_cb->f[$var]; call_user_func(\$_cb->cs[0], \$template->getParams())"; // get_defined_vars()
+			self::$blocks[] = "\n}\n\$_cb->f[$var][] = '$func';$call";
+			return "\nfunction $func() { extract(func_get_arg(0))\n";
+		}
+
+		self::$blocks[] = '} catch (Exception $_e) { ob_end_clean(); throw $_e; } '
+			. ($var === '' ? 'echo ' : $var . '=')
+			. self::macroModifiers('ob_get_clean()', $modifiers);
+		return 'ob_start(); try {';
+	}
+
+
+
+	/**
+	 * {/block ...}
+	 */
+	private static function macroBlockEnd($var)
+	{
+		return array_pop(self::$blocks);
+	}
+
+
+
+	/**
+	 * {foreach ...}
+	 */
+	private static function macroForeach($var)
+	{
+		return '$iterator = $_cb->its[] = new SmartCachingIterator(' . preg_replace('# +as +#i', ') as ', $var, 1);
+	}
+
+
+
+	/**
+	 * {attr ...}
+	 */
+	private static function macroAttr($var)
+	{
+		return str_replace(') ', ')->', $var . ' ');
+	}
+
+
+
+	/**
+	 * {snippet ...}
+	 */
+	private static function macroSnippet($var)
+	{
+		if (preg_match('#^([^\s,]+),?\s*(.*)$#', $var, $m)) {
+			$var = ', "' . $m[1] . '"';
+			if ($m[2]) $var .= ', ' . var_export($m[2], TRUE);
+		}
+		return $var;
+	}
+
+
+
+	/**
+	 * {link ...}
+	 */
+	private static function macroLink($var, $modifiers)
+	{
+		return self::macroModifiers('$control->link(' . self::formatVars($var) .')', $modifiers);
+	}
+
+
+
+	/**
+	 * {plink ...}
+	 */
+	private static function macroPlink($var, $modifiers)
+	{
+		return self::macroModifiers('$presenter->link(' . self::formatVars($var) .')', $modifiers);
+	}
+
+
+
+	/**
+	 * {ifCurrent ...}
+	 */
+	private static function macroIfCurrent($var, $modifiers)
+	{
+		return self::macroModifiers('$presenter->link(' . self::formatVars($var) .')', $modifiers);
+	}
+
+
+
+	/**
+	 * {ajaxlink ...}
+	 */
+	private static function macroAjaxlink($var, $modifiers)
+	{
+		return self::macroModifiers('$control->ajaxlink(' . self::formatVars($var) .')', $modifiers);
+	}
+
+
+
+	/**
+	 * Applies modifiers.
+	 */
+	public static function macroModifiers($var, $modifiers)
+	{
+		if (!$modifiers) return $var;
+		preg_match_all(
+			'#[^\'"}\s|:]+|[|:]|\'[^\']*\'|"[^"]*"#s',
+			$modifiers . '|',
+			$tokens
+		);
+		$state = FALSE;
+		foreach ($tokens[0] as $token) {
+			if ($token === ':' || $token === '|') {
+				if (!isset($prev)) {
+					continue;
+
+				} elseif ($state === FALSE) {
+					$var = "\$template->$prev($var";
+
 				} else {
-					$prev = $token;
+					$var .= ', ' . $prev;
 				}
+
+				if ($token === '|') {
+					$var .= ')';
+
+				} else {
+					$state = TRUE;
+				}
+			} else {
+				$prev = $token;
 			}
 		}
+		return $var;
+	}
 
-		if ($stat === 'block') {
-			self::$blocks[] = $tmp . $var;
+
+
+	/**
+	 * Formats {*link ...} parameters.
+	 */
+	private static function formatVars($var)
+	{
+		if (preg_match('#^([^\s,]+),?\s*(.*)$#', $var, $m)) {
+			$var = strspn($m[1], '\'"$') ? $m[1] : "'$m[1]'";
+			if ($m[2]) $var .= strncmp($m[2], 'array', 5) === 0 ? ", $m[2]" : ", array($m[2])";
 		}
+		return $var;
+	}
 
-		return strtr(self::$macros[$stat], array('#' => $var));
+
+
+	/**
+	 * Initializes state holder $_cb in template.
+	 */
+	public static function initState($template)
+	{
+		if (!isset($template->_cb)) {
+			$template->_cb = (object) array('escape' => 'escape'); // escaping support
+		}
+		if (!empty($template->_cb->caches)) { // cache support
+			end($template->_cb->caches)->addFile($template->getFile());
+		}
+		return $template->_cb;
 	}
 
 }
