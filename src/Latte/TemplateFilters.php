@@ -101,7 +101,7 @@ final class TemplateFilters
 	 */
 	public static function removePhp($s)
 	{
-		return preg_replace('#\x01@php:p\d+@\x02#', '<?php ?>', $s);
+		return preg_replace('#\x01@php:p\d+@\x02#', '<?php ?>', $s); // Template hides PHP code in these snippets
 	}
 
 
@@ -140,8 +140,8 @@ final class TemplateFilters
 	public static function relativeLinks($s)
 	{
 		return preg_replace(
-			'#(src|href|action)\s*=\s*["\'](?![a-z]+:|/|<|\\#)#',
-			'$1="<?php echo \\$baseUri ?>',
+			'#(src|href|action)\s*=\s*(["\'])(?![a-z]+:|[\x01/\\#])#', // \x01 is PHP snippet
+			'$1=$2<?php echo \\$baseUri ?>',
 			$s
 		);
 	}
@@ -161,7 +161,7 @@ final class TemplateFilters
 	public static function netteLinks($s)
 	{
 		return preg_replace_callback(
-			'#(src|href|action|on[a-z]+)\s*=\s*"(nette:.*?)([\#"])#',
+			'#(src|href|action|on[a-z]+)\s*=\s*["\'](nette:.*?)([\#"\'])#',
 			array(__CLASS__, 'tnlCb'),
 			$s)
 		;

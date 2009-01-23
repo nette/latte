@@ -92,7 +92,7 @@ final class TemplateHelpers
 	 */
 	public static function strip($s)
 	{
-		return preg_replace('#\\s+#', ' ', $s);
+		return trim(preg_replace('#\\s+#', ' ', $s));
 	}
 
 
@@ -105,7 +105,7 @@ final class TemplateHelpers
 	 */
 	public static function date($value, $format = "%x")
 	{
-		$value = is_numeric($value) ? (int) $value : ($value instanceof DateTime ? $value->format('U') : strtotime($value));
+		$value = is_numeric($value) ? (int) $value : ($value instanceof /*\*/DateTime ? $value->format('U') : strtotime($value));
 		return strftime($format, $value);
 	}
 
