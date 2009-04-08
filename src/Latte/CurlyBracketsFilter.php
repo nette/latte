@@ -177,9 +177,9 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 				(>)|                       ## 3) end tag
 				\\sstyle\s*=\s*(["\'])|    ## 4) style attribute
 				\\son[a-z]+\s*=\s*(["\'])| ## 5) javascript attribute
-				(["\'])|                   ## 6) attribute end
-				\\{(\S[^}]*?)(\\|[a-z](?:[^\'"}\s|]+|\\|[a-z]|\'[^\']*\'|"[^"]*")*)?\\}() ## 7,8) macro & modifiers
-			~xs',
+				(["\'])|                   ## 6) attribute delimiter
+				\\{([^\\s\'"][^}]*?)(\\|[a-z](?:[^\'"}\s|]+|\\|[a-z]|\'[^\']*\'|"[^"]*")*)?\\}() ## 7,8) macro & modifiers
+			~xsi',
 			array($this, 'cb'),
 			$s
 		);
@@ -216,15 +216,17 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 					return preg_replace_callback('#%(.*?)%#', array($this, 'cb2'), $val);
 				}
 			}
-			throw new /*\*/InvalidStateException("CurlyBrackets macro '$matches[0]' is unknown.");
+			throw new /*\*/InvalidStateException("Unknown CurlyBrackets macro '$matches[0]' in file '$this->file'.");
 
 		} elseif ($this->context === self::CONTEXT_NONE) {
 			// skip analyse
 
-		} elseif (!empty($matches[6])) { // (end) '"
+		} elseif (!empty($matches[6])) { // (attribute) '"
 			if ($this->context === $matches[6]) {
 				$this->context = self::CONTEXT_TAG;
 				$this->escape = 'TemplateHelpers::escapeHtml';
+			} elseif ($this->context === self::CONTEXT_TAG) {
+				$this->context = $matches[6];
 			}
 
 		} elseif (!empty($matches[5])) { // (javascript) '"
