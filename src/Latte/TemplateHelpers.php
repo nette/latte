@@ -133,6 +133,35 @@ final class TemplateHelpers
 
 
 	/**
+	 * Indents the HTML content from the left.
+	 * @param  string
+	 * @param  int
+	 * @param  string
+	 * @return string
+	 */
+	public static function indent($s, $level = 1, $chars = "\t")
+	{
+		if ($level >= 1) {
+			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', array(__CLASS__, 'indentCb'), $s);
+			$s = /*Nette\*/String::indent($s, $level, $chars);
+			$s = strtr($s, "\x1D\x1A", "\r\n");
+		}
+		return $s;
+	}
+
+
+
+	/**
+	 * Callback for self::indent
+	 */
+	private static function indentCb($m)
+	{
+		return strtr($m[0], "\r\n", "\x1D\x1A");
+	}
+
+
+
+	/**
 	 * Date/time formatting.
 	 * @param  string|int|DateTime
 	 * @param  string
