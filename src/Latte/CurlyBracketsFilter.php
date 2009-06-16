@@ -50,6 +50,7 @@ require_once dirname(__FILE__) . '/../../Object.php';
  * - {block|texy} ... {/block} capture of filter block
  * - {contentType ...} HTTP Content-Type header
  * - {assign $var value} set template parameter
+ * - {dump $var}
  * - {debugbreak}
  *
  * @author     David Grudl
@@ -80,6 +81,8 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 		'/for' => '<?php endfor ?>',
 		'while' => '<?php while (%%): ?>',
 		'/while' => '<?php endwhile ?>',
+		'continue' => '<?php continue ?>',
+		'break' => '<?php break ?>',
 
 		'include' => '<?php %:macroInclude% ?>',
 		'extends' => '<?php %:macroExtends% ?>',
@@ -92,6 +95,7 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 		'attr' => '<?php echo Html::el(NULL)->%:macroAttr%attributes() ?>',
 		'contentType' => '<?php %:macroContentType% ?>',
 		'assign' => '<?php %:macroAssign% ?>',
+		'dump' => '<?php Debug::consoleDump(%:macroDump%, "Template " . str_replace(Environment::getVariable("templatesDir"), "\xE2\x80\xA6", $template->getFile())) ?>',
 		'debugbreak' => '<?php if (function_exists("debugbreak")) debugbreak() ?>',
 
 		'!_' => '<?php echo $template->translate(%:macroModifiers%) ?>',
@@ -186,7 +190,7 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 
 		// internal state holder
 		$s = "<?php "
-			/*. "use Nette\\Templates\\CurlyBracketsFilter, Nette\\Templates\\TemplateHelpers, Nette\\SmartCachingIterator, Nette\\Web\\Html, Nette\\Templates\\SnippetHelper;\n"*/
+			/*. "use Nette\\Templates\\CurlyBracketsFilter, Nette\\Templates\\TemplateHelpers, Nette\\SmartCachingIterator, Nette\\Web\\Html, Nette\\Templates\\SnippetHelper, Nette\\Debug, Nette\\Environment;\n"*/
 			. "\$_cb = CurlyBracketsFilter::initState(\$template) ?>" . $s;
 
 		return $s;
@@ -473,6 +477,10 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 			$this->escape = 'TemplateHelpers::escapeCss';
 			$this->context = self::CONTEXT_NONE;
 
+		} elseif (strpos($var, 'plain') !== FALSE) {
+			$this->escape = '';
+			$this->context = self::CONTEXT_NONE;
+
 		} else {
 			$this->escape = '$template->escape';
 			$this->context = self::CONTEXT_NONE;
@@ -480,6 +488,16 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 
 		// temporary solution
 		return strpos($var, '/') ? /*\Nette\*/'Environment::getHttpResponse()->setHeader("Content-Type", "' . $var . '")' : '';
+	}
+
+
+
+	/**
+	 * {dump ...}
+	 */
+	private function macroDump($var)
+	{
+		return $var ? "array('$var' => $var)" : 'get_defined_vars()';
 	}
 
 
