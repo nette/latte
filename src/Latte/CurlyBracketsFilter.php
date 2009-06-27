@@ -224,7 +224,7 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 			/*. 'use Nette\Templates\CurlyBracketsFilter, Nette\Templates\TemplateHelpers, Nette\SmartCachingIterator, Nette\Web\Html, Nette\Templates\SnippetHelper, Nette\Debug, Nette\Environment, Nette\Templates\CachingHelper;' . "\n"*/
 			. 'if (!isset($_cb)) $_cb = (object) NULL;' . "\n"
 			. '$_cb->extends = ' . ($this->extends ? 'TRUE' : 'empty($template->layout) ? FALSE : $template->layout') . ";\n"
-			. "unset(\$template->layout, \$template->_cb);\n"
+			. "unset(\$layout, \$template->layout, \$template->_cb);\n"
 			. 'if (!empty($_cb->caches)) end($_cb->caches)->addFile($template->getFile());' . "\n"
 			. '?>' . $s;
 
@@ -387,11 +387,11 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 				}
 				$destination = $item[0];
 			}
-			$destination = var_export($destination, TRUE);
+			$name = var_export($destination, TRUE);
 			$params .= 'get_defined_vars()';
 			$cmd = isset($this->namedBlocks[$destination]) && !$parent
-				? "call_user_func(reset(\$_cb->blks[$destination]), $params)"
-				: "CurlyBracketsFilter::callBlock" . ($parent ? 'Parent' : '') . "(\$_cb->blks, $destination, $params)";
+				? "call_user_func(reset(\$_cb->blks[$name]), $params)"
+				: "CurlyBracketsFilter::callBlock" . ($parent ? 'Parent' : '') . "(\$_cb->blks, $name, $params)";
 			return $modifiers
 				? "ob_start(); $cmd; echo " . $this->macroModifiers('ob_get_clean()', $modifiers)
 				: $cmd;
