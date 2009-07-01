@@ -58,6 +58,8 @@ require_once dirname(__FILE__) . '/../../Object.php';
  */
 class CurlyBracketsFilter extends /*Nette\*/Object
 {
+	/** single & double quoted string */
+	const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*\'|"(?:\\\\.|[^"\\\\])*"';
 
 	/** @var array */
 	public static $defaultMacros = array(
@@ -182,12 +184,15 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 		);
 
 		// process all {tags} and <tags/>
-		$s = preg_replace_callback('~
+		$s = preg_replace_callback(
+			'~
 				<(/?)([a-z]+)|                          ## 1,2) start tag: <tag </tag ; ignores <!-- <!DOCTYPE
 				(>)|                                    ## 3) end tag
 				(?<=\\s)(style|on[a-z]+)\s*=\s*(["\'])| ## 4,5) attribute
 				(["\'])|                                ## 6) attribute delimiter
-				(\n[ \t]*)?\\{([^\\s\'"{}][^}]*?)(\\|[a-z](?:[^\'"}\s|]+|\\|[a-z]|\'[^\']*\'|"[^"]*")*)?\\}([ \t]*(?=\r|\n))? ## 7,8,9,10) indent & macro & modifiers & newline
+				(\n[ \t]*)?\\{([^\\s\'"{}]              ## 7,8) indent & macro begin
+					(?:'.self::RE_STRING.'|[^\'"}]+)    ##   + single or double quoted string, chars
+					*)\\}([\ \t]*(?=\r|\n))?            ##   + 9) newline
 			~xsi',
 			array($this, 'cbContent'),
 			"\n" . $s
@@ -245,21 +250,24 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 		//    [5] => '"
 		//    [6] => '"
 		//    [7] => indent
-		//    [8] => {macro
-		//    [9] => {...|modifiers}
-		//    [10] => newline?
+		//    [8] => {macro...}
+		//    [9] => newline?
 
 		if (!empty($matches[8])) { // {macro|var|modifiers}
-			$matches[] = NULL;
-			list(, , , , , , , $indent, $macro, $modifiers) = $matches;
+			list(, , , , , , , $indent, $macro) = $matches;
+
+			if (preg_match('#^(.*?)(\\|[a-z](?:'.self::RE_STRING.'|[^\'"\s]+)*)$#i', $macro, $m)) {
+				list(, $macro, $modifiers) = $m;
+			}
+
 			foreach ($this->macros as $key => $val) {
 				if (strncmp($macro, $key, strlen($key)) === 0) {
 					$var = substr($macro, strlen($key));
 					if (preg_match('#[a-zA-Z0-9]$#', $key) && preg_match('#^[a-zA-Z0-9._-]#', $var)) {
 						continue;
 					}
-					$result = $this->macro($key, trim($var), $modifiers);
-					$nl = isset($matches[10]) ? "\n" : ''; // double newline
+					$result = $this->macro($key, trim($var), isset($modifiers) ? $modifiers : '');
+					$nl = isset($matches[9]) ? "\n" : ''; // double newline
 					if ($nl && $indent && strncmp($result, '<?php echo ', 11)) {
 						return "\n" . $result; // remove indent, single newline
 					} else {
@@ -675,12 +683,11 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 	{
 		if (!$modifiers) return $var;
 		preg_match_all(
-			'/
-				[^\'"}\s|:]+|               ## symbol
-				[|:]|                       ## separator
-				\'(?:\\\\.|[^\'\\\\])*\'|   ## single quoted string
-				"(?:\\\\.|[^"\\\\])*"       ## double quoted string
-			/xs',
+			'~
+				'.self::RE_STRING.'|  ## single or double quoted string
+				[^\'"}\s|:]+|         ## symbol
+				[|:]                  ## separator
+			~xs',
 			$modifiers . '|',
 			$tokens
 		);
@@ -737,12 +744,11 @@ class CurlyBracketsFilter extends /*Nette\*/Object
 	public static function formatArray($s, $prefix = '')
 	{
 		$s = preg_replace_callback(
-			'/(?:
-				\'(?:\\\\.|[^\'\\\\])*\'|      ## single quoted string
-				"(?:\\\\.|[^"\\\\])*"|         ## double quoted string
+			'~
+				'.self::RE_STRING.'|           ## single or double quoted string
 				(?<=[,=(]|=>|^)\s*([a-z\d_]+)(?=\s*[,=)]|$)|   ## 1) symbol
 				(?<![=><!])(=)(?![=><!])       ## 2) equal sign
-			)/xi',
+			~xi',
 			array(__CLASS__, 'cbArgs'),
 			trim($s)
 		);
