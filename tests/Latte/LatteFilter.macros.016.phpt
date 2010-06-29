@@ -14,7 +14,7 @@ use Nette\Templates\Template,
 
 
 
-require __DIR__ . '/../NetteTest/initialize.php';
+require __DIR__ . '/../initialize.php';
 
 require __DIR__ . '/Template.inc';
 
@@ -22,7 +22,7 @@ require __DIR__ . '/Template.inc';
 
 $template = new MockTemplate;
 $template->registerFilter(new LatteFilter);
-$template->render(NetteTestHelpers::getSection(__FILE__, 'template'));
+$template->render(T::getSection(__FILE__, 'template'));
 echo $template->compiled;
 
 
@@ -45,10 +45,10 @@ __halt_compiler() ?>
 <?php
 %A%
 
-if (SnippetHelper::$outputAllowed) {
-} if (TRUE): if (SnippetHelper::$outputAllowed) { ?>
-		<?php } ;else: if (SnippetHelper::$outputAllowed) { ?>
-		<?php } endif ;if (SnippetHelper::$outputAllowed) { ?>
+if (%ns%SnippetHelper::$outputAllowed) {
+} if (TRUE): if (%ns%SnippetHelper::$outputAllowed) { ?>
+		<?php } ;else: if (%ns%SnippetHelper::$outputAllowed) { ?>
+		<?php } endif ;if (%ns%SnippetHelper::$outputAllowed) { ?>
 
 <?php
 }

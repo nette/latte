@@ -7,6 +7,7 @@
  * @category   Nette
  * @package    Nette\Templates
  * @subpackage UnitTests
+ * @keepTrailingSpaces
  */
 
 use Nette\Templates\Template,
@@ -15,7 +16,7 @@ use Nette\Templates\Template,
 
 
 
-require __DIR__ . '/../NetteTest/initialize.php';
+require __DIR__ . '/../initialize.php';
 
 require __DIR__ . '/Template.inc';
 

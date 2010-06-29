@@ -7,6 +7,7 @@
  * @category   Nette
  * @package    Nette\Templates
  * @subpackage UnitTests
+ * @keepTrailingSpaces
  */
 
 use Nette\Templates\Template,
@@ -14,7 +15,7 @@ use Nette\Templates\Template,
 
 
 
-require __DIR__ . '/../NetteTest/initialize.php';
+require __DIR__ . '/../initialize.php';
 
 require __DIR__ . '/Template.inc';
 
@@ -22,7 +23,7 @@ require __DIR__ . '/Template.inc';
 
 // temporary directory
 define('TEMP_DIR', __DIR__ . '/tmp');
-NetteTestHelpers::purge(TEMP_DIR);
+T::purge(TEMP_DIR);
 Template::setCacheStorage(new MockCacheStorage(TEMP_DIR));
 
 
