@@ -8,10 +8,6 @@
  * @subpackage UnitTests
  */
 
-use Nette\Templates\Template;
-
-
-
 require __DIR__ . '/../initialize.php';
 
 require __DIR__ . '/Template.inc';
