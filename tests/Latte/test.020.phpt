@@ -28,9 +28,6 @@ TestHelpers::purge(TEMP_DIR);
 
 $template = new FileTemplate;
 $template->setCacheStorage(new MockCacheStorage(TEMP_DIR));
-$template->setFile(__DIR__ . '/templates/inheritance.child2.latte');
 $template->registerFilter(new LatteFilter);
 
-$template->people = array('John', 'Mary', 'Paul');
-
-Assert::match(file_get_contents(__DIR__ . '/LatteFilter.macros.ext.002.expect'), $template->__toString(TRUE));
+Assert::match(file_get_contents(__DIR__ . '/test.020.expect'), $template->compile(file_get_contents(__DIR__ . '/templates/isLinkCurrent.latte')));

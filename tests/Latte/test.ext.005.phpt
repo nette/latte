@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Nette\Templates\LatteFilter delimiters.
+ * Test: Nette\Templates\LatteFilter and macros test.
  *
  * @author     David Grudl
  * @package    Nette\Templates
@@ -28,9 +28,9 @@ TestHelpers::purge(TEMP_DIR);
 
 $template = new FileTemplate;
 $template->setCacheStorage(new MockCacheStorage(TEMP_DIR));
-$template->setFile(__DIR__ . '/templates/delimiters.latte');
+$template->setFile(__DIR__ . '/templates/inheritance.child5.latte');
 $template->registerFilter(new LatteFilter);
-$template->registerHelperLoader('Nette\Templates\TemplateHelpers::loader');
-$template->people = array('John', 'Mary', 'Paul');
 
-Assert::match(file_get_contents(__DIR__ . '/LatteFilter.macros.009.expect'), $template->__toString(TRUE));
+$template->ext = 'inheritance.parent.latte';
+
+Assert::match(file_get_contents(__DIR__ . '/test.ext.005.expect'), $template->__toString(TRUE));

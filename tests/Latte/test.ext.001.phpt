@@ -28,9 +28,9 @@ TestHelpers::purge(TEMP_DIR);
 
 $template = new FileTemplate;
 $template->setCacheStorage(new MockCacheStorage(TEMP_DIR));
-$template->setFile(__DIR__ . '/templates/inheritance.child5.latte');
+$template->setFile(__DIR__ . '/templates/inheritance.child1.latte');
 $template->registerFilter(new LatteFilter);
 
-$template->ext = 'inheritance.parent.latte';
+$template->people = array('John', 'Mary', 'Paul');
 
-Assert::match(file_get_contents(__DIR__ . '/LatteFilter.macros.ext.005.expect'), $template->__toString(TRUE));
+Assert::match(file_get_contents(__DIR__ . '/test.ext.001.expect'), $template->__toString(TRUE));
