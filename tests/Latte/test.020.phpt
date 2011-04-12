@@ -14,7 +14,7 @@ use Nette\Templates\FileTemplate,
 
 
 
-require __DIR__ . '/../initialize.php';
+require __DIR__ . '/../bootstrap.php';
 
 require __DIR__ . '/Template.inc';
 
@@ -28,9 +28,6 @@ TestHelpers::purge(TEMP_DIR);
 
 $template = new FileTemplate;
 $template->setCacheStorage(new MockCacheStorage(TEMP_DIR));
-$template->setFile(__DIR__ . '/templates/inheritance.child5.latte');
 $template->registerFilter(new LatteFilter);
 
-$template->ext = 'inheritance.parent.latte';
-
-Assert::match(file_get_contents(__DIR__ . '/LatteFilter.macros.ext.005.expect'), $template->__toString(TRUE));
+Assert::match(file_get_contents(__DIR__ . '/test.020.expect'), $template->compile(file_get_contents(__DIR__ . '/templates/isLinkCurrent.latte')));
