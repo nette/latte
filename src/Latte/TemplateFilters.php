@@ -8,13 +8,14 @@
  * This source file is subject to the "Nette license" that is bundled
  * with this package in the file license.txt.
  *
- * For more information please see http://nettephp.com/
+ * For more information please see http://nettephp.com
  *
  * @copyright  Copyright (c) 2004, 2008 David Grudl
  * @license    http://nettephp.com/license  Nette license
- * @link       http://nettephp.com/
+ * @link       http://nettephp.com
  * @category   Nette
  * @package    Nette::Templates
+ * @version    $Id$
  */
 
 /*namespace Nette::Templates;*/
@@ -27,7 +28,6 @@
  * @author     David Grudl
  * @copyright  Copyright (c) 2004, 2008 David Grudl
  * @package    Nette::Templates
- * @version    $Revision$ $Date$
  */
 final class TemplateFilters
 {
@@ -80,11 +80,12 @@ final class TemplateFilters
 	 *   {$variable} with escaping
 	 *   {!$variable} without escaping
 	 *   {*comment*} will be removed
-	 *   {=expression} evaluate with escaping
-	 *   {!=expression} evaluate without escaping
-	 *   {_expression} evaluate with escaping and translation
-	 *   {=>view ...} component link
-	 *   {->view ...} component AJAX link
+	 *   {=expression} echo with escaping
+	 *   {!=expression} echo without escaping
+	 *   {?expression} evaluate PHP statement
+	 *   {_expression} echo with escaping and translation
+	 *   {link destination ...} control link
+	 *   {plink destination ...} presenter link
 	 *   {if ?} ... {elseif ?} ... {else} ... {/if} // or <%else%>, <%/if%>, <%/foreach%> ?
 	 *   {for ?} ... {/for}
 	 *   {foreach ?} ... {/foreach}
@@ -137,21 +138,22 @@ final class TemplateFilters
 	public static $curlyXlatMask = array(
 		'block ' => '<?php ob_start(); try { ?>',
 		'/bloc' => '<?php } catch (Exception $_e) { ob_end_clean(); throw $_e; } echo # ?>',
-		'partial ' => '<?php $component->beginPartial("#") ?>',
-		'/partial ' => '<?php $component->endPartial("#") ?>',
+		'partial ' => '<?php if ($component->beginPartial("#")): ?>',
+		'/partial ' => '<?php $component->endPartial("#"); endif; ?>',
 		'if ' => '<?php if (#): ?>',
 		'elseif ' => '<?php elseif (#): ?>',
 		'foreach ' => '<?php foreach (#): ?>',
 		'for ' => '<?php for (#): ?>',
 		'include ' => '<?php $template->subTemplate(#)->render() ?>',
-		'=>' => '<?php echo $template->escape($component->link(#)) ?>',
-		'->' => '<?php echo $template->escape($component->ajaxLink(#)) ?>',
+		'plink ' => '<?php echo $template->escape($presenter->link(#)) ?>',
+		'link ' => '<?php echo $template->escape($control->link(#)) ?>',
 		'!=' => '<?php echo # ?>',
 		'_' => '<?php echo $template->escape($template->translate(#)) ?>',
 		'=' => '<?php echo $template->escape(#) ?>',
 		'!$' => '<?php echo $# ?>',
 		'!' => '<?php echo $# ?>',
 		'$' => '<?php echo $template->escape($#) ?>',
+		'?' => '<?php # ?>',
 	);
 
 	/** @var array */
@@ -171,14 +173,14 @@ final class TemplateFilters
 
 		if ($mod === 'block ') {
 			if (!isset(self::$curlyBlocks[$var])) {
-				throw new /*::*/Exception("Unknown block '$var'");
+				throw new /*::*/Exception("The block '$var' is not declared in TemplateFilters::\$curlyBlocks.");
 			}
 			self::$curlyBlock = str_replace('#', 'ob_get_clean()', self::$curlyBlocks[$var]);
 
 		} elseif ($mod === '/bloc') { // missing 'k' is tricky...
 			$var = self::$curlyBlock;
 
-		} elseif ($mod === '=>' || $mod === '->') {
+		} elseif ($mod === 'link ' || $mod === 'plink ') {
 			$var = preg_replace('#^\s*(\S+?),?\s+(.*)$#', '"$1", array($2)', $var . ' ');
 		}
 
@@ -254,7 +256,7 @@ final class TemplateFilters
 	{
 		return preg_replace(
 			'#(src|href|action)\s*=\s*"(?![a-z]+:|/|<)#',
-			'$1="' . /*Nette::*/Environment::getHttpRequest()->getUri()->basePath,
+			'$1="' . /*Nette::*/Environment::getVariable('baseUri'),
 			$s
 		);
 	}
@@ -267,7 +269,7 @@ final class TemplateFilters
 
 	/**
 	 * Filter netteLinks: translates links "nette:...".
-	 *   nette:view?arg
+	 *   nette:destination?arg
 	 * @param  Template
 	 * @param  string
 	 * @return string
@@ -275,7 +277,7 @@ final class TemplateFilters
 	public static function netteLinks($template, $s)
 	{
 		return preg_replace_callback(
-			'#(src|href|action|onclick)\s*=\s*"(nette:.*?|ajax:.*?)([\#"])#',
+			'#(src|href|action|on[a-z]+)\s*=\s*"(nette:.*?)([\#"])#',
 			array(__CLASS__, 'tnlCb'),
 			$s)
 		;
@@ -285,14 +287,14 @@ final class TemplateFilters
 
 	/**
 	 * Callback for self::netteLinks.
-	 * Parses a "nette" URI (scheme is 'nette' or 'ajax') and converts to real URI
+	 * Parses a "nette" URI (scheme is 'nette') and converts to real URI
 	 */
 	private static function tnlCb($m)
 	{
 		list(, $attr, $uri, $fragment) = $m;
 
 		$parts = parse_url($uri);
-		if (!isset($parts['scheme'])) return $m[0];
+		if (!isset($parts['scheme']) || $parts['scheme'] !== 'nette') return $m[0];
 
 		if (isset($parts['query'])) {
 			parse_str($parts['query'], $params); // vyzaduje vypnute fuckingQuotes
@@ -303,10 +305,10 @@ final class TemplateFilters
 			$params = array();
 		}
 
-		return $attr . '="<?php echo $template->escape($component->'
-			. ($parts['scheme'] === 'ajax' ? 'ajaxLink' : 'link')
+		return $attr . '="<?php echo $template->escape($control->'
+			. (strncmp($attr, 'on', 2) ? 'link' : 'ajaxLink')
 			. '(\''
-			. (isset($parts['path']) ? $parts['path'] : Presenter::THIS_VIEW)
+			. (isset($parts['path']) ? $parts['path'] : 'this!')
 			. '\', '
 			. var_export($params, TRUE)
 			. '))?>'
