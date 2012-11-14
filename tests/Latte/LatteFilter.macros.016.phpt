@@ -35,9 +35,9 @@ __halt_compiler();
 {* kód  *}
 
 @{if TRUE}
-        {* kód  *}
+		{* kód  *}
 @{else}
-        {* kód  *}
+		{* kód  *}
 @{/if}
 
 {* kód  *}
@@ -49,8 +49,8 @@ __halt_compiler();
 
 if (SnippetHelper::$outputAllowed) {
 } if (TRUE): if (SnippetHelper::$outputAllowed) { ?>
-        <?php } ;else: if (SnippetHelper::$outputAllowed) { ?>
-        <?php } endif ;if (SnippetHelper::$outputAllowed) { ?>
+		<?php } ;else: if (SnippetHelper::$outputAllowed) { ?>
+		<?php } endif ;if (SnippetHelper::$outputAllowed) { ?>
 
 <?php
 }
