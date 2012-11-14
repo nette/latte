@@ -13,7 +13,7 @@ use Nette\Latte,
 
 
 
-require __DIR__ . '/../initialize.php';
+require __DIR__ . '/../bootstrap.php';
 
 
 
