@@ -5,7 +5,6 @@
  *
  * @author     David Grudl
  * @package    Nette\Latte
- * @subpackage UnitTests
  */
 
 use Nette\Latte\Macros\UIMacros;
@@ -22,6 +21,6 @@ UIMacros::install($compiler);
 Assert::same( '<?php if (isset($_l->blocks["block"])): ?>',  $compiler->expandMacro('ifset', '#block')->openingCode );
 Assert::same( '<?php if (isset($item->var["#test"], $_l->blocks["block"])): ?>',  $compiler->expandMacro('ifset', '$item->var["#test"], #block')->openingCode );
 
-Assert::throws(function() use ($compiler) {
+Assert::exception(function() use ($compiler) {
 	Assert::same( '<?php if (isset($var)): ?>',  $compiler->expandMacro('ifset', '$var')->openingCode );
 }, 'Nette\Latte\CompileException', 'Unhandled macro {ifset}');
