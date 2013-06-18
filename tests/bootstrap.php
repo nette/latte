@@ -32,3 +32,9 @@ if (extension_loaded('xdebug')) {
 function id($val) {
 	return $val;
 }
+
+
+function test(\Closure $function)
+{
+	$function();
+}
