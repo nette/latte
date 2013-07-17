@@ -24,7 +24,7 @@
 		"ext-mbstring": "*"
 	},
 	"require-dev": {
-		"nette/tester": "@dev"
+		"nette/tester": "v0.9.1"
 	},
 	"autoload": {
 		"classmap": ["src/Latte"]
