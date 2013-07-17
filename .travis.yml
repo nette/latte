@@ -6,5 +6,6 @@ php:
 script: "VERBOSE=true ./tests/run-tests.sh -s tests/"
 
 before_script:
-# Install Nette Tester
+  - composer self-update
+  # Install Nette Tester
   - composer install --no-interaction --dev
