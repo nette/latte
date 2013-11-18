@@ -274,15 +274,6 @@ class Engine extends Object
 
 
 	/**
-	 * @deprecated
-	 */
-	public function __invoke($s)
-	{
-		return $this->setLoader(new Loaders\StringLoader)->compile($s);
-	}
-
-
-	/**
 	 * @return Parser
 	 */
 	public function getParser()
