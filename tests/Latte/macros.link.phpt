@@ -20,8 +20,7 @@ class MockControl
 	public function link($destination, $args = array())
 	{
 		if (!is_array($args)) {
-			$args = func_get_args();
-			array_shift($args);
+			$args = array_slice(func_get_args(), 1);
 		}
 		array_unshift($args, $destination);
 		return 'link(' . strtr(json_encode($args), '"', "'") . ')';
