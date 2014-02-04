@@ -1,10 +1,11 @@
 language: php
 php:
-    - 5.3
+    - 5.3.3
     - 5.4
 
 script: "VERBOSE=true ./tests/run-tests.sh -s tests/"
 
 before_script:
-# Install Nette Tester
+  - composer self-update
+  # Install Nette Tester
   - composer install --no-interaction --dev
