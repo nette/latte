@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Templating;
+namespace Nette\Latte\Runtime;
 
 use Nette,
 	Nette\Utils\Strings,
@@ -14,11 +14,11 @@ use Nette,
 
 
 /**
- * Template helpers.
+ * Template filters.
  *
  * @author     David Grudl
  */
-class Helpers
+class Filters
 {
 	private static $helpers = array(
 		'normalize' => 'Nette\Utils\Strings::normalize',
