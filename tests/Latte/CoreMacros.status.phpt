@@ -7,6 +7,7 @@
  */
 
 use Nette\Latte,
+	Nette\Latte\Macros\CoreMacros,
 	Tester\Assert;
 
 
