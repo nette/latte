@@ -7,7 +7,7 @@
  */
 
 use Nette\Latte,
-	Nette\Utils\Html,
+	Nette\Latte\Runtime\Html,
 	Tester\Assert;
 
 
@@ -24,7 +24,7 @@ $params['hello'] = '<i>Hello</i>';
 $params['id'] = ':/item';
 $params['people'] = array('John', 'Mary', 'Paul', ']]> <!--');
 $params['comment'] = 'test -- comment';
-$params['el'] = Html::el('div')->title('1/2"');
+$params['el'] = new Html("<div title='1/2\"'></div>");
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.xml.phtml',
