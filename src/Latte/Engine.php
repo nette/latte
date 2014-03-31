@@ -51,7 +51,7 @@ class Engine extends Nette\Object
 	private $filters = array(
 		NULL => array(), // dynamic
 		'bytes' => 'Nette\Latte\Runtime\Filters::bytes',
-		'capitalize' => 'Nette\Utils\Strings::capitalize',
+		'capitalize' => 'Nette\Latte\Runtime\Filters::capitalize',
 		'datastream' => 'Nette\Latte\Runtime\Filters::dataStream',
 		'date' => 'Nette\Latte\Runtime\Filters::date',
 		'escapecss' => 'Nette\Latte\Runtime\Filters::escapeCss',
@@ -61,22 +61,22 @@ class Engine extends Nette\Object
 		'escapejs' => 'Nette\Latte\Runtime\Filters::escapeJs',
 		'escapeurl' => 'rawurlencode',
 		'escapexml' => 'Nette\Latte\Runtime\Filters::escapeXML',
-		'firstupper' => 'Nette\Utils\Strings::firstUpper',
+		'firstupper' => 'Nette\Latte\Runtime\Filters::firstUpper',
 		'implode' => 'implode',
 		'indent' => 'Nette\Latte\Runtime\Filters::indent',
-		'lower' => 'Nette\Utils\Strings::lower',
+		'lower' => 'Nette\Latte\Runtime\Filters::lower',
 		'nl2br' => 'Nette\Latte\Runtime\Filters::nl2br',
 		'number' => 'number_format',
 		'repeat' => 'str_repeat',
 		'replace' => 'Nette\Latte\Runtime\Filters::replace',
-		'replacere' => 'Nette\Utils\Strings::replace',
+		'replacere' => 'Nette\Latte\Runtime\Filters::replaceRe',
 		'safeurl' => 'Nette\Latte\Runtime\Filters::safeUrl',
 		'strip' => 'Nette\Latte\Runtime\Filters::strip',
 		'striptags' => 'strip_tags',
-		'substr' => 'Nette\Utils\Strings::substring',
-		'trim' => 'Nette\Utils\Strings::trim',
-		'truncate' => 'Nette\Utils\Strings::truncate',
-		'upper' => 'Nette\Utils\Strings::upper',
+		'substr' => 'Nette\Latte\Runtime\Filters::substring',
+		'trim' => 'Nette\Latte\Runtime\Filters::trim',
+		'truncate' => 'Nette\Latte\Runtime\Filters::truncate',
+		'upper' => 'Nette\Latte\Runtime\Filters::upper',
 	);
 
 	/** @var string */

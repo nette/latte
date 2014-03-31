@@ -7,8 +7,7 @@
 
 namespace Nette\Latte;
 
-use Nette,
-	Nette\Utils\Callback;
+use Nette;
 
 
 /**
@@ -86,16 +85,16 @@ class Template extends Nette\Object
 			$args2 = $args;
 			array_unshift($args2, $lname);
 			foreach ($this->filters[NULL] as $filter) {
-				$res = Callback::invokeArgs($filter, $args2);
+				$res = call_user_func_array($filter, $args2);
 				if ($res !== NULL) {
 					return $res;
 				} elseif (isset($this->filters[$lname])) {
-					return Callback::invokeArgs($this->filters[$lname], $args);
+					return call_user_func_array($this->filters[$lname], $args);
 				}
 			}
 			return parent::__call($name, $args);
 		}
-		return Callback::invokeArgs($this->filters[$lname], $args);
+		return call_user_func_array($this->filters[$lname], $args);
 	}
 
 

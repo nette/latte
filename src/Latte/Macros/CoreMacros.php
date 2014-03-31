@@ -11,8 +11,7 @@ use Nette,
 	Nette\Latte,
 	Nette\Latte\CompileException,
 	Nette\Latte\MacroNode,
-	Nette\Latte\PhpWriter,
-	Nette\Utils\Strings;
+	Nette\Latte\PhpWriter;
 
 
 /**
@@ -224,7 +223,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroUse(MacroNode $node, PhpWriter $writer)
 	{
-		Nette\Utils\Callback::invoke(array($node->tokenizer->fetchWord(), 'install'), $this->getCompiler())
+		call_user_func(array($node->tokenizer->fetchWord(), 'install'), $this->getCompiler())
 			->initialize();
 	}
 
@@ -296,7 +295,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('echo Nette\Utils\Html::el(NULL, %node.array)->attributes()');
+		return $writer->write('echo Nette\Latte\Runtime\Filters::htmlAttributes(%node.array)');
 	}
 
 
@@ -378,22 +377,22 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroContentType(MacroNode $node, PhpWriter $writer)
 	{
-		if (Strings::contains($node->args, 'xhtml')) {
+		if (strpos($node->args, 'xhtml') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_XHTML);
 
-		} elseif (Strings::contains($node->args, 'html')) {
+		} elseif (strpos($node->args, 'html') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_HTML);
 
-		} elseif (Strings::contains($node->args, 'xml')) {
+		} elseif (strpos($node->args, 'xml') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_XML);
 
-		} elseif (Strings::contains($node->args, 'javascript')) {
+		} elseif (strpos($node->args, 'javascript') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_JS);
 
-		} elseif (Strings::contains($node->args, 'css')) {
+		} elseif (strpos($node->args, 'css') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_CSS);
 
-		} elseif (Strings::contains($node->args, 'calendar')) {
+		} elseif (strpos($node->args, 'calendar') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_ICAL);
 
 		} else {
@@ -401,7 +400,7 @@ class CoreMacros extends MacroSet
 		}
 
 		// temporary solution
-		if (Strings::contains($node->args, '/')) {
+		if (strpos($node->args, '/')) {
 			return $writer->write('header(%var)', "Content-Type: $node->args");
 		}
 	}

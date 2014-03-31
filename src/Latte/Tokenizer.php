@@ -7,8 +7,7 @@
 
 namespace Nette\Latte;
 
-use Nette,
-	Nette\Utils\Strings;
+use Nette;
 
 
 /**
@@ -48,7 +47,10 @@ class Tokenizer extends Nette\Object
 	 */
 	public function tokenize($input)
 	{
-		$tokens = Strings::matchAll($input, $this->re);
+		preg_match_all($this->re, $input, $tokens, PREG_SET_ORDER);
+		if (preg_last_error()) {
+			throw new Nette\Latte\RegexpException(NULL, preg_last_error());
+		}
 		$len = 0;
 		$count = count($this->types);
 		foreach ($tokens as & $match) {

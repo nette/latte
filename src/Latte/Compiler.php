@@ -7,8 +7,7 @@
 
 namespace Nette\Latte;
 
-use Nette,
-	Nette\Utils\Strings;
+use Nette;
 
 
 /**
@@ -94,7 +93,7 @@ class Compiler extends Nette\Object
 	 */
 	public function compile(array $tokens)
 	{
-		$this->templateId = Nette\Utils\Random::generate();
+		$this->templateId = substr(lcg_value(), 2, 10);
 		$this->tokens = $tokens;
 		$output = '';
 		$this->output = & $output;
@@ -264,7 +263,7 @@ class Compiler extends Nette\Object
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
 			$this->htmlNode->isEmpty = in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))
-				&& isset(Nette\Utils\Html::$emptyElements[strtolower($token->name)]);
+				&& isset(Helpers::$emptyElements[strtolower($token->name)]);
 			$this->htmlNode->offset = strlen($this->output);
 			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
 		}
@@ -281,7 +280,7 @@ class Compiler extends Nette\Object
 		}
 
 		$htmlNode = $this->htmlNode;
-		$isEmpty = !$htmlNode->closing && (Strings::contains($token->text, '/') || $htmlNode->isEmpty);
+		$isEmpty = !$htmlNode->closing && (strpos($token->text, '/') !== FALSE || $htmlNode->isEmpty);
 		$end = '';
 
 		if ($isEmpty && in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))) { // auto-correct
@@ -321,7 +320,7 @@ class Compiler extends Nette\Object
 
 	private function processHtmlAttribute(Token $token)
 	{
-		if (Strings::startsWith($token->name, Parser::N_PREFIX)) {
+		if (strncmp($token->name, Parser::N_PREFIX, strlen(Parser::N_PREFIX)) === 0) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
 			if (isset($this->htmlNode->macroAttrs[$name])) {
 				throw new CompileException("Found multiple macro-attributes $token->name.");
@@ -400,7 +399,7 @@ class Compiler extends Nette\Object
 		$node = $this->macroNode;
 
 		if (!$node || ($node->name !== $name && '' !== $name) || $modifiers
-			|| ($args && $node->args && !Strings::startsWith("$node->args ", "$args "))
+			|| ($args && $node->args && strncmp("$node->args ", "$args ", strlen($args) + 1))
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix
@@ -490,7 +489,7 @@ class Compiler extends Nette\Object
 		}
 
 		if (!$this->htmlNode->closing) {
-			$this->htmlNode->attrCode = & $this->attrCodes[$uniq = ' n:' . Nette\Utils\Random::generate()];
+			$this->htmlNode->attrCode = & $this->attrCodes[$uniq = ' n:' . substr(lcg_value(), 2, 10)];
 			$code = substr_replace($code, $uniq, strrpos($code, '/>') ?: strrpos($code, '>'), 0);
 		}
 

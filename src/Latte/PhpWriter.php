@@ -50,18 +50,18 @@ class PhpWriter extends Nette\Object
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
 		$me = $this;
-		$mask = Nette\Utils\Strings::replace($mask, '#%escape(\(([^()]*+|(?1))+\))#', function($m) use ($me) {
+		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function($m) use ($me) {
 			return $me->escapeFilter(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
-		});
-		$mask = Nette\Utils\Strings::replace($mask, '#%modify(\(([^()]*+|(?1))+\))#', function($m) use ($me) {
+		}, $mask);
+		$mask = preg_replace_callback('#%modify(\(([^()]*+|(?1))+\))#', function($m) use ($me) {
 			return $me->formatModifiers(substr($m[1], 1, -1));
-		});
+		}, $mask);
 
 		$args = func_get_args();
 		$pos = $this->tokens->position;
 		$word = strpos($mask, '%node_word') === FALSE ? NULL : $this->tokens->fetchWord();
 
-		$code = Nette\Utils\Strings::replace($mask, '#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
+		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
 		function($m) use ($me, $word, & $args) {
 			list(, $l, $source, $format, $cond, $r) = $m;
 
@@ -93,7 +93,7 @@ class PhpWriter extends Nette\Object
 			} else {
 				return $l . $code . $r;
 			}
-		});
+		}, $mask);
 
 		$this->tokens->position = $pos;
 		return $code;

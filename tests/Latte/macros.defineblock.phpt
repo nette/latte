@@ -7,7 +7,6 @@
  */
 
 use Nette\Latte,
-	Nette\Utils\Html,
 	Tester\Assert;
 
 

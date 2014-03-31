@@ -11,8 +11,7 @@ use Nette,
 	Nette\Latte,
 	Nette\Latte\MacroNode,
 	Nette\Latte\PhpWriter,
-	Nette\Latte\CompileException,
-	Nette\Utils\Strings;
+	Nette\Latte\CompileException;
 
 
 /**
@@ -120,7 +119,7 @@ class BlockMacros extends MacroSet
 			$destination = $item->data->name;
 		}
 
-		$name = Strings::contains($destination, '$') ? $destination : var_export($destination, TRUE);
+		$name = strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination;
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
 			$cmd = "call_user_func(reset(\$_l->blocks[$name]), \$_l, %node.array? + get_defined_vars())";
 		} else {
@@ -193,7 +192,7 @@ class BlockMacros extends MacroSet
 				throw new CompileException("Missing block name.");
 			}
 
-		} elseif (Strings::contains($name, '$')) { // dynamic block/snippet
+		} elseif (strpos($name, '$') !== FALSE) { // dynamic block/snippet
 			if ($node->name === 'snippet') {
 				for ($parent = $node->parentNode; $parent && !($parent->name === 'snippet' || $parent->name === 'snippetArea'); $parent = $parent->parentNode);
 				if (!$parent) {
@@ -306,7 +305,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{
-		if (!Strings::contains($node->args, '#')) {
+		if (strpos($node->args, '#') === FALSE) {
 			return FALSE;
 		}
 		$list = array();

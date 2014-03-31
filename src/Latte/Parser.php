@@ -7,8 +7,7 @@
 
 namespace Nette\Latte;
 
-use Nette,
-	Nette\Utils\Strings;
+use Nette;
 
 
 /**
@@ -82,7 +81,7 @@ class Parser extends Nette\Object
 		if (substr($input, 0, 3) === "\xEF\xBB\xBF") { // BOM
 			$input = substr($input, 3);
 		}
-		if (!Strings::checkEncoding($input)) {
+		if (!preg_match('##u', $input)) {
 			throw new Nette\InvalidArgumentException('Template is not valid UTF-8 stream.');
 		}
 		$input = str_replace("\r\n", "\n", $input);
@@ -186,7 +185,7 @@ class Parser extends Nette\Object
 			$token->value = isset($matches['value']) ? $matches['value'] : '';
 
 			if ($token->value === '"' || $token->value === "'") { // attribute = "'
-				if (Strings::startsWith($token->name, self::N_PREFIX)) {
+				if (strncmp($token->name, self::N_PREFIX, strlen(self::N_PREFIX)) === 0) {
 					$token->value = '';
 					if ($m = $this->match('~(.*?)' . $matches['value'] . '~xsi')) {
 						$token->value = $m[1];
@@ -256,15 +255,20 @@ class Parser extends Nette\Object
 	 */
 	private function match($re)
 	{
-		if ($matches = Strings::match($this->input, $re, PREG_OFFSET_CAPTURE, $this->offset)) {
-			$value = substr($this->input, $this->offset, $matches[0][1] - $this->offset);
-			if ($value !== '') {
-				$this->addToken(Token::TEXT, $value);
+		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE, $this->offset)) {
+			if (preg_last_error()) {
+				throw new RegexpException(NULL, preg_last_error());
 			}
-			$this->offset = $matches[0][1] + strlen($matches[0][0]);
-			foreach ($matches as $k => $v) {
-				$matches[$k] = $v[0];
-			}
+			return array();
+		}
+
+		$value = substr($this->input, $this->offset, $matches[0][1] - $this->offset);
+		if ($value !== '') {
+			$this->addToken(Token::TEXT, $value);
+		}
+		$this->offset = $matches[0][1] + strlen($matches[0][0]);
+		foreach ($matches as $k => $v) {
+			$matches[$k] = $v[0];
 		}
 		return $matches;
 	}
@@ -345,16 +349,17 @@ class Parser extends Nette\Object
 	 */
 	public function parseMacroTag($tag)
 	{
-		$match = Strings::match($tag, '~^
+		if (!preg_match('~^
 			(
 				(?P<name>\?|/?[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
 				(?P<noescape>!?)(?P<shortname>/?[=\~#%^&_]?)      ## !expression, !=expression, ...
 			)(?P<args>.*?)
 			(?P<modifiers>\|[a-z](?:'.Parser::RE_STRING.'|[^\'"])*)?
 			(?P<empty>/?\z)
-		()\z~isx');
-
-		if (!$match) {
+		()\z~isx', $tag, $match)) {
+			if (preg_last_error()) {
+				throw new RegexpException(NULL, preg_last_error());
+			}
 			return FALSE;
 		}
 		if ($match['name'] === '') {

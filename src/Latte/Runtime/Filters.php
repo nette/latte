@@ -7,8 +7,7 @@
 
 namespace Nette\Latte\Runtime;
 
-use Nette,
-	Nette\Utils\Strings;
+use Nette;
 
 
 /**
@@ -20,6 +19,9 @@ class Filters
 {
 	/** @var string default date format */
 	public static $dateFormat = '%x';
+
+	/** @var bool  use XHTML syntax? */
+	public static $xhtml = FALSE;
 
 
 	/**
@@ -88,7 +90,13 @@ class Filters
 		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
 			$s = $s->__toString(TRUE);
 		}
-		return str_replace(array(']]>', '<!'), array(']]\x3E', '\x3C!'), Nette\Utils\Json::encode($s));
+
+		$json = json_encode($s, PHP_VERSION_ID >= 50400 ? JSON_UNESCAPED_UNICODE : 0);
+		if ($error = json_last_error()) {
+			throw new \Exception(PHP_VERSION_ID >= 50500 ? json_last_error_msg() : 'JSON encode error', $error);
+		}
+
+		return str_replace(array("\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'), array('\u2028', '\u2029', ']]\x3E', '\x3C!'), $json);
 	}
 
 
@@ -122,12 +130,13 @@ class Filters
 	 */
 	public static function strip($s)
 	{
-		return Strings::replace(
-			$s,
+		return preg_replace_callback(
 			'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
 			function($m) {
 				return trim(preg_replace('#[ \t\r\n]+#', " ", $m[0]));
-			});
+			},
+			$s
+		);
 	}
 
 
@@ -141,10 +150,13 @@ class Filters
 	public static function indent($s, $level = 1, $chars = "\t")
 	{
 		if ($level >= 1) {
-			$s = Strings::replace($s, '#<(textarea|pre).*?</\\1#si', function($m) {
+			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', function($m) {
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
-			});
-			$s = Strings::indent($s, $level, $chars);
+			}, $s);
+			if (preg_last_error()) {
+				throw new Nette\Latte\RegexpException(NULL, preg_last_error());
+			}
+			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 			$s = strtr($s, "\x1F\x1E\x1D\x1A", " \t\r\n");
 		}
 		return $s;
@@ -169,12 +181,13 @@ class Filters
 
 		if ($time instanceof \DateInterval) {
 			return $time->format($format);
-		}
 
-		$time = Nette\Utils\DateTime::from($time);
-		return Strings::contains($format, '%')
-			? strftime($format, $time->format('U')) // formats according to locales
-			: $time->format($format); // formats using date()
+		} elseif (!$time instanceof \DateTime && !$time instanceof \DateTimeInterface) {
+			$time = new \DateTime((is_numeric($time) ? '@' : '') . $time);
+		}
+		return strpos($format, '%') === FALSE
+			? $time->format($format) // formats using date()
+			: strftime($format, $time->format('U')); // formats according to locales
 	}
 
 
@@ -212,6 +225,22 @@ class Filters
 
 
 	/**
+	 * Perform a regular expression search and replace.
+	 * @param  string
+	 * @param  string
+	 * @return string
+	 */
+	public static function replaceRe($subject, $pattern, $replacement = '')
+	{
+		$res = preg_replace($pattern, $replacement, $subject);
+		if (preg_last_error()) {
+			throw new Latte\RegexpException(NULL, preg_last_error());
+		}
+		return $res;
+	}
+
+
+	/**
 	 * The data: URI generator.
 	 * @param  string
 	 * @param  string
@@ -232,7 +261,166 @@ class Filters
 	 */
 	public static function nl2br($value)
 	{
-		return nl2br($value, Nette\Utils\Html::$xhtml);
+		return nl2br($value, self::$xhtml);
+	}
+
+
+	/**
+	 * Returns a part of UTF-8 string.
+	 * @param  string
+	 * @param  int
+	 * @param  int
+	 * @return string
+	 */
+	public static function substring($s, $start, $length = NULL)
+	{
+		if ($length === NULL) {
+			$length = self::length($s);
+		}
+		if (function_exists('mb_substr')) {
+			return mb_substr($s, $start, $length, 'UTF-8'); // MB is much faster
+		}
+		return iconv_substr($s, $start, $length, 'UTF-8');
+	}
+
+
+	/**
+	 * Truncates string to maximal length.
+	 * @param  string  UTF-8 encoding
+	 * @param  int
+	 * @param  string  UTF-8 encoding
+	 * @return string
+	 */
+	public static function truncate($s, $maxLen, $append = "\xE2\x80\xA6")
+	{
+		if (self::length($s) > $maxLen) {
+			$maxLen = $maxLen - self::length($append);
+			if ($maxLen < 1) {
+				return $append;
+
+			} elseif (preg_match('#^.{1,'.$maxLen.'}(?=[\s\x00-/:-@\[-`{-~])#us', $s, $matches)) {
+				return $matches[0] . $append;
+
+			} else {
+				return self::substring($s, 0, $maxLen) . $append;
+			}
+		}
+		return $s;
+	}
+
+
+	/**
+	 * Convert to lower case.
+	 * @return string
+	 */
+	public static function lower($s)
+	{
+		return mb_strtolower($s, 'UTF-8');
+	}
+
+
+	/**
+	 * Convert to upper case.
+	 * @return string
+	 */
+	public static function upper($s)
+	{
+		return mb_strtoupper($s, 'UTF-8');
+	}
+
+
+	/**
+	 * Convert first character to upper case.
+	 * @return string
+	 */
+	public static function firstUpper($s)
+	{
+		return self::upper(self::substring($s, 0, 1)) . self::substring($s, 1);
+	}
+
+
+	/**
+	 * Capitalize string.
+	 * @return string
+	 */
+	public static function capitalize($s)
+	{
+		return mb_convert_case($s, MB_CASE_TITLE, 'UTF-8');
+	}
+
+
+	/**
+	 * Returns UTF-8 string length.
+	 * @return int
+	 */
+	public static function length($s)
+	{
+		return strlen(utf8_decode($s)); // fastest way
+	}
+
+
+	/**
+	 * Strips whitespace.
+	 * @param  string  UTF-8 encoding
+	 * @param  string
+	 * @return string
+	 */
+	public static function trim($s, $charlist = " \t\n\r\0\x0B\xC2\xA0")
+	{
+		$charlist = preg_quote($charlist, '#');
+		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', $s);
+		if (preg_last_error()) {
+			throw new Nette\Latte\RegexpException(NULL, preg_last_error());
+		}
+		return $s;
+	}
+
+
+	/**
+	 * Returns element's attributes.
+	 * @return string
+	 */
+	public static function htmlAttributes($attrs)
+	{
+		if (!is_array($attrs)) {
+			return '';
+		}
+
+		$s = '';
+		foreach ($attrs as $key => $value) {
+			if ($value === NULL || $value === FALSE) {
+				continue;
+
+			} elseif ($value === TRUE) {
+				if (static::$xhtml) {
+					$s .= ' ' . $key . '="' . $key . '"';
+				} else {
+					$s .= ' ' . $key;
+				}
+				continue;
+
+			} elseif (is_array($value)) {
+				$tmp = NULL;
+				foreach ($value as $k => $v) {
+					if ($v != NULL) { // intentionally ==, skip NULLs & empty string
+						//  composite 'style' vs. 'others'
+						$tmp[] = $v === TRUE ? $k : (is_string($k) ? $k . ':' . $v : $v);
+					}
+				}
+				if ($tmp === NULL) {
+					continue;
+				}
+
+				$value = implode($key === 'style' || !strncmp($key, 'on', 2) ? ';' : ' ', $tmp);
+
+			} else {
+				$value = (string) $value;
+			}
+
+			$q = strpos($value, '"') === FALSE ? '"' : "'";
+			$s .= ' ' . $key . '=' . $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value) . $q;
+		}
+		return $s;
 	}
 
 }

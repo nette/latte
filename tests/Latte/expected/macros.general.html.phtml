@@ -69,7 +69,7 @@ if ($_l->extends) { ob_start();}
 
 { test} {"test} {'test}
 
-<p<?php echo Nette\Utils\Html::el(NULL, array('title' => $hello, 'lang' => isset($lang) ? $lang : NULL))->attributes() ?>> </p>
+<p<?php echo Nette\Latte\Runtime\Filters::htmlAttributes(array('title' => $hello, 'lang' => isset($lang) ? $lang : NULL)) ?>> </p>
 
 <p val = <?php if (true) { ?>"a"<?php } else { ?>"b"<?php } ?>> </p>
 
