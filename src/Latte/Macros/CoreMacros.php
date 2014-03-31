@@ -402,7 +402,7 @@ class CoreMacros extends MacroSet
 
 		// temporary solution
 		if (Strings::contains($node->args, '/')) {
-			return $writer->write('$netteHttpResponse->setHeader("Content-Type", %var)', $node->args);
+			return $writer->write('header(%var)', "Content-Type: $node->args");
 		}
 	}
 
@@ -412,8 +412,8 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroStatus(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write((substr($node->args, -1) === '?' ? 'if (!$netteHttpResponse->isSent()) ' : '') .
-			'$netteHttpResponse->setCode(%var)', (int) $node->args
+		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
+			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var)', (int) $node->args
 		);
 	}
 

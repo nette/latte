@@ -23,7 +23,6 @@ Assert::matchFile(
 Assert::matchFile(
 	__DIR__ . '/expected/macros.ical.html',
 	$latte->renderToString(
-		__DIR__ . '/templates/ical.latte',
-		array('netteHttpResponse' => new Nette\Http\Response)
+		__DIR__ . '/templates/ical.latte'
 	)
 );

@@ -24,7 +24,6 @@ $params['hello'] = '<i>Hello</i>';
 $params['id'] = ':/item';
 $params['people'] = array('John', 'Mary', 'Paul', ']]> <!--');
 $params['comment'] = 'test -- comment';
-$params['netteHttpResponse'] = new Nette\Http\Response;
 $params['el'] = Html::el('div')->title('1/2"');
 
 Assert::matchFile(

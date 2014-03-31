@@ -13,7 +13,7 @@ list($_l, $_g) = Nette\Latte\Macros\CoreMacros::initRuntime($template, '%[a-z0-9
 <script><?php if (1) { ?><meta /><?php } ?>
 </script>
 
-<?php $netteHttpResponse->setHeader("Content-Type", 'application/xml; charset=utf-8') ?>
+<?php header('Content-Type: application/xml; charset=utf-8') ?>
 
 <ul>
 	<li>Escaped: <?php echo Nette\Latte\Runtime\Filters::escapeXml($hello) ?></li>
