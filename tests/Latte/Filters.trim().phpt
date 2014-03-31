@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Runtime\Filters::trim()
+ * Test: Latte\Runtime\Filters::trim()
  *
  * @author     David Grudl
  */
 
-use Nette\Latte\Runtime\Filters,
+use Latte\Runtime\Filters,
 	Tester\Assert;
 
 
@@ -20,4 +20,4 @@ Assert::same( 'e',  Filters::trim("\xc5\x98e-", "\xc5\x98-") ); // Ře-
 
 Assert::exception(function() {
 	Filters::trim("\xC2x\xA0");
-}, 'Nette\Latte\RegexpException', NULL);
+}, 'Latte\RegexpException', NULL);

@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Runtime;
+namespace Latte\Runtime;
 
-use Nette;
+use Latte;
 
 
 interface IHtmlString

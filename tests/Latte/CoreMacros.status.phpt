@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Engine: {status}
+ * Test: Latte\Engine: {status}
  *
  * @author     David Grudl
  */
 
-use Nette\Latte,
-	Nette\Latte\Macros\CoreMacros,
+use Latte\Macros\CoreMacros,
 	Tester\Assert;
 
 

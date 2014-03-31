@@ -5,13 +5,12 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Macros;
+namespace Latte\Macros;
 
-use Nette,
-	Nette\Latte,
-	Nette\Latte\CompileException,
-	Nette\Latte\MacroNode,
-	Nette\Latte\PhpWriter;
+use Latte,
+	Latte\CompileException,
+	Latte\MacroNode,
+	Latte\PhpWriter;
 
 
 /**
@@ -96,7 +95,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		return array('list($_l, $_g) = Nette\Latte\Macros\CoreMacros::initRuntime($template, '
+		return array('list($_l, $_g) = Latte\Macros\CoreMacros::initRuntime($template, '
 			. var_export($this->getCompiler()->getTemplateId(), TRUE) . ')');
 	}
 
@@ -257,7 +256,7 @@ class CoreMacros extends MacroSet
 	public function macroEndForeach(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
-			$node->openingCode = '<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Nette\Latte\Runtime\CachingIterator('
+			$node->openingCode = '<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
 			. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $writer->formatArgs(), 1) . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>';
 		} else {
@@ -295,7 +294,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('echo Nette\Latte\Runtime\Filters::htmlAttributes(%node.array)');
+		return $writer->write('echo Latte\Runtime\Filters::htmlAttributes(%node.array)');
 	}
 
 
@@ -424,7 +423,7 @@ class CoreMacros extends MacroSet
 	 * Initializes local & global storage in template.
 	 * @return [\stdClass, \stdClass]
 	 */
-	public static function initRuntime(Nette\Latte\Template $template, $templateId)
+	public static function initRuntime(Latte\Template $template, $templateId)
 	{
 		// local storage
 		if (isset($template->_l)) {

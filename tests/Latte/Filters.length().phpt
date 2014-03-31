@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Runtime\Filters::length()
+ * Test: Latte\Runtime\Filters::length()
  *
  * @author     David Grudl
  */
 
-use Nette\Latte\Runtime\Filters,
+use Latte\Runtime\Filters,
 	Tester\Assert;
 
 

@@ -5,9 +5,7 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte;
-
-use Nette;
+namespace Latte;
 
 
 /**
@@ -50,37 +48,37 @@ class Engine extends Object
 	/** @var array run-time filters */
 	private $filters = array(
 		NULL => array(), // dynamic
-		'bytes' => 'Nette\Latte\Runtime\Filters::bytes',
-		'capitalize' => 'Nette\Latte\Runtime\Filters::capitalize',
-		'datastream' => 'Nette\Latte\Runtime\Filters::dataStream',
-		'date' => 'Nette\Latte\Runtime\Filters::date',
-		'escapecss' => 'Nette\Latte\Runtime\Filters::escapeCss',
-		'escapehtml' => 'Nette\Latte\Runtime\Filters::escapeHtml',
-		'escapehtmlcomment' => 'Nette\Latte\Runtime\Filters::escapeHtmlComment',
-		'escapeical' => 'Nette\Latte\Runtime\Filters::escapeICal',
-		'escapejs' => 'Nette\Latte\Runtime\Filters::escapeJs',
+		'bytes' => 'Latte\Runtime\Filters::bytes',
+		'capitalize' => 'Latte\Runtime\Filters::capitalize',
+		'datastream' => 'Latte\Runtime\Filters::dataStream',
+		'date' => 'Latte\Runtime\Filters::date',
+		'escapecss' => 'Latte\Runtime\Filters::escapeCss',
+		'escapehtml' => 'Latte\Runtime\Filters::escapeHtml',
+		'escapehtmlcomment' => 'Latte\Runtime\Filters::escapeHtmlComment',
+		'escapeical' => 'Latte\Runtime\Filters::escapeICal',
+		'escapejs' => 'Latte\Runtime\Filters::escapeJs',
 		'escapeurl' => 'rawurlencode',
-		'escapexml' => 'Nette\Latte\Runtime\Filters::escapeXML',
-		'firstupper' => 'Nette\Latte\Runtime\Filters::firstUpper',
+		'escapexml' => 'Latte\Runtime\Filters::escapeXML',
+		'firstupper' => 'Latte\Runtime\Filters::firstUpper',
 		'implode' => 'implode',
-		'indent' => 'Nette\Latte\Runtime\Filters::indent',
-		'lower' => 'Nette\Latte\Runtime\Filters::lower',
-		'nl2br' => 'Nette\Latte\Runtime\Filters::nl2br',
+		'indent' => 'Latte\Runtime\Filters::indent',
+		'lower' => 'Latte\Runtime\Filters::lower',
+		'nl2br' => 'Latte\Runtime\Filters::nl2br',
 		'number' => 'number_format',
 		'repeat' => 'str_repeat',
-		'replace' => 'Nette\Latte\Runtime\Filters::replace',
-		'replacere' => 'Nette\Latte\Runtime\Filters::replaceRe',
-		'safeurl' => 'Nette\Latte\Runtime\Filters::safeUrl',
-		'strip' => 'Nette\Latte\Runtime\Filters::strip',
+		'replace' => 'Latte\Runtime\Filters::replace',
+		'replacere' => 'Latte\Runtime\Filters::replaceRe',
+		'safeurl' => 'Latte\Runtime\Filters::safeUrl',
+		'strip' => 'Latte\Runtime\Filters::strip',
 		'striptags' => 'strip_tags',
-		'substr' => 'Nette\Latte\Runtime\Filters::substring',
-		'trim' => 'Nette\Latte\Runtime\Filters::trim',
-		'truncate' => 'Nette\Latte\Runtime\Filters::truncate',
-		'upper' => 'Nette\Latte\Runtime\Filters::upper',
+		'substr' => 'Latte\Runtime\Filters::substring',
+		'trim' => 'Latte\Runtime\Filters::trim',
+		'truncate' => 'Latte\Runtime\Filters::truncate',
+		'upper' => 'Latte\Runtime\Filters::upper',
 	);
 
 	/** @var string */
-	private $baseTemplateClass = 'Nette\Latte\Template';
+	private $baseTemplateClass = 'Latte\Template';
 
 
 	/**

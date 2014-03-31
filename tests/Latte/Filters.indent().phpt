@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Runtime\Filters::indent()
+ * Test: Latte\Runtime\Filters::indent()
  *
  * @author     David Grudl
  */
 
-use Nette\Latte\Runtime\Filters,
+use Latte\Runtime\Filters,
 	Tester\Assert;
 
 

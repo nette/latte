@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Nette\Latte\Object
+ * Test: Latte\Object
  *
  * @author     David Grudl
  */
@@ -11,7 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-class TestClass extends Nette\Latte\Object
+class TestClass extends Latte\Object
 {
 	public function abc()
 	{

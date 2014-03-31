@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Runtime;
+namespace Latte\Runtime;
 
-use Nette;
+use Latte;
 
 
 /**
@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class Html extends Nette\Latte\Object implements IHtmlString
+class Html extends Latte\Object implements IHtmlString
 {
 	/** @var string */
 	private $value;

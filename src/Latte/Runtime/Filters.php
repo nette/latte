@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Runtime;
+namespace Latte\Runtime;
 
-use Nette;
+use Latte;
 
 
 /**
@@ -154,7 +154,7 @@ class Filters
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
 			}, $s);
 			if (preg_last_error()) {
-				throw new Nette\Latte\RegexpException(NULL, preg_last_error());
+				throw new Latte\RegexpException(NULL, preg_last_error());
 			}
 			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 			$s = strtr($s, "\x1F\x1E\x1D\x1A", " \t\r\n");
@@ -370,7 +370,7 @@ class Filters
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', $s);
 		if (preg_last_error()) {
-			throw new Nette\Latte\RegexpException(NULL, preg_last_error());
+			throw new Latte\RegexpException(NULL, preg_last_error());
 		}
 		return $s;
 	}

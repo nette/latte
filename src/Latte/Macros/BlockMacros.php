@@ -5,14 +5,13 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Macros;
+namespace Latte\Macros;
 
-use Nette,
-	Nette\Latte,
-	Nette\Latte\MacroNode,
-	Nette\Latte\PhpWriter,
-	Nette\Latte\CompileException,
-	Nette\Latte\RuntimeException;
+use Latte,
+	Latte\MacroNode,
+	Latte\PhpWriter,
+	Latte\CompileException,
+	Latte\RuntimeException;
 
 
 /**
@@ -124,7 +123,7 @@ class BlockMacros extends MacroSet
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
 			$cmd = "call_user_func(reset(\$_l->blocks[$name]), \$_l, %node.array? + get_defined_vars())";
 		} else {
-			$cmd = 'Nette\Latte\Macros\BlockMacros::callBlock' . ($parent ? 'Parent' : '') . "(\$_l, $name, %node.array? + " . ($parent ? 'get_defined_vars' : '$template->getParameters') . '())';
+			$cmd = 'Latte\Macros\BlockMacros::callBlock' . ($parent ? 'Parent' : '') . "(\$_l, $name, %node.array? + " . ($parent ? 'get_defined_vars' : '$template->getParameters') . '())';
 		}
 
 		if ($node->modifiers) {

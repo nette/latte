@@ -5,11 +5,10 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Macros;
+namespace Latte\Macros;
 
-use Nette,
-	Nette\Latte,
-	Nette\Latte\MacroNode;
+use Latte,
+	Latte\MacroNode;
 
 
 /**
@@ -17,7 +16,7 @@ use Nette,
  *
  * @author     David Grudl
  */
-class MacroSet extends Nette\Latte\Object implements Latte\IMacro
+class MacroSet extends Latte\Object implements Latte\IMacro
 {
 	/** @var Latte\Compiler */
 	private $compiler;

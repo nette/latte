@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Engine: general HTML test.
+ * Test: Latte\Engine: general HTML test.
  *
  * @author     David Grudl
  */
 
-use Nette\Latte,
-	Tester\Assert;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Nette\Latte\Loaders;
+namespace Latte\Loaders;
 
-use Nette;
+use Latte;
 
 
 /**
@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class FileLoader extends Nette\Latte\Object implements Nette\Latte\ILoader
+class FileLoader extends Latte\Object implements Latte\ILoader
 {
 
 	/**

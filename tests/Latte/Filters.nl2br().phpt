@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Runtime\Filters::nl2br()
+ * Test: Latte\Runtime\Filters::nl2br()
  *
  * @author     Filip Procházka
  */
 
-use Nette\Latte\Runtime\Filters,
+use Latte\Runtime\Filters,
 	Tester\Assert;
 
 

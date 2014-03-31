@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Test: Nette\Latte\Engine: {block $name} dynamic blocks.
+ * Test: Latte\Engine: {block $name} dynamic blocks.
  *
  * @author     David Grudl
  */
 
-use Nette\Latte,
-	Tester\Assert;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
