@@ -82,7 +82,7 @@ class Parser extends Nette\Object
 			$input = substr($input, 3);
 		}
 		if (!preg_match('##u', $input)) {
-			throw new Nette\InvalidArgumentException('Template is not valid UTF-8 stream.');
+			throw new \InvalidArgumentException('Template is not valid UTF-8 stream.');
 		}
 		$input = str_replace("\r\n", "\n", $input);
 		$this->input = $input;
@@ -313,7 +313,7 @@ class Parser extends Nette\Object
 		if (isset($this->syntaxes[$type])) {
 			$this->setDelimiters($this->syntaxes[$type][0], $this->syntaxes[$type][1]);
 		} else {
-			throw new Nette\InvalidArgumentException("Unknown syntax '$type'");
+			throw new \InvalidArgumentException("Unknown syntax '$type'");
 		}
 		return $this;
 	}

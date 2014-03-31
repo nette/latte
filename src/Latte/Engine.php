@@ -159,7 +159,7 @@ class Engine extends Nette\Object
 		$file = $this->getCacheFile($name);
 		$handle = fopen($file, 'c+');
 		if (!$handle) {
-			throw new Nette\IOException("Unable to open or create file '$file'.");
+			throw new \RuntimeException("Unable to open or create file '$file'.");
 		}
 		flock($handle, LOCK_SH);
 		$stat = fstat($handle);
@@ -171,7 +171,7 @@ class Engine extends Nette\Object
 				$code = $this->compile($name);
 				if (fwrite($handle, $code, strlen($code)) !== strlen($code)) {
 					ftruncate($handle, 0);
-					throw new Nette\IOException("Unable to write file '$file'.");
+					throw new \RuntimeException("Unable to write file '$file'.");
 				}
 			}
 			flock($handle, LOCK_SH); // holds the lock
@@ -193,7 +193,7 @@ class Engine extends Nette\Object
 	public function getCacheFile($name)
 	{
 		if (!$this->tempDirectory) {
-			throw new Nette\InvalidStateException("Set path to temporary directory using setTempDirectory().");
+			throw new \RuntimeException("Set path to temporary directory using setTempDirectory().");
 		} elseif (!is_dir($this->tempDirectory)) {
 			mkdir($this->tempDirectory);
 		}

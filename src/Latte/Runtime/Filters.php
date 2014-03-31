@@ -93,7 +93,7 @@ class Filters
 
 		$json = json_encode($s, PHP_VERSION_ID >= 50400 ? JSON_UNESCAPED_UNICODE : 0);
 		if ($error = json_last_error()) {
-			throw new \Exception(PHP_VERSION_ID >= 50500 ? json_last_error_msg() : 'JSON encode error', $error);
+			throw new \RuntimeException(PHP_VERSION_ID >= 50500 ? json_last_error_msg() : 'JSON encode error', $error);
 		}
 
 		return str_replace(array("\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'), array('\u2028', '\u2029', ']]\x3E', '\x3C!'), $json);

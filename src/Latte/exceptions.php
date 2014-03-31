@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class CompileException extends Nette\InvalidStateException
+class CompileException extends \Exception
 {
 	/** @var string */
 	public $sourceCode;
@@ -64,8 +64,8 @@ class RegexpException extends \Exception
 
 
 /**
- * The exception that indicates tokenizer error.
+ * The exception that indicates error during rendering template.
  */
-class TokenizerException extends \Exception
+class RuntimeException extends \Exception
 {
 }

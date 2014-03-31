@@ -68,7 +68,7 @@ class Tokenizer extends Nette\Object
 		if ($len !== strlen($input)) {
 			list($line, $col) = $this->getCoordinates($input, $len);
 			$token = str_replace("\n", '\n', substr($input, $len, 10));
-			throw new TokenizerException("Unexpected '$token' on line $line, column $col.");
+			throw new CompileException("Unexpected '$token' on line $line, column $col.");
 		}
 		return $tokens;
 	}

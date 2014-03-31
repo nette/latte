@@ -25,7 +25,7 @@ class FileLoader extends Nette\Object implements Nette\Latte\ILoader
 	public function getContent($file)
 	{
 		if (!is_file($file)) {
-			throw new Nette\FileNotFoundException("Missing template file '$file'.");
+			throw new \RuntimeException("Missing template file '$file'.");
 
 		} elseif (@filemtime($file) > time()) { // @ - stat may fail
 			touch($file);
