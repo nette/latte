@@ -60,6 +60,30 @@ class Template extends Object
 
 
 	/**
+	 * Initializes local & global storage in template.
+	 * @return [\stdClass, \stdClass]
+	 */
+	public function initialize($templateId)
+	{
+		// local storage
+		if (isset($this->params['_l'])) {
+			$local = $this->params['_l'];
+			unset($this->params['_l']);
+		} else {
+			$local = new \stdClass;
+		}
+		$local->templates[$templateId] = $this;
+
+		// global storage
+		if (!isset($this->params['_g'])) {
+			$this->params['_g'] = new \stdClass;
+		}
+
+		return array($local, $this->params['_g']);
+	}
+
+
+	/**
 	 * Renders template.
 	 * @return void
 	 */

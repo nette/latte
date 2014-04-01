@@ -95,8 +95,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		return array('list($_l, $_g) = Latte\Macros\CoreMacros::initRuntime($template, '
-			. var_export($this->getCompiler()->getTemplateId(), TRUE) . ')');
+		return array('list($_l, $_g) = $template->initialize('
+			. var_export($this->getCompiler()->getTemplateId(), TRUE)
+		. ')');
 	}
 
 
@@ -413,33 +414,6 @@ class CoreMacros extends MacroSet
 		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
 			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var)', (int) $node->args
 		);
-	}
-
-
-	/********************* run-time helpers ****************d*g**/
-
-
-	/**
-	 * Initializes local & global storage in template.
-	 * @return [\stdClass, \stdClass]
-	 */
-	public static function initRuntime(Latte\Template $template, $templateId)
-	{
-		// local storage
-		if (isset($template->_l)) {
-			$local = $template->_l;
-			unset($template->_l);
-		} else {
-			$local = new \stdClass;
-		}
-		$local->templates[$templateId] = $template;
-
-		// global storage
-		if (!isset($template->_g)) {
-			$template->_g = new \stdClass;
-		}
-
-		return array($local, $template->_g);
 	}
 
 }
