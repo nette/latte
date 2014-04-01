@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class Compiler extends Nette\Object
+class Compiler extends Object
 {
 	/** @var Token[] */
 	private $tokens;

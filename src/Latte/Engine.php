@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class Engine extends Nette\Object
+class Engine extends Object
 {
 	/** Content types */
 	const CONTENT_HTML = Compiler::CONTENT_HTML,
@@ -117,10 +117,10 @@ class Engine extends Nette\Object
 	 */
 	public function compile($name)
 	{
-		if ($this->onCompile) {
-			$this->onCompile($this);
-			$this->onCompile = array();
+		foreach ((array) $this->onCompile as $cb) {
+			call_user_func($cb, $this);
 		}
+		$this->onCompile = array();
 
 		$source = $this->getLoader()->getContent($name);
 		try {

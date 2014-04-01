@@ -17,7 +17,7 @@ use Nette,
  *
  * @author     David Grudl
  */
-class MacroSet extends Nette\Object implements Latte\IMacro
+class MacroSet extends Nette\Latte\Object implements Latte\IMacro
 {
 	/** @var Latte\Compiler */
 	private $compiler;

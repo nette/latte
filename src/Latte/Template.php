@@ -16,7 +16,7 @@ use Nette;
  * @author     David Grudl
  * @internal
  */
-class Template extends Nette\Object
+class Template extends Object
 {
 	/** @var Engine */
 	private $engine;

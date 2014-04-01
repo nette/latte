@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class FileLoader extends Nette\Object implements Nette\Latte\ILoader
+class FileLoader extends Nette\Latte\Object implements Nette\Latte\ILoader
 {
 
 	/**

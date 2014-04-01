@@ -21,7 +21,7 @@ Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 
 Assert::match('<>', $latte->renderToString('{!="<>"}'));
 
-$latte->parser->shortNoEscape = FALSE;
+$latte->getParser()->shortNoEscape = FALSE;
 Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 
 Assert::error(function() use ($latte) {

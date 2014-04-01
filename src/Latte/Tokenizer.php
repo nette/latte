@@ -16,7 +16,7 @@ use Nette;
  * @author     David Grudl
  * @internal
  */
-class Tokenizer extends Nette\Object
+class Tokenizer extends Object
 {
 	const VALUE = 0,
 		OFFSET = 1,

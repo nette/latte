@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class HtmlNode extends Nette\Object
+class HtmlNode extends Object
 {
 	/** @var string */
 	public $name;

@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class MacroNode extends Nette\Object
+class MacroNode extends Object
 {
 	const PREFIX_INNER = 'inner',
 		PREFIX_TAG = 'tag',

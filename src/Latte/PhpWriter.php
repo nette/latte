@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class PhpWriter extends Nette\Object
+class PhpWriter extends Object
 {
 	/** @var MacroTokens */
 	private $tokens;

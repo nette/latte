@@ -15,7 +15,7 @@ use Nette;
  *
  * @author     David Grudl
  */
-class Html extends Nette\Object implements IHtmlString
+class Html extends Nette\Latte\Object implements IHtmlString
 {
 	/** @var string */
 	private $value;
