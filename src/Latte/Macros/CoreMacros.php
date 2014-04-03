@@ -220,7 +220,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroUse(MacroNode $node, PhpWriter $writer)
 	{
-		call_user_func(array($node->tokenizer->fetchWord(), 'install'), $this->getCompiler())
+		call_user_func(Latte\Helpers::checkCallback(array($node->tokenizer->fetchWord(), 'install')), $this->getCompiler())
 			->initialize();
 	}
 

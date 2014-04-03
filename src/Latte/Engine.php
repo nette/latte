@@ -116,7 +116,7 @@ class Engine extends Object
 	public function compile($name)
 	{
 		foreach ($this->onCompile ?: array() as $cb) {
-			call_user_func($cb, $this);
+			call_user_func(Helpers::checkCallback($cb), $this);
 		}
 		$this->onCompile = array();
 

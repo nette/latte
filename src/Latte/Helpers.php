@@ -23,6 +23,19 @@ class Helpers
 
 
 	/**
+	 * Checks callback.
+	 * @return callable
+	 */
+	public static function checkCallback($callable)
+	{
+		if (!is_callable($callable, FALSE, $text)) {
+			throw new \InvalidArgumentException("Callback '$text' is not callable.");
+		}
+		return $callable;
+	}
+
+
+	/**
 	 * Removes unnecessary blocks of PHP code.
 	 * @param  string
 	 * @return string

@@ -33,6 +33,12 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 
 	public function addMacro($name, $begin, $end = NULL, $attr = NULL)
 	{
+		foreach (array($begin, $end, $attr) as $arg) {
+			if ($arg && !is_string($arg)) {
+				Latte\Helpers::checkCallback($arg);
+			}
+		}
+
 		$this->macros[$name] = array($begin, $end, $attr);
 		$this->compiler->addMacro($name, $this);
 		return $this;
