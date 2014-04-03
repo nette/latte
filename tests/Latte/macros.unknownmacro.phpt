@@ -26,3 +26,11 @@ Assert::exception(function() use ($latte) {
 Assert::exception(function() use ($latte) {
 	$latte->compile('<script>if (true) {return}</script>');
 }, 'Latte\CompileException', 'Unknown macro {return} (in JavaScript or CSS, try to put a space after bracket.)');
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('<ul n:abc></ul>');
+}, 'Latte\CompileException', 'Unknown macro-attribute n:abc');
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('<ul n:abc n:klm></ul>');
+}, 'Latte\CompileException', 'Unknown macro-attribute n:abc and n:klm');
