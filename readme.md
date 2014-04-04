@@ -11,6 +11,9 @@ ensures the output is protected against vulnerabilities, such as XSS.
 **Latte speaks your language:** it has intuitive syntax and helps you to build better websites easily.
 
 
+Getting Started
+===============
+
 Although PHP is originally a templating language, it isn't suited for writing templates. Let's have a look at an example of PHP template that prints an array `$items` as a list:
 
 ```php
@@ -28,10 +31,6 @@ Although PHP is originally a templating language, it isn't suited for writing te
 
 The code is rather confusing and also we must not forget to call `htmlSpecialChars` function. That's why there are so many different template engines for PHP. One of the best template engines is part of Nette Framework and it is called **Latte**. You'll love it!
 
-
-Latte
-=====
-
 The same template is written easily in Latte:
 
 ```html
@@ -47,9 +46,24 @@ As you can see there are two types of macros:
 - **macro** in braces, for example `{foreach …}`
 - **n:macro**, for example `n:if="…"`
 
+How to render template? Just install Latte (it requires PHP 5.3.1 or later) by [downloading a latest package](https://github.com/nette/latte/releases) or using a Composer:
+
+```
+php composer.phar require latte/latte
+```
+
+and run this code:
+
+```php
+$latte = new Latte\Engine;
+$latte->setTempDirectory('/path/to/tempdir');
+$params['items'] = array('one', 'two', 'three');
+$latte->render('template.latte', $params);
+```
+
 
 Macros
------
+======
 
 You can find detailed description of all the default macros on the [extra page](http://doc.nette.org/en/default-macros). Furthermore, you can make your own macros.
 
@@ -63,7 +77,7 @@ Each pair macro, such as `{if} … {/if}`, operating upon single HTML element ca
 
 With n:macros you can do much more interesting tricks as you will see in a moment.
 
-`{$item|capitalize}` macro which prints the `$item` variable contains so called helper, in this case the `capitalize` helper which makes the first letter of each word uppercase.
+`{$item|capitalize}` macro which prints the `$item` variable contains so called filter, in this case the `capitalize` filter which makes the first letter of each word uppercase.
 
 Very important feature of Latte is that it **escapes variables by default**. Escaping is needed when printing a variable because we have to convert all the characters which have a special meaning in HTML to other sequences. In case we forget it can lead to a serious security hole called Cross Site Scripting (XSS).
 
@@ -89,7 +103,7 @@ Latte also has a `{* comment macro *}` which doesn't get printed to the output.
 
 
 n:macros
--------
+========
 
 We showed that n:macros are supposed to be written directly into HTML tags as their special attributes. We also said that every pair macro (e.g. `{if} … {/if}`) can be written in n:macro notation. The macro then corresponds to the HTML element in which it is written:
 
@@ -148,32 +162,65 @@ Depending on the value of `$url` variable this will print:
 However, n:macros are not only a shortcut for pair macros, there are some pure n:macros as well, for example the coder's best friend [n:class](http://doc.nette.org/en/default-macros#toc-n-class) macro.
 
 
-Helpers in Latte
--------
+Filters
+=======
 
-Latte allows calling helpers by using the pipe sign notation (preceding space is allowed):
+Latte allows calling filters by using the pipe sign notation (preceding space is allowed):
 
 ```html
 <h1>{$heading|upper}</h1>
 ```
 
-Helpers (or modifiers) can be chained, in that case they apply in order from left to right:
+Filters (or modifiers) can be chained, in that case they apply in order from left to right:
 
 ```html
 <h1>{$heading|lower|capitalize}</h1>
 ```
 
-Parameters are put after the helper name separated by colon or comma:
+Parameters are put after the filter name separated by colon or comma:
 
 ```html
 <h1>{$heading|truncate:20,''}</h1>
 ```
 
-See the summary of [standard helpers](http://doc.nette.org/en/default-helpers) and how to make user-defined helpers.
+See the summary of [standard filters](http://doc.nette.org/en/default-filters) and how to make user-defined filters.
+
+
+In templates we can use functions which change or format the data to a form we want. They are called *filters*. See the [summary of the default filters|default filters].
+
+
+Filter can be registered by any callback or lambda function:
+
+```php
+$latte = new Latte\Engine;
+$latte->addFilter('shortify', function ($s) {
+	return mb_substr($s, 0, 10); // shortens the text to 10 characters
+});
+```
+
+In this case it would be better for the filter to get an extra parameter:
+
+```php
+$latte->addFilter('shortify', function ($s, $len = 10) {
+	return mb_substr($s, 0, $len);
+});
+```
+
+We call it in a template like this:
+
+```php
+<p><?php echo $template->shortify($text, 100); ?></p>
+```
+
+Latte simplifies the notation - filters are denoted by the pipe sign, they can be chained (they apply in order from left to right). Parameters are separated by colon or comma:
+
+```html
+<p>{$text|shortify:100}</p>
+```
 
 
 Performance
---------
+===========
 
 Latte is fast. It compiles the templates to native PHP code and stores them in cache on the disk. So they are as fast as if they would have been written in pure PHP.
 
@@ -181,7 +228,7 @@ The template is automatically recompiled each time we change the source file. Wh
 
 
 Debugging
------------
+=========
 
 With each error or typo you will be informed by the Debugger with all the luxury. The template source code is displayed and the red line marks the error showing error message as well. With just a single click you can open the template in your favorite editor and fix the error at once. Easy peasy!
 
@@ -190,7 +237,7 @@ If you are using an IDE with code stepping you can go through the generated PHP 
 
 
 Usability
-------------
+=========
 
 Latte syntax wasn't invented by engineers but came up from webdesigner's practical requests. We were looking for the friendliest syntax with which you can write even the most problematic constructions comfortably enough. You will be surprised how much help Latte can be.
 
@@ -199,7 +246,7 @@ You can find macros for advanced [layout](http://doc.nette.org/en/default-macros
 
 
 Context-Aware Escaping
-----------------------
+======================
 
 Although the Cross Site Scripting (XSS) is one of the trivial ways of exploiting a web page it is the most common vulnerability but very serious. It can lead to identity theft and so on. The best defense is consistent escaping of printed data, ie. converting the characters which have a special meaning in the given context.
 
@@ -231,57 +278,10 @@ Thanks to Context-Aware Escaping the template is simple and your application per
 
 
 A pretty output
-------------
+===============
 
 Sticklers will enjoy the look of the HTML output which Latte generates. All tags are indented as they are supposed to. The code looks like it has been processed with some kind of *HTML code beautifier* :-)
 
-
-
-Helpers
--------
-
-In templates we can use functions which change or format the data to a form we want. They are called *helpers*. See the [summary of the default helpers|default helpers].
-
-
-Helper can be registered by any callback or lambda function:
-
-```php
-$template->registerHelper('shortify', function ($s) {
-	return mb_substr($s, 0, 10); // shortens the text to 10 characters
-});
-```
-
-In this case it would be better for the helper to get an extra parameter:
-
-```php
-$template->registerHelper('shortify', function ($s, $len = 10) {
-	return mb_substr($s, 0, $len);
-});
-```
-
-We call it in a template like this:
-
-```php
-<p><?php echo $template->shortify($text, 100); ?></p>
-```
-
-Latte simplifies the notation - helpers are denoted by the pipe sign, they can be chained (they apply in order from left to right). Parameters are separated by colon or comma:
-
-```html
-<p>{$text|shortify:100}</p>
-```
-
-
-Installation
-------------
-
-The best way how to install is to [download a latest package](https://github.com/nette/latte/releases) or use a Composer:
-
-```
-php composer.phar require nette/latte
-```
-
-Nette Tester requires PHP 5.3.1 or later.
 
 -----
 
