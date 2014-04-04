@@ -115,7 +115,7 @@ class Engine extends Object
 	 */
 	public function compile($name)
 	{
-		foreach ((array) $this->onCompile as $cb) {
+		foreach ($this->onCompile instanceof \Traversable ? $this->onCompile : (array) $this->onCompile as $cb) {
 			call_user_func($cb, $this);
 		}
 		$this->onCompile = array();
