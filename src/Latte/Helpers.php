@@ -76,10 +76,10 @@ class Helpers
 
 				} elseif ($token[0] === T_OPEN_TAG && $token[1] === '<?' && isset($tokens[$n+1][1]) && $tokens[$n+1][1] === 'xml') {
 					$lastChar = '';
-					$php .= '<<?php ?>?';
+					$res .= '<<?php ?>?';
 					for ($tokens->next(); $tokens->valid(); $tokens->next()) {
 						$token = $tokens->current();
-						$php .= is_array($token) ? $token[1] : $token;
+						$res .= is_array($token) ? $token[1] : $token;
 						if ($token[0] === T_CLOSE_TAG) {
 							break;
 						}

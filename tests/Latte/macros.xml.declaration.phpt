@@ -31,3 +31,17 @@ EOD
 <?php echo 'ok' ?>
 EOD
 ));
+
+
+Assert::match(<<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+EOD
+
+, $latte->renderToString(<<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+EOD
+));
