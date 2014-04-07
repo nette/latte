@@ -146,7 +146,7 @@ class CoreMacros extends MacroSet
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
 			if (isset($ifNode->data->else)) {
-				throw new CompileException("Macro {if} supports only one {else}.");
+				throw new CompileException('Macro {if} supports only one {else}.');
 			}
 			$ifNode->data->else = TRUE;
 			return 'ob_start()';
@@ -247,7 +247,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer)
 	{
-		return $node->data->variable . $writer->write(" = %modify(ob_get_clean())");
+		return $node->data->variable . $writer->write(' = %modify(ob_get_clean())');
 	}
 
 
@@ -305,7 +305,7 @@ class CoreMacros extends MacroSet
 	public function macroDump(MacroNode $node, PhpWriter $writer)
 	{
 		$args = $writer->formatArgs();
-		return 'Tracy\Debugger::barDump(' . ($node->args ? "array(" . $writer->write('%var', $args) . " => $args)" : 'get_defined_vars()')
+		return 'Tracy\Debugger::barDump(' . ($node->args ? $writer->write("array(%var => $args)", $args) : 'get_defined_vars()')
 			. ', "Template " . str_replace(dirname(dirname($template->getName())), "\xE2\x80\xA6", $template->getName()))';
 	}
 
@@ -351,7 +351,7 @@ class CoreMacros extends MacroSet
 				$var = TRUE;
 
 			} elseif ($var === NULL && $node->name === 'default' && !$tokens->isCurrent(Latte\MacroTokens::T_WHITESPACE)) {
-				throw new CompileException("Unexpected '" . $tokens->currentValue() . "' in {default $node->args}");
+				throw new CompileException("Unexpected '{$tokens->currentValue()}' in {default $node->args}");
 
 			} else {
 				$res->append($tokens->currentToken());

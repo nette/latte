@@ -133,7 +133,7 @@ class Filters
 		return preg_replace_callback(
 			'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
 			function($m) {
-				return trim(preg_replace('#[ \t\r\n]+#', " ", $m[0]));
+				return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
 			},
 			$s
 		);

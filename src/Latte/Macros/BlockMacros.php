@@ -82,7 +82,7 @@ class BlockMacros extends MacroSet
 		}
 
 		if ($this->namedBlocks || $this->extends) {
-			$prolog[] = "// template extending";
+			$prolog[] = '// template extending';
 
 			$prolog[] = '$_l->extends = '
 				. ($this->extends ? $this->extends : 'empty($template->_extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
@@ -149,13 +149,13 @@ class BlockMacros extends MacroSet
 	public function macroExtends(MacroNode $node, PhpWriter $writer)
 	{
 		if (!$node->args) {
-			throw new CompileException('Missing destination in {' . $node->name . '}');
+			throw new CompileException("Missing destination in {{$node->name}}");
 		}
 		if (!empty($node->parentNode)) {
-			throw new CompileException('{' . $node->name . '} must be placed outside any macro.');
+			throw new CompileException("{{$node->name}} must be placed outside any macro.");
 		}
 		if ($this->extends !== NULL) {
-			throw new CompileException('Multiple {' . $node->name . '} declarations are not allowed.');
+			throw new CompileException("Multiple {{$node->name}} declarations are not allowed.");
 		}
 		if ($node->args === 'none') {
 			$this->extends = 'FALSE';
@@ -188,14 +188,14 @@ class BlockMacros extends MacroSet
 		$node->data->name = $name = ltrim($name, '#');
 		if ($name == NULL) {
 			if ($node->name === 'define') {
-				throw new CompileException("Missing block name.");
+				throw new CompileException('Missing block name.');
 			}
 
 		} elseif (strpos($name, '$') !== FALSE) { // dynamic block/snippet
 			if ($node->name === 'snippet') {
 				for ($parent = $node->parentNode; $parent && !($parent->name === 'snippet' || $parent->name === 'snippetArea'); $parent = $parent->parentNode);
 				if (!$parent) {
-					throw new CompileException("Dynamic snippets are allowed only inside static snippet/snippetArea.");
+					throw new CompileException('Dynamic snippets are allowed only inside static snippet/snippetArea.');
 				}
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
@@ -290,7 +290,7 @@ class BlockMacros extends MacroSet
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = rtrim(ltrim($node->content, "\n"), " \t");
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
-				$node->openingCode = "<?php ?>";
+				$node->openingCode = '<?php ?>';
 			}
 
 		} elseif ($node->modifiers) { // anonymous block with modifier

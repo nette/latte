@@ -323,7 +323,7 @@ class PhpWriter extends Object
 						$inside = TRUE;
 					}
 				} else {
-					throw new CompileException("Modifier name must be alphanumeric string, '" . $tokens->currentValue() . "' given.");
+					throw new CompileException("Modifier name must be alphanumeric string, '{$tokens->currentValue()}' given.");
 				}
 			}
 		}

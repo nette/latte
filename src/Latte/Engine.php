@@ -191,7 +191,7 @@ class Engine extends Object
 	public function getCacheFile($name)
 	{
 		if (!$this->tempDirectory) {
-			throw new \RuntimeException("Set path to temporary directory using setTempDirectory().");
+			throw new \RuntimeException('Set path to temporary directory using setTempDirectory().');
 		} elseif (!is_dir($this->tempDirectory)) {
 			mkdir($this->tempDirectory);
 		}
