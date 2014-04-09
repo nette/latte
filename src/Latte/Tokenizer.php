@@ -9,7 +9,7 @@ namespace Latte;
 
 
 /**
- * Simple lexical analyser. Internal class.
+ * Simple lexical analyser.
  *
  * @author     David Grudl
  * @internal
@@ -39,7 +39,7 @@ class Tokenizer extends Object
 
 
 	/**
-	 * Tokenize string.
+	 * Tokenizes string.
 	 * @param  string
 	 * @return array
 	 */
@@ -74,8 +74,9 @@ class Tokenizer extends Object
 
 	/**
 	 * Returns position of token in input string.
-	 * @param  int token number
-	 * @return array [line, column]
+	 * @param  string
+	 * @param  int
+	 * @return array of [line, column]
 	 */
 	public static function getCoordinates($text, $offset)
 	{
