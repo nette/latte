@@ -176,7 +176,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	}
 
 
-	/********************* Nette\Latte\Object behaviour + property accessor ****************d*g**/
+	/********************* Latte\Object behaviour + property accessor ****************d*g**/
 
 
 	/**
