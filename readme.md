@@ -83,7 +83,7 @@ Very important feature of Latte is that it **escapes variables by default**. Esc
 
 Because of different escaping functions that are needed in different documents and different parts of a page, Latte features a unique technology of Context-Aware Escaping which recognizes the context in which the macro is placed and **chooses the right escaping mode.** You don't have to worry that your coder forgets about it causing you goose bumps because of a security hole. Which is great!
 
-If the `$item` variable stores an HTML code and you want to print it without any alteration you just add the modifier noescape: `{!$item}`. Forgetting the modifier mark won't cause any security holes in spirit of „less code, more security“ principle.
+If the `$item` variable stores an HTML code and you want to print it without any alteration you just add the modifier noescape: `{$item|noescape}`. Forgetting the modifier mark won't cause any security holes in spirit of „less code, more security“ principle.
 
 You can still use PHP inside the macros normally, including comments as well. But Latte also extends the PHP syntax with three pleasant features:
 
