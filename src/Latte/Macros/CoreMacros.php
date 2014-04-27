@@ -21,12 +21,9 @@ use Latte,
  * - {for ?} ... {/for}
  * - {foreach ?} ... {/foreach}
  * - {$variable} with escaping
- * - {!$variable} without escaping
  * - {=expression} echo with escaping
- * - {!=expression} echo without escaping
  * - {?expression} evaluate PHP statement
  * - {_expression} echo translation with escaping
- * - {!_expression} echo translation without escaping
  * - {attr ?} HTML element attributes
  * - {capture ?} ... {/capture} capture block to parameter
  * - {var var => value} set template parameter
