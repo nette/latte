@@ -38,3 +38,11 @@ Assert::exception(function() use ($latte) {
 Assert::exception(function() use ($latte) {
 	$latte->compile('<ul n:abc n:klm></ul>');
 }, 'Latte\CompileException', 'Unknown macro-attribute n:abc and n:klm');
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('<a n:tag-class=$cond>');
+}, 'Latte\CompileException', 'Unknown macro-attribute n:tag-class');
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('<a n:inner-class=$cond>');
+}, 'Latte\CompileException', 'Unknown macro-attribute n:inner-class');
