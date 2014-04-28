@@ -20,6 +20,10 @@ Assert::exception(function() use ($latte) {
 }, 'Latte\CompileException', 'Unknown macro {unknown}');
 
 Assert::exception(function() use ($latte) {
+	$latte->compile('{class}');
+}, 'Latte\CompileException', 'Unhandled macro {class}');
+
+Assert::exception(function() use ($latte) {
 	$latte->compile('<style>body {color:blue}</style>');
 }, 'Latte\CompileException', 'Unknown macro {color:blue} (in JavaScript or CSS, try to put a space after bracket.)');
 

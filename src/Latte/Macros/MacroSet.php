@@ -33,6 +33,9 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 
 	public function addMacro($name, $begin, $end = NULL, $attr = NULL)
 	{
+		if (!$begin && !$end && !$attr) {
+			throw new \InvalidArgumentException("At least one argument must be specified for macro '$name'.");
+		}
 		foreach (array($begin, $end, $attr) as $arg) {
 			if ($arg && !is_string($arg)) {
 				Latte\Helpers::checkCallback($arg);
@@ -75,22 +78,31 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 	 */
 	public function nodeOpened(MacroNode $node)
 	{
-		if ($this->macros[$node->name][2] && $node->prefix) {
+		list($begin, $end, $attr) = $this->macros[$node->name];
+		$node->isEmpty = !$end;
+
+		if ($attr && $node->prefix === $node::PREFIX_NONE) {
 			$node->isEmpty = TRUE;
 			$this->compiler->setContext(Latte\Compiler::CONTEXT_DOUBLE_QUOTED_ATTR);
-			$res = $this->compile($node, $this->macros[$node->name][2]);
-			$this->compiler->setContext(NULL);
-			if (!$node->attrCode) {
+			$res = $this->compile($node, $attr);
+			if ($res === FALSE) {
+				return FALSE;
+			} elseif (!$node->attrCode) {
 				$node->attrCode = "<?php $res ?>";
 			}
-		} else {
-			$node->isEmpty = !isset($this->macros[$node->name][1]);
-			$res = $this->compile($node, $this->macros[$node->name][0]);
-			if (!$node->openingCode) {
+			$this->compiler->setContext(NULL);
+
+		} elseif ($begin) {
+			$res = $this->compile($node, $begin);
+			if ($res === FALSE) {
+				return FALSE;
+			} elseif (!$node->openingCode) {
 				$node->openingCode = "<?php $res ?>";
 			}
+
+		} elseif (!$end) {
+			return FALSE;
 		}
-		return $res !== FALSE;
 	}
 
 
@@ -100,9 +112,11 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 	 */
 	public function nodeClosed(MacroNode $node)
 	{
-		$res = $this->compile($node, $this->macros[$node->name][1]);
-		if (!$node->closingCode) {
-			$node->closingCode = "<?php $res ?>";
+		if (isset($this->macros[$node->name][1])) {
+			$res = $this->compile($node, $this->macros[$node->name][1]);
+			if (!$node->closingCode) {
+				$node->closingCode = "<?php $res ?>";
+			}
 		}
 	}
 
