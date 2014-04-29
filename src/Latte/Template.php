@@ -63,8 +63,10 @@ class Template extends Object
 	 * Initializes local & global storage in template.
 	 * @return [\stdClass, \stdClass]
 	 */
-	public function initialize($templateId)
+	public function initialize($templateId, $contentType)
 	{
+		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $contentType);
+
 		// local storage
 		if (isset($this->params['_l'])) {
 			$local = $this->params['_l'];

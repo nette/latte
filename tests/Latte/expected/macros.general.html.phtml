@@ -2,7 +2,7 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%')
+list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
@@ -302,4 +302,6 @@ Hello<?php } $iterations++; } $iterations = 0; foreach (array(1) as $foo) { if (
 <?php $_l->switch[] = (2); if (FALSE) { } elseif (end($_l->switch) === ('x')) { ?>x
 <?php } elseif (end($_l->switch) === (2)) { ?>y
 <?php } else { ?>z
-<?php } array_pop($_l->switch) ;
+<?php } array_pop($_l->switch) ?>
+
+<?php echo $template->nl2br("\n") ?>

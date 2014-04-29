@@ -92,7 +92,8 @@ class CoreMacros extends MacroSet
 	public function finalize()
 	{
 		return array('list($_l, $_g) = $template->initialize('
-			. var_export($this->getCompiler()->getTemplateId(), TRUE)
+			. var_export($this->getCompiler()->getTemplateId(), TRUE) . ', '
+			. var_export($this->getCompiler()->getContentType(), TRUE)
 		. ')');
 	}
 
