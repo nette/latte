@@ -342,6 +342,7 @@ class BlockMacros extends MacroSet
 			throw new RuntimeException("Cannot include undefined parent block '$name'.");
 		}
 		$block($context, $params);
+		prev($context->blocks[$name]);
 	}
 
 }
