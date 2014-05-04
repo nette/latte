@@ -25,7 +25,7 @@ class Engine extends Object
 		CONTENT_TEXT = Compiler::CONTENT_TEXT;
 
 	/** @var array */
-	public $onCompile;
+	public $onCompile = array();
 
 	/** @var Parser */
 	private $parser;
