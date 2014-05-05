@@ -131,7 +131,8 @@ class Engine extends Object
 				$code = "<?php\n// source: $name\n?>" . $code;
 			}
 
-		} catch (CompileException $e) {
+		} catch (\Exception $e) {
+			$e = $e instanceof CompileException ? $e : new CompileException("Thrown exception '{$e->getMessage()}'", NULL, $e);
 			throw $e->setSource($source, $this->getCompiler()->getLine(), $name);
 		}
 		$code = Helpers::optimizePhp($code);

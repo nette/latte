@@ -17,4 +17,4 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function() use ($latte) {
 	$latte->compile("\xAA");
-}, 'InvalidArgumentException', '%a% UTF-8 %a%');
+}, 'Latte\CompileException', '%a% UTF-8 %a%');
