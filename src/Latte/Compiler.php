@@ -101,18 +101,13 @@ class Compiler extends Object
 			$handler->initialize($this);
 		}
 
-		try {
-			foreach ($tokens as $this->position => $token) {
-				$this->{"process$token->type"}($token);
-			}
-		} catch (CompileException $e) {
-			throw $e->setSource(NULL, $token->line);
+		foreach ($tokens as $this->position => $token) {
+			$this->{"process$token->type"}($token);
 		}
 
 		while ($this->htmlNode) {
 			if (!empty($this->htmlNode->macroAttrs)) {
-				$e = new CompileException('Missing ' . self::printEndTag($this->macroNode));
-				throw $e->setSource(NULL, $token->line);
+				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
 			}
 			$this->htmlNode = $this->htmlNode->parentNode;
 		}
@@ -127,8 +122,7 @@ class Compiler extends Object
 		$output = ($prologs ? $prologs . "<?php\n//\n// main template\n//\n?>\n" : '') . $output . $epilogs;
 
 		if ($this->macroNode) {
-			$e = new CompileException('Missing ' . self::printEndTag($this->macroNode));
-			throw $e->setSource(NULL, $token->line);
+			throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
 		}
 
 		$output = $this->expandTokens($output);

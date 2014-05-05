@@ -132,7 +132,7 @@ class Engine extends Object
 			}
 
 		} catch (CompileException $e) {
-			throw $e->setSource($source, $e->sourceLine, $name);
+			throw $e->setSource($source, $this->getCompiler()->getLine(), $name);
 		}
 		$code = Helpers::optimizePhp($code);
 		return $code;
