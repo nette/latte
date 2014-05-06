@@ -1,6 +1,9 @@
 [Latte](http://latte.nette.org): amazing template engine for PHP
 ================================================================
 
+[![Downloads this Month](https://img.shields.io/packagist/dm/latte/latte.svg)](https://packagist.org/packages/latte/latte)
+[![Build Status](https://travis-ci.org/nette/latte.svg?branch=master)](https://travis-ci.org/nette/latte)
+
 Latte is a template engine for PHP which eases your work and
 ensures the output is protected against vulnerabilities, such as XSS.
 
@@ -281,8 +284,3 @@ A pretty output
 ===============
 
 Sticklers will enjoy the look of the HTML output which Latte generates. All tags are indented as they are supposed to. The code looks like it has been processed with some kind of *HTML code beautifier* :-)
-
-
------
-
-[![Build Status](https://secure.travis-ci.org/nette/latte.png?branch=master)](http://travis-ci.org/nette/latte)
