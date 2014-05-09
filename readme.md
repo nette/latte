@@ -17,7 +17,7 @@ ensures the output is protected against vulnerabilities, such as XSS.
 Getting Started
 ===============
 
-Although PHP is originally a templating language, it isn't suited for writing templates. Let's have a look at an example of PHP template that prints an array `$items` as a list:
+Although PHP is originally a templating language, it is not particularly suited for writing templates. Let's have a look at an example of a PHP template that prints an array `$items` as a list:
 
 ```php
 <?php if ($items): ?>
@@ -32,9 +32,9 @@ Although PHP is originally a templating language, it isn't suited for writing te
 <?php endif?>
 ```
 
-The code is rather confusing and also we must not forget to call `htmlSpecialChars` function. That's why there are so many different template engines for PHP. One of the best template engines is part of Nette Framework and it is called **Latte**. You'll love it!
+The code is rather confusing. Moreover, we must not forget to call `htmlSpecialChars` function. That's why there are so many different template engines for PHP. One of the best template engines is part of Nette Framework and it is called **Latte**. You'll love it!
 
-The same template is written easily in Latte:
+The same template as the one above can be written easily in Latte:
 
 ```html
 <ul n:if="$items">
@@ -49,7 +49,7 @@ As you can see there are two types of macros:
 - **macro** in braces, for example `{foreach …}`
 - **n:macro**, for example `n:if="…"`
 
-How to render template? Just install Latte (it requires PHP 5.3.1 or later) by [downloading a latest package](https://github.com/nette/latte/releases) or using a Composer:
+How to render template? Just install Latte (it requires PHP 5.3.1 or later) by [downloading the latest package](https://github.com/nette/latte/releases) or using Composer:
 
 ```
 php composer.phar require latte/latte
