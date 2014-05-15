@@ -70,7 +70,7 @@ EOD
 
 
 Assert::exception(function() use ($latte) {
-	$latte->compile('{ifcontent}');
+	$latte->compile('<html>{ifcontent}');
 }, 'Latte\CompileException', 'Unknown macro {ifcontent}, use n:ifcontent attribute.');
 
 
