@@ -15,10 +15,15 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.1"
+		"php": ">=5.3.1",
+		"ext-tokenizer": "*"
 	},
 	"require-dev": {
 		"nette/tester": "~1.0"
+	},
+	"suggest": {
+		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
+		"ext-fileinfo": "to use filter |datastream"
 	},
 	"autoload": {
 		"classmap": ["src/"]
