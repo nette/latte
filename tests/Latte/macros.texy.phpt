@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine and Texy.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine and blocks.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

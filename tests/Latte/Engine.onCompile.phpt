@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {onCompile}
- *
- * @author     Filip Procházka
  */
 
 use Tester\Assert;

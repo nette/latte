@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\TokenIterator traversing
- *
- * @author     David Grudl
  */
 
 use Latte\Tokenizer,

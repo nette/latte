@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: general XHTML test.
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Html,

@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::safeUrl()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

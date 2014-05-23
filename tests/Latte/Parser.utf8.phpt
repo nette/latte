@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine and invalid UTF-8.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

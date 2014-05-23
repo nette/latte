@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Helpers::optimizePhp()
- *
- * @author     David Grudl
  */
 
 use Latte\Helpers,

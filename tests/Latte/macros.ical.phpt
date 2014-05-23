@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: iCal template
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

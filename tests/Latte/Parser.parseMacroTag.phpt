@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Parser::parseMacroTag().
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

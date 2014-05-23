@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {block $name} dynamic blocks.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

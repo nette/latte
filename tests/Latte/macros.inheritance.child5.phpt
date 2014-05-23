@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {extends ...} test V.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

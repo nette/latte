@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Tokenizer::getCoordinates
- *
- * @author     David Grudl
  */
 
 use Latte\Tokenizer,

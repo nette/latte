@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {block} autoclosing
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

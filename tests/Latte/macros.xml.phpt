@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {contentType application/xml}
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Html,

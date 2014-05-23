@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine and n:ifcontent.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

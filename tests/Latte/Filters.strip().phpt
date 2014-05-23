@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::strip()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

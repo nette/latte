@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Compiler::expandMacro() and reentrant.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

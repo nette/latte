@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::trim()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

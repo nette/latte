@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine and JavaScript.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

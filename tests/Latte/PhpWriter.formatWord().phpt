@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\PhpWriter::formatWord()
- *
- * @author     David Grudl
  */
 
 use Latte\PhpWriter,

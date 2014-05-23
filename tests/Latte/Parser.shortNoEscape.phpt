@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Parser and $shortNoEscape.
- *
- * @author     Miloslav Hůla
  */
 
 use Tester\Assert;

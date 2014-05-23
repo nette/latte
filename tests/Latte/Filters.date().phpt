@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::date()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

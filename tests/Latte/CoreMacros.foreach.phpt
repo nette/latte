@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Macros\CoreMacros: {foreach ...}
- *
- * @author     Matej Kravjar
  */
 
 use Latte\Macros\CoreMacros,

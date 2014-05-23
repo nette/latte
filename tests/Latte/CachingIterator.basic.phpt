@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\CachingIterator basic usage.
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\CachingIterator,
