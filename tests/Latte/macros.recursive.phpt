@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: general HTML test.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

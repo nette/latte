@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::indent()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

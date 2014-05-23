@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine and auto-safe URL.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

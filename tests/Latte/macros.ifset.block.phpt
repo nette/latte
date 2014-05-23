@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Macros\BlockMacros {ifset #block}
- *
- * @author     David Grudl
  */
 
 use Latte\Macros\BlockMacros,

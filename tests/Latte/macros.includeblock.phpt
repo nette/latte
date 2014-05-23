@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {includeblock ...}
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

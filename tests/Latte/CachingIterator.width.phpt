@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\CachingIterator width.
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\CachingIterator,

@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Macros\CoreMacros: {if ...}
- *
- * @author     Matej Kravjar
  */
 
 use Latte\Macros\CoreMacros,

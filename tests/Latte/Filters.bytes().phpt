@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::bytes()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

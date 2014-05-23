@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: unknown macro.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

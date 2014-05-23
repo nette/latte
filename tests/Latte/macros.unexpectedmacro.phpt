@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: unexpected macro.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {status}
- *
- * @author     David Grudl
  */
 
 use Latte\Macros\CoreMacros,

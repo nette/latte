@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: unquoted attributes.
- *
- * @author     Jakub Vrana
  */
 
 use Tester\Assert;

@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: <?xml test.
- *
- * @author     David Grudl
  * @phpini     short_open_tag=on
  */
 

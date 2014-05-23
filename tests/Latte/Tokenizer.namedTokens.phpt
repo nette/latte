@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Tokenizer::tokenize with names
- *
- * @author     David Grudl
  */
 
 use Latte\Tokenizer,

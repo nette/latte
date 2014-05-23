@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::nl2br()
- *
- * @author     Filip Procházka
  */
 
 use Latte\Runtime\Filters,

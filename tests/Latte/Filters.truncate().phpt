@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Runtime\Filters::truncate()
- *
- * @author     David Grudl
  */
 
 use Latte\Runtime\Filters,

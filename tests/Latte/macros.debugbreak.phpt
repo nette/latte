@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: {debugbreak}
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

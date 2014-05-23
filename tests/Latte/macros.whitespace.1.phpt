@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: whitespace test I.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

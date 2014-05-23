@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Object
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;

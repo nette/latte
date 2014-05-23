@@ -2,8 +2,6 @@
 
 /**
  * Test: Latte\Engine: filters test.
- *
- * @author     David Grudl
  */
 
 use Tester\Assert;
