@@ -48,12 +48,6 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 	}
 
 
-	public static function install(Latte\Compiler $compiler)
-	{
-		return new static($compiler);
-	}
-
-
 	/**
 	 * Initializes before template parsing.
 	 * @return void

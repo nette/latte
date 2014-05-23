@@ -12,10 +12,11 @@ require __DIR__ . '/../bootstrap.php';
 
 class MyMacros extends Latte\Macros\MacroSet
 {
-	public function __construct($compiler)
+	public static function install($compiler)
 	{
-		parent::__construct($compiler);
-		$this->addMacro('my', 'echo "ok"');
+		$me = new static($compiler);
+		$me->addMacro('my', 'echo "ok"');
+		return $me;
 	}
 }
 
