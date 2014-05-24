@@ -22,3 +22,5 @@ Assert::same( ' style="float:left" class="three" a=\'<>"\' b="\'" title="0" chec
 	'checked' => TRUE,
 	'selected' => FALSE,
 )) );
+
+Assert::same( ' a="`test "', Filters::htmlAttributes(array('a' => '`test')) ); // mXSS

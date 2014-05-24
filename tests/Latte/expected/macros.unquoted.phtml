@@ -8,6 +8,7 @@ list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
 // main template
 //
 ?>
-<span title=<?php echo '"' . htmlSpecialChars($x) . '"' ?>></span>
+<span title=<?php echo '"' . Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT) . '"' ?>></span>
 
-<span title=<?php echo '"' . htmlSpecialChars($x) . '"' ?> <?php echo '"' . htmlSpecialChars($x) . '"' ?>></span>
+<span title=<?php echo '"' . Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT) . '"' ?>
+ <?php echo '"' . Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT) . '"' ?>></span>

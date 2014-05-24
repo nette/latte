@@ -26,3 +26,9 @@ Assert::same( '&lt; &amp; &#039; &quot; &gt;', Filters::escapeHtml('< & \' " >')
 Assert::same( '&lt; &amp; \' " &gt;', Filters::escapeHtml('< & \' " >', ENT_NOQUOTES) );
 Assert::same( '<br>', Filters::escapeHtml(new Test) );
 Assert::same( '<br>', Filters::escapeHtml(new Latte\Runtime\Html('<br>')) );
+
+// mXSS
+Assert::same( '`hello ', Filters::escapeHtml('`hello') );
+Assert::same( '`hello', Filters::escapeHtml('`hello', ENT_NOQUOTES) );
+Assert::same( '`hello&quot;', Filters::escapeHtml('`hello"') );
+Assert::same( "`hello&#039;", Filters::escapeHtml("`hello'") );
