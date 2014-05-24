@@ -35,6 +35,10 @@ class Filters
 		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
 			return $s->__toString(TRUE);
 		}
+		$s = (string) $s;
+		if ($quotes !== ENT_NOQUOTES && strpos($s, '`') !== FALSE && strpbrk($s, ' <>"\'') === FALSE) {
+			$s .= ' ';
+		}
 		return htmlSpecialChars($s, $quotes);
 	}
 
@@ -418,7 +422,10 @@ class Filters
 			}
 
 			$q = strpos($value, '"') === FALSE ? '"' : "'";
-			$s .= ' ' . $key . '=' . $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value) . $q;
+			$s .= ' ' . $key . '='
+				. $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value)
+				. (strpos($value, '`') !== FALSE && strpbrk($value, ' <>"\'') === FALSE ? ' ' : '')
+				. $q;
 		}
 		return $s;
 	}
