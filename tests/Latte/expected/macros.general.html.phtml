@@ -37,7 +37,7 @@ if (!function_exists($_b->blocks['bl'][] = '_%[a-z0-9]+%_bl')) { function _%[a-z
 
 // template extending
 
-$_l->extends = empty($template->_extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $template->_extended = $_extended = TRUE;
+$_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
 
 if ($_l->extends) { ob_start();}
 
@@ -264,7 +264,7 @@ bold<?php if (array_pop($_l->ifs)) { ?></b>
 
 <?php ob_start() ?>FALSE<?php if (FALSE) ob_end_flush(); else ob_end_clean() ?>
 
-<?php ob_start() ?>TRUE<?php ob_start() ?>FALSE<?php if (TRUE) { ob_end_clean(); ob_end_flush(); } else { $_else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_else; } ?>
+<?php ob_start() ?>TRUE<?php ob_start() ?>FALSE<?php if (TRUE) { ob_end_clean(); ob_end_flush(); } else { $_l->else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_l->else; } ?>
 
 
 <?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array(1,2,3)) as $foo) { ?>

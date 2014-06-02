@@ -85,8 +85,8 @@ class BlockMacros extends MacroSet
 			$prolog[] = '// template extending';
 
 			$prolog[] = '$_l->extends = '
-				. ($this->extends ? $this->extends : 'empty($template->_extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
-				. '; $template->_extended = $_extended = TRUE;';
+				. ($this->extends ? $this->extends : 'empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
+				. '; $_g->extended = TRUE;';
 
 			$prolog[] = 'if ($_l->extends) { ' . ($this->namedBlocks ? 'ob_start();' : 'return $template->renderChildTemplate($_l->extends, get_defined_vars());') . '}';
 		}
@@ -199,16 +199,16 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
-				$node->closingCode = "<?php \$_dynSnippets[\$_dynSnippetId] = ob_get_flush() ?>";
+				$node->closingCode = "<?php \$_l->dynSnippets[\$_l->dynSnippetId] = ob_get_flush() ?>";
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$_dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
+					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$_l->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write('ob_start()');
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
-				return $writer->write("?>\n<$tag id=\"<?php echo \$_dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
+				return $writer->write("?>\n<$tag id=\"<?php echo \$_l->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
 
 			} else {
 				$node->data->leave = TRUE;
@@ -283,7 +283,7 @@ class BlockMacros extends MacroSet
 					$node->content = "<?php \$_control->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$_control->snippetMode = FALSE; ?>";
 				}
 				if (!empty($node->data->dynamic)) {
-					$node->content .= '<?php if (isset($_dynSnippets)) return $_dynSnippets; ?>';
+					$node->content .= '<?php if (isset($_l->dynSnippets)) return $_l->dynSnippets; ?>';
 				}
 				if ($node->name === 'snippetArea') {
 					$node->content .= '<?php return FALSE; ?>';
