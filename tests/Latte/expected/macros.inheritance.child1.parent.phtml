@@ -2,20 +2,20 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
 // block title
 //
-if (!function_exists($_l->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ?>My website<?php
 }}
 
 //
 // block sidebar
 //
-if (!function_exists($_l->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { function _%[a-z0-9]+%_sidebar($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { function _%[a-z0-9]+%_sidebar($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ?>		<ul>
 			<li><a href="/">Homepage</a></li>
 			<li><a href="/contact">Contact</a></li>
@@ -42,16 +42,16 @@ extract(array('class' => NULL, 'namespace' => NULL, 'top' => TRUE), EXTR_SKIP) ?
 <head>
 	<link rel="stylesheet" href="style.css">
 	<title><?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
-call_user_func(reset($_l->blocks['title']), $_l, get_defined_vars())  ?></title>
+call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
 </head>
 
 <body>
 	<div id="sidebar">
-<?php call_user_func(reset($_l->blocks['sidebar']), $_l, get_defined_vars())  ?>
+<?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars())  ?>
 	</div>
 
 	<div id="content">
-<?php Latte\Macros\BlockMacros::callBlock($_l, 'content', $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacros::callBlock($_b, 'content', $template->getParameters()) ?>
 	</div>
 </body>
 </html>

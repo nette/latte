@@ -2,13 +2,13 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
 // block test
 //
-if (!function_exists($_l->blocks['test'][] = '_%[a-z0-9]+%_test')) { function _%[a-z0-9]+%_test($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['test'][] = '_%[a-z0-9]+%_test')) { function _%[a-z0-9]+%_test($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	Test block
 <?php
 }}

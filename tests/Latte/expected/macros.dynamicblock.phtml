@@ -2,13 +2,13 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
 // block static
 //
-if (!function_exists($_l->blocks['static'][] = '_%[a-z0-9]+%_static')) { function _%[a-z0-9]+%_static($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['static'][] = '_%[a-z0-9]+%_static')) { function _%[a-z0-9]+%_static($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	Static block #<?php echo Latte\Runtime\Filters::escapeHtml($var, ENT_NOQUOTES) ?>
 
 <?php
@@ -30,7 +30,7 @@ if ($_l->extends) { ob_start();}
 $var = 10 ?>
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
-call_user_func(reset($_l->blocks['static']), $_l, get_defined_vars())  ?>
+call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 
 <?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array('dynamic', 'static')) as $name) {
@@ -38,27 +38,27 @@ call_user_func(reset($_l->blocks['static']), $_l, get_defined_vars())  ?>
 //
 // block $name
 //
-if (!function_exists($_l->blocks[$name]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__name')) { function _%[a-z0-9]+%__name($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ?>
+if (!function_exists($_b->blocks[$name]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__name')) { function _%[a-z0-9]+%__name($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ?>
 		Dynamic block #<?php echo Latte\Runtime\Filters::escapeHtml($var, ENT_NOQUOTES) ?>
 
-<?php }} call_user_func(reset($_l->blocks[$name]), $_l, get_defined_vars()) ;$iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php }} call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ;$iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
-<?php Latte\Macros\BlockMacros::callBlock($_l, 'dynamic', array('var' => 20) + $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacros::callBlock($_b, 'dynamic', array('var' => 20) + $template->getParameters()) ?>
 
-<?php call_user_func(reset($_l->blocks['static']), $_l, array('var' => 30) + get_defined_vars()) ?>
+<?php call_user_func(reset($_b->blocks['static']), $_b, array('var' => 30) + get_defined_vars()) ?>
 
-<?php Latte\Macros\BlockMacros::callBlock($_l, $name, array('var' => 40) + $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacros::callBlock($_b, $name, array('var' => 40) + $template->getParameters()) ?>
 
 <?php
 
 //
 // block word$name
 //
-if (!function_exists($_l->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%_word_name')) { function _%[a-z0-9]+%_word_name($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_l->blocks["word$name"]), $_l, get_defined_vars()) ?>
+if (!function_exists($_b->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%_word_name')) { function _%[a-z0-9]+%_word_name($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
 <?php
 
 //
 // block "word$name"
 //
-if (!function_exists($_l->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__word_name_')) { function _%[a-z0-9]+%__word_name_($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_l->blocks["word$name"]), $_l, get_defined_vars()) ?>
+if (!function_exists($_b->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__word_name_')) { function _%[a-z0-9]+%__word_name_($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>

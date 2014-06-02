@@ -91,7 +91,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		return array('list($_l, $_g) = $template->initialize('
+		return array('list($_b, $_g, $_l) = $template->initialize('
 			. var_export($this->getCompiler()->getTemplateId(), TRUE) . ', '
 			. var_export($this->getCompiler()->getContentType(), TRUE)
 		. ')');
@@ -204,7 +204,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
-		$code = $writer->write('$_l->templates[%var]->renderChildTemplate(%node.word, %node.array? + $template->getParameters())',
+		$code = $writer->write('$_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + $template->getParameters())',
 			$this->getCompiler()->getTemplateId());
 
 		if ($node->modifiers) {

@@ -2,11 +2,11 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 //
 // main template
 //
 ?>
 
-<?php ob_start(); $_l->templates['%[a-z0-9]+%']->renderChildTemplate('subdir/include1.latte', array('localvar' => 10) + $template->getParameters()); echo $template->indent(ob_get_clean()) ;
+<?php ob_start(); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('subdir/include1.latte', array('localvar' => 10) + $template->getParameters()); echo $template->indent(ob_get_clean()) ;
