@@ -2,13 +2,13 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 //
 // main template
 //
 ?>
 
-<?php $_l->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()) ?>
+<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()) ?>
 
-<?php Latte\Macros\BlockMacros::callBlock($_l, 'test', $template->getParameters()) ;
+<?php Latte\Macros\BlockMacros::callBlock($_b, 'test', $template->getParameters()) ;

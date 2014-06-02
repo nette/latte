@@ -2,14 +2,14 @@
 // source: %a%
 
 // prolog Latte\Macros\CoreMacros
-list($_l, $_g) = $template->initialize('%[a-z0-9]+%', 'html')
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
 // block content
 //
-if (!function_exists($_l->blocks['content'][] = '_%[a-z0-9]+%_content')) { function _%[a-z0-9]+%_content($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>	<h1><?php call_user_func(reset($_l->blocks['title']), $_l, get_defined_vars())  ?></h1>
+if (!function_exists($_b->blocks['content'][] = '_%[a-z0-9]+%_content')) { function _%[a-z0-9]+%_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+?>	<h1><?php call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></h1>
 
 	<ul>
 <?php $iterations = 0; foreach ($people as $person) { ?>
@@ -22,14 +22,14 @@ if (!function_exists($_l->blocks['content'][] = '_%[a-z0-9]+%_content')) { funct
 //
 // block title
 //
-if (!function_exists($_l->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ?>Homepage<?php
 }}
 
 //
 // block sidebar
 //
-if (!function_exists($_l->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { function _%[a-z0-9]+%_sidebar($_l, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { function _%[a-z0-9]+%_sidebar($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ;
 }}
 
@@ -49,7 +49,7 @@ if ($_l->extends) { ob_start();}
 
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
-call_user_func(reset($_l->blocks['content']), $_l, get_defined_vars())  ?>
+call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 
 
-<?php call_user_func(reset($_l->blocks['sidebar']), $_l, get_defined_vars())  ?>
+<?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars())  ?>
