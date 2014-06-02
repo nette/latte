@@ -128,7 +128,7 @@ class CoreMacros extends MacroSet
 			return $writer->write('if (%node.args) '
 				. (isset($node->data->else) ? '{ ob_end_clean(); ob_end_flush(); }' : 'ob_end_flush();')
 				. ' else '
-				. (isset($node->data->else) ? '{ $_else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_else; }' : 'ob_end_clean();')
+				. (isset($node->data->else) ? '{ $_l->else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_l->else; }' : 'ob_end_clean();')
 			);
 		}
 		return '}';
@@ -176,9 +176,9 @@ class CoreMacros extends MacroSet
 		$node->content = $parts[1]
 			. '<?php ob_start() ?>'
 			. $parts[2]
-			. '<?php $_ifcontent = ob_get_contents(); ob_end_flush() ?>'
+			. '<?php $_l->ifcontent = ob_get_contents(); ob_end_flush() ?>'
 			. $parts[3];
-		return 'rtrim($_ifcontent) === "" ? ob_end_clean() : ob_end_flush()';
+		return 'rtrim($_l->ifcontent) === "" ? ob_end_clean() : ob_end_flush()';
 	}
 
 
