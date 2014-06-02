@@ -89,6 +89,8 @@ class BlockMacros extends MacroSet
 				. '; $template->_extended = $_extended = TRUE;';
 
 			$prolog[] = 'if ($_l->extends) { ' . ($this->namedBlocks ? 'ob_start();' : 'return $template->renderChildTemplate($_l->extends, get_defined_vars());') . '}';
+		} else {
+			$prolog[] = '$_l->extends = NULL;';
 		}
 
 		return array(implode("\n\n", $prolog), implode("\n", $epilog));
