@@ -13,58 +13,40 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::match(<<<EOD
-<div>Content</div>
-EOD
-, $latte->renderToString(<<<EOD
-<div n:ifcontent>Content</div>
-EOD
-));
+Assert::match(
+	'<div>Content</div>',
+	$latte->renderToString('<div n:ifcontent>Content</div>')
+);
 
 
-Assert::match(<<<EOD
-EOD
-, $latte->renderToString(<<<EOD
-<div n:ifcontent></div>
-EOD
-));
+Assert::match(
+	'',
+	$latte->renderToString('<div n:ifcontent></div>')
+);
 
 
-Assert::match(<<<EOD
-<div>0</div>
-EOD
-, $latte->renderToString(<<<'EOD'
-<div n:ifcontent>{$content}</div>
-EOD
-, array('content' => '0')));
+Assert::match(
+	'<div>0</div>',
+	$latte->renderToString('<div n:ifcontent>{$content}</div>', array('content' => '0'))
+);
 
 
-Assert::match(<<<EOD
-EOD
-, $latte->renderToString(<<<'EOD'
-<div n:ifcontent>{$empty}</div>
-EOD
-, array('empty' => '')));
+Assert::match(
+	'',
+	$latte->renderToString('<div n:ifcontent>{$empty}</div>', array('empty' => ''))
+);
 
 
-Assert::match(<<<EOD
-EOD
-, $latte->renderToString(<<<EOD
-<div n:ifcontent>
-
-</div>
-EOD
-));
+Assert::match(
+	'',
+	$latte->renderToString("<div n:ifcontent> \r\n </div>")
+);
 
 
-Assert::match(<<<EOD
-EOD
-, $latte->renderToString(<<<'EOD'
-<div n:ifcontent>
-	{$empty}
-</div>
-EOD
-, array('empty' => '')));
+Assert::match(
+	'',
+	$latte->renderToString('<div n:ifcontent>  {$empty}  </div>', array('empty' => ''))
+);
 
 
 Assert::exception(function() use ($latte) {
