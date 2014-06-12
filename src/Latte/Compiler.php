@@ -548,7 +548,10 @@ class Compiler extends Object
 			}
 		}
 
-		throw new CompileException($nPrefix ? 'Unknown attribute ' . Parser::N_PREFIX . "$nPrefix-$name" : "Unhandled macro {{$name}}");
+		throw new CompileException('Unknown ' . ($nPrefix
+			? 'attribute ' . Parser::N_PREFIX . ($nPrefix === MacroNode::PREFIX_NONE ? '' : "$nPrefix-") . $name
+			: 'macro {' . $name . ($args ? " $args" : '') . '}'
+		));
 	}
 
 

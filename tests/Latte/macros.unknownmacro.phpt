@@ -19,7 +19,7 @@ Assert::exception(function() use ($latte) {
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('{class}');
-}, 'Latte\CompileException', 'Unhandled macro {class}');
+}, 'Latte\CompileException', 'Unknown macro {class}');
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('<style>body {color:blue}</style>');
