@@ -19,11 +19,11 @@ Assert::exception(function() use ($latte) {
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1>');
-}, 'Latte\CompileException', 'Missing </span> for macro-attribute n:if');
+}, 'Latte\CompileException', 'Missing </span> for n:if');
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1></i>');
-}, 'Latte\CompileException', 'Unexpected </i>, expecting </span> for macro-attribute n:if');
+}, 'Latte\CompileException', 'Unexpected </i>, expecting </span> for n:if');
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('{/if}');
@@ -39,12 +39,12 @@ Assert::exception(function() use ($latte) {
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('<span n:if=1 n:foreach=2>{foreach}</span>');
-}, 'Latte\CompileException', 'Unexpected </span> for macro-attribute n:if and n:foreach, expecting {/foreach}');
+}, 'Latte\CompileException', 'Unexpected </span> for n:if and n:foreach, expecting {/foreach}');
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('<span n:if=1 n:foreach=2>{/foreach}');
-}, 'Latte\CompileException', 'Unexpected {/foreach}, expecting </span> for macro-attribute n:if and n:foreach');
+}, 'Latte\CompileException', 'Unexpected {/foreach}, expecting </span> for n:if and n:foreach');
 
 Assert::exception(function() use ($latte) {
 	$latte->compile('<span n:if=1 n:foreach=2>{/if}');
-}, 'Latte\CompileException', 'Unexpected {/if}, expecting </span> for macro-attribute n:if and n:foreach');
+}, 'Latte\CompileException', 'Unexpected {/if}, expecting </span> for n:if and n:foreach');
