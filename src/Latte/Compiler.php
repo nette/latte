@@ -48,6 +48,9 @@ class Compiler extends Object
 	/** @var string */
 	private $templateId;
 
+	/** @var mixed */
+	private $lastAttrValue;
+
 	/** Context-aware escaping content types */
 	const CONTENT_HTML = 'html',
 		CONTENT_XHTML = 'xhtml',
@@ -205,10 +208,12 @@ class Compiler extends Object
 
 	private function processText(Token $token)
 	{
-		if (($this->context[0] === self::CONTEXT_SINGLE_QUOTED_ATTR || $this->context[0] === self::CONTEXT_DOUBLE_QUOTED_ATTR)
-			&& $token->text === $this->context[0]
-		) {
-			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR))) {
+			if ($token->text === $this->context[0]) {
+				$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+			} elseif ($this->lastAttrValue === '') {
+				$this->lastAttrValue = $token->text;
+			}
 		}
 		$this->output .= $token->text;
 	}
@@ -216,6 +221,10 @@ class Compiler extends Object
 
 	private function processMacroTag(Token $token)
 	{
+		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR, self::CONTEXT_UNQUOTED_ATTR))) {
+			$this->lastAttrValue = TRUE;
+		}
+
 		$isRightmost = !isset($this->tokens[$this->position + 1])
 			|| substr($this->tokens[$this->position + 1]->text, 0, 1) === "\n";
 
@@ -324,12 +333,16 @@ class Compiler extends Object
 			return;
 		}
 
-		$this->htmlNode->attrs[$token->name] = TRUE;
+		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
 		$this->output .= $token->text;
 
-		$contextMain = in_array($token->value, array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR))
-			? $token->value
-			: self::CONTEXT_UNQUOTED_ATTR;
+		if (in_array($token->value, array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR))) {
+			$this->lastAttrValue = '';
+			$contextMain = $token->value;
+		} else {
+			$this->lastAttrValue = $token->value;
+			$contextMain = self::CONTEXT_UNQUOTED_ATTR;
+		}
 
 		$context = NULL;
 		if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))) {
