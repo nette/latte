@@ -44,3 +44,7 @@ Assert::exception(function() use ($latte) {
 Assert::exception(function() use ($latte) {
 	$latte->compile('<a n:inner-class=$cond>');
 }, 'Latte\CompileException', 'Unknown attribute n:inner-class');
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('<a n:var=x>');
+}, 'Latte\CompileException', 'Unknown attribute n:var');
