@@ -315,10 +315,10 @@ class Compiler extends Object
 		if (strncmp($token->name, Parser::N_PREFIX, strlen(Parser::N_PREFIX)) === 0) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
 			if (isset($this->htmlNode->macroAttrs[$name])) {
-				throw new CompileException("Found multiple macro-attributes $token->name.");
+				throw new CompileException("Found multiple attributes $token->name.");
 
 			} elseif ($this->macroNode && $this->macroNode->htmlNode === $this->htmlNode) {
-				throw new CompileException("Macro-attributes must not appear inside macro; found $token->name inside {{$this->macroNode->name}}.");
+				throw new CompileException("n:attributes must not appear inside macro; found $token->name inside {{$this->macroNode->name}}.");
 			}
 			$this->htmlNode->macroAttrs[$name] = $token->value;
 			return;
@@ -395,7 +395,7 @@ class Compiler extends Object
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix
-				? "</{$this->htmlNode->name}> for macro-attribute " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($this->htmlNode->macroAttrs))
+				? "</{$this->htmlNode->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($this->htmlNode->macroAttrs))
 				: '{/' . $name . ($args ? ' ' . $args : '') . $modifiers . '}';
 			throw new CompileException("Unexpected $name" . ($node ? ', expecting ' . self::printEndTag($node) : ''));
 		}
@@ -476,7 +476,7 @@ class Compiler extends Object
 		}
 
 		if ($attrs) {
-			throw new CompileException('Unknown macro-attribute ' . Parser::N_PREFIX
+			throw new CompileException('Unknown attribute ' . Parser::N_PREFIX
 				. implode(' and ' . Parser::N_PREFIX, array_keys($attrs)));
 		}
 
@@ -548,14 +548,14 @@ class Compiler extends Object
 			}
 		}
 
-		throw new CompileException($nPrefix ? 'Unknown macro-attribute ' . Parser::N_PREFIX . "$nPrefix-$name" : "Unhandled macro {{$name}}");
+		throw new CompileException($nPrefix ? 'Unknown attribute ' . Parser::N_PREFIX . "$nPrefix-$name" : "Unhandled macro {{$name}}");
 	}
 
 
 	private static function printEndTag(MacroNode $node)
 	{
 		if ($node->prefix) {
-			return  "</{$node->htmlNode->name}> for macro-attribute " . Parser::N_PREFIX
+			return  "</{$node->htmlNode->name}> for " . Parser::N_PREFIX
 				. implode(' and ' . Parser::N_PREFIX, array_keys($node->htmlNode->macroAttrs));
 		} else {
 			return "{/$node->name}";
