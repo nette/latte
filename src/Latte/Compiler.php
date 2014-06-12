@@ -327,6 +327,10 @@ class Compiler extends Object
 		$this->htmlNode->attrs[$token->name] = TRUE;
 		$this->output .= $token->text;
 
+		$contextMain = in_array($token->value, array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR))
+			? $token->value
+			: self::CONTEXT_UNQUOTED_ATTR;
+
 		$context = NULL;
 		if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))) {
 			$lower = strtolower($token->name);
@@ -340,7 +344,8 @@ class Compiler extends Object
 				$context = self::CONTENT_URL;
 			}
 		}
-		$this->setContext($token->value ?: self::CONTEXT_UNQUOTED_ATTR, $context);
+
+		$this->setContext($contextMain, $context);
 	}
 
 

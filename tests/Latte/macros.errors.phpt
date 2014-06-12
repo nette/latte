@@ -21,3 +21,9 @@ Assert::exception(function() use ($latte) {
 Assert::exception(function() use ($latte) {
 	$latte->compile('<a n:href n:href>');
 }, 'Latte\CompileException', 'Found multiple attributes n:href.');
+
+
+Assert::match(
+	'<div c=comment "--">',
+	$latte->renderToString('<div c=comment {="--"}>')
+);
