@@ -88,7 +88,7 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 
 		} elseif ($begin) {
 			$res = $this->compile($node, $begin);
-			if ($res === FALSE) {
+			if ($res === FALSE || ($node->isEmpty && $node->prefix)) {
 				return FALSE;
 			} elseif (!$node->openingCode) {
 				$node->openingCode = "<?php $res ?>";
