@@ -19,5 +19,5 @@ Assert::same( '<?php if (isset($_b->blocks["block"])) { ?>',  $compiler->expandM
 Assert::same( '<?php if (isset($item->var["#test"], $_b->blocks["block"])) { ?>',  $compiler->expandMacro('ifset', '$item->var["#test"], #block')->openingCode );
 
 Assert::exception(function() use ($compiler) {
-	Assert::same( '<?php if (isset($var)) { ?>',  $compiler->expandMacro('ifset', '$var')->openingCode );
-}, 'Latte\CompileException', 'Unhandled macro {ifset}');
+	$compiler->expandMacro('ifset', '$var');
+}, 'Latte\CompileException', 'Unknown macro {ifset $var}');
