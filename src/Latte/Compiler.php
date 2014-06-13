@@ -307,14 +307,15 @@ class Compiler extends Object
 			$htmlNode->closing = TRUE;
 		}
 
-		$lower = strtolower($htmlNode->name);
-		if (!$htmlNode->closing && ($lower === 'script' || $lower === 'style')) {
+		$this->setContext(NULL);
+
+		if ($htmlNode->closing) {
+			$this->htmlNode = $this->htmlNode->parentNode;
+
+		} elseif ((($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
+			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|css#i', $htmlNode->attrs['type']))
+		) {
 			$this->setContext($lower === 'script' ? self::CONTENT_JS : self::CONTENT_CSS);
-		} else {
-			$this->setContext(NULL);
-			if ($htmlNode->closing) {
-				$this->htmlNode = $this->htmlNode->parentNode;
-			}
 		}
 	}
 

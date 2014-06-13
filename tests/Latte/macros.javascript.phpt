@@ -55,3 +55,13 @@ Assert::exception(function() use ($latte) {
 Assert::exception(function() use ($latte) {
 	$latte->compile("<script> '{\$var}' </script>");
 }, 'Latte\CompileException', 'Do not place {$var} inside quotes.');
+
+Assert::match(
+	'<script type="TEXT/X-JAVASCRIPT">"<>"',
+	$latte->renderToString('<script type="TEXT/X-JAVASCRIPT">{="<>"}')
+);
+
+Assert::match(
+	'<script type="text/html">&lt;&gt;',
+	$latte->renderToString('<script type="text/html">{="<>"}')
+);

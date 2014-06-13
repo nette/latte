@@ -37,3 +37,13 @@ Assert::match(
 	'<style id="&lt;&gt;">',
 	$latte->renderToString('<style id="{="<>"}">')
 );
+
+Assert::match(
+	'<style type="TEXT/CSS">\<\>',
+	$latte->renderToString('<style type="TEXT/CSS">{="<>"}')
+);
+
+Assert::match(
+	'<style type="text/html">&lt;&gt;',
+	$latte->renderToString('<style type="text/html">{="<>"}')
+);
