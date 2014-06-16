@@ -208,7 +208,7 @@ class Compiler extends Object
 
 	private function processText(Token $token)
 	{
-		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR))) {
+		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR), TRUE)) {
 			if ($token->text === $this->context[0]) {
 				$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
 			} elseif ($this->lastAttrValue === '') {
@@ -221,7 +221,7 @@ class Compiler extends Object
 
 	private function processMacroTag(Token $token)
 	{
-		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR, self::CONTEXT_UNQUOTED_ATTR))) {
+		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR, self::CONTEXT_UNQUOTED_ATTR), TRUE)) {
 			$this->lastAttrValue = TRUE;
 		}
 
@@ -263,7 +263,7 @@ class Compiler extends Object
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
-			$this->htmlNode->isEmpty = in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))
+			$this->htmlNode->isEmpty = in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)
 				&& isset(Helpers::$emptyElements[strtolower($token->name)]);
 			$this->htmlNode->offset = strlen($this->output);
 			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
@@ -284,7 +284,7 @@ class Compiler extends Object
 		$isEmpty = !$htmlNode->closing && (strpos($token->text, '/') !== FALSE || $htmlNode->isEmpty);
 		$end = '';
 
-		if ($isEmpty && in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))) { // auto-correct
+		if ($isEmpty && in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)) { // auto-correct
 			$token->text = preg_replace('#^.*>#', $htmlNode->isEmpty && $this->contentType === self::CONTENT_XHTML ? ' />' : '>', $token->text);
 			if (!$htmlNode->isEmpty) {
 				$end = "</$htmlNode->name>";
@@ -337,7 +337,7 @@ class Compiler extends Object
 		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
 		$this->output .= $token->text;
 
-		if (in_array($token->value, array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR))) {
+		if (in_array($token->value, array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR), TRUE)) {
 			$this->lastAttrValue = '';
 			$contextMain = $token->value;
 		} else {
@@ -346,13 +346,13 @@ class Compiler extends Object
 		}
 
 		$context = NULL;
-		if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML))) {
+		if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)) {
 			$lower = strtolower($token->name);
 			if (substr($lower, 0, 2) === 'on') {
 				$context = self::CONTENT_JS;
 			} elseif ($lower === 'style') {
 				$context = self::CONTENT_CSS;
-			} elseif (in_array($lower, array('href', 'src', 'action', 'formaction'))
+			} elseif (in_array($lower, array('href', 'src', 'action', 'formaction'), TRUE)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object')
 			) {
 				$context = self::CONTENT_URL;
@@ -538,7 +538,7 @@ class Compiler extends Object
 	 */
 	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL)
 	{
-		$inScript = in_array($this->context[0], array(self::CONTENT_JS, self::CONTENT_CSS));
+		$inScript = in_array($this->context[0], array(self::CONTENT_JS, self::CONTENT_CSS), TRUE);
 
 		if (empty($this->macros[$name])) {
 			throw new CompileException("Unknown macro {{$name}}" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket.)' : ''));
