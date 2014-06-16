@@ -21,6 +21,11 @@ class Parser
 	/** @internal special HTML attribute prefix */
 	const N_PREFIX = 'n:';
 
+	/** Context-aware escaping content types */
+	const CONTENT_HTML = Engine::CONTENT_HTML,
+		CONTENT_XML = Engine::CONTENT_XML,
+		CONTENT_TEXT = Engine::CONTENT_TEXT;
+
 	/** @var string default macro tag syntax */
 	public $defaultSyntax = 'latte';
 
@@ -321,16 +326,14 @@ class Parser
 
 
 	/**
+	 * @param  string  Parser::CONTENT_HTML, CONTENT_XML or CONTENT_TEXT
 	 * @return self
 	 */
 	public function setContentType($type)
 	{
-		if (strpos($type, 'html') !== FALSE) {
-			$this->xmlMode = FALSE;
+		if ($type === self::CONTENT_HTML || $type === self::CONTENT_XML) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
-		} elseif (strpos($type, 'xml') !== FALSE) {
-			$this->xmlMode = TRUE;
-			$this->setContext(self::CONTEXT_HTML_TEXT);
+			$this->xmlMode = $type === self::CONTENT_XML;
 		} else {
 			$this->setContext(self::CONTEXT_RAW);
 		}
@@ -455,7 +458,13 @@ class Parser
 			$this->setSyntax($this->defaultSyntax);
 
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
-			$this->setContentType($token->value);
+			if (strpos($token->value, 'html') !== FALSE) {
+				$this->setContentType(self::CONTENT_HTML);
+			} elseif (strpos($token->value, 'xml') !== FALSE) {
+				$this->setContentType(self::CONTENT_XML);
+			} else {
+				$this->setContentType(self::CONTENT_TEXT);
+			}
 		}
 	}
 
