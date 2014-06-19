@@ -344,6 +344,9 @@ class CoreMacros extends MacroSet
 				$var = FALSE;
 
 			} elseif ($tokens->isCurrent(',') && $tokens->depth === 0) {
+				if ($var === NULL) {
+					$res->append($node->name === 'default' ? '=>NULL' : '=NULL');
+				}
 				$res->append($node->name === 'default' ? ',' : ';');
 				$var = TRUE;
 
@@ -353,6 +356,9 @@ class CoreMacros extends MacroSet
 			} else {
 				$res->append($tokens->currentToken());
 			}
+		}
+		if ($var === NULL) {
+			$res->append($node->name === 'default' ? '=>NULL' : '=NULL');
 		}
 		$out = $writer->quoteFilter($res)->joinAll();
 		return $node->name === 'default' ? "extract(array($out), EXTR_SKIP)" : $out;
