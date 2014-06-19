@@ -15,6 +15,7 @@ $compiler = new Latte\Compiler;
 CoreMacros::install($compiler);
 
 test(function() use ($compiler) { // {var ... }
+	Assert::same( '<?php $var=NULL; $var2=NULL ?>',  $compiler->expandMacro('var', 'var, var2', '')->openingCode );
 	Assert::same( '<?php $var = \'hello\' ?>',  $compiler->expandMacro('var', 'var => hello', '')->openingCode );
 	Assert::same( '<?php $var = \'hello\'; $var2 = \'world\' ?>',  $compiler->expandMacro('var', 'var => hello, var2 = world', '')->openingCode );
 	Assert::same( '<?php $var = 123 ?>',  $compiler->expandMacro('var', '$var => 123', '')->openingCode );
@@ -30,6 +31,7 @@ test(function() use ($compiler) { // {var ... }
 
 
 test(function() use ($compiler) { // {default ...}
+	Assert::same( "<?php extract(array('var'=>NULL, 'var2'=>NULL), EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var, var2', '')->openingCode );
 	Assert::same( "<?php extract(array('var' => 'hello'), EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var => hello', '')->openingCode );
 	Assert::same( "<?php extract(array('var' => 123), EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var => 123', '')->openingCode );
 	Assert::same( "<?php extract(array('var' => 123), EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var = 123', '')->openingCode );
