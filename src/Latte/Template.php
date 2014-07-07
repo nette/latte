@@ -62,6 +62,7 @@ class Template extends Object
 	/**
 	 * Initializes block, global & local storage in template.
 	 * @return [\stdClass, \stdClass, \stdClass]
+	 * @internal
 	 */
 	public function initialize($templateId, $contentType)
 	{
@@ -91,6 +92,7 @@ class Template extends Object
 	/**
 	 * Renders template.
 	 * @return void
+	 * @internal
 	 */
 	public function renderChildTemplate($name, array $params = array())
 	{
