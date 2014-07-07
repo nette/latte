@@ -344,6 +344,7 @@ class Parser extends Object
 	 * Parses macro tag to name, arguments a modifiers parts.
 	 * @param  string {name arguments | modifiers}
 	 * @return array
+	 * @internal
 	 */
 	public function parseMacroTag($tag)
 	{

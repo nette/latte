@@ -26,6 +26,7 @@ use Latte;
  * @property-read $innerIterator
  * @property   $flags
  * @property-read $cache
+ * @internal
  */
 class CachingIterator extends \CachingIterator implements \Countable
 {

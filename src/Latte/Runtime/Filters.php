@@ -14,6 +14,7 @@ use Latte;
  * Template filters.
  *
  * @author     David Grudl
+ * @internal
  */
 class Filters
 {

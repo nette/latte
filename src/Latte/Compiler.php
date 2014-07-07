@@ -197,6 +197,7 @@ class Compiler extends Object
 	}
 
 
+	/** @internal */
 	public function expandTokens($s)
 	{
 		return strtr($s, $this->attrCodes);
@@ -368,6 +369,7 @@ class Compiler extends Object
 	 * @param  string
 	 * @param  bool
 	 * @return MacroNode
+	 * @internal
 	 */
 	public function openMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL)
 	{
@@ -390,6 +392,7 @@ class Compiler extends Object
 	 * @param  string
 	 * @param  bool
 	 * @return MacroNode
+	 * @internal
 	 */
 	public function closeMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL)
 	{
@@ -442,6 +445,7 @@ class Compiler extends Object
 	 * Generates code for macro <tag n:attr> to the output.
 	 * @param  string
 	 * @return void
+	 * @internal
 	 */
 	public function writeAttrsMacro($code)
 	{
@@ -521,6 +525,7 @@ class Compiler extends Object
 	 * @param  string
 	 * @param  string
 	 * @return MacroNode
+	 * @internal
 	 */
 	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL)
 	{
