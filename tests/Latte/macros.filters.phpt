@@ -49,6 +49,14 @@ $latte->addFilter(NULL, function($name, $val) use ($latte) {
 	}
 });
 
+
+Assert::same('AA', $latte->invokeFilter('h2', array('aa')));
+Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', array('aa')));
+Assert::exception(function() use ($latte) {
+	$latte->invokeFilter('unknown', array(''));
+}, 'LogicException', "Filter 'unknown' is not defined.");
+
+
 $params['hello'] = 'Hello World';
 $params['date'] = strtotime('2008-01-02');
 

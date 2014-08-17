@@ -232,6 +232,32 @@ class Engine extends Object
 
 
 	/**
+	 * Call a run-time filter.
+	 * @param  string  filter name
+	 * @param  array   arguments
+	 * @return mixed
+	 */
+	public function invokeFilter($name, array $args)
+	{
+		$lname = strtolower($name);
+		if (!isset($this->filters[$lname])) {
+			$args2 = $args;
+			array_unshift($args2, $lname);
+			foreach ($this->filters[NULL] as $filter) {
+				$res = call_user_func_array(Helpers::checkCallback($filter), $args2);
+				if ($res !== NULL) {
+					return $res;
+				} elseif (isset($this->filters[$lname])) {
+					return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
+				}
+			}
+			throw new \LogicException("Filter '$name' is not defined.");
+		}
+		return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
+	}
+
+
+	/**
 	 * Adds new macro.
 	 * @return self
 	 */
