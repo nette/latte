@@ -36,3 +36,7 @@ Assert::same( "1212-09-26", Filters::date(new DateTime('1212-09-26'), 'Y-m-d') )
 
 
 Assert::same( "30:10:10", Filters::date(new DateInterval('PT30H10M10S'), '%H:%I:%S') );
+
+
+date_default_timezone_set('America/Los_Angeles');
+Assert::same( "07:09", Filters::date(1408284571, 'H:i') );
