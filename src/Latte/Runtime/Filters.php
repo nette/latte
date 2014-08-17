@@ -187,8 +187,12 @@ class Filters
 		if ($time instanceof \DateInterval) {
 			return $time->format($format);
 
+		} elseif (is_numeric($time)) {
+			$time = new \DateTime('@' . $time);
+			$time->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+
 		} elseif (!$time instanceof \DateTime && !$time instanceof \DateTimeInterface) {
-			$time = new \DateTime((is_numeric($time) ? '@' : '') . $time);
+			$time = new \DateTime($time);
 		}
 		return strpos($format, '%') === FALSE
 			? $time->format($format) // formats using date()
