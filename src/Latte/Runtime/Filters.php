@@ -189,6 +189,7 @@ class Filters
 
 		} elseif (!$time instanceof \DateTime && !$time instanceof \DateTimeInterface) {
 			$time = new \DateTime((is_numeric($time) ? '@' : '') . $time);
+			$time->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 		}
 		return strpos($format, '%') === FALSE
 			? $time->format($format) // formats using date()
