@@ -9,6 +9,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 //
 ?>
 
-<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()) ?>
+<?php ob_start(); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); echo rtrim(ob_get_clean()) ?>
+
 
 <?php Latte\Macros\BlockMacros::callBlock($_b, 'test', $template->getParameters()) ;
