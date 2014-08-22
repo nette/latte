@@ -37,6 +37,9 @@ class MacroNode extends Object
 	/** @var bool */
 	public $closing = FALSE;
 
+	/** @var bool  has output? */
+	public $replaced;
+
 	/** @var MacroTokens */
 	public $tokenizer;
 
