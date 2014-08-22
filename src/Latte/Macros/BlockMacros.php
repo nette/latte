@@ -138,7 +138,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('$_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars())',
+		return $writer->write('ob_start(); $_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); echo rtrim(ob_get_clean())',
 			$this->getCompiler()->getTemplateId());
 	}
 

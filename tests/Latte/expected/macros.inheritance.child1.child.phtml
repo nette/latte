@@ -38,7 +38,8 @@ if ($_l->extends) { ob_start();}
 // main template
 // ?>
 
-<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()) ?>
+<?php ob_start(); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); echo rtrim(ob_get_clean()) ?>
+
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?>
