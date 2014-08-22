@@ -389,7 +389,7 @@ class Compiler extends Object
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->isEmpty) {
-			$this->writeCode($node->openingCode, $this->output, $isRightmost);
+			$this->writeCode($node->openingCode, $this->output, $node->replaced, $isRightmost);
 		} else {
 			$this->macroNode = $node;
 			$node->saved = array(& $this->output, $isRightmost);
@@ -433,19 +433,24 @@ class Compiler extends Object
 		$node->macro->nodeClosed($node);
 
 		$this->output = & $node->saved[0];
-		$this->writeCode($node->openingCode, $this->output, $node->saved[1]);
-		$this->writeCode($node->closingCode, $node->content, $isRightmost, $isLeftmost);
+		$this->writeCode($node->openingCode, $this->output, $node->replaced, $node->saved[1]);
+		$this->writeCode($node->closingCode, $node->content, $node->replaced, $isRightmost, $isLeftmost);
 		$this->output .= $node->content;
 		return $node;
 	}
 
 
-	private function writeCode($code, & $output, $isRightmost, $isLeftmost = NULL)
+	private function writeCode($code, & $output, $replaced, $isRightmost, $isLeftmost = NULL)
 	{
 		if ($isRightmost) {
 			$leftOfs = strrpos("\n$output", "\n");
-			$isLeftmost = $isLeftmost === NULL ? trim(substr($output, $leftOfs)) === '' : $isLeftmost;
-			if ($isLeftmost && !preg_match('#<\?php.*\secho\s#As', $code)) {
+			if ($isLeftmost === NULL) {
+				$isLeftmost = trim(substr($output, $leftOfs)) === '';
+			}
+			if ($replaced === NULL) {
+				$replaced = preg_match('#<\?php.*\secho\s#As', $code);
+			}
+			if ($isLeftmost && !$replaced) {
 				$output = substr($output, 0, $leftOfs); // alone macro without output -> remove indentation
 			} elseif (substr($code, -2) === '?>') {
 				$code .= "\n"; // double newline to avoid newline eating by PHP
