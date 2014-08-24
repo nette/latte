@@ -47,7 +47,7 @@ class Tokenizer extends Object
 	{
 		preg_match_all($this->re, $input, $tokens, PREG_SET_ORDER);
 		if (preg_last_error()) {
-			throw new Latte\RegexpException(NULL, preg_last_error());
+			throw new RegexpException(NULL, preg_last_error());
 		}
 		$len = 0;
 		$count = count($this->types);
