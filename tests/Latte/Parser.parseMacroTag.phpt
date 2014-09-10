@@ -10,7 +10,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$parser = new Latte\Parser();
+$parser = new Latte\Parser;
 
 
 Assert::same( array('?', 'echo', '', FALSE), $parser->parseMacroTag('? echo') );
