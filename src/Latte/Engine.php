@@ -127,7 +127,7 @@ class Engine extends Object
 			$code = $this->getCompiler()->setContentType($this->contentType)
 				->compile($tokens);
 
-			if (preg_match('#^\S{5,100}\z#', $name)) {
+			if (!preg_match('#\n|\?#', $name)) {
 				$code = "<?php\n// source: $name\n?>" . $code;
 			}
 
