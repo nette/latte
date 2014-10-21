@@ -108,7 +108,7 @@ class Compiler extends Object
 
 		while ($this->htmlNode) {
 			if (!empty($this->htmlNode->macroAttrs)) {
-				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
+				throw new CompileException('Missing ' . self::printEndTag($this->htmlNode));
 			}
 			$this->htmlNode = $this->htmlNode->parentNode;
 		}
@@ -252,7 +252,7 @@ class Compiler extends Object
 					break;
 				}
 				if ($this->htmlNode->macroAttrs) {
-					throw new CompileException("Unexpected </$token->name>, expecting " . self::printEndTag($this->macroNode));
+					throw new CompileException("Unexpected </$token->name>, expecting " . self::printEndTag($this->htmlNode));
 				}
 				$this->htmlNode = $this->htmlNode->parentNode;
 			}
@@ -429,7 +429,7 @@ class Compiler extends Object
 			$name = $nPrefix
 				? "</{$this->htmlNode->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($this->htmlNode->macroAttrs))
 				: '{/' . $name . ($args ? ' ' . $args : '') . $modifiers . '}';
-			throw new CompileException("Unexpected $name" . ($node ? ', expecting ' . self::printEndTag($node) : ''));
+			throw new CompileException("Unexpected $name" . ($node ? ', expecting ' . self::printEndTag($node->prefix ? $this->htmlNode : $node) : ''));
 		}
 
 		$this->macroNode = $node->parentNode;
@@ -597,11 +597,11 @@ class Compiler extends Object
 	}
 
 
-	private static function printEndTag(MacroNode $node)
+	private static function printEndTag($node)
 	{
-		if ($node->prefix) {
-			return  "</{$node->htmlNode->name}> for " . Parser::N_PREFIX
-				. implode(' and ' . Parser::N_PREFIX, array_keys($node->htmlNode->macroAttrs));
+		if ($node instanceof HtmlNode) {
+			return  "</{$node->name}> for " . Parser::N_PREFIX
+				. implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs));
 		} else {
 			return "{/$node->name}";
 		}
