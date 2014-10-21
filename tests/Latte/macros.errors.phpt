@@ -27,3 +27,8 @@ Assert::match(
 	'<div c=comment "--">',
 	$latte->renderToString('<div c=comment {="--"}>')
 );
+
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('<a n:class class>');
+}, 'Latte\CompileException', 'It is not possible to combine class with n:class.');
