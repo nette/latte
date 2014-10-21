@@ -48,3 +48,11 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('<span n:if=1 n:foreach=2>{/if}');
 }, 'Latte\CompileException', 'Unexpected {/if}, expecting </span> for n:if and n:foreach');
+
+Assert::exception(function() use ($latte) {
+	$latte->compile('
+	{foreach [] as $item}
+		<li><a n:tag-if="$iterator->odd"></li>
+	{/foreach}
+	');
+}, 'Latte\CompileException', 'Unexpected </li>, expecting </a> for n:tag-if');
