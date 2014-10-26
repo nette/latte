@@ -40,6 +40,7 @@ class BlockMacros extends MacroSet
 		$me->addMacro('snippet', array($me, 'macroBlock'), array($me, 'macroBlockEnd'));
 		$me->addMacro('snippetArea', array($me, 'macroBlock'), array($me, 'macroBlockEnd'));
 		$me->addMacro('ifset', array($me, 'macroIfset'), '}');
+		$me->addMacro('elseifset', array($me, 'macroIfset'), '}');
 	}
 
 
@@ -301,6 +302,7 @@ class BlockMacros extends MacroSet
 
 	/**
 	 * {ifset #block}
+	 * {elseifset #block}
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{
@@ -311,7 +313,8 @@ class BlockMacros extends MacroSet
 		while (($name = $node->tokenizer->fetchWord()) !== FALSE) {
 			$list[] = $name[0] === '#' ? '$_b->blocks["' . substr($name, 1) . '"]' : $name;
 		}
-		return 'if (isset(' . implode(', ', $list) . ')) {';
+		return ($node->name === 'elseifset' ? '} else' : '')
+			. 'if (isset(' . implode(', ', $list) . ')) {';
 	}
 
 

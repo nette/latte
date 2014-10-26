@@ -21,3 +21,8 @@ Assert::same( '<?php if (isset($item->var["#test"], $_b->blocks["block"])) { ?>'
 Assert::exception(function() use ($compiler) {
 	$compiler->expandMacro('ifset', '$var');
 }, 'Latte\CompileException', 'Unknown macro {ifset $var}');
+
+
+// {elseifset ... }
+Assert::same( '<?php } elseif (isset($_b->blocks["block"])) { ?>',  $compiler->expandMacro('elseifset', '#block')->openingCode );
+Assert::same( '<?php } elseif (isset($item->var["#test"], $_b->blocks["block"])) { ?>',  $compiler->expandMacro('elseifset', '$item->var["#test"], #block')->openingCode );
