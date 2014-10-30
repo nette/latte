@@ -49,7 +49,7 @@ class FileLoader extends Latte\Object implements Latte\ILoader
 	 */
 	public function getChildName($file, $parent = NULL)
 	{
-		if ($parent && !preg_match('#/|\\\\|[a-z]:#iA', $file)) {
+		if ($parent && !preg_match('#/|\\\\|[a-z][a-z0-9+.-]*:#iA', $file)) {
 			$file = dirname($parent) . '/' . $file;
 		}
 		return $file;
