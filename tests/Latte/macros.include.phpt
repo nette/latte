@@ -25,6 +25,13 @@ Assert::matchFile(
 	)
 );
 Assert::matchFile(
+    __DIR__ . '/expected/macros.include.html',
+    $latte->renderToString(
+        __DIR__ . '/templates/include.concat.latte',
+        array('hello' => '<i>Hello</i>', 'file' => 'include1', 'empty' => '')
+    )
+);
+Assert::matchFile(
 	__DIR__ . '/expected/macros.include.inc1.phtml',
 	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/include1.latte'))
 );
