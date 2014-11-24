@@ -64,7 +64,7 @@ class Engine extends Object
 		'indent' => 'Latte\Runtime\Filters::indent',
 		'lower' => 'Latte\Runtime\Filters::lower',
 		'nl2br' => 'Latte\Runtime\Filters::nl2br',
-		'number' => 'number_format',
+		'number' => 'Latte\Runtime\Filters::number',
 		'repeat' => 'str_repeat',
 		'replace' => 'Latte\Runtime\Filters::replace',
 		'replacere' => 'Latte\Runtime\Filters::replaceRe',
