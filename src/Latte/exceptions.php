@@ -30,7 +30,7 @@ class CompileException extends \Exception
 		$this->sourceCode = (string) $code;
 		$this->sourceLine = (int) $line;
 		$this->sourceName = (string) $name;
-		if (is_file($name)) {
+		if (@is_file($name)) { // @ - may trigger error
 			$this->message = rtrim($this->message, '.')
 				. ' in ' . str_replace(dirname(dirname($name)), '...', $name) . ($line ? ":$line" : '');
 		}
