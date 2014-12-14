@@ -24,6 +24,9 @@ class Filters
 	/** @var bool  use XHTML syntax? */
 	public static $xhtml = FALSE;
 
+	/** @var array default number format parameters */
+	public static $numberFormat = array(0 , '.', ',');
+
 
 	/**
 	 * Escapes string for use inside HTML template.
@@ -271,6 +274,24 @@ class Filters
 	public static function nl2br($value)
 	{
 		return nl2br($value, self::$xhtml);
+	}
+
+
+	/**
+	 * @param  float
+	 * @param  int
+	 * @param  string
+	 * @param  string
+	 * @return string
+	 */
+	public static function number($number, $decimals = NULL, $dec_point = NULL, $thousands_sep = NULL)
+	{
+		return number_format(
+			$number,
+			$decimals !== NULL ? $decimals : self::$numberFormat[0],
+			$dec_point !== NULL ? $dec_point : self::$numberFormat[1],
+			$thousands_sep !== NULL ? $thousands_sep : self::$numberFormat[2]
+		);
 	}
 
 
