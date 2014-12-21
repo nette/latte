@@ -106,7 +106,23 @@ class MacroTokens extends TokenIterator
 	public function fetchWords()
 	{
 		do {
-			$words[] = $this->joinUntil(self::T_WHITESPACE, ',', ':');
+			$word = $this->joinUntil(self::T_WHITESPACE, ',', ':');
+			while (TRUE) {
+				if (substr($this->currentValue(), -1, 1) == '.') {
+					// case ITEM. ITEM
+					if (($next = $this->joinFollowing(self::T_WHITESPACE)) && empty($next)) {
+						break;
+					}
+					$word .= $this->joinAll(self::T_WHITESPACE);
+				} elseif (($next = $this->joinFollowing(self::T_WHITESPACE, '.')) && !empty($next) && trim($next) == '.') {
+					// case ITEM .[ ]ITEM
+					$word .= $this->joinAll(self::T_WHITESPACE, '.');
+				} else {
+					break;
+				}
+				$word .= $this->joinUntil(self::T_WHITESPACE, ',', ':');
+			}
+			$words[] = $word;
 		} while ($this->nextToken(':'));
 
 		if (count($words) === 1 && ($space = $this->nextValue(self::T_WHITESPACE))

@@ -126,6 +126,17 @@ class TokenIterator extends Object
 
 
 	/**
+	 * Returns concatenation of all next token values without advancing
+	 * @param  int|string  (optional) token type or value to be joined
+	 * @return string
+	 */
+	public function joinFollowing()
+	{
+		return $this->scan(func_get_args(), FALSE, FALSE, TRUE); // strings
+	}
+
+
+	/**
 	 * Checks the current token.
 	 * @param  int|string  token type or value
 	 * @return bool
