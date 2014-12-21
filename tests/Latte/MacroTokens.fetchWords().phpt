@@ -30,3 +30,31 @@ test(function() {
 	Assert::same( array('"a:"', '$b" c"'),  $tokenizer->fetchWords() );
 	Assert::same( '',  $tokenizer->joinAll() );
 });
+
+
+test(function() {
+	$tokenizer = new MacroTokens('a. b');
+	Assert::same( array('a. b'),  $tokenizer->fetchWords() );
+	Assert::same( '',  $tokenizer->joinAll() );
+});
+
+
+test(function() {
+	$tokenizer = new MacroTokens('a . b');
+	Assert::same( array('a . b'),  $tokenizer->fetchWords() );
+	Assert::same( '',  $tokenizer->joinAll() );
+});
+
+
+test(function() {
+	$tokenizer = new MacroTokens('a .b');
+	Assert::same( array('a .b'),  $tokenizer->fetchWords() );
+	Assert::same( '',  $tokenizer->joinAll() );
+});
+
+
+test(function() {
+	$tokenizer = new MacroTokens('a . b:x,');
+	Assert::same( array('a . b:x'),  $tokenizer->fetchWords() );
+	Assert::same( '',  $tokenizer->joinAll() );
+});
