@@ -79,6 +79,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('use', array($me, 'macroUse'));
 		$me->addMacro('contentType', array($me, 'macroContentType'));
 		$me->addMacro('status', array($me, 'macroStatus'));
+		$me->addMacro('php', array($me, 'macroExpr'));
 
 		$me->addMacro('class', NULL, NULL, array($me, 'macroClass'));
 		$me->addMacro('attr', NULL, NULL, array($me, 'macroAttr'));
@@ -374,7 +375,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write(($node->name === '?' ? '' : 'echo ') . '%modify(%node.args)');
+		return $writer->write(($node->name === '=' ? 'echo ' : '') . '%modify(%node.args)');
 	}
 
 
