@@ -13,13 +13,13 @@ require __DIR__ . '/../bootstrap.php';
 
 test(function() { // constructor
 	$tokenizer = new MacroTokens('hello world');
-	Assert::same( 3, count($tokenizer->tokens) );
+	Assert::count( 3, $tokenizer->tokens );
 
 	$tokenizer2 = new MacroTokens($tokenizer->tokens);
 	Assert::same( $tokenizer2->tokens, $tokenizer->tokens );
 
 	$tokenizer3 = new MacroTokens(NULL);
-	Assert::same( 0, count($tokenizer3->tokens) );
+	Assert::count( 0, $tokenizer3->tokens );
 });
 
 
@@ -29,23 +29,23 @@ test(function() { // append
 	$res = $tokenizer->append('world!');
 	Assert::same( $tokenizer, $res );
 	Assert::same( 'hello world!', $tokenizer->joinAll() );
-	Assert::same( 4, count($tokenizer->tokens) );
+	Assert::count( 4, $tokenizer->tokens );
 
 	$res = $tokenizer->append($tokenizer->tokens[0]);
 	Assert::same( 'hello world!hello', $tokenizer->reset()->joinAll() );
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->append(NULL);
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->append('');
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->append(array());
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->append(FALSE);
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 });
 
 
@@ -75,21 +75,21 @@ test(function() { // prepend
 	$res = $tokenizer->prepend('hello ');
 	Assert::same( $tokenizer, $res );
 	Assert::same( 'hello world!', $tokenizer->joinAll() );
-	Assert::same( 4, count($tokenizer->tokens) );
+	Assert::count( 4, $tokenizer->tokens );
 
 	$res = $tokenizer->prepend($tokenizer->tokens[2]);
 	Assert::same( 'worldhello world!', $tokenizer->reset()->joinAll() );
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->prepend(NULL);
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->prepend('');
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->prepend(array());
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->prepend(FALSE);
-	Assert::same( 5, count($tokenizer->tokens) );
+	Assert::count( 5, $tokenizer->tokens );
 });
