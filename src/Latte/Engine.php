@@ -24,7 +24,7 @@ class Engine extends Object
 		CONTENT_ICAL = Compiler::CONTENT_ICAL,
 		CONTENT_TEXT = Compiler::CONTENT_TEXT;
 
-	/** @var array */
+	/** @var callable[] */
 	public $onCompile = array();
 
 	/** @var Parser */
