@@ -15,6 +15,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match('%A%
 <?php if (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break() ;if (!($i==1)); elseif (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break() ;
+%A%
 ', $latte->compile('
 {debugbreak}
 {debugbreak $i==1}

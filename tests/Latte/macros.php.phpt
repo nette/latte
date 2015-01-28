@@ -15,6 +15,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match('%A%
 <?php $a = \'test\' ? array() : NULL ;
+%A%
 ', $latte->compile('
 {php}
 {php $a = test ? []}
@@ -22,6 +23,7 @@ Assert::match('%A%
 
 Assert::match('%A%
 <?php $a = \'test\' ? array() : NULL ;
+%A%
 ', $latte->compile('
 {?}
 {? $a = test ? []}

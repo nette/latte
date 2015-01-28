@@ -77,9 +77,6 @@ class Engine extends Object
 		'upper' => 'Latte\Runtime\Filters::upper',
 	);
 
-	/** @var string */
-	private $baseTemplateClass = 'Latte\Template';
-
 
 	/**
 	 * Renders template to output.
@@ -87,8 +84,13 @@ class Engine extends Object
 	 */
 	public function render($name, array $params = array())
 	{
-		$template = new $this->baseTemplateClass($params, $this->filters, $this, $name);
-		$this->loadCacheFile($name, $template->getParameters());
+		$class = $this->getTemplateClass($name);
+		if (!class_exists($class, FALSE)) {
+			$this->loadCacheFile($name);
+		}
+
+		$template = new $class($params, $this->filters, $this, $name);
+		$template->render();
 	}
 
 
@@ -125,7 +127,7 @@ class Engine extends Object
 			$tokens = $this->getParser()->setContentType($this->contentType)
 				->parse($source);
 			$code = $this->getCompiler()->setContentType($this->contentType)
-				->compile($tokens);
+				->compile($tokens, $this->getTemplateClass($name));
 
 			if (!preg_match('#\n|\?#', $name)) {
 				$code = "<?php\n// source: $name\n?>" . $code;
@@ -143,19 +145,15 @@ class Engine extends Object
 	/**
 	 * @return void
 	 */
-	private function loadCacheFile($name, $params)
+	private function loadCacheFile($name)
 	{
 		if (!$this->tempDirectory) {
-			return call_user_func(function() {
-				foreach (func_get_arg(1) as $__k => $__v) {
-					$$__k = $__v;
-				}
-				unset($__k, $__v);
-				eval('?>' . func_get_arg(0));
-			}, $this->compile($name), $params);
+			eval('?>' . $this->compile($name));
+			return;
 		}
 
 		$file = $this->getCacheFile($name);
+
 		$handle = fopen($file, 'c+');
 		if (!$handle) {
 			throw new \RuntimeException("Unable to open or create file '$file'.");
@@ -176,13 +174,7 @@ class Engine extends Object
 			flock($handle, LOCK_SH); // holds the lock
 		}
 
-		call_user_func(function() {
-			foreach (func_get_arg(1) as $__k => $__v) {
-				$$__k = $__v;
-			}
-			unset($__k, $__v);
-			include func_get_arg(0);
-		}, $file, $params);
+		include $file;
 	}
 
 
@@ -204,6 +196,15 @@ class Engine extends Object
 			$file = trim(preg_replace('#\W+#', '-', $m[0]), '-') . '-' . $file;
 		}
 		return $this->tempDirectory . '/' . $file . '.php';
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getTemplateClass($name)
+	{
+		return 'Template' . md5("$this->tempDirectory\00$name");
 	}
 
 

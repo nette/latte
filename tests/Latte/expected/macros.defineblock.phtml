@@ -1,6 +1,6 @@
 <?php
 // source: %a%
-
+%A%
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
@@ -34,3 +34,4 @@ if ($_l->extends) { ob_start();}
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); } ?>
 
 <?php call_user_func(reset($_b->blocks['test']), $_b, array('var' => 20) + get_defined_vars()) ;
+%A%

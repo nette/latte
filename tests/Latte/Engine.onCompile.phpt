@@ -22,8 +22,8 @@ test(function () {
 		Notes::add('adding macros 2');
 	};
 
-	Assert::match('%A%$var%a%;', $latte->compile('{$var}'));
-	Assert::match('%A%$var%a%;', $latte->compile('{$var}'));
+	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
+	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 
 	Assert::same(array(
 		'adding macros 1',
@@ -46,8 +46,8 @@ test(function () {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->onCompile = new ArrayIterator($callbacks);
 
-	Assert::match('%A%$var%a%;', $latte->compile('{$var}'));
-	Assert::match('%A%$var%a%;', $latte->compile('{$var}'));
+	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
+	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 
 	Assert::same(array(
 		'adding macros 3',
@@ -86,8 +86,8 @@ test(function () {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->onCompile = new Event($callbacks);
 
-	Assert::match('%A%$var%a%;', $latte->compile('{$var}'));
-	Assert::match('%A%$var%a%;', $latte->compile('{$var}'));
+	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
+	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 
 	Assert::same(array(
 		'adding macros 5',

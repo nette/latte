@@ -1,6 +1,6 @@
 <?php
 // source: %a%
-
+%A%
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
@@ -62,3 +62,6 @@ if (!function_exists($_b->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%_wor
 // block "word$name"
 //
 if (!function_exists($_b->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__word_name_')) { function _%[a-z0-9]+%__word_name_($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+
+<?php
+%A%

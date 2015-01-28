@@ -1,6 +1,6 @@
 <?php
 // source: %a%
-
+%A%
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
@@ -10,3 +10,5 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ?>
 <p>Included file #2 (<?php echo Latte\Runtime\Filters::escapeHtml($localvar, ENT_NOQUOTES) ?>
 , <?php echo Latte\Runtime\Filters::escapeHtml($hello, ENT_NOQUOTES) ?>)</p>
+<?php
+%A%

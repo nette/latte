@@ -92,7 +92,7 @@ class Compiler extends Object
 	 * @param  Token[]
 	 * @return string
 	 */
-	public function compile(array $tokens)
+	public function compile(array $tokens, $className = NULL)
 	{
 		$this->templateId = substr(lcg_value(), 2, 10);
 		$this->tokens = $tokens;
@@ -129,6 +129,12 @@ class Compiler extends Object
 		}
 
 		$output = $this->expandTokens($output);
+		$output = "<?php\n"
+			. 'class ' . ($className ?: 'Template') . " extends Latte\\Template {\n"
+			. "function render() {\n"
+			. 'foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);'
+			. '?>' . $output . "<?php\n}}";
+
 		return $output;
 	}
 

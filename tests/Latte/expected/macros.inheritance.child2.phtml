@@ -1,6 +1,6 @@
 <?php
 // source: %a%
-
+%A%
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
@@ -53,3 +53,6 @@ call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 
 
 <?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars())  ?>
+
+<?php
+%A%
