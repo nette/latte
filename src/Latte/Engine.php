@@ -88,7 +88,7 @@ class Engine extends Object
 	 */
 	public function render($name, array $params = array())
 	{
-		$template = new $this->baseTemplateClass($params, $this->filters, $this, $name);
+		$template = new $this->baseTemplateClass($params, $this, $name);
 		$this->loadCacheFile($name, $template->getParameters());
 	}
 
