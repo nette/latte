@@ -253,10 +253,8 @@ class Engine extends Object
 	public function invokeFilter($name, array $args)
 	{
 		if (!isset($this->filters[$name])) {
-			$args2 = $args;
-			array_unshift($args2, $name);
 			foreach ($this->filters[NULL] as $filter) {
-				$res = call_user_func_array(Helpers::checkCallback($filter), $args2);
+				$res = call_user_func(Helpers::checkCallback($filter), $name, $args);
 				if ($res !== NULL) {
 					return $res;
 				} elseif (isset($this->filters[$name])) {
