@@ -155,27 +155,43 @@ class Engine extends Object
 
 		$file = $this->getCacheFile($name);
 
-		$handle = fopen($file, 'c+');
-		if (!$handle) {
-			throw new \RuntimeException("Unable to open or create file '$file'.");
-		}
-		flock($handle, LOCK_SH);
-		$stat = fstat($handle);
-		if (!$stat['size'] || ($this->autoRefresh && $this->getLoader()->isExpired($name, $stat['mtime']))) {
-			ftruncate($handle, 0);
-			flock($handle, LOCK_EX);
-			$stat = fstat($handle);
-			if (!$stat['size']) {
-				$code = $this->compile($name);
-				if (fwrite($handle, $code, strlen($code)) !== strlen($code)) {
-					ftruncate($handle, 0);
-					throw new \RuntimeException("Unable to write file '$file'.");
-				}
-			}
-			flock($handle, LOCK_SH); // holds the lock
+		if (!$this->isExpired($file, $name) && (@include $file) !== FALSE) { // @ - file may not exist
+			return;
 		}
 
-		include $file;
+		if (!is_dir($this->tempDirectory)) {
+			@mkdir($this->tempDirectory); // @ - directory may already exist
+		}
+
+		$handle = fopen("$file.lock", 'c+');
+		if (!$handle || !flock($handle, LOCK_EX)) {
+			throw new \RuntimeException("Unable to acquire exclusive lock '$file.lock'.");
+		}
+
+		if (!is_file($file) || $this->isExpired($file, $name)) {
+			$code = $this->compile($name);
+			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
+				@unlink("$file.tmp"); // @ - file may not exist
+				throw new \RuntimeException("Unable to create '$file'.");
+			}
+		}
+
+		if ((include $file) === FALSE) {
+			throw new \RuntimeException("Unable to load '$file'.");
+		}
+
+		flock($handle, LOCK_UN);
+	}
+
+
+	/**
+	 * @param  string
+	 * @param  string
+	 * @return bool
+	 */
+	private function isExpired($file, $name)
+	{
+		return $this->autoRefresh && $this->getLoader()->isExpired($name, (int) @filemtime($file)); // @ - file may not exist
 	}
 
 
@@ -184,14 +200,6 @@ class Engine extends Object
 	 */
 	public function getCacheFile($name)
 	{
-		if (!$this->tempDirectory) {
-			throw new \RuntimeException('Set path to temporary directory using setTempDirectory().');
-		} elseif (!is_dir($this->tempDirectory)) {
-			@mkdir($this->tempDirectory); // High concurrency
-			if (!is_dir($this->tempDirectory)) {
-				throw new \RuntimeException("Temporary directory cannot be created. Check access rights");
-			}
-		}
 		$file = md5($name);
 		if (preg_match('#\b\w.{10,50}$#', $name, $m)) {
 			$file = trim(preg_replace('#\W+#', '-', $m[0]), '-') . '-' . $file;
