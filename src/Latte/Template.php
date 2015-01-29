@@ -33,7 +33,6 @@ class Template extends Object
 
 	public function __construct(array $params, array & $filters, Engine $engine, $name)
 	{
-		$params['template'] = $this;
 		$this->setParameters($params);
 		$this->filters = & $filters;
 		$this->engine = $engine;
