@@ -25,17 +25,10 @@ class Template extends Object
 	/** @var array */
 	protected $params = array();
 
-	/** @var array run-time filters */
-	protected $filters = array(
-		NULL => array(), // dynamic
-	);
 
-
-	public function __construct(array $params, array & $filters, Engine $engine, $name)
+	public function __construct(array $params, Engine $engine, $name)
 	{
-		$params['template'] = $this;
 		$this->setParameters($params);
-		$this->filters = & $filters;
 		$this->engine = $engine;
 		$this->name = $name;
 	}

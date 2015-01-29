@@ -90,7 +90,7 @@ class Engine extends Object
 			$this->loadCacheFile($name);
 		}
 
-		$template = new $class($params, $this->filters, $this, $name);
+		$template = new $class($params, $this, $name);
 		$template->render();
 	}
 
