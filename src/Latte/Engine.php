@@ -16,13 +16,14 @@ namespace Latte;
 class Engine extends Object
 {
 	/** Content types */
-	const CONTENT_HTML = Compiler::CONTENT_HTML,
-		CONTENT_XHTML = Compiler::CONTENT_XHTML,
-		CONTENT_XML = Compiler::CONTENT_XML,
-		CONTENT_JS = Compiler::CONTENT_JS,
-		CONTENT_CSS = Compiler::CONTENT_CSS,
-		CONTENT_ICAL = Compiler::CONTENT_ICAL,
-		CONTENT_TEXT = Compiler::CONTENT_TEXT;
+	const CONTENT_HTML = 'html',
+		CONTENT_XHTML = 'xhtml',
+		CONTENT_XML = 'xml',
+		CONTENT_JS = 'js',
+		CONTENT_CSS = 'css',
+		CONTENT_URL = 'url',
+		CONTENT_ICAL = 'ical',
+		CONTENT_TEXT = 'text';
 
 	/** @var callable[] */
 	public $onCompile = array();
