@@ -51,7 +51,7 @@ $macro = new MockMacro;
 $parser = new Parser;
 $compiler = new Compiler;
 $compiler->addMacro('foo', $macro);
-$compiler->compile($parser->parse($latte));
+$compiler->compile($parser->parse($latte), 'Template');
 
 Assert::same( array(
 	'initialize',

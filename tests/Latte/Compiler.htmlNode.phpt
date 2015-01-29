@@ -37,4 +37,4 @@ class MockMacro implements IMacro
 $parser = new Parser;
 $compiler = new Compiler;
 $compiler->addMacro('foo', new MockMacro);
-$compiler->compile($parser->parse('<div a b=123 c = abc d="text" e=\'xxx\' f={foo 1/} b="456" g="a{foo 2/}b"> {foo 3/}'));
+$compiler->compile($parser->parse('<div a b=123 c = abc d="text" e=\'xxx\' f={foo 1/} b="456" g="a{foo 2/}b"> {foo 3/}'), 'Template');
