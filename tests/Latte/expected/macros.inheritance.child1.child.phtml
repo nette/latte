@@ -9,7 +9,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 // block title
 //
 if (!function_exists($_b->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>Homepage | <?php Latte\Macros\BlockMacros::callBlockParent($_b, 'title', get_defined_vars()) ;Latte\Macros\BlockMacros::callBlockParent($_b, 'title', get_defined_vars()) ;
+?>Homepage | <?php Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars()) ;Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars()) ;
 }}
 
 //

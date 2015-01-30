@@ -123,7 +123,7 @@ class BlockMacros extends MacroSet
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
 			$cmd = "call_user_func(reset(\$_b->blocks[$name]), \$_b, %node.array? + get_defined_vars())";
 		} else {
-			$cmd = 'Latte\Macros\BlockMacros::callBlock' . ($parent ? 'Parent' : '') . "(\$_b, $name, %node.array? + " . ($parent ? 'get_defined_vars' : '$template->getParameters') . '())';
+			$cmd = 'Latte\Macros\BlockMacrosRuntime::callBlock' . ($parent ? 'Parent' : '') . "(\$_b, $name, %node.array? + " . ($parent ? 'get_defined_vars' : '$template->getParameters') . '())';
 		}
 
 		if ($node->modifiers) {
@@ -315,37 +315,6 @@ class BlockMacros extends MacroSet
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (isset(' . implode(', ', $list) . ')) {';
-	}
-
-
-	/********************* run-time helpers ****************d*g**/
-
-
-	/**
-	 * Calls block.
-	 * @return void
-	 */
-	public static function callBlock(\stdClass $context, $name, array $params)
-	{
-		if (empty($context->blocks[$name])) {
-			throw new RuntimeException("Cannot include undefined block '$name'.");
-		}
-		$block = reset($context->blocks[$name]);
-		$block($context, $params);
-	}
-
-
-	/**
-	 * Calls parent block.
-	 * @return void
-	 */
-	public static function callBlockParent(\stdClass $context, $name, array $params)
-	{
-		if (empty($context->blocks[$name]) || ($block = next($context->blocks[$name])) === FALSE) {
-			throw new RuntimeException("Cannot include undefined parent block '$name'.");
-		}
-		$block($context, $params);
-		prev($context->blocks[$name]);
 	}
 
 }

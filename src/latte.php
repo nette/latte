@@ -14,6 +14,7 @@ spl_autoload_register(function($className) {
 		'Latte\\MacroNode' => 'MacroNode.php',
 		'Latte\\MacroTokens' => 'MacroTokens.php',
 		'Latte\\Macros\\BlockMacros' => 'Macros/BlockMacros.php',
+		'Latte\\Macros\\BlockMacrosRuntime' => 'Macros/BlockMacrosRuntime.php',
 		'Latte\\Macros\\CoreMacros' => 'Macros/CoreMacros.php',
 		'Latte\\Macros\\MacroSet' => 'Macros/MacroSet.php',
 		'Latte\\Object' => 'Object.php',

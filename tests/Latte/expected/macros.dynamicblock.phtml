@@ -43,11 +43,11 @@ if (!function_exists($_b->blocks[$name]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__name')) 
 
 <?php }} call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ;$iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
-<?php Latte\Macros\BlockMacros::callBlock($_b, 'dynamic', array('var' => 20) + $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', array('var' => 20) + $template->getParameters()) ?>
 
 <?php call_user_func(reset($_b->blocks['static']), $_b, array('var' => 30) + get_defined_vars()) ?>
 
-<?php Latte\Macros\BlockMacros::callBlock($_b, $name, array('var' => 40) + $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, array('var' => 40) + $template->getParameters()) ?>
 
 <?php
 

@@ -51,7 +51,7 @@ call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
 	</div>
 
 	<div id="content">
-<?php Latte\Macros\BlockMacros::callBlock($_b, 'content', $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'content', $template->getParameters()) ?>
 	</div>
 </body>
 </html>
