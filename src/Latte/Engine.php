@@ -15,6 +15,8 @@ namespace Latte;
  */
 class Engine extends Object
 {
+	const VERSION = '2.3-dev';
+
 	/** Content types */
 	const CONTENT_HTML = 'html',
 		CONTENT_XHTML = 'xhtml',
@@ -200,7 +202,7 @@ class Engine extends Object
 	 */
 	public function getCacheFile($name)
 	{
-		$file = md5($name);
+		$file = md5($name . self::VERSION);
 		if (preg_match('#\b\w.{10,50}$#', $name, $m)) {
 			$file = trim(preg_replace('#\W+#', '-', $m[0]), '-') . '-' . $file;
 		}
