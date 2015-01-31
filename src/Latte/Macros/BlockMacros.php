@@ -306,12 +306,14 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{
-		if (strpos($node->args, '#') === FALSE) {
+		if (!preg_match('~#|[\w-]+\z~A', $node->args)) {
 			return FALSE;
 		}
 		$list = array();
 		while (($name = $node->tokenizer->fetchWord()) !== FALSE) {
-			$list[] = $name[0] === '#' ? '$_b->blocks["' . substr($name, 1) . '"]' : $name;
+			$list[] = preg_match('~#|[\w-]+\z~A', $name)
+				? '$_b->blocks["' . ltrim($name, '#') . '"]'
+				: $writer->formatArgs(new Latte\MacroTokens($name));
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (isset(' . implode(', ', $list) . ')) {';
