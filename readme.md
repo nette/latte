@@ -60,8 +60,8 @@ and run this code:
 ```php
 $latte = new Latte\Engine;
 $latte->setTempDirectory('/path/to/tempdir');
-$params['items'] = array('one', 'two', 'three');
-$latte->render('template.latte', $params);
+$parameters['items'] = array('one', 'two', 'three');
+$latte->render('template.latte', $parameters);
 ```
 
 
