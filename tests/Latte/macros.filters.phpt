@@ -35,13 +35,13 @@ $latte->addFilter('h1', array(new MyFilter, 'invoke'));
 $latte->addFilter('h2', 'strtoupper');
 $latte->addFilter('translate', 'strrev');
 $latte->addFilter('types', 'types');
-$latte->addFilter(NULL, function($name, $val) {
-	return $name === 'dynamic' ? "<$name $val>" : NULL;
+$latte->addFilter(NULL, function($name, array $args) {
+	return $name === 'dynamic' ? "<$name $args[0]>" : NULL;
 });
-$latte->addFilter(NULL, function($name, $val) {
-	return $name === 'dynamic' ? "[$name $val]" : NULL;
+$latte->addFilter(NULL, function($name, array $args) {
+	return $name === 'dynamic' ? "[$name $args[0]]" : NULL;
 });
-$latte->addFilter(NULL, function($name, $val) use ($latte) {
+$latte->addFilter(NULL, function($name, array $args) use ($latte) {
 	if ($name === 'dynamic2') {
 		$latte->addFilter($name, function($val) {
 			return "[$val]";

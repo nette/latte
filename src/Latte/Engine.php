@@ -230,7 +230,7 @@ class Engine extends Object
 		if ($name == NULL) { // intentionally ==
 			array_unshift($this->filters[NULL], $callback);
 		} else {
-			$this->filters[strtolower($name)] = $callback;
+			$this->filters[$name] = $callback;
 		}
 		return $this;
 	}
@@ -254,21 +254,18 @@ class Engine extends Object
 	 */
 	public function invokeFilter($name, array $args)
 	{
-		$lname = strtolower($name);
-		if (!isset($this->filters[$lname])) {
-			$args2 = $args;
-			array_unshift($args2, $lname);
+		if (!isset($this->filters[$name])) {
 			foreach ($this->filters[NULL] as $filter) {
-				$res = call_user_func_array(Helpers::checkCallback($filter), $args2);
+				$res = call_user_func(Helpers::checkCallback($filter), $name, $args);
 				if ($res !== NULL) {
 					return $res;
-				} elseif (isset($this->filters[$lname])) {
-					return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
+				} elseif (isset($this->filters[$name])) {
+					return call_user_func_array(Helpers::checkCallback($this->filters[$name]), $args);
 				}
 			}
 			throw new \LogicException("Filter '$name' is not defined.");
 		}
-		return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
+		return call_user_func_array(Helpers::checkCallback($this->filters[$name]), $args);
 	}
 
 
