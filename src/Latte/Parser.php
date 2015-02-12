@@ -57,6 +57,9 @@ class Parser extends Object
 	/** @var string used by filter() */
 	private $syntaxEndTag;
 
+	/** @var int */
+	private $syntaxEndLevel = 0;
+
 	/** @var bool */
 	private $xmlMode;
 
@@ -439,12 +442,13 @@ class Parser extends Object
 
 		} elseif ($token->type === Token::HTML_ATTRIBUTE && $token->name === 'n:syntax') {
 			$this->setSyntax($token->value);
-			$this->syntaxEndTag = '/' . $this->lastHtmlTag;
+			$this->syntaxEndTag = $this->lastHtmlTag;
+			$this->syntaxEndLevel = 1;
 			$token->type = Token::COMMENT;
-
-		} elseif ($token->type === Token::HTML_TAG_END && $this->lastHtmlTag === $this->syntaxEndTag) {
+		} elseif ($token->type === Token::HTML_TAG_BEGIN && $this->lastHtmlTag === $this->syntaxEndTag) {
+			$this->syntaxEndLevel++;
+		} elseif ($token->type === Token::HTML_TAG_END && $this->lastHtmlTag === ('/' . $this->syntaxEndTag) && --$this->syntaxEndLevel === 0) {
 			$this->setSyntax($this->defaultSyntax);
-
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
 			$this->setContentType($token->value);
 		}
