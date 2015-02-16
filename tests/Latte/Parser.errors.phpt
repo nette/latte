@@ -17,19 +17,22 @@ Assert::exception(function() {
 }, 'InvalidArgumentException', 'Template is not valid UTF-8 stream.');
 
 
-Assert::exception(function() {
+Assert::exception(function() use (& $parser) {
 	$parser = new Parser;
 	$parser->parse("{var \n'abc}");
-}, 'Latte\CompileException', 'Malformed macro on line 1.');
+}, 'Latte\CompileException', 'Malformed macro');
+Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function() {
+Assert::exception(function() use (& $parser) {
 	$parser = new Parser;
 	$parser->parse("\n{* \n'abc}");
-}, 'Latte\CompileException', 'Malformed macro on line 2.');
+}, 'Latte\CompileException', 'Malformed macro');
+Assert::same(2, $parser->getLine());
 
 
-Assert::exception(function() {
+Assert::exception(function() use (& $parser) {
 	$parser = new Parser;
 	$parser->parse('{');
-}, 'Latte\CompileException', 'Malformed macro on line 1.');
+}, 'Latte\CompileException', 'Malformed macro');
+Assert::same(1, $parser->getLine());

@@ -102,7 +102,7 @@ class Parser extends Object
 			$this->filter();
 		}
 		if ($this->context[0] === self::CONTEXT_MACRO) {
-			throw new CompileException("Malformed macro on line {$this->getLine()}.");
+			throw new CompileException('Malformed macro');
 		}
 
 		if ($this->offset < strlen($input)) {
@@ -275,7 +275,7 @@ class Parser extends Object
 			$this->context = $this->context[1][0];
 
 		} else {
-			throw new CompileException("Malformed macro on line {$this->getLine()}.");
+			throw new CompileException('Malformed macro');
 		}
 	}
 
@@ -418,7 +418,7 @@ class Parser extends Object
 	}
 
 
-	private function getLine()
+	public function getLine()
 	{
 		return substr_count($this->input, "\n", 0, max(1, $this->offset - 1)) + 1;
 	}

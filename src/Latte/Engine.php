@@ -126,19 +126,24 @@ class Engine extends Object
 		$this->onCompile = array();
 
 		$source = $this->getLoader()->getContent($name);
+
 		try {
 			$tokens = $this->getParser()->setContentType($this->contentType)
 				->parse($source);
+
 			$code = $this->getCompiler()->setContentType($this->contentType)
 				->compile($tokens, $this->getTemplateClass($name));
 
-			if (!preg_match('#\n|\?#', $name)) {
-				$code = "<?php\n// source: $name\n?>" . $code;
-			}
-
 		} catch (\Exception $e) {
-			$e = $e instanceof CompileException ? $e : new CompileException("Thrown exception '{$e->getMessage()}'", NULL, $e);
-			throw $e->setSource($source, $this->getCompiler()->getLine(), $name);
+			if (!$e instanceof CompileException) {
+				$e = new CompileException("Thrown exception '{$e->getMessage()}'", NULL, $e);
+			}
+			$line = isset($tokens) ? $this->getCompiler()->getLine() : $this->getParser()->getLine();
+			throw $e->setSource($source, $line, $name);
+		}
+
+		if (!preg_match('#\n|\?#', $name)) {
+			$code = "<?php\n// source: $name\n?>" . $code;
 		}
 		$code = Helpers::optimizePhp($code);
 		return $code;
