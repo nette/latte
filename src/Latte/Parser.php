@@ -89,7 +89,7 @@ class Parser extends Object
 		$input = str_replace("\r\n", "\n", $input);
 		$this->input = $input;
 		$this->output = array();
-		$this->offset = 0;
+		$this->offset = $tokenCount = 0;
 
 		$this->setSyntax($this->defaultSyntax);
 		$this->setContext(self::CONTEXT_HTML_TEXT);
@@ -99,7 +99,9 @@ class Parser extends Object
 			if ($this->{"context".$this->context[0]}() === FALSE) {
 				break;
 			}
-			$this->filter();
+			while ($tokenCount < count($this->output)) {
+				$this->filter($this->output[$tokenCount++]);
+			}
 		}
 		if ($this->context[0] === self::CONTEXT_MACRO) {
 			throw new CompileException('Malformed macro');
@@ -427,12 +429,9 @@ class Parser extends Object
 	/**
 	 * Process low-level macros.
 	 */
-	protected function filter()
+	protected function filter(Token $token)
 	{
-		$token = end($this->output);
-		if (!$token) {
-
-		} elseif ($token->type === Token::MACRO_TAG && $token->name === '/syntax') {
+		if ($token->type === Token::MACRO_TAG && $token->name === '/syntax') {
 			$this->setSyntax($this->defaultSyntax);
 			$token->type = Token::COMMENT;
 
@@ -445,10 +444,13 @@ class Parser extends Object
 			$this->syntaxEndTag = $this->lastHtmlTag;
 			$this->syntaxEndLevel = 1;
 			$token->type = Token::COMMENT;
+
 		} elseif ($token->type === Token::HTML_TAG_BEGIN && $this->lastHtmlTag === $this->syntaxEndTag) {
 			$this->syntaxEndLevel++;
+
 		} elseif ($token->type === Token::HTML_TAG_END && $this->lastHtmlTag === ('/' . $this->syntaxEndTag) && --$this->syntaxEndLevel === 0) {
 			$this->setSyntax($this->defaultSyntax);
+
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
 			$this->setContentType($token->value);
 		}
