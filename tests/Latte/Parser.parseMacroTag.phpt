@@ -55,3 +55,7 @@ Assert::same(['=', '-10', '', FALSE], $parser->parseMacroTag('-10'));
 Assert::same(['=', '$var', "|mod:'\\':a:b:c':arg2 |mod2:|mod3", FALSE], $parser->parseMacroTag("\$var |mod:'\\':a:b:c':arg2 |mod2:|mod3"));
 Assert::same(['=', '$var', '|mod|mod2|noescape', FALSE], $parser->parseMacroTag('$var|mod|mod2|noescape'));
 Assert::same(['=', "'a|b\\'c'", '', FALSE], $parser->parseMacroTag("'a|b\\'c'"));
+
+Assert::same(['link', 'foo => ($var|mod)', '|mod2', FALSE], $parser->parseMacroTag('link foo => ($var|mod)|mod2'));
+Assert::same(['link', 'foo => ($var|mod)', '|mod2:(1|foo)', FALSE], $parser->parseMacroTag('link foo => ($var|mod)|mod2:(1|foo)'));
+Assert::same(['link', 'foo => "(aa"', '|mod2:"bb)"', FALSE], $parser->parseMacroTag('link foo => "(aa"|mod2:"bb)"'));
