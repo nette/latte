@@ -25,6 +25,10 @@ Assert::matchFile(
 	)
 );
 Assert::matchFile(
+	__DIR__ . '/expected/macros.include-escape.html',
+	$latte->renderToString(__DIR__ . '/templates/include-escape.latte')
+);
+Assert::matchFile(
 	__DIR__ . '/expected/macros.include.inc1.phtml',
 	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/include1.latte'))
 );
