@@ -320,7 +320,7 @@ class Compiler extends Object
 			$this->htmlNode = $this->htmlNode->parentNode;
 
 		} elseif ((($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
-			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|css#i', $htmlNode->attrs['type']))
+			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|json|css#i', $htmlNode->attrs['type']))
 		) {
 			$this->setContext($lower === 'script' ? self::CONTENT_JS : self::CONTENT_CSS);
 		}
