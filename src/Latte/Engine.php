@@ -15,7 +15,7 @@ namespace Latte;
  */
 class Engine extends Object
 {
-	const VERSION = '2.3.0';
+	const VERSION = '2.3.1';
 
 	/** Content types */
 	const CONTENT_HTML = 'html',
