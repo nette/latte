@@ -306,8 +306,10 @@ class CoreMacros extends MacroSet
 	public function macroDump(MacroNode $node, PhpWriter $writer)
 	{
 		$args = $writer->formatArgs();
-		return 'Tracy\Debugger::barDump(' . ($node->args ? $writer->write("array(%var => $args)", $args) : 'get_defined_vars()')
-			. ', "Template " . str_replace(dirname(dirname($template->getName())), "\xE2\x80\xA6", $template->getName()))';
+		return $writer->write(
+			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()'). ', %var)',
+			$args ?: 'variables'
+		);
 	}
 
 
