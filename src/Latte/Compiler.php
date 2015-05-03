@@ -270,8 +270,6 @@ class Compiler extends Object
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
-			$this->htmlNode->isEmpty = in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)
-				&& isset(Helpers::$emptyElements[strtolower($token->name)]);
 			$this->htmlNode->offset = strlen($this->output);
 			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
 		}
@@ -288,33 +286,38 @@ class Compiler extends Object
 		}
 
 		$htmlNode = $this->htmlNode;
-		$isEmpty = !$htmlNode->closing && (strpos($token->text, '/') !== FALSE || $htmlNode->isEmpty);
 		$end = '';
 
-		if ($isEmpty && in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)) { // auto-correct
-			$space = substr(strstr($token->text, '>'), 1);
-			$token->text = $htmlNode->isEmpty && $this->contentType === self::CONTENT_XHTML ? ' />' : '>';
-			if ($htmlNode->isEmpty) {
-				$token->text .= $space;
-			} else {
-				$end = "</$htmlNode->name>" . $space;
+		if (!$htmlNode->closing) {
+			$htmlNode->isEmpty = strpos($token->text, '/') !== FALSE;
+			if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)) {
+				$emptyElement = isset(Helpers::$emptyElements[strtolower($htmlNode->name)]);
+				$htmlNode->isEmpty = $htmlNode->isEmpty || $emptyElement;
+				if ($htmlNode->isEmpty) { // auto-correct
+					$space = substr(strstr($token->text, '>'), 1);
+					if ($emptyElement) {
+						$token->text = ($this->contentType === self::CONTENT_XHTML ? ' />' : '>') . $space;
+					} else {
+						$token->text = '>';
+						$end = "</$htmlNode->name>" . $space;
+					}
+				}
 			}
 		}
 
-		if (empty($htmlNode->macroAttrs)) {
-			$this->output .= $token->text . $end;
-		} else {
+		if ($htmlNode->macroAttrs) {
 			$code = substr($this->output, $htmlNode->offset) . $token->text;
 			$this->output = substr($this->output, 0, $htmlNode->offset);
 			$this->writeAttrsMacro($code);
-			if ($isEmpty) {
-				$htmlNode->closing = TRUE;
-				$this->writeAttrsMacro($end);
-			}
+		} else {
+			$this->output .= $token->text . $end;
 		}
 
-		if ($isEmpty) {
+		if ($htmlNode->isEmpty) {
 			$htmlNode->closing = TRUE;
+			if ($htmlNode->macroAttrs) {
+				$this->writeAttrsMacro($end);
+			}
 		}
 
 		$this->setContext(NULL);
