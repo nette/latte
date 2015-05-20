@@ -31,12 +31,12 @@ test(function() use ($compiler) { // {var ... }
 
 
 test(function() use ($compiler) { // {default ...}
-	Assert::same( "<?php extract(array('var'=>NULL, 'var2'=>NULL), EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var, var2', '')->openingCode );
-	Assert::same( "<?php extract(array('var' => 'hello'), EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var => hello', '')->openingCode );
-	Assert::same( "<?php extract(array('var' => 123), EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var => 123', '')->openingCode );
-	Assert::same( "<?php extract(array('var' => 123), EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var = 123', '')->openingCode );
-	Assert::same( "<?php extract(array('var' => 123), EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var => 123', 'filter')->openingCode );
-	Assert::same( "<?php extract(array('var1' => 123, 'var2' => \"nette framework\"), EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var1 = 123, $var2 => "nette framework"', '')->openingCode );
+	Assert::same( "<?php extract(['var'=>NULL, 'var2'=>NULL], EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var, var2', '')->openingCode );
+	Assert::same( "<?php extract(['var' => 'hello'], EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var => hello', '')->openingCode );
+	Assert::same( "<?php extract(['var' => 123], EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var => 123', '')->openingCode );
+	Assert::same( "<?php extract(['var' => 123], EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var = 123', '')->openingCode );
+	Assert::same( "<?php extract(['var' => 123], EXTR_SKIP) ?>",  $compiler->expandMacro('default', '$var => 123', 'filter')->openingCode );
+	Assert::same( "<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP) ?>",  $compiler->expandMacro('default', 'var1 = 123, $var2 => "nette framework"', '')->openingCode );
 
 	Assert::exception(function() use ($compiler) {
 		$compiler->expandMacro('default', '$temp->var1 = 123', '');

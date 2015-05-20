@@ -367,7 +367,7 @@ class CoreMacros extends MacroSet
 			$res->append($node->name === 'default' ? '=>NULL' : '=NULL');
 		}
 		$out = $writer->quoteFilter($res)->joinAll();
-		return $node->name === 'default' ? "extract(array($out), EXTR_SKIP)" : $out;
+		return $node->name === 'default' ? "extract([$out], EXTR_SKIP)" : $out;
 	}
 
 

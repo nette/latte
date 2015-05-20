@@ -79,7 +79,7 @@ class PhpWriter extends Object
 					$code = $me->formatArgs(); break;
 				case 'array':
 					$code = $me->formatArray();
-					$code = $cond && $code === 'array()' ? '' : $code; break;
+					$code = $cond && $code === '[]' ? '' : $code; break;
 				case 'var':
 					$code = var_export($arg, TRUE); break;
 				case 'raw':
@@ -215,24 +215,26 @@ class PhpWriter extends Object
 	 */
 	public function expandFilter(MacroTokens $tokens)
 	{
-		$res = new MacroTokens('array(');
+		$res = new MacroTokens('[');
 		$expand = NULL;
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('(expand)') && $tokens->depth === 0) {
 				$expand = TRUE;
-				$res->append('),');
+				$res->append('],');
 			} elseif ($expand && $tokens->isCurrent(',') && !$tokens->depth) {
 				$expand = FALSE;
-				$res->append(', array(');
+				$res->append(', [');
 			} else {
 				$res->append($tokens->currentToken());
 			}
 		}
 
-		if ($expand !== NULL) {
-			$res->prepend('array_merge(')->append($expand ? ', array()' : ')');
+		if ($expand === NULL) {
+			$res->append(']');
+		} else {
+			$res->prepend('array_merge(')->append($expand ? ', [])' : '])');
 		}
-		return $res->append(')');
+		return $res;
 	}
 
 

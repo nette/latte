@@ -19,13 +19,13 @@ function formatArray($args) {
 
 
 test(function() { // symbols
-	Assert::same( 'array()',  formatArray('') );
-	Assert::same( 'array(1)',  formatArray('1') );
-	Assert::same( "array('symbol')",  formatArray('symbol') );
-	Assert::same( "array(1, 2, 'symbol1', 'symbol-2')",  formatArray('1, 2, symbol1, symbol-2') );
+	Assert::same( '[]',  formatArray('') );
+	Assert::same( '[1]',  formatArray('1') );
+	Assert::same( "['symbol']",  formatArray('symbol') );
+	Assert::same( "[1, 2, 'symbol1', 'symbol-2']",  formatArray('1, 2, symbol1, symbol-2') );
 });
 
 
 test(function() { // expand
-	Assert::same( 'array_merge(array(\'item\', $list, ), $list, array())',  formatArray('item, $list, (expand) $list') );
+	Assert::same( 'array_merge([\'item\', $list, ], $list, [])',  formatArray('item, $list, (expand) $list') );
 });
