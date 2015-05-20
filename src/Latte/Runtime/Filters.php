@@ -101,7 +101,7 @@ class Filters
 			throw new \RuntimeException(PHP_VERSION_ID >= 50500 ? json_last_error_msg() : 'JSON encode error', $error);
 		}
 
-		return str_replace(array("\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'), array('\u2028', '\u2029', ']]\x3E', '\x3C!'), $json);
+		return str_replace(["\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'], ['\u2028', '\u2029', ']]\x3E', '\x3C!'], $json);
 	}
 
 
@@ -209,7 +209,7 @@ class Filters
 	public static function bytes($bytes, $precision = 2)
 	{
 		$bytes = round($bytes);
-		$units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB');
+		$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
 		foreach ($units as $unit) {
 			if (abs($bytes) < 1024 || $unit === end($units)) {
 				break;
@@ -428,7 +428,7 @@ class Filters
 
 			$q = strpos($value, '"') === FALSE ? '"' : "'";
 			$s .= ' ' . $key . '='
-				. $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value)
+				. $q . str_replace(['&', $q], ['&amp;', $q === '"' ? '&quot;' : '&#39;'], $value)
 				. (strpos($value, '`') !== FALSE && strpbrk($value, ' <>"\'') === FALSE ? ' ' : '')
 				. $q;
 		}

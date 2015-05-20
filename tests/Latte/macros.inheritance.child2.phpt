@@ -20,6 +20,6 @@ Assert::matchFile(
 	__DIR__ . '/expected/macros.inheritance.child2.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/inheritance.child2.latte',
-		array('people' => array('John', 'Mary', 'Paul'))
+		['people' => ['John', 'Mary', 'Paul']]
 	)
 );

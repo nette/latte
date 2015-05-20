@@ -27,13 +27,13 @@ Assert::match(
 
 Assert::match(
 	'<div>0</div>',
-	$latte->renderToString('<div n:ifcontent>{$content}</div>', array('content' => '0'))
+	$latte->renderToString('<div n:ifcontent>{$content}</div>', ['content' => '0'])
 );
 
 
 Assert::match(
 	'',
-	$latte->renderToString('<div n:ifcontent>{$empty}</div>', array('empty' => ''))
+	$latte->renderToString('<div n:ifcontent>{$empty}</div>', ['empty' => ''])
 );
 
 
@@ -45,7 +45,7 @@ Assert::match(
 
 Assert::match(
 	'',
-	$latte->renderToString('<div n:ifcontent>  {$empty}  </div>', array('empty' => ''))
+	$latte->renderToString('<div n:ifcontent>  {$empty}  </div>', ['empty' => ''])
 );
 
 

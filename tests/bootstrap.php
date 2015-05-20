@@ -28,7 +28,7 @@ function test(\Closure $function)
 
 class Notes
 {
-	static public $notes = array();
+	static public $notes = [];
 
 	public static function add($message)
 	{
@@ -38,7 +38,7 @@ class Notes
 	public static function fetch()
 	{
 		$res = self::$notes;
-		self::$notes = array();
+		self::$notes = [];
 		return $res;
 	}
 

@@ -17,4 +17,4 @@ Assert::match('', $latte->renderToString('{define foobar}Hello{/define}'));
 
 Assert::match('', $latte->renderToString('{define foo-bar}Hello{/define}'));
 
-Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', array('foo' => 'bar')));
+Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', ['foo' => 'bar']));

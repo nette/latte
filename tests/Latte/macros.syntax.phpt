@@ -20,6 +20,6 @@ Assert::matchFile(
 	__DIR__ . '/expected/macros.syntax.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/syntax.latte',
-		array('people' => array('John', 'Mary', 'Paul'))
+		['people' => ['John', 'Mary', 'Paul']]
 	)
 );

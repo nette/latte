@@ -16,7 +16,7 @@ require __DIR__ . '/../bootstrap.php';
 
 class MockMacro implements IMacro
 {
-	public $calls = array();
+	public $calls = [];
 
 	public function initialize()
 	{
@@ -30,12 +30,12 @@ class MockMacro implements IMacro
 
 	public function nodeOpened(MacroNode $node)
 	{
-		$this->calls[] = array(__FUNCTION__, isset($node->htmlNode) ? $node->htmlNode->name : NULL, $node->closing, $node->prefix);
+		$this->calls[] = [__FUNCTION__, isset($node->htmlNode) ? $node->htmlNode->name : NULL, $node->closing, $node->prefix];
 	}
 
 	public function nodeClosed(MacroNode $node)
 	{
-		$this->calls[] = array(__FUNCTION__, isset($node->htmlNode) ? $node->htmlNode->name : NULL, $node->closing, $node->prefix);
+		$this->calls[] = [__FUNCTION__, isset($node->htmlNode) ? $node->htmlNode->name : NULL, $node->closing, $node->prefix];
 	}
 }
 
@@ -53,25 +53,25 @@ $compiler = new Compiler;
 $compiler->addMacro('foo', $macro);
 $compiler->compile($parser->parse($latte), 'Template');
 
-Assert::same( array(
+Assert::same( [
 	'initialize',
 
-	array('nodeOpened', NULL, FALSE, NULL),
-	array('nodeClosed', NULL, TRUE, NULL),
+	['nodeOpened', NULL, FALSE, NULL],
+	['nodeClosed', NULL, TRUE, NULL],
 
-	array('nodeOpened', 'div1', FALSE, NULL),
-	array('nodeClosed', 'div1', TRUE, NULL),
+	['nodeOpened', 'div1', FALSE, NULL],
+	['nodeClosed', 'div1', TRUE, NULL],
 
-	array('nodeOpened', 'div2', FALSE, 'none'),
-	array('nodeClosed', 'div2', TRUE, 'none'),
+	['nodeOpened', 'div2', FALSE, 'none'],
+	['nodeClosed', 'div2', TRUE, 'none'],
 
-	array('nodeOpened', 'div3', FALSE, 'inner'),
-	array('nodeClosed', 'div3', TRUE, 'inner'),
+	['nodeOpened', 'div3', FALSE, 'inner'],
+	['nodeClosed', 'div3', TRUE, 'inner'],
 
-	array('nodeOpened', 'div4', FALSE, 'tag'),
-	array('nodeClosed', 'div4', TRUE, 'tag'),
-	array('nodeOpened', 'div4', FALSE, 'tag'),
-	array('nodeClosed', 'div4', TRUE, 'tag'),
+	['nodeOpened', 'div4', FALSE, 'tag'],
+	['nodeClosed', 'div4', TRUE, 'tag'],
+	['nodeOpened', 'div4', FALSE, 'tag'],
+	['nodeClosed', 'div4', TRUE, 'tag'],
 
 	'finalize',
-), $macro->calls );
+], $macro->calls );

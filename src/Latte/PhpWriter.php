@@ -188,7 +188,7 @@ class PhpWriter extends Object
 	public function shortTernaryFilter(MacroTokens $tokens)
 	{
 		$res = new MacroTokens;
-		$inTernary = array();
+		$inTernary = [];
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('?')) {
 				$inTernary[] = $tokens->depth;
@@ -217,7 +217,7 @@ class PhpWriter extends Object
 	public function shortArraysFilter(MacroTokens $tokens)
 	{
 		$res = new MacroTokens;
-		$arrays = array();
+		$arrays = [];
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('[')) {
 				if ($arrays[] = !$tokens->isPrev(']', ')', MacroTokens::T_SYMBOL, MacroTokens::T_VARIABLE, MacroTokens::T_KEYWORD)) {

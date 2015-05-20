@@ -23,7 +23,7 @@ class TokenIterator extends Object
 	public $position = -1;
 
 	/** @var array */
-	public $ignored = array();
+	public $ignored = [];
 
 
 	/**
@@ -195,7 +195,7 @@ class TokenIterator extends Object
 	 */
 	protected function scan($wanted, $onlyFirst, $advance, $strings = FALSE, $until = FALSE, $prev = FALSE)
 	{
-		$res = $onlyFirst ? NULL : ($strings ? '' : array());
+		$res = $onlyFirst ? NULL : ($strings ? '' : []);
 		$pos = $this->position + ($prev ? -1 : 1);
 		do {
 			if (!isset($this->tokens[$pos])) {

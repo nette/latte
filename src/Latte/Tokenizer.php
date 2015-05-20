@@ -60,7 +60,7 @@ class Tokenizer extends Object
 					$type = $this->types[$i - 1]; break;
 				}
 			}
-			$match = array(self::VALUE => $match[0], self::OFFSET => $len, self::TYPE => $type);
+			$match = [self::VALUE => $match[0], self::OFFSET => $len, self::TYPE => $type];
 			$len += strlen($match[self::VALUE]);
 		}
 		if ($len !== strlen($input)) {
@@ -81,7 +81,7 @@ class Tokenizer extends Object
 	public static function getCoordinates($text, $offset)
 	{
 		$text = substr($text, 0, $offset);
-		return array(substr_count($text, "\n") + 1, $offset - strrpos("\n" . $text, "\n") + 1);
+		return [substr_count($text, "\n") + 1, $offset - strrpos("\n" . $text, "\n") + 1];
 	}
 
 }

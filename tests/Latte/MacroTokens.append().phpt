@@ -41,7 +41,7 @@ test(function() { // append
 	$res = $tokenizer->append('');
 	Assert::count( 5, $tokenizer->tokens );
 
-	$res = $tokenizer->append(array());
+	$res = $tokenizer->append([]);
 	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->append(FALSE);
@@ -87,7 +87,7 @@ test(function() { // prepend
 	$res = $tokenizer->prepend('');
 	Assert::count( 5, $tokenizer->tokens );
 
-	$res = $tokenizer->prepend(array());
+	$res = $tokenizer->prepend([]);
 	Assert::count( 5, $tokenizer->tokens );
 
 	$res = $tokenizer->prepend(FALSE);

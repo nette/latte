@@ -20,6 +20,6 @@ Assert::matchFile(
 	__DIR__ . '/expected/macros.unquoted.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/unquoted.latte',
-		array('x' => '\' & "')
+		['x' => '\' & "']
 	)
 );

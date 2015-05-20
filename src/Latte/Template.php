@@ -23,7 +23,7 @@ class Template extends Object
 	private $name;
 
 	/** @var array */
-	protected $params = array();
+	protected $params = [];
 
 
 	public function __construct(array $params, Engine $engine, $name)
@@ -78,7 +78,7 @@ class Template extends Object
 			$this->params['_g'] = new \stdClass;
 		}
 
-		return array($block, $this->params['_g'], $this->params['_l']);
+		return [$block, $this->params['_g'], $this->params['_l']];
 	}
 
 
@@ -87,7 +87,7 @@ class Template extends Object
 	 * @return void
 	 * @internal
 	 */
-	public function renderChildTemplate($name, array $params = array())
+	public function renderChildTemplate($name, array $params = [])
 	{
 		$name = $this->engine->getLoader()->getChildName($name, $this->name);
 		$this->engine->render($name, $params);

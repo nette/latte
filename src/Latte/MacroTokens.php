@@ -35,13 +35,13 @@ class MacroTokens extends TokenIterator
 	public function __construct($input = NULL)
 	{
 		parent::__construct(is_array($input) ? $input : $this->parse($input));
-		$this->ignored = array(self::T_COMMENT, self::T_WHITESPACE);
+		$this->ignored = [self::T_COMMENT, self::T_WHITESPACE];
 	}
 
 
 	public function parse($s)
 	{
-		self::$tokenizer = self::$tokenizer ?: new Tokenizer(array(
+		self::$tokenizer = self::$tokenizer ?: new Tokenizer([
 			self::T_WHITESPACE => '\s+',
 			self::T_COMMENT => '(?s)/\*.*?\*/',
 			self::T_STRING => Parser::RE_STRING,
@@ -51,7 +51,7 @@ class MacroTokens extends TokenIterator
 			self::T_NUMBER => '[+-]?[0-9]+(?:\.[0-9]+)?(?:e[0-9]+)?',
 			self::T_SYMBOL => '[\w\pL_]+(?:-[\w\pL_]+)*',
 			self::T_CHAR => '::|=>|->|\+\+|--|<<|>>|<=|>=|===|!==|==|!=|<>|&&|\|\||[^"\']', // =>, any char except quotes
-		), 'u');
+		], 'u');
 		return self::$tokenizer->tokenize($s);
 	}
 
@@ -66,7 +66,7 @@ class MacroTokens extends TokenIterator
 			array_splice(
 				$this->tokens,
 				$position === NULL ? count($this->tokens) : $position, 0,
-				is_array($val) ? array($val) : $this->parse($val)
+				is_array($val) ? [$val] : $this->parse($val)
 			);
 		}
 		return $this;
@@ -80,7 +80,7 @@ class MacroTokens extends TokenIterator
 	public function prepend($val)
 	{
 		if ($val != NULL) { // intentionally @
-			array_splice($this->tokens, 0, 0, is_array($val) ? array($val) : $this->parse($val));
+			array_splice($this->tokens, 0, 0, is_array($val) ? [$val] : $this->parse($val));
 		}
 		return $this;
 	}
@@ -116,7 +116,7 @@ class MacroTokens extends TokenIterator
 		}
 		$this->nextToken(',');
 		$this->nextAll(self::T_WHITESPACE, self::T_COMMENT);
-		return $words === array('') ? array() : $words;
+		return $words === [''] ? [] : $words;
 	}
 
 

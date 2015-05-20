@@ -22,10 +22,10 @@ class HtmlNode extends Object
 	public $isEmpty;
 
 	/** @var array */
-	public $attrs = array();
+	public $attrs = [];
 
 	/** @var array */
-	public $macroAttrs = array();
+	public $macroAttrs = [];
 
 	/** @var bool */
 	public $closing = FALSE;

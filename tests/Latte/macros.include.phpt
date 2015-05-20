@@ -21,7 +21,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/macros.include.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/include.latte',
-		array('hello' => '<i>Hello</i>')
+		['hello' => '<i>Hello</i>']
 	)
 );
 Assert::matchFile(

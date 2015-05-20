@@ -22,11 +22,11 @@ class MockMacro implements IMacro
 
 	function nodeOpened(MacroNode $node)
 	{
-		$res = array(
-			1 => array('a' => '', 'b' => '123', 'c' => 'abc', 'd' => 'text', 'e' => 'xxx', 'f' => TRUE),
-			2 => array('a' => '', 'b' => '456', 'c' => 'abc', 'd' => 'text', 'e' => 'xxx', 'f' => TRUE, 'g' => TRUE),
-			3 => array('a' => '', 'b' => '456', 'c' => 'abc', 'd' => 'text', 'e' => 'xxx', 'f' => TRUE, 'g' => TRUE),
-		);
+		$res = [
+			1 => ['a' => '', 'b' => '123', 'c' => 'abc', 'd' => 'text', 'e' => 'xxx', 'f' => TRUE],
+			2 => ['a' => '', 'b' => '456', 'c' => 'abc', 'd' => 'text', 'e' => 'xxx', 'f' => TRUE, 'g' => TRUE],
+			3 => ['a' => '', 'b' => '456', 'c' => 'abc', 'd' => 'text', 'e' => 'xxx', 'f' => TRUE, 'g' => TRUE],
+		];
 		Assert::same($res[$node->args], $node->htmlNode->attrs);
 	}
 

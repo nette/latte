@@ -37,7 +37,7 @@ class Compiler extends Object
 	private $macroNode;
 
 	/** @var string[] */
-	private $attrCodes = array();
+	private $attrCodes = [];
 
 	/** @var string */
 	private $contentType;
@@ -164,7 +164,7 @@ class Compiler extends Object
 	 */
 	public function setContext($context, $sub = NULL)
 	{
-		$this->context = array($context, $sub);
+		$this->context = [$context, $sub];
 		return $this;
 	}
 
@@ -215,7 +215,7 @@ class Compiler extends Object
 
 	private function processText(Token $token)
 	{
-		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR), TRUE)) {
+		if (in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
 			if ($token->text === $this->context[0]) {
 				$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
 			} elseif ($this->lastAttrValue === '') {
@@ -228,7 +228,7 @@ class Compiler extends Object
 
 	private function processMacroTag(Token $token)
 	{
-		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR, self::CONTEXT_UNQUOTED_ATTR), TRUE)) {
+		if (in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR, self::CONTEXT_UNQUOTED_ATTR], TRUE)) {
 			$this->lastAttrValue = TRUE;
 		}
 
@@ -290,7 +290,7 @@ class Compiler extends Object
 
 		if (!$htmlNode->closing) {
 			$htmlNode->isEmpty = strpos($token->text, '/') !== FALSE;
-			if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)) {
+			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
 				$emptyElement = isset(Helpers::$emptyElements[strtolower($htmlNode->name)]);
 				$htmlNode->isEmpty = $htmlNode->isEmpty || $emptyElement;
 				if ($htmlNode->isEmpty) { // auto-correct
@@ -350,7 +350,7 @@ class Compiler extends Object
 		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
 		$this->output .= $token->text;
 
-		if (in_array($token->value, array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR), TRUE)) {
+		if (in_array($token->value, [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
 			$this->lastAttrValue = '';
 			$contextMain = $token->value;
 		} else {
@@ -359,13 +359,13 @@ class Compiler extends Object
 		}
 
 		$context = NULL;
-		if (in_array($this->contentType, array(self::CONTENT_HTML, self::CONTENT_XHTML), TRUE)) {
+		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
 			$lower = strtolower($token->name);
 			if (substr($lower, 0, 2) === 'on') {
 				$context = self::CONTENT_JS;
 			} elseif ($lower === 'style') {
 				$context = self::CONTENT_CSS;
-			} elseif (in_array($lower, array('href', 'src', 'action', 'formaction'), TRUE)
+			} elseif (in_array($lower, ['href', 'src', 'action', 'formaction'], TRUE)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object')
 			) {
 				$context = self::CONTENT_URL;
@@ -404,7 +404,7 @@ class Compiler extends Object
 			$this->writeCode($node->openingCode, $this->output, $node->replaced, $isRightmost);
 		} else {
 			$this->macroNode = $node;
-			$node->saved = array(& $this->output, $isRightmost);
+			$node->saved = [& $this->output, $isRightmost];
 			$this->output = & $node->content;
 		}
 		return $node;
@@ -481,15 +481,15 @@ class Compiler extends Object
 	public function writeAttrsMacro($code)
 	{
 		$attrs = $this->htmlNode->macroAttrs;
-		$left = $right = array();
+		$left = $right = [];
 
 		foreach ($this->macros as $name => $foo) {
 			$attrName = MacroNode::PREFIX_INNER . "-$name";
 			if (isset($attrs[$attrName])) {
 				if ($this->htmlNode->closing) {
-					$left[] = array('closeMacro', $name, '', MacroNode::PREFIX_INNER);
+					$left[] = ['closeMacro', $name, '', MacroNode::PREFIX_INNER];
 				} else {
-					array_unshift($right, array('openMacro', $name, $attrs[$attrName], MacroNode::PREFIX_INNER));
+					array_unshift($right, ['openMacro', $name, $attrs[$attrName], MacroNode::PREFIX_INNER]);
 				}
 				unset($attrs[$attrName]);
 			}
@@ -498,8 +498,8 @@ class Compiler extends Object
 		foreach (array_reverse($this->macros) as $name => $foo) {
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
-				$left[] = array('openMacro', $name, $attrs[$attrName], MacroNode::PREFIX_TAG);
-				array_unshift($right, array('closeMacro', $name, '', MacroNode::PREFIX_TAG));
+				$left[] = ['openMacro', $name, $attrs[$attrName], MacroNode::PREFIX_TAG];
+				array_unshift($right, ['closeMacro', $name, '', MacroNode::PREFIX_TAG]);
 				unset($attrs[$attrName]);
 			}
 		}
@@ -507,9 +507,9 @@ class Compiler extends Object
 		foreach ($this->macros as $name => $foo) {
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
-					$right[] = array('closeMacro', $name, '', MacroNode::PREFIX_NONE);
+					$right[] = ['closeMacro', $name, '', MacroNode::PREFIX_NONE];
 				} else {
-					array_unshift($left, array('openMacro', $name, $attrs[$name], MacroNode::PREFIX_NONE));
+					array_unshift($left, ['openMacro', $name, $attrs[$name], MacroNode::PREFIX_NONE]);
 				}
 				unset($attrs[$name]);
 			}
@@ -560,7 +560,7 @@ class Compiler extends Object
 	 */
 	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL)
 	{
-		$inScript = in_array($this->context[0], array(self::CONTENT_JS, self::CONTENT_CSS), TRUE);
+		$inScript = in_array($this->context[0], [self::CONTENT_JS, self::CONTENT_CSS], TRUE);
 
 		if (empty($this->macros[$name])) {
 			throw new CompileException("Unknown macro {{$name}}" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket.)' : ''));

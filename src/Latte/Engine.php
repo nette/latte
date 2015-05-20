@@ -28,7 +28,7 @@ class Engine extends Object
 		CONTENT_TEXT = 'text';
 
 	/** @var callable[] */
-	public $onCompile = array();
+	public $onCompile = [];
 
 	/** @var Parser */
 	private $parser;
@@ -49,8 +49,8 @@ class Engine extends Object
 	private $autoRefresh = TRUE;
 
 	/** @var array run-time filters */
-	private $filters = array(
-		NULL => array(), // dynamic
+	private $filters = [
+		NULL => [], // dynamic
 		'bytes' => 'Latte\Runtime\Filters::bytes',
 		'capitalize' => 'Latte\Runtime\Filters::capitalize',
 		'datastream' => 'Latte\Runtime\Filters::dataStream',
@@ -78,14 +78,14 @@ class Engine extends Object
 		'trim' => 'Latte\Runtime\Filters::trim',
 		'truncate' => 'Latte\Runtime\Filters::truncate',
 		'upper' => 'Latte\Runtime\Filters::upper',
-	);
+	];
 
 
 	/**
 	 * Renders template to output.
 	 * @return void
 	 */
-	public function render($name, array $params = array())
+	public function render($name, array $params = [])
 	{
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, FALSE)) {
@@ -101,7 +101,7 @@ class Engine extends Object
 	 * Renders template to string.
 	 * @return string
 	 */
-	public function renderToString($name, array $params = array())
+	public function renderToString($name, array $params = [])
 	{
 		ob_start();
 		try {
@@ -120,10 +120,10 @@ class Engine extends Object
 	 */
 	public function compile($name)
 	{
-		foreach ($this->onCompile ?: array() as $cb) {
+		foreach ($this->onCompile ?: [] as $cb) {
 			call_user_func(Helpers::checkCallback($cb), $this);
 		}
-		$this->onCompile = array();
+		$this->onCompile = [];
 
 		$source = $this->getLoader()->getContent($name);
 

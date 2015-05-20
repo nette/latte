@@ -17,7 +17,7 @@ $types = array_map(function(Token $token) {
 	return $token->type;
 }, $result);
 
-Assert::same(array(
+Assert::same([
 	Token::HTML_TAG_BEGIN,
 	Token::COMMENT,
 	Token::HTML_TAG_END,
@@ -30,4 +30,4 @@ Assert::same(array(
 	Token::HTML_TAG_BEGIN,
 	Token::HTML_TAG_END,
 	Token::MACRO_TAG,
-), $types);
+], $types);

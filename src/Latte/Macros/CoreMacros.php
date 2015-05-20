@@ -44,45 +44,45 @@ class CoreMacros extends MacroSet
 	{
 		$me = new static($compiler);
 
-		$me->addMacro('if', array($me, 'macroIf'), array($me, 'macroEndIf'));
+		$me->addMacro('if', [$me, 'macroIf'], [$me, 'macroEndIf']);
 		$me->addMacro('elseif', '} elseif (%node.args) {');
-		$me->addMacro('else', array($me, 'macroElse'));
+		$me->addMacro('else', [$me, 'macroElse']);
 		$me->addMacro('ifset', 'if (isset(%node.args)) {', '}');
 		$me->addMacro('elseifset', '} elseif (isset(%node.args)) {');
-		$me->addMacro('ifcontent', array($me, 'macroIfContent'), array($me, 'macroEndIfContent'));
+		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 
 		$me->addMacro('switch', '$_l->switch[] = (%node.args); if (FALSE) {', '} array_pop($_l->switch)');
 		$me->addMacro('case', '} elseif (end($_l->switch) === (%node.args)) {');
 
-		$me->addMacro('foreach', '', array($me, 'macroEndForeach'));
+		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
 		$me->addMacro('for', 'for (%node.args) {', '}');
 		$me->addMacro('while', 'while (%node.args) {', '}');
-		$me->addMacro('continueIf', array($me, 'macroBreakContinueIf'));
-		$me->addMacro('breakIf', array($me, 'macroBreakContinueIf'));
+		$me->addMacro('continueIf', [$me, 'macroBreakContinueIf']);
+		$me->addMacro('breakIf', [$me, 'macroBreakContinueIf']);
 		$me->addMacro('first', 'if ($iterator->isFirst(%node.args)) {', '}');
 		$me->addMacro('last', 'if ($iterator->isLast(%node.args)) {', '}');
 		$me->addMacro('sep', 'if (!$iterator->isLast(%node.args)) {', '}');
 
-		$me->addMacro('var', array($me, 'macroVar'));
-		$me->addMacro('default', array($me, 'macroVar'));
-		$me->addMacro('dump', array($me, 'macroDump'));
-		$me->addMacro('debugbreak', array($me, 'macroDebugbreak'));
+		$me->addMacro('var', [$me, 'macroVar']);
+		$me->addMacro('default', [$me, 'macroVar']);
+		$me->addMacro('dump', [$me, 'macroDump']);
+		$me->addMacro('debugbreak', [$me, 'macroDebugbreak']);
 		$me->addMacro('l', '?>{<?php');
 		$me->addMacro('r', '?>}<?php');
 
-		$me->addMacro('_', array($me, 'macroTranslate'), array($me, 'macroTranslate'));
-		$me->addMacro('=', array($me, 'macroExpr'));
-		$me->addMacro('?', array($me, 'macroExpr'));
+		$me->addMacro('_', [$me, 'macroTranslate'], [$me, 'macroTranslate']);
+		$me->addMacro('=', [$me, 'macroExpr']);
+		$me->addMacro('?', [$me, 'macroExpr']);
 
-		$me->addMacro('capture', array($me, 'macroCapture'), array($me, 'macroCaptureEnd'));
-		$me->addMacro('include', array($me, 'macroInclude'));
-		$me->addMacro('use', array($me, 'macroUse'));
-		$me->addMacro('contentType', array($me, 'macroContentType'));
-		$me->addMacro('status', array($me, 'macroStatus'));
-		$me->addMacro('php', array($me, 'macroExpr'));
+		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
+		$me->addMacro('include', [$me, 'macroInclude']);
+		$me->addMacro('use', [$me, 'macroUse']);
+		$me->addMacro('contentType', [$me, 'macroContentType']);
+		$me->addMacro('status', [$me, 'macroStatus']);
+		$me->addMacro('php', [$me, 'macroExpr']);
 
-		$me->addMacro('class', NULL, NULL, array($me, 'macroClass'));
-		$me->addMacro('attr', NULL, NULL, array($me, 'macroAttr'));
+		$me->addMacro('class', NULL, NULL, [$me, 'macroClass']);
+		$me->addMacro('attr', NULL, NULL, [$me, 'macroAttr']);
 	}
 
 
@@ -92,10 +92,10 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		return array('list($_b, $_g, $_l) = $template->initialize('
+		return ['list($_b, $_g, $_l) = $template->initialize('
 			. var_export($this->getCompiler()->getTemplateId(), TRUE) . ', '
 			. var_export($this->getCompiler()->getContentType(), TRUE)
-		. ')');
+		. ')'];
 	}
 
 
@@ -221,7 +221,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroUse(MacroNode $node, PhpWriter $writer)
 	{
-		call_user_func(Latte\Helpers::checkCallback(array($node->tokenizer->fetchWord(), 'install')), $this->getCompiler())
+		call_user_func(Latte\Helpers::checkCallback([$node->tokenizer->fetchWord(), 'install']), $this->getCompiler())
 			->initialize();
 	}
 

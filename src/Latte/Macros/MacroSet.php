@@ -36,13 +36,13 @@ class MacroSet extends Latte\Object implements Latte\IMacro
 		if (!$begin && !$end && !$attr) {
 			throw new \InvalidArgumentException("At least one argument must be specified for macro '$name'.");
 		}
-		foreach (array($begin, $end, $attr) as $arg) {
+		foreach ([$begin, $end, $attr] as $arg) {
 			if ($arg && !is_string($arg)) {
 				Latte\Helpers::checkCallback($arg);
 			}
 		}
 
-		$this->macros[$name] = array($begin, $end, $attr);
+		$this->macros[$name] = [$begin, $end, $attr];
 		$this->compiler->addMacro($name, $this);
 		return $this;
 	}

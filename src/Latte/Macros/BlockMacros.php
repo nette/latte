@@ -22,7 +22,7 @@ use Latte,
 class BlockMacros extends MacroSet
 {
 	/** @var array */
-	private $namedBlocks = array();
+	private $namedBlocks = [];
 
 	/** @var bool */
 	private $extends;
@@ -31,16 +31,16 @@ class BlockMacros extends MacroSet
 	public static function install(Latte\Compiler $compiler)
 	{
 		$me = new static($compiler);
-		$me->addMacro('include', array($me, 'macroInclude'));
-		$me->addMacro('includeblock', array($me, 'macroIncludeBlock'));
-		$me->addMacro('extends', array($me, 'macroExtends'));
-		$me->addMacro('layout', array($me, 'macroExtends'));
-		$me->addMacro('block', array($me, 'macroBlock'), array($me, 'macroBlockEnd'));
-		$me->addMacro('define', array($me, 'macroBlock'), array($me, 'macroBlockEnd'));
-		$me->addMacro('snippet', array($me, 'macroBlock'), array($me, 'macroBlockEnd'));
-		$me->addMacro('snippetArea', array($me, 'macroBlock'), array($me, 'macroBlockEnd'));
-		$me->addMacro('ifset', array($me, 'macroIfset'), '}');
-		$me->addMacro('elseifset', array($me, 'macroIfset'), '}');
+		$me->addMacro('include', [$me, 'macroInclude']);
+		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']);
+		$me->addMacro('extends', [$me, 'macroExtends']);
+		$me->addMacro('layout', [$me, 'macroExtends']);
+		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('snippetArea', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('ifset', [$me, 'macroIfset'], '}');
+		$me->addMacro('elseifset', [$me, 'macroIfset'], '}');
 	}
 
 
@@ -50,7 +50,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function initialize()
 	{
-		$this->namedBlocks = array();
+		$this->namedBlocks = [];
 		$this->extends = NULL;
 	}
 
@@ -67,7 +67,7 @@ class BlockMacros extends MacroSet
 			$this->getCompiler()->closeMacro($last->name);
 		}
 
-		$epilog = $prolog = array();
+		$epilog = $prolog = [];
 
 		if ($this->namedBlocks) {
 			foreach ($this->namedBlocks as $name => $code) {
@@ -92,7 +92,7 @@ class BlockMacros extends MacroSet
 			$prolog[] = 'if ($_l->extends) { ' . ($this->namedBlocks ? 'ob_start();' : 'return $template->renderChildTemplate($_l->extends, get_defined_vars());') . '}';
 		}
 
-		return array(implode("\n\n", $prolog), implode("\n", $epilog));
+		return [implode("\n\n", $prolog), implode("\n", $epilog)];
 	}
 
 
@@ -309,7 +309,7 @@ class BlockMacros extends MacroSet
 		if (!preg_match('~#|[\w-]+\z~A', $node->args)) {
 			return FALSE;
 		}
-		$list = array();
+		$list = [];
 		while (($name = $node->tokenizer->fetchWord()) !== FALSE) {
 			$list[] = preg_match('~#|[\w-]+\z~A', $name)
 				? '$_b->blocks["' . ltrim($name, '#') . '"]'

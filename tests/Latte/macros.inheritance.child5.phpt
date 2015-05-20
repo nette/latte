@@ -21,6 +21,6 @@ Assert::matchFile(
 	__DIR__ . '/expected/macros.inheritance.child5.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/inheritance.child5.latte',
-		array('ext' => 'inheritance.parent.latte')
+		['ext' => 'inheritance.parent.latte']
 	)
 );

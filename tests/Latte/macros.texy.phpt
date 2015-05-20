@@ -21,10 +21,10 @@ class MockTexy
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->addFilter('texy', array(new MockTexy, 'process'));
+$latte->addFilter('texy', [new MockTexy, 'process']);
 
 $params['hello'] = '<i>Hello</i>';
-$params['people'] = array('John', 'Mary', 'Paul');
+$params['people'] = ['John', 'Mary', 'Paul'];
 
 $result = $latte->renderToString(<<<'EOD'
 {block|lower|texy}

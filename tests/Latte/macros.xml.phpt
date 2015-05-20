@@ -19,7 +19,7 @@ $latte->setContentType($latte::CONTENT_XML);
 
 $params['hello'] = '<i>Hello</i>';
 $params['id'] = ':/item';
-$params['people'] = array('John', 'Mary', 'Paul', ']]> <!--');
+$params['people'] = ['John', 'Mary', 'Paul', ']]> <!--'];
 $params['comment'] = 'test -- comment';
 $params['el'] = new Html("<div title='1/2\"'></div>");
 

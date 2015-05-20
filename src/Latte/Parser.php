@@ -28,13 +28,13 @@ class Parser extends Object
 	public $shortNoEscape = FALSE;
 
 	/** @var array */
-	public $syntaxes = array(
-		'latte' => array('\\{(?![\\s\'"{}])', '\\}'), // {...}
-		'double' => array('\\{\\{(?![\\s\'"{}])', '\\}\\}'), // {{...}}
-		'asp' => array('<%\s*', '\s*%>'), /* <%...%> */
-		'python' => array('\\{[{%]\s*', '\s*[%}]\\}'), // {% ... %} | {{ ... }}
-		'off' => array('[^\x00-\xFF]', ''),
-	);
+	public $syntaxes = [
+		'latte' => ['\\{(?![\\s\'"{}])', '\\}'], // {...}
+		'double' => ['\\{\\{(?![\\s\'"{}])', '\\}\\}'], // {{...}}
+		'asp' => ['<%\s*', '\s*%>'], /* <%...%> */
+		'python' => ['\\{[{%]\s*', '\s*[%}]\\}'], // {% ... %} | {{ ... }}
+		'off' => ['[^\x00-\xFF]', ''],
+	];
 
 	/** @var string[] */
 	private $delimiters;
@@ -88,7 +88,7 @@ class Parser extends Object
 		}
 		$input = str_replace("\r\n", "\n", $input);
 		$this->input = $input;
-		$this->output = array();
+		$this->output = [];
 		$this->offset = $tokenCount = 0;
 
 		$this->setSyntax($this->defaultSyntax);
@@ -177,7 +177,7 @@ class Parser extends Object
 
 		if (!empty($matches['end'])) { // end of HTML tag />
 			$this->addToken(Token::HTML_TAG_END, $matches[0]);
-			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, array('script', 'style'), TRUE) ? self::CONTEXT_CDATA : self::CONTEXT_HTML_TEXT);
+			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], TRUE) ? self::CONTEXT_CDATA : self::CONTEXT_HTML_TEXT);
 
 		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
 			$token = $this->addToken(Token::HTML_ATTRIBUTE, $matches[0]);
@@ -285,7 +285,7 @@ class Parser extends Object
 	private function processMacro($matches)
 	{
 		if (!empty($matches['macro'])) { // {macro} or {* *}
-			$this->setContext(self::CONTEXT_MACRO, array($this->context, $matches['macro']));
+			$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
 		} else {
 			return FALSE;
 		}
@@ -303,7 +303,7 @@ class Parser extends Object
 			if (preg_last_error()) {
 				throw new RegexpException(NULL, preg_last_error());
 			}
-			return array();
+			return [];
 		}
 
 		$value = substr($this->input, $this->offset, $matches[0][1] - $this->offset);
@@ -341,7 +341,7 @@ class Parser extends Object
 	 */
 	public function setContext($context, $quote = NULL)
 	{
-		$this->context = array($context, $quote);
+		$this->context = [$context, $quote];
 		return $this;
 	}
 
@@ -371,7 +371,7 @@ class Parser extends Object
 	 */
 	public function setDelimiters($left, $right)
 	{
-		$this->delimiters = array($left, $right);
+		$this->delimiters = [$left, $right];
 		return $this;
 	}
 
@@ -406,7 +406,7 @@ class Parser extends Object
 				$match['modifiers'] .= '|noescape';
 			}
 		}
-		return array($match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty']);
+		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty']];
 	}
 
 

@@ -13,11 +13,11 @@ require __DIR__ . '/../bootstrap.php';
 
 
 test(function() {
-	$tokenizer = new Tokenizer(array(
+	$tokenizer = new Tokenizer([
 		T_DNUMBER => '\d+',
 		T_WHITESPACE => '\s+',
 		T_STRING => '\w+',
-	));
+	]);
 	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
 	$traverser->ignored[] = T_WHITESPACE;
 
@@ -89,11 +89,11 @@ test(function() {
 
 
 test(function() {
-	$tokenizer = new Tokenizer(array(
+	$tokenizer = new Tokenizer([
 		'\d+',
 		'\s+',
 		'\w+',
-	));
+	]);
 	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
 	Assert::null( $traverser->nextValue('s') );
 	Assert::same( 'say', $traverser->nextValue('say') );

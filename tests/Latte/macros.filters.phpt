@@ -31,7 +31,7 @@ function types()
 
 $latte = new Latte\Engine;
 $latte->addFilter('nl2br', 'nl2br');
-$latte->addFilter('h1', array(new MyFilter, 'invoke'));
+$latte->addFilter('h1', [new MyFilter, 'invoke']);
 $latte->addFilter('h2', 'strtoupper');
 $latte->addFilter('translate', 'strrev');
 $latte->addFilter('types', 'types');
@@ -50,10 +50,10 @@ $latte->addFilter(NULL, function($name, $val) use ($latte) {
 });
 
 
-Assert::same('AA', $latte->invokeFilter('h2', array('aa')));
-Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', array('aa')));
+Assert::same('AA', $latte->invokeFilter('h2', ['aa']));
+Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', ['aa']));
 Assert::exception(function() use ($latte) {
-	$latte->invokeFilter('unknown', array(''));
+	$latte->invokeFilter('unknown', ['']);
 }, 'LogicException', "Filter 'unknown' is not defined.");
 
 

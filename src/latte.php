@@ -1,7 +1,7 @@
 <?php
 
 spl_autoload_register(function($className) {
-	static $classMap = array(
+	static $classMap = [
 		'Latte\\CompileException' => 'exceptions.php',
 		'Latte\\Compiler' => 'Compiler.php',
 		'Latte\\Engine' => 'Engine.php',
@@ -30,7 +30,7 @@ spl_autoload_register(function($className) {
 		'Latte\\Token' => 'Token.php',
 		'Latte\\TokenIterator' => 'TokenIterator.php',
 		'Latte\\Tokenizer' => 'Tokenizer.php',
-	);
+	];
 
 	if (isset($classMap[$className])) {
 		require __DIR__ . '/Latte/' . $classMap[$className];

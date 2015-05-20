@@ -25,15 +25,15 @@ test(function () {
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 
-	Assert::same(array(
+	Assert::same([
 		'adding macros 1',
 		'adding macros 2',
-	), Notes::fetch());
+	], Notes::fetch());
 });
 
 
 test(function () {
-	$callbacks = array();
+	$callbacks = [];
 	$callbacks[] = function (\Latte\Engine $engine) {
 		Notes::add('adding macros 3');
 	};
@@ -49,10 +49,10 @@ test(function () {
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 
-	Assert::same(array(
+	Assert::same([
 		'adding macros 3',
 		'adding macros 4',
-	), Notes::fetch());
+	], Notes::fetch());
 });
 
 
@@ -72,7 +72,7 @@ test(function () {
 		}
 	}
 
-	$callbacks = array();
+	$callbacks = [];
 	$callbacks[] = function (\Latte\Engine $engine) {
 		Notes::add('adding macros 5');
 	};
@@ -89,8 +89,8 @@ test(function () {
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 
-	Assert::same(array(
+	Assert::same([
 		'adding macros 5',
 		'adding macros 6',
-	), Notes::fetch());
+	], Notes::fetch());
 });
