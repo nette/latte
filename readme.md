@@ -2,7 +2,7 @@
 ================================================================
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/latte/latte.svg)](https://packagist.org/packages/latte/latte)
-[![Build Status](https://travis-ci.org/nette/latte.svg?branch=master)](https://travis-ci.org/nette/latte)
+[![Build Status](https://travis-ci.org/nette/latte.svg?branch=v2.3)](https://travis-ci.org/nette/latte)
 
 Latte is a template engine for PHP which eases your work and
 ensures the output is protected against vulnerabilities, such as XSS.
