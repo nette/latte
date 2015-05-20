@@ -389,7 +389,7 @@ class Parser extends Object
 				(?P<name>\?|/?[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
 				(?P<noescape>!?)(?P<shortname>/?[=\~#%^&_]?)      ## !expression, !=expression, ...
 			)(?P<args>.*?)
-			(?P<modifiers>\|[a-z](?:'.Parser::RE_STRING.'|[^\'"])*(?<!/))?
+			(?P<modifiers>\|[a-z](?:' . self::RE_STRING . '|[^\'"])*(?<!/))?
 			(?P<empty>/?\z)
 		()\z~isx', $tag, $match)) {
 			if (preg_last_error()) {

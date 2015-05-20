@@ -96,7 +96,7 @@ class Filters
 			$s = $s->__toString(TRUE);
 		}
 
-		$json = json_encode($s, PHP_VERSION_ID >= 50400 ? JSON_UNESCAPED_UNICODE : 0);
+		$json = json_encode($s, JSON_UNESCAPED_UNICODE);
 		if ($error = json_last_error()) {
 			throw new \RuntimeException(PHP_VERSION_ID >= 50500 ? json_last_error_msg() : 'JSON encode error', $error);
 		}
