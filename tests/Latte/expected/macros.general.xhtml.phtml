@@ -59,8 +59,8 @@ if ($_l->extends) { ob_start();}
 	<li>Non-escaped and translated: <?php echo $template->translate($people[1]) ?></li>
 	<li>Condition: <?php echo Latte\Runtime\Filters::escapeHtml($hello ? 'yes' : NULL, ENT_NOQUOTES) ?>
  <?php echo Latte\Runtime\Filters::escapeHtml($hello ? 'yes' : NULL, ENT_NOQUOTES) ?></li>
-	<li>Array: <?php echo Latte\Runtime\Filters::escapeHtml($template->join($hello ? array('a', 'b', 'c') : NULL), ENT_NOQUOTES) ?>
- <?php echo Latte\Runtime\Filters::escapeHtml($template->join(array('a', 'b', $hello ? 'c' : NULL)), ENT_NOQUOTES) ?></li>
+	<li>Array: <?php echo Latte\Runtime\Filters::escapeHtml($template->join($hello ? ['a', 'b', 'c'] : NULL), ENT_NOQUOTES) ?>
+ <?php echo Latte\Runtime\Filters::escapeHtml($template->join(['a', 'b', $hello ? 'c' : NULL]), ENT_NOQUOTES) ?></li>
 </ul>
 
 <input /> <input /> <input />
@@ -267,18 +267,18 @@ bold<?php if (array_pop($_l->ifs)) { ?></b>
 <?php ob_start() ?>TRUE<?php ob_start() ?>FALSE<?php if (TRUE) { ob_end_clean(); ob_end_flush(); } else { $_l->else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_l->else; } ?>
 
 
-<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array(1,2,3)) as $foo) { ?>
+<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) { ?>
 	<b<?php if ($_l->tmp = array_filter(array($iterator->even ? 'even' : NULL))) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>>item</b>
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
-<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array(1, 2, 3)) as $foo) { ?>
+<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) { ?>
 <p<?php if ($_l->tmp = array_filter(array($iterator->even ? 'even' : NULL))) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>
 ><?php echo Latte\Runtime\Filters::escapeHtml($foo, ENT_NOQUOTES) ?></p>
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
-<?php $iterations = 0; foreach (array(0) as $foo) { if (1) { $iterations = 0; foreach (array(1) as $foo) { if ($_l->ifs[] = (0)) { ?>
-<span><?php } $iterations++; } $iterations = 0; foreach (array(2) as $foo) { if (2) { ?>
-Hello<?php } $iterations++; } $iterations = 0; foreach (array(1) as $foo) { if (array_pop($_l->ifs)) { ?></span>
+<?php $iterations = 0; foreach ([0] as $foo) { if (1) { $iterations = 0; foreach ([1] as $foo) { if ($_l->ifs[] = (0)) { ?>
+<span><?php } $iterations++; } $iterations = 0; foreach ([2] as $foo) { if (2) { ?>
+Hello<?php } $iterations++; } $iterations = 0; foreach ([1] as $foo) { if (array_pop($_l->ifs)) { ?></span>
 <?php } $iterations++; } } $iterations++; } ?>
 
 

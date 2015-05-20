@@ -160,7 +160,6 @@ class PhpWriter extends Object
 		$tokens = $tokens === NULL ? $this->tokens : $tokens;
 		$tokens = $this->removeCommentsFilter($tokens);
 		$tokens = $this->shortTernaryFilter($tokens);
-		$tokens = $this->shortArraysFilter($tokens);
 		return $tokens;
 	}
 
@@ -205,33 +204,6 @@ class PhpWriter extends Object
 
 		if ($inTernary) {
 			$res->append(' : NULL');
-		}
-		return $res;
-	}
-
-
-	/**
-	 * Simplified array syntax [...]
-	 * @return MacroTokens
-	 */
-	public function shortArraysFilter(MacroTokens $tokens)
-	{
-		$res = new MacroTokens;
-		$arrays = [];
-		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('[')) {
-				if ($arrays[] = !$tokens->isPrev(']', ')', MacroTokens::T_SYMBOL, MacroTokens::T_VARIABLE, MacroTokens::T_KEYWORD)) {
-					$res->append('array(');
-					continue;
-
-				}
-			} elseif ($tokens->isCurrent(']')) {
-				if (array_pop($arrays) === TRUE) {
-					$res->append(')');
-					continue;
-				}
-			}
-			$res->append($tokens->currentToken());
 		}
 		return $res;
 	}

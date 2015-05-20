@@ -26,11 +26,6 @@ test(function() { // symbols
 });
 
 
-test(function() { // simplified arrays
-	Assert::same( 'array(array(\'item\', 123, array(), $item[1]))',  formatArray('[item, 123, [], $item[1]]') );
-});
-
-
 test(function() { // expand
 	Assert::same( 'array_merge(array(\'item\', $list, ), $list, array())',  formatArray('item, $list, (expand) $list') );
 });

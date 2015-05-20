@@ -52,12 +52,6 @@ test(function() { // associative arrays
 });
 
 
-test(function() { // simplified arrays
-	Assert::same( 'array(\'item\', 123, array(), $item[1])',  formatArgs('[item, 123, [], $item[1]]') );
-	Assert::same( "ITEM['id']",  formatArgs('ITEM[id]') );
-});
-
-
 test(function() { // short ternary operators
 	Assert::same( "(\$first ? 'first' : NULL), \$var ? 'foo' : 'bar', \$var ? 'foo' : NULL",  formatArgs('($first ? first), $var ? foo : bar, $var ? foo') );
 	Assert::same( "('a' ? 'b' : NULL) ? ('c' ? 'd' : NULL) : NULL",  formatArgs('(a ? b) ? (c ? d)') );
