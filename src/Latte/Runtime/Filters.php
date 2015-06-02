@@ -270,7 +270,7 @@ class Filters
 	 */
 	public static function nl2br($value)
 	{
-		return new Html(nl2br($value, self::$xhtml));
+		return nl2br($value, self::$xhtml);
 	}
 
 
