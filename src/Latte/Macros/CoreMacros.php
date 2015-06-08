@@ -287,7 +287,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
-		return $writer->write('if ($_l->tmp = array_filter(%node.array)) echo \' class="\' . %escape(implode(" ", array_unique($_l->tmp))) . \'"\'');
+		return $writer->write('if ($_l->tmp = array_filter(%node.array)) echo \' class="\', %escape(implode(" ", array_unique($_l->tmp))), \'"\'');
 	}
 
 

@@ -75,13 +75,13 @@ if ($_l->extends) { ob_start();}
 
 <p val0 val1 = tmp val2=tmp val3="x"></p> </p>
 
-<p val = <?php echo '"' . Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT) . '"' ?>
- val2=<?php echo '"' . Latte\Runtime\Filters::escapeHtml($mxss, ENT_COMPAT) . '"' ?>> </p>
+<p val = <?php echo '"', Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT), '"' ?>
+ val2=<?php echo '"', Latte\Runtime\Filters::escapeHtml($mxss, ENT_COMPAT), '"' ?>> </p>
 
-<p onclick = <?php echo '"' . Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT) . '"' ?>> </p>
+<p onclick = <?php echo '"', Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT), '"' ?>> </p>
 
 <p ONCLICK ="<?php echo Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT) ?>
-" <?php echo '"' . Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT) . '"' ?>> </p>
+" <?php echo '"', Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT), '"' ?>> </p>
 
 <p val =></p><?php echo Latte\Runtime\Filters::escapeHtml($xss, ENT_NOQUOTES) ?></p>
 
@@ -239,7 +239,7 @@ bold<?php if (array_pop($_l->ifs)) { ?></b><?php } ?>
 normal<?php if (array_pop($_l->ifs)) { ?></b>
 <?php } ?>
 
-<?php if ($_l->ifs[] = (true)) { ?><b<?php if ($_l->tmp = array_filter(['first'])) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>
+<?php if ($_l->ifs[] = (true)) { ?><b<?php if ($_l->tmp = array_filter(['first'])) echo ' class="', Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT), '"' ?>
 ><?php } ?>
 bold<?php if (array_pop($_l->ifs)) { ?></b>
 <?php } ?>
@@ -249,9 +249,9 @@ bold<?php if (array_pop($_l->ifs)) { ?></b>
 
 { }
 
-<p<?php if ($_l->tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', ($hello ? 'foo' : 'bar')])) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>>n:class</p>
+<p<?php if ($_l->tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', ($hello ? 'foo' : 'bar')])) echo ' class="', Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT), '"' ?>>n:class</p>
 
-<p<?php if ($_l->tmp = array_filter([false ? 'first' : NULL])) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>>n:class empty</p>
+<p<?php if ($_l->tmp = array_filter([false ? 'first' : NULL])) echo ' class="', Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT), '"' ?>>n:class empty</p>
 
 <meta>
 <?php if (true) { ?><meta>
@@ -268,11 +268,11 @@ bold<?php if (array_pop($_l->ifs)) { ?></b>
 
 
 <?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) { ?>
-	<b<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>>item</b>
+	<b<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT), '"' ?>>item</b>
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
 <?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) { ?>
-<p<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="' . Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT) . '"' ?>
+<p<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', Latte\Runtime\Filters::escapeHtml(implode(" ", array_unique($_l->tmp)), ENT_COMPAT), '"' ?>
 ><?php echo Latte\Runtime\Filters::escapeHtml($foo, ENT_NOQUOTES) ?></p>
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
