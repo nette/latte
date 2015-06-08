@@ -283,7 +283,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroClass(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('if ($_l->tmp = array_filter(%node.array)) echo \' class="\' . %escape(implode(" ", array_unique($_l->tmp))) . \'"\'');
+		return $writer->write('if ($_l->tmp = array_filter(%node.array)) echo \' class="\', %escape(implode(" ", array_unique($_l->tmp))), \'"\'');
 	}
 
 
