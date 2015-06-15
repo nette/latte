@@ -94,7 +94,7 @@ class Parser extends Object
 		$this->lastHtmlTag = $this->syntaxEndTag = NULL;
 
 		while ($this->offset < strlen($input)) {
-			if ($this->{"context".$this->context[0]}() === FALSE) {
+			if ($this->{'context' . $this->context[0]}() === FALSE) {
 				break;
 			}
 			while ($tokenCount < count($this->output)) {

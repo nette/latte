@@ -7,8 +7,8 @@
 
 namespace Latte\Macros;
 
-use Latte,
-	Latte\MacroNode;
+use Latte;
+use Latte\MacroNode;
 
 
 /**

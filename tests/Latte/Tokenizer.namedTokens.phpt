@@ -4,8 +4,8 @@
  * Test: Latte\Tokenizer::tokenize with names
  */
 
-use Latte\Tokenizer,
-	Tester\Assert;
+use Latte\Tokenizer;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -17,12 +17,12 @@ $tokenizer = new Tokenizer([
 	T_STRING => '\w+',
 ]);
 $tokens = $tokenizer->tokenize("say \n123");
-Assert::same( [
+Assert::same([
 	[Tokenizer::VALUE => 'say', Tokenizer::OFFSET => 0, Tokenizer::TYPE => T_STRING],
 	[Tokenizer::VALUE => " \n", Tokenizer::OFFSET => 3, Tokenizer::TYPE => T_WHITESPACE],
 	[Tokenizer::VALUE => '123', Tokenizer::OFFSET => 5, Tokenizer::TYPE => T_DNUMBER],
-], $tokens );
+], $tokens);
 
-Assert::exception(function() use ($tokenizer) {
+Assert::exception(function () use ($tokenizer) {
 	$tokenizer->tokenize('say 123;');
 }, 'Latte\CompileException', "Unexpected ';' on line 1, column 8.");

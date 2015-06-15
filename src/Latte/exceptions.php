@@ -45,7 +45,7 @@ class CompileException extends \Exception
  */
 class RegexpException extends \Exception
 {
-	static public $messages = [
+	public static $messages = [
 		PREG_INTERNAL_ERROR => 'Internal error',
 		PREG_BACKTRACK_LIMIT_ERROR => 'Backtrack limit was exhausted',
 		PREG_RECURSION_LIMIT_ERROR => 'Recursion limit was exhausted',

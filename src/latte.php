@@ -1,6 +1,6 @@
 <?php
 
-spl_autoload_register(function($className) {
+spl_autoload_register(function ($className) {
 	static $classMap = [
 		'Latte\\CompileException' => 'exceptions.php',
 		'Latte\\Compiler' => 'Compiler.php',

@@ -4,8 +4,8 @@
  * Test: Latte\Parser and syntax=off
  */
 
-use Latte\Token,
-	Tester\Assert;
+use Latte\Token;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 $parser = new \Latte\Parser();
 $result = $parser->parse('<div n:syntax="off"><div>{foo}</div>{bar}</div>{lorem}');
 
-$types = array_map(function(Token $token) {
+$types = array_map(function (Token $token) {
 	return $token->type;
 }, $result);
 

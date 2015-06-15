@@ -137,7 +137,7 @@ class Filters
 	{
 		return preg_replace_callback(
 			'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
-			function($m) {
+			function ($m) {
 				return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
 			},
 			$s
@@ -155,7 +155,7 @@ class Filters
 	public static function indent($s, $level = 1, $chars = "\t")
 	{
 		if ($level >= 1) {
-			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', function($m) {
+			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', function ($m) {
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
 			}, $s);
 			if (preg_last_error()) {

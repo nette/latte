@@ -4,11 +4,11 @@
  * Test: Latte\Compiler and macro methods calling order.
  */
 
-use Latte\IMacro,
-	Latte\MacroNode,
-	Latte\Parser,
-	Latte\Compiler,
-	Tester\Assert;
+use Latte\IMacro;
+use Latte\MacroNode;
+use Latte\Parser;
+use Latte\Compiler;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -39,13 +39,13 @@ class MockMacro implements IMacro
 	}
 }
 
-$latte = "
+$latte = '
 	{foo}Text{/foo}
 	<div1>{foo}Text{/foo}</div1>
 	<div2 n:foo>Text</div2>
 	<div3 n:inner-foo>Text</div3>
 	<div4 n:tag-foo>Text</div4>
-";
+';
 
 $macro = new MockMacro;
 $parser = new Parser;
@@ -53,7 +53,7 @@ $compiler = new Compiler;
 $compiler->addMacro('foo', $macro);
 $compiler->compile($parser->parse($latte), 'Template');
 
-Assert::same( [
+Assert::same([
 	'initialize',
 
 	['nodeOpened', NULL, FALSE, NULL],
@@ -74,4 +74,4 @@ Assert::same( [
 	['nodeClosed', 'div4', TRUE, 'tag'],
 
 	'finalize',
-], $macro->calls );
+], $macro->calls);

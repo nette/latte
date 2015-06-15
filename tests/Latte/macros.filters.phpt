@@ -24,7 +24,9 @@ class MyFilter
 
 function types()
 {
-	foreach (func_get_args() as $arg) $res[] = gettype($arg);
+	foreach (func_get_args() as $arg) {
+		$res[] = gettype($arg);
+	}
 	return implode(', ', $res);
 }
 
@@ -35,15 +37,15 @@ $latte->addFilter('h1', [new MyFilter, 'invoke']);
 $latte->addFilter('h2', 'strtoupper');
 $latte->addFilter('translate', 'strrev');
 $latte->addFilter('types', 'types');
-$latte->addFilter(NULL, function($name, $val) {
+$latte->addFilter(NULL, function ($name, $val) {
 	return $name === 'dynamic' ? "<$name $val>" : NULL;
 });
-$latte->addFilter(NULL, function($name, $val) {
+$latte->addFilter(NULL, function ($name, $val) {
 	return $name === 'dynamic' ? "[$name $val]" : NULL;
 });
-$latte->addFilter(NULL, function($name, $val) use ($latte) {
+$latte->addFilter(NULL, function ($name, $val) use ($latte) {
 	if ($name === 'dynamic2') {
-		$latte->addFilter($name, function($val) {
+		$latte->addFilter($name, function ($val) {
 			return "[$val]";
 		});
 	}
@@ -52,7 +54,7 @@ $latte->addFilter(NULL, function($name, $val) use ($latte) {
 
 Assert::same('AA', $latte->invokeFilter('h2', ['aa']));
 Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', ['aa']));
-Assert::exception(function() use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->invokeFilter('unknown', ['']);
 }, 'LogicException', "Filter 'unknown' is not defined.");
 

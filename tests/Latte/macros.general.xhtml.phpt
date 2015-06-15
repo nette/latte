@@ -4,8 +4,8 @@
  * Test: Latte\Engine: general XHTML test.
  */
 
-use Latte\Runtime\Html,
-	Tester\Assert;
+use Latte\Runtime\Html;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

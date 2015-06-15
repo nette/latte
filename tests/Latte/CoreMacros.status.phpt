@@ -4,8 +4,8 @@
  * Test: Latte\Engine: {status}
  */
 
-use Latte\Macros\CoreMacros,
-	Tester\Assert;
+use Latte\Macros\CoreMacros;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

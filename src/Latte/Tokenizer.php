@@ -57,7 +57,8 @@ class Tokenizer extends Object
 				if (!isset($match[$i])) {
 					break;
 				} elseif ($match[$i] != NULL) {
-					$type = $this->types[$i - 1]; break;
+					$type = $this->types[$i - 1];
+					break;
 				}
 			}
 			$match = [self::VALUE => $match[0], self::OFFSET => $len, self::TYPE => $type];

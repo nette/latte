@@ -49,11 +49,11 @@ Assert::match(
 );
 
 
-Assert::exception(function() use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->compile('<html>{ifcontent}');
 }, 'Latte\CompileException', 'Unknown macro {ifcontent}, use n:ifcontent attribute.');
 
 
-Assert::exception(function() use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:inner-ifcontent>');
 }, 'Latte\CompileException', 'Unknown attribute n:inner-ifcontent, use n:ifcontent attribute.');

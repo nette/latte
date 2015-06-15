@@ -18,8 +18,8 @@ class Helpers
 {
 	/** @var array  empty (void) HTML elements */
 	public static $emptyElements = [
-		'img'=>1,'hr'=>1,'br'=>1,'input'=>1,'meta'=>1,'area'=>1,'embed'=>1,'keygen'=>1,'source'=>1,'base'=>1,
-		'col'=>1,'link'=>1,'param'=>1,'basefont'=>1,'frame'=>1,'isindex'=>1,'wbr'=>1,'command'=>1,'track'=>1
+		'img' => 1,'hr' => 1,'br' => 1,'input' => 1,'meta' => 1,'area' => 1,'embed' => 1,'keygen' => 1,'source' => 1,'base' => 1,
+		'col' => 1,'link' => 1,'param' => 1,'basefont' => 1,'frame' => 1,'isindex' => 1,'wbr' => 1,'command' => 1,'track' => 1,
 	];
 
 
@@ -88,7 +88,7 @@ class Helpers
 					$lastChar = '';
 					$php .= $token[1];
 
-				} elseif ($token[0] === T_OPEN_TAG && $token[1] === '<?' && isset($tokens[$n+1][1]) && $tokens[$n+1][1] === 'xml') {
+				} elseif ($token[0] === T_OPEN_TAG && $token[1] === '<?' && isset($tokens[$n + 1][1]) && $tokens[$n + 1][1] === 'xml') {
 					$lastChar = '';
 					$res .= '<<?php ?>?';
 					for ($tokens->next(); $tokens->valid(); $tokens->next()) {

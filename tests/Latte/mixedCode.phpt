@@ -20,9 +20,9 @@ try {
 	?>
 	{notDefined line 4}
 	');
-} catch(\Latte\CompileException $e) {
+} catch (Latte\CompileException $e) {
 	Assert::same(4, $e->sourceLine);
-	Assert::same("Unknown macro {notDefined}", $e->getMessage());
+	Assert::same('Unknown macro {notDefined}', $e->getMessage());
 }
 
 try {
@@ -32,7 +32,7 @@ try {
 	<?xml ?>
 	{notDefined line 4}
 	');
-} catch(\Latte\CompileException $e) {
+} catch (Latte\CompileException $e) {
 	Assert::same(4, $e->sourceLine);
-	Assert::same("Unknown macro {notDefined}", $e->getMessage());
+	Assert::same('Unknown macro {notDefined}', $e->getMessage());
 }

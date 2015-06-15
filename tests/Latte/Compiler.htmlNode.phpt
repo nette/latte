@@ -4,11 +4,11 @@
  * Test: Latte\Compiler and htmlNode.
  */
 
-use Latte\IMacro,
-	Latte\MacroNode,
-	Latte\Parser,
-	Latte\Compiler,
-	Tester\Assert;
+use Latte\IMacro;
+use Latte\MacroNode;
+use Latte\Parser;
+use Latte\Compiler;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
