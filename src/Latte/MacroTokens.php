@@ -58,7 +58,7 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Appends simple token or string (will be parsed).
-	 * @return MacroTokens
+	 * @return self
 	 */
 	public function append($val, $position = NULL)
 	{
@@ -75,7 +75,7 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Prepends simple token or string (will be parsed).
-	 * @return MacroTokens
+	 * @return self
 	 */
 	public function prepend($val)
 	{

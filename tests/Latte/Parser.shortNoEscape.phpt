@@ -21,6 +21,6 @@ Assert::match('<>', $latte->renderToString('{!="<>"}'));
 $latte->getParser()->shortNoEscape = FALSE;
 Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 
-Assert::error(function() use ($latte) {
+Assert::error(function () use ($latte) {
 	$latte->compile('{!="<>"}');
 }, E_USER_DEPRECATED, 'The noescape shortcut {!...} is deprecated, use {...|noescape} modifier on line 1.');

@@ -4,8 +4,8 @@
  * Test: Latte\Macros\CoreMacros: {foreach ...}
  */
 
-use Latte\Macros\CoreMacros,
-	Tester\Assert;
+use Latte\Macros\CoreMacros;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -24,12 +24,12 @@ function expandMacro($compiler, $args, $modifiers = NULL) {
 	return $node;
 }
 
-Assert::same( $prefix . '$array) as $value) { ?>',  expandMacro($compiler, '$array as $value')->openingCode );
-Assert::same( $prefix . '$array) as $key => $value) { ?>',  expandMacro($compiler, '$array as $key => $value')->openingCode );
-Assert::same( $prefix . '$array) as $value) { ?>',  expandMacro($compiler, '$array as $value', '|filter')->openingCode ); // ignored
+Assert::same($prefix . '$array) as $value) { ?>',  expandMacro($compiler, '$array as $value')->openingCode);
+Assert::same($prefix . '$array) as $key => $value) { ?>',  expandMacro($compiler, '$array as $key => $value')->openingCode);
+Assert::same($prefix . '$array) as $value) { ?>',  expandMacro($compiler, '$array as $value', '|filter')->openingCode); // ignored
 
-Assert::same( $prefix . '$obj->data("A as B")) as $value) { ?>',  expandMacro($compiler, '$obj->data("A as B") as $value')->openingCode );
-Assert::same( $prefix . '$obj->data(\'A as B\')) as $value) { ?>',  expandMacro($compiler, '$obj->data(\'A as B\') as $value')->openingCode );
-Assert::same( $prefix . '$obj->data("X as Y, Z as W")) as $value) { ?>',  expandMacro($compiler, '$obj->data("X as Y, Z as W") as $value')->openingCode );
+Assert::same($prefix . '$obj->data("A as B")) as $value) { ?>',  expandMacro($compiler, '$obj->data("A as B") as $value')->openingCode);
+Assert::same($prefix . '$obj->data(\'A as B\')) as $value) { ?>',  expandMacro($compiler, '$obj->data(\'A as B\') as $value')->openingCode);
+Assert::same($prefix . '$obj->data("X as Y, Z as W")) as $value) { ?>',  expandMacro($compiler, '$obj->data("X as Y, Z as W") as $value')->openingCode);
 
-Assert::same( '<?php $iterations = 0; foreach ($array as $value) { ?>',  expandMacro($compiler, '$array as $value', '|noiterator')->openingCode );
+Assert::same('<?php $iterations = 0; foreach ($array as $value) { ?>',  expandMacro($compiler, '$array as $value', '|noiterator')->openingCode);

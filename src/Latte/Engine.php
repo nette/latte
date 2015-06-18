@@ -149,7 +149,7 @@ class Engine extends Object
 	private function loadCacheFile($name, $params)
 	{
 		if (!$this->tempDirectory) {
-			return call_user_func(function() {
+			return call_user_func(function () {
 				foreach (func_get_arg(1) as $__k => $__v) {
 					$$__k = $__v;
 				}
@@ -179,7 +179,7 @@ class Engine extends Object
 			flock($handle, LOCK_SH); // holds the lock
 		}
 
-		call_user_func(function() {
+		call_user_func(function () {
 			foreach (func_get_arg(1) as $__k => $__v) {
 				$$__k = $__v;
 			}

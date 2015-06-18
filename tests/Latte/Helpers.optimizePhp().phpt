@@ -4,8 +4,8 @@
  * Test: Latte\Helpers::optimizePhp()
  */
 
-use Latte\Helpers,
-	Tester\Assert;
+use Latte\Helpers;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

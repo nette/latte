@@ -7,11 +7,11 @@
 
 namespace Latte\Macros;
 
-use Latte,
-	Latte\MacroNode,
-	Latte\PhpWriter,
-	Latte\CompileException,
-	Latte\RuntimeException;
+use Latte;
+use Latte\MacroNode;
+use Latte\PhpWriter;
+use Latte\CompileException;
+use Latte\RuntimeException;
 
 
 /**
@@ -214,7 +214,7 @@ class BlockMacros extends MacroSet
 			} else {
 				$node->data->leave = TRUE;
 				$fname = $writer->formatWord($name);
-				$node->closingCode = "<?php }} " . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . " ?>";
+				$node->closingCode = '<?php }} ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
 				$func = '_lb' . substr(md5($this->getCompiler()->getTemplateId() . $name), 0, 10) . '_' . preg_replace('#[^a-z0-9_]#i', '_', $name);
 				return "\n\n//\n// block $name\n//\n"
 					. "if (!function_exists(\$_b->blocks[$fname]['{$this->getCompiler()->getTemplateId()}'] = '$func')) { "

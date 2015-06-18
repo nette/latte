@@ -11,7 +11,9 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-function xml($v) { echo $v; }
+function xml($v) {
+	echo $v;
+}
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);

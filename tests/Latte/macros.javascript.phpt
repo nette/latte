@@ -48,10 +48,10 @@ Assert::match(
 	$latte->renderToString('<script id="{=123|noescape}">')
 );
 
-Assert::exception(function() use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->compile('<script> "{$var}" </script>');
 }, 'Latte\CompileException', 'Do not place {$var} inside quotes.');
 
-Assert::exception(function() use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->compile("<script> '{\$var}' </script>");
 }, 'Latte\CompileException', 'Do not place {$var} inside quotes.');
