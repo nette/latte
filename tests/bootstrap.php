@@ -28,7 +28,7 @@ function test(\Closure $function)
 
 class Notes
 {
-	static public $notes = array();
+	public static $notes = array();
 
 	public static function add($message)
 	{

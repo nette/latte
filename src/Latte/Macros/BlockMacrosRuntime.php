@@ -7,8 +7,8 @@
 
 namespace Latte\Macros;
 
-use Latte,
-	Latte\RuntimeException;
+use Latte;
+use Latte\RuntimeException;
 
 
 /**

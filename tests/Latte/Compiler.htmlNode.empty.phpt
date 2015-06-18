@@ -4,9 +4,9 @@
  * Test: Latte\Compiler and htmlNode.
  */
 
-use Latte\IMacro,
-	Latte\MacroNode,
-	Tester\Assert;
+use Latte\IMacro;
+use Latte\MacroNode;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -66,6 +66,6 @@ Assert::match("%A%<textarea />\n %A%", $latte->compile("<textarea n:foo />\n "))
 $macro->empty = FALSE;
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></textarea>'));
 
-Assert::exception(function() use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->compile('<input n:foo>');
 }, 'Latte\CompileException', 'Missing </input> for n:foo');

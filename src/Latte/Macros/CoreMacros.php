@@ -7,10 +7,10 @@
 
 namespace Latte\Macros;
 
-use Latte,
-	Latte\CompileException,
-	Latte\MacroNode,
-	Latte\PhpWriter;
+use Latte;
+use Latte\CompileException;
+use Latte\MacroNode;
+use Latte\PhpWriter;
 
 
 /**

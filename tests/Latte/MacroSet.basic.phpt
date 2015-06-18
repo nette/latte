@@ -1,8 +1,8 @@
 <?php
 
-use Latte\Macros\MacroSet,
-	Latte\MacroNode,
-	Tester\Assert;
+use Latte\Macros\MacroSet;
+use Latte\MacroNode;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -12,7 +12,7 @@ $latte = new Latte\Engine;
 $set = new MacroSet($latte->getCompiler());
 
 
-test(function() use ($set) {
+test(function () use ($set) {
 	$set->addMacro('void', 'begin');
 
 	$node = new MacroNode($set, 'void');
@@ -26,7 +26,7 @@ test(function() use ($set) {
 });
 
 
-test(function() use ($set) {
+test(function () use ($set) {
 	$set->addMacro('nonvoid', 'begin', 'end');
 
 	$node = new MacroNode($set, 'nonvoid');
@@ -49,7 +49,7 @@ test(function() use ($set) {
 });
 
 
-test(function() use ($set) {
+test(function () use ($set) {
 	$set->addMacro('attr', 'begin', 'end', 'attr');
 
 	$node = new MacroNode($set, 'attr');
@@ -72,10 +72,10 @@ test(function() use ($set) {
 });
 
 
-test(function() use ($set) {
-	$set->addMacro('noattr', function() use (& $called) {
+test(function () use ($set) {
+	$set->addMacro('noattr', function () use (& $called) {
 		$called = TRUE;
-	}, NULL, function() { return FALSE; });
+	}, NULL, function () { return FALSE; });
 
 	$node = new MacroNode($set, 'noattr');
 	$node->prefix = $node::PREFIX_NONE;
@@ -84,7 +84,7 @@ test(function() use ($set) {
 });
 
 
-test(function() use ($set) {
+test(function () use ($set) {
 	$set->addMacro('onlyattr', NULL, NULL, 'attr');
 
 	$node = new MacroNode($set, 'onlyattr');
@@ -101,8 +101,8 @@ test(function() use ($set) {
 });
 
 
-test(function() use ($set) {
-	$set->addMacro('dynamic', function(MacroNode $node) use (& $called) {
+test(function () use ($set) {
+	$set->addMacro('dynamic', function (MacroNode $node) use (& $called) {
 		$called = TRUE;
 		$node->isEmpty = FALSE;
 	});
@@ -117,8 +117,8 @@ test(function() use ($set) {
 });
 
 
-test(function() use ($set) {
-	$set->addMacro('reject', function(MacroNode $node) {
+test(function () use ($set) {
+	$set->addMacro('reject', function (MacroNode $node) {
 		return FALSE;
 	});
 
