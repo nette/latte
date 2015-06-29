@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * PHP code generator helpers.
- *
- * @author     David Grudl
  */
 class PhpWriter extends Object
 {

@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Simple lexical analyser.
- *
- * @author     David Grudl
  * @internal
  */
 class Tokenizer extends Object

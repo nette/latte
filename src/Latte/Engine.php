@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Templating engine Latte.
- *
- * @author     David Grudl
  */
 class Engine extends Object
 {

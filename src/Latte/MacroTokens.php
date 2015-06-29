@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Macro tag tokenizer.
- *
- * @author     David Grudl
  */
 class MacroTokens extends TokenIterator
 {

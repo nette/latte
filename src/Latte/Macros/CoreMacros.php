@@ -33,8 +33,6 @@ use Latte\PhpWriter;
  * - {contentType ...} HTTP Content-Type header
  * - {status ...} HTTP status
  * - {l} {r} to display { }
- *
- * @author     David Grudl
  */
 class CoreMacros extends MacroSet
 {

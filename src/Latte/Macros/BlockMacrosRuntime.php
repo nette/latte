@@ -13,8 +13,6 @@ use Latte\RuntimeException;
 
 /**
  * Runtime helpers for block macros.
- *
- * @author     David Grudl
  */
 class BlockMacrosRuntime extends Latte\Object
 {

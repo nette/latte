@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * HTML element node.
- *
- * @author     David Grudl
  */
 class HtmlNode extends Object
 {

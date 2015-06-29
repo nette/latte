@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Latte helpers.
- *
- * @author     David Grudl
  * @internal
  */
 class Helpers

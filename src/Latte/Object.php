@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Object is the ultimate ancestor of all instantiable classes.
- *
- * @author     David Grudl
  */
 abstract class Object
 {
