@@ -11,7 +11,6 @@ use Latte;
 use Latte\MacroNode;
 use Latte\PhpWriter;
 use Latte\CompileException;
-use Latte\RuntimeException;
 
 
 /**
