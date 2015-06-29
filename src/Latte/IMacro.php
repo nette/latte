@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Latte macro.
- *
- * @author     David Grudl
  */
 interface IMacro
 {

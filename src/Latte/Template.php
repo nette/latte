@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Template.
- *
- * @author     David Grudl
  * @internal
  */
 class Template extends Object

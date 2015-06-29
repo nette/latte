@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Latte compiler.
- *
- * @author     David Grudl
  */
 class Compiler extends Object
 {

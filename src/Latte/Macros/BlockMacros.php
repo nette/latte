@@ -16,8 +16,6 @@ use Latte\RuntimeException;
 
 /**
  * Block macros.
- *
- * @author     David Grudl
  */
 class BlockMacros extends MacroSet
 {

@@ -10,8 +10,6 @@ namespace Latte;
 
 /**
  * Latte parser.
- *
- * @author     David Grudl
  */
 class Parser extends Object
 {

@@ -13,8 +13,6 @@ use Latte\MacroNode;
 
 /**
  * Base IMacro implementation. Allows add multiple macros.
- *
- * @author     David Grudl
  */
 class MacroSet extends Latte\Object implements Latte\IMacro
 {
