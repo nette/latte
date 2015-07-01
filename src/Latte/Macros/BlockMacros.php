@@ -73,7 +73,7 @@ class BlockMacros extends MacroSet
 				$prolog[] = "//\n// block $name\n//\n"
 					. "if (!function_exists(\$_b->blocks[" . var_export($name, TRUE) . "][] = '$func')) { "
 					. "function $func(\$_b, \$_args) { foreach (\$_args as \$__k => \$__v) \$\$__k = \$__v"
-					. ($snippet ? '; $_control->redrawControl(' . var_export(substr($name, 1), TRUE) . ', FALSE)' : '')
+					. ($snippet ? '; $_control->redrawControl(' . var_export((string) substr($name, 1), TRUE) . ', FALSE)' : '')
 					. "\n?>$code<?php\n}}";
 			}
 			$prolog[] = "//\n// end of blocks\n//";
