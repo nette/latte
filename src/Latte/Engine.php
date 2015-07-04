@@ -149,6 +149,25 @@ class Engine extends Object
 
 
 	/**
+	 * Compiles template to cache.
+	 * @param  string
+	 * @return void
+	 * @throws \LogicException
+	 */
+	public function warmupCache($name)
+	{
+		if (!$this->tempDirectory) {
+			throw new \LogicException('Path to temporary directory is not set.');
+		}
+
+		$class = $this->getTemplateClass($name);
+		if (!class_exists($class, FALSE)) {
+			$this->loadCacheFile($name);
+		}
+	}
+
+
+	/**
 	 * @return void
 	 */
 	private function loadCacheFile($name)
