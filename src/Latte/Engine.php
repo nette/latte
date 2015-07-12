@@ -149,6 +149,25 @@ class Engine extends Object
 
 
 	/**
+	 * Puts specific latte to cache
+	 * @param string $name
+	 *
+	 * @throws \Latte\RuntimeException
+	 */
+	public function warmupCache($name)
+	{
+		if (!isset($this->tempDirectory)) {
+			throw new RuntimeException('Temp directory is not set, so putting to cache is useless.');
+		}
+
+		$class = $this->getTemplateClass($name);
+		if (!class_exists($class, FALSE)) {
+			$this->loadCacheFile($name);
+		}
+	}
+
+
+	/**
 	 * @return void
 	 */
 	private function loadCacheFile($name)
