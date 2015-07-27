@@ -427,8 +427,12 @@ class Filters
 			}
 
 			$q = strpos($value, '"') === FALSE ? '"' : "'";
-			$s .= ' ' . $key . '='
-				. $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value)
+			$s .= ' ' . $key . '=' . $q
+				. str_replace(
+					array('&', $q, '<'),
+					array('&amp;', $q === '"' ? '&quot;' : '&#39;', self::$xhtml ? '&lt;' : '<'),
+					$value
+				)
 				. (strpos($value, '`') !== FALSE && strpbrk($value, ' <>"\'') === FALSE ? ' ' : '')
 				. $q;
 		}
