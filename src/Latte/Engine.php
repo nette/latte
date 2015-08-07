@@ -239,12 +239,12 @@ class Engine extends Object
 	{
 		return 'Template' . md5("$this->tempDirectory\00$name");
 	}
-        
-        public function setTranslator(Runtime\ITranslator $translator = NULL)
-        {
-            $this->addFilter('translate', $translator === NULL ? NULL : array($translator, 'translate'));
-            return $this;
-        }
+
+		public function setTranslator(Runtime\ITranslator $translator = NULL)
+		{
+			$this->addFilter('translate', $translator === NULL ? NULL : array($translator, 'translate'));
+			return $this;
+		}
 
 
 	/**

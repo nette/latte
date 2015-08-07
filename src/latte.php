@@ -26,7 +26,7 @@ spl_autoload_register(function ($className) {
 		'Latte\\Runtime\\Filters' => 'Runtime/Filters.php',
 		'Latte\\Runtime\\Html' => 'Runtime/Html.php',
 		'Latte\\Runtime\\IHtmlString' => 'Runtime/IHtmlString.php',
-                'Latte\\Runtime\\ITranslator' => 'Runtime/ITranslator.php',
+		'Latte\\Runtime\\ITranslator' => 'Runtime/ITranslator.php',
 		'Latte\\Template' => 'Template.php',
 		'Latte\\Token' => 'Token.php',
 		'Latte\\TokenIterator' => 'TokenIterator.php',
