@@ -242,7 +242,7 @@ class Engine extends Object
 
 		public function setTranslator(Runtime\ITranslator $translator = NULL)
 		{
-			$this->addFilter('translate', $translator === NULL ? NULL : array($translator, 'translate'));
+			$this->addFilter('translate', $translator === NULL ? NULL : [$translator, 'translate']);
 			return $this;
 		}
 
