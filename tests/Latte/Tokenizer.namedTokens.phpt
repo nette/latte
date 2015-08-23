@@ -25,4 +25,4 @@ Assert::same([
 
 Assert::exception(function () use ($tokenizer) {
 	$tokenizer->tokenize('say 123;');
-}, 'Latte\CompileException', "Unexpected ';' on line 1, column 8.");
+}, Latte\CompileException::class, "Unexpected ';' on line 1, column 8.");

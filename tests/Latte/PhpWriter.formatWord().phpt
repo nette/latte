@@ -32,4 +32,4 @@ Assert::same('$x["[x]"]',  $writer->formatWord('$x["[x]"]'));
 
 Assert::exception(function () use ($writer) {
 	$writer->formatWord("'var\"");
-}, 'Latte\CompileException', "Unexpected ''var\"' on line 1, column 1.");
+}, Latte\CompileException::class, "Unexpected ''var\"' on line 1, column 1.");

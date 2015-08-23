@@ -26,7 +26,7 @@ test(function () use ($compiler) { // {var ... }
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('var', '$var => "123', '');
-	}, 'Latte\CompileException', 'Unexpected %a% on line 1, column 9.');
+	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 9.');
 });
 
 
@@ -40,5 +40,5 @@ test(function () use ($compiler) { // {default ...}
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('default', '$temp->var1 = 123', '');
-	}, 'Latte\CompileException', "Unexpected '->' in {default \$temp->var1 = 123}");
+	}, Latte\CompileException::class, "Unexpected '->' in {default \$temp->var1 = 123}");
 });
