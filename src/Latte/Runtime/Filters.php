@@ -170,7 +170,7 @@ class Filters
 
 	/**
 	 * Date/time formatting.
-	 * @param  string|int|DateTime|DateInterval
+	 * @param  string|int|\DateTime|\DateInterval
 	 * @param  string
 	 * @return string
 	 */
