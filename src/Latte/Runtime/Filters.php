@@ -168,7 +168,7 @@ class Filters
 
 	/**
 	 * Date/time formatting.
-	 * @param  string|int|DateTime|DateInterval
+	 * @param  string|int|\DateTimeInterface|\DateInterval
 	 * @param  string
 	 * @return string
 	 */
@@ -189,7 +189,7 @@ class Filters
 			$time = new \DateTime('@' . $time);
 			$time->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
-		} elseif (!$time instanceof \DateTime && !$time instanceof \DateTimeInterface) {
+		} elseif (!$time instanceof \DateTimeInterface) {
 			$time = new \DateTime($time);
 		}
 		return strpos($format, '%') === FALSE

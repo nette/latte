@@ -15,4 +15,4 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('Block{/block}');
-}, 'Latte\CompileException', 'Unexpected {/block}');
+}, Latte\CompileException::class, 'Unexpected {/block}');
