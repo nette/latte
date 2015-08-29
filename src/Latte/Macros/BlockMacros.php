@@ -83,7 +83,7 @@ class BlockMacros extends MacroSet
 			$prolog[] = '// template extending';
 
 			$prolog[] = '$_l->extends = '
-				. ($this->extends ? $this->extends : 'empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
+				. ($this->extends ? $this->extends : 'empty($_g->extended) && isset($_layoutFileFinder) ? $_layoutFileFinder->find() : NULL')
 				. '; $_g->extended = TRUE;';
 
 			$prolog[] = 'if ($_l->extends) { ' . ($this->namedBlocks ? 'ob_start();' : 'return $template->renderChildTemplate($_l->extends, get_defined_vars());') . '}';
@@ -158,7 +158,7 @@ class BlockMacros extends MacroSet
 		if ($node->args === 'none') {
 			$this->extends = 'FALSE';
 		} elseif ($node->args === 'auto') {
-			$this->extends = '$_presenter->findLayoutTemplateFile()';
+			$this->extends = '$_layoutFileFinder->find()';
 		} else {
 			$this->extends = $writer->write('%node.word%node.args');
 		}

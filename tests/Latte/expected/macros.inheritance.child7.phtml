@@ -1,0 +1,30 @@
+<?php
+// source: %a%
+
+// prolog Latte\Macros\CoreMacros
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
+;
+// prolog Latte\Macros\BlockMacros
+//
+// block content
+//
+if (!function_exists($_b->blocks['content'][] = '_%[a-z0-9]+%_content')) { function _%[a-z0-9]+%_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+?>	Content
+<?php
+}}
+
+//
+// end of blocks
+//
+
+// template extending
+
+$_l->extends = empty($_g->extended) && isset($_layoutFileFinder) ? $_layoutFileFinder->find() : NULL; $_g->extended = TRUE;
+
+if ($_l->extends) { ob_start();}
+
+//
+// main template
+//
+if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
+call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars()) ;
