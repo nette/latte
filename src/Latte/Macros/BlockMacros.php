@@ -86,7 +86,10 @@ class BlockMacros extends MacroSet
 				. ($this->extends ? $this->extends : 'empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
 				. '; $_g->extended = TRUE;';
 
-			$prolog[] = 'if ($_l->extends) { ' . ($this->namedBlocks ? 'ob_start();' : 'return $template->renderChildTemplate($_l->extends, get_defined_vars());') . '}';
+			$prolog[] = 'if ($_l->extends) { ob_start();}';
+			if (!$this->namedBlocks) {
+				$epilog[] = 'if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars());}';
+			}
 		}
 
 		return [implode("\n\n", $prolog), implode("\n", $epilog)];
