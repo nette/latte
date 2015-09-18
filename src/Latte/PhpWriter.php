@@ -42,41 +42,39 @@ class PhpWriter extends Object
 	 * @param  string
 	 * @return string
 	 */
-	public function write($mask)
+	public function write($mask, ...$args)
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
-		$me = $this;
-		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) use ($me) {
-			return $me->escapeFilter(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
+		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) {
+			return $this->escapeFilter(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
 		}, $mask);
-		$mask = preg_replace_callback('#%modify(\(([^()]*+|(?1))+\))#', function ($m) use ($me) {
-			return $me->formatModifiers(substr($m[1], 1, -1));
+		$mask = preg_replace_callback('#%modify(\(([^()]*+|(?1))+\))#', function ($m) {
+			return $this->formatModifiers(substr($m[1], 1, -1));
 		}, $mask);
 
-		$args = func_get_args();
 		$pos = $this->tokens->position;
 		$word = strpos($mask, '%node_word') === FALSE ? NULL : $this->tokens->fetchWord();
 
 		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
-		function ($m) use ($me, $word, & $args) {
+		function ($m) use ($word, & $args) {
 			list(, $l, $source, $format, $cond, $r) = $m;
 
 			switch ($source) {
 				case 'node_':
 					$arg = $word; break;
 				case '':
-					$arg = next($args); break;
+					$arg = each($args)[1]; break;
 				default:
-					$arg = $args[$source + 1]; break;
+					$arg = $args[(int) $source]; break;
 			}
 
 			switch ($format) {
 				case 'word':
-					$code = $me->formatWord($arg); break;
+					$code = $this->formatWord($arg); break;
 				case 'args':
-					$code = $me->formatArgs(); break;
+					$code = $this->formatArgs(); break;
 				case 'array':
-					$code = $me->formatArray();
+					$code = $this->formatArray();
 					$code = $cond && $code === '[]' ? '' : $code; break;
 				case 'var':
 					$code = var_export($arg, TRUE); break;

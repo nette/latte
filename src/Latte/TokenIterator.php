@@ -62,9 +62,9 @@ class TokenIterator extends Object
 	 * @param  int|string  (optional) desired token type or value
 	 * @return array|NULL
 	 */
-	public function nextToken()
+	public function nextToken(...$args)
 	{
-		return $this->scan(func_get_args(), TRUE, TRUE); // onlyFirst, advance
+		return $this->scan($args, TRUE, TRUE); // onlyFirst, advance
 	}
 
 
@@ -73,9 +73,9 @@ class TokenIterator extends Object
 	 * @param  int|string  (optional) desired token type or value
 	 * @return string|NULL
 	 */
-	public function nextValue()
+	public function nextValue(...$args)
 	{
-		return $this->scan(func_get_args(), TRUE, TRUE, TRUE); // onlyFirst, advance, strings
+		return $this->scan($args, TRUE, TRUE, TRUE); // onlyFirst, advance, strings
 	}
 
 
@@ -84,9 +84,9 @@ class TokenIterator extends Object
 	 * @param  int|string  (optional) desired token type or value
 	 * @return array[]
 	 */
-	public function nextAll()
+	public function nextAll(...$args)
 	{
-		return $this->scan(func_get_args(), FALSE, TRUE); // advance
+		return $this->scan($args, FALSE, TRUE); // advance
 	}
 
 
@@ -95,9 +95,9 @@ class TokenIterator extends Object
 	 * @param  int|string  token type or value to stop before
 	 * @return array[]
 	 */
-	public function nextUntil($arg)
+	public function nextUntil(...$args)
 	{
-		return $this->scan(func_get_args(), FALSE, TRUE, FALSE, TRUE); // advance, until
+		return $this->scan($args, FALSE, TRUE, FALSE, TRUE); // advance, until
 	}
 
 
@@ -106,9 +106,9 @@ class TokenIterator extends Object
 	 * @param  int|string  (optional) token type or value to be joined
 	 * @return string
 	 */
-	public function joinAll()
+	public function joinAll(...$args)
 	{
-		return $this->scan(func_get_args(), FALSE, TRUE, TRUE); // advance, strings
+		return $this->scan($args, FALSE, TRUE, TRUE); // advance, strings
 	}
 
 
@@ -117,9 +117,9 @@ class TokenIterator extends Object
 	 * @param  int|string  token type or value to stop before
 	 * @return string
 	 */
-	public function joinUntil($arg)
+	public function joinUntil(...$args)
 	{
-		return $this->scan(func_get_args(), FALSE, TRUE, TRUE, TRUE); // advance, strings, until
+		return $this->scan($args, FALSE, TRUE, TRUE, TRUE); // advance, strings, until
 	}
 
 
@@ -128,12 +128,11 @@ class TokenIterator extends Object
 	 * @param  int|string  token type or value
 	 * @return bool
 	 */
-	public function isCurrent($arg)
+	public function isCurrent(...$args)
 	{
 		if (!isset($this->tokens[$this->position])) {
 			return FALSE;
 		}
-		$args = func_get_args();
 		$token = $this->tokens[$this->position];
 		return in_array($token[Tokenizer::VALUE], $args, TRUE)
 			|| (isset($token[Tokenizer::TYPE]) && in_array($token[Tokenizer::TYPE], $args, TRUE));
@@ -145,9 +144,9 @@ class TokenIterator extends Object
 	 * @param  int|string  (optional) token type or value
 	 * @return bool
 	 */
-	public function isNext()
+	public function isNext(...$args)
 	{
-		return (bool) $this->scan(func_get_args(), TRUE, FALSE); // onlyFirst
+		return (bool) $this->scan($args, TRUE, FALSE); // onlyFirst
 	}
 
 
@@ -156,9 +155,9 @@ class TokenIterator extends Object
 	 * @param  int|string  (optional) token type or value
 	 * @return bool
 	 */
-	public function isPrev()
+	public function isPrev(...$args)
 	{
-		return (bool) $this->scan(func_get_args(), TRUE, FALSE, FALSE, FALSE, TRUE); // onlyFirst, prev
+		return (bool) $this->scan($args, TRUE, FALSE, FALSE, FALSE, TRUE); // onlyFirst, prev
 	}
 
 
