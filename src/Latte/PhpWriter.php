@@ -74,8 +74,8 @@ class PhpWriter extends Object
 				case 'args':
 					$code = $this->formatArgs(); break;
 				case 'array':
-					$code = $this->formatArray();
-					$code = $cond && $code === '[]' ? '' : $code; break;
+					$code = $this->formatArgs();
+					$code = $cond && $code === '' ? '' : "[$code]"; break;
 				case 'var':
 					$code = var_export($arg, TRUE); break;
 				case 'raw':
@@ -121,16 +121,10 @@ class PhpWriter extends Object
 	}
 
 
-	/**
-	 * Formats macro arguments to PHP array. (It advances tokenizer to the end as a side effect.)
-	 * @return string
-	 */
+	/** @deprecated */
 	public function formatArray(MacroTokens $tokens = NULL)
 	{
-		$tokens = $this->preprocess($tokens);
-		$tokens = $this->quoteFilter($tokens);
-		$tokens->prepend('[')->append(']');
-		return $tokens->joinAll();
+		return '[' . $this->formatArgs($tokens) . ']';
 	}
 
 
