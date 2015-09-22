@@ -418,6 +418,10 @@ class Parser extends Object
 
 	public function getLine()
 	{
+		if (empty($this->input)) {
+			return 1;
+		}
+
 		return substr_count($this->input, "\n", 0, max(1, $this->offset - 1)) + 1;
 	}
 
