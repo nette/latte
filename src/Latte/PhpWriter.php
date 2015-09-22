@@ -128,8 +128,8 @@ class PhpWriter extends Object
 	public function formatArray(MacroTokens $tokens = NULL)
 	{
 		$tokens = $this->preprocess($tokens);
-		$tokens = $this->expandFilter($tokens);
 		$tokens = $this->quoteFilter($tokens);
+		$tokens->prepend('[')->append(']');
 		return $tokens->joinAll();
 	}
 
@@ -156,6 +156,7 @@ class PhpWriter extends Object
 		$tokens = $tokens === NULL ? $this->tokens : $tokens;
 		$tokens = $this->removeCommentsFilter($tokens);
 		$tokens = $this->shortTernaryFilter($tokens);
+		$tokens = $this->expandFilter($tokens);
 		return $tokens;
 	}
 
@@ -211,24 +212,14 @@ class PhpWriter extends Object
 	 */
 	public function expandFilter(MacroTokens $tokens)
 	{
-		$res = new MacroTokens('[');
-		$expand = NULL;
+		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('(expand)') && $tokens->depth === 0) {
-				$expand = TRUE;
-				$res->append('],');
-			} elseif ($expand && $tokens->isCurrent(',') && !$tokens->depth) {
-				$expand = FALSE;
-				$res->append(', [');
+			if ($tokens->isCurrent('(expand)')) {
+				$tokens->nextAll(MacroTokens::T_WHITESPACE);
+				$res->append('...');
 			} else {
 				$res->append($tokens->currentToken());
 			}
-		}
-
-		if ($expand === NULL) {
-			$res->append(']');
-		} else {
-			$res->prepend('array_merge(')->append($expand ? ', [])' : '])');
 		}
 		return $res;
 	}
