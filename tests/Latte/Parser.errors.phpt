@@ -11,10 +11,18 @@ use Latte\Parser;
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::exception(function () {
+test(function () {
+	$parser = new Parser;
+	$parser->parse("\n{a}");
+	$parser->parse('');
+	Assert::same(0, $parser->getLine());
+});
+
+Assert::exception(function () use (& $parser) {
 	$parser = new Parser;
 	$parser->parse("\xA0\xA0");
 }, 'InvalidArgumentException', 'Template is not valid UTF-8 stream.');
+Assert::same(0, $parser->getLine());
 
 
 Assert::exception(function () use (& $parser) {
@@ -36,3 +44,10 @@ Assert::exception(function () use (& $parser) {
 	$parser->parse('{');
 }, Latte\CompileException::class, 'Malformed macro');
 Assert::same(1, $parser->getLine());
+
+
+Assert::exception(function () use (& $parser) {
+	$parser = new Parser;
+	$parser->parse("\n{");
+}, Latte\CompileException::class, 'Malformed macro');
+Assert::same(2, $parser->getLine());

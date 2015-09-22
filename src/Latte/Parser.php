@@ -76,6 +76,8 @@ class Parser extends Object
 	 */
 	public function parse($input)
 	{
+		$this->offset = 0;
+
 		if (substr($input, 0, 3) === "\xEF\xBB\xBF") { // BOM
 			$input = substr($input, 3);
 		}
@@ -85,7 +87,7 @@ class Parser extends Object
 		$input = str_replace("\r\n", "\n", $input);
 		$this->input = $input;
 		$this->output = [];
-		$this->offset = $tokenCount = 0;
+		$tokenCount = 0;
 
 		$this->setSyntax($this->defaultSyntax);
 		$this->setContext(self::CONTEXT_HTML_TEXT);
@@ -418,7 +420,9 @@ class Parser extends Object
 
 	public function getLine()
 	{
-		return substr_count($this->input, "\n", 0, max(1, $this->offset - 1)) + 1;
+		return $this->offset
+			? substr_count(substr($this->input, 0, $this->offset - 1), "\n") + 1
+			: 0;
 	}
 
 
