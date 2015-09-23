@@ -170,7 +170,7 @@ class Engine extends Object
 	/**
 	 * @return void
 	 */
-	private function loadCacheFile($name)
+	public function loadCacheFile($name)
 	{
 		if (!$this->tempDirectory) {
 			eval('?>' . $this->compile($name));
