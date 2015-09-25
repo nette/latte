@@ -289,7 +289,7 @@ class BlockMacros extends MacroSet
 				if ($node->name === 'snippetArea') {
 					$node->content .= '<?php return FALSE; ?>';
 				}
-				$this->namedBlocks[$node->data->name] = $tmp = rtrim(ltrim($node->content, "\n"), " \t");
+				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+\z#', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
 				$node->openingCode = '<?php ?>';
 			}
