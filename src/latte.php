@@ -17,7 +17,7 @@ spl_autoload_register(function ($className) {
 		Latte\Macros\BlockMacrosRuntime::class => 'Macros/BlockMacrosRuntime.php',
 		Latte\Macros\CoreMacros::class => 'Macros/CoreMacros.php',
 		Latte\Macros\MacroSet::class => 'Macros/MacroSet.php',
-		Latte\Object::class => 'Object.php',
+		Latte\Strict::class => 'Strict.php',
 		Latte\Parser::class => 'Parser.php',
 		Latte\PhpWriter::class => 'PhpWriter.php',
 		Latte\RegexpException::class => 'exceptions.php',

@@ -12,8 +12,10 @@ namespace Latte;
  * Simple lexical analyser.
  * @internal
  */
-class Tokenizer extends Object
+class Tokenizer
 {
+	use Strict;
+
 	const VALUE = 0,
 		OFFSET = 1,
 		TYPE = 2;

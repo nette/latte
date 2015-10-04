@@ -13,8 +13,9 @@ use Latte;
 /**
  * Template loader.
  */
-class FileLoader extends Latte\Object implements Latte\ILoader
+class FileLoader implements Latte\ILoader
 {
+	use Latte\Strict;
 
 	/**
 	 * Returns template source code.

@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * PHP code generator helpers.
  */
-class PhpWriter extends Object
+class PhpWriter
 {
+	use Strict;
+
 	/** @var MacroTokens */
 	private $tokens;
 

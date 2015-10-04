@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * Templating engine Latte.
  */
-class Engine extends Object
+class Engine
 {
+	use Strict;
+
 	const VERSION = '2.4-dev';
 
 	/** Content types */

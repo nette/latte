@@ -25,6 +25,8 @@ use Latte;
  */
 class CachingIterator extends \CachingIterator implements \Countable
 {
+	use Latte\Strict;
+
 	/** @var int */
 	private $counter = 0;
 
@@ -173,17 +175,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	}
 
 
-	/********************* Latte\Object behaviour + property accessor ****************d*g**/
-
-
-	/**
-	 * Call to undefined method.
-	 * @throws \LogicException
-	 */
-	public function __call($name, $args)
-	{
-		throw new \LogicException(sprintf('Call to undefined method %s::%s().', get_class($this), $name));
-	}
+	/********************* property accessor ****************d*g**/
 
 
 	/**
@@ -196,17 +188,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 			$ret = $this->$m();
 			return $ret;
 		}
-		throw new \LogicException(sprintf('Attempt to read undeclared property %s::$%s.', get_class($this), $name));
-	}
-
-
-	/**
-	 * Access to undeclared property.
-	 * @throws \LogicException
-	 */
-	public function __set($name, $value)
-	{
-		throw new \LogicException(sprintf('Attempt to write to undeclared property %s::$%s.', get_class($this), $name));
+		throw new \LogicException('Attempt to read undeclared property ' . get_class($this) . "::\$$name.");
 	}
 
 
@@ -217,16 +199,6 @@ class CachingIterator extends \CachingIterator implements \Countable
 	public function __isset($name)
 	{
 		return method_exists($this, 'get' . $name) || method_exists($this, 'is' . $name);
-	}
-
-
-	/**
-	 * Access to undeclared property.
-	 * @throws \LogicException
-	 */
-	public function __unset($name)
-	{
-		throw new \LogicException(sprintf('Attempt to unset undeclared property %s::$%s.', get_class($this), $name));
 	}
 
 }

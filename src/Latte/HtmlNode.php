@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * HTML element node.
  */
-class HtmlNode extends Object
+class HtmlNode
 {
+	use Strict;
+
 	/** @var string */
 	public $name;
 

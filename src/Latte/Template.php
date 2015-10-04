@@ -12,7 +12,7 @@ namespace Latte;
  * Template.
  * @internal
  */
-class Template extends Object
+class Template
 {
 	/** @var Engine */
 	private $engine;

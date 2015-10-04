@@ -12,8 +12,10 @@ namespace Latte;
  * Traversing helper.
  * @internal
  */
-class TokenIterator extends Object
+class TokenIterator
 {
+	use Strict;
+
 	/** @var array */
 	public $tokens;
 
