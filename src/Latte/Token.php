@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * Latte parser token.
  */
-class Token extends Object
+class Token
 {
+	use Strict;
+
 	const TEXT = 'text',
 		MACRO_TAG = 'macroTag', // latte macro tag
 		HTML_TAG_BEGIN = 'htmlTagBegin', // begin of HTML tag or comment

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Object
+ * Test: Latte\Strict
  */
 
 use Tester\Assert;
@@ -9,8 +9,10 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-class TestClass extends Latte\Object
+class TestClass
 {
+	use Latte\Strict;
+
 	public $public;
 
 	protected $protected;
@@ -28,7 +30,10 @@ class TestClass extends Latte\Object
 
 	protected static function protectedMethodS()
 	{}
+}
 
+class TestChild extends TestClass
+{
 	public function callParent()
 	{
 		parent::callParent();
@@ -47,7 +52,7 @@ Assert::exception(function () {
 }, LogicException::class, 'Call to undefined static method TestClass::undeclared().');
 
 Assert::exception(function () {
-	$obj = new TestClass;
+	$obj = new TestChild;
 	$obj->callParent();
 }, LogicException::class, 'Call to undefined method parent::callParent().');
 

@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * Latte parser.
  */
-class Parser extends Object
+class Parser
 {
+	use Strict;
+
 	/** @internal regular expression for single & double quoted PHP string */
 	const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*\'|"(?:\\\\.|[^"\\\\])*"';
 

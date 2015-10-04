@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * Macro element node.
  */
-class MacroNode extends Object
+class MacroNode
 {
+	use Strict;
+
 	const PREFIX_INNER = 'inner',
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = 'none';

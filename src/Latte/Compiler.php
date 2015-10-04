@@ -11,8 +11,10 @@ namespace Latte;
 /**
  * Latte compiler.
  */
-class Compiler extends Object
+class Compiler
 {
+	use Strict;
+
 	/** @var Token[] */
 	private $tokens;
 

@@ -14,8 +14,10 @@ use Latte\MacroNode;
 /**
  * Base IMacro implementation. Allows add multiple macros.
  */
-class MacroSet extends Latte\Object implements Latte\IMacro
+class MacroSet implements Latte\IMacro
 {
+	use Latte\Strict;
+
 	/** @var Latte\Compiler */
 	private $compiler;
 

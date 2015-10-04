@@ -14,8 +14,9 @@ use Latte\RuntimeException;
 /**
  * Runtime helpers for block macros.
  */
-class BlockMacrosRuntime extends Latte\Object
+class BlockMacrosRuntime
 {
+	use Latte\Strict;
 
 	/**
 	 * Calls block.
