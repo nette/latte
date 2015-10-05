@@ -21,7 +21,7 @@ test(function () {
 Assert::exception(function () use (& $parser) {
 	$parser = new Parser;
 	$parser->parse("\xA0\xA0");
-}, 'InvalidArgumentException', 'Template is not valid UTF-8 stream.');
+}, InvalidArgumentException::class, 'Template is not valid UTF-8 stream.');
 Assert::same(0, $parser->getLine());
 
 

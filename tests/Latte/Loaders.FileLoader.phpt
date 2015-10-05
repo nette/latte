@@ -24,4 +24,4 @@ Assert::same(__FILE__, $loader->getChildName(__FILE__, __FILE__));
 Assert::exception(function () {
 	$loader = new FileLoader;
 	$loader->getContent('unknown');
-}, 'RuntimeException', "Missing template file 'unknown'.");
+}, RuntimeException::class, "Missing template file 'unknown'.");
