@@ -11,6 +11,24 @@ require __DIR__ . '/../bootstrap.php';
 
 class TestClass extends Latte\Object
 {
+	public $public;
+
+	protected $protected;
+
+	public static $publicStatic;
+
+	public function publicMethod()
+	{}
+
+	public static function publicMethodStatic()
+	{}
+
+	protected function protectedMethod()
+	{}
+
+	protected static function protectedMethodS()
+	{}
+
 	public function callParent()
 	{
 		parent::callParent();
@@ -33,6 +51,21 @@ Assert::exception(function () {
 	$obj->callParent();
 }, LogicException::class, 'Call to undefined method parent::callParent().');
 
+Assert::exception(function () {
+	$obj = new TestClass;
+	$obj->publicMethodX();
+}, LogicException::class, 'Call to undefined method TestClass::publicMethodX(), did you mean publicMethod()?');
+
+Assert::exception(function () { // suggest static method
+	$obj = new TestClass;
+	$obj->publicMethodStaticX();
+}, LogicException::class, 'Call to undefined method TestClass::publicMethodStaticX(), did you mean publicMethodStatic()?');
+
+Assert::exception(function () { // suggest only public method
+	$obj = new TestClass;
+	$obj->protectedMethodX();
+}, LogicException::class, 'Call to undefined method TestClass::protectedMethodX().');
+
 
 // writing
 Assert::exception(function () {
@@ -40,12 +73,42 @@ Assert::exception(function () {
 	$obj->undeclared = 'value';
 }, LogicException::class, 'Attempt to write to undeclared property TestClass::$undeclared.');
 
+Assert::exception(function () {
+	$obj = new TestClass;
+	$obj->publicX = 'value';
+}, LogicException::class, 'Attempt to write to undeclared property TestClass::$publicX, did you mean $public?');
+
+Assert::exception(function () { // suggest only non-static property
+	$obj = new TestClass;
+	$obj->publicStaticX = 'value';
+}, LogicException::class, 'Attempt to write to undeclared property TestClass::$publicStaticX.');
+
+Assert::exception(function () { // suggest only public property
+	$obj = new TestClass;
+	$obj->protectedX = 'value';
+}, LogicException::class, 'Attempt to write to undeclared property TestClass::$protectedX.');
+
 
 // reading
 Assert::exception(function () {
 	$obj = new TestClass;
 	$val = $obj->undeclared;
 }, LogicException::class, 'Attempt to read undeclared property TestClass::$undeclared.');
+
+Assert::exception(function () {
+	$obj = new TestClass;
+	$val = $obj->publicX;
+}, LogicException::class, 'Attempt to read undeclared property TestClass::$publicX, did you mean $public?');
+
+Assert::exception(function () { // suggest only non-static property
+	$obj = new TestClass;
+	$val = $obj->publicStaticX;
+}, LogicException::class, 'Attempt to read undeclared property TestClass::$publicStaticX.');
+
+Assert::exception(function () { // suggest only public property
+	$obj = new TestClass;
+	$val = $obj->protectedX;
+}, LogicException::class, 'Attempt to read undeclared property TestClass::$protectedX.');
 
 
 // unset/isset
