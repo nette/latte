@@ -2,16 +2,16 @@
 	"name": "latte/latte",
 	"description": "Latte: the amazing template engine for PHP",
 	"keywords": ["templating", "twig"],
-	"homepage": "http://latte.nette.org",
+	"homepage": "https://latte.nette.org",
 	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
 		{
 			"name": "David Grudl",
-			"homepage": "http://davidgrudl.com"
+			"homepage": "https://davidgrudl.com"
 		},
 		{
 			"name": "Nette Community",
-			"homepage": "http://nette.org/contributors"
+			"homepage": "https://nette.org/contributors"
 		}
 	],
 	"require": {

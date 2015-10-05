@@ -1,4 +1,4 @@
-[Latte](http://latte.nette.org): amazing template engine for PHP
+[Latte](https://latte.nette.org): amazing template engine for PHP
 ================================================================
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/latte/latte.svg)](https://packagist.org/packages/latte/latte)
@@ -70,7 +70,7 @@ $latte->render('template.latte', $parameters);
 Macros
 ======
 
-You can find detailed description of all the default macros on the [extra page](http://doc.nette.org/en/default-macros). Furthermore, you can make your own macros.
+You can find detailed description of all the default macros on the [extra page](https://doc.nette.org/en/default-macros). Furthermore, you can make your own macros.
 
 Each pair macro, such as `{if} … {/if}`, operating upon single HTML element can be written in `n:macro` notation. So, it is possible to write the `{foreach}` macro in the same manner:
 
@@ -160,11 +160,11 @@ Depending on the value of `$url` variable this will print:
 // when $url is empty
 <p>Title</p>
 
-// when $url equals 'http://nette.org'
-<p><a href="http://nette.org">Title</a></p>
+// when $url equals 'https://nette.org'
+<p><a href="https://nette.org">Title</a></p>
 ```
 
-However, n:macros are not only a shortcut for pair macros, there are some pure n:macros as well, for example the coder's best friend [n:class](http://doc.nette.org/en/default-macros#toc-n-class) macro.
+However, n:macros are not only a shortcut for pair macros, there are some pure n:macros as well, for example the coder's best friend [n:class](https://doc.nette.org/en/default-macros#toc-n-class) macro.
 
 
 Filters
@@ -188,7 +188,7 @@ Parameters are put after the filter name separated by colon or comma:
 <h1>{$heading|truncate:20,''}</h1>
 ```
 
-See the summary of [standard filters](http://doc.nette.org/en/default-filters) and how to make user-defined filters.
+See the summary of [standard filters](https://doc.nette.org/en/default-filters) and how to make user-defined filters.
 
 
 In templates we can use functions which change or format the data to a form we want. They are called *filters*. See the [summary of the default filters|default filters].
@@ -246,7 +246,7 @@ Usability
 
 Latte syntax wasn't invented by engineers but came up from webdesigner's practical requests. We were looking for the friendliest syntax with which you can write even the most problematic constructions comfortably enough. You will be surprised how much help Latte can be.
 
-You can find macros for advanced [layout](http://doc.nette.org/en/default-macros#toc-template-expanding-inheritance) managing, for **template inheritance**, nested blocks and so on. Syntax comes from PHP itself so you don't have to learn anything new and you can leverage your know-how.
+You can find macros for advanced [layout](https://doc.nette.org/en/default-macros#toc-template-expanding-inheritance) managing, for **template inheritance**, nested blocks and so on. Syntax comes from PHP itself so you don't have to learn anything new and you can leverage your know-how.
 
 
 
