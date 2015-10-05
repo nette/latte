@@ -23,7 +23,9 @@ abstract class Object
 	public function __call($name, $args)
 	{
 		$class = method_exists($this, $name) ? 'parent' : get_class($this);
-		throw new LogicException(sprintf('Call to undefined method %s::%s().', $class, $name));
+		$items = (new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC);
+		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $t()?" : '.';
+		throw new LogicException("Call to undefined method $class::$name()$hint");
 	}
 
 
@@ -33,7 +35,10 @@ abstract class Object
 	 */
 	public static function __callStatic($name, $args)
 	{
-		throw new LogicException(sprintf('Call to undefined static method %s::%s().', get_called_class(), $name));
+		$rc = new \ReflectionClass(get_called_class());
+		$items = array_intersect($rc->getMethods(\ReflectionMethod::IS_PUBLIC), $rc->getMethods(\ReflectionMethod::IS_STATIC));
+		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $t()?" : '.';
+		throw new LogicException("Call to undefined static method {$rc->getName()}::$name()$hint");
 	}
 
 
@@ -43,7 +48,10 @@ abstract class Object
 	 */
 	public function &__get($name)
 	{
-		throw new LogicException(sprintf('Attempt to read undeclared property %s::$%s.', get_class($this), $name));
+		$rc = new \ReflectionClass($this);
+		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $$t?" : '.';
+		throw new LogicException("Attempt to read undeclared property {$rc->getName()}::$$name$hint");
 	}
 
 
@@ -53,7 +61,10 @@ abstract class Object
 	 */
 	public function __set($name, $value)
 	{
-		throw new LogicException(sprintf('Attempt to write to undeclared property %s::$%s.', get_class($this), $name));
+		$rc = new \ReflectionClass($this);
+		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $$t?" : '.';
+		throw new LogicException("Attempt to write to undeclared property {$rc->getName()}::$$name$hint");
 	}
 
 
@@ -72,7 +83,8 @@ abstract class Object
 	 */
 	public function __unset($name)
 	{
-		throw new LogicException(sprintf('Attempt to unset undeclared property %s::$%s.', get_class($this), $name));
+		$class = get_class($this);
+		throw new LogicException("Attempt to unset undeclared property $class::$$name.");
 	}
 
 }

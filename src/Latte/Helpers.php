@@ -110,4 +110,23 @@ class Helpers
 		return $res . $php;
 	}
 
+
+	/**
+	 * Finds the best suggestion.
+	 * @return string|NULL
+	 */
+	public static function getSuggestion(array $items, $value)
+	{
+		$best = NULL;
+		$min = (int) (strlen($value) / 4) + 2;
+		foreach ($items as $item) {
+			$item = is_object($item) ? $item->getName() : $item;
+			if (($len = levenshtein($item, $value)) > 0 && $len < $min) {
+				$min = $len;
+				$best = $item;
+			}
+		}
+		return $best;
+	}
+
 }
