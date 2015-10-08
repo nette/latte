@@ -16,3 +16,11 @@ CoreMacros::install($compiler);
 
 Assert::same('<?php if (isset($var)) { ?>',  $compiler->expandMacro('ifset', '$var')->openingCode);
 Assert::same('<?php if (isset($item->var["test"])) { ?>',  $compiler->expandMacro('ifset', '$item->var["test"]')->openingCode);
+
+Assert::error(function () use ($compiler) {
+	$compiler->expandMacro('if', '$var', '|filter');
+}, E_USER_WARNING, 'Modifiers are not allowed here.');
+
+Assert::error(function () use ($compiler) {
+	$compiler->expandMacro('ifset', '$var', '|filter');
+}, E_USER_WARNING, 'Modifiers are not allowed here.');
