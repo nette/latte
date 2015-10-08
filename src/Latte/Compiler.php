@@ -563,7 +563,8 @@ class Compiler
 		$inScript = in_array($this->context[0], [self::CONTENT_JS, self::CONTENT_CSS], TRUE);
 
 		if (empty($this->macros[$name])) {
-			throw new CompileException("Unknown macro {{$name}}" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket.)' : ''));
+			$hint = ($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '';
+			throw new CompileException("Unknown macro {{$name}}$hint" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket.)' : ''));
 		}
 
 		if ($this->context[1] === self::CONTENT_URL) {

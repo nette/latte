@@ -290,7 +290,8 @@ class Engine
 					return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
 				}
 			}
-			throw new \LogicException("Filter '$name' is not defined.");
+			$hint = ($t = Helpers::getSuggestion(array_keys($this->filters), $name)) ? ", did you mean '$t'?" : '.';
+			throw new \LogicException("Filter '$name' is not defined$hint");
 		}
 		return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
 	}

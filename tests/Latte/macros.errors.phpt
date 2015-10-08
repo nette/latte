@@ -32,3 +32,9 @@ Assert::match(
 Assert::exception(function () use ($latte) {
 	$latte->compile('<a n:class class>');
 }, Latte\CompileException::class, 'It is not possible to combine class with n:class.');
+
+
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{forech}');
+}, Latte\CompileException::class, 'Unknown macro {forech}, did you mean {foreach}?');

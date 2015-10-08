@@ -25,7 +25,8 @@ class BlockMacrosRuntime
 	public static function callBlock(\stdClass $context, $name, array $params)
 	{
 		if (empty($context->blocks[$name])) {
-			throw new RuntimeException("Cannot include undefined block '$name'.");
+			$hint = isset($context->blocks) && ($t = Latte\Helpers::getSuggestion(array_keys($context->blocks), $name)) ? ", did you mean '$t'?" : '.';
+			throw new RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 		$block = reset($context->blocks[$name]);
 		$block($context, $params);

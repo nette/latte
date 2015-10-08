@@ -58,6 +58,10 @@ Assert::exception(function () use ($latte) {
 	$latte->invokeFilter('unknown', ['']);
 }, LogicException::class, "Filter 'unknown' is not defined.");
 
+Assert::exception(function () use ($latte) {
+	$latte->invokeFilter('h3', ['']);
+}, LogicException::class, "Filter 'h3' is not defined, did you mean 'h1'?");
+
 
 $params['hello'] = 'Hello World';
 $params['date'] = strtotime('2008-01-02');
