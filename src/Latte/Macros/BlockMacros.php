@@ -139,8 +139,13 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('ob_start(); $_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); echo rtrim(ob_get_clean())',
-			$this->getCompiler()->getTemplateId());
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
+		return $writer->write(
+			'ob_start(); $_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); echo rtrim(ob_get_clean())',
+			$this->getCompiler()->getTemplateId()
+		);
 	}
 
 
@@ -149,6 +154,9 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroExtends(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		if (!$node->args) {
 			throw new CompileException("Missing destination in {{$node->name}}");
 		}
@@ -306,6 +314,9 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		if (!preg_match('~#|[\w-]+\z~A', $node->args)) {
 			return FALSE;
 		}

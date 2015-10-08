@@ -125,3 +125,39 @@ test(function () use ($set) {
 	$node = new MacroNode($set, 'reject');
 	Assert::false($set->nodeOpened($node));
 });
+
+
+test(function () use ($set) {
+	$set->addMacro('modifyOk1', function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk1', NULL, '|filter'));
+
+	$set->addMacro('modifyOk2', NULL, function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk2', NULL, '|filter'));
+
+	$set->addMacro('modifyOk3', NULL, NULL, function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk3', NULL, '|filter'));
+
+	$set->addMacro('modifyOk4', function () {}, '-');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk4', NULL, '|filter'));
+
+	$set->addMacro('modifyOk5', '-', function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk5', NULL, '|filter'));
+
+	$set->addMacro('modifyOk6', '-', '-', function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk6', NULL, '|filter'));
+
+	Assert::exception(function () use ($set) {
+		$set->addMacro('modifyError1', '-');
+		$set->nodeOpened(new MacroNode($set, 'modifyError1', NULL, '|filter'));
+	}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+
+	Assert::exception(function () use ($set) {
+		$set->addMacro('modifyError2', NULL, '-');
+		$set->nodeOpened(new MacroNode($set, 'modifyError2', NULL, '|filter'));
+	}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+
+	Assert::exception(function () use ($set) {
+		$set->addMacro('modifyError3', NULL, NULL, '-');
+		$set->nodeOpened(new MacroNode($set, 'modifyError3', NULL, '|filter'));
+	}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+});

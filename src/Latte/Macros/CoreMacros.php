@@ -105,6 +105,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroIf(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		if ($node->data->capture = ($node->args === '')) {
 			return 'ob_start()';
 		}
@@ -139,6 +142,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroElse(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
 			if (isset($ifNode->data->else)) {
@@ -219,6 +225,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroUse(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		call_user_func(Latte\Helpers::checkCallback([$node->tokenizer->fetchWord(), 'install']), $this->getCompiler())
 			->initialize();
 	}
@@ -252,6 +261,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndForeach(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers && $node->modifiers !== '|noiterator') {
+			throw new CompileException('Only modifier |noiterator is allowed here.');
+		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
 			$node->openingCode = '<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
 			. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $writer->formatArgs(), 1) . ') { ?>';
@@ -269,6 +281,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		$cmd = str_replace('If', '', $node->name);
 		if ($node->parentNode && $node->parentNode->prefix === $node::PREFIX_NONE) {
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
@@ -303,6 +318,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroDump(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		$args = $writer->formatArgs();
 		return $writer->write(
 			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()'). ', %var)',
@@ -316,6 +334,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroDebugbreak(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		return $writer->write(($node->args == NULL ? '' : 'if (!(%node.args)); else')
 			. 'if (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break()');
 	}
@@ -327,6 +348,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroVar(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		if ($node->args === '' && $node->parentNode && $node->parentNode->name === 'switch') {
 			return '} else {';
 		}
@@ -384,6 +408,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroContentType(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		if (strpos($node->args, 'xhtml') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_XHTML);
 
@@ -418,6 +445,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroStatus(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed here.');
+		}
 		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
 			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var)', (int) $node->args
 		);
