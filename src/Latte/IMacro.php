@@ -15,6 +15,8 @@ interface IMacro
 {
 	const
 		AUTO_CLOSE = 64,
+		IMPLICIT_TAG = 256,
+		IMPLICIT_INNER = 128,
 		DEFAULT_FLAGS = 0;
 
 	/**
