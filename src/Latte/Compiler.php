@@ -567,20 +567,22 @@ class Compiler
 			throw new CompileException("Unknown macro {{$name}}$hint" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket.)' : ''));
 		}
 
-		if ($this->context[1] === self::CONTENT_URL) {
-			$modifiers = preg_replace('#\|nosafeurl\s?(?=\||\z)#i', '', $modifiers, -1, $found);
-			if (!$found && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
-				$modifiers .= '|safeurl';
+		if (strpbrk($name, '=~%^&_')) {
+			if ($this->context[1] === self::CONTENT_URL) {
+				$modifiers = preg_replace('#\|nosafeurl\s?(?=\||\z)#i', '', $modifiers, -1, $found);
+				if (!$found && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
+					$modifiers .= '|safeurl';
+				}
 			}
-		}
 
-		$modifiers = preg_replace('#\|noescape\s?(?=\||\z)#i', '', $modifiers, -1, $found);
-		if (!$found && strpbrk($name, '=~%^&_')) {
-			$modifiers .= '|escape';
-		}
+			$modifiers = preg_replace('#\|noescape\s?(?=\||\z)#i', '', $modifiers, -1, $found);
+			if (!$found) {
+				$modifiers .= '|escape';
+			}
 
-		if (!$found && $inScript && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
-			throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
+			if (!$found && $inScript && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
+				throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
+			}
 		}
 
 		foreach (array_reverse($this->macros[$name]) as $macro) {
