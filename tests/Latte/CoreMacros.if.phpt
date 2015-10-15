@@ -24,3 +24,11 @@ Assert::error(function () use ($compiler) {
 Assert::error(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var', '|filter');
 }, E_USER_WARNING, 'Modifiers are not allowed here.');
+
+Assert::error(function () use ($compiler) {
+	$compiler->expandMacro('else', 'if args');
+}, E_USER_WARNING, 'Did you mean {elseif}?');
+
+Assert::error(function () use ($compiler) {
+	$compiler->expandMacro('else', 'args');
+}, E_USER_WARNING, 'Arguments are not allowed here.');

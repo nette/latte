@@ -144,6 +144,10 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->modifiers) {
 			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+		} elseif (substr($node->args, 0, 2) === 'if') {
+			trigger_error('Did you mean {elseif}?', E_USER_WARNING);
+		} elseif ($node->args) {
+			trigger_error('Arguments are not allowed here.', E_USER_WARNING);
 		}
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
