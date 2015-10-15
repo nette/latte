@@ -179,3 +179,57 @@ test(function () use ($set) {
 		$set->nodeOpened(new MacroNode($set, 'modifyError3', NULL, '|filter'));
 	}, Latte\CompileException::class, 'Modifiers are not allowed here.');
 });
+
+
+test(function () use ($set) {
+	$set->addMacro('paramsOk1', function () {});
+	$set->nodeOpened(new MacroNode($set, 'paramsOk1', 'params'));
+
+	$set->addMacro('paramsOk2', NULL, function () {});
+	$set->nodeOpened(new MacroNode($set, 'paramsOk2', 'params'));
+
+	$set->addMacro('paramsOk3', NULL, NULL, function () {});
+	$set->nodeOpened(new MacroNode($set, 'paramsOk3', 'params'));
+
+	$set->addMacro('paramsOk4', function () {}, '-');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk4', 'params'));
+
+	$set->addMacro('paramsOk5', '-', function () {});
+	$set->nodeOpened(new MacroNode($set, 'paramsOk5', 'params'));
+
+	$set->addMacro('paramsOk6', '-', '-', function () {});
+	$set->nodeOpened(new MacroNode($set, 'paramsOk6', 'params'));
+
+	$set->addMacro('paramsOk7', '%node');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk7', 'params'));
+
+	$set->addMacro('paramsOk8', NULL, '%node');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk8', 'params'));
+
+	$set->addMacro('paramsOk9', NULL, NULL, '%node');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk9', 'params'));
+
+	$set->addMacro('paramsOk10', '%node', '-');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk10', 'params'));
+
+	$set->addMacro('paramsOk11', '-', '%node');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk11', 'params'));
+
+	$set->addMacro('paramsOk12', '-', '-', '%node');
+	$set->nodeOpened(new MacroNode($set, 'paramsOk12', 'params'));
+
+	Assert::exception(function () use ($set) {
+		$set->addMacro('paramsError1', '-');
+		$set->nodeOpened(new MacroNode($set, 'paramsError1', 'params'));
+	}, Latte\CompileException::class, 'Arguments are not allowed here.');
+
+	Assert::exception(function () use ($set) {
+		$set->addMacro('paramsError2', NULL, '-');
+		$set->nodeOpened(new MacroNode($set, 'paramsError2', 'params'));
+	}, Latte\CompileException::class, 'Arguments are not allowed here.');
+
+	Assert::exception(function () use ($set) {
+		$set->addMacro('paramsError3', NULL, NULL, '-');
+		$set->nodeOpened(new MacroNode($set, 'paramsError3', 'params'));
+	}, Latte\CompileException::class, 'Arguments are not allowed here.');
+});
