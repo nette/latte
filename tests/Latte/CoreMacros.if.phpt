@@ -24,3 +24,11 @@ Assert::exception(function () use ($compiler) {
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var', '|filter');
 }, Latte\CompileException::class, 'Modifiers are not allowed here.');
+
+Assert::exception(function () use ($compiler) {
+	$compiler->expandMacro('else', 'if args');
+}, Latte\CompileException::class, 'Did you mean {elseif}?');
+
+Assert::exception(function () use ($compiler) {
+	$compiler->expandMacro('else', 'args');
+}, Latte\CompileException::class, 'Arguments are not allowed here.');

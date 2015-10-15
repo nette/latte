@@ -144,6 +144,10 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed here.');
+		} elseif (substr($node->args, 0, 2) === 'if') {
+			throw new CompileException('Did you mean {elseif}?');
+		} elseif ($node->args) {
+			throw new CompileException('Arguments are not allowed here.');
 		}
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
