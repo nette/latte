@@ -146,6 +146,24 @@ test(function () use ($set) {
 	$set->addMacro('modifyOk6', '-', '-', function () {});
 	$set->nodeOpened(new MacroNode($set, 'modifyOk6', NULL, '|filter'));
 
+	$set->addMacro('modifyOk7', '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk7', NULL, '|filter'));
+
+	$set->addMacro('modifyOk8', NULL, '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk8', NULL, '|filter'));
+
+	$set->addMacro('modifyOk9', NULL, NULL, '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk9', NULL, '|filter'));
+
+	$set->addMacro('modifyOk10', '%modify', '-');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk10', NULL, '|filter'));
+
+	$set->addMacro('modifyOk11', '-', '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk11', NULL, '|filter'));
+
+	$set->addMacro('modifyOk12', '-', '-', '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk12', NULL, '|filter'));
+
 	Assert::exception(function () use ($set) {
 		$set->addMacro('modifyError1', '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError1', NULL, '|filter'));
