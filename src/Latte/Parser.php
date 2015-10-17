@@ -18,6 +18,9 @@ class Parser
 	/** @internal regular expression for single & double quoted PHP string */
 	const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*\'|"(?:\\\\.|[^"\\\\])*"';
 
+	/** @internal regular expression for heredoc and nowdoc */
+	const RE_HEREDOC = '(?:<<<\s*(\'|"|)?([A-Z_]+[A-Z0-9_]*)(\g{-3})(?=\n).*?(\g{-3});?(?=\n))';
+
 	/** @internal special HTML attribute prefix */
 	const N_PREFIX = 'n:';
 
@@ -172,7 +175,7 @@ class Parser
 		$matches = $this->match('~
 			(?P<end>\ ?/?>)([ \t]*\n)?|  ##  end of HTML tag
 			(?P<macro>' . $this->delimiters[0] . ')|
-			\s*(?P<attr>[^\s/>={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))? ## beginning of HTML attribute
+			\s*(?P<attr>[^\s/><={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))? ## beginning of HTML attribute
 		~xsi');
 
 		if (!empty($matches['end'])) { // end of HTML tag />
@@ -259,8 +262,8 @@ class Parser
 		$matches = $this->match('~
 			(?P<comment>\\*.*?\\*' . $this->delimiters[1] . '\n{0,2})|
 			(?P<macro>(?:
-				' . self::RE_STRING . '|
-				\{(?:' . self::RE_STRING . '|[^\'"{}])*+\}|
+				' . self::RE_STRING . '|'. self::RE_HEREDOC . '|
+				\{(?:' . self::RE_STRING . '|' . self::RE_HEREDOC . '|[^\'"{}])*+\}|
 				[^\'"{}]
 			)+?)
 			' . $this->delimiters[1] . '
