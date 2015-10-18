@@ -400,6 +400,7 @@ class CoreMacros extends MacroSet
 	/**
 	 * {= ...}
 	 * {? ...}
+	 * {php ...}
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
