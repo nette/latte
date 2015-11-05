@@ -194,14 +194,13 @@ class Engine
 		}
 
 		if (!is_file($file) || $this->isExpired($file, $name)) {
-			$code = $this->compile($name);
+			$code = $this->loadTemplate($name);
 			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
 				@unlink("$file.tmp"); // @ - file may not exist
 				throw new \RuntimeException("Unable to create '$file'.");
 			}
-		}
 
-		if ((include $file) === FALSE) {
+		} elseif ((include $file) === FALSE) {
 			throw new \RuntimeException("Unable to load '$file'.");
 		}
 
@@ -210,12 +209,19 @@ class Engine
 
 
 	/**
-	 * @return void
+	 * @return string
 	 */
 	private function loadTemplate($name)
 	{
 		$code = $this->compile($name);
-		eval('?>' . $code);
+		try {
+			if (@eval('?>' . $code) === FALSE) { // @ is escalated to exception
+				throw (new CompileException('Error in template: ' . error_get_last()['message']))->setSource(NULL, NULL, $name);
+			}
+		} catch (\ParseError $e) {
+			throw (new CompileException('Error in template: ' . $e->getMessage(), 0, $e))->setSource(NULL, NULL, $name);
+		}
+		return $code;
 	}
 
 
