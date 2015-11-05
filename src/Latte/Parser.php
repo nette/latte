@@ -14,7 +14,7 @@ namespace Latte;
 class Parser extends Object
 {
 	/** @internal regular expression for single & double quoted PHP string */
-	const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*\'|"(?:\\\\.|[^"\\\\])*"';
+	const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
 
 	/** @internal special HTML attribute prefix */
 	const N_PREFIX = 'n:';
@@ -258,9 +258,9 @@ class Parser extends Object
 	{
 		$matches = $this->match('~
 			(?P<comment>\\*.*?\\*' . $this->delimiters[1] . '\n{0,2})|
-			(?P<macro>(?:
+			(?P<macro>(?>
 				' . self::RE_STRING . '|
-				\{(?:' . self::RE_STRING . '|[^\'"{}])*+\}|
+				\{(?>' . self::RE_STRING . '|[^\'"{}])*+\}|
 				[^\'"{}]
 			)+?)
 			' . $this->delimiters[1] . '
@@ -389,7 +389,7 @@ class Parser extends Object
 				(?P<name>\?|/?[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
 				(?P<noescape>!?)(?P<shortname>/?[=\~#%^&_]?)      ## !expression, !=expression, ...
 			)(?P<args>.*?)
-			(?P<modifiers>\|[a-z](?:' . self::RE_STRING . '|[^\'"])*(?<!/))?
+			(?P<modifiers>\|[a-z](?:' . self::RE_STRING . '|[^\'"/]|/(?=.))*+)?
 			(?P<empty>/?\z)
 		()\z~isx', $tag, $match)) {
 			if (preg_last_error()) {
