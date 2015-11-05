@@ -89,7 +89,11 @@ class Engine
 	{
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, FALSE)) {
-			$this->loadCacheFile($name);
+			if ($this->tempDirectory) {
+				$this->loadTemplateFromCache($name);
+			} else {
+				$this->loadTemplate($name);
+			}
 		}
 
 		$template = new $class($params, $this, $name);
@@ -164,7 +168,7 @@ class Engine
 
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, FALSE)) {
-			$this->loadCacheFile($name);
+			$this->loadTemplateFromCache($name);
 		}
 	}
 
@@ -172,13 +176,8 @@ class Engine
 	/**
 	 * @return void
 	 */
-	private function loadCacheFile($name)
+	private function loadTemplateFromCache($name)
 	{
-		if (!$this->tempDirectory) {
-			eval('?>' . $this->compile($name));
-			return;
-		}
-
 		$file = $this->getCacheFile($name);
 
 		if (!$this->isExpired($file, $name) && (@include $file) !== FALSE) { // @ - file may not exist
@@ -207,6 +206,16 @@ class Engine
 		}
 
 		flock($handle, LOCK_UN);
+	}
+
+
+	/**
+	 * @return void
+	 */
+	private function loadTemplate($name)
+	{
+		$code = $this->compile($name);
+		eval('?>' . $code);
 	}
 
 
