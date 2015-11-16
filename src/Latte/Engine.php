@@ -216,10 +216,11 @@ class Engine
 		$code = $this->compile($name);
 		try {
 			if (@eval('?>' . $code) === FALSE) { // @ is escalated to exception
-				throw (new CompileException('Error in template: ' . error_get_last()['message']))->setSource(NULL, NULL, $name);
+				$error = error_get_last();
+				throw (new CompileException('Error in template: ' . $error['message']))->setSource($code, $error['line'], $name . ' (compiled)');
 			}
 		} catch (\ParseError $e) {
-			throw (new CompileException('Error in template: ' . $e->getMessage(), 0, $e))->setSource(NULL, NULL, $name);
+			throw (new CompileException('Error in template: ' . $e->getMessage(), 0, $e))->setSource($code, $e->getLine(), $name . ' (compiled)');
 		}
 		return $code;
 	}
