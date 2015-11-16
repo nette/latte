@@ -216,11 +216,11 @@ class Engine extends Object
 			if (@eval('?>' . $code) === FALSE) { // @ is escalated to exception
 				$error = error_get_last();
 				$e = new CompileException('Error in template: ' . $error['message']);
-				throw $e->setSource(NULL, NULL, $name);
+				throw $e->setSource($code, $error['line'], $name . ' (compiled)');
 			}
 		} catch (\ParseError $e) {
 			$e = new CompileException('Error in template: ' . $e->getMessage(), 0, $e);
-			throw $e->setSource(NULL, NULL, $name);
+			throw $e->setSource($code, $e->getLine(), $name . ' (compiled)');
 		}
 		return $code;
 	}
