@@ -11,7 +11,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <ul>
-<?php $iterations = 0; foreach ($people as $person) { ?>
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
 	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->upper($person), ENT_NOQUOTES) ?></li>
 <?php $iterations++; } ?>
 {* comment latte *}

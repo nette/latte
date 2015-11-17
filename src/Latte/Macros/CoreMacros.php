@@ -268,12 +268,18 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers && $node->modifiers !== '|noiterator') {
 			throw new CompileException('Only modifier |noiterator is allowed here.');
 		}
+		$node->openingCode = '<?php $iterations = 0; ';
+		$args = $writer->formatArgs();
+		preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
+		for ($i = 1; $i < count($m); $i++) {
+			$node->openingCode .= "if (isset(\$template->{$m[$i]})) trigger_error('Variable \${$m[$i]} overwritten in foreach.', E_USER_NOTICE); ";
+		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
-			$node->openingCode = '<?php $iterations = 0; foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
-			. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $writer->formatArgs(), 1) . ') { ?>';
+			$node->openingCode .= 'foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
+				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>';
 		} else {
-			$node->openingCode = '<?php $iterations = 0; foreach (' . $writer->formatArgs() . ') { ?>';
+			$node->openingCode .= 'foreach (' . $args . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } ?>';
 		}
 	}

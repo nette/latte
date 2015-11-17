@@ -57,7 +57,8 @@ var html = <?php echo Latte\Runtime\Filters::escapeHtmlComment($el) ?>;
 
 
 <ul>
-<?php $iterations = 0; foreach ($people as $person) { ?>	<li><?php echo Latte\Runtime\Filters::escapeXml($person) ?></li>
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeXml($person) ?></li>
 <?php $iterations++; } ?>
 </ul>
 

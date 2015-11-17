@@ -17,7 +17,7 @@ if (!function_exists($_b->blocks['title'][] = '_%[a-z0-9]+%_title')) { function 
 //
 if (!function_exists($_b->blocks['content'][] = '_%[a-z0-9]+%_content')) { function _%[a-z0-9]+%_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	<ul>
-<?php $iterations = 0; foreach ($people as $person) { ?>
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
 		<li><?php echo Latte\Runtime\Filters::escapeHtml($person, ENT_NOQUOTES) ?></li>
 <?php $iterations++; } ?>
 	</ul>
