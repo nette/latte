@@ -129,7 +129,7 @@ class Parser
 			$this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
 			$this->setContext(self::CONTEXT_HTML_COMMENT);
 
-		} elseif (!empty($matches['tag'])) { // <tag or </tag
+		} elseif (isset($matches['tag']) && $matches['tag'] !== '') { // <tag or </tag
 			$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
 			$token->name = $matches['tag'];
 			$token->closing = (bool) $matches['closing'];
