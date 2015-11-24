@@ -110,6 +110,9 @@ class Engine
 		ob_start();
 		try {
 			$this->render($name, $params);
+		} catch (\Throwable $e) {
+			ob_end_clean();
+			throw $e;
 		} catch (\Exception $e) {
 			ob_end_clean();
 			throw $e;
