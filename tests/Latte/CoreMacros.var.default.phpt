@@ -29,7 +29,7 @@ test(function () use ($compiler) { // {var ... }
 
 	Assert::error(function () use ($compiler) {
 		$compiler->expandMacro('var', '$var => 123', '|filter');
-	}, E_USER_WARNING, 'Modifiers are not allowed here.');
+	}, E_USER_WARNING, 'Modifiers are not allowed in {var}');
 });
 
 
@@ -46,5 +46,5 @@ test(function () use ($compiler) { // {default ...}
 
 	Assert::error(function () use ($compiler) {
 		$compiler->expandMacro('default', '$var => 123', '|filter');
-	}, E_USER_WARNING, 'Modifiers are not allowed here.');
+	}, E_USER_WARNING, 'Modifiers are not allowed in {default}');
 });

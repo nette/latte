@@ -106,7 +106,7 @@ class CoreMacros extends MacroSet
 	public function macroIf(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		if ($node->data->capture = ($node->args === '')) {
 			return 'ob_start()';
@@ -143,11 +143,10 @@ class CoreMacros extends MacroSet
 	public function macroElse(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
-		} elseif (substr($node->args, 0, 2) === 'if') {
-			trigger_error('Did you mean {elseif}?', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		} elseif ($node->args) {
-			trigger_error('Arguments are not allowed here.', E_USER_WARNING);
+			$hint = substr($node->args, 0, 2) === 'if' ? ', did you mean {elseif}?' : '';
+			trigger_error("Arguments are not allowed in {{$node->name}}$hint", E_USER_WARNING);
 		}
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
@@ -230,7 +229,7 @@ class CoreMacros extends MacroSet
 	public function macroUse(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		call_user_func(Latte\Helpers::checkCallback(array($node->tokenizer->fetchWord(), 'install')), $this->getCompiler())
 			->initialize();
@@ -286,7 +285,7 @@ class CoreMacros extends MacroSet
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		$cmd = str_replace('If', '', $node->name);
 		if ($node->parentNode && $node->parentNode->prefix === $node::PREFIX_NONE) {
@@ -323,7 +322,7 @@ class CoreMacros extends MacroSet
 	public function macroDump(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		$args = $writer->formatArgs();
 		return $writer->write(
@@ -339,7 +338,7 @@ class CoreMacros extends MacroSet
 	public function macroDebugbreak(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		return $writer->write(($node->args == NULL ? '' : 'if (!(%node.args)); else')
 			. 'if (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break()');
@@ -353,7 +352,7 @@ class CoreMacros extends MacroSet
 	public function macroVar(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		if ($node->args === '' && $node->parentNode && $node->parentNode->name === 'switch') {
 			return '} else {';
@@ -413,7 +412,7 @@ class CoreMacros extends MacroSet
 	public function macroContentType(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		if (strpos($node->args, 'xhtml') !== FALSE) {
 			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_XHTML);
@@ -450,7 +449,7 @@ class CoreMacros extends MacroSet
 	public function macroStatus(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			trigger_error('Modifiers are not allowed here.', E_USER_WARNING);
+			trigger_error("Modifiers are not allowed in {{$node->name}}", E_USER_WARNING);
 		}
 		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
 			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var)', (int) $node->args

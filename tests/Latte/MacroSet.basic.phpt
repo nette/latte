@@ -167,17 +167,17 @@ test(function () use ($set) {
 	Assert::error(function () use ($set) {
 		$set->addMacro('modifyError1', '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError1', NULL, '|filter'));
-	}, E_USER_WARNING, 'Modifiers are not allowed here.');
+	}, E_USER_WARNING, 'Modifiers are not allowed in {modifyError1}');
 
 	Assert::error(function () use ($set) {
 		$set->addMacro('modifyError2', NULL, '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError2', NULL, '|filter'));
-	}, E_USER_WARNING, 'Modifiers are not allowed here.');
+	}, E_USER_WARNING, 'Modifiers are not allowed in {modifyError2}');
 
 	Assert::error(function () use ($set) {
 		$set->addMacro('modifyError3', NULL, NULL, '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError3', NULL, '|filter'));
-	}, E_USER_WARNING, 'Modifiers are not allowed here.');
+	}, E_USER_WARNING, 'Modifiers are not allowed in {modifyError3}');
 });
 
 
@@ -221,15 +221,15 @@ test(function () use ($set) {
 	Assert::error(function () use ($set) {
 		$set->addMacro('paramsError1', '-');
 		$set->nodeOpened(new MacroNode($set, 'paramsError1', 'params'));
-	}, E_USER_WARNING, 'Arguments are not allowed here.');
+	}, E_USER_WARNING, 'Arguments are not allowed in {paramsError1}');
 
 	Assert::error(function () use ($set) {
 		$set->addMacro('paramsError2', NULL, '-');
 		$set->nodeOpened(new MacroNode($set, 'paramsError2', 'params'));
-	}, E_USER_WARNING, 'Arguments are not allowed here.');
+	}, E_USER_WARNING, 'Arguments are not allowed in {paramsError2}');
 
 	Assert::error(function () use ($set) {
 		$set->addMacro('paramsError3', NULL, NULL, '-');
 		$set->nodeOpened(new MacroNode($set, 'paramsError3', 'params'));
-	}, E_USER_WARNING, 'Arguments are not allowed here.');
+	}, E_USER_WARNING, 'Arguments are not allowed in {paramsError3}');
 });

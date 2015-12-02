@@ -19,16 +19,16 @@ Assert::same('<?php if (isset($item->var["test"])) { ?>',  $compiler->expandMacr
 
 Assert::error(function () use ($compiler) {
 	$compiler->expandMacro('if', '$var', '|filter');
-}, E_USER_WARNING, 'Modifiers are not allowed here.');
+}, E_USER_WARNING, 'Modifiers are not allowed in {if}');
 
 Assert::error(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var', '|filter');
-}, E_USER_WARNING, 'Modifiers are not allowed here.');
+}, E_USER_WARNING, 'Modifiers are not allowed in {ifset}');
 
 Assert::error(function () use ($compiler) {
 	$compiler->expandMacro('else', 'if args');
-}, E_USER_WARNING, 'Did you mean {elseif}?');
+}, E_USER_WARNING, 'Arguments are not allowed in {else}, did you mean {elseif}?');
 
 Assert::error(function () use ($compiler) {
 	$compiler->expandMacro('else', 'args');
-}, E_USER_WARNING, 'Arguments are not allowed here.');
+}, E_USER_WARNING, 'Arguments are not allowed in {else}');
