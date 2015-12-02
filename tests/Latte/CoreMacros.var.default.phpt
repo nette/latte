@@ -29,7 +29,7 @@ test(function () use ($compiler) { // {var ... }
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('var', '$var => 123', '|filter');
-	}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+	}, Latte\CompileException::class, 'Modifiers are not allowed in {var}');
 });
 
 
@@ -46,5 +46,5 @@ test(function () use ($compiler) { // {default ...}
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('default', '$var => 123', '|filter');
-	}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+	}, Latte\CompileException::class, 'Modifiers are not allowed in {default}');
 });

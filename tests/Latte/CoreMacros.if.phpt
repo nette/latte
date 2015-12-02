@@ -19,16 +19,16 @@ Assert::same('<?php if (isset($item->var["test"])) { ?>',  $compiler->expandMacr
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('if', '$var', '|filter');
-}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+}, Latte\CompileException::class, 'Modifiers are not allowed in {if}');
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var', '|filter');
-}, Latte\CompileException::class, 'Modifiers are not allowed here.');
+}, Latte\CompileException::class, 'Modifiers are not allowed in {ifset}');
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('else', 'if args');
-}, Latte\CompileException::class, 'Did you mean {elseif}?');
+}, Latte\CompileException::class, 'Arguments are not allowed in {else}, did you mean {elseif}?');
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('else', 'args');
-}, Latte\CompileException::class, 'Arguments are not allowed here.');
+}, Latte\CompileException::class, 'Arguments are not allowed in {else}');
