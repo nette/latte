@@ -53,3 +53,4 @@ Assert::same(array('=', '-10', '', FALSE), $parser->parseMacroTag('-10'));
 
 Assert::same(array('=', '$var', "|mod:'\\':a:b:c':arg2 |mod2:|mod3", FALSE), $parser->parseMacroTag("\$var |mod:'\\':a:b:c':arg2 |mod2:|mod3"));
 Assert::same(array('=', '$var', '|mod|mod2|noescape', FALSE), $parser->parseMacroTag('$var|mod|mod2|noescape'));
+Assert::same(array('=', "'a|b\\'c'", '', FALSE), $parser->parseMacroTag("'a|b\\'c'"));
