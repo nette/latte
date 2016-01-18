@@ -288,7 +288,7 @@ class BlockMacros extends MacroSet
 			}
 
 			if (empty($node->data->leave)) {
-				if ($node->name === 'snippetArea') {
+				if ($node->name === 'snippetArea' && empty($node->data->dynamic)) {
 					$node->content = "<?php \$_control->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$_control->snippetMode = FALSE; ?>";
 				}
 				if (!empty($node->data->dynamic)) {
