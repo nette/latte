@@ -27,7 +27,9 @@ class FileLoader implements Latte\ILoader
 			throw new \RuntimeException("Missing template file '$file'.");
 
 		} elseif ($this->isExpired($file, time())) {
-			touch($file);
+			if (@touch($file) === FALSE) {
+				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
+			}
 		}
 		return file_get_contents($file);
 	}
