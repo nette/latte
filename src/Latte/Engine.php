@@ -222,8 +222,8 @@ class Engine extends Object
 				throw $e->setSource($code, $error['line'], $name . ' (compiled)');
 			}
 		} catch (\ParseError $e) {
-			$e = new CompileException('Error in template: ' . $e->getMessage(), 0, $e);
-			throw $e->setSource($code, $e->getLine(), $name . ' (compiled)');
+			$compileException = new CompileException('Error in template: ' . $e->getMessage(), 0, $e);
+			throw $compileException->setSource($code, $e->getLine(), $name . ' (compiled)');
 		}
 		return $code;
 	}
