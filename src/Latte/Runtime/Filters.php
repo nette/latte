@@ -366,8 +366,8 @@ class Filters
 	 */
 	public static function length($s)
 	{
-		return is_string($s) ? 
-			strlen(utf8_decode($s)) : // fastest way
+		return is_string($s) ?
+			strlen(utf8_decode($s)): // fastest way
 			count($s);
 	}
 
