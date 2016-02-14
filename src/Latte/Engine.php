@@ -65,6 +65,7 @@ class Engine
 		'firstupper' => 'Latte\Runtime\Filters::firstUpper',
 		'implode' => 'implode',
 		'indent' => 'Latte\Runtime\Filters::indent',
+		'length' => 'Latte\Runtime\Filters::length',
 		'lower' => 'Latte\Runtime\Filters::lower',
 		'nl2br' => 'Latte\Runtime\Filters::nl2br',
 		'number' => 'number_format',
