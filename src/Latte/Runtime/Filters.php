@@ -364,9 +364,15 @@ class Filters
 	 * Returns UTF-8 string length.
 	 * @return int
 	 */
-	public static function length($s)
+	public static function length($val)
 	{
-		return strlen(utf8_decode($s)); // fastest way
+		if (is_array($val) || $val instanceof \Countable) {
+			return count($val);
+		} elseif ($val instanceof \Traversable) {
+			return iterator_count($val);
+		} else {
+			return strlen(utf8_decode($val)); // fastest way
+		}
 	}
 
 
