@@ -366,7 +366,13 @@ class Filters
 	 */
 	public static function length($s)
 	{
-		return strlen(utf8_decode($s)); // fastest way
+		if (is_array($s) || $s instanceof \Countable) {
+			return count($s);
+		} elseif ($s instanceof \Traversable) {
+			return iterator_count($s);
+		} else {
+			return strlen(utf8_decode($s)); // fastest way
+		}
 	}
 
 
