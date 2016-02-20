@@ -27,5 +27,5 @@ test(function () { // symbols
 
 
 test(function () { // expand
-	Assert::same("['item', \$list, ...\$list]",  formatArray('item, $list, (expand) $list'));
+	Assert::same('array_merge([\'item\', $list, ], $list, [])',  formatArray('item, $list, (expand) $list'));
 });

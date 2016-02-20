@@ -76,8 +76,8 @@ class PhpWriter
 				case 'args':
 					$code = $this->formatArgs(); break;
 				case 'array':
-					$code = $this->formatArgs();
-					$code = $cond && $code === '' ? '' : "[$code]"; break;
+					$code = $this->formatArray();
+					$code = $cond && $code === '[]' ? '' : $code; break;
 				case 'var':
 					$code = var_export($arg, TRUE); break;
 				case 'raw':
@@ -123,10 +123,16 @@ class PhpWriter
 	}
 
 
-	/** @deprecated */
+	/**
+	 * Formats macro arguments to PHP array. (It advances tokenizer to the end as a side effect.)
+	 * @return string
+	 */
 	public function formatArray(MacroTokens $tokens = NULL)
 	{
-		return '[' . $this->formatArgs($tokens) . ']';
+		$tokens = $this->preprocess($tokens);
+		$tokens = $this->expandFilter($tokens);
+		$tokens = $this->quoteFilter($tokens);
+		return $tokens->joinAll();
 	}
 
 
@@ -152,7 +158,6 @@ class PhpWriter
 		$tokens = $tokens === NULL ? $this->tokens : $tokens;
 		$tokens = $this->removeCommentsFilter($tokens);
 		$tokens = $this->shortTernaryFilter($tokens);
-		$tokens = $this->expandFilter($tokens);
 		return $tokens;
 	}
 
@@ -208,14 +213,24 @@ class PhpWriter
 	 */
 	public function expandFilter(MacroTokens $tokens)
 	{
-		$res = new MacroTokens;
+		$res = new MacroTokens('[');
+		$expand = NULL;
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('(expand)')) {
-				$tokens->nextAll(MacroTokens::T_WHITESPACE);
-				$res->append('...');
+			if ($tokens->isCurrent('(expand)') && $tokens->depth === 0) {
+				$expand = TRUE;
+				$res->append('],');
+			} elseif ($expand && $tokens->isCurrent(',') && !$tokens->depth) {
+				$expand = FALSE;
+				$res->append(', [');
 			} else {
 				$res->append($tokens->currentToken());
 			}
+		}
+
+		if ($expand === NULL) {
+			$res->append(']');
+		} else {
+			$res->prepend('array_merge(')->append($expand ? ', [])' : '])');
 		}
 		return $res;
 	}

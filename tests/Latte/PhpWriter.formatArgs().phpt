@@ -59,12 +59,6 @@ test(function () { // short ternary operators
 });
 
 
-test(function () { // variadics/expand operator
-	Assert::same("'item', \$list, ...\$list",  formatArgs('item, $list, ...$list'));
-	Assert::same("'item', \$list, ...\$list",  formatArgs('item, $list, (expand) $list'));
-});
-
-
 test(function () { // special
 	Assert::same('$var',  formatArgs('$var'));
 	Assert::same('$var => $var',  formatArgs('$var => $var'));
