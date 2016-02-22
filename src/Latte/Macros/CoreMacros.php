@@ -8,6 +8,7 @@
 namespace Latte\Macros;
 
 use Latte;
+use Latte\Engine;
 use Latte\CompileException;
 use Latte\MacroNode;
 use Latte\PhpWriter;
@@ -26,6 +27,7 @@ use Latte\PhpWriter;
  * - {_expression} echo translation with escaping
  * - {attr ?} HTML element attributes
  * - {capture ?} ... {/capture} capture block to parameter
+ * - {spaceless} ... {/spaceless} compress whitespaces
  * - {var var => value} set template parameter
  * - {default var => value} set default template parameter
  * - {dump $var}
@@ -73,6 +75,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('?', [$me, 'macroExpr']);
 
 		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
+		$me->addMacro('spaceless', [$me, 'macroSpaceless'], [$me, 'macroSpaceless']);
 		$me->addMacro('include', [$me, 'macroInclude']);
 		$me->addMacro('use', [$me, 'macroUse']);
 		$me->addMacro('contentType', [$me, 'macroContentType']);
@@ -247,11 +250,34 @@ class CoreMacros extends MacroSet
 
 
 	/**
+	 * {spaceless} ... {/spaceless}
+	 */
+	public function macroSpaceless(MacroNode $node, PhpWriter $writer)
+	{
+		if (!$node->closing) {
+			return;
+		} elseif ($node->prefix) { // preserve trailing whitespaces
+			preg_match('#^(\s*)(.*?)(\s*)\z#s', $node->content, $parts);
+			$node->content = $parts[2];
+		}
+
+		$node->content = preg_replace('#[ \t\r\n]+#', ' ', $node->content);
+
+		if (in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
+			$node->content = preg_replace('#(?<=>) | (?=<)#', '', $node->content);
+			if ($node->prefix) {
+				$node->content = $parts[1] . $node->content . $parts[3];
+			}
+		}
+	}
+
+
+	/**
 	 * {/capture}
 	 */
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer)
 	{
-		$body = in_array($node->context[0], [Latte\Engine::CONTENT_HTML, Latte\Engine::CONTENT_XHTML], TRUE)
+		$body = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)
 			? "ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()"
 			: 'ob_get_clean()';
 		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body)", $node->context[0], $node->data->variable);
