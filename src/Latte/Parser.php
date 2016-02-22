@@ -78,23 +78,25 @@ class Parser
 	 */
 	public function parse($input)
 	{
-		$this->offset = 0;
-
 		if (substr($input, 0, 3) === "\xEF\xBB\xBF") { // BOM
 			$input = substr($input, 3);
 		}
+
+		$this->input = $input = str_replace("\r\n", "\n", $input);
+		$this->offset = 0;
+		$this->output = [];
+
 		if (!preg_match('##u', $input)) {
+			preg_match('#(?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})*+#A', $input, $m);
+			$this->offset = strlen($m[0]) + 1;
 			throw new \InvalidArgumentException('Template is not valid UTF-8 stream.');
 		}
-		$input = str_replace("\r\n", "\n", $input);
-		$this->input = $input;
-		$this->output = [];
-		$tokenCount = 0;
 
 		$this->setSyntax($this->defaultSyntax);
 		$this->setContext(self::CONTEXT_HTML_TEXT);
 		$this->lastHtmlTag = $this->syntaxEndTag = NULL;
 
+		$tokenCount = 0;
 		while ($this->offset < strlen($input)) {
 			if ($this->{'context' . $this->context[0]}() === FALSE) {
 				break;
@@ -424,7 +426,7 @@ class Parser
 	{
 		return $this->offset
 			? substr_count(substr($this->input, 0, $this->offset - 1), "\n") + 1
-			: 0;
+			: 1;
 	}
 
 
