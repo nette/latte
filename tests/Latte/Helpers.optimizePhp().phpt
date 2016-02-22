@@ -18,3 +18,7 @@ Assert::match($expected, Helpers::optimizePhp($input));
 Assert::match('<<?php ?>?xml version="1.0" ?>', Helpers::optimizePhp('<?xml version="1.0" ?>'));
 Assert::match('<<?php ?>?xml version="1.0" ?>', Helpers::optimizePhp('<?php ?><?xml version="1.0" ?>'));
 Assert::match('<?php echo "<?xml" ;', Helpers::optimizePhp('<?php echo "<?xml" ?>'));
+Assert::match('', Helpers::optimizePhp('<?php ?>'));
+Assert::match(' <?php', Helpers::optimizePhp('<?php ?> <?php'));
+Assert::match('<<?php ?>? 123 ?>', Helpers::optimizePhp('<<?php ?>? 123 ?>'));
+Assert::match('<?<?php ?> 123 ?>', Helpers::optimizePhp('<?<?php ?> 123 ?>'));
