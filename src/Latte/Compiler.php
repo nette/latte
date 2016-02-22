@@ -387,7 +387,14 @@ class Compiler
 
 	private function escape($s)
 	{
-		return str_replace('<?xml', '<<?php ?>?xml', $s);
+		return preg_replace_callback('#<(\z|\?xml|\?)#', function ($m) {
+			if ($m[1] === '?') {
+				trigger_error('Inline <?php ... ?> is deprecated, use {php ... } on line ' . $this->getLine(), E_USER_DEPRECATED);
+				return '<?';
+			} else {
+				return '<<?php ?>' . $m[1];
+			}
+		}, $s);
 	}
 
 
