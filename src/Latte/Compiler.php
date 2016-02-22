@@ -222,7 +222,7 @@ class Compiler
 				$this->lastAttrValue = $token->text;
 			}
 		}
-		$this->output .= $token->text;
+		$this->output .= $this->escape($token->text);
 	}
 
 
@@ -348,7 +348,7 @@ class Compiler
 		}
 
 		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
-		$this->output .= $token->text;
+		$this->output .= $this->escape($token->text);
 
 		if (in_array($token->value, [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
 			$this->lastAttrValue = '';
@@ -382,6 +382,12 @@ class Compiler
 		if (!$isLeftmost) {
 			$this->output .= substr($token->text, strlen(rtrim($token->text, "\n")));
 		}
+	}
+
+
+	private function escape($s)
+	{
+		return str_replace('<?xml', '<<?php ?>?xml', $s);
 	}
 
 
