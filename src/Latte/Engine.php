@@ -105,7 +105,7 @@ class Engine extends Object
 	 */
 	public function renderToString($name, array $params = array())
 	{
-		ob_start();
+		ob_start(function () {});
 		try {
 			$this->render($name, $params);
 		} catch (\Throwable $e) {
