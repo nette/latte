@@ -21,7 +21,7 @@ if (!function_exists($_b->blocks['content'][] = '_%[a-z0-9]+%_content')) { funct
 
 $_l->extends = $ext; $_g->extended = TRUE;
 
-if ($_l->extends) { ob_start();}
+if ($_l->extends) { ob_start(function () {});}
 
 //
 // main template

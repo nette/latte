@@ -109,7 +109,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
 		if ($node->data->capture = ($node->args === '')) {
-			return 'ob_start()';
+			return 'ob_start(function () {})';
 		}
 		if ($node->prefix === $node::PREFIX_TAG) {
 			return $writer->write($node->htmlNode->closing ? 'if (array_pop($_l->ifs)) {' : 'if ($_l->ifs[] = (%node.args)) {');
@@ -128,9 +128,9 @@ class CoreMacros extends MacroSet
 				throw new CompileException('Missing condition in {if} macro.');
 			}
 			return $writer->write('if (%node.args) '
-				. (isset($node->data->else) ? '{ ob_end_clean(); ob_end_flush(); }' : 'ob_end_flush();')
+				. (isset($node->data->else) ? '{ ob_end_clean(); echo ob_get_clean(); }' : 'echo ob_get_clean();')
 				. ' else '
-				. (isset($node->data->else) ? '{ $_l->else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_l->else; }' : 'ob_end_clean();')
+				. (isset($node->data->else) ? '{ $_l->else = ob_get_clean(); ob_end_clean(); echo $_l->else; }' : 'ob_end_clean();')
 			);
 		}
 		return '}';
@@ -154,7 +154,7 @@ class CoreMacros extends MacroSet
 				throw new CompileException('Macro {if} supports only one {else}.');
 			}
 			$ifNode->data->else = TRUE;
-			return 'ob_start()';
+			return 'ob_start(function () {})';
 		}
 		return '} else {';
 	}
@@ -171,7 +171,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException("Unknown attribute n:{$node->prefix}-{$node->name}, use n:{$node->name} attribute.");
 		}
 
-		return $writer->write('ob_start()');
+		return $writer->write('ob_start(function () {})');
 	}
 
 
@@ -184,9 +184,9 @@ class CoreMacros extends MacroSet
 		$node->content = $parts[1]
 			. '<?php ob_start() ?>'
 			. $parts[2]
-			. '<?php $_l->ifcontent = ob_get_contents(); ob_end_flush() ?>'
+			. '<?php $_l->ifcontent = ob_get_flush() ?>'
 			. $parts[3];
-		return 'rtrim($_l->ifcontent) === "" ? ob_end_clean() : ob_end_flush()';
+		return 'if (rtrim($_l->ifcontent) === "") ob_end_clean(); else echo ob_get_clean()';
 	}
 
 
@@ -202,7 +202,7 @@ class CoreMacros extends MacroSet
 			return $writer->write('echo %modify($template->translate(%node.args))');
 
 		} else {
-			return 'ob_start()';
+			return 'ob_start(function () {})';
 		}
 	}
 
@@ -216,7 +216,7 @@ class CoreMacros extends MacroSet
 			$this->getCompiler()->getTemplateId());
 
 		if ($node->modifiers) {
-			return $writer->write('ob_start(); %raw; echo %modify(ob_get_clean())', $code);
+			return $writer->write('ob_start(function () {}); %raw; echo %modify(ob_get_clean())', $code);
 		} else {
 			return $code;
 		}
@@ -246,7 +246,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException("Invalid capture block variable '$variable'");
 		}
 		$node->data->variable = $variable;
-		return 'ob_start()';
+		return 'ob_start(function () {})';
 	}
 
 

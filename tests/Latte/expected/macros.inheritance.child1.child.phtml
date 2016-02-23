@@ -32,13 +32,13 @@ if (!function_exists($_b->blocks['content'][] = '_%[a-z0-9]+%_content')) { funct
 
 $_l->extends = "inheritance.parent.latte"; $_g->extended = TRUE;
 
-if ($_l->extends) { ob_start();}
+if ($_l->extends) { ob_start(function () {});}
 
 //
 // main template
 // ?>
 
-<?php ob_start(); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); echo rtrim(ob_get_clean()) ?>
+<?php ob_start(function () {}); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); echo rtrim(ob_get_clean()) ?>
 
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }

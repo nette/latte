@@ -41,7 +41,7 @@ if (!function_exists($_b->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { funct
 
 $_l->extends = "inheritance.parent.latte"; $_g->extended = TRUE;
 
-if ($_l->extends) { ob_start();}
+if ($_l->extends) { ob_start(function () {});}
 
 //
 // main template

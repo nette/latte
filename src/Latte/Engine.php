@@ -108,7 +108,7 @@ class Engine
 	 */
 	public function renderToString($name, array $params = [])
 	{
-		ob_start(NULL, 0, PHP_OUTPUT_HANDLER_REMOVABLE | PHP_OUTPUT_HANDLER_CLEANABLE);
+		ob_start(function () {});
 		try {
 			$this->render($name, $params);
 		} catch (\Throwable $e) {

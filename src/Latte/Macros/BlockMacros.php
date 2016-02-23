@@ -86,7 +86,7 @@ class BlockMacros extends MacroSet
 				. ($this->extends ? $this->extends : 'empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
 				. '; $_g->extended = TRUE;';
 
-			$prolog[] = 'if ($_l->extends) { ob_start();}';
+			$prolog[] = 'if ($_l->extends) { ob_start(function () {});}';
 			if (!$this->namedBlocks) {
 				$epilog[] = 'if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars());}';
 			}
@@ -127,7 +127,7 @@ class BlockMacros extends MacroSet
 		}
 
 		if ($node->modifiers) {
-			return $writer->write("ob_start(); $cmd; echo %modify(ob_get_clean())");
+			return $writer->write("ob_start(function () {}); $cmd; echo %modify(ob_get_clean())");
 		} else {
 			return $writer->write($cmd);
 		}
@@ -143,7 +143,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
 		return $writer->write(
-			'ob_start(); $_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); echo rtrim(ob_get_clean())',
+			'ob_start(function () {}); $_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); echo rtrim(ob_get_clean())',
 			$this->getCompiler()->getTemplateId()
 		);
 	}
@@ -191,7 +191,7 @@ class BlockMacros extends MacroSet
 			trigger_error('Shortcut {#block} is deprecated.', E_USER_DEPRECATED);
 
 		} elseif ($node->name === 'block' && $name === FALSE) { // anonymous block
-			return $node->modifiers === '' ? '' : 'ob_start()';
+			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
 		}
 
 		$node->data->name = $name = ltrim($name, '#');
@@ -247,7 +247,7 @@ class BlockMacros extends MacroSet
 
 		$include = 'call_user_func(reset($_b->blocks[%var]), $_b, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$template->getParameters()' : 'get_defined_vars()') . ')';
 		if ($node->modifiers) {
-			$include = "ob_start(); $include; echo %modify(ob_get_clean())";
+			$include = "ob_start(function () {}); $include; echo %modify(ob_get_clean())";
 		}
 
 		if ($node->name === 'snippet') {

@@ -16,8 +16,8 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 	<li>truncate: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($template->truncate($hello, "10 ")), ENT_NOQUOTES) ?></li>
 	<li>date: <?php echo Latte\Runtime\Filters::escapeHtml($template->date($date, '%d.%m.%Y %H:%M:%S'), ENT_NOQUOTES) ?></li>
 	<li>translated: <?php echo Latte\Runtime\Filters::escapeHtml($template->truncate($template->translate($hello), 3), ENT_NOQUOTES) ?></li>
-	<li>Translated HTML: <?php ob_start() ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
-	<li>Translated HTML: <?php ob_start() ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
 	<li>Translated HTML: <?php echo Latte\Runtime\Filters::escapeHtml($template->translate('ahoj|ahojahojahojahoj'), ENT_NOQUOTES) ?></li>
 	<li>spaces: <?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello , '' , "" , "$hello" ), ENT_NOQUOTES) ?></li>
 	<li>dynamic: <?php echo Latte\Runtime\Filters::escapeHtml($template->dynamic($hello), ENT_NOQUOTES) ?>
@@ -41,7 +41,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 
 
 
-<?php ob_start() ?>  <a   href="#"
+<?php ob_start(function () {}) ?>  <a   href="#"
 > test</a
 
 >
@@ -56,7 +56,7 @@ alert();
 
 
 
-<?php ob_start() ?>
+<?php ob_start(function () {}) ?>
 <ul>
 	<li>lower: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($hello), ENT_NOQUOTES) ?></li>
 </ul>
@@ -68,7 +68,7 @@ Captured: <?php echo Latte\Runtime\Filters::escapeHtml($capture, ENT_NOQUOTES) ?
 </p>
 
 
-<?php ob_start() ?>
+<?php ob_start(function () {}) ?>
 Hello
 <?php $capture = $template->upper(ob_get_clean()) ?>
 
@@ -80,8 +80,8 @@ Captured with modifier: <?php echo Latte\Runtime\Filters::escapeHtml($capture, E
 
 
 <p>
-Nested blocks: <?php ob_start() ?> Outer   <?php ob_start() ?> Inner Block <?php echo $template->upper(ob_get_clean()) ?>
-  Block <?php echo $template->truncate(ob_get_clean(), 20) ?>
+Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?>
+ Inner Block <?php echo $template->upper(ob_get_clean()) ?>  Block <?php echo $template->truncate(ob_get_clean(), 20) ?>
 
 </p>
 <?php

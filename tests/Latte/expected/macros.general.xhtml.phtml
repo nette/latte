@@ -39,7 +39,7 @@ if (!function_exists($_b->blocks['bl'][] = '_%[a-z0-9]+%_bl')) { function _%[a-z
 
 $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
 
-if ($_l->extends) { ob_start();}
+if ($_l->extends) { ob_start(function () {});}
 
 //
 // main template
@@ -261,11 +261,11 @@ bold<?php if (array_pop($_l->ifs)) { ?></b>
 <meta />
 <?php if (true) { } ?><meta />
 
-<?php ob_start() ?>TRUE<?php if (TRUE) ob_end_flush(); else ob_end_clean() ?>
+<?php ob_start(function () {}) ?>TRUE<?php if (TRUE) echo ob_get_clean(); else ob_end_clean() ?>
 
-<?php ob_start() ?>FALSE<?php if (FALSE) ob_end_flush(); else ob_end_clean() ?>
+<?php ob_start(function () {}) ?>FALSE<?php if (FALSE) echo ob_get_clean(); else ob_end_clean() ?>
 
-<?php ob_start() ?>TRUE<?php ob_start() ?>FALSE<?php if (TRUE) { ob_end_clean(); ob_end_flush(); } else { $_l->else = ob_get_contents(); ob_end_clean(); ob_end_clean(); echo $_l->else; } ?>
+<?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php if (TRUE) { ob_end_clean(); echo ob_get_clean(); } else { $_l->else = ob_get_clean(); ob_end_clean(); echo $_l->else; } ?>
 
 
 <?php $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) { ?>
