@@ -13,7 +13,7 @@ namespace Latte;
  */
 class Engine extends Object
 {
-	const VERSION = '2.3.9';
+	const VERSION = '2.3.10';
 
 	/** Content types */
 	const CONTENT_HTML = 'html',
@@ -222,8 +222,8 @@ class Engine extends Object
 				throw $e->setSource($code, $error['line'], $name . ' (compiled)');
 			}
 		} catch (\ParseError $e) {
-			$e = new CompileException('Error in template: ' . $e->getMessage(), 0, $e);
-			throw $e->setSource($code, $e->getLine(), $name . ' (compiled)');
+			$compileException = new CompileException('Error in template: ' . $e->getMessage(), 0, $e);
+			throw $compileException->setSource($code, $e->getLine(), $name . ' (compiled)');
 		}
 		return $code;
 	}
