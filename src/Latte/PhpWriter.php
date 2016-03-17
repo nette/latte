@@ -157,9 +157,26 @@ class PhpWriter
 	public function preprocess(MacroTokens $tokens = NULL)
 	{
 		$tokens = $tokens === NULL ? $this->tokens : $tokens;
+		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsFilter($tokens);
 		$tokens = $this->shortTernaryFilter($tokens);
 		return $tokens;
+	}
+
+
+	/**
+	 * @throws CompileException
+	 * @return void
+	 */
+	public function validateTokens(MacroTokens $tokens)
+	{
+		$pos = $tokens->position;
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent('?>')) {
+				throw new CompileException('Forbidden ?> inside macro');
+			}
+		}
+		$tokens->position = $pos;
 	}
 
 

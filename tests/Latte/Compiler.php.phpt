@@ -44,3 +44,8 @@ Assert::error(function () use ($latte) {
 Assert::error(function () use ($latte) {
 	$latte->compile('<div a="<?">');
 }, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
+
+
+Assert::exception(function () use ($latte) {
+	echo $latte->compile('{var ?> }');
+}, 'Latte\CompileException', 'Forbidden ?> inside macro');
