@@ -3,8 +3,9 @@
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/latte/latte.svg)](https://packagist.org/packages/latte/latte)
 [![Build Status](https://travis-ci.org/nette/latte.svg?branch=master)](https://travis-ci.org/nette/latte)
-[![Latest Stable Version](https://poser.pugx.org/nette/latte/v/stable)](https://github.com/nette/latte/releases)
+[![Latest Stable Version](https://poser.pugx.org/latte/latte/v/stable)](https://github.com/nette/latte/releases)
 [![License](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://github.com/nette/latte/blob/master/license.md)
+[![Join the chat at https://gitter.im/nette/latte](https://badges.gitter.im/nette/latte.svg)](https://gitter.im/nette/latte)
 
 Latte is a template engine for PHP which eases your work and
 ensures the output is protected against vulnerabilities, such as XSS.
