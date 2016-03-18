@@ -23,10 +23,10 @@ test(function () { // special
 	Assert::same('@',  formatModifiers('@', '|'));
 	Assert::exception(function () {
 		formatModifiers('@', ':');
-	}, Latte\CompileException::class, 'Modifier name must be alphanumeric string%a%');
+	}, 'Latte\CompileException', 'Modifier name must be alphanumeric string%a%');
 	Assert::exception(function () {
 		Assert::same('$template->mod(@, \'\\\\\', "a", "b", "c", "arg2")',  formatModifiers('@', "mod:'\\\\':a:b:c':arg2"));
-	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 15.');
+	}, 'Latte\CompileException', 'Unexpected %a% on line 1, column 15.');
 });
 
 

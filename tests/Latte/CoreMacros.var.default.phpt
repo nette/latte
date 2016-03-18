@@ -25,11 +25,11 @@ test(function () use ($compiler) { // {var ... }
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('var', '$var => "123', '');
-	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 9.');
+	}, 'Latte\CompileException', 'Unexpected %a% on line 1, column 9.');
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('var', '$var => 123', '|filter');
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {var}');
+	}, 'Latte\CompileException', 'Modifiers are not allowed in {var}');
 });
 
 
@@ -42,9 +42,9 @@ test(function () use ($compiler) { // {default ...}
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('default', '$temp->var1 = 123', '');
-	}, Latte\CompileException::class, "Unexpected '->' in {default \$temp->var1 = 123}");
+	}, 'Latte\CompileException', "Unexpected '->' in {default \$temp->var1 = 123}");
 
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('default', '$var => 123', '|filter');
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {default}');
+	}, 'Latte\CompileException', 'Modifiers are not allowed in {default}');
 });

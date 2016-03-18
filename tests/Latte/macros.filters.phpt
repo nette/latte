@@ -56,11 +56,11 @@ Assert::same('AA', $latte->invokeFilter('h2', ['aa']));
 Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', ['aa']));
 Assert::exception(function () use ($latte) {
 	$latte->invokeFilter('unknown', ['']);
-}, LogicException::class, "Filter 'unknown' is not defined.");
+}, 'LogicException', "Filter 'unknown' is not defined.");
 
 Assert::exception(function () use ($latte) {
 	$latte->invokeFilter('h3', ['']);
-}, LogicException::class, "Filter 'h3' is not defined, did you mean 'h1'?");
+}, 'LogicException', "Filter 'h3' is not defined, did you mean 'h1'?");
 
 
 $params['hello'] = 'Hello World';

@@ -51,9 +51,9 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<html>{ifcontent}');
-}, Latte\CompileException::class, 'Unknown macro {ifcontent}, use n:ifcontent attribute.');
+}, 'Latte\CompileException', 'Unknown macro {ifcontent}, use n:ifcontent attribute.');
 
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:inner-ifcontent>');
-}, Latte\CompileException::class, 'Unknown attribute n:inner-ifcontent, use n:ifcontent attribute.');
+}, 'Latte\CompileException', 'Unknown attribute n:inner-ifcontent, use n:ifcontent attribute.');

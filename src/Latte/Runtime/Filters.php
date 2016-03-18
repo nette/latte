@@ -100,7 +100,7 @@ class Filters
 
 		$json = json_encode($s, JSON_UNESCAPED_UNICODE);
 		if ($error = json_last_error()) {
-			throw new \RuntimeException(json_last_error_msg(), $error);
+			throw new \RuntimeException(PHP_VERSION_ID >= 50500 ? json_last_error_msg() : 'JSON encode error', $error);
 		}
 
 		return str_replace(["\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'], ['\u2028', '\u2029', ']]\x3E', '\x3C!'], $json);
@@ -172,7 +172,7 @@ class Filters
 
 	/**
 	 * Date/time formatting.
-	 * @param  string|int|\DateTimeInterface|\DateInterval
+	 * @param  string|int|\DateTime|\DateTimeInterface|\DateInterval
 	 * @param  string
 	 * @return string
 	 */
@@ -193,7 +193,7 @@ class Filters
 			$time = new \DateTime('@' . $time);
 			$time->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
-		} elseif (!$time instanceof \DateTimeInterface) {
+		} elseif (!$time instanceof \DateTime && !$time instanceof \DateTimeInterface) {
 			$time = new \DateTime($time);
 		}
 		return strpos($format, '%') === FALSE

@@ -36,7 +36,7 @@ test(function () { // strings
 	Assert::same("('hello')",  formatArgs('(hello)'));
 	Assert::exception(function () {
 		formatArgs("'\\\\'1, 2, symbol1, symbol2'");
-	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 27.');
+	}, 'Latte\CompileException', 'Unexpected %a% on line 1, column 27.');
 });
 
 

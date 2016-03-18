@@ -50,11 +50,11 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<script> "{$var}" </script>');
-}, Latte\CompileException::class, 'Do not place {$var} inside quotes.');
+}, 'Latte\CompileException', 'Do not place {$var} inside quotes.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile("<script> '{\$var}' </script>");
-}, Latte\CompileException::class, 'Do not place {$var} inside quotes.');
+}, 'Latte\CompileException', 'Do not place {$var} inside quotes.');
 
 Assert::match(
 	'<script type="TEXT/X-JAVASCRIPT">"<>"',

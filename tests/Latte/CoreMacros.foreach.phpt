@@ -48,4 +48,4 @@ Assert::same(
 
 Assert::exception(function () use ($compiler) {
 	expandMacro($compiler, '$array as $value', '|filter');
-}, Latte\CompileException::class, 'Only modifier |noiterator is allowed here.');
+}, 'Latte\CompileException', 'Only modifier |noiterator is allowed here.');

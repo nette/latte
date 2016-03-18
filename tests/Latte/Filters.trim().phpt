@@ -18,4 +18,4 @@ Assert::same('e',  Filters::trim("\xc5\x98e-", "\xc5\x98-")); // Ře-
 
 Assert::exception(function () {
 	Filters::trim("\xC2x\xA0");
-}, Latte\RegexpException::class, NULL);
+}, 'Latte\RegexpException', NULL);

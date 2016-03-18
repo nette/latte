@@ -14,11 +14,11 @@ Assert::exception(function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->render('{php * }');
-}, Latte\CompileException::class, "Error in template: syntax error, unexpected '*'");
+}, 'Latte\CompileException', "Error in template: syntax error, unexpected '*'");
 
 Assert::exception(function () {
 	$latte = new Latte\Engine;
 	$latte->setTempDirectory(TEMP_DIR);
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->render('{php * * }');
-}, Latte\CompileException::class, "Error in template: syntax error, unexpected '*'");
+}, 'Latte\CompileException', "Error in template: syntax error, unexpected '*'");
