@@ -38,7 +38,7 @@ if ($_l->extends) { ob_start(function () {});}
 // main template
 // ?>
 
-<?php ob_start(function () {}); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); echo rtrim(ob_get_clean()) ?>
+<?php ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean()) ?>
 
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
