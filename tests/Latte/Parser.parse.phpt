@@ -36,11 +36,17 @@ Assert::same([
 ], parse('<?xml encoding="{$enc}" ?>text'));
 
 Assert::same([
-	['text', '<?php $abc ?>text'],
+	['htmlTagBegin', '<?'],
+	['text', 'php $abc ?'],
+	['htmlTagEnd', '>'],
+	['text', 'text'],
 ], parse('<?php $abc ?>text'));
 
 Assert::same([
-	['text', '<?= $abc ?>text'],
+	['htmlTagBegin', '<?'],
+	['text', '= $abc ?'],
+	['htmlTagEnd', '>'],
+	['text', 'text'],
 ], parse('<?= $abc ?>text'));
 
 Assert::same([

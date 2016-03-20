@@ -128,7 +128,7 @@ class Parser
 	{
 		$matches = $this->match('~
 			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>[a-z][a-z0-9:]*)|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
-			<(?P<htmlcomment>!(?:--(?!>))?|\?(?!=|php))|     ##  begin of <!, <!--, <!DOCTYPE, <?, but not <?php and <?=
+			<(?P<htmlcomment>!(?:--(?!>))?|\?)|     ##  begin of <!, <!--, <!DOCTYPE, <?
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 

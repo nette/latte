@@ -333,8 +333,6 @@ class Compiler
 
 		} elseif ($token->text === '<?' || $token->text === '<!') {
 			$this->context = self::CONTEXT_HTML_BOGUS_COMMENT;
-			$this->output .= $token->text === '<?' ? '<<?php ?>?' : '<!'; // bypass error in escape()
-			return;
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
@@ -342,7 +340,7 @@ class Compiler
 			$this->context = self::CONTEXT_HTML_TAG;
 		}
 		$this->tagOffset = strlen($this->output);
-		$this->output .= $token->text;
+		$this->output .= $this->escape($token->text);
 	}
 
 
@@ -466,14 +464,7 @@ class Compiler
 
 	private function escape($s)
 	{
-		return preg_replace_callback('#<(\z|\?xml|\?)#', function ($m) {
-			if ($m[1] === '?') {
-				trigger_error('Inline <?php ... ?> is deprecated, use {php ... } on line ' . $this->getLine(), E_USER_DEPRECATED);
-				return '<?';
-			} else {
-				return '<<?php ?>' . $m[1];
-			}
-		}, $s);
+		return substr(str_replace('<?', '<<?php ?>?', $s . '?'), 0, -1);
 	}
 
 

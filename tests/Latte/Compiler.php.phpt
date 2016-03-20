@@ -17,36 +17,17 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::contains('a <<?php ?>? b', $latte->compile('a <{syntax off}? b'));
 
+Assert::contains('<<?php ?>?php ?>', $latte->compile('<?php ?>'));
 
-Assert::error(function () use ($latte) {
-	$latte->compile('<?php ?>');
-}, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
+Assert::contains('<<?php ?>? ?>', $latte->compile('<? ?>'));
 
+Assert::contains('<<?php ?>?= $a ?>', $latte->compile('<?= $a ?>'));
 
-Assert::error(function () use ($latte) {
-	$latte->compile('<?= ?>');
-}, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
+Assert::contains('<!-- <<?php ?>? -->', $latte->compile('<!-- <? -->'));
 
+Assert::contains('<div <<?php ?>? >', $latte->compile('<div <? >'));
 
-Assert::error(function () use ($latte) {
-	$latte->compile('<?= $a ?>');
-}, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
-
-
-Assert::error(function () use ($latte) {
-	$latte->compile('<!-- <?= -->');
-}, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
-
-
-Assert::error(function () use ($latte) {
-	$latte->compile('<div <?= >');
-}, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
-
-
-Assert::error(function () use ($latte) {
-	$latte->compile('<div a="<?=">');
-}, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
-
+Assert::contains('<div a="<<?php ?>?">', $latte->compile('<div a="<?">'));
 
 Assert::exception(function () use ($latte) {
 	echo $latte->compile('{var ?> }');
