@@ -67,7 +67,7 @@ if ($_l->extends) { ob_start(function () {});}
 
 <input checked> <input checked="checked">
 
-{ test} {"test} {'test}
+{ test} <?php echo Latte\Runtime\Filters::escapeHtml("test", ENT_NOQUOTES) ?> <?php echo Latte\Runtime\Filters::escapeHtml('test', ENT_NOQUOTES) ?> {"test":} {'test':}
 
 <p<?php echo Latte\Runtime\Filters::htmlAttributes(['title' => $hello, 'lang' => isset($lang) ? $lang : NULL]) ?>> </p>
 
