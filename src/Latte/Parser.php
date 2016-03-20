@@ -172,9 +172,9 @@ class Parser
 	private function contextHtmlTag()
 	{
 		$matches = $this->match('~
-			(?P<end>\ ?/?>)([ \t]*\n)?|  ##  end of HTML tag
+			(?P<end>\s?/?>)([ \t]*\n)?|  ##  end of HTML tag
 			(?P<macro>' . $this->delimiters[0] . ')|
-			\s*(?P<attr>[^\s/>={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))? ## beginning of HTML attribute
+			\s*(?P<attr>[^\s"\'>/={]+)(?:\s*=\s*(?P<value>["\']|[^\s"\'=<>`{]+))? ## beginning of HTML attribute
 		~xsi');
 
 		if (!empty($matches['end'])) { // end of HTML tag />

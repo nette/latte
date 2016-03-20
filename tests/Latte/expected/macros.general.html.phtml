@@ -83,7 +83,7 @@ if ($_l->extends) { ob_start(function () {});}
 <p ONCLICK ="<?php echo Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT) ?>
 " <?php echo '"', Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT), '"' ?>> </p>
 
-<p val =></p><?php echo Latte\Runtime\Filters::escapeHtml($xss, ENT_NOQUOTES) ?></p>
+<p val = /><?php echo Latte\Runtime\Filters::escapeHtml($xss, ENT_NOQUOTES) ?></p>
 
 <?php echo Latte\Runtime\Filters::escapeHtml((string) (bool) (float) (int) (array) 10, ENT_NOQUOTES) ?>
 
