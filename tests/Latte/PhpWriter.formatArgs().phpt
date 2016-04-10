@@ -65,7 +65,7 @@ test(function () { // special
 	Assert::same('$var => $var',  formatArgs('$var => $var'));
 	Assert::same("'truex' => 0word, 0true, true-true, true-1",  formatArgs('truex => 0word, 0true, true-true, true-1'));
 	Assert::same("'symbol' => 'PI'",  formatArgs('symbol => PI'));
-	Assert::same("'symbol' => CONST, M_PI ",  formatArgs('symbol => CONST, M_PI '));
+	Assert::same("'symbol' => CONST, M_PI, NAN, INF ",  formatArgs('symbol => CONST, M_PI, NAN, INF '));
 	Assert::same("'symbol' => Class::CONST, ",  formatArgs('symbol => Class::CONST, '));
 	Assert::same("'symbol' => Class::method(), ",  formatArgs('symbol => Class::method(), '));
 	Assert::same("'symbol' => Namespace\\Class::method()",  formatArgs('symbol => Namespace\Class::method()'));
