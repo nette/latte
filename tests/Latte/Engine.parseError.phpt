@@ -2,6 +2,8 @@
 
 /**
  * Test: Latte\Engine & parseError
+ * @phpversion < 7
+ * @phpversion >= 5.4  exists with bad error code in PHP 5.3
  */
 
 use Tester\Assert;
@@ -15,15 +17,3 @@ Assert::exception(function () {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->render('{php * }');
 }, 'Latte\CompileException', "Error in template: syntax error, unexpected '*'");
-
-$e = Assert::exception(function () {
-	$latte = new Latte\Engine;
-	$latte->setTempDirectory(TEMP_DIR);
-	$latte->setLoader(new Latte\Loaders\StringLoader);
-	$latte->render('{php * * }');
-}, 'Latte\CompileException', "Error in template: syntax error, unexpected '*'");
-Assert::same(13, $e->sourceLine);
-
-if (PHP_VERSION_ID < 50400) {
-	die(0); // otherwise PHP exits with code 255
-}
