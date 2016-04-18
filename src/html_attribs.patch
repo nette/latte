@@ -1,0 +1,271 @@
+diff --git a/composer.json b/composer.json
+index ec4c3e4..e1c2b5d 100644
+--- a/composer.json
++++ b/composer.json
+@@ -1,9 +1,6 @@
+ {
+-	"name": "latte/latte",
++	"name": "eat24/latte",
+ 	"description": "Latte: the amazing template engine for PHP",
+-	"keywords": ["templating", "twig"],
+-	"homepage": "https://latte.nette.org",
+-	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+ 	"authors": [
+ 		{
+ 			"name": "David Grudl",
+diff --git a/src/Latte/Compiler.php b/src/Latte/Compiler.php
+index ced7dd3..ae85d47 100644
+--- a/src/Latte/Compiler.php
++++ b/src/Latte/Compiler.php
+@@ -63,6 +63,7 @@ class Compiler
+
+ 	/** @internal Context-aware escaping HTML contexts */
+ 	const CONTEXT_COMMENT = 'comment',
++		CONTEXT_ATTRNAME = 'attrname',
+ 		CONTEXT_SINGLE_QUOTED_ATTR = "'",
+ 		CONTEXT_DOUBLE_QUOTED_ATTR = '"',
+ 		CONTEXT_UNQUOTED_ATTR = '=';
+@@ -215,12 +216,17 @@ class Compiler
+
+ 	private function processText(Token $token)
+ 	{
+-		if (in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
++		if (trim($token->text) === "=" && $this->context[0] === self::CONTEXT_ATTRNAME) {
++			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
++		}
++		elseif (in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
+ 			if ($token->text === $this->context[0]) {
+-				$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
++				$this->setContext(self::CONTEXT_ATTRNAME);
+ 			} elseif ($this->lastAttrValue === '') {
+ 				$this->lastAttrValue = $token->text;
+ 			}
++		} elseif ($this->context[0] === self::CONTEXT_UNQUOTED_ATTR && trim($token->text) === "") {
++			$this->setContext(self::CONTEXT_ATTRNAME);
+ 		}
+ 		$this->output .= $token->text;
+ 	}
+@@ -271,7 +277,7 @@ class Compiler
+ 		} else {
+ 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
+ 			$this->htmlNode->offset = strlen($this->output);
+-			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
++			$this->setContext(self::CONTEXT_ATTRNAME);
+ 		}
+ 		$this->output .= $token->text;
+ 	}
+@@ -332,7 +338,6 @@ class Compiler
+ 		}
+ 	}
+
+o-
+ 	private function processHtmlAttribute(Token $token)
+ 	{
+ 		if (strncmp($token->name, Parser::N_PREFIX, strlen(Parser::N_PREFIX)) === 0) {
+diff --git a/src/Latte/Parser.php b/src/Latte/Parser.php
+index 90e02ff..e2ac3bf 100644
+--- a/src/Latte/Parser.php
++++ b/src/Latte/Parser.php
+@@ -172,20 +172,23 @@ class Parser
+ 		$matches = $this->match('~
+ 			(?P<end>\ ?/?>)([ \t]*\n)?|  ##  end of HTML tag
+ 			(?P<macro>' . $this->delimiters[0] . ')|
+-			\s*(?P<attr>[^\s/>={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))? ## beginning of HTML attribute
++			\s*(?P<attr>[^\s/>={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))?| ## beginning of HTML attribute
++			\s*=\s*(?P<justvalue>["\']|[^\s/>{]+) ## beginning of HTML attribute, name is already parsed
+ 		~xsi');
++		if (!isset($matches['justvalue'])) $matches['justvalue'] = null;
+
+ 		if (!empty($matches['end'])) { // end of HTML tag />
+ 			$this->addToken(Token::HTML_TAG_END, $matches[0]);
+ 			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], TRUE) ? self::CONTEXT_CDATA : self::CONTEXT_HTML_TEXT);
+-
+-		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
++		} elseif (isset($matches['attr']) && $matches['attr'] !== '' ||
++				isset($matches['justvalue']) && $matches['justvalue'] !== '') { // HTML attribute
++			$matches['value'] = isset($matches['value']) ? $matches['value'] : (isset($matches['justvalue']) ? $matches['justvalue'] : '');
++			$attrName = isset($matches['attr']) ? $matches['attr'] : '';
+ 			$token = $this->addToken(Token::HTML_ATTRIBUTE, $matches[0]);
+-			$token->name = $matches['attr'];
+-			$token->value = isset($matches['value']) ? $matches['value'] : '';
+-
+-			if ($token->value === '"' || $token->value === "'") { // attribute = "'
+-				if (strncmp($token->name, self::N_PREFIX, strlen(self::N_PREFIX)) === 0) {
++			$token->name = $attrName;
++			$token->value = $matches['value'];
++			if ($matches['value'] === '"' || $matches['value'] === "'") { // attribute = "'
++				if (strncmp($attrName, self::N_PREFIX, strlen(self::N_PREFIX)) === 0) {
+ 					$token->value = '';
+ 					if ($m = $this->match('~(.*?)' . $matches['value'] . '~xsi')) {
+ 						$token->value = $m[1];
+diff --git a/src/Latte/PhpWriter.php b/src/Latte/PhpWriter.php
+index 2265ea0..ba38915 100644
+--- a/src/Latte/PhpWriter.php
++++ b/src/Latte/PhpWriter.php
+@@ -318,6 +318,9 @@ class PhpWriter
+ 			case Compiler::CONTENT_HTML:
+ 				$context = $this->compiler->getContext();
+ 				switch ($context[0]) {
++					case Compiler::CONTEXT_ATTRNAME:
++						$tokens->prepend('Latte\Runtime\Filters::escapeName(')->append(')');
++						return $tokens;
+ 					case Compiler::CONTEXT_SINGLE_QUOTED_ATTR:
+ 					case Compiler::CONTEXT_DOUBLE_QUOTED_ATTR:
+ 					case Compiler::CONTEXT_UNQUOTED_ATTR:
+diff --git a/src/Latte/Runtime/Filters.php b/src/Latte/Runtime/Filters.php
+index e574573..02eef96 100644
+--- a/src/Latte/Runtime/Filters.php
++++ b/src/Latte/Runtime/Filters.php
+@@ -447,4 +447,12 @@ class Filters
+ 		return $s;
+ 	}
+
++	// This is used to ensure valid HTML attribute names
++	public static function escapeName($name) {
++		$leadingchar = "/^[^:_\\p{L}]+/u"; # the first letter can be colon underscore, or a unicode letter
++		$namechar = "/[^-:_.\\p{N}\\p{L}\\p{M}]/u"; # letters or numbers or diacritics
++		$cleaned = preg_replace($leadingchar, '', $name);
++		$cleaned = preg_replace($namechar, '', $cleaned);
++		return $cleaned ?: "invalid";
++	}
+ }
+diff --git a/tests/Latte/Filters.escapeName().phpt b/tests/Latte/Filters.escapeName().phpt
+new file mode 100644
+index 0000000..189e90f
+--- /dev/null
++++ b/tests/Latte/Filters.escapeName().phpt
+@@ -0,0 +1,23 @@
++<?php
++
++/**
++ * Test: Latte\Runtime\Filters::escapeName
++ */
++
++use Latte\Runtime\Filters;
++use Tester\Assert;
++
++
++require __DIR__ . '/../bootstrap.php';
++
++
++# attribute names must start with a letter
++Assert::same('invalid', Filters::escapeName(NULL));
++Assert::same('invalid', Filters::escapeName(1));
++
++Assert::same('a', Filters::escapeName('a'));
++Assert::same('a111', Filters::escapeName('111a111'));
++Assert::same('a', Filters::escapeName('"\'`a`\'"'));
++
++# do not decode entities
++Assert::same('lt', Filters::escapeName('&lt;'));
+diff --git a/tests/Latte/expected/macros.general.html.html b/tests/Latte/expected/macros.general.html.html
+index 9cdb19c..f205b08 100644
+--- a/tests/Latte/expected/macros.general.html.html
++++ b/tests/Latte/expected/macros.general.html.html
+@@ -30,7 +30,7 @@
+
+ <p onclick = "&quot;some&amp;&lt;&gt;\&quot;'\/chars&quot;"> </p>
+
+-<p ONCLICK ="&quot;some&amp;&lt;&gt;\&quot;'\/chars&quot;" "some&amp;&lt;&gt;&quot;'/chars"> </p>
++<p ONCLICK ="&quot;some&amp;&lt;&gt;\&quot;'\/chars&quot;" somechars> </p>
+
+ <p val =></p>some&amp;&lt;&gt;"'/chars</p>
+
+diff --git a/tests/Latte/expected/macros.general.html.phtml b/tests/Latte/expected/macros.general.html.phtml
+index ab9af02..9b47b77 100644
+--- a/tests/Latte/expected/macros.general.html.phtml
++++ b/tests/Latte/expected/macros.general.html.phtml
+@@ -81,7 +81,7 @@ if ($_l->extends) { ob_start(function () {});}
+ <p onclick = <?php echo '"', Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT), '"' ?>> </p>
+
+ <p ONCLICK ="<?php echo Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT) ?>
+-" <?php echo '"', Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT), '"' ?>> </p>
++" <?php echo Latte\Runtime\Filters::escapeName($xss) ?>> </p>
+
+ <p val =></p><?php echo Latte\Runtime\Filters::escapeHtml($xss, ENT_NOQUOTES) ?></p>
+
+diff --git a/tests/Latte/expected/macros.general.xhtml.html b/tests/Latte/expected/macros.general.xhtml.html
+index 1e9d151..666e82f 100644
+--- a/tests/Latte/expected/macros.general.xhtml.html
++++ b/tests/Latte/expected/macros.general.xhtml.html
+@@ -30,7 +30,7 @@
+
+ <p onclick = "&quot;some&amp;&lt;&gt;\&quot;'\/chars&quot;"> </p>
+
+-<p ONCLICK ="&quot;some&amp;&lt;&gt;\&quot;'\/chars&quot;" "some&amp;&lt;&gt;&quot;'/chars"> </p>
++<p ONCLICK ="&quot;some&amp;&lt;&gt;\&quot;'\/chars&quot;" somechars> </p>
+
+ <p val =></p>some&amp;&lt;&gt;"'/chars</p>
+
+diff --git a/tests/Latte/expected/macros.general.xhtml.phtml b/tests/Latte/expected/macros.general.xhtml.phtml
+index 069a52f..b4f9cad 100644
+--- a/tests/Latte/expected/macros.general.xhtml.phtml
++++ b/tests/Latte/expected/macros.general.xhtml.phtml
+@@ -81,7 +81,7 @@ if ($_l->extends) { ob_start(function () {});}
+ <p onclick = <?php echo '"', Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT), '"' ?>> </p>
+
+ <p ONCLICK ="<?php echo Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT) ?>
+-" <?php echo '"', Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT), '"' ?>> </p>
++" <?php echo Latte\Runtime\Filters::escapeName($xss) ?>> </p>
+
+ <p val =></p><?php echo Latte\Runtime\Filters::escapeHtml($xss, ENT_NOQUOTES) ?></p>
+
+diff --git a/tests/Latte/expected/macros.unquoted.html b/tests/Latte/expected/macros.unquoted.html
+index 4c295cf..ab64cb9 100644
+--- a/tests/Latte/expected/macros.unquoted.html
++++ b/tests/Latte/expected/macros.unquoted.html
+@@ -1,3 +1,5 @@
+ <span title="' &amp; &quot;"></span>
+
+-<span title="' &amp; &quot;" "' &amp; &quot;"></span>
++<span title="' &amp; &quot;" invalid></span>
++
++<span invalid="' &amp; &quot;" invalid="' &amp; &quot;"></span>
+diff --git a/tests/Latte/expected/macros.unquoted.phtml b/tests/Latte/expected/macros.unquoted.phtml
+index 9e1c595..cf4e05d 100644
+--- a/tests/Latte/expected/macros.unquoted.phtml
++++ b/tests/Latte/expected/macros.unquoted.phtml
+@@ -11,6 +11,9 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
+ <span title=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>></span>
+
+ <span title=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>
+- <?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>></span>
++ <?php echo Latte\Runtime\Filters::escapeName($x) ?>></span>
++
++<span <?php echo Latte\Runtime\Filters::escapeName($x) ?>=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>
++ <?php echo Latte\Runtime\Filters::escapeName($x) ?>=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>></span>
+ <?php
+ %A%
+diff --git a/tests/Latte/macros.errors.phpt b/tests/Latte/macros.errors.phpt
+index 22d236a..c26f694 100644
+--- a/tests/Latte/macros.errors.phpt
++++ b/tests/Latte/macros.errors.phpt
+@@ -24,11 +24,17 @@ Assert::exception(function () use ($latte) {
+
+
+ Assert::match(
+-	'<div c=comment "--">',
++	'<div c=comment invalid>',
+ 	$latte->renderToString('<div c=comment {="--"}>')
+ );
+
+
++Assert::match(
++	'<div c=comment -->',
++	$latte->renderToString('<div c=comment {="--"|noescape}>')
++);
++
++
+ Assert::exception(function () use ($latte) {
+ 	$latte->compile('<a n:class class>');
+ }, Latte\CompileException::class, 'It is not possible to combine class with n:class.');
+diff --git a/tests/Latte/templates/unquoted.latte b/tests/Latte/templates/unquoted.latte
+index 7d8965b..a81178a 100644
+--- a/tests/Latte/templates/unquoted.latte
++++ b/tests/Latte/templates/unquoted.latte
+@@ -1,3 +1,5 @@
+ <span title={$x}></span>
+
+ <span title={$x} {$x}></span>
++
++<span {$x}={$x} {$x}={$x}></span>

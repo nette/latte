@@ -81,7 +81,7 @@ if ($_l->extends) { ob_start();}
 <p onclick = <?php echo '"', Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT), '"' ?>> </p>
 
 <p ONCLICK ="<?php echo Latte\Runtime\Filters::escapeHtml(Latte\Runtime\Filters::escapeJs($xss), ENT_COMPAT) ?>
-" <?php echo '"', Latte\Runtime\Filters::escapeHtml($xss, ENT_COMPAT), '"' ?>> </p>
+" <?php echo Latte\Runtime\Filters::escapeName($xss) ?>> </p>
 
 <p val =></p><?php echo Latte\Runtime\Filters::escapeHtml($xss, ENT_NOQUOTES) ?></p>
 

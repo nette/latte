@@ -11,6 +11,9 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 <span title=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>></span>
 
 <span title=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>
- <?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>></span>
+ <?php echo Latte\Runtime\Filters::escapeName($x) ?>></span>
+
+<span <?php echo Latte\Runtime\Filters::escapeName($x) ?>=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>
+ <?php echo Latte\Runtime\Filters::escapeName($x) ?>=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_COMPAT), '"' ?>></span>
 <?php
 %A%

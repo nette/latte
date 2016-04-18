@@ -19,14 +19,14 @@ class Filters
 	/** @deprecated */
 	public static $dateFormat = '%x';
 
-	/** @internal @var bool  use XHTML syntax? */
+	/** @internal @var bool	 use XHTML syntax? */
 	public static $xhtml = FALSE;
 
 
 	/**
 	 * Escapes string for use inside HTML template.
 	 * @param  mixed  UTF-8 encoding
-	 * @param  int    optional attribute quotes
+	 * @param  int	  optional attribute quotes
 	 * @return string
 	 */
 	public static function escapeHtml($s, $quotes = ENT_QUOTES)
@@ -70,7 +70,7 @@ class Filters
 	{
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,
-		//   \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
+		//	 \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
 		return htmlSpecialChars(preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F]+#', '', $s), ENT_QUOTES, 'UTF-8');
 	}
 
@@ -414,7 +414,7 @@ class Filters
 				$tmp = NULL;
 				foreach ($value as $k => $v) {
 					if ($v != NULL) { // intentionally ==, skip NULLs & empty string
-						//  composite 'style' vs. 'others'
+						//	composite 'style' vs. 'others'
 						$tmp[] = $v === TRUE ? $k : (is_string($k) ? $k . ':' . $v : $v);
 					}
 				}
@@ -441,4 +441,12 @@ class Filters
 		return $s;
 	}
 
+	// This is used to ensure valid HTML attribute names
+	public static function escapeName($name) {
+		$leadingchar = "/^[^:_\\p{L}]+/u"; # the first letter can be colon underscore, or a unicode letter
+		$namechar = "/[^-:_.\\p{N}\\p{L}\\p{M}]/u"; # letters or numbers or diacritics
+		$cleaned = preg_replace($leadingchar, '', $name);
+		$cleaned = preg_replace($namechar, '', $cleaned);
+		return $cleaned ?: "invalid";
+	}
 }

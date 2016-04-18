@@ -61,6 +61,7 @@ class Compiler extends Object
 
 	/** @internal Context-aware escaping HTML contexts */
 	const CONTEXT_COMMENT = 'comment',
+        CONTEXT_ATTRNAME = 'attrname',
 		CONTEXT_SINGLE_QUOTED_ATTR = "'",
 		CONTEXT_DOUBLE_QUOTED_ATTR = '"',
 		CONTEXT_UNQUOTED_ATTR = '=';
@@ -213,13 +214,19 @@ class Compiler extends Object
 
 	private function processText(Token $token)
 	{
-		if (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR), TRUE)) {
+        if (trim($token->text) === "=" && $this->context[0] === self::CONTEXT_ATTRNAME) {
+            $this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+        }
+        elseif (in_array($this->context[0], array(self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR), TRUE)) {
 			if ($token->text === $this->context[0]) {
-				$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+				$this->setContext(self::CONTEXT_ATTRNAME);
 			} elseif ($this->lastAttrValue === '') {
 				$this->lastAttrValue = $token->text;
 			}
 		}
+        elseif ($this->context[0] === self::CONTEXT_UNQUOTED_ATTR && trim($token->text) === "") {
+            $this->setContext(self::CONTEXT_ATTRNAME);
+        }
 		$this->output .= $token->text;
 	}
 
@@ -269,7 +276,7 @@ class Compiler extends Object
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
 			$this->htmlNode->offset = strlen($this->output);
-			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+			$this->setContext(self::CONTEXT_ATTRNAME);
 		}
 		$this->output .= $token->text;
 	}
