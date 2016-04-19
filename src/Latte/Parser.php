@@ -171,15 +171,23 @@ class Parser extends Object
 	{
 		$matches = $this->match('~
 			(?P<end>\ ?/?>)([ \t]*\n)?|  ##  end of HTML tag
-			(?P<macro>' . $this->delimiters[0] . ')|
-			\s*(?P<attr>[^\s/>={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))? ## beginning of HTML attribute
-		~xsi');
+			(?P<macro>' . $this->delimiters[0] . <<<'EOF'
+)|
+			\s*(?P<attr>[^\s/>={]+)(?:\s*=\s*(?P<value>["\']|[^\s/>{]+))?| ## beginning of HTML attribute
+            \s*=\s*(?P<justvalue>["\']|[^\s/>{]+) ## beginning of HTML attribute value, name is already parsed
+		~xsi
+EOF
+);
 
-		if (!empty($matches['end'])) { // end of HTML tag />
+        if (!empty($matches['end'])) { // end of HTML tag />
 			$this->addToken(Token::HTML_TAG_END, $matches[0]);
 			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, array('script', 'style'), TRUE) ? self::CONTEXT_CDATA : self::CONTEXT_HTML_TEXT);
 
-		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
+		} else if (isset($matches['justvalue'])) {
+			$token = $this->addToken(Token::HTML_ATTRIBUTE, $matches[0]);
+			$token->value = $matches['justvalue'];
+        }
+        elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
 			$token = $this->addToken(Token::HTML_ATTRIBUTE, $matches[0]);
 			$token->name = $matches['attr'];
 			$token->value = isset($matches['value']) ? $matches['value'] : '';
