@@ -11,7 +11,7 @@ matrix:
         - php: hhvm
 
 script:
-    - vendor/bin/tester tests -s -p php -c tests/php-unix.ini
+    - vendor/bin/tester tests -s -p php -c tests/php-unix.ini $COVERAGE
     - php temp/code-checker/src/code-checker.php --short-arrays -i use.latte
 
 after_failure:
@@ -22,6 +22,15 @@ before_script:
     # Install Nette Tester & Code Checker
     - travis_retry composer install --no-interaction --prefer-dist
     - travis_retry composer create-project nette/code-checker temp/code-checker ~2.5 --no-interaction
+    - if [ $TRAVIS_PHP_VERSION == "7.0" ]; then COVERAGE="-p phpdbg --coverage ./coverage.xml --coverage-src ./src"; fi
+
+after_script:
+    # Report Code Coverage
+    - >
+      if [ "$COVERAGE" != "" ]; then
+      wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+      && php coveralls.phar --verbose --config tests/.coveralls.yml
+      || true; fi
 
 sudo: false
 
