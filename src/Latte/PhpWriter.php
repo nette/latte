@@ -160,6 +160,7 @@ class PhpWriter
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsFilter($tokens);
 		$tokens = $this->shortTernaryFilter($tokens);
+		$tokens = $this->inlineModifierFilter($tokens);
 		return $tokens;
 	}
 
@@ -227,6 +228,65 @@ class PhpWriter
 			$res->append(' : NULL');
 		}
 		return $res;
+	}
+
+
+	public function inlineModifierFilter(MacroTokens $tokens)
+	{
+		$result = new MacroTokens();
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent('(', '[')) {
+				$result->tokens = array_merge($result->tokens, $this->inlineModifiersFilterInner($tokens));
+			} else {
+				$result->append($tokens->currentToken());
+			}
+		}
+
+		return $result;
+	}
+
+	private function inlineModifiersFilterInner(MacroTokens $tokens)
+	{
+		$isFunctionOrArray = $tokens->isPrev(MacroTokens::T_VARIABLE, MacroTokens::T_SYMBOL) || $tokens->isCurrent('[');
+		$result = new MacroTokens();
+		$args = new MacroTokens();
+		$modifiers = new MacroTokens();
+		$current = $args;
+		$anyModifier = FALSE;
+		$result->append($tokens->currentToken());
+
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent('(', '[')) {
+				$current->tokens = array_merge($current->tokens, $this->inlineModifiersFilterInner($tokens));
+			} elseif ($current !== $modifiers && $tokens->isCurrent('|')) {
+				$anyModifier = TRUE;
+				$current = $modifiers;
+			} elseif ($tokens->isCurrent(')', ']') || ($isFunctionOrArray && $tokens->isCurrent(','))) {
+				if (count($modifiers->tokens)) {
+					$partTokens = $this->modifiersFilter($modifiers, $args->tokens)->tokens;
+				} else {
+					$partTokens = $args->tokens;
+				}
+				$result->tokens = array_merge($result->tokens, $partTokens);
+				if (!$tokens->isCurrent(',')) {
+					if ($isFunctionOrArray || !$anyModifier) {
+						$result->append($tokens->currentToken());
+					} else {
+						array_shift($result->tokens);
+					}
+
+					return $result->tokens;
+				}
+				//comma
+				$result->append($tokens->currentToken());
+				$args = new MacroTokens();
+				$modifiers = new MacroTokens();
+				$current = $args;
+			} else {
+				$current->append($tokens->currentToken());
+			}
+		}
+		throw new CompileException('Unbalanced brackets.');
 	}
 
 

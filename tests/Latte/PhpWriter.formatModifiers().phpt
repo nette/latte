@@ -49,3 +49,7 @@ test(function () { // arguments
 	Assert::same('$template->mod(@, \'True\', \'False\', \'Null\')',  formatModifiers('@', 'mod: True, False, Null'));
 	Assert::same('$template->mod(@, array(1))',  formatModifiers('@', 'mod: array(1)'));
 });
+
+test(function() {
+	Assert::same('$template->mod(@, $template->mod2(2))', formatModifiers('@', 'mod:(2|mod2)'));
+});

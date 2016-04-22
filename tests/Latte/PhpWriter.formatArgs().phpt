@@ -89,3 +89,15 @@ test(function () { // special UTF-8
 	Assert::same("'M_PIÁNO'",  formatArgs('M_PIÁNO'));
 	Assert::same("'symbôl-1' => 'vålue-2'",  formatArgs('symbôl-1 => vålue-2'));
 });
+
+test(function () {
+	Assert::same("'foo' => \$template->mod(\$val, 'param', \"param2)\")", formatArgs('foo => ($val|mod:param:"param2)")'));
+	Assert::same("'foo' => \$template->mod2(\$template->mod(\$val))", formatArgs('foo => ($val|mod|mod2)'));
+	Assert::same("'foo' => \$template->mod(\$val, 'param', \$template->mod2(1))", formatArgs('foo => ($val|mod:param:(1|mod2))'));
+	Assert::same("'foo' => \$template->mod(\$val, 'param', \$template->mod2(1, round(\$template->foo(2))))", formatArgs('foo => ($val|mod:param:(1|mod2:round((2|foo))))'));
+	Assert::same("'foo' => foo(\$val)", formatArgs('foo => foo($val)'));
+	Assert::same("'foo' => foo(\$template->bar(\$val))", formatArgs('foo => foo($val|bar)'));
+	Assert::same("foo(\$template->bar(\$val),\$template->lorem( \$val))", formatArgs('foo($val|bar, $val|lorem)'));
+	Assert::same("'foo' => array(\$template->bar(\$val),)", formatArgs('foo => array($val|bar,)'));
+	Assert::same("[\$template->bar(\$val),\$template->lorem( \$val)]", formatArgs('[$val|bar, $val|lorem]'));
+});
