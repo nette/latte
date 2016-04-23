@@ -8,7 +8,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 // main template
 //
 ?>
-<p>Included file #3 (<?php echo Latte\Runtime\Filters::escapeHtml($localvar, ENT_NOQUOTES) ?>
-, <?php echo Latte\Runtime\Filters::escapeHtml($hello, ENT_NOQUOTES) ?>)</p>
+<p>Included file #3 (<?php echo Latte\Runtime\Filters::escapeHtmlText($localvar) ?>
+, <?php echo Latte\Runtime\Filters::escapeHtmlText($hello) ?>)</p>
 <?php
 %A%

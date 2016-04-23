@@ -9,34 +9,34 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 //
 ?>
 <ul>
-	<li>lower: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($hello), ENT_NOQUOTES) ?></li>
-	<li>upper: <?php echo Latte\Runtime\Filters::escapeHtml($template->upper($hello), ENT_NOQUOTES) ?></li>
-	<li>lower & capitalize: <?php echo Latte\Runtime\Filters::escapeHtml($template->capitalize($template->lower($hello)), ENT_NOQUOTES) ?></li>
-	<li>nl2br: <?php echo Latte\Runtime\Filters::escapeHtml($template->nl2br($hello), ENT_NOQUOTES) ?></li>
-	<li>truncate: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($template->truncate($hello, "10 ")), ENT_NOQUOTES) ?></li>
-	<li>date: <?php echo Latte\Runtime\Filters::escapeHtml($template->date($date, '%d.%m.%Y %H:%M:%S'), ENT_NOQUOTES) ?></li>
-	<li>translated: <?php echo Latte\Runtime\Filters::escapeHtml($template->truncate($template->translate($hello), 3), ENT_NOQUOTES) ?></li>
-	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
-	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
-	<li>Translated HTML: <?php echo Latte\Runtime\Filters::escapeHtml($template->translate('ahoj|ahojahojahojahoj'), ENT_NOQUOTES) ?></li>
-	<li>spaces: <?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello , '' , "" , "$hello" ), ENT_NOQUOTES) ?></li>
-	<li>dynamic: <?php echo Latte\Runtime\Filters::escapeHtml($template->dynamic($hello), ENT_NOQUOTES) ?>
- <?php echo Latte\Runtime\Filters::escapeHtml($template->dynamic2($hello), ENT_NOQUOTES) ?></li>
+	<li>lower: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->lower($hello)) ?></li>
+	<li>upper: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->upper($hello)) ?></li>
+	<li>lower & capitalize: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->capitalize($template->lower($hello))) ?></li>
+	<li>nl2br: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->nl2br($hello)) ?></li>
+	<li>truncate: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->lower($template->truncate($hello, "10 "))) ?></li>
+	<li>date: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->date($date, '%d.%m.%Y %H:%M:%S')) ?></li>
+	<li>translated: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->truncate($template->translate($hello), 3)) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtmlText($template->translate(ob_get_clean())) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtmlText($template->translate(ob_get_clean())) ?></li>
+	<li>Translated HTML: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->translate('ahoj|ahojahojahojahoj')) ?></li>
+	<li>spaces: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->types($hello , '' , "" , "$hello" )) ?></li>
+	<li>dynamic: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->dynamic($hello)) ?>
+ <?php echo Latte\Runtime\Filters::escapeHtmlText($template->dynamic2($hello)) ?></li>
 </ul>
 
 <ul>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->h2($template->h1($hello)), ENT_NOQUOTES) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->h2($template->h1($hello))) ?></li>
 	<li><?php echo $template->h2($template->h1($hello)) ?></li>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->h1($template->h2($hello)), ENT_NOQUOTES) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->h1($template->h2($hello))) ?></li>
 	<li><?php echo $template->h1($template->h2($hello)) ?></li>
 </ul>
 
 <ul>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello*0, 0, 0.0, "0"), ENT_NOQUOTES) ?></li>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello*1, 1, "1"), ENT_NOQUOTES) ?></li>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello, true, null, false), ENT_NOQUOTES) ?></li>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello, TRUE, NULL, FALSE), ENT_NOQUOTES) ?></li>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello, '', "", "$hello"), ENT_NOQUOTES) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->types($hello*0, 0, 0.0, "0")) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->types($hello*1, 1, "1")) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->types($hello, true, null, false)) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->types($hello, TRUE, NULL, FALSE)) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->types($hello, '', "", "$hello")) ?></li>
 </ul>
 
 
@@ -58,12 +58,12 @@ alert();
 
 <?php ob_start(function () {}) ?>
 <ul>
-	<li>lower: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($hello), ENT_NOQUOTES) ?></li>
+	<li>lower: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->lower($hello)) ?></li>
 </ul>
 <?php $capture = ob_get_clean() ?>
 
 <p>
-Captured: <?php echo Latte\Runtime\Filters::escapeHtml($capture, ENT_NOQUOTES) ?>
+Captured: <?php echo Latte\Runtime\Filters::escapeHtmlText($capture) ?>
 
 </p>
 
@@ -73,7 +73,7 @@ Hello
 <?php $capture = $template->upper(ob_get_clean()) ?>
 
 <p>
-Captured with modifier: <?php echo Latte\Runtime\Filters::escapeHtml($capture, ENT_NOQUOTES) ?>
+Captured with modifier: <?php echo Latte\Runtime\Filters::escapeHtmlText($capture) ?>
 
 </p>
 

@@ -8,9 +8,8 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 // main template
 //
 ?>
-<span title=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_QUOTES), '"' ?>></span>
+<span title=<?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr($x), '"' ?>></span>
 
-<span title=<?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_QUOTES), '"' ?>
- <?php echo '"', Latte\Runtime\Filters::escapeHtml($x, ENT_QUOTES), '"' ?>></span>
+<span title=<?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr($x), '"' ?> <?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr($x), '"' ?>></span>
 <?php
 %A%

@@ -56,7 +56,7 @@ class Engine
 		'datastream' => 'Latte\Runtime\Filters::dataStream',
 		'date' => 'Latte\Runtime\Filters::date',
 		'escapecss' => 'Latte\Runtime\Filters::escapeCss',
-		'escapehtml' => 'Latte\Runtime\Filters::escapeHtml',
+		'escapehtml' => 'Latte\Runtime\Filters::escapeHtmlAttr',
 		'escapehtmlcomment' => 'Latte\Runtime\Filters::escapeHtmlComment',
 		'escapeical' => 'Latte\Runtime\Filters::escapeICal',
 		'escapejs' => 'Latte\Runtime\Filters::escapeJs',

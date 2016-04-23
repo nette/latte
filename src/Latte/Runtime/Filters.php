@@ -24,21 +24,43 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside HTML template.
+	 * Escapes string for use inside HTML.
 	 * @param  mixed  UTF-8 encoding
-	 * @param  int    optional attribute quotes
 	 * @return string
 	 */
-	public static function escapeHtml($s, $quotes = ENT_QUOTES)
+	public static function escapeHtmlText($s)
+	{
+		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
+			? $s->__toString(TRUE)
+			: htmlSpecialChars($s, ENT_NOQUOTES, 'UTF-8');
+	}
+
+
+	/**
+	 * Escapes string for use inside HTML attribute value.
+	 * @param  mixed  UTF-8 encoding
+	 * @return string
+	 */
+	public static function escapeHtmlAttr($s)
 	{
 		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
 			return $s->__toString(TRUE);
 		}
 		$s = (string) $s;
-		if ($quotes !== ENT_NOQUOTES && strpos($s, '`') !== FALSE && strpbrk($s, ' <>"\'') === FALSE) {
-			$s .= ' ';
+		if (strpos($s, '`') !== FALSE && strpbrk($s, ' <>"\'') === FALSE) {
+			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
-		return htmlSpecialChars($s, $quotes, 'UTF-8');
+		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
+	}
+
+
+	/** @deprecated */
+	public static function escapeHtml($s)
+	{
+		trigger_error('Do not rely on internal methods like ' . __METHOD__, E_USER_WARNING);
+		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
+			? $s->__toString(TRUE)
+			: htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
 	}
 
 

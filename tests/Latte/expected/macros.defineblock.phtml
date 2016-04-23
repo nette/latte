@@ -9,7 +9,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 // block test
 //
 if (!function_exists($_b->blocks['test'][] = '_%[a-z0-9]+%_test')) { function _%[a-z0-9]+%_test($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>	This is definition #<?php echo Latte\Runtime\Filters::escapeHtml($var, ENT_NOQUOTES) ?>
+?>	This is definition #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
 
 <?php
 }}

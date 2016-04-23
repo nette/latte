@@ -414,7 +414,7 @@ class PhpWriter
 						} elseif ($context[1] === Compiler::CONTENT_CSS) {
 							$tokens->prepend('Latte\Runtime\Filters::escapeCss(')->append(')');
 						}
-						$tokens->prepend('Latte\Runtime\Filters::escapeHtml(')->append(', ENT_QUOTES)');
+						$tokens->prepend('Latte\Runtime\Filters::escapeHtmlAttr(')->append(')');
 						if ($context[0] === Compiler::CONTEXT_TAG) {
 							$tokens->prepend("'\"', ")->append(", '\"'");
 						}
@@ -425,7 +425,7 @@ class PhpWriter
 					case Compiler::CONTENT_CSS:
 						return $tokens->prepend('Latte\Runtime\Filters::escape' . ucfirst($context[0]) . '(')->append(')');
 					default:
-						return $tokens->prepend('Latte\Runtime\Filters::escapeHtml(')->append(', ENT_NOQUOTES)');
+						return $tokens->prepend('Latte\Runtime\Filters::escapeHtmlText(')->append(')');
 				}
 
 			case Compiler::CONTENT_XML:
