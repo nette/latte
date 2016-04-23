@@ -28,7 +28,7 @@ Assert::match('
 <OBJECT DATA=""></object>
 <a HREF=""></a>
 <a href=""></a>
-<a href="ok">ok</a>
+<a href=ok>ok</a>
 <a href=""></a>
 <a href="data:%a%;base64,b2s="></a>
 <a href="data:%a%;base64,b2s="></a>

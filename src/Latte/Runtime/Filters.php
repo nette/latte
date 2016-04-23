@@ -62,6 +62,20 @@ class Filters
 
 
 	/**
+	 * Escapes string for use inside HTML attribute name.
+	 * @param  mixed  UTF-8 encoding
+	 * @return string
+	 */
+	public static function escapeHtmlAttrUnquoted($s)
+	{
+		$s = (string) $s;
+		return preg_match('#^[a-z0-9:-]+$#i', $s)
+			? $s
+			: '"' . self::escapeHtmlAttr($s) . '"';
+	}
+
+
+	/**
 	 * Escapes string for use inside HTML comments.
 	 * @param  string  UTF-8 encoding
 	 * @return string
@@ -91,6 +105,20 @@ class Filters
 		// XML 1.1: \x00 forbidden directly and as a character reference,
 		//   \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
 		return htmlSpecialChars(preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F]+#', '', $s), ENT_QUOTES, 'UTF-8');
+	}
+
+
+	/**
+	 * Escapes string for use inside XML attribute name.
+	 * @param  mixed  UTF-8 encoding
+	 * @return string
+	 */
+	public static function escapeXmlAttrUnquoted($s)
+	{
+		$s = (string) $s;
+		return preg_match('#^[a-z0-9:-]+$#i', $s)
+			? $s
+			: '"' . self::escapeXml($s) . '"';
 	}
 
 

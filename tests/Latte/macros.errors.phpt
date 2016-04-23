@@ -24,7 +24,7 @@ Assert::exception(function () use ($latte) {
 
 
 Assert::match(
-	'<div c=comment "--">',
+	'<div c=comment -->',
 	$latte->renderToString('<div c=comment {="--"}>')
 );
 

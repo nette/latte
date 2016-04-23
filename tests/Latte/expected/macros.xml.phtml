@@ -71,9 +71,9 @@ var html = <?php echo Latte\Runtime\Filters::escapeHtmlComment($el) ?>;
 
 <p val = <?php if (true) { ?>"a"<?php } else { ?>"b"<?php } ?>> </p>
 
-<p val = <?php echo '"', Latte\Runtime\Filters::escapeXml($xss), '"' ?> val2=<?php echo '"', Latte\Runtime\Filters::escapeXml($mxss), '"' ?>> </p>
+<p val = <?php echo Latte\Runtime\Filters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo Latte\Runtime\Filters::escapeXmlAttrUnquoted($mxss) ?>> </p>
 
-<p onclick = <?php echo '"', Latte\Runtime\Filters::escapeXml($xss), '"' ?>> </p>
+<p onclick = <?php echo Latte\Runtime\Filters::escapeXmlAttrUnquoted($xss) ?>> </p>
 
 <p val = /><?php echo Latte\Runtime\Filters::escapeXml($xss) ?></p>
 <?php

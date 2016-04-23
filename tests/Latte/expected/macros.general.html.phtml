@@ -61,12 +61,12 @@ if ($_l->extends) { ob_start(function () {});}
 
 <p val0 val1 = tmp val2=tmp val3="x"></p> </p>
 
-<p val = <?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr($xss), '"' ?> val2=<?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr($mxss), '"' ?>> </p>
+<p val = <?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($xss) ?> val2=<?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($mxss) ?>> </p>
 
-<p onclick = <?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr(Latte\Runtime\Filters::escapeJs($xss)), '"' ?>> </p>
+<p onclick = <?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted(Latte\Runtime\Filters::escapeJs($xss)) ?>> </p>
 
 <p ONCLICK ="<?php echo Latte\Runtime\Filters::escapeHtmlAttr(Latte\Runtime\Filters::escapeJs($xss)) ?>
-" <?php echo '"', Latte\Runtime\Filters::escapeHtmlAttr($xss), '"' ?>> </p>
+" <?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($xss) ?>> </p>
 
 <p val = /><?php echo Latte\Runtime\Filters::escapeHtmlText($xss) ?></p>
 
