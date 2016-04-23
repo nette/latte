@@ -19,10 +19,11 @@ class Token
 		MACRO_TAG = 'macroTag', // latte macro tag
 		HTML_TAG_BEGIN = 'htmlTagBegin', // begin of HTML tag or comment
 		HTML_TAG_END = 'htmlTagEnd', // end of HTML tag or comment
-		HTML_ATTRIBUTE = 'htmlAttribute',
+		HTML_ATTRIBUTE_BEGIN = 'htmlAttributeBegin',
+		HTML_ATTRIBUTE_END = 'htmlAttributeEnd',
 		COMMENT = 'comment'; // latte comment
 
-	/** @var string  token type [TEXT | MACRO_TAG | HTML_TAG_BEGIN | HTML_TAG_END | HTML_ATTRIBUTE | COMMENT] */
+	/** @var string  token type [TEXT | MACRO_TAG | HTML_TAG_BEGIN | HTML_TAG_END | HTML_ATTRIBUTE_BEGIN | HTML_ATTRIBUTE_END | COMMENT] */
 	public $type;
 
 	/** @var string  original text content of the token */
@@ -31,10 +32,10 @@ class Token
 	/** @var int  line number */
 	public $line;
 
-	/** @var string  name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE */
+	/** @var string  name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
 	public $name;
 
-	/** @var string  value of macro tag or HTML attribute; used for types MACRO_TAG, HTML_ATTRIBUTE */
+	/** @var string  value of macro tag or HTML attribute; used for types MACRO_TAG, HTML_ATTRIBUTE_BEGIN */
 	public $value;
 
 	/** @var string  macro modifiers; used for type MACRO_TAG */

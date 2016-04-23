@@ -182,7 +182,7 @@ class Parser
 			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], TRUE) ? self::CONTEXT_CDATA : self::CONTEXT_HTML_TEXT);
 
 		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
-			$token = $this->addToken(Token::HTML_ATTRIBUTE, $matches[0]);
+			$token = $this->addToken(Token::HTML_ATTRIBUTE_BEGIN, $matches[0]);
 			$token->name = $matches['attr'];
 			$token->value = isset($matches['value']) ? $matches['value'] : '';
 
@@ -214,7 +214,7 @@ class Parser
 		~xsi');
 
 		if (!empty($matches['quote'])) { // (attribute end) '"
-			$this->addToken(Token::TEXT, $matches[0]);
+			$this->addToken(Token::HTML_ATTRIBUTE_END, $matches[0]);
 			$this->setContext(self::CONTEXT_HTML_TAG);
 		} else {
 			return $this->processMacro($matches);
@@ -443,7 +443,7 @@ class Parser
 			$this->setSyntax($token->value);
 			$token->type = Token::COMMENT;
 
-		} elseif ($token->type === Token::HTML_ATTRIBUTE && $token->name === 'n:syntax') {
+		} elseif ($token->type === Token::HTML_ATTRIBUTE_BEGIN && $token->name === 'n:syntax') {
 			$this->setSyntax($token->value);
 			$this->syntaxEndTag = $this->lastHtmlTag;
 			$this->syntaxEndLevel = 1;

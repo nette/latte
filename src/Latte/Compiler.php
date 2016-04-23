@@ -215,12 +215,10 @@ class Compiler
 
 	private function processText(Token $token)
 	{
-		if (in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
-			if ($token->text === $this->context[0]) {
-				$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
-			} elseif ($this->lastAttrValue === '') {
-				$this->lastAttrValue = $token->text;
-			}
+		if ($this->lastAttrValue === ''
+			&& in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)
+		) {
+			$this->lastAttrValue = $token->text;
 		}
 		$this->output .= $this->escape($token->text);
 	}
@@ -333,7 +331,7 @@ class Compiler
 	}
 
 
-	private function processHtmlAttribute(Token $token)
+	private function processHtmlAttributeBegin(Token $token)
 	{
 		if (strncmp($token->name, Parser::N_PREFIX, strlen(Parser::N_PREFIX)) === 0) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
@@ -373,6 +371,13 @@ class Compiler
 		}
 
 		$this->setContext($contextMain, $context);
+	}
+
+
+	private function processHtmlAttributeEnd(Token $token)
+	{
+		$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+		$this->output .= $token->text;
 	}
 
 
