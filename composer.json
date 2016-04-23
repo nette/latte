@@ -1,9 +1,6 @@
 {
-	"name": "latte/latte",
+	"name": "eat24/latte",
 	"description": "Latte: the amazing template engine for PHP",
-	"keywords": ["templating", "twig"],
-	"homepage": "https://latte.nette.org",
-	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
 		{
 			"name": "David Grudl",

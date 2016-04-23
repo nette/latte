@@ -24,7 +24,7 @@ Assert::exception(function () use ($latte) {
 
 
 Assert::match(
-	'<div c=comment "--">',
+	'<div c=comment invalid>',
 	$latte->renderToString('<div c=comment {="--"}>')
 );
 
@@ -38,3 +38,8 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{forech}');
 }, 'Latte\CompileException', 'Unknown macro {forech}, did you mean {foreach}?');
+
+Assert::match(
+    '<div c=comment -->',
+    $latte->renderToString('<div c=comment {="--"|noescape}>')
+);

@@ -344,6 +344,9 @@ class PhpWriter extends Object
 			case Compiler::CONTENT_HTML:
 				$context = $this->compiler->getContext();
 				switch ($context[0]) {
+					case Compiler::CONTEXT_ATTRNAME:
+						$tokens->prepend('Latte\Runtime\Filters::escapeName(')->append(')');
+						return $tokens;
 					case Compiler::CONTEXT_SINGLE_QUOTED_ATTR:
 					case Compiler::CONTEXT_DOUBLE_QUOTED_ATTR:
 					case Compiler::CONTEXT_UNQUOTED_ATTR:
