@@ -407,16 +407,15 @@ class PhpWriter
 			case Compiler::CONTENT_HTML:
 				$context = $this->compiler->getContext();
 				switch ($context[0]) {
-					case Compiler::CONTEXT_SINGLE_QUOTED_ATTR:
-					case Compiler::CONTEXT_DOUBLE_QUOTED_ATTR:
-					case Compiler::CONTEXT_UNQUOTED_ATTR:
+					case Compiler::CONTEXT_QUOTED_ATTRIBUTE:
+					case Compiler::CONTEXT_TAG:
 						if ($context[1] === Compiler::CONTENT_JS) {
 							$tokens->prepend('Latte\Runtime\Filters::escapeJs(')->append(')');
 						} elseif ($context[1] === Compiler::CONTENT_CSS) {
 							$tokens->prepend('Latte\Runtime\Filters::escapeCss(')->append(')');
 						}
-						$tokens->prepend('Latte\Runtime\Filters::escapeHtml(')->append($context[0] === Compiler::CONTEXT_SINGLE_QUOTED_ATTR ? ', ENT_QUOTES)' : ', ENT_COMPAT)');
-						if ($context[0] === Compiler::CONTEXT_UNQUOTED_ATTR) {
+						$tokens->prepend('Latte\Runtime\Filters::escapeHtml(')->append(', ENT_QUOTES)');
+						if ($context[0] === Compiler::CONTEXT_TAG) {
 							$tokens->prepend("'\"', ")->append(", '\"'");
 						}
 						return $tokens;
@@ -436,7 +435,7 @@ class PhpWriter
 						return $tokens->prepend('Latte\Runtime\Filters::escapeHtmlComment(')->append(')');
 					default:
 						$tokens->prepend('Latte\Runtime\Filters::escapeXml(')->append(')');
-						if ($context[0] === Compiler::CONTEXT_UNQUOTED_ATTR) {
+						if ($context[0] === Compiler::CONTEXT_TAG) {
 							$tokens->prepend("'\"', ")->append(", '\"'");
 						}
 						return $tokens;

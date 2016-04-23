@@ -63,9 +63,8 @@ class Compiler
 
 	/** @internal Context-aware escaping HTML contexts */
 	const CONTEXT_COMMENT = 'comment',
-		CONTEXT_SINGLE_QUOTED_ATTR = "'",
-		CONTEXT_DOUBLE_QUOTED_ATTR = '"',
-		CONTEXT_UNQUOTED_ATTR = '=';
+		CONTEXT_QUOTED_ATTRIBUTE = 'attr',
+		CONTEXT_TAG = 'tag';
 
 
 	public function __construct()
@@ -215,9 +214,7 @@ class Compiler
 
 	private function processText(Token $token)
 	{
-		if ($this->lastAttrValue === ''
-			&& in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)
-		) {
+		if ($this->context[0] === self::CONTEXT_QUOTED_ATTRIBUTE && $this->lastAttrValue === '') {
 			$this->lastAttrValue = $token->text;
 		}
 		$this->output .= $this->escape($token->text);
@@ -226,7 +223,7 @@ class Compiler
 
 	private function processMacroTag(Token $token)
 	{
-		if (in_array($this->context[0], [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR, self::CONTEXT_UNQUOTED_ATTR], TRUE)) {
+		if (in_array($this->context[0], [self::CONTEXT_QUOTED_ATTRIBUTE, self::CONTEXT_TAG], TRUE)) {
 			$this->lastAttrValue = TRUE;
 		}
 
@@ -269,7 +266,7 @@ class Compiler
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
 			$this->htmlNode->offset = strlen($this->output);
-			$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+			$this->setContext(self::CONTEXT_TAG);
 		}
 		$this->output .= $token->text;
 	}
@@ -348,12 +345,12 @@ class Compiler
 		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
 		$this->output .= $this->escape($token->text);
 
-		if (in_array($token->value, [self::CONTEXT_SINGLE_QUOTED_ATTR, self::CONTEXT_DOUBLE_QUOTED_ATTR], TRUE)) {
+		if (in_array($token->value, ['"', "'"], TRUE)) {
 			$this->lastAttrValue = '';
-			$contextMain = $token->value;
+			$contextMain = self::CONTEXT_QUOTED_ATTRIBUTE;
 		} else {
 			$this->lastAttrValue = $token->value;
-			$contextMain = self::CONTEXT_UNQUOTED_ATTR;
+			$contextMain = self::CONTEXT_TAG;
 		}
 
 		$context = NULL;
@@ -376,7 +373,7 @@ class Compiler
 
 	private function processHtmlAttributeEnd(Token $token)
 	{
-		$this->setContext(self::CONTEXT_UNQUOTED_ATTR);
+		$this->setContext(self::CONTEXT_TAG);
 		$this->output .= $token->text;
 	}
 

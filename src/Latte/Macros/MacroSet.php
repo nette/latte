@@ -93,7 +93,7 @@ class MacroSet implements Latte\IMacro
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
 			$node->isEmpty = TRUE;
-			$this->compiler->setContext(Latte\Compiler::CONTEXT_DOUBLE_QUOTED_ATTR);
+			$this->compiler->setContext(Latte\Compiler::CONTEXT_QUOTED_ATTRIBUTE);
 			$res = $this->compile($node, $attr);
 			if ($res === FALSE) {
 				return FALSE;
