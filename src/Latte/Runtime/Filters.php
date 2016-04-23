@@ -43,9 +43,6 @@ class Filters
 	 */
 	public static function escapeHtmlAttr($s)
 	{
-		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
-			return $s->__toString(TRUE);
-		}
 		$s = (string) $s;
 		if (strpos($s, '`') !== FALSE && strpbrk($s, ' <>"\'') === FALSE) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
