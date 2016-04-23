@@ -20,7 +20,9 @@ class Test implements Latte\Runtime\IHtmlString
 }
 
 Assert::same('', Filters::escapeHtmlText(NULL));
+Assert::same('', Filters::escapeHtmlText(''));
 Assert::same('1', Filters::escapeHtmlText(1));
+Assert::same('string', Filters::escapeHtmlText('string'));
 Assert::same('&lt;br&gt;', Filters::escapeHtmlText('<br>'));
 Assert::same('&lt; &amp; \' " &gt;', Filters::escapeHtmlText('< & \' " >'));
 Assert::same('<br>', Filters::escapeHtmlText(new Test));

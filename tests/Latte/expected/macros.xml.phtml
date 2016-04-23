@@ -65,5 +65,16 @@ var html = <?php echo Latte\Runtime\Filters::escapeHtmlComment($el) ?>;
 <?php if (true) { ?><p>
 	<div><p>true</div>
 </p>
-<?php }
+<?php } ?>
+
+<input/> <input />
+
+<p val = <?php if (true) { ?>"a"<?php } else { ?>"b"<?php } ?>> </p>
+
+<p val = <?php echo '"', Latte\Runtime\Filters::escapeXml($xss), '"' ?> val2=<?php echo '"', Latte\Runtime\Filters::escapeXml($mxss), '"' ?>> </p>
+
+<p onclick = <?php echo '"', Latte\Runtime\Filters::escapeXml($xss), '"' ?>> </p>
+
+<p val = /><?php echo Latte\Runtime\Filters::escapeXml($xss) ?></p>
+<?php
 %A%
