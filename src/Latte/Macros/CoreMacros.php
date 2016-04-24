@@ -170,8 +170,6 @@ class CoreMacros extends MacroSet
 		} elseif ($node->prefix !== MacroNode::PREFIX_NONE) {
 			throw new CompileException("Unknown attribute n:{$node->prefix}-{$node->name}, use n:{$node->name} attribute.");
 		}
-
-		return $writer->write('ob_start(function () {})');
 	}
 
 
@@ -180,13 +178,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer)
 	{
-		preg_match('#(^.*?>)(.*)(<.*\z)#s', $node->content, $parts);
-		$node->content = $parts[1]
-			. '<?php ob_start() ?>'
-			. $parts[2]
-			. '<?php $_l->ifcontent = ob_get_flush() ?>'
-			. $parts[3];
-		return 'if (rtrim($_l->ifcontent) === "") ob_end_clean(); else echo ob_get_clean()';
+		$node->openingCode = '<?php ob_start(function () {}) ?>';
+		$node->innerContent = '<?php ob_start() ?>' . $node->innerContent . '<?php $_l->ifcontent = ob_get_flush() ?>';
+		$node->closingCode = '<?php if (rtrim($_l->ifcontent) === "") ob_end_clean(); else echo ob_get_clean() ?>';
 	}
 
 

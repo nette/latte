@@ -57,3 +57,12 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:inner-ifcontent>');
 }, 'Latte\CompileException', 'Unknown attribute n:inner-ifcontent, use n:ifcontent attribute.');
+
+
+Assert::match(
+	'%A%
+ob_start(function () {}) ?><div class="bar" <?php if (isset($id)) { ?>id="content"<?php } ?>
+><?php ob_start() ;$_l->ifcontent = ob_get_flush() ?></div><?php if (rtrim($_l->ifcontent) === "") ob_end_clean(); else echo ob_get_clean() ;
+%A%',
+	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:ifcontent></div>')
+);
