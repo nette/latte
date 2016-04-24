@@ -1,0 +1,186 @@
+<?php
+// source: %a%
+%A%
+// prolog Latte\Macros\CoreMacros
+list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
+;
+// prolog Latte\Macros\BlockMacros
+//
+// block bl
+//
+if (!function_exists($_b->blocks['bl'][] = '_%[a-z0-9]+%_bl')) { function _%[a-z0-9]+%_bl($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+?><ul title="block + if + foreach">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { if (strlen($person)===4) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
+<?php } $iterations++; } ?>
+</ul>
+<?php
+}}
+
+//
+// end of blocks
+//
+
+// template extending
+
+$_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
+
+if ($_l->extends) { ob_start(function () {});}
+
+//
+// main template
+//
+?>
+
+<p<?php echo Latte\Runtime\Filters::htmlAttributes(['title' => 'hello', 'lang' => isset($lang) ? $lang : NULL]) ?>> </p>
+
+
+
+<?php $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) { ?>
+	<b<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', Latte\Runtime\Filters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>>item</b>
+<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+
+<?php $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) { ?>
+<p<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', Latte\Runtime\Filters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>
+><?php echo Latte\Runtime\Filters::escapeHtmlText($foo) ?></p>
+<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+
+<p<?php if ($_l->tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', Latte\Runtime\Filters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>>n:class</p>
+
+<p<?php if ($_l->tmp = array_filter([false ? 'first' : NULL])) echo ' class="', Latte\Runtime\Filters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>>n:class empty</p>
+
+
+
+<?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
+call_user_func(reset($_b->blocks['bl']), $_b, get_defined_vars())  ?>
+
+
+
+
+
+<ul title="foreach">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
+<?php $iterations++; } ?>
+</ul>
+
+<ul title="foreach">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>	<li>
+		<?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?>
+
+	</li>
+<?php $iterations++; } ?>
+</ul>
+
+<ul title="inner foreach">
+	<li>
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
+		<?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?>
+
+<?php $iterations++; } ?>	</li>
+</ul>
+
+<ul title="tag if">
+<?php if ($_l->ifs[] = (true)) { ?>	<li>
+<?php } ?>
+		<?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?>
+
+<?php if (array_pop($_l->ifs)) { ?>	</li>
+<?php } ?>
+</ul>
+
+<ul title="for">
+<?php for ($i=0;$i<3;$i++) { ?>	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($i) ?></li>
+<?php } ?>
+</ul>
+
+<ul title="white">
+<?php while (--$i>0) { ?>	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($i) ?></li>
+<?php } ?>
+</ul>
+
+<?php if (true) { ?><p>
+	<div><p>true</div>
+</p>
+<?php } ?>
+
+<?php if (true) { ?><p>
+	<div><p>true</p></div>
+</p>
+<?php } ?>
+
+<?php if (false) { ?><p>
+	<div><p>false</div>
+</p>
+<?php } ?>
+
+<?php if (false) { ?><p>
+	<div><p>false</p></div>
+</p>
+<?php } ?>
+
+<?php if (strlen('{$name}') > 5) { ?><p>noLatte</p>
+<?php } ?>
+
+<ul title="if + foreach">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { if (strlen($person)===4) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
+<?php } $iterations++; } ?>
+</ul>
+
+<ul title="if + inner-if + inner-foreach">
+<?php if (empty($iterator)) { ?>	<li><?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { if (strlen($person)===4) { echo Latte\Runtime\Filters::escapeHtmlText($person) ;} $iterations++; } ?></li>
+<?php } ?>
+</ul>
+
+<ul title="inner-if + inner-foreach">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { if (strlen($person)===4) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($template->lower($person)) ?></li>
+<?php } $iterations++; } ?></ul>
+
+<?php if ($_l->ifs[] = (true)) { ?><b><?php } ?>
+bold<?php if (array_pop($_l->ifs)) { ?></b><?php } ?>
+ <?php if ($_l->ifs[] = (false)) { ?><b><?php } ?>
+normal<?php if (array_pop($_l->ifs)) { ?></b>
+<?php } ?>
+
+<?php if ($_l->ifs[] = (true)) { ?><b<?php if ($_l->tmp = array_filter(['first'])) echo ' class="', Latte\Runtime\Filters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>
+><?php } ?>
+bold<?php if (array_pop($_l->ifs)) { ?></b>
+<?php } ?>
+
+<meta>
+<?php if (true) { ?><meta>
+<?php } if ($_l->ifs[] = (true)) { ?><meta>
+<?php } if (array_pop($_l->ifs)) { } ?>
+<meta>
+<?php if (true) { } ?><meta>
+
+<?php $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ([0] as $foo) { if (1) { $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ([1] as $foo) { if ($_l->ifs[] = (0)) { ?>
+<span><?php } $iterations++; } $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ([2] as $foo) { if (2) { ?>
+Hello<?php } $iterations++; } $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ([1] as $foo) { if (array_pop($_l->ifs)) { ?></span>
+<?php } $iterations++; } } $iterations++; } ?>
+
+
+<ul title="foreach break">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (TRUE) { echo "</li>\n"; break; } ?></li>
+<?php $iterations++; } ?>
+</ul>
+
+<ul title="foreach continue">
+<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (TRUE) { echo "</li>\n"; continue; } ?></li>
+<?php $iterations++; } ?>
+</ul>
+
+
+<ul title="inner foreach break">
+	<li><?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (TRUE) break ;$iterations++; } ?></li>
+</ul>
+
+<ul title="inner foreach continue">
+	<li><?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (TRUE) continue ;$iterations++; } ?></li>
+</ul>
+<?php
+%A%

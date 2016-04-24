@@ -20,8 +20,6 @@
 
 { test} {"test} {'test}
 
-<p n:attr="title => $hello, lang => isset($lang) ? $lang"> </p>
-
 <p val = {if true}"a"{else}"b"{/if}> </p>
 
 <p val0 val1 = tmp val2=tmp val3="x"/> </p>
@@ -125,56 +123,6 @@ var prop2 = {$people};
 </ul>
 
 
-<ul title="foreach">
-	<li n:foreach="$people as $person">{$person}</li>
-</ul>
-
-<ul title="for">
-	<li n:for="$i=0;$i<3;$i++">{$i}</li>
-</ul>
-
-<ul title="white">
-	<li n:while="--$i>0">{$i}</li>
-</ul>
-
-<p n:if="true">
-	<div><p>true</div>
-</p>
-
-<p n:if="true">
-	<div><p>true</p></div>
-</p>
-
-<p n:if="false">
-	<div><p>false</div>
-</p>
-
-<p n:if="false">
-	<div><p>false</p></div>
-</p>
-
-<p n:if="strlen('{$xss}') > 5">noLatte</p>
-
-<ul title="if + foreach">
-	<li n:if="strlen($person)===4" n:foreach="$people as $person">{$person}</li>
-</ul>
-
-<ul title="if + inner-if + inner-foreach">
-	<li n:if="empty($iterator)" n:inner-if="strlen($person)===4" n:inner-foreach="$people as $person">{$person}</li>
-</ul>
-
-<ul title="inner-if + inner-foreach" n:inner-if="strlen($person)===4" n:inner-foreach="$people as $person">
-	<li>{$person|lower}</li>
-</ul>
-
-<ul title="block + if + foreach" n:block="#bl">
-	<li n:if="strlen($person)===4" n:foreach="$people as $person">{$person}</li>
-</ul>
-
-<b n:tag-if="true">bold</b> <b n:tag-if="false">normal</b>
-
-<b n:tag-if="true" n:class="first">bold</b>
-
 {?
 
 	echo 'test'
@@ -183,45 +131,10 @@ var prop2 = {$people};
 
 {l} {r}
 
-<p n:class="foo, (false ? first), odd, ($hello ? foo : bar)">n:class</p>
-
-<p n:class="false ? first">n:class empty</p>
-
-<meta>
-<meta n:if="true">
-<meta n:tag-if="true">
-<meta n:inner-if="true">
-<meta>
-
 {if}TRUE{/if TRUE}
 {if}FALSE{/if FALSE}
 {if}TRUE{else}FALSE{/if TRUE}
 
-{foreach [1,2,3] as $foo}
-	<b n:class="$iterator->even ? even">item</b>
-{/foreach}
-
-<p n:foreach="[1, 2, 3] as $foo" n:class="$iterator->even ? even">{$foo}</p>
-
-<span n:tag-if="0" n:if="1" n:inner-if="2" n:foreach="[0] as $foo" n:tag-foreach="[1] as $foo" n:inner-foreach="[2] as $foo">Hello</span>
-
-
-<ul title="foreach break">
-	<li n:foreach="$people as $person">{$person}{breakIf TRUE}</li>
-</ul>
-
-<ul title="foreach continue">
-	<li n:foreach="$people as $person">{$person}{continueIf TRUE}</li>
-</ul>
-
-
-<ul title="inner foreach break">
-	<li n:inner-foreach="$people as $person">{$person}{breakIf TRUE}</li>
-</ul>
-
-<ul title="inner foreach continue">
-	<li n:inner-foreach="$people as $person">{$person}{continueIf TRUE}</li>
-</ul>
 
 {switch 2}
 {case x}x

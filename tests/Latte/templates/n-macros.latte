@@ -1,0 +1,114 @@
+
+<p n:attr="title => hello, lang => isset($lang) ? $lang"> </p>
+
+
+
+{foreach [1,2,3] as $foo}
+	<b n:class="$iterator->even ? even">item</b>
+{/foreach}
+
+<p n:foreach="[1, 2, 3] as $foo" n:class="$iterator->even ? even">{$foo}</p>
+
+<p n:class="foo, (false ? first), odd, (true ? foo : bar)">n:class</p>
+
+<p n:class="false ? first">n:class empty</p>
+
+
+
+<ul title="block + if + foreach" n:block="#bl">
+	<li n:if="strlen($person)===4" n:foreach="$people as $person">{$person}</li>
+</ul>
+
+
+
+
+
+<ul title="foreach">
+	<li n:foreach="$people as $person">{$person}</li>
+</ul>
+
+<ul title="foreach">
+	<li n:foreach="$people as $person">
+		{$person}
+	</li>
+</ul>
+
+<ul title="inner foreach">
+	<li n:inner-foreach="$people as $person">
+		{$person}
+	</li>
+</ul>
+
+<ul title="tag if">
+	<li n:tag-if=true>
+		{$person}
+	</li>
+</ul>
+
+<ul title="for">
+	<li n:for="$i=0;$i<3;$i++">{$i}</li>
+</ul>
+
+<ul title="white">
+	<li n:while="--$i>0">{$i}</li>
+</ul>
+
+<p n:if="true">
+	<div><p>true</div>
+</p>
+
+<p n:if="true">
+	<div><p>true</p></div>
+</p>
+
+<p n:if="false">
+	<div><p>false</div>
+</p>
+
+<p n:if="false">
+	<div><p>false</p></div>
+</p>
+
+<p n:if="strlen('{$name}') > 5">noLatte</p>
+
+<ul title="if + foreach">
+	<li n:if="strlen($person)===4" n:foreach="$people as $person">{$person}</li>
+</ul>
+
+<ul title="if + inner-if + inner-foreach">
+	<li n:if="empty($iterator)" n:inner-if="strlen($person)===4" n:inner-foreach="$people as $person">{$person}</li>
+</ul>
+
+<ul title="inner-if + inner-foreach" n:inner-if="strlen($person)===4" n:inner-foreach="$people as $person">
+	<li>{$person|lower}</li>
+</ul>
+
+<b n:tag-if="true">bold</b> <b n:tag-if="false">normal</b>
+
+<b n:tag-if="true" n:class="first">bold</b>
+
+<meta>
+<meta n:if="true">
+<meta n:tag-if="true">
+<meta n:inner-if="true">
+<meta>
+
+<span n:tag-if="0" n:if="1" n:inner-if="2" n:foreach="[0] as $foo" n:tag-foreach="[1] as $foo" n:inner-foreach="[2] as $foo">Hello</span>
+
+
+<ul title="foreach break">
+	<li n:foreach="$people as $person">{$person}{breakIf TRUE}</li>
+</ul>
+
+<ul title="foreach continue">
+	<li n:foreach="$people as $person">{$person}{continueIf TRUE}</li>
+</ul>
+
+
+<ul title="inner foreach break">
+	<li n:inner-foreach="$people as $person">{$person}{breakIf TRUE}</li>
+</ul>
+
+<ul title="inner foreach continue">
+	<li n:inner-foreach="$people as $person">{$person}{continueIf TRUE}</li>
+</ul>
