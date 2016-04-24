@@ -454,8 +454,18 @@ class Compiler
 
 		$isLeftmost = $node->content ? trim(substr($this->output, strrpos("\n$this->output", "\n"))) === '' : FALSE;
 
+		if ($node->prefix === MacroNode::PREFIX_NONE) {
+			$parts = explode('<' . spl_object_hash($node) . '>', $node->content);
+			$node->content = implode('', $parts);
+			$node->innerContent = $parts[1];
+		}
+
 		$node->closing = TRUE;
 		$node->macro->nodeClosed($node);
+
+		if ($node->prefix === MacroNode::PREFIX_NONE && $node->innerContent !== $parts[1]) {
+			$node->content = $parts[0] . $node->innerContent . $parts[2];
+		}
 
 		if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 			$this->htmlNode->attrCode .= $node->attrCode;
@@ -496,8 +506,8 @@ class Compiler
 	 */
 	public function writeAttrsMacro($html)
 	{
-		//     none-2 none-1 tag-1 tag-2   <el attr-1 attr-2>   /tag-2 /tag-1 inner-2 inner-1
-		// /inner-1 /inner-2 tag-1 tag-2   </el>   /tag-2 /tag-1 /none-1 /none-2
+		//     none-2 none-1 tag-1 tag-2       <el attr-1 attr-2>   /tag-2 /tag-1 [none-1] [none-2] inner-2 inner-1
+		// /inner-1 /inner-2 [none-2] [none-1] tag-1 tag-2  </el>   /tag-2 /tag-1 /none-1 /none-2
 		$attrs = $this->htmlNode->macroAttrs;
 		$left = $right = [];
 
@@ -518,6 +528,18 @@ class Compiler
 				unset($attrs[$attrName]);
 			}
 		}
+
+		$innerMarkers = '';
+		if ($this->htmlNode->closing) {
+			$left[] = function () {
+				$this->output .= $this->htmlNode->innerMarkers;
+			};
+		} else {
+			array_unshift($right, function () use (& $innerMarkers) {
+				$this->output .= $innerMarkers;
+			});
+		}
+
 
 		foreach (array_reverse($this->macros) as $name => $foo) {
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
@@ -541,9 +563,13 @@ class Compiler
 						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_NONE);
 					};
 				} else {
-					array_unshift($left, function () use ($name, $attrs) {
-						if ($this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE)->isEmpty) {
+					array_unshift($left, function () use ($name, $attrs, & $innerMarkers) {
+						$node = $this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE);
+						if ($node->isEmpty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
+						} else {
+							$this->htmlNode->innerMarkers .= $uniq = '<' . spl_object_hash($node) . '>';
+							$innerMarkers = $uniq . $innerMarkers;
 						}
 					});
 				}
