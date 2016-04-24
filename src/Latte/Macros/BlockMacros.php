@@ -279,12 +279,8 @@ class BlockMacros extends MacroSet
 	public function macroBlockEnd(MacroNode $node, PhpWriter $writer)
 	{
 		if (isset($node->data->name)) { // block, snippet, define
-			if ($node->name === 'snippet' && $node->prefix === MacroNode::PREFIX_NONE // n:snippet -> n:inner-snippet
-				&& preg_match('#^.*? n:\w+>\n?#s', $node->content, $m1) && preg_match('#[ \t]*<[^<]+\z#s', $node->content, $m2)
-			) {
-				$node->openingCode = $m1[0] . $node->openingCode;
-				$node->content = substr($node->content, strlen($m1[0]), -strlen($m2[0]));
-				$node->closingCode .= $m2[0];
+			if ($asInner = $node->name === 'snippet' && $node->prefix === MacroNode::PREFIX_NONE) {
+				$node->content = $node->innerContent;
 			}
 
 			if (empty($node->data->leave)) {
@@ -300,6 +296,11 @@ class BlockMacros extends MacroSet
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+\z#', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
 				$node->openingCode = '<?php ?>';
+			}
+
+			if ($asInner) { // n:snippet -> n:inner-snippet
+				$node->innerContent = $node->openingCode . $node->content . $node->closingCode;
+				$node->closingCode = $node->openingCode = '<?php ?>';
 			}
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
