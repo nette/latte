@@ -36,6 +36,9 @@ class HtmlNode
 	/** @var string */
 	public $attrCode;
 
+	/** @var string @internal */
+	public $innerMarker;
+
 
 	public function __construct($name, self $parentNode = NULL)
 	{

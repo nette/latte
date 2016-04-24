@@ -91,7 +91,7 @@ Assert::same([
 
 	// <div2 n:foo>Text</div2>
 	['nodeOpened', 'div2', FALSE, 'none', NULL, FALSE],
-	['nodeClosed', 'div2', TRUE, 'none', "\t<div2 n:#>Text</div2>\n", FALSE],
+	['nodeClosed', 'div2', TRUE, 'none', "\t<div2 n:#><n:#>Text<n:#></div2>\n", FALSE],
 
 	// <div3 n:inner-foo>Text</div3>
 	['nodeOpened', 'div3', FALSE, 'inner', NULL, FALSE],

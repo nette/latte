@@ -58,6 +58,9 @@ class MacroNode
 	/** @var string */
 	public $content;
 
+	/** @var string */
+	public $innerContent;
+
 	/** @var \stdClass  user data */
 	public $data;
 
