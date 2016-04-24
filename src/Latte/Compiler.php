@@ -27,9 +27,6 @@ class Compiler
 	/** @var array of [name => IMacro[]] */
 	private $macros;
 
-	/** @var \SplObjectStorage */
-	private $macroHandlers;
-
 	/** @var HtmlNode */
 	private $htmlNode;
 
@@ -37,7 +34,7 @@ class Compiler
 	private $macroNode;
 
 	/** @var string[] */
-	private $attrCodes = [];
+	private $placeholders = [];
 
 	/** @var string */
 	private $contentType;
@@ -67,12 +64,6 @@ class Compiler
 		CONTEXT_TAG = 'tag';
 
 
-	public function __construct()
-	{
-		$this->macroHandlers = new \SplObjectStorage;
-	}
-
-
 	/**
 	 * Adds new macro.
 	 * @param  string
@@ -81,7 +72,6 @@ class Compiler
 	public function addMacro($name, IMacro $macro)
 	{
 		$this->macros[$name][] = $macro;
-		$this->macroHandlers->attach($macro);
 		return $this;
 	}
 
@@ -99,7 +89,10 @@ class Compiler
 		$this->output = & $output;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
 
-		foreach ($this->macroHandlers as $handler) {
+		$macroHandlers = new \SplObjectStorage;
+		array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
+
+		foreach ($macroHandlers as $handler) {
 			$handler->initialize($this);
 		}
 
@@ -115,7 +108,7 @@ class Compiler
 		}
 
 		$prologs = $epilogs = '';
-		foreach ($this->macroHandlers as $handler) {
+		foreach ($macroHandlers as $handler) {
 			$res = $handler->finalize();
 			$handlerName = get_class($handler);
 			$prologs .= empty($res[0]) ? '' : "<?php\n// prolog $handlerName\n$res[0]\n?>";
@@ -208,7 +201,7 @@ class Compiler
 	/** @internal */
 	public function expandTokens($s)
 	{
-		return strtr($s, $this->attrCodes);
+		return strtr($s, $this->placeholders);
 	}
 
 
@@ -536,7 +529,7 @@ class Compiler
 		}
 
 		if (!$this->htmlNode->closing) {
-			$this->htmlNode->attrCode = & $this->attrCodes[$uniq = ' n:' . substr(lcg_value(), 2, 10)];
+			$this->htmlNode->attrCode = & $this->placeholders[$uniq = ' n:' . substr(lcg_value(), 2, 10)];
 			$code = substr_replace($code, $uniq, strrpos($code, '/>') ?: strrpos($code, '>'), 0);
 		}
 

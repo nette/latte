@@ -67,6 +67,7 @@ class MacroNode
 	/** @var string  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
 	public $prefix;
 
+	/** @internal */
 	public $saved;
 
 
