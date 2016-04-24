@@ -88,7 +88,7 @@ class Filters
 	 * @param  string UTF-8 encoding
 	 * @return string
 	 */
-	public static function escapeXML($s)
+	public static function escapeXml($s)
 	{
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,

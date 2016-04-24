@@ -61,7 +61,7 @@ class Engine
 		'escapeical' => 'Latte\Runtime\Filters::escapeICal',
 		'escapejs' => 'Latte\Runtime\Filters::escapeJs',
 		'escapeurl' => 'rawurlencode',
-		'escapexml' => 'Latte\Runtime\Filters::escapeXML',
+		'escapexml' => 'Latte\Runtime\Filters::escapeXml',
 		'firstupper' => 'Latte\Runtime\Filters::firstUpper',
 		'implode' => 'implode',
 		'indent' => 'Latte\Runtime\Filters::indent',
