@@ -13,6 +13,8 @@ namespace Latte;
  */
 interface IMacro
 {
+	const
+		DEFAULT_FLAGS = 0;
 
 	/**
 	 * Initializes before template parsing.

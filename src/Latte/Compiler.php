@@ -27,6 +27,9 @@ class Compiler
 	/** @var array of [name => IMacro[]] */
 	private $macros;
 
+	/** @var int[] IMacro flags */
+	private $flags;
+
 	/** @var HtmlNode */
 	private $htmlNode;
 
@@ -68,13 +71,17 @@ class Compiler
 
 
 	/**
-	 * Adds new macro.
+	 * Adds new macro with IMacro flags.
 	 * @param  string
 	 * @return self
 	 */
-	public function addMacro($name, IMacro $macro)
+	public function addMacro($name, IMacro $macro, $flags = NULL)
 	{
+		if ($flags && isset($this->flags[$name]) && $this->flags[$name] !== $flags) {
+			throw new \LogicException("Incompatible flags for macro $name.");
+		}
 		$this->macros[$name][] = $macro;
+		$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
 		return $this;
 	}
 
