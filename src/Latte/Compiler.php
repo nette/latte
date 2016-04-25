@@ -510,7 +510,9 @@ class Compiler
 					};
 				} else {
 					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						$this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_INNER);
+						if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_INNER)->isEmpty) {
+							throw new CompileException("Unable to use empty macro as n:$attrName.");
+						}
 					});
 				}
 				unset($attrs[$attrName]);
@@ -521,7 +523,9 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
 				$left[] = function () use ($name, $attrs, $attrName) {
-					$this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_TAG);
+					if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_TAG)->isEmpty) {
+						throw new CompileException("Unable to use empty macro as n:$attrName.");
+					}
 				};
 				array_unshift($right, function () use ($name) {
 					$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_TAG);

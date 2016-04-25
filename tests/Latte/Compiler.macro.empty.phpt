@@ -56,8 +56,8 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:inner-one>@</div>');
-}, 'Latte\CompileException', 'Unexpected </div> for n:inner-one');
+}, 'Latte\CompileException', 'Unable to use empty macro as n:inner-one.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:tag-one>@</div>');
-}, 'Latte\CompileException', 'Unexpected </div> for n:tag-one');
+}, 'Latte\CompileException', 'Unable to use empty macro as n:tag-one.');
