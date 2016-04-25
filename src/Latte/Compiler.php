@@ -412,7 +412,7 @@ class Compiler
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->isEmpty) {
 			$this->writeCode($node->openingCode, $node->replaced, $isRightmost);
-			if ($node->prefix) {
+			if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 				$this->htmlNode->attrCode .= $node->attrCode;
 			}
 		} else {
@@ -457,7 +457,7 @@ class Compiler
 		$node->closing = TRUE;
 		$node->macro->nodeClosed($node);
 
-		if ($node->prefix) {
+		if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 			$this->htmlNode->attrCode .= $node->attrCode;
 		}
 		$this->output = & $node->saved[0];

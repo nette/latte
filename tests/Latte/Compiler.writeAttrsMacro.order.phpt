@@ -76,8 +76,7 @@ DOC
 
 Assert::match(<<<'DOC'
 %A%
-'two open' ?>[<?php 'one open' ?>[<div<?php 'one attr' ;'two attr' ;'one attr' ;'two attr' ?>
->]<?php 'one close' ?>]<?php 'two close' ?>
+'two open' ?>[<?php 'one open' ?>[<div>]<?php 'one close' ?>]<?php 'two close' ?>
 @<?php 'two open' ?>[<?php 'one open' ?>[</div>]<?php 'one close' ?>]<?php 'two close' %A%
 DOC
 , $latte->compile('<div n:tag-two n:tag-one>@</div>'));
@@ -93,8 +92,7 @@ DOC
 
 Assert::match(<<<'DOC'
 %A%
-'one open' ?>[<?php 'two open' ?>[<div<?php 'two attr' ;'three attr' ;'two attr' ;'one attr' ?>
->]<?php 'two close' ;'three open' ?>[@]<?php 'three close' ;'two open' ?>[</div>]<?php 'two close' ?>
-]<?php 'one close' %A%
+'one open' ?>[<?php 'two open' ?>[<div<?php 'three attr' ;'one attr' ?>>]<?php 'two close' ;'three open' ?>
+[@]<?php 'three close' ;'two open' ?>[</div>]<?php 'two close' ?>]<?php 'one close' %A%
 DOC
 , $latte->compile('<div n:one n:tag-two n:inner-three>@</div>'));

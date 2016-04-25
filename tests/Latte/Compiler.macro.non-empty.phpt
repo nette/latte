@@ -70,6 +70,6 @@ Assert::match(
 );
 
 Assert::match(
-	'%A%opening[<div attr attr>]closing@opening[</div>]closing%A%',
+	'%A%opening[<div>]closing@opening[</div>]closing%A%',
 	$latte->compile('<div n:tag-one>@</div>')
 );
