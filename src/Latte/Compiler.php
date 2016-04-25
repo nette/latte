@@ -412,6 +412,9 @@ class Compiler
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->isEmpty) {
 			$this->writeCode($node->openingCode, $node->replaced, $isRightmost);
+			if ($node->prefix) {
+				$this->htmlNode->attrCode .= $node->attrCode;
+			}
 		} else {
 			$this->macroNode = $node;
 			$node->saved = [& $this->output, $isRightmost];
@@ -454,6 +457,9 @@ class Compiler
 		$node->closing = TRUE;
 		$node->macro->nodeClosed($node);
 
+		if ($node->prefix) {
+			$this->htmlNode->attrCode .= $node->attrCode;
+		}
 		$this->output = & $node->saved[0];
 		$this->writeCode($node->openingCode, $node->replaced, $node->saved[1]);
 		$this->output .= $node->content;
@@ -484,12 +490,14 @@ class Compiler
 
 	/**
 	 * Generates code for macro <tag n:attr> to the output.
-	 * @param  string
+	 * @param  string HTML tag
 	 * @return void
 	 * @internal
 	 */
-	public function writeAttrsMacro($code)
+	public function writeAttrsMacro($html)
 	{
+		//     none-2 none-1 tag-1 tag-2   <el attr-1 attr-2>   /tag-2 /tag-1 inner-2 inner-1
+		// /inner-1 /inner-2 tag-1 tag-2   </el>   /tag-2 /tag-1 /none-1 /none-2
 		$attrs = $this->htmlNode->macroAttrs;
 		$left = $right = [];
 
@@ -497,9 +505,13 @@ class Compiler
 			$attrName = MacroNode::PREFIX_INNER . "-$name";
 			if (isset($attrs[$attrName])) {
 				if ($this->htmlNode->closing) {
-					$left[] = ['closeMacro', $name, '', MacroNode::PREFIX_INNER];
+					$left[] = function () use ($name) {
+						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_INNER);
+					};
 				} else {
-					array_unshift($right, ['openMacro', $name, $attrs[$attrName], MacroNode::PREFIX_INNER]);
+					array_unshift($right, function () use ($name, $attrs, $attrName) {
+						$this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_INNER);
+					});
 				}
 				unset($attrs[$attrName]);
 			}
@@ -508,8 +520,12 @@ class Compiler
 		foreach (array_reverse($this->macros) as $name => $foo) {
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
-				$left[] = ['openMacro', $name, $attrs[$attrName], MacroNode::PREFIX_TAG];
-				array_unshift($right, ['closeMacro', $name, '', MacroNode::PREFIX_TAG]);
+				$left[] = function () use ($name, $attrs, $attrName) {
+					$this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_TAG);
+				};
+				array_unshift($right, function () use ($name) {
+					$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_TAG);
+				});
 				unset($attrs[$attrName]);
 			}
 		}
@@ -517,9 +533,15 @@ class Compiler
 		foreach ($this->macros as $name => $foo) {
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
-					$right[] = ['closeMacro', $name, '', MacroNode::PREFIX_NONE];
+					$right[] = function () use ($name) {
+						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_NONE);
+					};
 				} else {
-					array_unshift($left, ['openMacro', $name, $attrs[$name], MacroNode::PREFIX_NONE]);
+					array_unshift($left, function () use ($name, $attrs) {
+						if ($this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE)->isEmpty) {
+							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
+						}
+					});
 				}
 				unset($attrs[$name]);
 			}
@@ -531,27 +553,18 @@ class Compiler
 		}
 
 		if (!$this->htmlNode->closing) {
-			$this->htmlNode->attrCode = & $this->placeholders[$uniq = ' n:' . substr(lcg_value(), 2, 10)];
-			$code = substr_replace($code, $uniq, strrpos($code, '/>') ?: strrpos($code, '>'), 0);
+			$this->htmlNode->attrCode = & $this->placeholders[$uniq = ' n:q' . count($this->placeholders) . 'q'];
+			$html = substr_replace($html, $uniq, strrpos($html, '/>') ?: strrpos($html, '>'), 0);
 		}
 
-		foreach ($left as $item) {
-			$node = $this->{$item[0]}($item[1], $item[2], NULL, NULL, $item[3]);
-			if ($node->closing || $node->isEmpty) {
-				$this->htmlNode->attrCode .= $node->attrCode;
-				if ($node->isEmpty) {
-					unset($this->htmlNode->macroAttrs[$node->name]);
-				}
-			}
+		foreach ($left as $func) {
+			$func();
 		}
 
-		$this->output .= $code;
+		$this->output .= $html;
 
-		foreach ($right as $item) {
-			$node = $this->{$item[0]}($item[1], $item[2], NULL, NULL, $item[3]);
-			if ($node->closing) {
-				$this->htmlNode->attrCode .= $node->attrCode;
-			}
+		foreach ($right as $func) {
+			$func();
 		}
 
 		if ($right && substr($this->output, -2) === '?>') {
