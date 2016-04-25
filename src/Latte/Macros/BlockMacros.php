@@ -317,6 +317,7 @@ class BlockMacros extends MacroSet
 				$node->innerContent = $node->openingCode . $node->content . $node->closingCode;
 				$node->closingCode = $node->openingCode = '<?php ?>';
 			}
+			return ' '; // consume next new line
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
 			return $writer->write('echo %modify(ob_get_clean())');

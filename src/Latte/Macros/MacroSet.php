@@ -124,7 +124,7 @@ class MacroSet implements Latte\IMacro
 	{
 		if (isset($this->macros[$node->name][1])) {
 			$res = $this->compile($node, $this->macros[$node->name][1]);
-			if (!$node->closingCode) {
+			if (!$node->closingCode && is_string($res) && $res !== '') {
 				$node->closingCode = "<?php $res ?>";
 			}
 		}
