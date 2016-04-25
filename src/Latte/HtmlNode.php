@@ -36,9 +36,6 @@ class HtmlNode
 	/** @var string */
 	public $attrCode;
 
-	/** @var int */
-	public $offset;
-
 
 	public function __construct($name, self $parentNode = NULL)
 	{

@@ -48,6 +48,9 @@ class Compiler
 	/** @var mixed */
 	private $lastAttrValue;
 
+	/** @var int */
+	private $tagOffset;
+
 	/** Context-aware escaping content types */
 	const CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
@@ -250,7 +253,6 @@ class Compiler
 				$this->htmlNode = new HtmlNode($token->name);
 			}
 			$this->htmlNode->closing = TRUE;
-			$this->htmlNode->offset = strlen($this->output);
 			$this->setContext(NULL);
 
 		} elseif ($token->text === '<!--') {
@@ -258,9 +260,9 @@ class Compiler
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
-			$this->htmlNode->offset = strlen($this->output);
 			$this->setContext(self::CONTEXT_TAG);
 		}
+		$this->tagOffset = strlen($this->output);
 		$this->output .= $token->text;
 	}
 
@@ -294,9 +296,9 @@ class Compiler
 		}
 
 		if ($htmlNode->macroAttrs) {
-			$code = substr($this->output, $htmlNode->offset) . $token->text;
-			$this->output = substr($this->output, 0, $htmlNode->offset);
-			$this->writeAttrsMacro($code);
+			$html = substr($this->output, $this->tagOffset) . $token->text;
+			$this->output = substr($this->output, 0, $this->tagOffset);
+			$this->writeAttrsMacro($html);
 		} else {
 			$this->output .= $token->text . $end;
 		}
