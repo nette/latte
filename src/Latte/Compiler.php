@@ -236,8 +236,8 @@ class Compiler
 		$isRightmost = !isset($this->tokens[$this->position + 1])
 			|| substr($this->tokens[$this->position + 1]->text, 0, 1) === "\n";
 
-		if ($token->name[0] === '/') {
-			$this->closeMacro((string) substr($token->name, 1), $token->value, $token->modifiers, $isRightmost);
+		if ($token->closing) {
+			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
 			$this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost && !$token->empty);
 			if ($token->empty) {

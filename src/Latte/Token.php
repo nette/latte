@@ -41,7 +41,7 @@ class Token
 	/** @var string  macro modifiers; used for type MACRO_TAG */
 	public $modifiers;
 
-	/** @var bool  is closing HTML tag </tag>? used for type HTML_TAG_BEGIN */
+	/** @var bool  is closing macro or HTML tag </tag>? used for types MACRO_TAG, HTML_TAG_BEGIN */
 	public $closing;
 
 	/** @var bool  is tag empty {name/}? used for type MACRO_TAG */
