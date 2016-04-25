@@ -284,6 +284,13 @@ class Compiler
 		if ($token->closing) {
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
+			if (!$token->empty && isset($this->flags[$token->name]) && $this->flags[$token->name] & IMacro::AUTO_EMPTY) {
+				$pos = $this->position;
+				while (($t = isset($this->tokens[++$pos]) ? $this->tokens[$pos] : NULL)
+					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)
+					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
+				$token->empty = $t ? !$t->closing : TRUE;
+			}
 			$this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost && !$token->empty);
 			if ($token->empty) {
 				$this->closeMacro($token->name, NULL, NULL, $isRightmost);

@@ -14,6 +14,7 @@ namespace Latte;
 interface IMacro
 {
 	const
+		AUTO_EMPTY = 4,
 		AUTO_CLOSE = 64,
 		DEFAULT_FLAGS = 0;
 
