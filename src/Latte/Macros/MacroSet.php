@@ -31,7 +31,7 @@ class MacroSet implements Latte\IMacro
 	}
 
 
-	public function addMacro($name, $begin, $end = NULL, $attr = NULL)
+	public function addMacro($name, $begin, $end = NULL, $attr = NULL, $flags = NULL)
 	{
 		if (!$begin && !$end && !$attr) {
 			throw new \InvalidArgumentException("At least one argument must be specified for macro '$name'.");
@@ -43,7 +43,7 @@ class MacroSet implements Latte\IMacro
 		}
 
 		$this->macros[$name] = [$begin, $end, $attr];
-		$this->compiler->addMacro($name, $this);
+		$this->compiler->addMacro($name, $this, $flags);
 		return $this;
 	}
 
