@@ -12,13 +12,11 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->getParser()->shortNoEscape = TRUE;
 
 Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 
-Assert::match('<>', $latte->renderToString('{!="<>"}'));
+Assert::match('<>', @$latte->renderToString('{!="<>"}'));
 
-$latte->getParser()->shortNoEscape = FALSE;
 Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 
 Assert::error(function () use ($latte) {
