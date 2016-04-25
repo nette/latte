@@ -271,7 +271,7 @@ class Parser
 
 		if (!empty($matches['macro'])) {
 			$token = $this->addToken(Token::MACRO_TAG, $this->context[1][1] . $matches[0]);
-			list($token->name, $token->value, $token->modifiers, $token->empty) = $this->parseMacroTag($matches['macro']);
+			list($token->name, $token->value, $token->modifiers, $token->empty, $token->closing) = $this->parseMacroTag($matches['macro']);
 			$this->context = $this->context[1][0];
 
 		} elseif (!empty($matches['comment'])) {
@@ -387,9 +387,10 @@ class Parser
 	public function parseMacroTag($tag)
 	{
 		if (!preg_match('~^
+			(?P<closing>/?)
 			(
-				(?P<name>\?|/?[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
-				(?P<noescape>!?)(?P<shortname>/?[=\~#%^&_]?)      ## !expression, !=expression, ...
+				(?P<name>\?|[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
+				(?P<noescape>!?)(?P<shortname>[=\~#%^&_]?)      ## !expression, !=expression, ...
 			)(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
 			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
 			(?P<empty>/?\z)
@@ -400,13 +401,13 @@ class Parser
 			return FALSE;
 		}
 		if ($match['name'] === '') {
-			$match['name'] = $match['shortname'] ?: '=';
+			$match['name'] = $match['shortname'] ?: ($match['closing'] ? '' : '=');
 			if ($match['noescape']) {
 				trigger_error("The noescape shortcut {!...} is deprecated, use {...|noescape} modifier on line {$this->getLine()}.", E_USER_DEPRECATED);
 				$match['modifiers'] .= '|noescape';
 			}
 		}
-		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty']];
+		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty'], (bool) $match['closing']];
 	}
 
 
