@@ -230,6 +230,7 @@ class Filters
 		}
 
 		if (!isset($format)) {
+			trigger_error('Filter date: missing format.', E_USER_WARNING);
 			$format = self::$dateFormat;
 		}
 
