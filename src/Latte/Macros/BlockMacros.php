@@ -181,10 +181,7 @@ class BlockMacros extends MacroSet
 	{
 		$name = $node->tokenizer->fetchWord();
 
-		if ($node->name === '#') {
-			trigger_error('Shortcut {#block} is deprecated.', E_USER_DEPRECATED);
-
-		} elseif ($node->name === 'block' && $name === FALSE) { // anonymous block
+		if ($node->name === 'block' && $name === FALSE) { // anonymous block
 			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
 		}
 
