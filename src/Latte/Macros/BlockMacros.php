@@ -32,7 +32,7 @@ class BlockMacros extends MacroSet
 		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']);
 		$me->addMacro('extends', [$me, 'macroExtends']);
 		$me->addMacro('layout', [$me, 'macroExtends']);
-		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd'], NULL, self::AUTO_CLOSE);
 		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('snippetArea', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
@@ -58,12 +58,6 @@ class BlockMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		// try close last block
-		$last = $this->getCompiler()->getMacroNode();
-		if ($last && $last->name === 'block') {
-			$this->getCompiler()->closeMacro($last->name);
-		}
-
 		$epilog = $prolog = [];
 
 		if ($this->namedBlocks) {
