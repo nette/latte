@@ -17,13 +17,12 @@ setlocale(LC_TIME, 'C');
 Assert::null(Filters::date(NULL));
 
 
-Assert::same('01/23/78', Filters::date(254400000));
+Assert::same('01/23/78', @Filters::date(254400000));
 
 
-Assert::same('05/05/78', Filters::date('1978-05-05'));
-
-
-Assert::same('05/05/78', Filters::date(new DateTime('1978-05-05')));
+Assert::error(function () {
+	Filters::date('1978-05-05');
+}, E_USER_WARNING, 'Filter date: missing format.');
 
 
 Assert::same('1978-01-23', Filters::date(254400000, 'Y-m-d'));

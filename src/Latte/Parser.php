@@ -24,8 +24,8 @@ class Parser
 	/** @var string default macro tag syntax */
 	public $defaultSyntax = 'latte';
 
-	/** @var bool */
-	public $shortNoEscape = FALSE;
+	/** @deprecated */
+	public $shortNoEscape;
 
 	/** @var array */
 	public $syntaxes = [
@@ -402,9 +402,7 @@ class Parser
 		if ($match['name'] === '') {
 			$match['name'] = $match['shortname'] ?: '=';
 			if ($match['noescape']) {
-				if (!$this->shortNoEscape) {
-					trigger_error("The noescape shortcut {!...} is deprecated, use {...|noescape} modifier on line {$this->getLine()}.", E_USER_DEPRECATED);
-				}
+				trigger_error("The noescape shortcut {!...} is deprecated, use {...|noescape} modifier on line {$this->getLine()}.", E_USER_DEPRECATED);
 				$match['modifiers'] .= '|noescape';
 			}
 		}
