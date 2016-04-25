@@ -117,6 +117,13 @@ class Compiler
 			$this->htmlNode = $this->htmlNode->parentNode;
 		}
 
+		while ($this->macroNode) {
+			if (~$this->flags[$this->macroNode->name] & IMacro::AUTO_CLOSE) {
+				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
+			}
+			$this->closeMacro($this->macroNode->name);
+		}
+
 		$prologs = $epilogs = '';
 		foreach ($macroHandlers as $handler) {
 			$res = $handler->finalize();
@@ -125,10 +132,6 @@ class Compiler
 			$epilogs = (empty($res[1]) ? '' : "<?php\n// epilog $handlerName\n$res[1]\n?>") . $epilogs;
 		}
 		$output = ($prologs ? $prologs . "<?php\n//\n// main template\n//\n?>\n" : '') . $output . $epilogs;
-
-		if ($this->macroNode) {
-			throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
-		}
 
 		$output = $this->expandTokens($output);
 		$output = "<?php\n"
