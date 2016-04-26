@@ -19,7 +19,7 @@ if ($_l->extends) { ob_start(function () {});}
 // main template
 $var = 10 ?>
 
-<?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
+<?php if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 

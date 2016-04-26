@@ -83,7 +83,7 @@ class BlockMacros extends MacroSet
 
 			$prolog[] = 'if ($_l->extends) { ob_start(function () {});}';
 			if (!$this->namedBlocks) {
-				$epilog[] = 'if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars());}';
+				$epilog[] = 'if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars());}';
 			}
 		}
 
@@ -138,8 +138,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
 		return $writer->write(
-			'ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean())',
-			$this->getCompiler()->getTemplateId()
+			'ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $this->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean())'
 		);
 	}
 
@@ -235,7 +234,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
 
-		$prolog = $this->namedBlocks ? '' : "if (\$_l->extends) { ob_end_clean(); return \$template->renderChildTemplate(\$_l->extends, get_defined_vars()); }\n";
+		$prolog = $this->namedBlocks ? '' : "if (\$_l->extends) { ob_end_clean(); return \$this->renderChildTemplate(\$_l->extends, get_defined_vars()); }\n";
 		$this->namedBlocks[$name] = TRUE;
 
 		$include = 'call_user_func(reset($_b->blocks[%var]), $_b, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
