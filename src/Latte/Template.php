@@ -27,9 +27,8 @@ class Template
 	protected $filters;
 
 
-	public function __construct(array $params, Engine $engine, Filters $filters, $name)
+	public function __construct(Engine $engine, Filters $filters, $name)
 	{
-		$this->setParameters($params);
 		$this->engine = $engine;
 		$this->filters = $filters;
 		$this->name = $name;

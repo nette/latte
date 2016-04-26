@@ -66,13 +66,7 @@ class Engine
 	 */
 	public function render($name, array $params = [])
 	{
-		$class = $this->getTemplateClass($name);
-		if (!class_exists($class, FALSE)) {
-			$this->loadTemplate($name);
-		}
-
-		$template = new $class($params, $this, $this->filters, $name);
-		$template->render();
+		$this->createTemplate($name)->setParameters($params)->render();
 	}
 
 
@@ -93,6 +87,20 @@ class Engine
 			throw $e;
 		}
 		return ob_get_clean();
+	}
+
+
+	/**
+	 * Creates template object.
+	 * @return Template
+	 */
+	public function createTemplate($name)
+	{
+		$class = $this->getTemplateClass($name);
+		if (!class_exists($class, FALSE)) {
+			$this->loadTemplate($name);
+		}
+		return new $class($this, $this->filters, $name);
 	}
 
 
