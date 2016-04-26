@@ -38,7 +38,7 @@ call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 
 	<ul>
 <?php %a% foreach ($people as $person) { ?>
-		<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
+		<li><?php echo LFilters::escapeHtmlText($person) ?></li>
 <?php $iterations++; } ?>
 	</ul>
 <?php

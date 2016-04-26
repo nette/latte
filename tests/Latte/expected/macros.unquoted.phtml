@@ -7,11 +7,11 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%?>
-<span title=<?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($x) ?>></span>
+<span title=<?php echo LFilters::escapeHtmlAttrUnquoted($x) ?>></span>
 
-<span title=<?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($x) ?> <?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($x) ?>></span>
+<span title=<?php echo LFilters::escapeHtmlAttrUnquoted($x) ?> <?php echo LFilters::escapeHtmlAttrUnquoted($x) ?>></span>
 
-<span <?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted('title') ?>=<?php echo Latte\Runtime\Filters::escapeHtmlAttrUnquoted($x) ?>></span>
+<span <?php echo LFilters::escapeHtmlAttrUnquoted('title') ?>=<?php echo LFilters::escapeHtmlAttrUnquoted($x) ?>></span>
 <?php
 	}
 

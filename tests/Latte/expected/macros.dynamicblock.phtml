@@ -45,7 +45,7 @@ call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?>
-		Dynamic block #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
+		Dynamic block #<?php echo LFilters::escapeHtmlText($var) ?>
 
 <?php
 	}
@@ -68,7 +68,7 @@ call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 	function block_static_%h%($_b, $_args)
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
-?>	Static block #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
+?>	Static block #<?php echo LFilters::escapeHtmlText($var) ?>
 
 <?php
 	}

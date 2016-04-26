@@ -143,7 +143,8 @@ class Compiler
 			$methods[] = "\tfunction $name($method[1])\n\t{\n\t\t$method[0]\n\t}";
 		}
 
-		return "<?php\n\n"
+		return "<?php\n"
+			. "use Latte\\Runtime\\Filters as LFilters;\n\n"
 			. "class $className extends Latte\\Template\n{\n\n"
 			. $this->expandTokens(implode("\n\n\n", $methods))
 			. "\n\n}\n";
