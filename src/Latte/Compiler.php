@@ -462,8 +462,6 @@ class Compiler
 			$node->setArgs($args);
 		}
 
-		$isLeftmost = $node->content ? trim(substr($this->output, strrpos("\n$this->output", "\n"))) === '' : FALSE;
-
 		if ($node->prefix === MacroNode::PREFIX_NONE) {
 			$parts = explode($node->htmlNode->innerMarker, $node->content);
 			if (count($parts) === 3) { // markers may be destroyed by inner macro
@@ -484,18 +482,16 @@ class Compiler
 		$this->output = & $node->saved[0];
 		$this->writeCode($node->openingCode, $node->replaced, $node->saved[1]);
 		$this->output .= $node->content;
-		$this->writeCode($node->closingCode, $node->replaced, $isRightmost, $isLeftmost);
+		$this->writeCode($node->closingCode, $node->replaced, $isRightmost);
 		return $node;
 	}
 
 
-	private function writeCode($code, $isReplaced, $isRightmost, $isLeftmost = NULL)
+	private function writeCode($code, $isReplaced, $isRightmost)
 	{
 		if ($isRightmost) {
 			$leftOfs = strrpos("\n$this->output", "\n");
-			if ($isLeftmost === NULL) {
-				$isLeftmost = trim(substr($this->output, $leftOfs)) === '';
-			}
+			$isLeftmost = trim(substr($this->output, $leftOfs)) === '';
 			if ($isReplaced === NULL) {
 				$isReplaced = preg_match('#<\?php.*\secho\s#As', $code);
 			}
