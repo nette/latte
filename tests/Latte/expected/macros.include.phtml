@@ -1,15 +1,17 @@
 <?php
-// source: %a%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
 %A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
-//
-// main template
-//
 ?>
 
 <?php ob_start(function () {}); $_b->templates['%[a-z0-9]+%']->renderChildTemplate('subdir/include1.latte' . '', ['localvar' => 10] + $template->getParameters()); echo $template->indent(ob_get_clean()) ?>
 
 <?php
-%A%
+	}
+
+}

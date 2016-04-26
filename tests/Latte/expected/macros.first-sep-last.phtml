@@ -1,39 +1,40 @@
 <?php
-// source: %a%
-%A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
-//
-// main template
-//
-?>
+// source: %A%
 
-<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
+%A%?>
+
+<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst()) { ?>(<?php } ?> <?php echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (!$iterator->isLast()) { ?>
 , <?php } ?> <?php if ($iterator->isLast()) { ?>)<?php } ?>
 
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
 
-<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst(2)) { ?>(<?php } ?> <?php echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (!$iterator->isLast(2)) { ?>
 , <?php } ?> <?php if ($iterator->isLast(2)) { ?>)<?php } ?>
 
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
 
-<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst(1)) { ?>(<?php } ?> <?php echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (!$iterator->isLast(1)) { ?>
 , <?php } ?> <?php if ($iterator->isLast(1)) { ?>)<?php } ?>
 
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
 
-<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { if ($iterator->isFirst(0)) { ?>
+<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { if ($iterator->isFirst(0)) { ?>
 	<span>(</span><?php } ?>
  <?php echo Latte\Runtime\Filters::escapeHtmlText($person) ;if (!$iterator->isLast()) { ?>
 <span>, </span><?php } ?>
  <?php if ($iterator->isLast()) { ?><span>)</span>
 <?php } $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ;
-%A%
+	}
+
+}

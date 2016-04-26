@@ -136,7 +136,7 @@ class Compiler
 			$prologs .= empty($res[0]) ? '' : "<?php\n// prolog $handlerName\n$res[0]\n?>";
 			$epilogs = (empty($res[1]) ? '' : "<?php\n// epilog $handlerName\n$res[1]\n?>") . $epilogs;
 		}
-		$output = ($prologs ? $prologs . "<?php\n//\n// main template\n//\n?>\n" : '') . $output . $epilogs;
+		$output = ($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs;
 
 		$this->addMethod('render', 'foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);' . "\n?>$output<?php");
 		foreach ($this->methods as $name => $method) {
