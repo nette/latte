@@ -417,9 +417,9 @@ class Compiler
 	 * @return MacroNode
 	 * @internal
 	 */
-	public function openMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL)
+	public function openMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL, $nPrefixImplied = FALSE)
 	{
-		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
+		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix, $nPrefixImplied);
 		if ($node->isEmpty) {
 			$this->writeCode($node->openingCode, $node->replaced, $isRightmost);
 			if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
@@ -536,6 +536,19 @@ class Compiler
 				}
 				unset($attrs[$attrName]);
 			}
+			if (isset($attrs[$name]) && $this->getImplicitPrefix($name) === MacroNode::PREFIX_INNER) {
+				if ($this->htmlNode->closing) {
+					$left[] = function () use ($name) {
+						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_INNER);
+					};
+				} else {
+					array_unshift($right, function () use ($name, $attrs) {
+						if ($this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_INNER, TRUE)->isEmpty) {
+							throw new CompileException("Unable to use empty macro as n:$name.");
+						}
+					});
+				}
+			}
 		}
 
 		$innerMarkers = '';
@@ -563,24 +576,37 @@ class Compiler
 				});
 				unset($attrs[$attrName]);
 			}
+			if (isset($attrs[$name]) && $this->getImplicitPrefix($name) === MacroNode::PREFIX_TAG) {
+				$left[] = function () use ($name, $attrs) {
+					if ($this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_TAG, TRUE)->isEmpty) {
+						throw new CompileException("Unable to use empty macro as n:$name.");
+					}
+				};
+				array_unshift($right, function () use ($name) {
+					$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_TAG);
+				});
+			}
 		}
 
 		foreach ($this->macros as $name => $foo) {
 			if (isset($attrs[$name])) {
-				if ($this->htmlNode->closing) {
-					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_NONE);
-					};
-				} else {
-					array_unshift($left, function () use ($name, $attrs, & $innerMarkers) {
-						$node = $this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE);
-						if ($node->isEmpty) {
-							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
-						} else {
-							$this->htmlNode->innerMarkers .= $uniq = '<' . spl_object_hash($node) . '>';
-							$innerMarkers = $uniq . $innerMarkers;
-						}
-					});
+				if ($this->getImplicitPrefix($name) === MacroNode::PREFIX_NONE) {
+					if ($this->htmlNode->closing) {
+						$right[] = function () use ($name) {
+							$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_NONE);
+						};
+					} else {
+						array_unshift($left, function () use ($name, $attrs, & $innerMarkers) {
+							$node = $this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE);
+							if ($node->isEmpty) {
+								unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
+							} else {
+								$this->htmlNode->innerMarkers .= $uniq = '<' . spl_object_hash($node) . '>';
+								$innerMarkers = $uniq . $innerMarkers;
+							}
+						});
+
+					}
 				}
 				unset($attrs[$name]);
 			}
@@ -611,16 +637,29 @@ class Compiler
 		}
 	}
 
+	private function hasHandlerWithImplicitPrefix($macroName, $prefix)
+	{
+		foreach ($this->macros[$macroName] as $macro) {
+			if ($this->getImplicitPrefix($macroName) === $prefix) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
 
 	/**
 	 * Expands macro and returns node & code.
 	 * @param  string
 	 * @param  string
 	 * @param  string
+	 * @param  string $nPrefix prefix to be the node treated as
+	 * @param  bool $nPrefixImplied If true, determines that the prefix was added implicitly.
 	 * @return MacroNode
+	 * @throws CompileException
 	 * @internal
 	 */
-	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL)
+	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL, $nPrefixImplied = FALSE)
 	{
 		$inScript = in_array($this->context[0], [self::CONTENT_JS, self::CONTENT_CSS], TRUE);
 
@@ -648,6 +687,18 @@ class Compiler
 		}
 
 		foreach (array_reverse($this->macros[$name]) as $macro) {
+			if ($nPrefix !== NULL) { //used as n: macro
+				// treat as no prefix, skip implicitly prefixed macros
+				if ($nPrefix === MacroNode::PREFIX_NONE
+					&& $this->getImplicitPrefix($name) !== MacroNode::PREFIX_NONE
+				) {
+					continue;
+				}
+				// treat as prefixed, skip not implicitly prefixed if the prefix was added implicitly
+				if ($nPrefixImplied && $this->getImplicitPrefix($name) !== $nPrefix) {
+					continue;
+				}
+			}
 			$node = new MacroNode($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
 			if ($macro->nodeOpened($node) !== FALSE) {
 				return $node;
@@ -671,4 +722,17 @@ class Compiler
 		}
 	}
 
+	private function getImplicitPrefix($name)
+	{
+		if (!isset($this->flags[$name])) {
+			throw new RuntimeException('Trying to get implicit prefix of unknown macro handler');
+		}
+		if ($this->flags[$name] & IMacro::IMPLICIT_INNER) {
+			return MacroNode::PREFIX_INNER;
+		}
+		if ($this->flags[$name] & IMacro::IMPLICIT_TAG) {
+			return MacroNode::PREFIX_TAG;
+		}
+		return MacroNode::PREFIX_NONE;
+	}
 }
