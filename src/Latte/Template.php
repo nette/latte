@@ -55,7 +55,7 @@ class Template
 	 * @return [\stdClass, \stdClass, \stdClass]
 	 * @internal
 	 */
-	public function initialize($templateId, $contentType)
+	public function initialize($contentType)
 	{
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $contentType);
 
@@ -69,7 +69,6 @@ class Template
 		} else {
 			$block = new \stdClass;
 		}
-		$block->templates[$templateId] = $this;
 
 		// global storage
 		if (!isset($this->params['_g'])) {
