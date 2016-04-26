@@ -118,4 +118,20 @@ class Helpers
 		return $best;
 	}
 
+
+	public static function dumpPhp($value)
+	{
+		if (is_array($value)) {
+			$s = "[\n";
+			foreach ($value as $k => $v) {
+				$v = is_array($v) && (!$v || array_keys($v) === range(0, count($v) - 1))
+					? '[' . implode(', ', array_map(function($s) { return var_export($s, TRUE); }, $v)) . ']'
+					: var_export($v, TRUE);
+				$s .= "\t\t" . var_export($k, TRUE) . ' => ' . $v . ",\n";
+			}
+			return $s. "\t]";
+		}
+		return var_export($value, TRUE);
+	}
+
 }

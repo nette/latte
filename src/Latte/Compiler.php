@@ -54,6 +54,9 @@ class Compiler
 	/** @var array of [name => [body, params]] */
 	private $methods = [];
 
+	/** @var array of [name => serialized value] */
+	private $properties = [];
+
 	/** Context-aware escaping content types */
 	const CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
@@ -97,7 +100,7 @@ class Compiler
 		$output = '';
 		$this->output = & $output;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
-		$this->placeholders = [];
+		$this->placeholders = $this->properties = [];
 		$this->methods = ['render' => NULL];
 
 		$macroHandlers = new \SplObjectStorage;
@@ -135,14 +138,18 @@ class Compiler
 		$output = $this->expandTokens(($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs);
 
 		$this->addMethod('render', 'foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);' . "\n?>$output<?php");
+
+		foreach ($this->properties as $name => $value) {
+			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';
+		}
 		foreach ($this->methods as $name => $method) {
-			$methods[] = "\tfunction $name($method[params])\n\t{\n\t\t$method[body]\n\t}";
+			$members[] = "\n\tfunction $name($method[params])\n\t{\n\t\t$method[body]\n\t}";
 		}
 
 		return "<?php\n"
 			. "use Latte\\Runtime\\Filters as LFilters;\n\n"
-			. "class $className extends Latte\\Template\n{\n\n"
-			. implode("\n\n\n", $methods)
+			. "class $className extends Latte\\Template\n{\n"
+			. implode("\n\n", $members)
 			. "\n\n}\n";
 	}
 
@@ -224,6 +231,28 @@ class Compiler
 	public function getMethods()
 	{
 		return $this->methods;
+	}
+
+
+	/**
+	 * Adds custom property to template.
+	 * @return void
+	 * @internal
+	 */
+	public function addProperty($name, $value)
+	{
+		$this->properties[$name] = $value;
+	}
+
+
+	/**
+	 * Returns custom properites.
+	 * @return array
+	 * @internal
+	 */
+	public function getProperties()
+	{
+		return $this->properties;
 	}
 
 
