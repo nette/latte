@@ -27,11 +27,11 @@ call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
-<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>
 
 <?php call_user_func(reset($_b->blocks['static']), $_b, ['var' => 30] + get_defined_vars()) ?>
 
-<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $template->getParameters()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $this->params) ?>
 
 <?php $_b->blocks["word$name"][] = [$this, 'block_word_name_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
