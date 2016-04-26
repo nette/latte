@@ -377,7 +377,7 @@ class PhpWriter
 						$res = $this->escapeFilter($res);
 						$tokens->nextToken('|');
 					} elseif (!strcasecmp($tokens->currentValue(), 'safeurl')) {
-						$res->prepend('Latte\Runtime\Filters::safeUrl(');
+						$res->prepend('LFilters::safeUrl(');
 						$inside = TRUE;
 					} else {
 						$res->prepend('$template->' . $tokens->currentValue() . '(');
@@ -410,40 +410,40 @@ class PhpWriter
 					case Compiler::CONTEXT_QUOTED_ATTRIBUTE:
 					case Compiler::CONTEXT_TAG:
 						if ($context[1] === Compiler::CONTENT_JS) {
-							$tokens->prepend('Latte\Runtime\Filters::escapeJs(')->append(')');
+							$tokens->prepend('LFilters::escapeJs(')->append(')');
 						} elseif ($context[1] === Compiler::CONTENT_CSS) {
-							$tokens->prepend('Latte\Runtime\Filters::escapeCss(')->append(')');
+							$tokens->prepend('LFilters::escapeCss(')->append(')');
 						}
 						if ($context[0] === Compiler::CONTEXT_TAG) {
-							$tokens->prepend('Latte\Runtime\Filters::escapeHtmlAttrUnquoted(')->append(')');
+							$tokens->prepend('LFilters::escapeHtmlAttrUnquoted(')->append(')');
 						} else {
-							$tokens->prepend('Latte\Runtime\Filters::escapeHtmlAttr(')->append(')');
+							$tokens->prepend('LFilters::escapeHtmlAttr(')->append(')');
 						}
 						return $tokens;
 					case Compiler::CONTEXT_COMMENT:
-						return $tokens->prepend('Latte\Runtime\Filters::escapeHtmlComment(')->append(')');
+						return $tokens->prepend('LFilters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTENT_JS:
 					case Compiler::CONTENT_CSS:
-						return $tokens->prepend('Latte\Runtime\Filters::escape' . ucfirst($context[0]) . '(')->append(')');
+						return $tokens->prepend('LFilters::escape' . ucfirst($context[0]) . '(')->append(')');
 					default:
-						return $tokens->prepend('Latte\Runtime\Filters::escapeHtmlText(')->append(')');
+						return $tokens->prepend('LFilters::escapeHtmlText(')->append(')');
 				}
 
 			case Compiler::CONTENT_XML:
 				$context = $this->compiler->getContext();
 				switch ($context[0]) {
 					case Compiler::CONTEXT_COMMENT:
-						return $tokens->prepend('Latte\Runtime\Filters::escapeHtmlComment(')->append(')');
+						return $tokens->prepend('LFilters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTEXT_TAG:
-						return $tokens->prepend('Latte\Runtime\Filters::escapeXmlAttrUnquoted(')->append(')');
+						return $tokens->prepend('LFilters::escapeXmlAttrUnquoted(')->append(')');
 					default:
-						return $tokens->prepend('Latte\Runtime\Filters::escapeXml(')->append(')');
+						return $tokens->prepend('LFilters::escapeXml(')->append(')');
 				}
 
 			case Compiler::CONTENT_JS:
 			case Compiler::CONTENT_CSS:
 			case Compiler::CONTENT_ICAL:
-				return $tokens->prepend('Latte\Runtime\Filters::escape' . ucfirst($this->compiler->getContentType()) . '(')->append(')');
+				return $tokens->prepend('LFilters::escape' . ucfirst($this->compiler->getContentType()) . '(')->append(')');
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
 			default:

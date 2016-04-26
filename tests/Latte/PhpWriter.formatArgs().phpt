@@ -115,5 +115,5 @@ test(function () { // inline modifiers
 	}, 'Latte\CompileException', 'Unbalanced brackets.');
 
 	Assert::same('$template->escape(@)',  formatArgs('(@|escape)'));
-	Assert::same('Latte\Runtime\Filters::safeUrl(@)',  formatArgs('(@|safeurl)'));
+	Assert::same('LFilters::safeUrl(@)',  formatArgs('(@|safeurl)'));
 });
