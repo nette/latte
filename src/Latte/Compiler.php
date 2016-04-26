@@ -54,6 +54,9 @@ class Compiler
 	/** @var int */
 	private $tagOffset;
 
+	/** @var array of [name => [body, params]] */
+	private $methods = [];
+
 	/** Context-aware escaping content types */
 	const CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
@@ -98,6 +101,8 @@ class Compiler
 		$output = '';
 		$this->output = & $output;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
+		$this->placeholders = [];
+		$this->methods = ['render' => NULL];
 
 		$macroHandlers = new \SplObjectStorage;
 		array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
@@ -131,16 +136,17 @@ class Compiler
 			$prologs .= empty($res[0]) ? '' : "<?php\n// prolog $handlerName\n$res[0]\n?>";
 			$epilogs = (empty($res[1]) ? '' : "<?php\n// epilog $handlerName\n$res[1]\n?>") . $epilogs;
 		}
-		$output = ($prologs ? $prologs . "<?php\n//\n// main template\n//\n?>\n" : '') . $output . $epilogs;
+		$output = $this->expandTokens(($prologs ? $prologs . "<?php\n//\n// main template\n//\n?>\n" : '') . $output . $epilogs);
 
-		$output = $this->expandTokens($output);
-		$output = "<?php\n"
-			. "class $className extends Latte\\Template {\n"
-			. "function render() {\n"
-			. 'foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);'
-			. '?>' . $output . "<?php\n}}";
+		$this->addMethod('render', 'foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);' . "\n?>$output<?php");
+		foreach ($this->methods as $name => $method) {
+			$methods[] = "\tfunction $name($method[params])\n\t{\n\t\t$method[body]\n\t}";
+		}
 
-		return $output;
+		return "<?php\n\n"
+			. "class $className extends Latte\\Template\n{\n\n"
+			. implode("\n\n\n", $methods)
+			. "\n\n}\n";
 	}
 
 
@@ -208,6 +214,28 @@ class Compiler
 	public function getLine()
 	{
 		return $this->tokens ? $this->tokens[$this->position]->line : NULL;
+	}
+
+
+	/**
+	 * Adds custom method to template.
+	 * @return void
+	 * @internal
+	 */
+	public function addMethod($name, $body, $params = '')
+	{
+		$this->methods[$name] = ['body' => trim($body), 'params' => $params];
+	}
+
+
+	/**
+	 * Returns custom methods.
+	 * @return array
+	 * @internal
+	 */
+	public function getMethods()
+	{
+		return $this->methods;
 	}
 
 

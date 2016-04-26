@@ -116,6 +116,7 @@ class Template
 	{
 		$this->params = $params;
 		$this->params['template'] = $this;
+		unset($this->params['this']);
 		return $this;
 	}
 
