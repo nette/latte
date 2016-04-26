@@ -6,9 +6,9 @@
 	<li><?php echo LFilters::escapeHtmlText(function(){}) ?></li>
 	<li><?php echo LFilters::escapeHtmlText(function(){return}) ?></li>
 	<li><?php echo LFilters::escapeHtmlText(function() { return; }) ?></li>
-	<li><?php echo LFilters::escapeHtmlText($template->upper(function(){return})) ?></li>
-	<li><?php echo LFilters::escapeHtmlText($template->upper(function() { return; })) ?></li>
-	<li><?php echo LFilters::escapeHtmlText($template->upper(function() { return; }, $item->{10})) ?></li>
+	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, function(){return})) ?></li>
+	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, function() { return; })) ?></li>
+	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, function() { return; }, $item->{10})) ?></li>
 </ul>
 <?php
 %A%

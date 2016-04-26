@@ -31,12 +31,12 @@ if ($_l->extends) { ob_start(function () {});}
 	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' ?></li>
 	<li>Array access: <?php echo LFilters::escapeHtmlText($people[1]) ?></li>
 	<li>Html: <?php echo LFilters::escapeHtmlText($el) ?></li>
-	<li>Translated: <?php echo LFilters::escapeHtmlText($template->translate($people[1])) ?></li>
-	<li>Translated string: <?php echo LFilters::escapeHtmlText($template->translate('ahoj')) ?></li>
-	<li>Non-escaped and translated: <?php echo $template->translate($people[1]) ?></li>
+	<li>Translated: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->translate, $people[1])) ?></li>
+	<li>Translated string: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->translate, 'ahoj')) ?></li>
+	<li>Non-escaped and translated: <?php echo call_user_func($this->filters->translate, $people[1]) ?></li>
 	<li>Condition: <?php echo LFilters::escapeHtmlText($hello ? 'yes' : NULL) ?> <?php echo LFilters::escapeHtmlText($hello ? 'yes' : NULL) ?></li>
-	<li>Array: <?php echo LFilters::escapeHtmlText($template->join($hello ? ['a', 'b', 'c'] : NULL)) ?>
- <?php echo LFilters::escapeHtmlText($template->join(['a', 'b', $hello ? 'c' : NULL])) ?></li>
+	<li>Array: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->join, $hello ? ['a', 'b', 'c'] : NULL)) ?>
+ <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->join, ['a', 'b', $hello ? 'c' : NULL])) ?></li>
 </ul>
 
 <input /> <input /> <input />
@@ -166,7 +166,7 @@ call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 <?php } else { ?>z
 <?php } array_pop($_l->switch) ?>
 
-<?php echo $template->nl2br("\n") ?>
+<?php echo call_user_func($this->filters->nl2br, "\n") ?>
 
 
 

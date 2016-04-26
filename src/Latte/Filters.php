@@ -14,13 +14,11 @@ namespace Latte;
  */
 class Filters
 {
-	use Strict;
+	/** @var array */
+	private $_dynamic = [];
 
 	/** @var array */
-	private $dynamic = [];
-
-	/** @var array */
-	private $static = [
+	private $_static = [
 		'bytes' => 'Latte\Runtime\Filters::bytes',
 		'capitalize' => 'Latte\Runtime\Filters::capitalize',
 		'datastream' => 'Latte\Runtime\Filters::dataStream',
@@ -61,9 +59,9 @@ class Filters
 	public function add($name, $callback)
 	{
 		if ($name == NULL) { // intentionally ==
-			array_unshift($this->dynamic, $callback);
+			array_unshift($this->_dynamic, $callback);
 		} else {
-			$this->static[strtolower($name)] = $callback;
+			$this->_static[strtolower($name)] = $callback;
 		}
 		return $this;
 	}
@@ -75,7 +73,7 @@ class Filters
 	 */
 	public function getAll()
 	{
-		return $this->static;
+		return $this->_static;
 	}
 
 
@@ -87,22 +85,36 @@ class Filters
 	 */
 	public function invoke($name, array $args)
 	{
+		return call_user_func_array($this->$name, $args);
+	}
+
+
+	/**
+	 * Returns filter.
+	 * @return callbable
+	 */
+	public function __get($name)
+	{
 		$lname = strtolower($name);
-		if (!isset($this->static[$lname])) {
-			$args2 = $args;
-			array_unshift($args2, $lname);
-			foreach ($this->dynamic as $filter) {
-				$res = call_user_func_array(Helpers::checkCallback($filter), $args2);
+		if (isset($this->_static[$lname])) {
+			return $this->$name = Helpers::checkCallback($this->_static[$lname]);
+		}
+
+		return $this->$name = function ($arg) use ($lname, $name) {
+			$args = func_get_args();
+			array_unshift($args, $lname);
+			foreach ($this->_dynamic as $filter) {
+				$res = call_user_func_array(Helpers::checkCallback($filter), $args);
 				if ($res !== NULL) {
 					return $res;
-				} elseif (isset($this->static[$lname])) {
-					return call_user_func_array(Helpers::checkCallback($this->static[$lname]), $args);
+				} elseif (isset($this->_static[$lname])) {
+					$this->$name = Helpers::checkCallback($this->_static[$lname]);
+					return call_user_func_array($this->$name, func_get_args());
 				}
 			}
-			$hint = ($t = Helpers::getSuggestion(array_keys($this->static), $name)) ? ", did you mean '$t'?" : '.';
+			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \LogicException("Filter '$name' is not defined$hint");
-		}
-		return call_user_func_array(Helpers::checkCallback($this->static[$lname]), $args);
+		};
 	}
 
 }

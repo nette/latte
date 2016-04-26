@@ -380,7 +380,7 @@ class PhpWriter
 						$res->prepend('LFilters::safeUrl(');
 						$inside = TRUE;
 					} else {
-						$res->prepend('$template->' . $tokens->currentValue() . '(');
+						$res->prepend('call_user_func($this->filters->' . $tokens->currentValue() . ', ');
 						$inside = TRUE;
 					}
 				} else {
@@ -447,7 +447,7 @@ class PhpWriter
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
 			default:
-				return $tokens->prepend('$template->escape(')->append(')');
+				return $tokens->prepend('call_user_func($this->filters->escape, ')->append(')');
 		}
 	}
 
