@@ -9,9 +9,9 @@ class Template%a% extends Latte\Template
 %A%?>
 <p>Included file #1</p>
 
-<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate("include2.latte", ['localvar' => 20] + $template->getParameters()) ?>
+<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate("include2.latte", ['localvar' => 20] + $this->params) ?>
 
-<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate("../include3.latte", $template->getParameters()) ?>
+<?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate("../include3.latte", $this-params) ?>
 
 <textarea>
 pre

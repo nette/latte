@@ -11,7 +11,7 @@ class Template%a% extends Latte\Template
 <?php ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $_b->templates['%[a-z0-9]+%']->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean()) ?>
 
 
-<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'test', $template->getParameters()) ;
+<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'test', $this->params) ;
 	}
 
 }

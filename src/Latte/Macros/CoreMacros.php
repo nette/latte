@@ -206,7 +206,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
-		$code = $writer->write('$_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + $template->getParameters())',
+		$code = $writer->write('$_b->templates[%var]->renderChildTemplate(%node.word, %node.array? + $this->params)',
 			$this->getCompiler()->getTemplateId());
 
 		if ($node->modifiers) {
@@ -265,7 +265,8 @@ class CoreMacros extends MacroSet
 		$args = $writer->formatArgs();
 		preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
 		for ($i = 1; $i < count($m); $i++) {
-			$node->openingCode .= "if (isset(\$template->{$m[$i]})) trigger_error('Variable \${$m[$i]} overwritten in foreach.', E_USER_NOTICE); ";
+			$s = var_export($m[$i], TRUE);
+			$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.', E_USER_NOTICE); ";
 		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
 			$node->openingCode .= 'foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
