@@ -122,7 +122,7 @@ call_user_func(reset($_b->blocks['bl']), $_b, get_defined_vars())  ?>
 
 <ul title="inner-if + inner-foreach">
 <?php %a% foreach ($people as $person) { if (strlen($person)===4) { ?>
-	<li><?php echo LFilters::escapeHtmlText($template->lower($person)) ?></li>
+	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->lower, $person)) ?></li>
 <?php } $iterations++; } ?></ul>
 
 <?php if ($_l->ifs[] = (true)) { ?><b><?php } ?>

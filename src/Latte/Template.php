@@ -23,11 +23,15 @@ class Template
 	/** @var array */
 	protected $params = [];
 
+	/** @var Filters */
+	protected $filters;
 
-	public function __construct(array $params, Engine $engine, $name)
+
+	public function __construct(array $params, Engine $engine, Filters $filters, $name)
 	{
 		$this->setParameters($params);
 		$this->engine = $engine;
+		$this->filters = $filters;
 		$this->name = $name;
 	}
 
@@ -99,7 +103,7 @@ class Template
 	 */
 	public function __call($name, $args)
 	{
-		return $this->engine->invokeFilter($name, $args);
+		return call_user_func_array($this->filters->$name, $args);
 	}
 
 
