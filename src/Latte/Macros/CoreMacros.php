@@ -263,7 +263,7 @@ class CoreMacros extends MacroSet
 		preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
 		for ($i = 1; $i < count($m); $i++) {
 			$s = var_export($m[$i], TRUE);
-			$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.', E_USER_NOTICE); ";
+			$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.'); ";
 		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
 			$node->openingCode .= 'foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
