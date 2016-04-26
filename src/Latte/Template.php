@@ -151,7 +151,7 @@ class Template
 	public function &__get($name)
 	{
 		if (!array_key_exists($name, $this->params)) {
-			trigger_error("The variable '$name' does not exist in template.", E_USER_NOTICE);
+			trigger_error("The variable '$name' does not exist in template.");
 		}
 		return $this->params[$name];
 	}
