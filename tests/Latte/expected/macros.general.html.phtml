@@ -71,7 +71,7 @@ if ($_l->extends) { ob_start(function () {});}
 <?php } ?>
 
 
-<?php $iterations = 0; if (isset($template->foo)) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) { $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php $iterations = 0; if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) { $iterations = 0; if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst()) { ?><ul><?php } ?>
 
 	<li id="item-<?php echo LFilters::escapeHtmlAttr($iterator->getCounter()) ?>" class="<?php echo LFilters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') ?>
@@ -181,7 +181,7 @@ call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?><ul>
-<?php $iterations = 0; if (isset($template->item)) trigger_error('Variable $item overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
+<?php $iterations = 0; if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
 	<li><?php echo LFilters::escapeHtmlText($counter++) ?> <?php if (is_array($item)) { ?>
  <?php call_user_func(reset($_b->blocks['menu']), $_b, ['menu' => $item] + get_defined_vars()) ?>
  <?php } else { echo LFilters::escapeHtmlText($item) ;} ?></li>
