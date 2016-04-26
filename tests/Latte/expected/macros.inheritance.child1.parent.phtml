@@ -1,31 +1,20 @@
 <?php
-// source: %a%
-%A%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
+		foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);
+
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
-//
-// block title
-//
-if (!function_exists($_b->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>My website<?php
-}}
+$_b->blocks['title'][] = [$this, 'block_title_%h%'];
 
-//
-// block sidebar
-//
-if (!function_exists($_b->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { function _%[a-z0-9]+%_sidebar($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>		<ul>
-			<li><a href="/">Homepage</a></li>
-			<li><a href="/contact">Contact</a></li>
-		</ul>
-<?php
-}}
-
-//
-// end of blocks
-//
+$_b->blocks['sidebar'][] = [$this, 'block_sidebar_%h%'];
 
 // template extending
 
@@ -33,9 +22,7 @@ $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof 
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
 // main template
-//
 extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -56,4 +43,24 @@ call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
 </body>
 </html>
 <?php
-%A%
+	}
+
+
+	function block_title_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>My website<?php
+	}
+
+
+	function block_sidebar_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>		<ul>
+			<li><a href="/">Homepage</a></li>
+			<li><a href="/contact">Contact</a></li>
+		</ul>
+<?php
+	}
+
+}

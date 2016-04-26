@@ -1,22 +1,14 @@
 <?php
-// source: %a%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
 %A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
 // prolog Latte\Macros\BlockMacros
-//
-// block static
-//
-if (!function_exists($_b->blocks['static'][] = '_%[a-z0-9]+%_static')) { function _%[a-z0-9]+%_static($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>	Static block #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
-
-<?php
-}}
-
-//
-// end of blocks
-//
+$_b->blocks['static'][] = [$this, 'block_static_%h%'];
 
 // template extending
 
@@ -24,24 +16,16 @@ $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof 
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
 // main template
-//
 $var = 10 ?>
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 
-<?php $iterations = 0; if (isset($template->name)) trigger_error('Variable $name overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) {
+<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { $_b->blocks[$name][] = [$this, 'block__name_%h%']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
 
-//
-// block $name
-//
-if (!function_exists($_b->blocks[$name]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__name')) { function _%[a-z0-9]+%__name($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ?>
-		Dynamic block #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
-
-<?php }} call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ;$iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
 <?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $template->getParameters()) ?>
 
@@ -49,19 +33,44 @@ if (!function_exists($_b->blocks[$name]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__name')) 
 
 <?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $template->getParameters()) ?>
 
-<?php
+<?php $_b->blocks["word$name"][] = [$this, 'block_word_name_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
-//
-// block word$name
-//
-if (!function_exists($_b->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%_word_name')) { function _%[a-z0-9]+%_word_name($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php $_b->blocks["word$name"][] = [$this, 'block__word_name__%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
 <?php
+	}
 
-//
-// block "word$name"
-//
-if (!function_exists($_b->blocks["word$name"]['%[a-z0-9]+%'] = '_%[a-z0-9]+%__word_name_')) { function _%[a-z0-9]+%__word_name_($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v ;}} call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+
+	function block__name_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>
+		Dynamic block #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
 
 <?php
-%A%
+	}
+
+
+	function block_word_name_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;
+
+	}
+
+
+	function block__word_name__%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;
+
+	}
+
+
+	function block_static_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>	Static block #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
+
+<?php
+	}
+
+}

@@ -1,41 +1,18 @@
 <?php
-// source: %a%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
 %A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
 // prolog Latte\Macros\BlockMacros
-//
-// block content
-//
-if (!function_exists($_b->blocks['content'][] = '_%[a-z0-9]+%_content')) { function _%[a-z0-9]+%_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>	<h1><?php call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></h1>
+$_b->blocks['content'][] = [$this, 'block_content_%h%'];
 
-	<ul>
-<?php $iterations = 0; if (isset($template->person)) trigger_error('Variable $person overwritten in foreach.', E_USER_NOTICE); foreach ($people as $person) { ?>
-		<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
-<?php $iterations++; } ?>
-	</ul>
-<?php
-}}
+$_b->blocks['title'][] = [$this, 'block_title_%h%'];
 
-//
-// block title
-//
-if (!function_exists($_b->blocks['title'][] = '_%[a-z0-9]+%_title')) { function _%[a-z0-9]+%_title($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>Homepage <?php
-}}
-
-//
-// block sidebar
-//
-if (!function_exists($_b->blocks['sidebar'][] = '_%[a-z0-9]+%_sidebar')) { function _%[a-z0-9]+%_sidebar($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-;
-}}
-
-//
-// end of blocks
-//
+$_b->blocks['sidebar'][] = [$this, 'block_sidebar_%h%'];
 
 // template extending
 
@@ -43,9 +20,7 @@ $_l->extends = "inheritance.parent.latte"; $_g->extended = TRUE;
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
-// main template
-// ?>
+// main template ?>
 
 
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
@@ -53,4 +28,34 @@ call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 
 
 <?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars()) ;
-%A%
+	}
+
+
+	function block_content_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>	<h1><?php call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></h1>
+
+	<ul>
+<?php %a% foreach ($people as $person) { ?>
+		<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
+<?php $iterations++; } ?>
+	</ul>
+<?php
+	}
+
+
+	function block_title_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>Homepage <?php
+	}
+
+
+	function block_sidebar_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;
+
+	}
+
+}

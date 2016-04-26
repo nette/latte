@@ -1,22 +1,14 @@
 <?php
-// source: %a%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
 %A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
 // prolog Latte\Macros\BlockMacros
-//
-// block test
-//
-if (!function_exists($_b->blocks['test'][] = '_%[a-z0-9]+%_test')) { function _%[a-z0-9]+%_test($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>	This is definition #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
-
-<?php
-}}
-
-//
-// end of blocks
-//
+$_b->blocks['test'][] = [$this, 'block_test_%h%'];
 
 // template extending
 
@@ -24,9 +16,7 @@ $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof 
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
 // main template
-//
 ?>
 
 <?php $var = 10 ?>
@@ -34,4 +24,15 @@ if ($_l->extends) { ob_start(function () {});}
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); } ?>
 
 <?php call_user_func(reset($_b->blocks['test']), $_b, ['var' => 20] + get_defined_vars()) ;
-%A%
+	}
+
+
+	function block_test_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>	This is definition #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
+
+<?php
+	}
+
+}

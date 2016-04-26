@@ -1,27 +1,18 @@
 <?php
-// source: %a%
-%A%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
+		foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);
+
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
-//
-// block menu
-//
-if (!function_exists($_b->blocks['menu'][] = '_%[a-z0-9]+%_menu')) { function _%[a-z0-9]+%_menu($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?><ul>
-<?php $iterations = 0; if (isset($template->item)) trigger_error('Variable $item overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
-	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($counter++) ?> <?php if (is_array($item)) { ?>
- <?php call_user_func(reset($_b->blocks['menu']), $_b, ['menu' => $item] + get_defined_vars()) ?>
- <?php } else { echo Latte\Runtime\Filters::escapeHtmlText($item) ;} ?></li>
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
-</ul>
-<?php
-}}
-
-//
-// end of blocks
-//
+$_b->blocks['menu'][] = [$this, 'block_menu_%h%'];
 
 // template extending
 
@@ -29,9 +20,7 @@ $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof 
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
 // main template
-//
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -188,4 +177,20 @@ call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 
 <button></button> xx
 <?php
-%A%
+	}
+
+
+	function block_menu_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?><ul>
+<?php $iterations = 0; if (isset($template->item)) trigger_error('Variable $item overwritten in foreach.', E_USER_NOTICE); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
+	<li><?php echo Latte\Runtime\Filters::escapeHtmlText($counter++) ?> <?php if (is_array($item)) { ?>
+ <?php call_user_func(reset($_b->blocks['menu']), $_b, ['menu' => $item] + get_defined_vars()) ?>
+ <?php } else { echo Latte\Runtime\Filters::escapeHtmlText($item) ;} ?></li>
+<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+</ul>
+<?php
+	}
+
+}

@@ -1,21 +1,14 @@
 <?php
-// source: %a%
-%A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
-// prolog Latte\Macros\BlockMacros
-//
-// block test
-//
-if (!function_exists($_b->blocks['test'][] = '_%[a-z0-9]+%_test')) { function _%[a-z0-9]+%_test($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?>	Test block
-<?php
-}}
+// source: %A%
 
-//
-// end of blocks
-//
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
+%A%
+// prolog Latte\Macros\BlockMacros
+$_b->blocks['test'][] = [$this, 'block_test_%h%'];
 
 // template extending
 
@@ -23,8 +16,17 @@ $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof 
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
 // main template
-//
 if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
-%A%
+
+	}
+
+
+	function block_test_%h%($_b, $_args)
+	{
+		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+?>	Test block
+<?php
+	}
+
+}

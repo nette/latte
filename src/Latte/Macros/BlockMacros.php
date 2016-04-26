@@ -59,18 +59,20 @@ class BlockMacros extends MacroSet
 	public function finalize()
 	{
 		$epilog = $prolog = [];
+		$compiler = $this->getCompiler();
 
 		if ($this->namedBlocks) {
 			foreach ($this->namedBlocks as $name => $code) {
-				$func = '_lb' . substr(md5($this->getCompiler()->getTemplateId() . $name), 0, 10) . '_' . preg_replace('#[^a-z0-9_]#i', '_', $name);
 				$snippet = $name[0] === '_';
-				$prolog[] = "//\n// block $name\n//\n"
-					. "if (!function_exists(\$_b->blocks[" . var_export($name, TRUE) . "][] = '$func')) { "
-					. "function $func(\$_b, \$_args) { foreach (\$_args as \$__k => \$__v) \$\$__k = \$__v"
-					. ($snippet ? '; $_control->redrawControl(' . var_export((string) substr($name, 1), TRUE) . ', FALSE)' : '')
-					. "\n?>$code<?php\n}}";
+				$compiler->addMethod(
+					$func = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7),
+					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;'
+					. ($snippet ? "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n" : '')
+					. "\n?>" . $compiler->expandTokens($code) . '<?php',
+					'$_b, $_args'
+				);
+				$prolog[] = '$_b->blocks[' . var_export($name, TRUE) . "][] = [\$this, '$func'];";
 			}
-			$prolog[] = "//\n// end of blocks\n//";
 		}
 
 		if ($this->namedBlocks || $this->extends) {
@@ -215,12 +217,10 @@ class BlockMacros extends MacroSet
 
 			} else {
 				$node->data->leave = TRUE;
+				$node->data->func = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7);
 				$fname = $writer->formatWord($name);
-				$node->closingCode = '<?php }} ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
-				$func = '_lb' . substr(md5($this->getCompiler()->getTemplateId() . $name), 0, 10) . '_' . preg_replace('#[^a-z0-9_]#i', '_', $name);
-				return "\n\n//\n// block $name\n//\n"
-					. "if (!function_exists(\$_b->blocks[$fname]['{$this->getCompiler()->getTemplateId()}'] = '$func')) { "
-					. "function $func(\$_b, \$_args) { foreach (\$_args as \$__k => \$__v) \$\$__k = \$__v";
+				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
+				return "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";
 			}
 		}
 
@@ -290,6 +290,15 @@ class BlockMacros extends MacroSet
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+\z#', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
 				$node->openingCode = '<?php ?>';
+
+			} elseif (isset($node->data->func)) {
+				$node->content = rtrim($node->content, " \t");
+				$this->getCompiler()->addMethod(
+					$node->data->func,
+					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;' . "\n?>$node->content<?php",
+					'$_b, $_args'
+				);
+				$node->content = '';
 			}
 
 			if ($asInner) { // n:snippet -> n:inner-snippet
