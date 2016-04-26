@@ -77,6 +77,7 @@ class Template
 		}
 		foreach ($this->_blocks as $name => $method) {
 			$block->blocks[$name][] = [$this, $method];
+			Macros\BlockMacrosRuntime::checkType($this->_blockTypes[$name], $block->types, $name);
 		}
 
 		// global storage

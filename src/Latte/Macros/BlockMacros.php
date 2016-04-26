@@ -21,6 +21,9 @@ class BlockMacros extends MacroSet
 	/** @var array */
 	private $namedBlocks = [];
 
+	/** @var array */
+	private $blockTypes = [];
+
 	/** @var bool */
 	private $extends;
 
@@ -48,6 +51,7 @@ class BlockMacros extends MacroSet
 	public function initialize()
 	{
 		$this->namedBlocks = [];
+		$this->blockTypes = [];
 		$this->extends = NULL;
 	}
 
@@ -72,6 +76,7 @@ class BlockMacros extends MacroSet
 				$this->getCompiler()->addMethod($functions[$name], $code, '$_b, $_args');
 			}
 			$this->getCompiler()->addProperty('_blocks', $functions);
+			$this->getCompiler()->addProperty('_blockTypes', $this->blockTypes);
 		}
 
 
@@ -121,6 +126,13 @@ class BlockMacros extends MacroSet
 			$cmd = "call_user_func(reset(\$_b->blocks[$name]), \$_b, %node.array? + get_defined_vars())";
 		} else {
 			$cmd = 'Latte\Macros\BlockMacrosRuntime::callBlock' . ($parent ? 'Parent' : '') . "(\$_b, $name, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')';
+		}
+
+		$node->modifiers = preg_replace('#\|noescape\s?(?=\||\z)#i', '', $node->modifiers, -1, $found);
+		if (!$found && !preg_match('#\|?escape(?:html|htmlcomment|ical|js|url|xml)?\s?(?=\||\z)#i', $node->modifiers)) {
+			$cmd = "if (" . var_export($this->exportBlockType(), TRUE) . " !== \$_b->types[$name]) { "
+				. "trigger_error('Incompatible context for including block $destination.', E_USER_WARNING); }\n"
+				. $cmd;
 		}
 
 		if ($node->modifiers) {
@@ -217,7 +229,9 @@ class BlockMacros extends MacroSet
 				$node->data->func = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7);
 				$fname = $writer->formatWord($name);
 				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
-				return "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";
+				$blockType = var_export($this->exportBlockType(), TRUE);
+				return "Latte\\Macros\\BlockMacrosRuntime::checkType($blockType, \$_b->types, $fname);"
+					. "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";
 			}
 		}
 
@@ -235,6 +249,7 @@ class BlockMacros extends MacroSet
 
 		$prolog = $this->namedBlocks ? '' : "if (\$_l->extends) { ob_end_clean(); return \$this->renderChildTemplate(\$_l->extends, get_defined_vars()); }\n";
 		$this->namedBlocks[$name] = TRUE;
+		$this->blockTypes[$name] = $this->exportBlockType();
 
 		$include = 'call_user_func(reset($_b->blocks[%var]), $_b, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
 		if ($node->modifiers) {
@@ -329,6 +344,13 @@ class BlockMacros extends MacroSet
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (isset(' . implode(', ', $list) . ')) {';
+	}
+
+
+	private function exportBlockType()
+	{
+		$compiler = $this->getCompiler();
+		return implode(array_merge([$compiler->getContentType()], $compiler->getContext()));
 	}
 
 }

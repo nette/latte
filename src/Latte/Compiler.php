@@ -189,7 +189,7 @@ class Compiler
 	 */
 	public function getContext()
 	{
-		return $this->context;
+		return $this->context ?: [NULL, NULL];
 	}
 
 

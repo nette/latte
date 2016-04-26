@@ -46,4 +46,17 @@ class BlockMacrosRuntime
 		prev($context->blocks[$name]);
 	}
 
+
+	/**
+	 * @return void
+	 */
+	public static function checkType($current, & $blocks, $name)
+	{
+		if (!isset($blocks[$name])) {
+			$blocks[$name] = $current;
+		} elseif ($blocks[$name] !== $current) {
+			trigger_error('Overridden block ' . $name . ' in an incompatible context.', E_USER_WARNING);
+		}
+	}
+
 }
