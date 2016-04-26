@@ -54,6 +54,9 @@ class Compiler
 	/** @var array of [name => [body, params]] */
 	private $methods = [];
 
+	/** @var array of [name => serialized value] */
+	private $properties = [];
+
 	/** Context-aware escaping content types */
 	const CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
@@ -97,7 +100,7 @@ class Compiler
 		$output = '';
 		$this->output = & $output;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
-		$this->placeholders = [];
+		$this->placeholders = $this->properties = [];
 		$this->methods = ['render' => NULL];
 
 		$macroHandlers = new \SplObjectStorage;
@@ -135,14 +138,18 @@ class Compiler
 		$output = ($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs;
 
 		$this->addMethod('render', 'foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);' . "\n?>$output<?php");
+
+		foreach ($this->properties as $name => $value) {
+			$members[] = "\tpublic $$name = $value;";
+		}
 		foreach ($this->methods as $name => $method) {
-			$methods[] = "\tfunction $name($method[1])\n\t{\n\t\t$method[0]\n\t}";
+			$members[] = "\n\tfunction $name($method[1])\n\t{\n\t\t$method[0]\n\t}";
 		}
 
 		return "<?php\n"
 			. "use Latte\\Runtime\\Filters as LFilters;\n\n"
-			. "class $className extends Latte\\Template\n{\n\n"
-			. $this->expandTokens(implode("\n\n\n", $methods))
+			. "class $className extends Latte\\Template\n{\n"
+			. $this->expandTokens(implode("\n\n", $members))
 			. "\n\n}\n";
 	}
 
@@ -213,6 +220,25 @@ class Compiler
 	public function addMethod($name, $body, $params = '')
 	{
 		$this->methods[$name] = [$body, $params];
+	}
+
+
+	/**
+	 * Adds custom property to template.
+	 * @return void
+	 * @internal
+	 */
+	public function addProperty($name, $value)
+	{
+		if (is_array($value)) {
+			$s = "[\n";
+			foreach ($value as $k => $v) {
+				$s .= "\t\t" . var_export($k, TRUE) . ' => ' . var_export($v, TRUE) . ",\n";
+			}
+			$this->properties[$name] = "$s\t]";
+		} else {
+			$this->properties[$name] = var_export($value, TRUE);
+		}
 	}
 
 
