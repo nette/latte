@@ -45,9 +45,6 @@ class Compiler
 	/** @var array [context, subcontext] */
 	private $context;
 
-	/** @var string */
-	private $templateId;
-
 	/** @var mixed */
 	private $lastAttrValue;
 
@@ -96,7 +93,6 @@ class Compiler
 	 */
 	public function compile(array $tokens, $className)
 	{
-		$this->templateId = substr(md5($className), 0, 10);
 		$this->tokens = $tokens;
 		$output = '';
 		$this->output = & $output;
@@ -187,15 +183,6 @@ class Compiler
 	public function getContext()
 	{
 		return $this->context;
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getTemplateId()
-	{
-		return $this->templateId;
 	}
 
 
