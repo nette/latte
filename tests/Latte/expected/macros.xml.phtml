@@ -15,17 +15,17 @@ class Template%a% extends Latte\Template
 <?php header('Content-Type: application/xml; charset=utf-8') ?>
 
 <ul>
-	<li>Escaped: <?php echo Latte\Runtime\Filters::escapeXml($hello) ?></li>
+	<li>Escaped: <?php echo LFilters::escapeXml($hello) ?></li>
 	<li>Non-escaped: <?php echo $hello ?></li>
-	<li>Escaped expression: <?php echo Latte\Runtime\Filters::escapeXml('<' . 'b' . '>hello' . '</b>') ?></li>
+	<li>Escaped expression: <?php echo LFilters::escapeXml('<' . 'b' . '>hello' . '</b>') ?></li>
 	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' ?></li>
-	<li>Array access: <?php echo Latte\Runtime\Filters::escapeXml($people[1]) ?></li>
-	<li>Html: <?php echo Latte\Runtime\Filters::escapeXml($el) ?></li>
+	<li>Array access: <?php echo LFilters::escapeXml($people[1]) ?></li>
+	<li>Html: <?php echo LFilters::escapeXml($el) ?></li>
 </ul>
 
 <style type="text/css">
 <!--
-#<?php echo Latte\Runtime\Filters::escapeHtmlComment($id) ?> {
+#<?php echo LFilters::escapeHtmlComment($id) ?> {
 	background: blue;
 }
 -->
@@ -34,22 +34,22 @@ class Template%a% extends Latte\Template
 
 <script>
 <!--
-var html = <?php echo Latte\Runtime\Filters::escapeHtmlComment($el) ?>;
+var html = <?php echo LFilters::escapeHtmlComment($el) ?>;
 -->
 </script>
 
 
 <p onclick =
-'alert(<?php echo Latte\Runtime\Filters::escapeXml($id) ?>);alert("hello");'
- title='<?php echo Latte\Runtime\Filters::escapeXml($id) ?>"'
+'alert(<?php echo LFilters::escapeXml($id) ?>);alert("hello");'
+ title='<?php echo LFilters::escapeXml($id) ?>"'
  style =
- "color:<?php echo Latte\Runtime\Filters::escapeXml($id) ?>;'"
- alt='<?php echo Latte\Runtime\Filters::escapeXml($el) ?>'
- onfocus="alert(<?php echo Latte\Runtime\Filters::escapeXml($el) ?>)"
+ "color:<?php echo LFilters::escapeXml($id) ?>;'"
+ alt='<?php echo LFilters::escapeXml($el) ?>'
+ onfocus="alert(<?php echo LFilters::escapeXml($el) ?>)"
 >click on me</p>
 
 
-<!-- <?php echo Latte\Runtime\Filters::escapeHtmlComment($comment) ?> -->
+<!-- <?php echo LFilters::escapeHtmlComment($comment) ?> -->
 
 
 </ul>
@@ -57,7 +57,7 @@ var html = <?php echo Latte\Runtime\Filters::escapeHtmlComment($el) ?>;
 
 <ul>
 <?php %a% foreach ($people as $person) { ?>
-	<li><?php echo Latte\Runtime\Filters::escapeXml($person) ?></li>
+	<li><?php echo LFilters::escapeXml($person) ?></li>
 <?php $iterations++; } ?>
 </ul>
 
@@ -70,11 +70,11 @@ var html = <?php echo Latte\Runtime\Filters::escapeHtmlComment($el) ?>;
 
 <p val = <?php if (true) { ?>"a"<?php } else { ?>"b"<?php } ?>> </p>
 
-<p val = <?php echo Latte\Runtime\Filters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo Latte\Runtime\Filters::escapeXmlAttrUnquoted($mxss) ?>> </p>
+<p val = <?php echo LFilters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo LFilters::escapeXmlAttrUnquoted($mxss) ?>> </p>
 
-<p onclick = <?php echo Latte\Runtime\Filters::escapeXmlAttrUnquoted($xss) ?>> </p>
+<p onclick = <?php echo LFilters::escapeXmlAttrUnquoted($xss) ?>> </p>
 
-<p val = /><?php echo Latte\Runtime\Filters::escapeXml($xss) ?></p>
+<p val = /><?php echo LFilters::escapeXml($xss) ?></p>
 <?php
 	}
 

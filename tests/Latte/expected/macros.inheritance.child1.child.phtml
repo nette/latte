@@ -42,7 +42,7 @@ call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?>
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	<ul>
 <?php %a% foreach ($people as $person) { ?>
-		<li><?php echo Latte\Runtime\Filters::escapeHtmlText($person) ?></li>
+		<li><?php echo LFilters::escapeHtmlText($person) ?></li>
 <?php $iterations++; } ?>
 	</ul>
 <?php

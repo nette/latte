@@ -312,7 +312,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('echo Latte\Runtime\Filters::htmlAttributes(%node.array)');
+		return $writer->write('echo LFilters::htmlAttributes(%node.array)');
 	}
 
 

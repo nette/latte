@@ -7,8 +7,7 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%?>
-<p>Included file #2 (<?php echo Latte\Runtime\Filters::escapeHtmlText($localvar) ?>
-, <?php echo Latte\Runtime\Filters::escapeHtmlText($hello) ?>)</p>
+<p>Included file #2 (<?php echo LFilters::escapeHtmlText($localvar) ?>, <?php echo LFilters::escapeHtmlText($hello) ?>)</p>
 <?php
 	}
 

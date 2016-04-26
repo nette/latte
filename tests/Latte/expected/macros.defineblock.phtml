@@ -30,7 +30,7 @@ if ($_l->extends) { ob_start(function () {});}
 	function block_test_%h%($_b, $_args)
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
-?>	This is definition #<?php echo Latte\Runtime\Filters::escapeHtmlText($var) ?>
+?>	This is definition #<?php echo LFilters::escapeHtmlText($var) ?>
 
 <?php
 	}
