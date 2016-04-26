@@ -1,13 +1,12 @@
 <?php
-// source: %a%
-%A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
-//
-// main template
-//
-?>
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
+%A%?>
 <p>Included file #1</p>
 
 <?php $_b->templates['%[a-z0-9]+%']->renderChildTemplate("include2.latte", ['localvar' => 20] + $template->getParameters()) ?>
@@ -18,4 +17,6 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 pre
 </textarea>
 <?php
-%A%
+	}
+
+}

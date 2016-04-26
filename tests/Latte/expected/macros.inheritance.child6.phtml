@@ -1,9 +1,12 @@
 <?php
-// source: %a%
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
 %A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
 // prolog Latte\Macros\BlockMacros
 // template extending
 
@@ -11,11 +14,12 @@ $_l->extends = "inheritance.parent2.latte"; $_g->extended = TRUE;
 
 if ($_l->extends) { ob_start(function () {});}
 
-//
-// main template
-// ?>
+// main template ?>
 This should be erased
 <?php $foo = 1 ;
 // epilog Latte\Macros\BlockMacros
 if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars());}
-%A%
+
+	}
+
+}

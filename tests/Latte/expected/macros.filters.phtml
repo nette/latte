@@ -1,13 +1,12 @@
 <?php
-// source: %a%
-%A%
-// prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
-;
-//
-// main template
-//
-?>
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+
+	function render()
+	{
+%A%?>
 <ul>
 	<li>lower: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->lower($hello)) ?></li>
 	<li>upper: <?php echo Latte\Runtime\Filters::escapeHtmlText($template->upper($hello)) ?></li>
@@ -85,4 +84,6 @@ Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function
 
 </p>
 <?php
-%A%
+	}
+
+}
