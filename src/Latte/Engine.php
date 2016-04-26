@@ -71,7 +71,7 @@ class Engine
 			$this->loadTemplate($name);
 		}
 
-		$template = new $class($params, $this, $name);
+		$template = new $class($params, $this, $this->filters, $name);
 		$template->render();
 	}
 
@@ -265,7 +265,7 @@ class Engine
 	 */
 	public function invokeFilter($name, array $args)
 	{
-		return $this->filters->invoke($name, $args);
+		return call_user_func_array($this->filters->$name, $args);
 	}
 
 

@@ -13,11 +13,11 @@ VERSION:2.0
 PRODID:-//example.org//iCal 4.0.3//CS
 METHOD:PUBLISH
 BEGIN:VEVENT
-DTSTAMP:<?php echo LFilters::escapeIcal($template->date($start, 'Ymd\THis')) ?>
+DTSTAMP:<?php echo LFilters::escapeIcal(call_user_func($this->filters->date, $start, 'Ymd\THis')) ?>
 
-DTSTART;TZID=Europe/Prague:<?php echo LFilters::escapeIcal($template->date($start, 'Ymd\THis')) ?>
+DTSTART;TZID=Europe/Prague:<?php echo LFilters::escapeIcal(call_user_func($this->filters->date, $start, 'Ymd\THis')) ?>
 
-DTEND;TZID=Europe/Prague:<?php echo LFilters::escapeIcal($template->date($end, 'Ymd\THis')) ?>
+DTEND;TZID=Europe/Prague:<?php echo LFilters::escapeIcal(call_user_func($this->filters->date, $end, 'Ymd\THis')) ?>
 
 SUMMARY;LANGUAGE=cs:<?php echo LFilters::escapeIcal($info) ?>
 

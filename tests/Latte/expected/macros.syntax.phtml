@@ -11,7 +11,7 @@ class Template%a% extends Latte\Template
 
 <ul>
 <?php %a% foreach ($people as $person) { ?>
-	<li><?php echo LFilters::escapeHtmlText($template->upper($person)) ?></li>
+	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, $person)) ?></li>
 <?php $iterations++; } ?>
 {* comment latte *}
 </ul>
