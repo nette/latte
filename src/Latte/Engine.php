@@ -39,6 +39,9 @@ class Engine
 	/** @var ILoader */
 	private $loader;
 
+	/** @var Filters */
+	private $filters;
+
 	/** @var string */
 	private $contentType = self::CONTENT_HTML;
 
@@ -48,38 +51,13 @@ class Engine
 	/** @var bool */
 	private $autoRefresh = TRUE;
 
-	/** @var array run-time filters */
-	private $filters = [
-		NULL => [], // dynamic
-		'bytes' => 'Latte\Runtime\Filters::bytes',
-		'capitalize' => 'Latte\Runtime\Filters::capitalize',
-		'datastream' => 'Latte\Runtime\Filters::dataStream',
-		'date' => 'Latte\Runtime\Filters::date',
-		'escapecss' => 'Latte\Runtime\Filters::escapeCss',
-		'escapehtml' => 'Latte\Runtime\Filters::escapeHtmlAttr',
-		'escapehtmlcomment' => 'Latte\Runtime\Filters::escapeHtmlComment',
-		'escapeical' => 'Latte\Runtime\Filters::escapeICal',
-		'escapejs' => 'Latte\Runtime\Filters::escapeJs',
-		'escapeurl' => 'rawurlencode',
-		'escapexml' => 'Latte\Runtime\Filters::escapeXml',
-		'firstupper' => 'Latte\Runtime\Filters::firstUpper',
-		'implode' => 'implode',
-		'indent' => 'Latte\Runtime\Filters::indent',
-		'length' => 'Latte\Runtime\Filters::length',
-		'lower' => 'Latte\Runtime\Filters::lower',
-		'nl2br' => 'Latte\Runtime\Filters::nl2br',
-		'number' => 'number_format',
-		'repeat' => 'str_repeat',
-		'replace' => 'Latte\Runtime\Filters::replace',
-		'replacere' => 'Latte\Runtime\Filters::replaceRe',
-		'safeurl' => 'Latte\Runtime\Filters::safeUrl',
-		'strip' => 'Latte\Runtime\Filters::strip',
-		'striptags' => 'strip_tags',
-		'substr' => 'Latte\Runtime\Filters::substring',
-		'trim' => 'Latte\Runtime\Filters::trim',
-		'truncate' => 'Latte\Runtime\Filters::truncate',
-		'upper' => 'Latte\Runtime\Filters::upper',
-	];
+
+
+	public function __construct()
+	{
+		$this->filters = new Filters;
+	}
+
 
 
 	/**
@@ -264,11 +242,7 @@ class Engine
 	 */
 	public function addFilter($name, $callback)
 	{
-		if ($name == NULL) { // intentionally ==
-			array_unshift($this->filters[NULL], $callback);
-		} else {
-			$this->filters[strtolower($name)] = $callback;
-		}
+		$this->filters->add($name, $callback);
 		return $this;
 	}
 
@@ -279,7 +253,7 @@ class Engine
 	 */
 	public function getFilters()
 	{
-		return $this->filters;
+		return $this->filters->getAll();
 	}
 
 
@@ -291,22 +265,7 @@ class Engine
 	 */
 	public function invokeFilter($name, array $args)
 	{
-		$lname = strtolower($name);
-		if (!isset($this->filters[$lname])) {
-			$args2 = $args;
-			array_unshift($args2, $lname);
-			foreach ($this->filters[NULL] as $filter) {
-				$res = call_user_func_array(Helpers::checkCallback($filter), $args2);
-				if ($res !== NULL) {
-					return $res;
-				} elseif (isset($this->filters[$lname])) {
-					return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
-				}
-			}
-			$hint = ($t = Helpers::getSuggestion(array_keys($this->filters), $name)) ? ", did you mean '$t'?" : '.';
-			throw new \LogicException("Filter '$name' is not defined$hint");
-		}
-		return call_user_func_array(Helpers::checkCallback($this->filters[$lname]), $args);
+		return $this->filters->invoke($name, $args);
 	}
 
 
