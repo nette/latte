@@ -44,6 +44,5 @@ if ($_l->extends) { ob_start(function () {});}
 <?php if ($_l->extends) { ob_end_clean(); return $template->renderChildTemplate($_l->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?>
 
-
 <?php call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars()) ;
 %A%

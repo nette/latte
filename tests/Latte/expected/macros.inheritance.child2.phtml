@@ -52,7 +52,5 @@ if ($_l->extends) { ob_start(function () {});}
 call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 
 
-<?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars())  ?>
-
-<?php
+<?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars()) ;
 %A%
