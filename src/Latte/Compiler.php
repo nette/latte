@@ -492,9 +492,8 @@ class Compiler
 	{
 		if ($isRightmost) {
 			$leftOfs = strrpos("\n$this->output", "\n");
-			if ($isLeftmost === NULL) {
-				$isLeftmost = trim(substr($this->output, $leftOfs)) === '';
-			}
+			$isLeftmost = ($isLeftmost === NULL ? TRUE : $isLeftmost)
+				&& trim(substr($this->output, $leftOfs)) === '';
 			if ($isReplaced === NULL) {
 				$isReplaced = preg_match('#<\?php.*\secho\s#As', $code);
 			}
