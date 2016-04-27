@@ -76,23 +76,13 @@ class BlockMacros extends MacroSet
 			$compiler->addMethod($functions[$name], $code, '$_b, $_args');
 		}
 
-		$epilog = $prolog = [];
-		if ($this->namedBlocks || $this->extends) {
+		$epilog = '';
+		if ($this->namedBlocks) {
 			$compiler->addProperty('blocks', array_merge_recursive($functions, $this->blockTypes));
-
-			$prolog[] = '// template extending';
-
-			$prolog[] = '$this->local->extends = '
-				. ($this->extends ? $this->extends : 'empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
-				. '; $this->global->extended = TRUE;';
-
-			$prolog[] = 'if ($this->local->extends) { ob_start(function () {});}';
-			if (!$this->namedBlocks) {
-				$epilog[] = 'if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars());}';
-			}
+		} elseif ($this->extends) {
+			$epilog = 'if ($this->tryRenderParent(get_defined_vars())) return;';
 		}
-
-		return [implode("\n\n", $prolog), implode("\n", $epilog)];
+		return ['', $epilog];
 	}
 
 
@@ -156,30 +146,25 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {extends auto | none | $var | "file"}
+	 * {extends none | $var | "file"}
 	 */
 	public function macroExtends(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
-		}
-		if (!$node->args) {
+		} elseif (!$node->args) {
 			throw new CompileException("Missing destination in {{$node->name}}");
-		}
-		if (!empty($node->parentNode)) {
+		} elseif ($node->parentNode) {
 			throw new CompileException("{{$node->name}} must be placed outside any macro.");
-		}
-		if ($this->extends !== NULL) {
+		} elseif ($this->extends !== NULL) {
 			throw new CompileException("Multiple {{$node->name}} declarations are not allowed.");
-		}
-		if ($node->args === 'none') {
-			$this->extends = 'FALSE';
-		} elseif ($node->args === 'auto') {
-			$this->extends = '$_presenter->findLayoutTemplateFile()';
+		} elseif ($node->args === 'none') {
+			$this->getCompiler()->addMethod('getParentName', '');
+			$this->extends = FALSE;
 		} else {
-			$this->extends = $writer->write('%node.word%node.args');
+			$this->getCompiler()->addMethod('getParentName', $writer->write('extract($this->params); return %node.word%node.args;'));
+			$this->extends = TRUE;
 		}
-		return;
 	}
 
 
@@ -245,7 +230,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
 
-		$prolog = $this->namedBlocks ? '' : "if (\$this->local->extends) { ob_end_clean(); return \$this->renderChildTemplate(\$this->local->extends, get_defined_vars()); }\n";
+		$prolog = $this->namedBlocks ? '' : 'if ($this->tryRenderParent(get_defined_vars())) return;';
 		$this->namedBlocks[$name] = TRUE;
 		$this->blockTypes[$name] = $this->exportBlockType($node);
 

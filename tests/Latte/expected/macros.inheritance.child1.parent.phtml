@@ -16,21 +16,13 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $this->initialize('html')
 ;
-// prolog Latte\Macros\BlockMacros
-// template extending
-
-$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
-
-if ($this->local->extends) { ob_start(function () {});}
-
 // main template
 extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<link rel="stylesheet" href="style.css">
-	<title><?php if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
-call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
+	<title><?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
 </head>
 
 <body>

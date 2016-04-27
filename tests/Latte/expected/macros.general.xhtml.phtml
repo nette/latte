@@ -15,13 +15,6 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $this->initialize('xhtml')
 ;
-// prolog Latte\Macros\BlockMacros
-// template extending
-
-$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
-
-if ($this->local->extends) { ob_start(function () {});}
-
 // main template
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -129,8 +122,7 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 
 
 
-<?php $counter = 0 ;if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
-call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
+<?php $counter = 0 ;if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 
 
 <?php extract(['varx' => 2], EXTR_SKIP) ;echo LFilters::escapeHtmlText($varx) ?>

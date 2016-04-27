@@ -23,7 +23,7 @@ class Template
 	private $name;
 
 	/** @var array */
-	protected $params = [];
+	public $params = [];
 
 	/** @var Filters */
 	protected $filters;
@@ -67,11 +67,19 @@ class Template
 
 
 	/**
+	 * @return string|NULL
+	 */
+	public function getParentName()
+	{
+	}
+
+
+	/**
 	 * Initializes block, global & local storage in template.
 	 * @return [\stdClass, \stdClass, \stdClass]
 	 * @internal
 	 */
-	public function initialize($contentType)
+	protected function initialize($contentType)
 	{
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $contentType);
 
@@ -95,7 +103,25 @@ class Template
 			$this->global = $this->params['_g'];
 		}
 
+		// extends
+		if ($this->local->parentName = $this->getParentName()) {
+			ob_start(function () {});
+		}
+
 		return [$block, $this->global, $this->local];
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	protected function tryRenderParent($params)
+	{
+		if ($this->local->parentName) {
+			ob_end_clean();
+			$this->renderChildTemplate($this->local->parentName, $params);
+			return TRUE;
+		}
 	}
 
 

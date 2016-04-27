@@ -11,18 +11,11 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%
-// prolog Latte\Macros\BlockMacros
-// template extending
-
-$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
-
-if ($this->local->extends) { ob_start(function () {});}
-
+;
 // main template
 $var = 10 ?>
 
-<?php if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
-call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
+<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 
 <?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
