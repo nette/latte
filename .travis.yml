@@ -11,7 +11,7 @@ matrix:
         - php: hhvm
 
 script:
-    - vendor/bin/tester tests -s -p php -c tests/php-unix.ini
+    - vendor/bin/tester tests -s -p php-cgi -c tests/php-unix.ini
     - php temp/code-checker/src/code-checker.php --short-arrays -i use.latte
 
 after_failure:
