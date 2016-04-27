@@ -64,8 +64,14 @@ class Filters
 			array_unshift($this->_dynamic, $callback);
 		} else {
 			$name = strtolower($name);
+			if (isset($this->_static[$name])) {
+				foreach ($this as $key => $value) {
+					if (strcasecmp($name, $key) === 0) {
+						unset($this->$key);
+					}
+				}
+			}
 			$this->_static[$name] = $callback;
-			unset($this->$name);
 		}
 		return $this;
 	}
@@ -88,14 +94,11 @@ class Filters
 	public function __get($name)
 	{
 		$lname = strtolower($name);
-		if (isset($this->$lname)) {
-			return $this->$lname;
-
-		} elseif (isset($this->_static[$lname])) {
-			return $this->$lname = Helpers::checkCallback($this->_static[$lname]);
+		if (isset($this->_static[$lname])) {
+			return $this->$name = Helpers::checkCallback($this->_static[$lname]);
 		}
 
-		return $this->$lname = function ($arg) use ($lname, $name) {
+		return $this->$name = function ($arg) use ($lname, $name) {
 			$args = func_get_args();
 			array_unshift($args, $lname);
 			foreach ($this->_dynamic as $filter) {

@@ -32,8 +32,12 @@ test(function () {
 	Assert::same('AA', call_user_func($filters->f1, 'aa'));
 
 	$filters->add('f1', 'trim');
-	Assert::same('trim', $filters->f1);
 	Assert::same('trim', $filters->F1);
+	Assert::same('trim', $filters->f1);
+
+	$filters->add('f1', 'strtoupper');
+	Assert::same('strtoupper', $filters->f1);
+	Assert::same('strtoupper', $filters->F1);
 
 	$filters->add('f2', [new MyFilter, 'invoke']);
 	Assert::same('aa', call_user_func($filters->f2, 'aA'));
