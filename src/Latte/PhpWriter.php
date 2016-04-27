@@ -380,7 +380,8 @@ class PhpWriter
 						$res->prepend('LFilters::safeUrl(');
 						$inside = TRUE;
 					} else {
-						$res->prepend('call_user_func($this->filters->' . $tokens->currentValue() . ', ');
+						$filterName = strtolower($tokens->currentValue());
+						$res->prepend('call_user_func($this->filters->' . $filterName . ', ');
 						$inside = TRUE;
 					}
 				} else {

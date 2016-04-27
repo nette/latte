@@ -270,6 +270,7 @@ class Engine
 	 */
 	public function invokeFilter($name, array $args)
 	{
+		$name = strtolower($name);
 		return call_user_func_array($this->filters->$name, $args);
 	}
 
