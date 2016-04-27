@@ -3,6 +3,11 @@
 
 class Template%a% extends Latte\Template
 {
+	public $blocks = [
+		'title' => 'block_title_d5d3db1',
+		'sidebar' => 'block_sidebar_0838fec',
+	];
+
 
 	function render()
 	{
@@ -12,10 +17,6 @@ class Template%a% extends Latte\Template
 list($_b, $_g, $_l) = $this->initialize('html')
 ;
 // prolog Latte\Macros\BlockMacros
-$_b->blocks['title'][] = [$this, 'block_title_%h%'];
-
-$_b->blocks['sidebar'][] = [$this, 'block_sidebar_%h%'];
-
 // template extending
 
 $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
