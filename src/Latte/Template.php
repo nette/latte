@@ -14,6 +14,8 @@ namespace Latte;
  */
 class Template
 {
+	use Strict;
+
 	/** @var Engine */
 	private $engine;
 
@@ -101,18 +103,6 @@ class Template
 	}
 
 
-	/**
-	 * Call a template run-time filter. Do not call directly.
-	 * @param  string  filter name
-	 * @param  array   arguments
-	 * @return mixed
-	 */
-	public function __call($name, $args)
-	{
-		return call_user_func_array($this->filters->$name, $args);
-	}
-
-
 	/********************* template parameters ****************d*g**/
 
 
@@ -124,7 +114,6 @@ class Template
 	public function setParameters(array $params)
 	{
 		$this->params = $params;
-		$this->params['template'] = $this;
 		unset($this->params['this']);
 		return $this;
 	}
@@ -137,50 +126,6 @@ class Template
 	public function getParameters()
 	{
 		return $this->params;
-	}
-
-
-	/**
-	 * Sets a template parameter. Do not call directly.
-	 * @return void
-	 */
-	public function __set($name, $value)
-	{
-		$this->params[$name] = $value;
-	}
-
-
-	/**
-	 * Returns a template parameter. Do not call directly.
-	 * @return mixed  value
-	 */
-	public function &__get($name)
-	{
-		if (!array_key_exists($name, $this->params)) {
-			trigger_error("The variable '$name' does not exist in template.");
-		}
-		return $this->params[$name];
-	}
-
-
-	/**
-	 * Determines whether parameter is defined. Do not call directly.
-	 * @return bool
-	 */
-	public function __isset($name)
-	{
-		return isset($this->params[$name]);
-	}
-
-
-	/**
-	 * Removes a template parameter. Do not call directly.
-	 * @param  string    name
-	 * @return void
-	 */
-	public function __unset($name)
-	{
-		unset($this->params[$name]);
 	}
 
 }
