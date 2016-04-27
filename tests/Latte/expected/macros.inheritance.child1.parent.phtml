@@ -4,14 +4,14 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'title' => 'block_title_d5d3db1',
-		'sidebar' => 'block_sidebar_0838fec',
+		'title' => 'blockTitle',
+		'sidebar' => 'blockSidebar',
 	];
 
 
 	function render()
 	{
-		foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);
+		foreach ($this->params as $__k => $__v) $$__k = $__v;
 
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $this->initialize('html')
@@ -47,17 +47,13 @@ call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
 	}
 
 
-	function block_title_%h%($_b, $_args)
-	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
-?>My website<?php
+	function blockTitle($_b, $_args)
+	{	?>My website<?php
 	}
 
 
-	function block_sidebar_%h%($_b, $_args)
-	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
-?>		<ul>
+	function blockSidebar($_b, $_args)
+	{	?>		<ul>
 			<li><a href="/">Homepage</a></li>
 			<li><a href="/contact">Contact</a></li>
 		</ul>

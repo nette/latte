@@ -4,13 +4,13 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'menu' => 'block_menu_8d6ab84',
+		'menu' => 'blockMenu',
 	];
 
 
 	function render()
 	{
-		foreach ($this->params as $__k => $__v) $$__k = $__v; unset($__k, $__v);
+		foreach ($this->params as $__k => $__v) $$__k = $__v;
 
 // prolog Latte\Macros\CoreMacros
 list($_b, $_g, $_l) = $this->initialize('xhtml')
@@ -179,7 +179,7 @@ call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 	}
 
 
-	function block_menu_%h%($_b, $_args)
+	function blockMenu($_b, $_args)
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?><ul>

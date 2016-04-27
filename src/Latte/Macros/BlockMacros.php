@@ -59,25 +59,23 @@ class BlockMacros extends MacroSet
 	public function finalize()
 	{
 		$compiler = $this->getCompiler();
-
-		if ($this->namedBlocks) {
-			$functions = [];
-			foreach ($this->namedBlocks as $name => $code) {
-				$snippet = $name[0] === '_';
-				$compiler->addMethod(
-					$functions[$name] = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7),
-					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;'
-					. ($snippet ? "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n" : '')
-					. "\n?>" . $compiler->expandTokens($code) . '<?php',
-					'$_b, $_args'
-				);
+		$functions = [];
+		foreach ($this->namedBlocks as $name => $code) {
+			$functions[$name] = $this->generateMethodName($name);
+			$code = "\n?>" . $compiler->expandTokens($code) . '<?php';
+			if ($name[0] === '_') { // snippet
+				$code = "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n$code";
 			}
-			$compiler->addProperty('blocks', $functions);
+			if (strpos($code, '$') !== FALSE) {
+				$code = 'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;' . $code;
+			}
+			$compiler->addMethod($functions[$name], $code, '$_b, $_args');
 		}
-
 
 		$epilog = $prolog = [];
 		if ($this->namedBlocks || $this->extends) {
+			$compiler->addProperty('blocks', $functions);
+
 			$prolog[] = '// template extending';
 
 			$prolog[] = '$_l->extends = '
@@ -218,7 +216,7 @@ class BlockMacros extends MacroSet
 
 			} else {
 				$node->data->leave = TRUE;
-				$node->data->func = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7);
+				$node->data->func = $this->generateMethodName($name);
 				$fname = $writer->formatWord($name);
 				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
 				return "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";
@@ -333,6 +331,18 @@ class BlockMacros extends MacroSet
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (isset(' . implode(', ', $list) . ')) {';
+	}
+
+
+	private function generateMethodName($blockName)
+	{
+		$clean = trim(preg_replace('#\W+#', '_', $blockName), '_');
+		$name = 'block' . ucfirst($clean);
+		$methods = array_keys($this->getCompiler()->getMethods());
+		if (!$clean || in_array(strtolower($name), array_map('strtolower', $methods))) {
+			$name .=  '_' . substr(md5($blockName), 0, 5);
+		}
+		return $name;
 	}
 
 }
