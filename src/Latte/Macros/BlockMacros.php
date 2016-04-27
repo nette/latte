@@ -61,14 +61,15 @@ class BlockMacros extends MacroSet
 		if ($this->namedBlocks) {
 			$functions = [];
 			foreach ($this->namedBlocks as $name => $code) {
-				$snippet = $name[0] === '_';
-				$this->getCompiler()->addMethod(
-					$functions[$name] = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7),
-					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;'
-					. ($snippet ? "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n" : '')
-					. "\n?>$code<?php",
-					'$_b, $_args'
-				);
+				$functions[$name] = 'block_' . preg_replace('#\W#', '_', $name) . '_' . substr(md5($name), 0, 7);
+				$code = "\n?>$code<?php";
+				if ($name[0] === '_') { // snippet
+					$code = "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n$code";
+				}
+				if (strpos($code, '$') !== FALSE) {
+					$code = 'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;' . $code;
+				}
+				$this->getCompiler()->addMethod($functions[$name], $code, '$_b, $_args');
 			}
 			$this->getCompiler()->addProperty('_blocks', $functions);
 		}
