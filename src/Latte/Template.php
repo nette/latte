@@ -26,6 +26,9 @@ class Template
 	/** @var Filters */
 	protected $filters;
 
+	/** @var array */
+	protected $blocks = [];
+
 
 	public function __construct(Engine $engine, Filters $filters, $name)
 	{
@@ -71,6 +74,9 @@ class Template
 			unset($this->params['_b']);
 		} else {
 			$block = new \stdClass;
+		}
+		foreach ($this->blocks as $name => $method) {
+			$block->blocks[$name][] = [$this, $method];
 		}
 
 		// global storage

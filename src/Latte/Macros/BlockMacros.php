@@ -58,23 +58,25 @@ class BlockMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		$epilog = $prolog = [];
 		$compiler = $this->getCompiler();
 
 		if ($this->namedBlocks) {
+			$functions = [];
 			foreach ($this->namedBlocks as $name => $code) {
 				$snippet = $name[0] === '_';
 				$compiler->addMethod(
-					$func = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7),
+					$functions[$name] = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7),
 					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;'
 					. ($snippet ? "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n" : '')
 					. "\n?>" . $compiler->expandTokens($code) . '<?php',
 					'$_b, $_args'
 				);
-				$prolog[] = '$_b->blocks[' . var_export($name, TRUE) . "][] = [\$this, '$func'];";
 			}
+			$compiler->addProperty('blocks', $functions);
 		}
 
+
+		$epilog = $prolog = [];
 		if ($this->namedBlocks || $this->extends) {
 			$prolog[] = '// template extending';
 
