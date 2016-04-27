@@ -61,14 +61,19 @@ class BlockMacros extends MacroSet
 		if ($this->namedBlocks) {
 			$functions = [];
 			foreach ($this->namedBlocks as $name => $code) {
-				$snippet = $name[0] === '_';
-				$this->getCompiler()->addMethod(
-					$functions[$name] = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7),
-					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;'
-					. ($snippet ? "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n" : '')
-					. "\n?>$code<?php",
-					'$_b, $_args'
-				);
+				$cleanName = trim(preg_replace('#\W+#', '_', $name), '_');
+				if (!$cleanName || in_array(strtolower("block$cleanName"), array_map('strtolower', $functions))) {
+					$cleanName .=  '_' . substr(md5($name), 0, 5);
+				}
+				$functions[$name] = 'block' . ucfirst($cleanName);
+				$code = "\n?>$code<?php";
+				if ($name[0] === '_') { // snippet
+					$code = "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n$code";
+				}
+				if (strpos($code, '$') !== FALSE) {
+					$code = 'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;' . $code;
+				}
+				$this->getCompiler()->addMethod($functions[$name], $code, '$_b, $_args');
 			}
 			$this->getCompiler()->addProperty('blocks', $functions);
 		}
@@ -216,7 +221,7 @@ class BlockMacros extends MacroSet
 
 			} else {
 				$node->data->leave = TRUE;
-				$node->data->func = 'block_' . preg_replace('#[^a-z0-9_]#i', '_', $name) . '_' . substr(md5($name), 0, 7);
+				$node->data->func = 'block' . ucfirst(preg_replace('#\W#', '', $name)) . '_' . substr(md5($name), 0, 5);
 				$fname = $writer->formatWord($name);
 				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
 				return "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";

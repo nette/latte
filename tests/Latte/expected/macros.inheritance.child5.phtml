@@ -4,7 +4,7 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'content' => 'block_content_9a0364b',
+		'content' => 'blockContent',
 	];
 
 
@@ -25,9 +25,8 @@ call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars()) ;
 	}
 
 
-	function block_content_%h%($_b, $_args)
+	function blockContent($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	Content
 <?php
 	}

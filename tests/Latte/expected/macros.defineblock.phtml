@@ -4,7 +4,7 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'test' => 'block_test_098f6bc',
+		'test' => 'blockTest',
 	];
 
 
@@ -29,7 +29,7 @@ if ($_l->extends) { ob_start(function () {});}
 	}
 
 
-	function block_test_%h%($_b, $_args)
+	function blockTest($_b, $_args)
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	This is definition #<?php echo LFilters::escapeHtmlText($var) ?>

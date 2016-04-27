@@ -4,9 +4,9 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'content' => 'block_content_9a0364b',
-		'title' => 'block_title_d5d3db1',
-		'sidebar' => 'block_sidebar_0838fec',
+		'content' => 'blockContent',
+		'title' => 'blockTitle',
+		'sidebar' => 'blockSidebar',
 	];
 
 
@@ -31,7 +31,7 @@ call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 	}
 
 
-	function block_content_%h%($_b, $_args)
+	function blockContent($_b, $_args)
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?>	<h1><?php call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></h1>
@@ -45,16 +45,15 @@ call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 	}
 
 
-	function block_title_%h%($_b, $_args)
+	function blockTitle($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?>Homepage <?php
 	}
 
 
-	function block_sidebar_%h%($_b, $_args)
+	function blockSidebar($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;
+
 
 	}
 
