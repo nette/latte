@@ -7,6 +7,10 @@ class Template%a% extends Latte\Template
 		'static' => 'blockStatic',
 	];
 
+	public $blockTypes = [
+		'static' => 'html',
+	];
+
 
 	function render()
 	{
@@ -25,19 +29,22 @@ $var = 10 ?>
 call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { $_b->blocks[$name][] = [$this, 'blockName_%h%']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
+<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName_%h%']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
 
 <?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
 
-<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>
+<?php if ('html' !== $_b->types['dynamic']) { trigger_error('Incompatible context for including block dynamic.', E_USER_WARNING); }
+Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>
 
-<?php call_user_func(reset($_b->blocks['static']), $_b, ['var' => 30] + get_defined_vars()) ?>
+<?php if ('html' !== $_b->types['static']) { trigger_error('Incompatible context for including block static.', E_USER_WARNING); }
+call_user_func(reset($_b->blocks['static']), $_b, ['var' => 30] + get_defined_vars()) ?>
 
-<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $this->params) ?>
+<?php if ('html' !== $_b->types[$name]) { trigger_error('Incompatible context for including block $name.', E_USER_WARNING); }
+Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $this->params) ?>
 
-<?php $_b->blocks["word$name"][] = [$this, 'blockWordname_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWordname_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
-<?php $_b->blocks["word$name"][] = [$this, 'blockWordname_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWordname_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
 <?php
 	}
