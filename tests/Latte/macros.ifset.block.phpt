@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Macros\BlockMacros {ifset #block}
+ * Test: Latte\Macros\BlockMacros {ifset block}
  */
 
 use Latte\Macros\BlockMacros;

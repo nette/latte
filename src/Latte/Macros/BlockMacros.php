@@ -100,7 +100,7 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {include #block}
+	 * {include block}
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
@@ -184,19 +184,16 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {block [[#]name]}
+	 * {block [name]}
 	 * {snippet [name [,]] [tag]}
 	 * {snippetArea [name]}
-	 * {define [#]name}
+	 * {define name}
 	 */
 	public function macroBlock(MacroNode $node, PhpWriter $writer)
 	{
 		$name = $node->tokenizer->fetchWord();
 
-		if ($node->name === '#') {
-			trigger_error('Shortcut {#block} is deprecated.', E_USER_DEPRECATED);
-
-		} elseif ($node->name === 'block' && $name === FALSE) { // anonymous block
+		if ($node->name === 'block' && $name === FALSE) { // anonymous block
 			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
 		}
 
@@ -326,8 +323,8 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {ifset #block}
-	 * {elseifset #block}
+	 * {ifset block}
+	 * {elseifset block}
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{

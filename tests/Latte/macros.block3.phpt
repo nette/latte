@@ -24,7 +24,7 @@ EOD
 , $latte->renderToString(<<<EOD
 <head>
 	<script src="nette.js"></script>
-	{include #meta}
+	{include meta}
 </head>
 
 {block meta}

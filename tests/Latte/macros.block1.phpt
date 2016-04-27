@@ -30,6 +30,6 @@ EOD
 
 	{include sidebar}
 
-{include #main}
+{include main}
 EOD
 ));
