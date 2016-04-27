@@ -3,13 +3,15 @@
 
 class Template%a% extends Latte\Template
 {
+	public $_blocks = [
+		'bl' => 'block_bl_fd18772',
+	];
+
 
 	function render()
 	{
 %A%
 // prolog Latte\Macros\BlockMacros
-$_b->blocks['bl'][] = [$this, 'block_bl_%h%'];
-
 // template extending
 
 $_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;

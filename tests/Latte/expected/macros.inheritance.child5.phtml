@@ -3,13 +3,15 @@
 
 class Template%a% extends Latte\Template
 {
+	public $_blocks = [
+		'content' => 'block_content_9a0364b',
+	];
+
 
 	function render()
 	{
 %A%
 // prolog Latte\Macros\BlockMacros
-$_b->blocks['content'][] = [$this, 'block_content_%h%'];
-
 // template extending
 
 $_l->extends = $ext; $_g->extended = TRUE;
