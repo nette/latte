@@ -8,6 +8,10 @@ class Template%a% extends Latte\Template
 	{
 %A%?>
 <p>Included file #2 (<?php echo LFilters::escapeHtmlText($localvar) ?>, <?php echo LFilters::escapeHtmlText($hello) ?>)</p>
+
+Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate()->getName())) ?>
+/<?php echo LFilters::escapeHtmlText($this->getReferenceType()) ?>
+
 <?php
 	}
 

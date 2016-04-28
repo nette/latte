@@ -140,7 +140,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
 		return $writer->write(
-			'ob_start(function () {}); $this->global->includingBlock = isset($this->global->includingBlock) ? ++$this->global->includingBlock : 1; $this->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); $this->global->includingBlock--; echo rtrim(ob_get_clean())'
+			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->render(); echo rtrim(ob_get_clean())'
 		);
 	}
 

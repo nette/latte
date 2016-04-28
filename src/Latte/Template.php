@@ -31,6 +31,12 @@ class Template
 	/** @var array */
 	protected $blocks = [];
 
+	/** @var Template|NULL */
+	private $referrerTemplate;
+
+	/** @var string|NULL */
+	private $referenceType;
+
 	/** @var \stdClass local accumulators for intermediate results */
 	public $local;
 
@@ -75,6 +81,24 @@ class Template
 
 
 	/**
+	 * @return Template|NULL
+	 */
+	public function getReferrerTemplate()
+	{
+		return $this->referrerTemplate;
+	}
+
+
+	/**
+	 * @return string|NULL
+	 */
+	public function getReferenceType()
+	{
+		return $this->referenceType;
+	}
+
+
+	/**
 	 * Initializes block, global & local storage in template.
 	 * @return [\stdClass, \stdClass, \stdClass]
 	 * @internal
@@ -83,8 +107,9 @@ class Template
 	{
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $contentType);
 
-		// local storage
+		// old accumulators
 		$this->params['_l'] = $this->local;
+		$this->params['_g'] = $this->global;
 
 		// block storage
 		if (isset($this->params['_b'])) {
@@ -96,11 +121,6 @@ class Template
 		foreach ($this->blocks as $name => $info) {
 			$block->blocks[$name][] = [$this, $info[0]];
 			Macros\BlockMacrosRuntime::checkType($info[1], $block->types, $name);
-		}
-
-		// global storage
-		if (isset($this->params['_g'])) {
-			$this->global = $this->params['_g'];
 		}
 
 		// extends
@@ -119,7 +139,7 @@ class Template
 	{
 		if ($this->local->parentName) {
 			ob_end_clean();
-			$this->renderChildTemplate($this->local->parentName, $params);
+			$this->createTemplate($this->local->parentName, $params, 'extends')->render();
 			return TRUE;
 		}
 	}
@@ -127,13 +147,18 @@ class Template
 
 	/**
 	 * Renders template.
-	 * @return void
+	 * @return Template
 	 * @internal
 	 */
-	public function renderChildTemplate($name, array $params = [])
+	public function createTemplate($name, array $params, $referenceType)
 	{
 		$name = $this->engine->getLoader()->getChildName($name, $this->name);
-		$this->engine->render($name, $params);
+		$child = $this->engine->createTemplate($name);
+		$child->params = $params;
+		$child->referrerTemplate = $this;
+		$child->referenceType = $referenceType;
+		$child->global = $this->global;
+		return $child;
 	}
 
 

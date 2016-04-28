@@ -1,3 +1,3 @@
 {define test}
-	Test block
+	Parent: {basename($this->getReferrerTemplate()->getName())}/{$this->getReferenceType()}
 {/define}

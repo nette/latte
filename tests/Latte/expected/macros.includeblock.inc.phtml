@@ -11,14 +11,17 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%
-;
 // main template
 if ($this->tryRenderParent(get_defined_vars())) return;
 	}
 
 
 	function blockTest($_b, $_args)
-	{	?>	Test block
+	{
+		extract($_args)
+?>	Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate()->getName())) ?>
+/<?php echo LFilters::escapeHtmlText($this->getReferenceType()) ?>
+
 <?php
 	}
 

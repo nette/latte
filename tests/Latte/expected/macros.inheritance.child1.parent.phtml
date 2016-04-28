@@ -36,6 +36,9 @@ Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'content', $this->params) ?>
 	</div>
 </body>
 </html>
+Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate()->getName())) ?>
+/<?php echo LFilters::escapeHtmlText($this->getReferenceType()) ?>
+
 <?php
 	}
 
