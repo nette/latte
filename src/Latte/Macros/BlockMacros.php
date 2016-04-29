@@ -71,7 +71,7 @@ class BlockMacros extends MacroSet
 				$code = "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n$code";
 			}
 			if (strpos($code, '$') !== FALSE) {
-				$code = 'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;' . $code;
+				$code = 'extract($_args);' . $code;
 			}
 			$compiler->addMethod($functions[$name], $code, '$_b, $_args');
 		}
@@ -305,7 +305,7 @@ class BlockMacros extends MacroSet
 				$node->content = rtrim($node->content, " \t");
 				$this->getCompiler()->addMethod(
 					$node->data->func,
-					'unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;' . "\n?>$node->content<?php",
+					"extract(\$_args);\n?>$node->content<?php",
 					'$_b, $_args'
 				);
 				$node->content = '';

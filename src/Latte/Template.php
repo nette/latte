@@ -122,7 +122,6 @@ class Template
 	public function setParameters(array $params)
 	{
 		$this->params = $params;
-		unset($this->params['this']);
 		return $this;
 	}
 

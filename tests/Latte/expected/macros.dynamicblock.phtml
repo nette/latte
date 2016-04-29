@@ -48,7 +48,7 @@ Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $this->pa
 
 	function blockName($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+		extract($_args)
 ?>
 		Dynamic block #<?php echo LFilters::escapeHtmlText($var) ?>
 
@@ -58,21 +58,21 @@ Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $this->pa
 
 	function blockWord_name($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;
+		extract($_args);
 
 	}
 
 
 	function blockWord_name_%h%($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v;
+		extract($_args);
 
 	}
 
 
 	function blockStatic($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+		extract($_args)
 ?>	Static block #<?php echo LFilters::escapeHtmlText($var) ?>
 
 <?php

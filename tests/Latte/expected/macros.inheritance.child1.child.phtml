@@ -33,7 +33,7 @@ call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?>
 
 	function blockTitle($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+		extract($_args)
 ?>Homepage | <?php if ('html' !== $_b->types['title']) { trigger_error('Incompatible context for including block title.', E_USER_WARNING); }
 Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars()) ;if ('html' !== $_b->types['title']) { trigger_error('Incompatible context for including block title.', E_USER_WARNING); }
 Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars()) ;
@@ -42,7 +42,7 @@ Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars(
 
 	function blockContent($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+		extract($_args)
 ?>	<ul>
 <?php $iterations = 0; if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.'); foreach ($people as $person) { ?>
 		<li><?php echo LFilters::escapeHtmlText($person) ?></li>

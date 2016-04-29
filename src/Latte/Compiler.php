@@ -137,7 +137,7 @@ class Compiler
 		}
 		$output = $this->expandTokens(($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs);
 
-		$this->addMethod('render', 'foreach ($this->params as $__k => $__v) $$__k = $__v;' . "\n?>$output<?php");
+		$this->addMethod('render', "extract(\$this->params)\n?>$output<?php");
 
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';

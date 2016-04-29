@@ -177,7 +177,7 @@ Hello<?php } $iterations++; } %a% foreach ([1] as $foo) { if (array_pop($this->l
 
 	function blockBl($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+		extract($_args)
 ?><ul title="block + if + foreach">
 <?php %a% foreach ($people as $person) { if (strlen($person)===4) { ?>
 	<li><?php echo LFilters::escapeHtmlText($person) ?></li>

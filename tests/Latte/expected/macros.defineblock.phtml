@@ -32,7 +32,7 @@ call_user_func(reset($_b->blocks['test']), $_b, ['var' => 20] + get_defined_vars
 
 	function blockTest($_b, $_args)
 	{
-		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
+		extract($_args)
 ?>	This is definition #<?php echo LFilters::escapeHtmlText($var) ?>
 
 <?php
