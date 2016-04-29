@@ -31,6 +31,7 @@ class Filters
 		'escapeurl' => 'rawurlencode',
 		'escapexml' => 'Latte\Runtime\Filters::escapeXml',
 		'firstupper' => 'Latte\Runtime\Filters::firstUpper',
+		'checkurl' => 'Latte\Runtime\Filters::safeUrl',
 		'implode' => 'implode',
 		'indent' => 'Latte\Runtime\Filters::indent',
 		'length' => 'Latte\Runtime\Filters::length',

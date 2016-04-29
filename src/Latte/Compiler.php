@@ -674,7 +674,7 @@ class Compiler
 
 		if (strpbrk($name, '=~%^&_')) {
 			if ($this->context[1] === self::CONTENT_URL) {
-				$modifiers = preg_replace('#\|nosafeurl\s?(?=\||\z)#i', '', $modifiers, -1, $found);
+				$modifiers = preg_replace('#\|(nosafeurl|nocheck)\s?(?=\||\z)#i', '', $modifiers, -1, $found);
 				if (!$found && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
 					$modifiers .= '|safeurl';
 				}
