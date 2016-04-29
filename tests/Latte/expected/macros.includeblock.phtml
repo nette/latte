@@ -12,7 +12,7 @@ class Template%a% extends Latte\Template
 
 
 <?php if ('html' !== $_b->types['test']) { trigger_error('Incompatible context for including block test.', E_USER_WARNING); }
-Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'test', $this->params) ;
+$this->renderBlock($_b, 'test', $this->params) ;
 	}
 
 }

@@ -34,8 +34,8 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args)
 ?>Homepage | <?php if ('html' !== $_b->types['title']) { trigger_error('Incompatible context for including block title.', E_USER_WARNING); }
-Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars()) ;if ('html' !== $_b->types['title']) { trigger_error('Incompatible context for including block title.', E_USER_WARNING); }
-Latte\Macros\BlockMacrosRuntime::callBlockParent($_b, 'title', get_defined_vars()) ;
+$this->renderBlockParent($_b, 'title', get_defined_vars()) ;if ('html' !== $_b->types['title']) { trigger_error('Incompatible context for including block title.', E_USER_WARNING); }
+$this->renderBlockParent($_b, 'title', get_defined_vars()) ;
 	}
 
 

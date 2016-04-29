@@ -113,7 +113,7 @@ class BlockMacros extends MacroSet
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
 			$cmd = "call_user_func(reset(\$_b->blocks[$name]), \$_b, %node.array? + get_defined_vars())";
 		} else {
-			$cmd = 'Latte\Macros\BlockMacrosRuntime::callBlock' . ($parent ? 'Parent' : '') . "(\$_b, $name, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')';
+			$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . "(\$_b, $name, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')';
 		}
 
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $found);
@@ -213,7 +213,7 @@ class BlockMacros extends MacroSet
 				$fname = $writer->formatWord($name);
 				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
 				$blockType = var_export($this->exportBlockType($node), TRUE);
-				return "Latte\\Macros\\BlockMacrosRuntime::checkType($blockType, \$_b->types, $fname);"
+				return "\$this->checkBlockContentType($blockType, \$_b->types, $fname);"
 					. "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";
 			}
 		}

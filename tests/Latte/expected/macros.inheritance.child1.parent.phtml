@@ -32,7 +32,7 @@ extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 
 	<div id="content">
 <?php if ('html' !== $_b->types['content']) { trigger_error('Incompatible context for including block content.', E_USER_WARNING); }
-Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'content', $this->params) ?>
+$this->renderBlock($_b, 'content', $this->params) ?>
 	</div>
 </body>
 </html>

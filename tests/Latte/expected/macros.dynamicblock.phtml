@@ -18,22 +18,22 @@ $var = 10 ?>
 <?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 
-<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { $this->checkBlockContentType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
 
 <?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
 <?php if ('html' !== $_b->types['dynamic']) { trigger_error('Incompatible context for including block dynamic.', E_USER_WARNING); }
-Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>
+$this->renderBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>
 
 <?php if ('html' !== $_b->types['static']) { trigger_error('Incompatible context for including block static.', E_USER_WARNING); }
 call_user_func(reset($_b->blocks['static']), $_b, ['var' => 30] + get_defined_vars()) ?>
 
 <?php if ('html' !== $_b->types[$name]) { trigger_error('Incompatible context for including block $name.', E_USER_WARNING); }
-Latte\Macros\BlockMacrosRuntime::callBlock($_b, $name, ['var' => 40] + $this->params) ?>
+$this->renderBlock($_b, $name, ['var' => 40] + $this->params) ?>
 
-<?php Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWord_name']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php $this->checkBlockContentType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWord_name']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
-<?php Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWord_name_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php $this->checkBlockContentType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWord_name_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
 
 <?php
 	}

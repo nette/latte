@@ -120,7 +120,7 @@ class Template
 		}
 		foreach ($this->blocks as $name => $info) {
 			$block->blocks[$name][] = [$this, $info[0]];
-			Macros\BlockMacrosRuntime::checkType($info[1], $block->types, $name);
+			$this->checkBlockContentType($info[1], $block->types, $name);
 		}
 
 		// extends
@@ -159,6 +159,51 @@ class Template
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
 		return $child;
+	}
+
+
+	/********************* blocks ****************d*g**/
+
+
+	/**
+	 * Calls block.
+	 * @return void
+	 */
+	protected function renderBlock(\stdClass $context, $name, array $params)
+	{
+		if (empty($context->blocks[$name])) {
+			$hint = isset($context->blocks) && ($t = Helpers::getSuggestion(array_keys($context->blocks), $name)) ? ", did you mean '$t'?" : '.';
+			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
+		}
+		$block = reset($context->blocks[$name]);
+		$block($context, $params);
+	}
+
+
+	/**
+	 * Calls parent block.
+	 * @return void
+	 */
+	protected function renderBlockParent(\stdClass $context, $name, array $params)
+	{
+		if (empty($context->blocks[$name]) || ($block = next($context->blocks[$name])) === FALSE) {
+			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
+		}
+		$block($context, $params);
+		prev($context->blocks[$name]);
+	}
+
+
+	/**
+	 * @return void
+	 */
+	protected function checkBlockContentType($current, & $blocks, $name)
+	{
+		if (!isset($blocks[$name])) {
+			$blocks[$name] = $current;
+		} elseif ($blocks[$name] !== $current) {
+			trigger_error('Overridden block ' . $name . ' in an incompatible context.', E_USER_WARNING);
+		}
 	}
 
 
