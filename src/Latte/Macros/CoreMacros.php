@@ -49,8 +49,8 @@ class CoreMacros extends MacroSet
 		$me->addMacro('elseifset', '} elseif (isset(%node.args)) {');
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 
-		$me->addMacro('switch', '$_l->switch[] = (%node.args); if (FALSE) {', '} array_pop($_l->switch)');
-		$me->addMacro('case', '} elseif (end($_l->switch) === (%node.args)) {');
+		$me->addMacro('switch', '$this->local->switch[] = (%node.args); if (FALSE) {', '} array_pop($this->local->switch)');
+		$me->addMacro('case', '} elseif (end($this->local->switch) === (%node.args)) {');
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
 		$me->addMacro('for', 'for (%node.args) {', '}');
@@ -111,7 +111,7 @@ class CoreMacros extends MacroSet
 			return 'ob_start(function () {})';
 		}
 		if ($node->prefix === $node::PREFIX_TAG) {
-			return $writer->write($node->htmlNode->closing ? 'if (array_pop($_l->ifs)) {' : 'if ($_l->ifs[] = (%node.args)) {');
+			return $writer->write($node->htmlNode->closing ? 'if (array_pop($this->local->ifs)) {' : 'if ($this->local->ifs[] = (%node.args)) {');
 		}
 		return $writer->write('if (%node.args) {');
 	}
@@ -129,7 +129,7 @@ class CoreMacros extends MacroSet
 			return $writer->write('if (%node.args) '
 				. (isset($node->data->else) ? '{ ob_end_clean(); echo ob_get_clean(); }' : 'echo ob_get_clean();')
 				. ' else '
-				. (isset($node->data->else) ? '{ $_l->else = ob_get_clean(); ob_end_clean(); echo $_l->else; }' : 'ob_end_clean();')
+				. (isset($node->data->else) ? '{ $this->local->else = ob_get_clean(); ob_end_clean(); echo $this->local->else; }' : 'ob_end_clean();')
 			);
 		}
 		return '}';
@@ -178,8 +178,8 @@ class CoreMacros extends MacroSet
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer)
 	{
 		$node->openingCode = '<?php ob_start(function () {}) ?>';
-		$node->innerContent = '<?php ob_start() ?>' . $node->innerContent . '<?php $_l->ifcontent = ob_get_flush() ?>';
-		$node->closingCode = '<?php if (rtrim($_l->ifcontent) === "") ob_end_clean(); else echo ob_get_clean() ?>';
+		$node->innerContent = '<?php ob_start() ?>' . $node->innerContent . '<?php $this->local->ifcontent = ob_get_flush() ?>';
+		$node->closingCode = '<?php if (rtrim($this->local->ifcontent) === "") ob_end_clean(); else echo ob_get_clean() ?>';
 	}
 
 
@@ -266,9 +266,9 @@ class CoreMacros extends MacroSet
 			$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.'); ";
 		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
-			$node->openingCode .= 'foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator('
+			$node->openingCode .= 'foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
-			$node->closingCode = '<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>';
+			$node->closingCode = '<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>';
 		} else {
 			$node->openingCode .= 'foreach (' . $args . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } ?>';
@@ -301,7 +301,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
-		return $writer->write('if ($_l->tmp = array_filter(%node.array)) echo \' class="\', %escape(implode(" ", array_unique($_l->tmp))), \'"\'');
+		return $writer->write('if ($_tmp = array_filter(%node.array)) echo \' class="\', %escape(implode(" ", array_unique($_tmp))), \'"\'');
 	}
 
 

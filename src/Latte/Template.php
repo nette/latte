@@ -31,12 +31,20 @@ class Template
 	/** @var array */
 	protected $blocks = [];
 
+	/** @var \stdClass local accumulators for intermediate results */
+	public $local;
+
+	/** @var \stdClass global accumulators for intermediate results */
+	public $global;
+
 
 	public function __construct(Engine $engine, Filters $filters, $name)
 	{
 		$this->engine = $engine;
 		$this->filters = $filters;
 		$this->name = $name;
+		$this->local = new \stdClass;
+		$this->global = new \stdClass;
 	}
 
 
@@ -68,7 +76,7 @@ class Template
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $contentType);
 
 		// local storage
-		$this->params['_l'] = new \stdClass;
+		$this->params['_l'] = $this->local;
 
 		// block storage
 		if (isset($this->params['_b'])) {
@@ -83,11 +91,11 @@ class Template
 		}
 
 		// global storage
-		if (!isset($this->params['_g'])) {
-			$this->params['_g'] = new \stdClass;
+		if (isset($this->params['_g'])) {
+			$this->global = $this->params['_g'];
 		}
 
-		return [$block, $this->params['_g'], $this->params['_l']];
+		return [$block, $this->global, $this->local];
 	}
 
 

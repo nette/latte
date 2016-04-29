@@ -15,16 +15,16 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\BlockMacros
 // template extending
 
-$_l->extends = "inheritance.parent.latte"; $_g->extended = TRUE;
+$this->local->extends = "inheritance.parent.latte"; $this->global->extended = TRUE;
 
-if ($_l->extends) { ob_start(function () {});}
+if ($this->local->extends) { ob_start(function () {});}
 
 // main template ?>
 
-<?php ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $this->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean()) ?>
+<?php ob_start(function () {}); $this->global->includingBlock = isset($this->global->includingBlock) ? ++$this->global->includingBlock : 1; $this->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); $this->global->includingBlock--; echo rtrim(ob_get_clean()) ?>
 
 
-<?php if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
+<?php if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?>
 
 <?php call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars()) ;

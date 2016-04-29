@@ -14,20 +14,20 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\BlockMacros
 // template extending
 
-$_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
+$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
 
-if ($_l->extends) { ob_start(function () {});}
+if ($this->local->extends) { ob_start(function () {});}
 
 // main template
 $var = 10 ?>
 
-<?php if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
+<?php if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
 
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { Latte\Macros\BlockMacrosRuntime::checkType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
 
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
 <?php if ('html' !== $_b->types['dynamic']) { trigger_error('Incompatible context for including block dynamic.', E_USER_WARNING); }
 Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>

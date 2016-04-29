@@ -8,7 +8,7 @@ class Template%a% extends Latte\Template
 	{
 %A%?>
 
-<?php ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $this->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean()) ?>
+<?php ob_start(function () {}); $this->global->includingBlock = isset($this->global->includingBlock) ? ++$this->global->includingBlock : 1; $this->renderChildTemplate('includeblock.inc.latte', get_defined_vars()); $this->global->includingBlock--; echo rtrim(ob_get_clean()) ?>
 
 
 <?php if ('html' !== $_b->types['test']) { trigger_error('Incompatible context for including block test.', E_USER_WARNING); }

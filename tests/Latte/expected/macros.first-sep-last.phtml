@@ -8,32 +8,32 @@ class Template%a% extends Latte\Template
 	{
 %A%?>
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst()) { ?>(<?php } ?> <?php echo LFilters::escapeHtmlText($person) ;if (!$iterator->isLast()) { ?>
 , <?php } ?> <?php if ($iterator->isLast()) { ?>)<?php } ?>
 
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst(2)) { ?>(<?php } ?> <?php echo LFilters::escapeHtmlText($person) ;if (!$iterator->isLast(2)) { ?>
 , <?php } ?> <?php if ($iterator->isLast(2)) { ?>)<?php } ?>
 
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst(1)) { ?>(<?php } ?> <?php echo LFilters::escapeHtmlText($person) ;if (!$iterator->isLast(1)) { ?>
 , <?php } ?> <?php if ($iterator->isLast(1)) { ?>)<?php } ?>
 
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { if ($iterator->isFirst(0)) { ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) { if ($iterator->isFirst(0)) { ?>
 	<span>(</span><?php } ?>
  <?php echo LFilters::escapeHtmlText($person) ;if (!$iterator->isLast()) { ?><span>, </span><?php } ?>
  <?php if ($iterator->isLast()) { ?><span>)</span>
-<?php } $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ;
+<?php } $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ;
 	}
 
 }

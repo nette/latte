@@ -14,9 +14,9 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\BlockMacros
 // template extending
 
-$_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
+$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
 
-if ($_l->extends) { ob_start(function () {});}
+if ($this->local->extends) { ob_start(function () {});}
 
 // main template
 ?>
@@ -25,22 +25,22 @@ if ($_l->extends) { ob_start(function () {});}
 
 
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) { ?>
-	<b<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>>item</b>
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) { ?>
+	<b<?php if ($_tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>item</b>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
-<?php %a% foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) { ?>
-<p<?php if ($_l->tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) { ?>
+<p<?php if ($_tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>
 ><?php echo LFilters::escapeHtmlText($foo) ?></p>
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
-<p<?php if ($_l->tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>>n:class</p>
+<p<?php if ($_tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class</p>
 
-<p<?php if ($_l->tmp = array_filter([false ? 'first' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>>n:class empty</p>
+<p<?php if ($_tmp = array_filter([false ? 'first' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class empty</p>
 
 
 
-<?php if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
+<?php if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['bl']), $_b, get_defined_vars())  ?>
 
 
@@ -70,11 +70,11 @@ call_user_func(reset($_b->blocks['bl']), $_b, get_defined_vars())  ?>
 </ul>
 
 <ul title="tag if">
-<?php if ($_l->ifs[] = (true)) { ?>	<li>
+<?php if ($this->local->ifs[] = (true)) { ?>	<li>
 <?php } ?>
 		<?php echo LFilters::escapeHtmlText($person) ?>
 
-<?php if (array_pop($_l->ifs)) { ?>	</li>
+<?php if (array_pop($this->local->ifs)) { ?>	</li>
 <?php } ?>
 </ul>
 
@@ -127,27 +127,27 @@ call_user_func(reset($_b->blocks['bl']), $_b, get_defined_vars())  ?>
 	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->lower, $person)) ?></li>
 <?php } $iterations++; } ?></ul>
 
-<?php if ($_l->ifs[] = (true)) { ?><b><?php } ?>
-bold<?php if (array_pop($_l->ifs)) { ?></b><?php } ?>
- <?php if ($_l->ifs[] = (false)) { ?><b><?php } ?>
-normal<?php if (array_pop($_l->ifs)) { ?></b>
+<?php if ($this->local->ifs[] = (true)) { ?><b><?php } ?>
+bold<?php if (array_pop($this->local->ifs)) { ?></b><?php } ?>
+ <?php if ($this->local->ifs[] = (false)) { ?><b><?php } ?>
+normal<?php if (array_pop($this->local->ifs)) { ?></b>
 <?php } ?>
 
-<?php if ($_l->ifs[] = (true)) { ?><b<?php if ($_l->tmp = array_filter(['first'])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_l->tmp))), '"' ?>
+<?php if ($this->local->ifs[] = (true)) { ?><b<?php if ($_tmp = array_filter(['first'])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>
 ><?php } ?>
-bold<?php if (array_pop($_l->ifs)) { ?></b>
+bold<?php if (array_pop($this->local->ifs)) { ?></b>
 <?php } ?>
 
 <meta>
 <?php if (true) { ?><meta>
-<?php } if ($_l->ifs[] = (true)) { ?><meta>
-<?php } if (array_pop($_l->ifs)) { } ?>
+<?php } if ($this->local->ifs[] = (true)) { ?><meta>
+<?php } if (array_pop($this->local->ifs)) { } ?>
 <meta>
 <?php if (true) { } ?><meta>
 
-<?php %a% foreach ([0] as $foo) { if (1) { %a% foreach ([1] as $foo) { if ($_l->ifs[] = (0)) { ?>
+<?php %a% foreach ([0] as $foo) { if (1) { %a% foreach ([1] as $foo) { if ($this->local->ifs[] = (0)) { ?>
 <span><?php } $iterations++; } %a% foreach ([2] as $foo) { if (2) { ?>
-Hello<?php } $iterations++; } %a% foreach ([1] as $foo) { if (array_pop($_l->ifs)) { ?></span>
+Hello<?php } $iterations++; } %a% foreach ([1] as $foo) { if (array_pop($this->local->ifs)) { ?></span>
 <?php } $iterations++; } } $iterations++; } ?>
 
 

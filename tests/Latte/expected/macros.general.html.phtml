@@ -18,9 +18,9 @@ list($_b, $_g, $_l) = $this->initialize('html')
 // prolog Latte\Macros\BlockMacros
 // template extending
 
-$_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
+$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
 
-if ($_l->extends) { ob_start(function () {});}
+if ($this->local->extends) { ob_start(function () {});}
 
 // main template
 ?>
@@ -73,14 +73,14 @@ if ($_l->extends) { ob_start(function () {});}
 <?php } ?>
 
 
-<?php $iterations = 0; if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.'); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) { $iterations = 0; if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.'); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
+<?php $iterations = 0; if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.'); foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) { $iterations = 0; if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.'); foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
 	<?php if ($iterator->isFirst()) { ?><ul><?php } ?>
 
 	<li id="item-<?php echo LFilters::escapeHtmlAttr($iterator->getCounter()) ?>" class="<?php echo LFilters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') ?>
 "><?php echo LFilters::escapeHtmlText($person) ?></li>
 	<?php if ($iterator->isLast()) { ?></ul><?php } ?>
 
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ;$iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ;$iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
 
 
@@ -129,7 +129,7 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 
 
 
-<?php $counter = 0 ;if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
+<?php $counter = 0 ;if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 
 
@@ -159,14 +159,14 @@ call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 
 <?php ob_start(function () {}) ?>FALSE<?php if (FALSE) echo ob_get_clean(); else ob_end_clean() ?>
 
-<?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php if (TRUE) { ob_end_clean(); echo ob_get_clean(); } else { $_l->else = ob_get_clean(); ob_end_clean(); echo $_l->else; } ?>
+<?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php if (TRUE) { ob_end_clean(); echo ob_get_clean(); } else { $this->local->else = ob_get_clean(); ob_end_clean(); echo $this->local->else; } ?>
 
 
 
-<?php $_l->switch[] = (2); if (FALSE) { } elseif (end($_l->switch) === ('x')) { ?>x
-<?php } elseif (end($_l->switch) === (2)) { ?>y
+<?php $this->local->switch[] = (2); if (FALSE) { } elseif (end($this->local->switch) === ('x')) { ?>x
+<?php } elseif (end($this->local->switch) === (2)) { ?>y
 <?php } else { ?>z
-<?php } array_pop($_l->switch) ?>
+<?php } array_pop($this->local->switch) ?>
 
 <?php echo call_user_func($this->filters->nl2br, "\n") ?>
 
@@ -183,12 +183,12 @@ call_user_func(reset($_b->blocks['menu']), $_b, get_defined_vars())  ?>
 	{
 		unset($_args["this"]); foreach ($_args as $__k => $__v) $$__k = $__v
 ?><ul>
-<?php $iterations = 0; if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.'); foreach ($iterator = $_l->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
+<?php $iterations = 0; if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.'); foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
 	<li><?php echo LFilters::escapeHtmlText($counter++) ?> <?php if (is_array($item)) { ?>
  <?php if ('html' !== $_b->types['menu']) { trigger_error('Incompatible context for including block menu.', E_USER_WARNING); }
 call_user_func(reset($_b->blocks['menu']), $_b, ['menu' => $item] + get_defined_vars()) ?>
  <?php } else { echo LFilters::escapeHtmlText($item) ;} ?></li>
-<?php $iterations++; } array_pop($_l->its); $iterator = end($_l->its) ?>
+<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 </ul>
 <?php
 	}

@@ -82,13 +82,13 @@ class BlockMacros extends MacroSet
 
 			$prolog[] = '// template extending';
 
-			$prolog[] = '$_l->extends = '
-				. ($this->extends ? $this->extends : 'empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
-				. '; $_g->extended = TRUE;';
+			$prolog[] = '$this->local->extends = '
+				. ($this->extends ? $this->extends : 'empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL')
+				. '; $this->global->extended = TRUE;';
 
-			$prolog[] = 'if ($_l->extends) { ob_start(function () {});}';
+			$prolog[] = 'if ($this->local->extends) { ob_start(function () {});}';
 			if (!$this->namedBlocks) {
-				$epilog[] = 'if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars());}';
+				$epilog[] = 'if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars());}';
 			}
 		}
 
@@ -150,7 +150,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
 		return $writer->write(
-			'ob_start(function () {}); $_g->includingBlock = isset($_g->includingBlock) ? ++$_g->includingBlock : 1; $this->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); $_g->includingBlock--; echo rtrim(ob_get_clean())'
+			'ob_start(function () {}); $this->global->includingBlock = isset($this->global->includingBlock) ? ++$this->global->includingBlock : 1; $this->renderChildTemplate(%node.word, %node.array? + get_defined_vars()); $this->global->includingBlock--; echo rtrim(ob_get_clean())'
 		);
 	}
 
@@ -211,16 +211,16 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
-				$node->closingCode = "<?php \$_l->dynSnippets[\$_l->dynSnippetId] = ob_get_flush() ?>";
+				$node->closingCode = "<?php \$this->local->dynSnippets[\$this->local->dynSnippetId] = ob_get_flush() ?>";
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$_l->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
+					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->local->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write('ob_start()');
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
-				return $writer->write("?>\n<$tag id=\"<?php echo \$_l->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
+				return $writer->write("?>\n<$tag id=\"<?php echo \$this->local->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
 
 			} else {
 				$node->data->leave = TRUE;
@@ -245,7 +245,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
 
-		$prolog = $this->namedBlocks ? '' : "if (\$_l->extends) { ob_end_clean(); return \$this->renderChildTemplate(\$_l->extends, get_defined_vars()); }\n";
+		$prolog = $this->namedBlocks ? '' : "if (\$this->local->extends) { ob_end_clean(); return \$this->renderChildTemplate(\$this->local->extends, get_defined_vars()); }\n";
 		$this->namedBlocks[$name] = TRUE;
 		$this->blockTypes[$name] = $this->exportBlockType($node);
 
@@ -292,7 +292,7 @@ class BlockMacros extends MacroSet
 					$node->content = "<?php \$_control->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$_control->snippetMode = FALSE; ?>";
 				}
 				if (!empty($node->data->dynamic)) {
-					$node->content .= '<?php if (isset($_l->dynSnippets)) return $_l->dynSnippets; ?>';
+					$node->content .= '<?php if (isset($this->local->dynSnippets)) return $this->local->dynSnippets; ?>';
 				}
 				if ($node->name === 'snippetArea') {
 					$node->content .= '<?php return FALSE; ?>';

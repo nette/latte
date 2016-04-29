@@ -14,12 +14,12 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\BlockMacros
 // template extending
 
-$_l->extends = empty($_g->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $_g->extended = TRUE;
+$this->local->extends = empty($this->global->extended) && isset($_control) && $_control instanceof Nette\Application\UI\Presenter ? $_control->findLayoutTemplateFile() : NULL; $this->global->extended = TRUE;
 
-if ($_l->extends) { ob_start(function () {});}
+if ($this->local->extends) { ob_start(function () {});}
 
 // main template
-if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
+if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
 
 	}
 

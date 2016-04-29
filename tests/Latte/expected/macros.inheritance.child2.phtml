@@ -16,14 +16,14 @@ class Template%a% extends Latte\Template
 // prolog Latte\Macros\BlockMacros
 // template extending
 
-$_l->extends = "inheritance.parent.latte"; $_g->extended = TRUE;
+$this->local->extends = "inheritance.parent.latte"; $this->global->extended = TRUE;
 
-if ($_l->extends) { ob_start(function () {});}
+if ($this->local->extends) { ob_start(function () {});}
 
 // main template ?>
 
 
-<?php if ($_l->extends) { ob_end_clean(); return $this->renderChildTemplate($_l->extends, get_defined_vars()); }
+<?php if ($this->local->extends) { ob_end_clean(); return $this->renderChildTemplate($this->local->extends, get_defined_vars()); }
 call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
 
 
