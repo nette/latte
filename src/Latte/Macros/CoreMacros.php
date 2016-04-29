@@ -85,6 +85,19 @@ class CoreMacros extends MacroSet
 
 
 	/**
+	 * Initializes before template parsing.
+	 * @return void
+	 */
+	public function initialize()
+	{
+		$compiler = $this->getCompiler();
+		if ($compiler->getContentType() !== $compiler::CONTENT_HTML) {
+			$compiler->addProperty('contentType', $compiler->getContentType());
+		}
+	}
+
+
+	/**
 	 * Finishes template parsing.
 	 * @return array(prolog, epilog)
 	 */
@@ -409,29 +422,28 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroContentType(MacroNode $node, PhpWriter $writer)
 	{
+		$compiler = $this->getCompiler();
 		if ($node->modifiers) {
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
-		}
-		if (strpos($node->args, 'xhtml') !== FALSE) {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_XHTML);
-
+		} elseif (strpos($node->args, 'xhtml') !== FALSE) {
+			$type = $compiler::CONTENT_XHTML;
 		} elseif (strpos($node->args, 'html') !== FALSE) {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_HTML);
-
+			$type = $compiler::CONTENT_HTML;
 		} elseif (strpos($node->args, 'xml') !== FALSE) {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_XML);
-
+			$type = $compiler::CONTENT_XML;
 		} elseif (strpos($node->args, 'javascript') !== FALSE) {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_JS);
-
+			$type = $compiler::CONTENT_JS;
 		} elseif (strpos($node->args, 'css') !== FALSE) {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_CSS);
-
+			$type = $compiler::CONTENT_CSS;
 		} elseif (strpos($node->args, 'calendar') !== FALSE) {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_ICAL);
-
+			$type = $compiler::CONTENT_ICAL;
 		} else {
-			$this->getCompiler()->setContentType(Latte\Compiler::CONTENT_TEXT);
+			$type = $compiler::CONTENT_TEXT;
+		}
+
+		$compiler->setContentType($type);
+		if (!$node->parentNode && !$node->htmlNode) {
+			$compiler->addProperty('contentType', $type);
 		}
 
 		// temporary solution

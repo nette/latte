@@ -22,6 +22,9 @@ class Template
 	/** @var string */
 	private $name;
 
+	/** @var string */
+	protected $contentType = Engine::CONTENT_HTML;
+
 	/** @var array */
 	public $params = [];
 
@@ -73,6 +76,15 @@ class Template
 
 
 	/**
+	 * @return string
+	 */
+	public function getContentType()
+	{
+		return $this->contentType;
+	}
+
+
+	/**
 	 * @return string|NULL
 	 */
 	public function getParentName()
@@ -105,7 +117,7 @@ class Template
 	 */
 	protected function initialize($contentType)
 	{
-		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $contentType);
+		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 
 		// old accumulators
 		$this->params['_l'] = $this->local;
