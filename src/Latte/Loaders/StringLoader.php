@@ -40,7 +40,7 @@ class StringLoader implements Latte\ILoader
 	 * Returns fully qualified template name.
 	 * @return string
 	 */
-	public function getChildName($content, $parent = NULL)
+	public function getChildName($content, $referrer = NULL)
 	{
 		return $content;
 	}

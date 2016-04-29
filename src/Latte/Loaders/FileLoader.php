@@ -48,10 +48,10 @@ class FileLoader implements Latte\ILoader
 	 * Returns fully qualified template name.
 	 * @return string
 	 */
-	public function getChildName($file, $parent = NULL)
+	public function getChildName($file, $referrer = NULL)
 	{
-		if ($parent && !preg_match('#/|\\\\|[a-z][a-z0-9+.-]*:#iA', $file)) {
-			$file = dirname($parent) . '/' . $file;
+		if ($referrer && !preg_match('#/|\\\\|[a-z][a-z0-9+.-]*:#iA', $file)) {
+			$file = dirname($referrer) . '/' . $file;
 		}
 		return $file;
 	}

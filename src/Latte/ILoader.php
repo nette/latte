@@ -30,6 +30,6 @@ interface ILoader
 	 * Returns fully qualified template name.
 	 * @return string
 	 */
-	function getChildName($name, $parent = NULL);
+	function getChildName($name, $referrer = NULL);
 
 }
