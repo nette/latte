@@ -177,11 +177,6 @@ class Engine
 
 		$file = $this->getCacheFile($name);
 
-		$lock = NULL;
-		if (defined('PHP_WINDOWS_VERSION_BUILD') && ($lock = @fopen("$file.lock", 'c'))) { // @ - file may not exist
-			flock($lock, LOCK_SH);
-		}
-
 		if (!$this->isExpired($file, $name) && (@include $file) !== FALSE) { // @ - file may not exist
 			return;
 		}
@@ -190,8 +185,8 @@ class Engine
 			@mkdir($this->tempDirectory); // @ - directory may already exist
 		}
 
-		$lock = $lock ?: fopen("$file.lock", 'c');
-		if (!$lock || !flock($lock, LOCK_EX)) {
+		$handle = fopen("$file.lock", 'c+');
+		if (!$handle || !flock($handle, LOCK_EX)) {
 			throw new \RuntimeException("Unable to acquire exclusive lock '$file.lock'.");
 		}
 
@@ -207,7 +202,7 @@ class Engine
 			throw new \RuntimeException("Unable to load '$file'.");
 		}
 
-		flock($lock, LOCK_UN);
+		flock($handle, LOCK_UN);
 	}
 
 
