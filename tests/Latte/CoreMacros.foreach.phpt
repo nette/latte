@@ -35,6 +35,12 @@ Assert::same(
 	expandMacro($compiler, '$array as $key => $value')->openingCode
 );
 
+Assert::same(
+	'<?php $iterations = 0; '
+	. 'foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($array) as $key => $value) { ?>',
+	expandMacro($compiler, '$array as $key => $value', '|nocheck')->openingCode
+);
+
 Assert::same($prefix . '$obj->data("A as B")) as $value) { ?>',  expandMacro($compiler, '$obj->data("A as B") as $value')->openingCode);
 Assert::same($prefix . '$obj->data(\'A as B\')) as $value) { ?>',  expandMacro($compiler, '$obj->data(\'A as B\') as $value')->openingCode);
 Assert::same($prefix . '$obj->data("X as Y, Z as W")) as $value) { ?>',  expandMacro($compiler, '$obj->data("X as Y, Z as W") as $value')->openingCode);
@@ -48,4 +54,4 @@ Assert::same(
 
 Assert::exception(function () use ($compiler) {
 	expandMacro($compiler, '$array as $value', '|filter');
-}, 'Latte\CompileException', 'Only modifier |noiterator is allowed here.');
+}, 'Latte\CompileException', 'Only modifiers |noiterator and |nocheck are allowed here.');

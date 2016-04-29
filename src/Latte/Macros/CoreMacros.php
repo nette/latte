@@ -266,15 +266,18 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndForeach(MacroNode $node, PhpWriter $writer)
 	{
+		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
 		if ($node->modifiers && $node->modifiers !== '|noiterator') {
-			throw new CompileException('Only modifier |noiterator is allowed here.');
+			throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.');
 		}
 		$node->openingCode = '<?php $iterations = 0; ';
 		$args = $writer->formatArgs();
 		preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
-		for ($i = 1; $i < count($m); $i++) {
-			$s = var_export($m[$i], TRUE);
-			$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.'); ";
+		if (!$noCheck) {
+			for ($i = 1; $i < count($m); $i++) {
+				$s = var_export($m[$i], TRUE);
+				$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.'); ";
+			}
 		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
 			$node->openingCode .= 'foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator('
