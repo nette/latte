@@ -157,7 +157,7 @@ class Template
 	{
 		if ($this->local->parentName) {
 			ob_end_clean();
-			$this->createTemplate($this->local->parentName, $params, 'extends')->render();
+			$this->createTemplate($this->local->parentName, $params, 'extends', $this->contentType)->render();
 			return TRUE;
 		}
 	}
@@ -168,10 +168,13 @@ class Template
 	 * @return Template
 	 * @internal
 	 */
-	public function createTemplate($name, array $params, $referenceType)
+	public function createTemplate($name, array $params, $referenceType, $contentType)
 	{
 		$name = $this->engine->getLoader()->getChildName($name, $this->name);
 		$child = $this->engine->createTemplate($name);
+		if ($child->contentType !== $contentType) {
+			trigger_error("Incompatible context for including $name.", E_USER_WARNING);
+		}
 		$child->params = $params;
 		$child->referrerTemplate = $this;
 		$child->referenceType = $referenceType;

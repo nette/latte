@@ -216,7 +216,10 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
-		$code = $writer->write('$this->createTemplate(%node.word, %node.array? + $this->params, "include")->render()');
+		$code = $writer->write(
+			'$this->createTemplate(%node.word, %node.array? + $this->params, "include", %var)->render()',
+			$this->getCompiler()->getContentType() . implode((array) $this->getCompiler()->getContext())
+		);
 		if ($node->modifiers) {
 			return $writer->write('ob_start(function () {}); %raw; echo %modify(ob_get_clean())', $code);
 		} else {

@@ -9,9 +9,9 @@ class Template%a% extends Latte\Template
 %A%?>
 <p>Included file #1</p>
 
-<?php $this->createTemplate("include2.latte", ['localvar' => 20] + $this->params, "include")->render() ?>
+<?php $this->createTemplate("include2.latte", ['localvar' => 20] + $this->params, "include", 'html')->render() ?>
 
-<?php $this->createTemplate("../include3.latte", $this->params, "include")->render() ?>
+<?php $this->createTemplate("../include3.latte", $this->params, "include", 'html')->render() ?>
 
 <textarea>
 pre

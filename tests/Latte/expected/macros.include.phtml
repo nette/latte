@@ -9,7 +9,7 @@ class Template%a% extends Latte\Template
 %A%
 ?>
 
-<?php ob_start(function () {}); $this->createTemplate('subdir/include1.latte' . '', ['localvar' => 10] + $this->params, "include")->render(); echo call_user_func($this->filters->indent, ob_get_clean()) ?>
+<?php ob_start(function () {}); $this->createTemplate('subdir/include1.latte' . '', ['localvar' => 10] + $this->params, "include", 'html')->render(); echo call_user_func($this->filters->indent, ob_get_clean()) ?>
 
 <?php
 	}

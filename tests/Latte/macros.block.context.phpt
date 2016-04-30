@@ -93,3 +93,27 @@ test(function () {
 	}, E_USER_WARNING, 'Incompatible context for including block script.');
 
 });
+
+
+Assert::error(function () {
+	$latte = new Latte\Engine;
+	$latte->renderToString(__DIR__ . '/templates/include.context1.latte');
+}, E_USER_WARNING, 'Incompatible context for including %a%.');
+
+
+Assert::error(function () {
+	$latte = new Latte\Engine;
+	$latte->renderToString(__DIR__ . '/templates/include.context2.latte');
+}, E_USER_WARNING, 'Incompatible context for including %a%.');
+
+
+Assert::error(function () {
+	$latte = new Latte\Engine;
+	$latte->renderToString(__DIR__ . '/templates/include.context3.latte');
+}, E_USER_WARNING, 'Incompatible context for including %a%.');
+
+
+Assert::noError(function () {
+	$latte = new Latte\Engine;
+	$latte->renderToString(__DIR__ . '/templates/include.context4.latte');
+});
