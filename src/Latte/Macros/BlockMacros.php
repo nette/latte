@@ -33,6 +33,7 @@ class BlockMacros extends MacroSet
 		$me = new static($compiler);
 		$me->addMacro('include', [$me, 'macroInclude']);
 		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']);
+		$me->addMacro('import', [$me, 'macroImport']);
 		$me->addMacro('extends', [$me, 'macroExtends']);
 		$me->addMacro('layout', [$me, 'macroExtends']);
 		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd'], NULL, self::AUTO_CLOSE);
@@ -141,6 +142,21 @@ class BlockMacros extends MacroSet
 		}
 		return $writer->write(
 			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock", %var)->render(); echo rtrim(ob_get_clean())',
+			$this->exportBlockType($node)
+		);
+	}
+
+
+	/**
+	 * {import "file"}
+	 */
+	public function macroImport(MacroNode $node, PhpWriter $writer)
+	{
+		if ($node->modifiers) {
+			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+		}
+		return $writer->write(
+			'ob_start(function () {}); $this->createTemplate(%node.word, get_defined_vars(), "includeblock", %var)->render(); ob_end_clean();',
 			$this->exportBlockType($node)
 		);
 	}

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Test: Latte\Engine: {import ...}
+ */
+
+use Tester\Assert;
+
+
+require __DIR__ . '/../bootstrap.php';
+
+
+$latte = new Latte\Engine;
+$latte->setTempDirectory(TEMP_DIR);
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'main' => '
+		{import "inc"}
+		{include test}
+	',
+	'inc' => '
+		outer text
+		{define test}
+			Test block
+		{/define}
+	',
+]));
+
+Assert::matchFile(
+	__DIR__ . '/expected/macros.import.phtml',
+	$latte->compile('main')
+);
+Assert::match(
+	'Test block',
+	trim($latte->renderToString('main'))
+);
