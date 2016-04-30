@@ -324,6 +324,16 @@ class Filters
 
 
 	/**
+	 * @param  string
+	 * @return Html
+	 */
+	public static function breaklines($value)
+	{
+		return new Html(nl2br(self::escapeHtmlText($value), self::$xhtml));
+	}
+
+
+	/**
 	 * Returns a part of UTF-8 string.
 	 * @param  string
 	 * @param  int
