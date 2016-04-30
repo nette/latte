@@ -19,6 +19,7 @@ class Filters
 
 	/** @var array */
 	private $_static = [
+		'breaklines' => 'Latte\Runtime\Filters::breaklines',
 		'bytes' => 'Latte\Runtime\Filters::bytes',
 		'capitalize' => 'Latte\Runtime\Filters::capitalize',
 		'datastream' => 'Latte\Runtime\Filters::dataStream',
