@@ -17,20 +17,36 @@ class StringLoader implements Latte\ILoader
 {
 	use Latte\Strict;
 
+	/** @var array|NULL [name => content] */
+	private $templates;
+
+
+	public function __construct(array $templates = NULL)
+	{
+		$this->templates = $templates;
+	}
+
+
 	/**
 	 * Returns template source code.
 	 * @return string
 	 */
-	public function getContent($content)
+	public function getContent($name)
 	{
-		return $content;
+		if ($this->templates === NULL) {
+			return $name;
+		} elseif (isset($this->templates[$name])) {
+			return $this->templates[$name];
+		} else {
+			throw new \RuntimeException("Missing template '$name'.");
+		}
 	}
 
 
 	/**
 	 * @return bool
 	 */
-	public function isExpired($content, $time)
+	public function isExpired($name, $time)
 	{
 		return FALSE;
 	}
@@ -40,9 +56,9 @@ class StringLoader implements Latte\ILoader
 	 * Returns fully qualified template name.
 	 * @return string
 	 */
-	public function getChildName($content, $referrer = NULL)
+	public function getChildName($name, $referrer = NULL)
 	{
-		return $content;
+		return $name;
 	}
 
 }
