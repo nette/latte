@@ -75,8 +75,9 @@ class Template
 		} else {
 			$block = new \stdClass;
 		}
-		foreach ($this->blocks as $name => $method) {
-			$block->blocks[$name][] = [$this, $method];
+		foreach ($this->blocks as $name => $info) {
+			$block->blocks[$name][] = [$this, $info[0]];
+			Macros\BlockMacrosRuntime::checkType($info[1], $block->types, $name);
 		}
 
 		// global storage

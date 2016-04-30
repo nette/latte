@@ -4,8 +4,8 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'title' => 'blockTitle',
-		'sidebar' => 'blockSidebar',
+		'title' => ['blockTitle', 'html'],
+		'sidebar' => ['blockSidebar', 'html'],
 	];
 
 
@@ -39,7 +39,8 @@ call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
 	</div>
 
 	<div id="content">
-<?php Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'content', $this->params) ?>
+<?php if ('html' !== $_b->types['content']) { trigger_error('Incompatible context for including block content.', E_USER_WARNING); }
+Latte\Macros\BlockMacrosRuntime::callBlock($_b, 'content', $this->params) ?>
 	</div>
 </body>
 </html>

@@ -4,9 +4,9 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'content' => 'blockContent',
-		'title' => 'blockTitle',
-		'sidebar' => 'blockSidebar',
+		'content' => ['blockContent', 'html'],
+		'title' => ['blockTitle', 'html'],
+		'sidebar' => ['blockSidebar', 'html'],
 	];
 
 
