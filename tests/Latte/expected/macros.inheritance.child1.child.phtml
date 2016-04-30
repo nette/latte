@@ -12,7 +12,6 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%
-;
 // main template ?>
 
 <?php ob_start(function () {}); $this->createTemplate('includeblock.inc.latte', get_defined_vars(), "includeblock")->render(); echo rtrim(ob_get_clean()) ?>

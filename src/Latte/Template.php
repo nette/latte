@@ -118,17 +118,17 @@ class Template
 
 	/**
 	 * Initializes block, global & local storage in template.
-	 * @return [\stdClass, \stdClass, \stdClass]
+	 * @return void
 	 * @internal
 	 */
-	protected function initialize($contentType)
+	protected function initialize(& $_b, & $_l, & $_g)
 	{
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 
 		// old accumulators
-		$this->params['_l'] = $this->local;
-		$this->params['_g'] = $this->global;
-		$block = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
+		$this->params['_l'] = $_l = $this->local;
+		$this->params['_g'] = $_g = $this->global;
+		$_b = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 
 		foreach ($this->blocks as $name => $info) {
 			$this->blockQueue[$name][] = [$this, $info[0]];
@@ -139,8 +139,6 @@ class Template
 		if ($this->local->parentName = $this->getParentName()) {
 			ob_start(function () {});
 		}
-
-		return [$block, $this->global, $this->local];
 	}
 
 

@@ -14,8 +14,8 @@ class Template%a% extends Latte\Template
 		extract($this->params)
 ;
 // prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $this->initialize('html')
-;
+$this->initialize($_b, $_l, $_g);
+
 // main template
 extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
