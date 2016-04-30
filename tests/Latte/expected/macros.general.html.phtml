@@ -13,7 +13,7 @@ class Template%a% extends Latte\Template
 		extract($this->params)
 ;
 // prolog Latte\Macros\CoreMacros
-$this->initialize($_b, $_l, $_g);
+if ($this->initialize($_b, $_l, $_g)) return;
 
 // main template
 ?>

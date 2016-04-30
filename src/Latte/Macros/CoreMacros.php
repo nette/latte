@@ -103,7 +103,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		return ['$this->initialize($_b, $_l, $_g);'];
+		return ['if ($this->initialize($_b, $_l, $_g)) return;'];
 	}
 
 

@@ -117,8 +117,8 @@ class Template
 
 
 	/**
-	 * Initializes block, global & local storage in template.
-	 * @return void
+	 * Initializes template.
+	 * @return bool
 	 * @internal
 	 */
 	protected function initialize(& $_b, & $_l, & $_g)
@@ -138,6 +138,14 @@ class Template
 		// extends
 		if ($this->local->parentName = $this->getParentName()) {
 			ob_start(function () {});
+
+		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
+			$tmp = $this;
+			while (in_array($this->referenceType, ['extends', NULL], TRUE) && ($tmp = $tmp->referrerTemplate));
+			if (!$tmp) {
+				$this->renderBlock($this->params['_renderblock'], $this->params);
+				return TRUE;
+			}
 		}
 	}
 

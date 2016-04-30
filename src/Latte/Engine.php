@@ -64,10 +64,10 @@ class Engine
 	 * Renders template to output.
 	 * @return void
 	 */
-	public function render($name, array $params = [])
+	public function render($name, array $params = [], $block = NULL)
 	{
 		$this->createTemplate($name)
-			->setParameters($params)
+			->setParameters($params + ['_renderblock' => $block])
 			->render();
 	}
 
@@ -76,11 +76,11 @@ class Engine
 	 * Renders template to string.
 	 * @return string
 	 */
-	public function renderToString($name, array $params = [])
+	public function renderToString($name, array $params = [], $block = NULL)
 	{
 		ob_start(function () {});
 		try {
-			$this->render($name, $params);
+			$this->render($name, $params, $block);
 		} catch (\Throwable $e) {
 			ob_end_clean();
 			throw $e;
