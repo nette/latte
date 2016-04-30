@@ -73,7 +73,7 @@ class BlockMacros extends MacroSet
 			if (strpos($code, '$') !== FALSE) {
 				$code = 'extract($_args);' . $code;
 			}
-			$compiler->addMethod($functions[$name], $code, '$_b, $_args');
+			$compiler->addMethod($functions[$name], $code, '$_args');
 		}
 
 		$epilog = '';
@@ -111,14 +111,14 @@ class BlockMacros extends MacroSet
 
 		$name = strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination;
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
-			$cmd = "call_user_func(reset(\$_b->blocks[$name]), \$_b, %node.array? + get_defined_vars())";
+			$cmd = "call_user_func(reset(\$this->blockQueue[$name]), %node.array? + get_defined_vars())";
 		} else {
-			$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . "(\$_b, $name, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')';
+			$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . "($name, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')'; //  + ["_b" => $_bl]
 		}
 
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $found);
 		if (!$found && !preg_match('#\|?escape(?:html|htmlcomment|ical|js|url|xml)?\s?(?=\||\z)#i', $node->modifiers)) {
-			$cmd = "if (" . var_export($this->exportBlockType($node), TRUE) . " !== \$_b->types[$name]) { "
+			$cmd = "if (" . var_export($this->exportBlockType($node), TRUE) . " !== \$this->blockTypes[$name]) { "
 				. "trigger_error('Incompatible context for including block $destination.', E_USER_WARNING); }\n"
 				. $cmd;
 		}
@@ -211,10 +211,10 @@ class BlockMacros extends MacroSet
 				$node->data->leave = TRUE;
 				$node->data->func = $this->generateMethodName($name);
 				$fname = $writer->formatWord($name);
-				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$_b->blocks[$fname]), \$_b, get_defined_vars())") . ' ?>';
+				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$this->blockQueue[$fname]), get_defined_vars())") . ' ?>';
 				$blockType = var_export($this->exportBlockType($node), TRUE);
-				return "\$this->checkBlockContentType($blockType, \$_b->types, $fname);"
-					. "\$_b->blocks[$fname][] = [\$this, '{$node->data->func}'];";
+				return "\$this->checkBlockContentType($blockType, $fname);"
+					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
 			}
 		}
 
@@ -234,7 +234,7 @@ class BlockMacros extends MacroSet
 		$this->namedBlocks[$name] = TRUE;
 		$this->blockTypes[$name] = $this->exportBlockType($node);
 
-		$include = 'call_user_func(reset($_b->blocks[%var]), $_b, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
+		$include = 'call_user_func(reset($this->blockQueue[%var]), ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
 		if ($node->modifiers) {
 			$include = "ob_start(function () {}); $include; echo %modify(ob_get_clean())";
 		}
@@ -291,7 +291,7 @@ class BlockMacros extends MacroSet
 				$this->getCompiler()->addMethod(
 					$node->data->func,
 					"extract(\$_args);\n?>$node->content<?php",
-					'$_b, $_args'
+					'$_args'
 				);
 				$node->content = '';
 			}
@@ -322,7 +322,7 @@ class BlockMacros extends MacroSet
 		$list = [];
 		while (($name = $node->tokenizer->fetchWord()) !== FALSE) {
 			$list[] = preg_match('~#|[\w-]+\z~A', $name)
-				? '$_b->blocks["' . ltrim($name, '#') . '"]'
+				? '$this->blockQueue["' . ltrim($name, '#') . '"]'
 				: $writer->formatArgs(new Latte\MacroTokens($name));
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')

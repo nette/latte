@@ -15,31 +15,31 @@ class Template%a% extends Latte\Template
 // main template
 $var = 10 ?>
 
-<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['static']), $_b, get_defined_vars())  ?>
+<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($this->blockQueue['static']), get_defined_vars())  ?>
 
 
-<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { $this->checkBlockContentType('html', $_b->types, $name);$_b->blocks[$name][] = [$this, 'blockName']; call_user_func(reset($_b->blocks[$name]), $_b, get_defined_vars()) ?>
+<?php %a% foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) { $this->checkBlockContentType('html', $name);$this->blockQueue[$name][] = [$this, 'blockName']; call_user_func(reset($this->blockQueue[$name]), get_defined_vars()) ?>
 
 <?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
 
-<?php if ('html' !== $_b->types['dynamic']) { trigger_error('Incompatible context for including block dynamic.', E_USER_WARNING); }
-$this->renderBlock($_b, 'dynamic', ['var' => 20] + $this->params) ?>
+<?php if ('html' !== $this->blockTypes['dynamic']) { trigger_error('Incompatible context for including block dynamic.', E_USER_WARNING); }
+$this->renderBlock('dynamic', ['var' => 20] + $this->params) ?>
 
-<?php if ('html' !== $_b->types['static']) { trigger_error('Incompatible context for including block static.', E_USER_WARNING); }
-call_user_func(reset($_b->blocks['static']), $_b, ['var' => 30] + get_defined_vars()) ?>
+<?php if ('html' !== $this->blockTypes['static']) { trigger_error('Incompatible context for including block static.', E_USER_WARNING); }
+call_user_func(reset($this->blockQueue['static']), ['var' => 30] + get_defined_vars()) ?>
 
-<?php if ('html' !== $_b->types[$name]) { trigger_error('Incompatible context for including block $name.', E_USER_WARNING); }
-$this->renderBlock($_b, $name, ['var' => 40] + $this->params) ?>
+<?php if ('html' !== $this->blockTypes[$name]) { trigger_error('Incompatible context for including block $name.', E_USER_WARNING); }
+$this->renderBlock($name, ['var' => 40] + $this->params) ?>
 
-<?php $this->checkBlockContentType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWord_name']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php $this->checkBlockContentType('html', "word$name");$this->blockQueue["word$name"][] = [$this, 'blockWord_name']; call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars()) ?>
 
-<?php $this->checkBlockContentType('html', $_b->types, "word$name");$_b->blocks["word$name"][] = [$this, 'blockWord_name_%h%']; call_user_func(reset($_b->blocks["word$name"]), $_b, get_defined_vars()) ?>
+<?php $this->checkBlockContentType('html', "word$name");$this->blockQueue["word$name"][] = [$this, 'blockWord_name_%h%']; call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars()) ?>
 
 <?php
 	}
 
 
-	function blockName($_b, $_args)
+	function blockName($_args)
 	{
 		extract($_args)
 ?>
@@ -49,21 +49,21 @@ $this->renderBlock($_b, $name, ['var' => 40] + $this->params) ?>
 	}
 
 
-	function blockWord_name($_b, $_args)
+	function blockWord_name($_args)
 	{
 		extract($_args);
 
 	}
 
 
-	function blockWord_name_%h%($_b, $_args)
+	function blockWord_name_%h%($_args)
 	{
 		extract($_args);
 
 	}
 
 
-	function blockStatic($_b, $_args)
+	function blockStatic($_args)
 	{
 		extract($_args)
 ?>	Static block #<?php echo LFilters::escapeHtmlText($var) ?>

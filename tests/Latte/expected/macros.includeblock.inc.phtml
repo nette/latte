@@ -16,7 +16,7 @@ if ($this->tryRenderParent(get_defined_vars())) return;
 	}
 
 
-	function blockTest($_b, $_args)
+	function blockTest($_args)
 	{
 		extract($_args)
 ?>	Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate()->getName())) ?>

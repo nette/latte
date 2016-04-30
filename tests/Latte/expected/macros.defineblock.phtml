@@ -19,12 +19,12 @@ class Template%a% extends Latte\Template
 
 <?php if ($this->tryRenderParent(get_defined_vars())) return ?>
 
-<?php if ('html' !== $_b->types['test']) { trigger_error('Incompatible context for including block test.', E_USER_WARNING); }
-call_user_func(reset($_b->blocks['test']), $_b, ['var' => 20] + get_defined_vars()) ;
+<?php if ('html' !== $this->blockTypes['test']) { trigger_error('Incompatible context for including block test.', E_USER_WARNING); }
+call_user_func(reset($this->blockQueue['test']), ['var' => 20] + get_defined_vars()) ;
 	}
 
 
-	function blockTest($_b, $_args)
+	function blockTest($_args)
 	{
 		extract($_args)
 ?>	This is definition #<?php echo LFilters::escapeHtmlText($var) ?>

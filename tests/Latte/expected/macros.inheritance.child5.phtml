@@ -14,7 +14,7 @@ class Template%a% extends Latte\Template
 ;
 // main template ?>
 
-<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars()) ;
+<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($this->blockQueue['content']), get_defined_vars()) ;
 	}
 
 
@@ -24,7 +24,7 @@ class Template%a% extends Latte\Template
 	}
 
 
-	function blockContent($_b, $_args)
+	function blockContent($_args)
 	{	?>	Content
 <?php
 	}

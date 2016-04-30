@@ -22,17 +22,17 @@ extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<link rel="stylesheet" href="style.css">
-	<title><?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></title>
+	<title><?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($this->blockQueue['title']), get_defined_vars())  ?></title>
 </head>
 
 <body>
 	<div id="sidebar">
-<?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars())  ?>
+<?php call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars())  ?>
 	</div>
 
 	<div id="content">
-<?php if ('html' !== $_b->types['content']) { trigger_error('Incompatible context for including block content.', E_USER_WARNING); }
-$this->renderBlock($_b, 'content', $this->params) ?>
+<?php if ('html' !== $this->blockTypes['content']) { trigger_error('Incompatible context for including block content.', E_USER_WARNING); }
+$this->renderBlock('content', $this->params) ?>
 	</div>
 </body>
 </html>
@@ -43,12 +43,12 @@ Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate(
 	}
 
 
-	function blockTitle($_b, $_args)
+	function blockTitle($_args)
 	{	?>My website<?php
 	}
 
 
-	function blockSidebar($_b, $_args)
+	function blockSidebar($_args)
 	{	?>		<ul>
 			<li><a href="/">Homepage</a></li>
 			<li><a href="/contact">Contact</a></li>

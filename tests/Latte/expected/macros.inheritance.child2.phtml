@@ -17,10 +17,10 @@ class Template%a% extends Latte\Template
 // main template ?>
 
 
-<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($_b->blocks['content']), $_b, get_defined_vars())  ?>
+<?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($this->blockQueue['content']), get_defined_vars())  ?>
 
 
-<?php call_user_func(reset($_b->blocks['sidebar']), $_b, get_defined_vars()) ;
+<?php call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars()) ;
 	}
 
 
@@ -30,10 +30,10 @@ class Template%a% extends Latte\Template
 	}
 
 
-	function blockContent($_b, $_args)
+	function blockContent($_args)
 	{
 		extract($_args)
-?>	<h1><?php call_user_func(reset($_b->blocks['title']), $_b, get_defined_vars())  ?></h1>
+?>	<h1><?php call_user_func(reset($this->blockQueue['title']), get_defined_vars())  ?></h1>
 
 	<ul>
 <?php %a% foreach ($people as $person) { ?>
@@ -44,12 +44,12 @@ class Template%a% extends Latte\Template
 	}
 
 
-	function blockTitle($_b, $_args)
+	function blockTitle($_args)
 	{	?>Homepage <?php
 	}
 
 
-	function blockSidebar($_b, $_args)
+	function blockSidebar($_args)
 	{
 
 	}

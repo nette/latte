@@ -46,6 +46,12 @@ class Template
 	/** @var \stdClass global accumulators for intermediate results */
 	public $global;
 
+	/** @var [name => [methods]] */
+	public $blockQueue = [];
+
+	/** @var [name => type] */
+	public $blockTypes = [];
+
 
 	public function __construct(Engine $engine, Filters $filters, $name)
 	{
@@ -122,17 +128,11 @@ class Template
 		// old accumulators
 		$this->params['_l'] = $this->local;
 		$this->params['_g'] = $this->global;
+		$block = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 
-		// block storage
-		if (isset($this->params['_b'])) {
-			$block = $this->params['_b'];
-			unset($this->params['_b']);
-		} else {
-			$block = new \stdClass;
-		}
 		foreach ($this->blocks as $name => $info) {
-			$block->blocks[$name][] = [$this, $info[0]];
-			$this->checkBlockContentType($info[1], $block->types, $name);
+			$this->blockQueue[$name][] = [$this, $info[0]];
+			$this->checkBlockContentType($info[1], $name);
 		}
 
 		// extends
@@ -170,6 +170,10 @@ class Template
 		$child->referrerTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
+		if (in_array($referenceType, ['extends', 'includeblock'])) {
+			$child->blockTypes = & $this->blockTypes;
+			$child->blockQueue = & $this->blockQueue;
+		}
 		return $child;
 	}
 
@@ -181,14 +185,14 @@ class Template
 	 * Calls block.
 	 * @return void
 	 */
-	protected function renderBlock(\stdClass $context, $name, array $params)
+	protected function renderBlock($name, array $params)
 	{
-		if (empty($context->blocks[$name])) {
-			$hint = isset($context->blocks) && ($t = Helpers::getSuggestion(array_keys($context->blocks), $name)) ? ", did you mean '$t'?" : '.';
+		if (empty($this->blockQueue[$name])) {
+			$hint = isset($this->blockQueue) && ($t = Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
-		$block = reset($context->blocks[$name]);
-		$block($context, $params);
+		$block = reset($this->blockQueue[$name]);
+		$block($params);
 	}
 
 
@@ -196,24 +200,24 @@ class Template
 	 * Calls parent block.
 	 * @return void
 	 */
-	protected function renderBlockParent(\stdClass $context, $name, array $params)
+	protected function renderBlockParent($name, array $params)
 	{
-		if (empty($context->blocks[$name]) || ($block = next($context->blocks[$name])) === FALSE) {
+		if (empty($this->blockQueue[$name]) || ($block = next($this->blockQueue[$name])) === FALSE) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
 		}
-		$block($context, $params);
-		prev($context->blocks[$name]);
+		$block($params);
+		prev($this->blockQueue[$name]);
 	}
 
 
 	/**
 	 * @return void
 	 */
-	protected function checkBlockContentType($current, & $blocks, $name)
+	protected function checkBlockContentType($current, $name)
 	{
-		if (!isset($blocks[$name])) {
-			$blocks[$name] = $current;
-		} elseif ($blocks[$name] !== $current) {
+		if (!isset($this->blockTypes[$name])) {
+			$this->blockTypes[$name] = $current;
+		} elseif ($this->blockTypes[$name] !== $current) {
 			trigger_error('Overridden block ' . $name . ' in an incompatible context.', E_USER_WARNING);
 		}
 	}

@@ -15,11 +15,11 @@ $compiler = new Latte\Compiler;
 BlockMacros::install($compiler);
 
 // {ifset ... }
-Assert::same('<?php if (isset($_b->blocks["block"])) { ?>',  $compiler->expandMacro('ifset', '#block')->openingCode);
-Assert::same('<?php if (isset($_b->blocks["block"])) { ?>',  $compiler->expandMacro('ifset', 'block')->openingCode);
-Assert::same('<?php if (isset($_b->blocks["block"], $item->var["#test"])) { ?>',  $compiler->expandMacro('ifset', '#block, $item->var["#test"]')->openingCode);
+Assert::same('<?php if (isset($this->blockQueue["block"])) { ?>',  $compiler->expandMacro('ifset', '#block')->openingCode);
+Assert::same('<?php if (isset($this->blockQueue["block"])) { ?>',  $compiler->expandMacro('ifset', 'block')->openingCode);
+Assert::same('<?php if (isset($this->blockQueue["block"], $item->var["#test"])) { ?>',  $compiler->expandMacro('ifset', '#block, $item->var["#test"]')->openingCode);
 Assert::same(
-	'<?php if (isset($_b->blocks["block1"], $_b->blocks["block2"], $var3, item(\'abc\'))) { ?>',
+	'<?php if (isset($this->blockQueue["block1"], $this->blockQueue["block2"], $var3, item(\'abc\'))) { ?>',
 	$compiler->expandMacro('ifset', '#block1, block2, $var3, item(abc)')->openingCode
 );
 
@@ -29,10 +29,10 @@ Assert::exception(function () use ($compiler) {
 
 
 // {elseifset ... }
-Assert::same('<?php } elseif (isset($_b->blocks["block"])) { ?>',  $compiler->expandMacro('elseifset', '#block')->openingCode);
-Assert::same('<?php } elseif (isset($_b->blocks["block"])) { ?>',  $compiler->expandMacro('elseifset', 'block')->openingCode);
-Assert::same('<?php } elseif (isset($_b->blocks["block"], $item->var["#test"])) { ?>',  $compiler->expandMacro('elseifset', '#block, $item->var["#test"]')->openingCode);
+Assert::same('<?php } elseif (isset($this->blockQueue["block"])) { ?>',  $compiler->expandMacro('elseifset', '#block')->openingCode);
+Assert::same('<?php } elseif (isset($this->blockQueue["block"])) { ?>',  $compiler->expandMacro('elseifset', 'block')->openingCode);
+Assert::same('<?php } elseif (isset($this->blockQueue["block"], $item->var["#test"])) { ?>',  $compiler->expandMacro('elseifset', '#block, $item->var["#test"]')->openingCode);
 Assert::same(
-	'<?php } elseif (isset($_b->blocks["block1"], $_b->blocks["block2"], $var3, item(\'abc\'))) { ?>',
+	'<?php } elseif (isset($this->blockQueue["block1"], $this->blockQueue["block2"], $var3, item(\'abc\'))) { ?>',
 	$compiler->expandMacro('elseifset', '#block1, block2, $var3, item(abc)')->openingCode
 );
