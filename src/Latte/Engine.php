@@ -66,8 +66,8 @@ class Engine
 	 */
 	public function render($name, array $params = [], $block = NULL)
 	{
-		$this->createTemplate($name)
-			->setParameters($params + ['_renderblock' => $block])
+		$params += ['_renderblock' => $block];
+		$this->createTemplate($name, $params)
 			->render();
 	}
 
@@ -96,13 +96,13 @@ class Engine
 	 * Creates template object.
 	 * @return Template
 	 */
-	public function createTemplate($name)
+	public function createTemplate($name, array $params = [])
 	{
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, FALSE)) {
 			$this->loadTemplate($name);
 		}
-		return new $class($this, $this->filters, $name);
+		return new $class($this, $params, $this->filters, $name);
 	}
 
 

@@ -25,8 +25,7 @@ Assert::same('file.latte', $template->getParentName());
 $template = $latte->createTemplate('{extends "file.latte"}');
 Assert::same('file.latte', $template->getParentName());
 
-$template = $latte->createTemplate('{extends $file} {block name}...{/block}');
-$template->params['file'] = 'file.latte';
+$template = $latte->createTemplate('{extends $file} {block name}...{/block}', ['file' => 'file.latte']);
 Assert::same('file.latte', $template->getParentName());
 
 $template = $latte->createTemplate('{extends none}');

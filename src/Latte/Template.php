@@ -53,9 +53,10 @@ class Template
 	public $blockTypes = [];
 
 
-	public function __construct(Engine $engine, Filters $filters, $name)
+	public function __construct(Engine $engine, array $params, Filters $filters, $name)
 	{
 		$this->engine = $engine;
+		$this->params = $params;
 		$this->filters = $filters;
 		$this->name = $name;
 		$this->local = new \stdClass;
@@ -171,11 +172,10 @@ class Template
 	public function createTemplate($name, array $params, $referenceType, $contentType)
 	{
 		$name = $this->engine->getLoader()->getChildName($name, $this->name);
-		$child = $this->engine->createTemplate($name);
+		$child = $this->engine->createTemplate($name, $params);
 		if ($child->contentType !== $contentType) {
 			trigger_error("Incompatible context for including $name.", E_USER_WARNING);
 		}
-		$child->params = $params;
 		$child->referrerTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
@@ -232,16 +232,10 @@ class Template
 	}
 
 
-	/********************* template parameters ****************d*g**/
-
-
-	/**
-	 * Sets all parameters.
-	 * @param  array
-	 * @return self
-	 */
+	/** @deprecated */
 	public function setParameters(array $params)
 	{
+		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
 		$this->params = $params;
 		return $this;
 	}
