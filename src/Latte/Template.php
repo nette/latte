@@ -26,7 +26,7 @@ class Template
 	protected $contentType = Engine::CONTENT_HTML;
 
 	/** @var array */
-	public $params = [];
+	protected $params = [];
 
 	/** @var Filters */
 	protected $filters;
@@ -41,16 +41,16 @@ class Template
 	private $referenceType;
 
 	/** @var \stdClass local accumulators for intermediate results */
-	public $local;
+	protected $local;
 
 	/** @var \stdClass global accumulators for intermediate results */
-	public $global;
+	protected $global;
 
 	/** @var [name => [methods]] */
-	public $blockQueue = [];
+	protected $blockQueue = [];
 
 	/** @var [name => type] */
-	public $blockTypes = [];
+	protected $blockTypes = [];
 
 
 	public function __construct(Engine $engine, array $params, Filters $filters, $name)
@@ -79,6 +79,16 @@ class Template
 	public function getName()
 	{
 		return $this->name;
+	}
+
+
+	/**
+	 * Returns array of all parameters.
+	 * @return array
+	 */
+	public function getParameters()
+	{
+		return $this->params;
 	}
 
 
@@ -169,7 +179,7 @@ class Template
 	 * @return Template
 	 * @internal
 	 */
-	public function createTemplate($name, array $params, $referenceType, $contentType)
+	protected function createTemplate($name, array $params, $referenceType, $contentType)
 	{
 		$name = $this->engine->getLoader()->getChildName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
@@ -238,16 +248,6 @@ class Template
 		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
 		$this->params = $params;
 		return $this;
-	}
-
-
-	/**
-	 * Returns array of all parameters.
-	 * @return array
-	 */
-	public function getParameters()
-	{
-		return $this->params;
 	}
 
 }
