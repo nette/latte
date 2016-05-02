@@ -355,8 +355,9 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
-		return $writer->write(($node->args == NULL ? '' : 'if (!(%node.args)); else')
-			. 'if (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break()');
+		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
+			return $writer->write($node->args == NULL ? "$func()" : "if (%node.args) $func()");
+		}
 	}
 
 

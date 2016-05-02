@@ -13,8 +13,12 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
+if (!function_exists('debugbreak')) {
+	function debugbreak() {}
+}
+
 Assert::match('%A%
-<?php if (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break() ;if (!($i==1)); elseif (function_exists("debugbreak")) debugbreak(); elseif (function_exists("xdebug_break")) xdebug_break() ;
+<?php debugbreak() ;if ($i==1) debugbreak() ;
 %A%
 ', $latte->compile('
 {debugbreak}
