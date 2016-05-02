@@ -12,6 +12,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = $latte->createTemplate('');
 Assert::null($template->getParentName());
+Assert::null($template->getParentName());
 
 $template = $latte->createTemplate('{block}...{/block}');
 Assert::null($template->getParentName());
@@ -20,6 +21,7 @@ $template = $latte->createTemplate('{block name}...{/block}');
 Assert::null($template->getParentName());
 
 $template = $latte->createTemplate('{extends "file.latte"} {block name}...{/block}');
+Assert::same('file.latte', $template->getParentName());
 Assert::same('file.latte', $template->getParentName());
 
 $template = $latte->createTemplate('{extends "file.latte"}');

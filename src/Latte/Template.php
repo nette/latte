@@ -147,7 +147,7 @@ class Template
 		}
 
 		// extends
-		if ($this->local->parentName = $this->getParentName()) {
+		if ($this->getParentName()) {
 			ob_start(function () {});
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
@@ -166,9 +166,9 @@ class Template
 	 */
 	protected function tryRenderParent($params)
 	{
-		if ($this->local->parentName) {
+		if ($parent = $this->getParentName()) {
 			ob_end_clean();
-			$this->createTemplate($this->local->parentName, $params, 'extends', $this->contentType)->render();
+			$this->createTemplate($parent, $params, 'extends', $this->contentType)->render();
 			return TRUE;
 		}
 	}
