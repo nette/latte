@@ -12,13 +12,12 @@ class Template%a% extends Latte\Template
 
 	function render()
 	{
-		extract($this->params)
-;
-// prolog Latte\Macros\CoreMacros
-if ($this->initialize($_b, $_l, $_g)) return;
+		extract($this->params);
+		// prolog Latte\Macros\CoreMacros
+		if ($this->initialize($_b, $_l, $_g)) return;
 
-// main template
-?>
+		// main template
+		?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <ul>
@@ -32,8 +31,8 @@ if ($this->initialize($_b, $_l, $_g)) return;
 	<li>Translated string: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->translate, 'ahoj')) ?></li>
 	<li>Non-escaped and translated: <?php echo call_user_func($this->filters->translate, $people[1]) ?></li>
 	<li>Condition: <?php echo LFilters::escapeHtmlText($hello ? 'yes' : NULL) ?> <?php echo LFilters::escapeHtmlText($hello ? 'yes' : NULL) ?></li>
-	<li>Array: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->join, $hello ? ['a', 'b', 'c'] : NULL)) ?>
- <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->join, ['a', 'b', $hello ? 'c' : NULL])) ?></li>
+	<li>Array: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->join, $hello ? ['a', 'b', 'c'] : NULL)) ?> <?php
+		echo LFilters::escapeHtmlText(call_user_func($this->filters->join, ['a', 'b', $hello ? 'c' : NULL])) ?></li>
 </ul>
 
 <input /> <input /> <input />
@@ -42,7 +41,14 @@ if ($this->initialize($_b, $_l, $_g)) return;
 
 { test} {"test} {'test}
 
-<p val = <?php if (true) { ?>"a"<?php } else { ?>"b"<?php } ?>> </p>
+<p val = <?php
+		if (true) {
+			?>"a"<?php
+		}
+		else {
+			?>"b"<?php
+		}
+		?>> </p>
 
 <p val0 val1 = tmp val2=tmp val3="x"></p> </p>
 
@@ -57,25 +63,55 @@ if ($this->initialize($_b, $_l, $_g)) return;
 <?php echo LFilters::escapeHtmlText((string) (bool) (float) (int) (array) 10) ?>
 
 
-<?php if ($hello) { ?>
-	<?php echo LFilters::escapeHtmlText($hello) ?>
+<?php
+		if ($hello) {
+			?>	<?php echo LFilters::escapeHtmlText($hello) ?>
 
-<?php } elseif ($any) { ?>
-	<?php echo LFilters::escapeHtmlText($any) ?>
+<?php
+		}
+		elseif ($any) {
+			?>	<?php echo LFilters::escapeHtmlText($any) ?>
 
-<?php } else { ?>
+<?php
+		}
+		else {
+			?>
 	none
-<?php } ?>
+<?php
+		}
+		?>
 
 
-<?php $iterations = 0; if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.'); foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) { $iterations = 0; if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.'); foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) { ?>
-	<?php if ($iterator->isFirst()) { ?><ul><?php } ?>
+<?php
+		$iterations = 0;
+		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.');
+		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) {
+			$iterations = 0;
+			if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.');
+			foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
+				?>	<?php
+				if ($iterator->isFirst()) {
+					?><ul><?php
+				}
+				?>
 
-	<li id="item-<?php echo LFilters::escapeHtmlAttr($iterator->getCounter()) ?>" class="<?php echo LFilters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') ?>
-"><?php echo LFilters::escapeHtmlText($person) ?></li>
-	<?php if ($iterator->isLast()) { ?></ul><?php } ?>
+	<li id="item-<?php echo LFilters::escapeHtmlAttr($iterator->getCounter()) ?>" class="<?php echo LFilters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') ?>"><?php
+				echo LFilters::escapeHtmlText($person) ?></li>
+	<?php
+				if ($iterator->isLast()) {
+					?></ul><?php
+				}
+				?>
 
-<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ;$iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
+<?php
+				$iterations++;
+			}
+			array_pop($this->local->its);
+			$iterator = end($this->local->its);
+			$iterations++;
+		}
+		array_pop($this->local->its);
+		$iterator = end($this->local->its) ?>
 
 
 
@@ -124,20 +160,35 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 
 
 
-<?php $counter = 0 ;if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($this->blockQueue['menu']), get_defined_vars())  ?>
+<?php
+		$counter = 0;
+		if ($this->tryRenderParent(get_defined_vars())) return;
+		call_user_func(reset($this->blockQueue['menu']), get_defined_vars());
+		?>
 
 
-<?php extract(['varx' => 2], EXTR_SKIP) ;echo LFilters::escapeHtmlText($varx) ?>
+<?php
+		extract(['varx' => 2], EXTR_SKIP);
+		echo LFilters::escapeHtmlText($varx) ?>
 
-<?php extract(['varx' => 4], EXTR_SKIP) ;echo LFilters::escapeHtmlText($varx) ?>
+<?php
+		extract(['varx' => 4], EXTR_SKIP);
+		echo LFilters::escapeHtmlText($varx) ?>
 
 
-<?php $varx = 8 ;echo LFilters::escapeHtmlText($varx) ?>
+<?php
+		$varx = 8;
+		echo LFilters::escapeHtmlText($varx) ?>
 
-<?php $varx = 9 ;echo LFilters::escapeHtmlText($varx) ?>
+<?php
+		$varx = 9;
+		echo LFilters::escapeHtmlText($varx) ?>
 
 
-<?php $now = new DateTime ;$foo = $now->format('u') ;extract(['foo' => $now->format('u')], EXTR_SKIP) ?>
+<?php
+		$now = new DateTime;
+		$foo = $now->format('u');
+		extract(['foo' => $now->format('u')], EXTR_SKIP) ?>
 
 
 
@@ -149,18 +200,47 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 
 { }
 
-<?php ob_start(function () {}) ?>TRUE<?php if (TRUE) echo ob_get_clean(); else ob_end_clean() ?>
+<?php ob_start(function () {}) ?>TRUE<?php
+		if (TRUE) echo ob_get_clean();
+		else ob_end_clean();
+		?>
 
-<?php ob_start(function () {}) ?>FALSE<?php if (FALSE) echo ob_get_clean(); else ob_end_clean() ?>
+<?php ob_start(function () {}) ?>FALSE<?php
+		if (FALSE) echo ob_get_clean();
+		else ob_end_clean();
+		?>
 
-<?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php if (TRUE) { ob_end_clean(); echo ob_get_clean(); } else { $this->local->else = ob_get_clean(); ob_end_clean(); echo $this->local->else; } ?>
+<?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php
+		if (TRUE) {
+			ob_end_clean();
+			echo ob_get_clean();
+		}
+		else {
+			$this->local->else = ob_get_clean();
+			ob_end_clean();
+			echo $this->local->else;
+		}
+		?>
 
 
 
-<?php $this->local->switch[] = (2); if (FALSE) { } elseif (end($this->local->switch) === ('x')) { ?>x
-<?php } elseif (end($this->local->switch) === (2)) { ?>y
-<?php } else { ?>z
-<?php } array_pop($this->local->switch) ?>
+<?php
+		$this->local->switch[] = (2);
+		if (FALSE) {
+		}
+		elseif (end($this->local->switch) === ('x')) {
+			?>x
+<?php
+		}
+		elseif (end($this->local->switch) === (2)) {
+			?>y
+<?php
+		}
+		else {
+			?>z
+<?php
+		}
+		array_pop($this->local->switch) ?>
 
 <?php echo call_user_func($this->filters->nl2br, "\n") ?>
 
@@ -175,14 +255,29 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 
 	function blockMenu($_args)
 	{
-		extract($_args)
-?><ul>
-<?php $iterations = 0; if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.'); foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($menu) as $item) { ?>
-	<li><?php echo LFilters::escapeHtmlText($counter++) ?> <?php if (is_array($item)) { ?>
- <?php if ('xhtml' !== $this->blockTypes['menu']) { trigger_error('Incompatible context for including block menu.', E_USER_WARNING); }
-call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars()) ?>
- <?php } else { echo LFilters::escapeHtmlText($item) ;} ?></li>
-<?php $iterations++; } array_pop($this->local->its); $iterator = end($this->local->its) ?>
+		extract($_args);
+		?><ul>
+<?php
+		$iterations = 0;
+		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.');
+		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($menu) as $item) {
+			?>	<li><?php echo LFilters::escapeHtmlText($counter++) ?> <?php
+			if (is_array($item)) {
+				?> <?php
+				if ('xhtml' !== $this->blockTypes['menu']) {
+					trigger_error('Incompatible context for including block menu.', E_USER_WARNING);
+				}
+				call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars()) ?> <?php
+			}
+			else {
+				echo LFilters::escapeHtmlText($item);
+			}
+			?></li>
+<?php
+			$iterations++;
+		}
+		array_pop($this->local->its);
+		$iterator = end($this->local->its) ?>
 </ul>
 <?php
 	}

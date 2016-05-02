@@ -7,18 +7,18 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%
-// main template ?>
 This should be erased
-<?php $foo = 1 ;
-// epilog Latte\Macros\BlockMacros
-if ($this->tryRenderParent(get_defined_vars())) return;
+<?php
+		$foo = 1;
+		// epilog Latte\Macros\BlockMacros
+		if ($this->tryRenderParent(get_defined_vars())) return;
 
 	}
 
 
 	function getParentName()
 	{
-		%A%extract($this->params); return "inheritance.parent2.latte";%A%
+		%A%return "inheritance.parent2.latte";%A%
 	}
 
 }

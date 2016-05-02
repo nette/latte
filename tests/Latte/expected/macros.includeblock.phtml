@@ -6,13 +6,18 @@ class Template%a% extends Latte\Template
 
 	function render()
 	{
-%A%?>
+%A%
+<?php
+		ob_start(function () {});
+		$this->createTemplate('includeblock.inc.latte', get_defined_vars(), "includeblock", 'html')->render();
+		echo rtrim(ob_get_clean()) ?>
 
-<?php ob_start(function () {}); $this->createTemplate('includeblock.inc.latte', get_defined_vars(), "includeblock", 'html')->render(); echo rtrim(ob_get_clean()) ?>
 
-
-<?php if ('html' !== $this->blockTypes['test']) { trigger_error('Incompatible context for including block test.', E_USER_WARNING); }
-$this->renderBlock('test', $this->params) ;
+<?php
+		if ('html' !== $this->blockTypes['test']) {
+			trigger_error('Incompatible context for including block test.', E_USER_WARNING);
+		}
+		$this->renderBlock('test', $this->params);
 	}
 
 }

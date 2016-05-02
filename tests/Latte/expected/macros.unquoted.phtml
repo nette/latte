@@ -6,8 +6,8 @@ class Template%a% extends Latte\Template
 
 	function render()
 	{
-%A%?>
-<span title=<?php echo LFilters::escapeHtmlAttrUnquoted($x) ?>></span>
+%A%
+		?><span title=<?php echo LFilters::escapeHtmlAttrUnquoted($x) ?>></span>
 
 <span title=<?php echo LFilters::escapeHtmlAttrUnquoted($x) ?> <?php echo LFilters::escapeHtmlAttrUnquoted($x) ?>></span>
 

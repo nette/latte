@@ -60,39 +60,44 @@ $latte->addMacro('three', new SkipMacro);
 
 
 Assert::match(<<<'DOC'
-%A%
-'one open' ?>[<div<?php 'one attr' ?>></div>]<?php 'one close' %A%
+%A%'one open' ?>[<div<?php 'one attr' ?>></div>]<?php 'one close' %A%
 DOC
-, $latte->compile('<div n:one></div>'));
+, $latte->compile('<div n:one></div> '));
 
 
 Assert::match(<<<'DOC'
 %A%
-'three open' ?>[<?php 'two open' ?>[<?php 'one open' ?>[<div<?php 'one attr' ;'two attr' ;'three attr' ?>
->@</div>]<?php 'one close' ?>]<?php 'two close' ?>]<?php 'three close' %A%
+		'three open' ?>[<?php 'two open' ?>[<?php 'one open' ?>[<div<?php
+		'one attr';
+		'two attr';
+		'three attr' ?>>@</div>]<?php 'one close' ?>]<?php 'two close' ?>]<?php 'three close' %A%
 DOC
-, $latte->compile('<div n:two n:three n:one>@</div>'));
+, $latte->compile('<div n:two n:three n:one>@</div> '));
+
+
+Assert::match(<<<'DOC'
+%A%'two open' ?>[<?php 'one open' ?>[<div>]<?php 'one close' ?>]<?php 'two close' ?>@<?php 'two open' ?>[<?php
+		'one open' ?>[</div>]<?php 'one close' ?>]<?php 'two close' %A%
+DOC
+, $latte->compile('<div n:tag-two n:tag-one>@</div> '));
 
 
 Assert::match(<<<'DOC'
 %A%
-'two open' ?>[<?php 'one open' ?>[<div>]<?php 'one close' ?>]<?php 'two close' ?>
-@<?php 'two open' ?>[<?php 'one open' ?>[</div>]<?php 'one close' ?>]<?php 'two close' %A%
+		'one attr';
+		'two attr' ?>><?php 'two open' ?>[<?php 'one open' ?>[@]<?php 'one close' ?>]<?php 'two close' ?></div>%A%
 DOC
-, $latte->compile('<div n:tag-two n:tag-one>@</div>'));
+, $latte->compile('<div n:inner-two n:inner-one>@</div> '));
 
 
 Assert::match(<<<'DOC'
 %A%
-<div<?php 'one attr' ;'two attr' ?>><?php 'two open' ?>[<?php 'one open' ?>[@]<?php 'one close' ?>
-]<?php 'two close' ?></div>%A%
+		'one open' ?>[<?php 'two open' ?>[<div<?php
+		'three attr';
+		'one attr' ?>>]<?php
+		'two close';
+		'three open' ?>[@]<?php
+		'three close';
+		'two open' ?>[</div>]<?php 'two close' ?>]<?php 'one close' %A%
 DOC
-, $latte->compile('<div n:inner-two n:inner-one>@</div>'));
-
-
-Assert::match(<<<'DOC'
-%A%
-'one open' ?>[<?php 'two open' ?>[<div<?php 'three attr' ;'one attr' ?>>]<?php 'two close' ;'three open' ?>
-[@]<?php 'three close' ;'two open' ?>[</div>]<?php 'two close' ?>]<?php 'one close' %A%
-DOC
-, $latte->compile('<div n:one n:tag-two n:inner-three>@</div>'));
+, $latte->compile('<div n:one n:tag-two n:inner-three>@</div> '));

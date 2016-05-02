@@ -19,8 +19,8 @@ class Template%a% extends Latte\Template
 	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LFilters::escapeHtmlText(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
 	<li>Translated HTML: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->translate, 'ahoj|ahojahojahojahoj')) ?></li>
 	<li>spaces: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->types, $hello , '' , "" , "$hello" )) ?></li>
-	<li>dynamic: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->dynamic, $hello)) ?>
- <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->dynamic2, $hello)) ?></li>
+	<li>dynamic: <?php echo LFilters::escapeHtmlText(call_user_func($this->filters->dynamic, $hello)) ?> <?php
+		echo LFilters::escapeHtmlText(call_user_func($this->filters->dynamic2, $hello)) ?></li>
 </ul>
 
 <ul>
@@ -79,9 +79,8 @@ Captured with modifier: <?php echo LFilters::escapeHtmlText($capture) ?>
 
 
 <p>
-Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?>
- Inner Block <?php echo call_user_func($this->filters->upper, ob_get_clean()) ?>
-  Block <?php echo call_user_func($this->filters->truncate, ob_get_clean(), 20) ?>
+Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?> Inner Block <?php
+		echo call_user_func($this->filters->upper, ob_get_clean()) ?>  Block <?php echo call_user_func($this->filters->truncate, ob_get_clean(), 20) ?>
 
 </p>
 <?php

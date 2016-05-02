@@ -17,10 +17,6 @@ if (!function_exists('debugbreak')) {
 	function debugbreak() {}
 }
 
-Assert::match('%A%
-<?php debugbreak() ;if ($i==1) debugbreak() ;
-%A%
-', $latte->compile('
-{debugbreak}
-{debugbreak $i==1}
-'));
+Assert::match('%A%debugbreak();%A%', $latte->compile('{debugbreak}'));
+
+Assert::match('%A%if ($i==1) debugbreak();%A%', $latte->compile('{debugbreak $i==1}'));

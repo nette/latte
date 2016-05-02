@@ -11,7 +11,11 @@ class Template%a% extends Latte\Template
 %A%?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<script><?php if (1) { ?><meta /><?php } ?>
+<script><?php
+		if (1) {
+			?><meta /><?php
+		}
+		?>
 </script>
 
 <?php header('Content-Type: application/xml; charset=utf-8') ?>
@@ -58,19 +62,36 @@ var html = <?php echo LFilters::escapeHtmlComment($el) ?>;
 
 
 <ul>
-<?php %a% foreach ($people as $person) { ?>
-	<li><?php echo LFilters::escapeXml($person) ?></li>
-<?php $iterations++; } ?>
+<?php
+		$iterations = 0;
+		%a%
+		foreach ($people as $person) {
+			?>	<li><?php echo LFilters::escapeXml($person) ?></li>
+<?php
+			$iterations++;
+		}
+		?>
 </ul>
 
-<?php if (true) { ?><p>
+<?php
+		if (true) {
+			?><p>
 	<div><p>true</div>
 </p>
-<?php } ?>
+<?php
+		}
+		?>
 
 <input/> <input />
 
-<p val = <?php if (true) { ?>"a"<?php } else { ?>"b"<?php } ?>> </p>
+<p val = <?php
+		if (true) {
+			?>"a"<?php
+		}
+		else {
+			?>"b"<?php
+		}
+		?>> </p>
 
 <p val = <?php echo LFilters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo LFilters::escapeXmlAttrUnquoted($mxss) ?>> </p>
 

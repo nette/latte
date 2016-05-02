@@ -11,45 +11,53 @@ class Template%a% extends Latte\Template
 
 	function render()
 	{
-		extract($this->params)
-;
-// prolog Latte\Macros\CoreMacros
-if ($this->initialize($_b, $_l, $_g)) return;
+		extract($this->params);
+		// prolog Latte\Macros\CoreMacros
+		if ($this->initialize($_b, $_l, $_g)) return;
 
-// main template
-extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
+		// main template
+		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<link rel="stylesheet" href="style.css">
-	<title><?php if ($this->tryRenderParent(get_defined_vars())) return;call_user_func(reset($this->blockQueue['title']), get_defined_vars())  ?></title>
+	<title><?php
+		if ($this->tryRenderParent(get_defined_vars())) return;
+		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
+		?></title>
 </head>
 
 <body>
 	<div id="sidebar">
-<?php call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars())  ?>
+<?php
+		call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars());
+		?>
 	</div>
 
 	<div id="content">
-<?php if ('html' !== $this->blockTypes['content']) { trigger_error('Incompatible context for including block content.', E_USER_WARNING); }
-$this->renderBlock('content', $this->params) ?>
+<?php
+		if ('html' !== $this->blockTypes['content']) {
+			trigger_error('Incompatible context for including block content.', E_USER_WARNING);
+		}
+		$this->renderBlock('content', $this->params) ?>
 	</div>
 </body>
 </html>
-Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate()->getName())) ?>
-/<?php echo LFilters::escapeHtmlText($this->getReferenceType()) ?>
+Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferrerTemplate()->getName())) ?>/<?php echo LFilters::escapeHtmlText($this->getReferenceType()) ?>
 
 <?php
 	}
 
 
 	function blockTitle($_args)
-	{	?>My website<?php
+	{
+		?>My website<?php
 	}
 
 
 	function blockSidebar($_args)
-	{	?>		<ul>
+	{
+		?>		<ul>
 			<li><a href="/">Homepage</a></li>
 			<li><a href="/contact">Contact</a></li>
 		</ul>
