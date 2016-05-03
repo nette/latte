@@ -296,7 +296,7 @@ class Compiler
 					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
 				$token->empty = $t ? !$t->closing : TRUE;
 			}
-			$this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost && !$token->empty);
+			$this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
 				$this->closeMacro($token->name, NULL, NULL, $isRightmost);
 			}
