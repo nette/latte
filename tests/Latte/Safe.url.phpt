@@ -35,7 +35,7 @@ Assert::match('
 <a href="data:%a%;base64,b2s="></a>
 <a href="data:%a%;base64,b2s="></a>
 <a href=""></a>
-', $latte->renderToString('
+', @$latte->renderToString('
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <a href={$url1|nocheck}></a>
 <a href={$url1|nosafeurl}></a>
