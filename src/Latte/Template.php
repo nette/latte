@@ -146,10 +146,15 @@ class Template
 			$this->checkBlockContentType($info[1], $name);
 		}
 
+		$parent = $this->getParentName();
+
 		if ($this->referenceType === 'import') {
+			if ($parent) {
+				$this->createTemplate($parent, $this->params, 'import')->render();
+			}
 			return TRUE;
 
-		} elseif ($this->getParentName()) { // extends
+		} elseif ($parent) { // extends
 			ob_start(function () {});
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
