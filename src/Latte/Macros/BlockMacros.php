@@ -32,7 +32,7 @@ class BlockMacros extends MacroSet
 	{
 		$me = new static($compiler);
 		$me->addMacro('include', [$me, 'macroInclude']);
-		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']);
+		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']); // deprecated
 		$me->addMacro('import', [$me, 'macroImport']);
 		$me->addMacro('extends', [$me, 'macroExtends']);
 		$me->addMacro('layout', [$me, 'macroExtends']);
@@ -134,6 +134,7 @@ class BlockMacros extends MacroSet
 
 	/**
 	 * {includeblock "file"}
+	 * @deprecated
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
 	{
