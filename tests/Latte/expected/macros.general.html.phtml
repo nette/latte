@@ -254,7 +254,8 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 	function blockMenu($_args)
 	{
 		extract($_args);
-		?><ul>
+		?>
+<ul>
 <?php
 		$iterations = 0;
 		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.');

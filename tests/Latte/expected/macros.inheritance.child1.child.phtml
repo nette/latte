@@ -53,7 +53,8 @@ class Template%a% extends Latte\Template
 	function blockContent($_args)
 	{
 		extract($_args);
-		?>	<ul>
+		?>
+	<ul>
 <?php
 		$iterations = 0;
 		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.');

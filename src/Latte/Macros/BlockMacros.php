@@ -66,15 +66,11 @@ class BlockMacros extends MacroSet
 		$compiler = $this->getCompiler();
 		$functions = [];
 		foreach ($this->namedBlocks as $name => $code) {
-			$functions[$name] = $this->generateMethodName($name);
-			$code = "\n?>" . $compiler->expandTokens($code) . '<?php';
-			if ($name[0] === '_') { // snippet
-				$code = "\n\$_control->redrawControl(" . var_export((string) substr($name, 1), TRUE) . ", FALSE);\n$code";
-			}
-			if (strpos($code, '$') !== FALSE) {
-				$code = 'extract($_args);' . $code;
-			}
-			$compiler->addMethod($functions[$name], $code, '$_args');
+			$compiler->addMethod(
+				$functions[$name] = $this->generateMethodName($name),
+				'?>' . $compiler->expandTokens($code) . '<?php',
+				'$_args'
+			);
 		}
 
 		$epilog = '';
@@ -299,6 +295,11 @@ class BlockMacros extends MacroSet
 				}
 				if ($node->name === 'snippetArea') {
 					$node->content .= '<?php return FALSE; ?>';
+				} elseif ($node->name === 'snippet') {
+					$node->content = '<?php $_control->redrawControl(' . var_export((string) substr($node->data->name, 1), TRUE) . ", FALSE);\n\n?>" . $node->content;
+				}
+				if (preg_match('#\$|n:#', $node->content)) {
+					$node->content = '<?php extract($_args); ?>' . $node->content;
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+\z#', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
