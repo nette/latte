@@ -11,7 +11,6 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(TEMP_DIR);
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main' => '
 		{import "inc"}

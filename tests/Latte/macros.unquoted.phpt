@@ -11,15 +11,22 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+$template = <<<'EOD'
+<span title={$x}></span>
+
+<span title={$x} {$x}></span>
+
+<span {='title'}={$x}></span>
+
+EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.unquoted.phtml',
-	$latte->compile(__DIR__ . '/templates/unquoted.latte')
+	$latte->compile($template)
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.unquoted.html',
-	$latte->renderToString(
-		__DIR__ . '/templates/unquoted.latte',
-		['x' => '\' & "']
-	)
+	$latte->renderToString($template, ['x' => '\' & "'])
 );

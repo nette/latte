@@ -1,5 +1,5 @@
 <?php
-// source: %A%
+%A%
 
 class Template%a% extends Latte\Template
 {
@@ -23,17 +23,16 @@ class Template%a% extends Latte\Template
 		call_user_func(reset($this->blockQueue['content']), get_defined_vars());
 		?>
 
-
 <?php
 		call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars());
-
+		?>	<?php
 	}
 
 
 	function prepare()
 	{
 		extract($this->params);
-		$this->parentName = "inheritance.parent.latte";
+		$this->parentName = "parent";
 		return get_defined_vars();
 	}
 

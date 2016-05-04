@@ -33,22 +33,3 @@ function test(\Closure $function)
 {
 	$function();
 }
-
-
-class Notes
-{
-	public static $notes = [];
-
-	public static function add($message)
-	{
-		self::$notes[] = $message;
-	}
-
-	public static function fetch()
-	{
-		$res = self::$notes;
-		self::$notes = [];
-		return $res;
-	}
-
-}

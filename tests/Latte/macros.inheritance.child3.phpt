@@ -13,8 +13,16 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
+$template = <<<'EOD'
+{extends none}
+
+{block content}
+	Content
+{/block}
+EOD;
+
 Assert::match(<<<EOD
 
 	Content
 EOD
-, $latte->renderToString(file_get_contents(__DIR__ . '/templates/inheritance.child3.latte')));
+, $latte->renderToString($template));

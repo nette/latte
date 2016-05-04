@@ -11,18 +11,17 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(TEMP_DIR);
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main' => '
 		{import "inc"}
 		{include test}
 	',
 	'inc' => '
-		{extends extends}
+		{extends parent}
 		outer text
 		{define test}Child {include parent}{/define}
 	',
-	'extends' => '
+	'parent' => '
 		outer text
 		{define test}Parent{/define}
 	',

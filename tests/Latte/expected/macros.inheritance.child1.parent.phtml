@@ -1,5 +1,5 @@
 <?php
-// source: %A%
+%A%
 
 class Template%a% extends Latte\Template
 {
@@ -23,10 +23,8 @@ class Template%a% extends Latte\Template
 
 		// main template
 		?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
 <head>
-	<link rel="stylesheet" href="style.css">
 	<title><?php
 		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
 		?></title>
@@ -73,7 +71,6 @@ Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferringTemplate
 	{
 		?>		<ul>
 			<li><a href="/">Homepage</a></li>
-			<li><a href="/contact">Contact</a></li>
 		</ul>
 <?php
 	}

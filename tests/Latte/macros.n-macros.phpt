@@ -12,7 +12,6 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(TEMP_DIR);
 
 $params['people'] = ['John', 'Mary', 'Paul'];
 

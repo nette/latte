@@ -10,6 +10,24 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
+class Notes
+{
+	public static $notes = [];
+
+	public static function add($message)
+	{
+		self::$notes[] = $message;
+	}
+
+	public static function fetch()
+	{
+		$res = self::$notes;
+		self::$notes = [];
+		return $res;
+	}
+}
+
+
 test(function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);

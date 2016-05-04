@@ -12,15 +12,23 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'parent' => file_get_contents(__DIR__ . '/templates/inheritance.parent.latte'),
+
+	'main' => '
+{extends $ext}
+
+{block content}
+	Content
+{/block}
+	',
+]));
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.inheritance.child5.phtml',
-	$latte->compile(__DIR__ . '/templates/inheritance.child5.latte')
+	$latte->compile('main')
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.inheritance.child5.html',
-	$latte->renderToString(
-		__DIR__ . '/templates/inheritance.child5.latte',
-		['ext' => 'inheritance.parent.latte']
-	)
+	$latte->renderToString('main', ['ext' => 'parent'])
 );

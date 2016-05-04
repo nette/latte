@@ -11,12 +11,31 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+$template = <<<'EOD'
+
+{var $var = 10}
+
+{define test}
+	This is definition #{$var}
+{/define}
+
+{include #test, var => 20}
+
+{define testargs $var1, $var2}
+	Variables {$var1}, {$var2}
+{/define}
+
+{include testargs, 1}
+
+EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.defineblock.phtml',
-	$latte->compile(__DIR__ . '/templates/defineblock.latte')
+	$latte->compile($template)
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.defineblock.html',
-	$latte->renderToString(__DIR__ . '/templates/defineblock.latte')
+	$latte->renderToString($template)
 );

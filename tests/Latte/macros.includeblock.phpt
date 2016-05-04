@@ -11,17 +11,30 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(TEMP_DIR);
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'main' => '
+
+{includeblock "inc"}
+
+{include test}
+	',
+
+	'inc' => '
+{define test}
+	Parent: {basename($this->getReferringTemplate()->getName())}/{$this->getReferenceType()}
+{/define}
+	',
+]));
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.includeblock.phtml',
-	$latte->compile(__DIR__ . '/templates/includeblock.latte')
+	$latte->compile('main')
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.includeblock.html',
-	$latte->renderToString(__DIR__ . '/templates/includeblock.latte')
+	$latte->renderToString('main')
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.includeblock.inc.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/includeblock.inc.latte'))
+	$latte->compile('inc')
 );

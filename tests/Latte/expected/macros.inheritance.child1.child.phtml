@@ -1,5 +1,5 @@
 <?php
-// source: %A%
+%A%
 
 class Template%a% extends Latte\Template
 {
@@ -17,9 +17,8 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%
-<?php
 		ob_start(function () {});
-		$this->createTemplate('includeblock.inc.latte', get_defined_vars(), "includeblock", 'html')->render();
+		$this->createTemplate("inc", get_defined_vars(), "includeblock", 'html')->render();
 		echo rtrim(ob_get_clean()) ?>
 
 
@@ -29,14 +28,15 @@ class Template%a% extends Latte\Template
 
 <?php
 		call_user_func(reset($this->blockQueue['content']), get_defined_vars());
-
+		?>	<?php
 	}
 
 
 	function prepare()
 	{
 		extract($this->params);
-		$this->parentName = "inheritance.parent.latte";
+		$this->parentName = "parent";
+		$this->createTemplate("inc", [], "import")->render();
 		return get_defined_vars();
 	}
 

@@ -22,12 +22,21 @@ class MyMacros extends Latte\Macros\MacroSet
 
 
 $latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+$template = <<<'EOD'
+
+{use MyMacros}
+
+{my}
+
+EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.use.phtml',
-	$latte->compile(__DIR__ . '/templates/use.latte')
+	$latte->compile($template)
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.use.html',
-	$latte->renderToString(__DIR__ . '/templates/use.latte')
+	$latte->renderToString($template)
 );

@@ -50,17 +50,42 @@ test(function () {
 
 test(function () {
 	$latte = new Latte\Engine;
+	$latte->setLoader(new Latte\Loaders\StringLoader([
+		'parent' => '<meta name={block foo}{/block}>',
 
-	Assert::match('<meta name="b&quot;ar">', $latte->renderToString(__DIR__ . '/templates/block.context.1.latte', ['foo' => 'b"ar']));
+		'parentvar' => '{var $name = "foo"}<meta name={block $name}{/block}>',
 
-	Assert::match('<meta name="b&quot;ar">', $latte->renderToString(__DIR__ . '/templates/block.context.2.latte', ['foo' => 'b"ar']));
+		'context1' => '
+{extends "parent"}
+<meta name={block foo}{$foo}{/block}>
+		',
+
+		'context2' => '
+{extends "parentvar"}
+<meta name={block foo}{$foo}{/block}>
+		',
+
+		'context3' => '
+{extends "parent"}
+{block foo}{$foo}{/block}
+		',
+
+		'context4' => '
+{extends "parentvar"}
+{block foo}{$foo}{/block}
+		',
+	]));
+
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context1', ['foo' => 'b"ar']));
+
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context2', ['foo' => 'b"ar']));
 
 	Assert::error(function () use ($latte) {
-		$latte->renderToString(__DIR__ . '/templates/block.context.3.latte', ['foo' => 'b"ar']);
+		$latte->renderToString('context3', ['foo' => 'b"ar']);
 	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
 
 	Assert::error(function () use ($latte) {
-		$latte->renderToString(__DIR__ . '/templates/block.context.4.latte', ['foo' => 'b"ar']);
+		$latte->renderToString('context4', ['foo' => 'b"ar']);
 	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
 });
 
@@ -95,25 +120,28 @@ test(function () {
 });
 
 
-Assert::error(function () {
-	$latte = new Latte\Engine;
-	$latte->renderToString(__DIR__ . '/templates/include.context1.latte');
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'ical.latte' => '{contentType text/calendar; charset=utf-8}',
+
+	'context1' => '<p>{include ical.latte}</p>',
+	'context2' => '{extends ical.latte}',
+	'context3' => '{includeblock ical.latte}',
+	'context4' => '{contentType calendar} {includeblock ical.latte}',
+]));
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context1');
 }, E_USER_WARNING, 'Incompatible context for including %a%.');
 
-
-Assert::error(function () {
-	$latte = new Latte\Engine;
-	$latte->renderToString(__DIR__ . '/templates/include.context2.latte');
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context2');
 }, E_USER_WARNING, 'Incompatible context for including %a%.');
 
-
-Assert::error(function () {
-	$latte = new Latte\Engine;
-	$latte->renderToString(__DIR__ . '/templates/include.context3.latte');
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context3');
 }, E_USER_WARNING, 'Incompatible context for including %a%.');
 
-
-Assert::noError(function () {
-	$latte = new Latte\Engine;
-	$latte->renderToString(__DIR__ . '/templates/include.context4.latte');
+Assert::noError(function () use ($latte) {
+	$latte->renderToString('context4');
 });
