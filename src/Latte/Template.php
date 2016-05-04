@@ -146,8 +146,10 @@ class Template
 			$this->checkBlockContentType($info[1], $name);
 		}
 
-		// extends
-		if ($this->getParentName()) {
+		if ($this->referenceType === 'import') {
+			return TRUE;
+
+		} elseif ($this->getParentName()) { // extends
 			ob_start(function () {});
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
@@ -179,17 +181,17 @@ class Template
 	 * @return Template
 	 * @internal
 	 */
-	protected function createTemplate($name, array $params, $referenceType, $contentType)
+	protected function createTemplate($name, array $params, $referenceType, $contentType = NULL)
 	{
 		$name = $this->engine->getLoader()->getChildName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
-		if ($child->contentType !== $contentType) {
+		if ($contentType && $contentType !== $child->contentType) {
 			trigger_error("Incompatible context for including $name.", E_USER_WARNING);
 		}
 		$child->referrerTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
-		if (in_array($referenceType, ['extends', 'includeblock'])) {
+		if (in_array($referenceType, ['extends', 'includeblock', 'import'])) {
 			$child->blockTypes = & $this->blockTypes;
 			$child->blockQueue = & $this->blockQueue;
 		}
