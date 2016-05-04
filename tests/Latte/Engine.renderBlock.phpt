@@ -14,6 +14,11 @@ Assert::match(
 );
 
 Assert::match(
+	'Variables 5, 6',
+	trim($latte->renderToString(__DIR__ . '/templates/defineblock.latte', [5, 6], 'testargs'))
+);
+
+Assert::match(
 	'Homepage | My websiteMy website',
 	$latte->renderToString(__DIR__ . '/templates/inheritance.child1.latte', [], 'title')
 );

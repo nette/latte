@@ -9,6 +9,7 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\MacroNode;
+use Latte\MacroTokens;
 use Latte\PhpWriter;
 use Latte\CompileException;
 
@@ -262,6 +263,21 @@ class BlockMacros extends MacroSet
 			);
 
 		} elseif ($node->name === 'define') {
+			$tokens = $node->tokenizer;
+			$args = [];
+			while ($tokens->nextToken()) {
+				if ($tokens->isCurrent(MacroTokens::T_VARIABLE)) {
+					$args[] = $tokens->currentValue();
+					if ($tokens->isNext(',')) {
+						$tokens->nextToken();
+					}
+				} elseif (!$tokens->isCurrent(MacroTokens::T_WHITESPACE, MacroTokens::T_COMMENT)) {
+					throw new CompileException("Unexpected '{$tokens->currentValue()}' in {define $node->args}");
+				}
+			}
+			if ($args) {
+				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
+			}
 			return $prolog;
 
 		} else { // block, snippetArea
@@ -296,7 +312,7 @@ class BlockMacros extends MacroSet
 					$node->content = '<?php $_control->redrawControl(' . var_export((string) substr($node->data->name, 1), TRUE) . ", FALSE);\n\n?>" . $node->content;
 				}
 				if (preg_match('#\$|n:#', $node->content)) {
-					$node->content = '<?php extract($_args); ?>' . $node->content;
+					$node->content = '<?php ' . (isset($node->data->args) ? $node->data->args : 'extract($_args);') . ' ?>' . $node->content;
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+\z#', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));

@@ -5,6 +5,7 @@ class Template%a% extends Latte\Template
 {
 	public $blocks = [
 		'test' => ['blockTest', 'html'],
+		'testargs' => ['blockTestargs', 'html'],
 	];
 
 
@@ -24,7 +25,14 @@ class Template%a% extends Latte\Template
 		if ('html' !== $this->blockTypes['test']) {
 			trigger_error('Incompatible context for including block test.', E_USER_WARNING);
 		}
-		call_user_func(reset($this->blockQueue['test']), ['var' => 20] + get_defined_vars());
+		call_user_func(reset($this->blockQueue['test']), ['var' => 20] + get_defined_vars()) ?>
+
+
+<?php
+		if ('html' !== $this->blockTypes['testargs']) {
+			trigger_error('Incompatible context for including block testargs.', E_USER_WARNING);
+		}
+		call_user_func(reset($this->blockQueue['testargs']), [1] + get_defined_vars());
 	}
 
 
@@ -32,6 +40,15 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		?>	This is definition #<?php echo LFilters::escapeHtmlText($var) ?>
+
+<?php
+	}
+
+
+	function blockTestargs($_args)
+	{
+		list($var1, $var2) = $_args + [NULL, NULL, ];
+		?>	Variables <?php echo LFilters::escapeHtmlText($var1) ?>, <?php echo LFilters::escapeHtmlText($var2) ?>
 
 <?php
 	}
