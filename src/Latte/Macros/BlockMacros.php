@@ -37,9 +37,9 @@ class BlockMacros extends MacroSet
 		$me->addMacro('import', [$me, 'macroImport']);
 		$me->addMacro('extends', [$me, 'macroExtends']);
 		$me->addMacro('layout', [$me, 'macroExtends']);
+		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd'], NULL, self::AUTO_CLOSE);
 		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
-		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('snippetArea', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('ifset', [$me, 'macroIfset'], '}');
 		$me->addMacro('elseifset', [$me, 'macroIfset'], '}');
