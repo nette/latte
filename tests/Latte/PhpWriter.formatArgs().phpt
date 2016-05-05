@@ -75,7 +75,9 @@ test(function () { // special
 	Assert::same("'symbol' => Namespace\\Class::method()",  formatArgs('symbol => Namespace\Class::method()'));
 	Assert::same("'symbol' => Namespace \\ Class :: method ()",  formatArgs('symbol => Namespace \ Class :: method ()'));
 	Assert::same("'symbol' => \$this->var, ",  formatArgs('symbol => $this->var, '));
+	Assert::same("'symbol' => \$this->VAR, ",  formatArgs('symbol => $this->VAR, '));
 	Assert::same("'symbol' => \$this -> var, ",  formatArgs('symbol => $this -> var, '));
+	Assert::same("'symbol' => \$this -> VAR, ",  formatArgs('symbol => $this -> VAR, '));
 	Assert::same("'symbol' => \$this -> var",  formatArgs('symbol => $this -> var'));
 	Assert::same("'symbol1' => 'value'",  formatArgs('symbol1 => /*value,* /symbol2=>*/value/**/'));
 	Assert::same('(array)',  formatArgs('(array)'));
