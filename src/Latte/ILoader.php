@@ -32,4 +32,10 @@ interface ILoader
 	 */
 	function getReferredName($name, $referringName);
 
+	/**
+	 * Returns unique identifier for caching.
+	 * @return string
+	 */
+	function getUniqueId($name);
+
 }

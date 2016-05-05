@@ -61,4 +61,14 @@ class StringLoader implements Latte\ILoader
 		return $name;
 	}
 
+
+	/**
+	 * Returns unique identifier for caching.
+	 * @return string
+	 */
+	public function getUniqueId($name)
+	{
+		return $this->getContent($name);
+	}
+
 }
