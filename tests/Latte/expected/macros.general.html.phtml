@@ -165,7 +165,6 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 
 <?php
 		$counter = 0;
-		if ($this->tryRenderParent(get_defined_vars())) return;
 		call_user_func(reset($this->blockQueue['menu']), get_defined_vars());
 		?>
 

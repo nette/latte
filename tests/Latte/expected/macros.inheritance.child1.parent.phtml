@@ -28,7 +28,6 @@ class Template%a% extends Latte\Template
 <head>
 	<link rel="stylesheet" href="style.css">
 	<title><?php
-		if ($this->tryRenderParent(get_defined_vars())) return;
 		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
 		?></title>
 </head>

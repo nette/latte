@@ -60,7 +60,6 @@ class BlockMacros extends MacroSet
 
 	/**
 	 * Finishes template parsing.
-	 * @return array(prolog, epilog)
 	 */
 	public function finalize()
 	{
@@ -74,14 +73,10 @@ class BlockMacros extends MacroSet
 			);
 		}
 
-		$epilog = '';
 		if ($this->namedBlocks) {
 			$compiler->addProperty('blocks', $functions);
 			$compiler->addProperty('blockTypes', $this->blockTypes);
-		} elseif ($this->extends) {
-			$epilog = 'if ($this->tryRenderParent(get_defined_vars())) return;';
 		}
-		return ['', $epilog];
 	}
 
 
@@ -243,7 +238,6 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
 
-		$prolog = $this->namedBlocks ? '' : 'if ($this->tryRenderParent(get_defined_vars())) return;';
 		$this->namedBlocks[$name] = TRUE;
 		$this->blockTypes[$name] = $this->exportBlockType($node);
 
@@ -255,11 +249,11 @@ class BlockMacros extends MacroSet
 		if ($node->name === 'snippet') {
 			if ($node->prefix) {
 				$node->attrCode = $writer->write('<?php echo \' id="\' . $_control->getSnippetId(%var) . \'"\' ?>', (string) substr($name, 1));
-				return $writer->write($prolog . $include, $name);
+				return $writer->write($include, $name);
 			}
 			$tag = trim($node->tokenizer->fetchWord(), '<>');
 			$tag = $tag ? $tag : 'div';
-			return $writer->write("$prolog ?>\n<$tag id=\"<?php echo \$_control->getSnippetId(%var) ?>\"><?php $include ?>\n</$tag><?php ",
+			return $writer->write("?>\n<$tag id=\"<?php echo \$_control->getSnippetId(%var) ?>\"><?php $include ?>\n</$tag><?php ",
 				(string) substr($name, 1), $name
 			);
 
@@ -279,10 +273,10 @@ class BlockMacros extends MacroSet
 			if ($args) {
 				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
 			}
-			return $prolog;
+			return;
 
 		} else { // block, snippetArea
-			return $writer->write($prolog . $include, $name);
+			return $writer->write($include, $name);
 		}
 	}
 

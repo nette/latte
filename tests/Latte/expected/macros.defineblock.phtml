@@ -20,9 +20,6 @@ class Template%a% extends Latte\Template
 		// main template
 		?>
 
-<?php
-		if ($this->tryRenderParent(get_defined_vars())) return;
-		?>
 
 <?php
 		if ('html' !== $this->blockTypes['test']) {

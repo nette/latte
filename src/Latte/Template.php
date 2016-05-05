@@ -137,25 +137,18 @@ class Template
 	 */
 	protected function initialize(& $params)
 	{
-		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
-
 		$params = $this->prepare();
-
-		// old accumulators
-		$this->params['_l'] = $params['_l'] = $this->local;
-		$this->params['_g'] = $params['_g'] = $this->global;
-		$params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
-
 		$parent = $this->getParentName();
 
 		if ($this->referenceType === 'import') {
 			if ($parent) {
-				$this->createTemplate($parent, $this->params, 'import')->render();
+				$this->createTemplate($parent, [], 'import')->render();
 			}
 			return TRUE;
 
 		} elseif ($parent) { // extends
-			ob_start(function () {});
+			$this->createTemplate($parent, $params, 'extends', $this->contentType)->render();
+			return TRUE;
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
 			$tmp = $this;
@@ -165,19 +158,12 @@ class Template
 				return TRUE;
 			}
 		}
-	}
 
-
-	/**
-	 * @return bool
-	 */
-	protected function tryRenderParent($params)
-	{
-		if ($parent = $this->getParentName()) {
-			ob_end_clean();
-			$this->createTemplate($parent, $params, 'extends', $this->contentType)->render();
-			return TRUE;
-		}
+		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
+		// old accumulators for back compatibility
+		$this->params['_l'] = $params['_l'] = $this->local;
+		$this->params['_g'] = $params['_g'] = $this->global;
+		$params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 	}
 
 
