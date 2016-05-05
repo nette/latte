@@ -176,7 +176,7 @@ class PhpWriter
 			if ($tokens->isCurrent('?>')) {
 				throw new CompileException('Forbidden ?> inside macro');
 			} elseif ($tokens->isCurrent(MacroTokens::T_SYMBOL)
-				&& !$tokens->isPrev('::')
+				&& !$tokens->isPrev('::') && !$tokens->isPrev('->')
 				&& preg_match('#^[A-Z0-9]{3,}$#', $val = $tokens->currentValue())
 			) {
 				trigger_error("Replace literal $val with constant('$val')", E_USER_DEPRECATED);
