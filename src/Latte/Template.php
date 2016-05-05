@@ -35,7 +35,7 @@ class Template
 	protected $blocks = [];
 
 	/** @var Template|NULL */
-	private $referrerTemplate;
+	private $referringTemplate;
 
 	/** @var string|NULL */
 	private $referenceType;
@@ -112,9 +112,9 @@ class Template
 	/**
 	 * @return Template|NULL
 	 */
-	public function getReferrerTemplate()
+	public function getReferringTemplate()
 	{
-		return $this->referrerTemplate;
+		return $this->referringTemplate;
 	}
 
 
@@ -159,7 +159,7 @@ class Template
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
 			$tmp = $this;
-			while (in_array($this->referenceType, ['extends', NULL], TRUE) && ($tmp = $tmp->referrerTemplate));
+			while (in_array($this->referenceType, ['extends', NULL], TRUE) && ($tmp = $tmp->referringTemplate));
 			if (!$tmp) {
 				$this->renderBlock($this->params['_renderblock'], $this->params);
 				return TRUE;
@@ -193,7 +193,7 @@ class Template
 		if ($contentType && $contentType !== $child->contentType) {
 			trigger_error("Incompatible context for including $name.", E_USER_WARNING);
 		}
-		$child->referrerTemplate = $this;
+		$child->referringTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'])) {

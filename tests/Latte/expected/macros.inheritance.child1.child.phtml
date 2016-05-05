@@ -65,7 +65,7 @@ class Template%a% extends Latte\Template
 		}
 		?>
 	</ul>
-	Parent: <?php echo LFilters::escapeHtmlText(gettype($this->getReferrerTemplate())) ?>
+	Parent: <?php echo LFilters::escapeHtmlText(gettype($this->getReferringTemplate())) ?>
 
 <?php
 	}
