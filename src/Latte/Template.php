@@ -188,7 +188,7 @@ class Template
 	 */
 	protected function createTemplate($name, array $params, $referenceType, $contentType = NULL)
 	{
-		$name = $this->engine->getLoader()->getChildName($name, $this->name);
+		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
 		if ($contentType && $contentType !== $child->contentType) {
 			trigger_error("Incompatible context for including $name.", E_USER_WARNING);

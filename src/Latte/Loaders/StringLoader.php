@@ -53,10 +53,10 @@ class StringLoader implements Latte\ILoader
 
 
 	/**
-	 * Returns fully qualified template name.
+	 * Returns referred template name.
 	 * @return string
 	 */
-	public function getChildName($name, $referrer = NULL)
+	public function getReferredName($name, $referringName)
 	{
 		return $name;
 	}

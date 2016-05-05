@@ -18,7 +18,7 @@ test(function () {
 	Assert::false($loader->isExpired('content', 0));
 	Assert::false($loader->isExpired('content', 1));
 
-	Assert::same('inner', $loader->getChildName('inner', 'outer'));
+	Assert::same('inner', $loader->getReferredName('inner', 'referrer'));
 });
 
 test(function () {
@@ -29,5 +29,5 @@ test(function () {
 	Assert::false($loader->isExpired('main', 0));
 	Assert::false($loader->isExpired('undefined', 1));
 
-	Assert::same('other', $loader->getChildName('other', 'referrer'));
+	Assert::same('other', $loader->getReferredName('other', 'referrer'));
 });
