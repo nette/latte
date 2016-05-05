@@ -554,6 +554,9 @@ class Compiler
 			}
 			if ($isLeftmost && !$isReplaced) {
 				$this->output = substr($this->output, 0, $leftOfs); // alone macro without output -> remove indentation
+				if (substr($code, -2) !== '?>') {
+					$code .= '<?php ?>'; // consume new line
+				}
 			} elseif (substr($code, -2) === '?>') {
 				$code .= "\n"; // double newline to avoid newline eating by PHP
 			}
