@@ -9,10 +9,17 @@ class Template%a% extends Latte\Template
 %A%
 This should be erased
 <?php
-		$foo = 1;
 		// epilog Latte\Macros\BlockMacros
 		if ($this->tryRenderParent(get_defined_vars())) return;
 
+	}
+
+
+	function prepare()
+	{
+		extract($this->params);
+		$foo = 1;
+		return get_defined_vars();
 	}
 
 

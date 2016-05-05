@@ -16,7 +16,7 @@ class Template%a% extends Latte\Template
 	{
 %A%
 		// main template
-		$var = 10 ?>
+		?>
 
 <?php
 		if ($this->tryRenderParent(get_defined_vars())) return;
@@ -67,6 +67,14 @@ class Template%a% extends Latte\Template
 		call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars()) ?>
 
 <?php
+	}
+
+
+	function prepare()
+	{
+		extract($this->params);
+		$var = 10;
+		return get_defined_vars();
 	}
 
 

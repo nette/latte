@@ -58,6 +58,7 @@ Assert::match('
 <object data="javascript:alert(1)"></object>
 ', $latte->renderToString('
 {contentType xml}
+
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <object data={$url1}></object>
 ', $params));

@@ -16,12 +16,13 @@ class Template%a% extends Latte\Template
 
 	function render()
 	{
-		extract($this->params);
+
 		// prolog Latte\Macros\CoreMacros
-		if ($this->initialize($_b, $_l, $_g)) return;
+		if ($this->initialize($_args)) return;
+		extract($_args);
 
 		// main template
-		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
+		?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -52,6 +53,14 @@ Parent: <?php echo LFilters::escapeHtmlText(basename($this->getReferringTemplate
 		echo LFilters::escapeHtmlText($this->getReferenceType()) ?>
 
 <?php
+	}
+
+
+	function prepare()
+	{
+		extract($this->params);
+		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP);
+		return get_defined_vars();
 	}
 
 

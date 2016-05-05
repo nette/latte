@@ -34,6 +34,13 @@ class Template%a% extends Latte\Template
 	}
 
 
+	function prepare()
+	{
+		extract($this->params);
+		return get_defined_vars();
+	}
+
+
 	function getParentName()
 	{
 		%A%return "inheritance.parent.latte";%A%

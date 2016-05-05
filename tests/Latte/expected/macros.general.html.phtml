@@ -14,9 +14,10 @@ class Template%a% extends Latte\Template
 
 	function render()
 	{
-		extract($this->params);
+
 		// prolog Latte\Macros\CoreMacros
-		if ($this->initialize($_b, $_l, $_g)) return;
+		if ($this->initialize($_args)) return;
+		extract($_args);
 
 		// main template
 		?>

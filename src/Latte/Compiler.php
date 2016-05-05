@@ -97,11 +97,9 @@ class Compiler
 	public function compile(array $tokens, $className)
 	{
 		$this->tokens = $tokens;
-		$output = '';
-		$this->output = & $output;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
 		$this->placeholders = $this->properties = [];
-		$this->methods = ['render' => NULL];
+		$this->methods = ['render' => NULL, 'prepare' => NULL];
 
 		$macroHandlers = new \SplObjectStorage;
 		array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
@@ -110,7 +108,35 @@ class Compiler
 			$handler->initialize($this);
 		}
 
-		foreach ($tokens as $this->position => $token) {
+		$depth = 0; $contentPos = -1;
+		foreach ($tokens as $i => $token) {
+			if ($token->type === $token::MACRO_TAG && in_array($token->name, ['if', 'ifset', 'foreach'], TRUE)) {
+				$depth += $token->empty ? 0 : ($token->closing ? -1 : 1);
+			} elseif (!($token->type === $token::COMMENT
+				|| $token->type === $token::MACRO_TAG && in_array($token->name, ['extends', 'layout', 'import', 'var', 'default', 'contentType', 'else', 'elseif', 'elseifset'], TRUE)
+				|| $token->type === $token::TEXT && trim($token->text) === ''
+			)) {
+				break;
+			}
+			$contentPos = $depth || $token->type === $token::TEXT ? $contentPos : $i;
+		}
+
+		$position = & $this->position;
+		$prepare = '';
+		$this->output = & $prepare;
+
+		for ($position = 0; $position <= $contentPos; $position++) {
+			$token = $tokens[$position];
+			if ($token->type !== $token::TEXT) {
+				$this->{"process$token->type"}($token);
+			}
+		}
+
+		$output = $prepare ? '<?php ?>' : ''; // consume next new line
+		$this->output = & $output;
+
+		for (; $position < count($this->tokens); $position++) {
+			$token = $tokens[$position];
 			$this->{"process$token->type"}($token);
 		}
 
@@ -134,10 +160,15 @@ class Compiler
 			$handlerName = get_class($handler);
 			$prologs .= empty($res[0]) ? '' : "<?php\n// prolog $handlerName\n$res[0]\n?>";
 			$epilogs = (empty($res[1]) ? '' : "<?php\n// epilog $handlerName\n$res[1]\n?>") . $epilogs;
+			$prepare .= (empty($res[2]) ? '' : "<?php $res[2] ?>");
 		}
-		$output = $this->expandTokens(($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs);
 
-		$this->addMethod('render', "extract(\$this->params)\n?>$output<?php");
+		$output = $this->expandTokens(($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs);
+		$this->addMethod('render', "?>$output<?php");
+
+		if ($prepare) {
+			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php return get_defined_vars();");
+		}
 
 		if (!empty($this->methods['getParentName']['body'])) {
 			$this->methods['getParentName']['body'] = 'return ($l = & $this->local->parentName) ? '
@@ -147,7 +178,7 @@ class Compiler
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';
 		}
-		foreach ($this->methods as $name => $method) {
+		foreach (array_filter($this->methods) as $name => $method) {
 			$members[] = "\n\tfunction $name($method[params])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
@@ -213,7 +244,7 @@ class Compiler
 	 */
 	public function getLine()
 	{
-		return $this->tokens ? $this->tokens[$this->position]->line : NULL;
+		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position]->line : NULL;
 	}
 
 

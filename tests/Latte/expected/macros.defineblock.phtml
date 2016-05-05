@@ -20,8 +20,6 @@ class Template%a% extends Latte\Template
 		// main template
 		?>
 
-<?php $var = 10 ?>
-
 <?php
 		if ($this->tryRenderParent(get_defined_vars())) return;
 		?>
@@ -38,6 +36,14 @@ class Template%a% extends Latte\Template
 			trigger_error('Incompatible context for including block testargs.', E_USER_WARNING);
 		}
 		call_user_func(reset($this->blockQueue['testargs']), [1] + get_defined_vars());
+	}
+
+
+	function prepare()
+	{
+		extract($this->params);
+		$var = 10;
+		return get_defined_vars();
 	}
 
 

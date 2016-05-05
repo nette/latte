@@ -135,14 +135,16 @@ class Template
 	 * @return bool
 	 * @internal
 	 */
-	protected function initialize(& $_b, & $_l, & $_g)
+	protected function initialize(& $params)
 	{
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 
+		$params = $this->prepare();
+
 		// old accumulators
-		$this->params['_l'] = $_l = $this->local;
-		$this->params['_g'] = $_g = $this->global;
-		$_b = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
+		$this->params['_l'] = $params['_l'] = $this->local;
+		$this->params['_g'] = $params['_g'] = $this->global;
+		$params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 
 		$parent = $this->getParentName();
 
@@ -203,6 +205,15 @@ class Template
 			$child->blockTypes = & $this->blockTypes;
 		}
 		return $child;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function prepare()
+	{
+		return $this->params;
 	}
 
 

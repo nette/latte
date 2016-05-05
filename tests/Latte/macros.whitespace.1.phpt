@@ -27,7 +27,6 @@ EOD
 
 
 Assert::match(<<<EOD
-
 asdfgh
 EOD
 
