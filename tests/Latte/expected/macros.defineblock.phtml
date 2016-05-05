@@ -4,8 +4,13 @@
 class Template%a% extends Latte\Template
 {
 	public $blocks = [
-		'test' => ['blockTest', 'html'],
-		'testargs' => ['blockTestargs', 'html'],
+		'test' => 'blockTest',
+		'testargs' => 'blockTestargs',
+	];
+
+	public $blockTypes = [
+		'test' => 'html',
+		'testargs' => 'html',
 	];
 
 

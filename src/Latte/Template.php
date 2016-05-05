@@ -31,7 +31,7 @@ class Template
 	/** @var Filters */
 	protected $filters;
 
-	/** @var array */
+	/** @var array [name => method] */
 	protected $blocks = [];
 
 	/** @var Template|NULL */
@@ -46,7 +46,7 @@ class Template
 	/** @var \stdClass global accumulators for intermediate results */
 	protected $global;
 
-	/** @var [name => [methods]] */
+	/** @var [name => [callbacks]] */
 	protected $blockQueue = [];
 
 	/** @var [name => type] */
@@ -61,6 +61,9 @@ class Template
 		$this->name = $name;
 		$this->local = new \stdClass;
 		$this->global = new \stdClass;
+		foreach ($this->blocks as $nm => $method) {
+			$this->blockQueue[$nm][] = [$this, $method];
+		}
 	}
 
 
@@ -141,11 +144,6 @@ class Template
 		$this->params['_g'] = $_g = $this->global;
 		$_b = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 
-		foreach ($this->blocks as $name => $info) {
-			$this->blockQueue[$name][] = [$this, $info[0]];
-			$this->checkBlockContentType($info[1], $name);
-		}
-
 		$parent = $this->getParentName();
 
 		if ($this->referenceType === 'import') {
@@ -197,8 +195,12 @@ class Template
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'])) {
-			$child->blockTypes = & $this->blockTypes;
+			$this->blockQueue = array_merge_recursive($this->blockQueue, $child->blockQueue);
+			foreach ($child->blockTypes as $nm => $type) {
+				$this->checkBlockContentType($type, $nm);
+			}
 			$child->blockQueue = & $this->blockQueue;
+			$child->blockTypes = & $this->blockTypes;
 		}
 		return $child;
 	}

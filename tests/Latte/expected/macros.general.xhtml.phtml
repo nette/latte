@@ -6,7 +6,11 @@ class Template%a% extends Latte\Template
 	public $contentType = 'xhtml';
 
 	public $blocks = [
-		'menu' => ['blockMenu', 'xhtml'],
+		'menu' => 'blockMenu',
+	];
+
+	public $blockTypes = [
+		'menu' => 'xhtml',
 	];
 
 

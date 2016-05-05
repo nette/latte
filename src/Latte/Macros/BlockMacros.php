@@ -76,7 +76,8 @@ class BlockMacros extends MacroSet
 
 		$epilog = '';
 		if ($this->namedBlocks) {
-			$compiler->addProperty('blocks', array_merge_recursive($functions, $this->blockTypes));
+			$compiler->addProperty('blocks', $functions);
+			$compiler->addProperty('blockTypes', $this->blockTypes);
 		} elseif ($this->extends) {
 			$epilog = 'if ($this->tryRenderParent(get_defined_vars())) return;';
 		}
