@@ -56,4 +56,14 @@ class FileLoader implements Latte\ILoader
 		return $file;
 	}
 
+
+	/**
+	 * Returns unique identifier for caching.
+	 * @return string
+	 */
+	public function getUniqueId($file)
+	{
+		return $file;
+	}
+
 }

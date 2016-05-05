@@ -235,7 +235,7 @@ class Engine
 	 */
 	public function getTemplateClass($name)
 	{
-		return 'Template' . substr(md5("$this->tempDirectory\00$name\00" . self::VERSION), 0, 10);
+		return 'Template' . substr(md5($this->getLoader()->getUniqueId($name) . "\00" . self::VERSION), 0, 10);
 	}
 
 
