@@ -170,11 +170,6 @@ class Compiler
 			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php return get_defined_vars();");
 		}
 
-		if (!empty($this->methods['getParentName']['body'])) {
-			$this->methods['getParentName']['body'] = 'return ($l = & $this->local->parentName) ? '
-				. '$l[0] : $l[0] = call_user_func(function () { ' . $this->methods['getParentName']['body'] . ' });';
-		}
-
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';
 		}

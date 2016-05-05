@@ -34,6 +34,9 @@ class Template
 	/** @var array [name => method] */
 	protected $blocks = [];
 
+	/** @var string|NULL */
+	protected $parentName;
+
 	/** @var Template|NULL */
 	private $referringTemplate;
 
@@ -109,6 +112,7 @@ class Template
 	 */
 	public function getParentName()
 	{
+		return $this->parentName;
 	}
 
 

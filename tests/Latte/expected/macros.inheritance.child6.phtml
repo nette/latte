@@ -15,14 +15,9 @@ This should be erased
 	function prepare()
 	{
 		extract($this->params);
+		$this->parentName = "inheritance.parent2.latte";
 		$foo = 1;
 		return get_defined_vars();
-	}
-
-
-	function getParentName()
-	{
-		%A%return "inheritance.parent2.latte";%A%
 	}
 
 }

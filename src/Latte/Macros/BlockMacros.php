@@ -167,11 +167,11 @@ class BlockMacros extends MacroSet
 		} elseif ($this->extends !== NULL) {
 			throw new CompileException("Multiple {{$node->name}} declarations are not allowed.");
 		} elseif ($node->args === 'none') {
-			$this->getCompiler()->addMethod('getParentName', '');
 			$this->extends = FALSE;
+			return $writer->write('$this->parentName = NULL');
 		} else {
-			$this->getCompiler()->addMethod('getParentName', $writer->write('extract($this->params); return %node.word%node.args;'));
 			$this->extends = TRUE;
+			return $writer->write('$this->parentName = %node.word%node.args');
 		}
 	}
 
