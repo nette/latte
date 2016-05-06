@@ -34,7 +34,11 @@ Assert::exception(function () use ($latte) {
 }, 'Latte\CompileException', 'It is not possible to combine class with n:class.');
 
 
-
 Assert::exception(function () use ($latte) {
 	$latte->compile('{forech}');
 }, 'Latte\CompileException', 'Unknown macro {forech}, did you mean {foreach}?');
+
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{time() /}');
+}, 'Latte\CompileException', 'Unexpected /} in tag {time() /}');

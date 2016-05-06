@@ -322,8 +322,11 @@ class Compiler
 					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
 				$token->empty = $t ? !$t->closing : TRUE;
 			}
-			$this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
+			$node = $this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
+				if ($node->isEmpty) {
+					throw new CompileException("Unexpected /} in tag {$token->text}");
+				}
 				$this->closeMacro($token->name, NULL, NULL, $isRightmost);
 			}
 		}
