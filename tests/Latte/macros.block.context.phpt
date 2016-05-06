@@ -14,20 +14,20 @@ test(function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
-	Assert::error(function () use ($latte) {
+	Assert::noError(function () use ($latte) {
 		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}{/block}', ['value' => 'b"ar']);
 	}, E_USER_WARNING, 'Incompatible context for including block foo.');
 
 	Assert::error(function () use ($latte) {
-		$latte->renderToString('<meta content="aaa{include foo}aaa">{block foo}{$value}{/block}', ['value' => 'b"ar']);
+		$latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']);
 	}, E_USER_WARNING, 'Incompatible context for including block foo.');
 
-	Assert::same('<meta content="b&quot;ar">b&quot;ar',
-		$latte->renderToString('<meta content="{include foo|nocheck}">{block foo}{$value}{/block}', ['value' => 'b"ar'])
+	Assert::same('<meta content=b&quot;ar>b&quot;ar',
+		$latte->renderToString('<meta content={include foo|nocheck}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
 	Assert::same('<meta content="b&amp;quot;ar">b&quot;ar',
-		$latte->renderToString('<meta content="{include foo|escape}">{block foo}{$value}{/block}', ['value' => 'b"ar'])
+		$latte->renderToString('<meta content={include foo|escape}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
 	Assert::same('<meta content="b&quot;ar"><meta content="b&quot;ar">',
@@ -74,11 +74,30 @@ test(function () {
 {extends "parentvar"}
 {block foo}{$foo}{/block}
 		',
+
+		'context5' => '
+{extends "parent"}
+<meta name="{block foo}{$foo}{/block}">
+		',
+
+		'context6' => '
+{extends "parentvar"}
+<meta name="{block foo}{$foo}{/block}">
+		',
+
+		'parentattr' => '<meta name="{block foo}{/block}">',
+
+		'context7' => '
+{extends "parentattr"}
+{block foo}{$foo}{/block}
+		',
 	]));
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context1', ['foo' => 'b"ar']));
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context2', ['foo' => 'b"ar']));
+
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context7', ['foo' => 'b"ar']));
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context3', ['foo' => 'b"ar']);
@@ -86,6 +105,14 @@ test(function () {
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context4', ['foo' => 'b"ar']);
+	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
+
+	Assert::error(function () use ($latte) {
+		$latte->renderToString('context5', ['foo' => 'b"ar']);
+	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
+
+	Assert::error(function () use ($latte) {
+		$latte->renderToString('context6', ['foo' => 'b"ar']);
 	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
 });
 
