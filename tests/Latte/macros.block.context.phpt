@@ -26,10 +26,6 @@ test(function () {
 		$latte->renderToString('<meta content={include foo|nocheck}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
-	Assert::same('<meta content="b&amp;quot;ar">b&quot;ar',
-		$latte->renderToString('<meta content={include foo|escape}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
-	);
-
 	Assert::same('<meta content="b&quot;ar"><meta content="b&quot;ar">',
 		$latte->renderToString('<meta content="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
 	);

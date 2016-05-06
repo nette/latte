@@ -111,7 +111,7 @@ class BlockMacros extends MacroSet
 		}
 
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $found);
-		if (!$found && !preg_match('#\|?escape(?:html|htmlcomment|ical|js|url|xml)?\s?(?=\||\z)#i', $node->modifiers)) {
+		if (!$found) {
 			$cmd = "if (" . var_export($this->exportBlockType($node), TRUE) . " !== \$this->blockTypes[$name]) { "
 				. "trigger_error('Incompatible context for including block $destination.', E_USER_WARNING); }\n"
 				. $cmd;
