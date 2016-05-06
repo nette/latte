@@ -67,6 +67,7 @@ class Template
 		foreach ($this->blocks as $nm => $method) {
 			$this->blockQueue[$nm][] = [$this, $method];
 		}
+		$this->params['template'] = $this; // back compatibility
 	}
 
 
@@ -258,6 +259,52 @@ class Template
 		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
 		$this->params = $params;
 		return $this;
+	}
+
+
+	/********************* deprecated ****************d*g**/
+
+
+	/** @deprecated */
+	public function __call($name, $args)
+	{
+		trigger_error("Invoking filters via \$template->$name(\$vars) is deprecated, use (\$vars|$name)", E_USER_DEPRECATED);
+		return call_user_func_array($this->filters->$name, $args);
+	}
+
+
+	/** @deprecated */
+	public function __set($name, $value)
+	{
+		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		$this->params[$name] = $value;
+	}
+
+
+	/** @deprecated */
+	public function &__get($name)
+	{
+		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		if (!array_key_exists($name, $this->params)) {
+			trigger_error("The variable '$name' does not exist in template.");
+		}
+		return $this->params[$name];
+	}
+
+
+	/** @deprecated */
+	public function __isset($name)
+	{
+		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		return isset($this->params[$name]);
+	}
+
+
+	/** @deprecated */
+	public function __unset($name)
+	{
+		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		unset($this->params[$name]);
 	}
 
 }
