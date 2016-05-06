@@ -8,6 +8,7 @@
 namespace Latte\Macros;
 
 use Latte;
+use Latte\CompileException;
 use Latte\MacroNode;
 
 
@@ -80,7 +81,7 @@ class MacroSet implements Latte\IMacro
 			&& (!$end || (is_string($end) && strpos($end, '%modify') === FALSE))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%modify') === FALSE))
 		) {
-			throw new Latte\CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
 
 		if ($node->args
@@ -88,7 +89,7 @@ class MacroSet implements Latte\IMacro
 			&& (!$end || (is_string($end) && strpos($end, '%node') === FALSE))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%node') === FALSE))
 		) {
-			throw new Latte\CompileException("Arguments are not allowed in {{$node->name}}");
+			throw new CompileException("Arguments are not allowed in {{$node->name}}");
 		}
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
@@ -139,11 +140,9 @@ class MacroSet implements Latte\IMacro
 	{
 		$node->tokenizer->reset();
 		$writer = Latte\PhpWriter::using($node, $this->compiler);
-		if (is_string($def)) {
-			return $writer->write($def);
-		} else {
-			return call_user_func($def, $node, $writer);
-		}
+		return is_string($def)
+			? $writer->write($def)
+			: call_user_func($def, $node, $writer);
 	}
 
 
