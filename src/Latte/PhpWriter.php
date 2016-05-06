@@ -426,7 +426,7 @@ class PhpWriter
 					case Compiler::CONTENT_CSS:
 						return $tokens->prepend('LFilters::escape' . ucfirst($context[0]) . '(')->append(')');
 					default:
-						return $tokens->prepend('LFilters::escapeHtmlText(')->append(')');
+						return $tokens->prepend('LFilters::escapeHtml(')->append(')');
 				}
 
 			case Compiler::CONTENT_XML:

@@ -1,20 +1,20 @@
 <?php
 %A%
 <ul>
-	<li><?php echo LFilters::escapeHtmlText($hello->{'item'}) ?></li>
-	<li><?php echo LFilters::escapeHtmlText(function(){}) ?></li>
-	<li><?php echo LFilters::escapeHtmlText(function(){return}) ?></li>
+	<li><?php echo LFilters::escapeHtml($hello->{'item'}) ?></li>
+	<li><?php echo LFilters::escapeHtml(function(){}) ?></li>
+	<li><?php echo LFilters::escapeHtml(function(){return}) ?></li>
 	<li><?php
-		echo LFilters::escapeHtmlText(function() {
+		echo LFilters::escapeHtml(function() {
 			return;
 		}) ?></li>
-	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, function(){return})) ?></li>
+	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->upper, function(){return})) ?></li>
 	<li><?php
-		echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, function() {
+		echo LFilters::escapeHtml(call_user_func($this->filters->upper, function() {
 			return;
 		})) ?></li>
 	<li><?php
-		echo LFilters::escapeHtmlText(call_user_func($this->filters->upper, function() {
+		echo LFilters::escapeHtml(call_user_func($this->filters->upper, function() {
 			return;
 		}, $item->{10})) ?></li>
 </ul>

@@ -17,7 +17,7 @@ class Template%a% extends Latte\Template
 				?>(<?php
 			}
 			?> <?php
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (!$iterator->isLast()) {
 				?>, <?php
 			}
@@ -43,7 +43,7 @@ class Template%a% extends Latte\Template
 				?>(<?php
 			}
 			?> <?php
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (!$iterator->isLast(2)) {
 				?>, <?php
 			}
@@ -69,7 +69,7 @@ class Template%a% extends Latte\Template
 				?>(<?php
 			}
 			?> <?php
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (!$iterator->isLast(1)) {
 				?>, <?php
 			}
@@ -94,7 +94,7 @@ class Template%a% extends Latte\Template
 				?>	<span>(</span><?php
 			}
 			?> <?php
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (!$iterator->isLast()) {
 				?><span>, </span><?php
 			}

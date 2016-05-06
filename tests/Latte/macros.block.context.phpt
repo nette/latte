@@ -22,11 +22,11 @@ test(function () {
 		$latte->renderToString('<meta content="aaa{include foo}aaa">{block foo}{$value}{/block}', ['value' => 'b"ar']);
 	}, E_USER_WARNING, 'Incompatible context for including block foo.');
 
-	Assert::same('<meta content="b"ar">b"ar',
+	Assert::same('<meta content="b&quot;ar">b&quot;ar',
 		$latte->renderToString('<meta content="{include foo|nocheck}">{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
-	Assert::same('<meta content="b&quot;ar">b"ar',
+	Assert::same('<meta content="b&amp;quot;ar">b&quot;ar',
 		$latte->renderToString('<meta content="{include foo|escape}">{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 

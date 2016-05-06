@@ -36,7 +36,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) {
 			?><p<?php if ($_tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>><?php
-			echo LFilters::escapeHtmlText($foo) ?></p>
+			echo LFilters::escapeHtml($foo) ?></p>
 <?php
 			$iterations++;
 		}
@@ -62,7 +62,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>	<li><?php echo LFilters::escapeHtmlText($person) ?></li>
+			?>	<li><?php echo LFilters::escapeHtml($person) ?></li>
 <?php
 			$iterations++;
 		}
@@ -75,7 +75,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			?>	<li>
-		<?php echo LFilters::escapeHtmlText($person) ?>
+		<?php echo LFilters::escapeHtml($person) ?>
 
 	</li>
 <?php
@@ -90,7 +90,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>		<?php echo LFilters::escapeHtmlText($person) ?>
+			?>		<?php echo LFilters::escapeHtml($person) ?>
 
 <?php
 			$iterations++;
@@ -104,7 +104,7 @@ class Template%a% extends Latte\Template
 			?>	<li>
 <?php
 		}
-		?>		<?php echo LFilters::escapeHtmlText($person) ?>
+		?>		<?php echo LFilters::escapeHtml($person) ?>
 
 <?php
 		if (array_pop($this->local->ifs)) {
@@ -119,7 +119,7 @@ class Template%a% extends Latte\Template
 		for ($i=0;
 		$i<3;
 		$i++) {
-			?>	<li><?php echo LFilters::escapeHtmlText($i) ?></li>
+			?>	<li><?php echo LFilters::escapeHtml($i) ?></li>
 <?php
 		}
 		?>
@@ -128,7 +128,7 @@ class Template%a% extends Latte\Template
 <ul title="white">
 <?php
 		while (--$i>0) {
-			?>	<li><?php echo LFilters::escapeHtmlText($i) ?></li>
+			?>	<li><?php echo LFilters::escapeHtml($i) ?></li>
 <?php
 		}
 		?>
@@ -183,7 +183,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LFilters::escapeHtmlText($person) ?></li>
+				?>	<li><?php echo LFilters::escapeHtml($person) ?></li>
 <?php
 			}
 			$iterations++;
@@ -199,7 +199,7 @@ class Template%a% extends Latte\Template
 			%a%
 			foreach ($people as $person) {
 				if (strlen($person)===4) {
-					echo LFilters::escapeHtmlText($person);
+					echo LFilters::escapeHtml($person);
 				}
 				$iterations++;
 			}
@@ -215,7 +215,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LFilters::escapeHtmlText(call_user_func($this->filters->lower, $person)) ?></li>
+				?>	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, $person)) ?></li>
 <?php
 			}
 			$iterations++;
@@ -313,7 +313,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			?>	<li><?php
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (TRUE) {
 				echo "</li>\n";
 				break;
@@ -331,7 +331,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			?>	<li><?php
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (TRUE) {
 				echo "</li>\n";
 				continue;
@@ -349,7 +349,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (TRUE) break;
 			$iterations++;
 		}
@@ -361,7 +361,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			echo LFilters::escapeHtmlText($person);
+			echo LFilters::escapeHtml($person);
 			if (TRUE) continue;
 			$iterations++;
 		}
@@ -380,7 +380,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LFilters::escapeHtmlText($person) ?></li>
+				?>	<li><?php echo LFilters::escapeHtml($person) ?></li>
 <?php
 			}
 			$iterations++;

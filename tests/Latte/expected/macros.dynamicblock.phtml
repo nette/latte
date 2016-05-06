@@ -80,7 +80,7 @@ class Template%a% extends Latte\Template
 	function blockName($_args)
 	{
 		extract($_args);
-		?>		Dynamic block #<?php echo LFilters::escapeHtmlText($var) ?>
+		?>		Dynamic block #<?php echo LFilters::escapeHtml($var) ?>
 
 <?php
 	}
@@ -103,7 +103,7 @@ class Template%a% extends Latte\Template
 	function blockStatic($_args)
 	{
 		extract($_args);
-		?>	Static block #<?php echo LFilters::escapeHtmlText($var) ?>
+		?>	Static block #<?php echo LFilters::escapeHtml($var) ?>
 
 <?php
 	}

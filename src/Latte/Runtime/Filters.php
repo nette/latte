@@ -28,11 +28,11 @@ class Filters
 	 * @param  mixed  UTF-8 encoding
 	 * @return string
 	 */
-	public static function escapeHtmlText($s)
+	public static function escapeHtml($s)
 	{
 		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
 			? $s->__toString(TRUE)
-			: htmlSpecialChars($s, ENT_NOQUOTES, 'UTF-8');
+			: htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -48,16 +48,6 @@ class Filters
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
 		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
-	}
-
-
-	/** @deprecated */
-	public static function escapeHtml($s)
-	{
-		trigger_error('Do not rely on internal methods like ' . __METHOD__, E_USER_WARNING);
-		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
-			? $s->__toString(TRUE)
-			: htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
 	}
 
 
