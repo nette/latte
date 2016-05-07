@@ -150,7 +150,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context1' => '<p>{include ical.latte}</p>',
 	'context2' => '{extends ical.latte}',
 	'context3' => '{includeblock ical.latte}',
-	'context4' => '{contentType calendar} {includeblock ical.latte}',
+	'context4' => '{contentType calendar} {include ical.latte}',
 ]));
 
 Assert::error(function () use ($latte) {
@@ -163,7 +163,10 @@ Assert::error(function () use ($latte) {
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');
-}, E_USER_WARNING, 'Incompatible context for including %a%.');
+}, [
+	[E_USER_DEPRECATED, '%a%'],
+	[E_USER_WARNING, 'Incompatible context for including %a%.'],
+]);
 
 Assert::noError(function () use ($latte) {
 	$latte->renderToString('context4');

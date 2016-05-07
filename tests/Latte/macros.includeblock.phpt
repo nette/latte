@@ -28,11 +28,11 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.includeblock.phtml',
-	$latte->compile('main')
+	@$latte->compile('main') // @ false temporary warning for {includeblock}
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.includeblock.html',
-	$latte->renderToString('main')
+	@$latte->renderToString('main') // @ false temporary warning for {includeblock}
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.includeblock.inc.phtml',

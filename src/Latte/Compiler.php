@@ -108,10 +108,12 @@ class Compiler
 			$handler->initialize($this);
 		}
 
-		$depth = 0; $contentPos = -1;
+		$depth = 0; $contentPos = -1; $line = 1;
 		foreach ($tokens as $i => $token) {
 			if ($token->type === $token::MACRO_TAG && in_array($token->name, ['if', 'ifset', 'foreach'], TRUE)) {
 				$depth += $token->empty ? 0 : ($token->closing ? -1 : 1);
+			} elseif ($token->type === $token::MACRO_TAG && $token->name === 'includeblock') {
+				trigger_error("Macro {includeblock} used in template header on line $line should be replaced with similar macro {import} which imports only blocks.", E_USER_DEPRECATED);
 			} elseif (!($token->type === $token::COMMENT
 				|| $token->type === $token::MACRO_TAG && in_array($token->name, ['extends', 'layout', 'import', 'var', 'default', 'contentType', 'else', 'elseif', 'elseifset'], TRUE)
 				|| $token->type === $token::TEXT && trim($token->text) === ''
@@ -119,6 +121,7 @@ class Compiler
 				break;
 			}
 			$contentPos = $depth || $token->type === $token::TEXT ? $contentPos : $i;
+			$line += substr_count($token->text, "\n");
 		}
 
 		$position = & $this->position;

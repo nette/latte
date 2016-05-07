@@ -17,11 +17,6 @@ class Template%a% extends Latte\Template
 	function render()
 	{
 %A%
-		ob_start(function () {});
-		$this->createTemplate("inc", get_defined_vars(), "includeblock", 'html')->render();
-		echo rtrim(ob_get_clean()) ?>
-
-
 <?php
 		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
 		?>
@@ -37,6 +32,9 @@ class Template%a% extends Latte\Template
 		extract($this->params);
 		$this->parentName = "parent";
 		$this->createTemplate("inc", [], "import")->render();
+		ob_start(function () {});
+		$this->createTemplate("inc", get_defined_vars(), "includeblock", 'html')->render();
+		echo rtrim(ob_get_clean());
 		return get_defined_vars();
 	}
 
