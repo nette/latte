@@ -19,6 +19,9 @@ class HtmlNode
 	public $name;
 
 	/** @var bool */
+	public $empty;
+
+	/** @deprecated */
 	public $isEmpty;
 
 	/** @var array */
@@ -44,6 +47,7 @@ class HtmlNode
 	{
 		$this->name = $name;
 		$this->parentNode = $parentNode;
+		$this->isEmpty = & $this->empty;
 	}
 
 }

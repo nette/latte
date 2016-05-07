@@ -202,7 +202,7 @@ class CoreMacros extends MacroSet
 		if ($node->closing) {
 			return $writer->write('echo %modify(call_user_func($this->filters->translate, ob_get_clean()))');
 
-		} elseif ($node->isEmpty = ($node->args !== '')) {
+		} elseif ($node->empty = ($node->args !== '')) {
 			return $writer->write('echo %modify(call_user_func($this->filters->translate, %node.args))');
 
 		} else {

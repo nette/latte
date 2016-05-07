@@ -74,7 +74,7 @@ class MacroSet implements Latte\IMacro
 	public function nodeOpened(MacroNode $node)
 	{
 		list($begin, $end, $attr) = $this->macros[$node->name];
-		$node->isEmpty = !$end;
+		$node->empty = !$end;
 
 		if ($node->modifiers
 			&& (!$begin || (is_string($begin) && strpos($begin, '%modify') === FALSE))
@@ -93,7 +93,7 @@ class MacroSet implements Latte\IMacro
 		}
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
-			$node->isEmpty = TRUE;
+			$node->empty = TRUE;
 			$this->compiler->setContext(Latte\Compiler::CONTEXT_QUOTED_ATTRIBUTE);
 			$res = $this->compile($node, $attr);
 			if ($res === FALSE) {
@@ -105,7 +105,7 @@ class MacroSet implements Latte\IMacro
 
 		} elseif ($begin) {
 			$res = $this->compile($node, $begin);
-			if ($res === FALSE || ($node->isEmpty && $node->prefix)) {
+			if ($res === FALSE || ($node->empty && $node->prefix)) {
 				return FALSE;
 			} elseif (!$node->openingCode && is_string($res) && $res !== '') {
 				$node->openingCode = "<?php $res ?>";

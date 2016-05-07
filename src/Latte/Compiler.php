@@ -327,7 +327,7 @@ class Compiler
 			}
 			$node = $this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
-				if ($node->isEmpty) {
+				if ($node->empty) {
 					throw new CompileException("Unexpected /} in tag {$token->text}");
 				}
 				$this->closeMacro($token->name, NULL, NULL, $isRightmost);
@@ -378,11 +378,11 @@ class Compiler
 		$end = '';
 
 		if (!$htmlNode->closing) {
-			$htmlNode->isEmpty = strpos($token->text, '/') !== FALSE;
+			$htmlNode->empty = strpos($token->text, '/') !== FALSE;
 			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
 				$emptyElement = isset(Helpers::$emptyElements[strtolower($htmlNode->name)]);
-				$htmlNode->isEmpty = $htmlNode->isEmpty || $emptyElement;
-				if ($htmlNode->isEmpty) { // auto-correct
+				$htmlNode->empty = $htmlNode->empty || $emptyElement;
+				if ($htmlNode->empty) { // auto-correct
 					$space = substr(strstr($token->text, '>'), 1);
 					if ($emptyElement) {
 						$token->text = ($this->contentType === self::CONTENT_XHTML ? ' />' : '>') . $space;
@@ -402,7 +402,7 @@ class Compiler
 			$this->output .= $token->text . $end;
 		}
 
-		if ($htmlNode->isEmpty) {
+		if ($htmlNode->empty) {
 			$htmlNode->closing = TRUE;
 			if ($htmlNode->macroAttrs) {
 				$this->writeAttrsMacro($end);
@@ -509,7 +509,7 @@ class Compiler
 	public function openMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL)
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
-		if ($node->isEmpty) {
+		if ($node->empty) {
 			$this->writeCode($node->openingCode, $node->replaced, $isRightmost);
 			if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 				$this->htmlNode->attrCode .= $node->attrCode;
@@ -619,7 +619,7 @@ class Compiler
 					};
 				} else {
 					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_INNER)->isEmpty) {
+						if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_INNER)->empty) {
 							throw new CompileException("Unable to use empty macro as n:$attrName.");
 						}
 					});
@@ -644,7 +644,7 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
 				$left[] = function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_TAG)->isEmpty) {
+					if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_TAG)->empty) {
 						throw new CompileException("Unable to use empty macro as n:$attrName.");
 					}
 				};
@@ -664,7 +664,7 @@ class Compiler
 				} else {
 					array_unshift($left, function () use ($name, $attrs, & $innerMarker) {
 						$node = $this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE);
-						if ($node->isEmpty) {
+						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {
 							$this->htmlNode->innerMarker = $innerMarker = '<n:q' . count($this->placeholders) . 'q>';
