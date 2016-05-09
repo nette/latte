@@ -110,3 +110,16 @@ EOD
 word 1 {* comment *} word 2
 EOD
 ));
+
+
+Assert::match(<<<EOD
+	<link>
+	<link>
+EOD
+
+, $latte->renderToString(<<<EOD
+	<link>
+	{* comment *}
+	<link>
+EOD
+));

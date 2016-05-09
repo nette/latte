@@ -376,8 +376,12 @@ class Compiler extends Object
 
 	private function processComment(Token $token)
 	{
-		$isLeftmost = trim(substr($this->output, strrpos("\n$this->output", "\n"))) === '';
-		if (!$isLeftmost) {
+		$leftOfs = ($tmp = strrpos($this->output, "\n")) === FALSE ? 0 : $tmp + 1;
+		$isLeftmost = trim(substr($this->output, $leftOfs)) === '';
+		$isRightmost = substr($token->text, -1) === "\n";
+		if ($isLeftmost && $isRightmost) {
+			$this->output = substr($this->output, 0, $leftOfs);
+		} else {
 			$this->output .= substr($token->text, strlen(rtrim($token->text, "\n")));
 		}
 	}
@@ -453,7 +457,7 @@ class Compiler extends Object
 	private function writeCode($code, & $output, $replaced, $isRightmost, $isLeftmost = NULL)
 	{
 		if ($isRightmost) {
-			$leftOfs = strrpos("\n$output", "\n");
+			$leftOfs = ($tmp = strrpos($output, "\n")) === FALSE ? 0 : $tmp + 1;
 			if ($isLeftmost === NULL) {
 				$isLeftmost = trim(substr($output, $leftOfs)) === '';
 			}
