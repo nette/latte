@@ -10,7 +10,6 @@ namespace Latte;
 
 /**
  * Template.
- * @internal
  */
 class Template
 {
@@ -22,25 +21,25 @@ class Template
 	/** @var string */
 	private $name;
 
-	/** @var string */
+	/** @var string  @internal */
 	protected $contentType = Engine::CONTENT_HTML;
 
-	/** @var array */
+	/** @var array  @internal */
 	protected $params = [];
 
 	/** @var Filters */
 	protected $filters;
 
-	/** @var array [name => method] */
+	/** @var array [name => method]  @internal */
 	protected $blocks = [];
 
-	/** @var string|NULL */
+	/** @var string|NULL  @internal */
 	protected $parentName;
 
-	/** @var Template|NULL */
+	/** @var Template|NULL  @internal */
 	private $referringTemplate;
 
-	/** @var string|NULL */
+	/** @var string|NULL  @internal */
 	private $referenceType;
 
 	/** @var \stdClass local accumulators for intermediate results */
@@ -49,10 +48,10 @@ class Template
 	/** @var \stdClass global accumulators for intermediate results */
 	protected $global;
 
-	/** @var [name => [callbacks]] */
+	/** @var [name => [callbacks]]  @internal */
 	protected $blockQueue = [];
 
-	/** @var [name => type] */
+	/** @var [name => type]  @internal */
 	protected $blockTypes = [];
 
 
@@ -214,6 +213,7 @@ class Template
 
 	/**
 	 * @return array
+	 * @internal
 	 */
 	public function prepare()
 	{
@@ -227,6 +227,7 @@ class Template
 	/**
 	 * Calls block.
 	 * @return void
+	 * @internal
 	 */
 	protected function renderBlock($name, array $params)
 	{
@@ -242,6 +243,7 @@ class Template
 	/**
 	 * Calls parent block.
 	 * @return void
+	 * @internal
 	 */
 	protected function renderBlockParent($name, array $params)
 	{
@@ -255,6 +257,7 @@ class Template
 
 	/**
 	 * @return void
+	 * @internal
 	 */
 	protected function checkBlockContentType($current, $name)
 	{
