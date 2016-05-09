@@ -267,7 +267,7 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 			?>	<li><?php echo LFilters::escapeHtml($counter++) ?> <?php
 			if (is_array($item)) {
 				?> <?php
-				if ('html' !== $this->blockTypes['menu']) {
+				if (isset($this->blockTypes['menu']) && $this->blockTypes['menu'] !== 'html') {
 					trigger_error('Incompatible context for including block menu.', E_USER_WARNING);
 				}
 				call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars()) ?> <?php

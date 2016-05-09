@@ -31,7 +31,7 @@ $template = <<<'EOD'
 
 {include static var => 30}
 
-{include #$name var => 40}
+{include #$name . '', var => 40}
 
 {block word$name}{/block}
 {block "word$name"}{/block}

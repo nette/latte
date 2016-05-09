@@ -103,18 +103,24 @@ class BlockMacros extends MacroSet
 			$destination = $item->data->name;
 		}
 
-		$name = strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination;
-		if (isset($this->namedBlocks[$destination]) && !$parent) {
-			$cmd = "call_user_func(reset(\$this->blockQueue[$name]), %node.array? + get_defined_vars())";
+		$cmd = '';
+		if (strpos($destination, '$') === FALSE) {
+			$phpName = var_export($destination, TRUE);
 		} else {
-			$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . "($name, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')'; //  + ["_b" => $_bl]
+			$phpName = '$_tmp';
+			$cmd .= "\$_tmp = $destination;";
 		}
 
-		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $found);
-		if (!$found) {
-			$cmd = "if (" . var_export($this->exportBlockType($node), TRUE) . " !== \$this->blockTypes[$name]) { "
-				. "trigger_error('Incompatible context for including block $destination.', E_USER_WARNING); }\n"
-				. $cmd;
+		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
+		if (!$noCheck) {
+			$cmd .= "if (isset(\$this->blockTypes[$phpName]) && \$this->blockTypes[$phpName] !== " . var_export($this->exportBlockType($node), TRUE) . ") { "
+				. "trigger_error('Incompatible context for including block " . addcslashes($destination, "'") . ".', E_USER_WARNING); }\n";
+		}
+
+		if (isset($this->namedBlocks[$destination]) && !$parent) {
+			$cmd .= "call_user_func(reset(\$this->blockQueue[$phpName]), %node.array? + get_defined_vars())";
+		} else {
+			$cmd .= '$this->renderBlock' . ($parent ? 'Parent' : '') . "($phpName, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')'; //  + ["_b" => $_bl]
 		}
 
 		if ($node->modifiers) {

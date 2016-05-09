@@ -38,22 +38,23 @@ class Template%a% extends Latte\Template
 		$iterator = end($this->local->its) ?>
 
 <?php
-		if ('html' !== $this->blockTypes['dynamic']) {
+		if (isset($this->blockTypes['dynamic']) && $this->blockTypes['dynamic'] !== 'html') {
 			trigger_error('Incompatible context for including block dynamic.', E_USER_WARNING);
 		}
 		$this->renderBlock('dynamic', ['var' => 20] + $this->params) ?>
 
 <?php
-		if ('html' !== $this->blockTypes['static']) {
+		if (isset($this->blockTypes['static']) && $this->blockTypes['static'] !== 'html') {
 			trigger_error('Incompatible context for including block static.', E_USER_WARNING);
 		}
 		call_user_func(reset($this->blockQueue['static']), ['var' => 30] + get_defined_vars()) ?>
 
 <?php
-		if ('html' !== $this->blockTypes[$name]) {
-			trigger_error('Incompatible context for including block $name.', E_USER_WARNING);
+		$_tmp = $name . '';
+		if (isset($this->blockTypes[$_tmp]) && $this->blockTypes[$_tmp] !== 'html') {
+			trigger_error('Incompatible context for including block $name . \'\'.', E_USER_WARNING);
 		}
-		$this->renderBlock($name, ['var' => 40] + $this->params) ?>
+		$this->renderBlock($_tmp, ['var' => 40] + $this->params) ?>
 
 <?php
 		$this->checkBlockContentType('html', "word$name");
