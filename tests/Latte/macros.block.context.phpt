@@ -151,6 +151,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context2' => '{extends ical.latte}',
 	'context3' => '{includeblock ical.latte}',
 	'context4' => '{contentType calendar} {include ical.latte}',
+	'context5' => '<p>{include ical.latte|nocheck}</p>',
 ]));
 
 Assert::error(function () use ($latte) {
@@ -170,4 +171,8 @@ Assert::error(function () use ($latte) {
 
 Assert::noError(function () use ($latte) {
 	$latte->renderToString('context4');
+});
+
+Assert::noError(function () use ($latte) {
+	$latte->renderToString('context5');
 });
