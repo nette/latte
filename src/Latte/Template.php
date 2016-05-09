@@ -100,6 +100,19 @@ class Template
 
 
 	/**
+	 * Returns parameter.
+	 * @return mixed
+	 */
+	public function getParameter($name)
+	{
+		if (!array_key_exists($name, $this->params)) {
+			trigger_error("The variable '$name' does not exist in template.", E_USER_NOTICE);
+		}
+		return $this->params[$name];
+	}
+
+
+	/**
 	 * @return string
 	 */
 	public function getContentType()
@@ -276,7 +289,7 @@ class Template
 	/** @deprecated */
 	public function __set($name, $value)
 	{
-		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		trigger_error("Access to parameters via \$template->$name is deprecated", E_USER_DEPRECATED);
 		$this->params[$name] = $value;
 	}
 
@@ -284,7 +297,7 @@ class Template
 	/** @deprecated */
 	public function &__get($name)
 	{
-		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->getParameter('$name')", E_USER_DEPRECATED);
 		if (!array_key_exists($name, $this->params)) {
 			trigger_error("The variable '$name' does not exist in template.");
 		}
@@ -295,7 +308,7 @@ class Template
 	/** @deprecated */
 	public function __isset($name)
 	{
-		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		trigger_error("Access to parameters via \$template->$name is deprecated, use isset(\$this->getParameters()['$name'])", E_USER_DEPRECATED);
 		return isset($this->params[$name]);
 	}
 
@@ -303,7 +316,7 @@ class Template
 	/** @deprecated */
 	public function __unset($name)
 	{
-		trigger_error("Access to parameters via \$template->$name is deprecated, use \$this->params['$name']", E_USER_DEPRECATED);
+		trigger_error("Access to parameters via \$template->$name is deprecated.", E_USER_DEPRECATED);
 		unset($this->params[$name]);
 	}
 
