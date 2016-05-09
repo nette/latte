@@ -56,7 +56,7 @@ test(function () { // short ternary operators
 	Assert::same("(\$first ? 'first' : NULL), \$var ? 'foo' : 'bar', \$var ? 'foo' : NULL",  formatArgs('($first ? first), $var ? foo : bar, $var ? foo'));
 	Assert::same("('a' ? 'b' : NULL) ? ('c' ? 'd' : NULL) : NULL",  formatArgs('(a ? b) ? (c ? d)'));
 	Assert::same("fce() ? 'a' : NULL, fce() ? 'b' : NULL",  formatArgs('fce() ? a, fce() ? b'));
-	Assert::same("fce() ?? 'a'",  formatArgs('fce() ?? a')); //null coalesce is ignored
+	Assert::same("fce() ?? 'a'",  formatArgs('fce() ?? a')); // NULL coalesce is ignored
 });
 
 
@@ -68,7 +68,7 @@ test(function () { // special
 	Assert::error(function () {
 		formatArgs('NOTCONST');
 	}, E_USER_DEPRECATED, "Replace literal NOTCONST with constant('NOTCONST')");
-	Assert::same("'symbol' => NOTCONST",  @formatArgs('symbol => NOTCONST'));
+	Assert::same("'symbol' => NOTCONST",  @formatArgs('symbol => NOTCONST')); // @ not contant
 	Assert::same("'symbol' => M_PI, NAN, INF ",  formatArgs('symbol => M_PI, NAN, INF '));
 	Assert::same("'symbol' => Class::CONST, ",  formatArgs('symbol => Class::CONST, '));
 	Assert::same("'symbol' => Class::method(), ",  formatArgs('symbol => Class::method(), '));

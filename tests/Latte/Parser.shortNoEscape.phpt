@@ -15,7 +15,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 
-Assert::match('<>', @$latte->renderToString('{!="<>"}'));
+Assert::match('<>', @$latte->renderToString('{!="<>"}')); // @ short-no-escape is deprecated
 
 Assert::match('&lt;&gt;', $latte->renderToString('{="<>"}'));
 

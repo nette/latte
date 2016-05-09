@@ -51,7 +51,7 @@ class Compiler
 	/** @var int */
 	private $tagOffset;
 
-	/** @var array of [name => [body, params]] */
+	/** @var array of [name => [body, arguments]] */
 	private $methods = [];
 
 	/** @var array of [name => serialized value] */
@@ -177,7 +177,7 @@ class Compiler
 			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';
 		}
 		foreach (array_filter($this->methods) as $name => $method) {
-			$members[] = "\n\tfunction $name($method[params])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
+			$members[] = "\n\tfunction $name($method[arguments])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
 		return "<?php\n"
@@ -251,9 +251,9 @@ class Compiler
 	 * @return void
 	 * @internal
 	 */
-	public function addMethod($name, $body, $params = '')
+	public function addMethod($name, $body, $arguments = '')
 	{
-		$this->methods[$name] = ['body' => trim($body), 'params' => $params];
+		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments];
 	}
 
 
