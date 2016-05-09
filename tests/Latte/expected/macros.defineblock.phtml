@@ -23,14 +23,14 @@ class Template%a% extends Latte\Template
 
 <?php
 		if (isset($this->blockTypes['test']) && $this->blockTypes['test'] !== 'html') {
-			trigger_error('Incompatible context for including block test.', E_USER_WARNING);
+			trigger_error('Including block test with content type ' . strtoupper($this->blockTypes['test']) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
 		call_user_func(reset($this->blockQueue['test']), ['var' => 20] + get_defined_vars()) ?>
 
 
 <?php
 		if (isset($this->blockTypes['testargs']) && $this->blockTypes['testargs'] !== 'html') {
-			trigger_error('Incompatible context for including block testargs.', E_USER_WARNING);
+			trigger_error('Including block testargs with content type ' . strtoupper($this->blockTypes['testargs']) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
 		call_user_func(reset($this->blockQueue['testargs']), [1] + get_defined_vars());
 	}

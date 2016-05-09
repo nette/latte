@@ -270,7 +270,7 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 			if (is_array($item)) {
 				?> <?php
 				if (isset($this->blockTypes['menu']) && $this->blockTypes['menu'] !== 'xhtml') {
-					trigger_error('Incompatible context for including block menu.', E_USER_WARNING);
+					trigger_error('Including block menu with content type ' . strtoupper($this->blockTypes['menu']) . ' into incompatible type XHTML.', E_USER_WARNING);
 				}
 				call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars()) ?> <?php
 			}

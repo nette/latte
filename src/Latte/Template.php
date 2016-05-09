@@ -194,7 +194,7 @@ class Template
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
 		if ($contentType && $contentType !== $child->contentType) {
-			trigger_error("Incompatible context for including $name.", E_USER_WARNING);
+			trigger_error("Including '$name' with content type " . strtoupper($child->contentType) . ' into incompatible type ' . strtoupper($contentType) . '.', E_USER_WARNING);
 		}
 		$child->referringTemplate = $this;
 		$child->referenceType = $referenceType;
@@ -261,10 +261,11 @@ class Template
 	 */
 	protected function checkBlockContentType($current, $name)
 	{
-		if (!isset($this->blockTypes[$name])) {
-			$this->blockTypes[$name] = $current;
-		} elseif ($this->blockTypes[$name] !== $current) {
-			trigger_error('Overridden block ' . $name . ' in an incompatible context.', E_USER_WARNING);
+		$expected = & $this->blockTypes[$name];
+		if ($expected === NULL) {
+			$expected = $current;
+		} elseif ($expected !== $current) {
+			trigger_error("Overridden block $name with content type " . strtoupper($expected) . ' by incompatible type ' . strtoupper($current) . '.', E_USER_WARNING);
 		}
 	}
 

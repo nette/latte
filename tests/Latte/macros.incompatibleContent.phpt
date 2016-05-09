@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: block context
+ * Test: Latte\Engine: block types compatibility
  */
 
 use Tester\Assert;
@@ -16,11 +16,11 @@ test(function () {
 
 	Assert::noError(function () use ($latte) {
 		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}{/block}', ['value' => 'b"ar']);
-	}, E_USER_WARNING, 'Incompatible context for including block foo.');
+	});
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']);
-	}, E_USER_WARNING, 'Incompatible context for including block foo.');
+	}, E_USER_WARNING, 'Including block foo with content type HTML into incompatible type HTMLTAG.');
 
 	Assert::same('<meta content=b&quot;ar>b&quot;ar',
 		$latte->renderToString('<meta content={include foo|nocheck}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
@@ -97,19 +97,19 @@ test(function () {
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context3', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context4', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context5', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context6', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo in an incompatible context.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
 });
 
 
@@ -129,7 +129,7 @@ test(function () {
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('<div>{include style}</div> <STYLE n:inner-block=style>...</STYLE>');
-	}, E_USER_WARNING, 'Incompatible context for including block style.');
+	}, E_USER_WARNING, 'Including block style with content type HTMLCSS into incompatible type HTML.');
 
 	Assert::match(
 		"<div><script>...</script></div> <script>...</script>",
@@ -138,7 +138,7 @@ test(function () {
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('<div>{include script}</div> <script n:inner-block=script>...</script>');
-	}, E_USER_WARNING, 'Incompatible context for including block script.');
+	}, E_USER_WARNING, 'Including block script with content type HTMLJS into incompatible type HTML.');
 
 });
 
@@ -156,17 +156,17 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1');
-}, E_USER_WARNING, 'Incompatible context for including %a%.');
+}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context2');
-}, E_USER_WARNING, 'Incompatible context for including %a%.');
+}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');
 }, [
 	[E_USER_DEPRECATED, '%a%'],
-	[E_USER_WARNING, 'Incompatible context for including %a%.'],
+	[E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML."],
 ]);
 
 Assert::noError(function () use ($latte) {

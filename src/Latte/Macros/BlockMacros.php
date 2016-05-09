@@ -113,8 +113,9 @@ class BlockMacros extends MacroSet
 
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
 		if (!$noCheck) {
-			$cmd .= "if (isset(\$this->blockTypes[$phpName]) && \$this->blockTypes[$phpName] !== " . var_export($this->exportBlockType($node), TRUE) . ") { "
-				. "trigger_error('Incompatible context for including block " . addcslashes($destination, "'") . ".', E_USER_WARNING); }\n";
+			$type = $this->exportBlockType($node);
+			$cmd .= "if (isset(\$this->blockTypes[$phpName]) && \$this->blockTypes[$phpName] !== '$type') { "
+				. "trigger_error('Including block " . addcslashes($destination, "'") . " with content type ' . strtoupper(\$this->blockTypes[$phpName]) . ' into incompatible type " . strtoupper($type) . ".', E_USER_WARNING); }\n";
 		}
 
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
