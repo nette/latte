@@ -78,17 +78,9 @@ class Engine
 	 */
 	public function renderToString($name, array $params = [], $block = NULL)
 	{
-		ob_start(function () {});
-		try {
-			$this->render($name, $params, $block);
-		} catch (\Throwable $e) {
-			ob_end_clean();
-			throw $e;
-		} catch (\Exception $e) {
-			ob_end_clean();
-			throw $e;
-		}
-		return ob_get_clean();
+		$params += ['_renderblock' => $block];
+		return $this->createTemplate($name, $params)
+			->renderToString();
 	}
 
 

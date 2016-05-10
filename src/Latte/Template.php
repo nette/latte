@@ -212,6 +212,26 @@ class Template
 
 
 	/**
+	 * Renders template to string.
+	 * @return string
+	 */
+	public function renderToString()
+	{
+		ob_start(function () {});
+		try {
+			$this->render();
+		} catch (\Throwable $e) {
+			ob_end_clean();
+			throw $e;
+		} catch (\Exception $e) {
+			ob_end_clean();
+			throw $e;
+		}
+		return ob_get_clean();
+	}
+
+
+	/**
 	 * @return array
 	 * @internal
 	 */
