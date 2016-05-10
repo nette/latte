@@ -234,6 +234,15 @@ class Template
 	 */
 	protected function renderToContentType($type)
 	{
+		if ($this->contentType && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
+			if ($type === Engine::CONTENT_HTML || $type === 'htmlattr') {
+				echo Runtime\Filters::escapeHtml($this->renderToString());
+				return;
+			} elseif ($type === Engine::CONTENT_HTML . $this->contentType) {
+				echo Runtime\Filters::escapeRawText($this->renderToString(), $this->contentType);
+				return;
+			}
+		}
 		if ($type && $type !== $this->contentType) {
 			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
 		}

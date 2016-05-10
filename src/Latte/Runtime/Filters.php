@@ -157,6 +157,18 @@ class Filters
 
 
 	/**
+	 * Escapes CSS/JS for usage in <script> / <style>..
+	 * @param  string
+	 * @return string
+	 */
+	public static function escapeRawText($s, $type)
+	{
+		$tag = $type === Latte\Engine::CONTENT_JS ? 'script' : 'style';
+		return str_ireplace('</' . $tag, '<\/' . $tag, $s);
+	}
+
+
+	/**
 	 * Sanitizes string for use inside href attribute.
 	 * @param  string
 	 * @return string
