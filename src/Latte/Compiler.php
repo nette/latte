@@ -172,6 +172,9 @@ class Compiler
 		if ($prepare) {
 			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php return get_defined_vars();");
 		}
+		if ($this->contentType !== self::CONTENT_HTML) {
+			$this->addProperty('contentType', $this->contentType);
+		}
 
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';

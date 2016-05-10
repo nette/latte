@@ -85,19 +85,6 @@ class CoreMacros extends MacroSet
 
 
 	/**
-	 * Initializes before template parsing.
-	 * @return void
-	 */
-	public function initialize()
-	{
-		$compiler = $this->getCompiler();
-		if ($compiler->getContentType() !== $compiler::CONTENT_HTML) {
-			$compiler->addProperty('contentType', $compiler->getContentType());
-		}
-	}
-
-
-	/**
 	 * Finishes template parsing.
 	 * @return array(prolog, epilog)
 	 */
@@ -446,11 +433,7 @@ class CoreMacros extends MacroSet
 		} else {
 			$type = $compiler::CONTENT_TEXT;
 		}
-
 		$compiler->setContentType($type);
-		if (!$node->parentNode && !$node->htmlNode) {
-			$compiler->addProperty('contentType', $type);
-		}
 
 		// temporary solution
 		if (strpos($node->args, '/')) {
