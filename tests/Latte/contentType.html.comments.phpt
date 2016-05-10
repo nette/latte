@@ -16,7 +16,7 @@ $params['dash'] = '-';
 $params['basePath'] = '/www';
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.comments.html.html',
+	__DIR__ . '/expected/contentType.html.comments.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/comments.latte',
 		$params

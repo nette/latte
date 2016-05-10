@@ -26,11 +26,11 @@ $params['xss'] = 'some&<>"\'/chars';
 $params['mxss'] = '`mxss';
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.xml.phtml',
+	__DIR__ . '/expected/contentType.xml.phtml',
 	$latte->compile(__DIR__ . '/templates/xml.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.xml.html',
+	__DIR__ . '/expected/contentType.xml.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/xml.latte',
 		$params

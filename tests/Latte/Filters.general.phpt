@@ -67,11 +67,11 @@ $params['hello'] = 'Hello World';
 $params['date'] = strtotime('2008-01-02');
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.filters.phtml',
+	__DIR__ . '/expected/filters.general.phtml',
 	$latte->compile(__DIR__ . '/templates/filters.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.filters.html',
+	__DIR__ . '/expected/filters.general.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/filters.latte',
 		$params

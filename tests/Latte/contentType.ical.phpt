@@ -34,10 +34,10 @@ END:VCALENDAR
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.ical.phtml',
+	__DIR__ . '/expected/contentType.ical.phtml',
 	$latte->compile($template)
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.ical.html',
+	__DIR__ . '/expected/contentType.ical.html',
 	$latte->renderToString($template)
 );

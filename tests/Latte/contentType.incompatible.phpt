@@ -176,3 +176,35 @@ Assert::noError(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->renderToString('context5');
 });
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'js.latte' => '{contentType javascript} </script>',
+
+	'context1' => '<p>{include js.latte}</p>',
+	'context2' => '<p title="{include js.latte}"></p>',
+	'context3' => '<p title={include js.latte}></p>',
+	'context4' => '<script>{include js.latte}</script>',
+	'context5' => '<style>{include js.latte}</style>',
+]));
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context1');
+}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTML.");
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context2');
+}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLATTR.");
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context3');
+}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLTAG.");
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context4');
+}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLJS.");
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context5');
+}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLCSS.");
