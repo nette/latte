@@ -255,6 +255,9 @@ class BlockMacros extends MacroSet
 
 		if ($node->name === 'snippet') {
 			if ($node->prefix) {
+				if (isset($node->htmlNode->macroAttrs['foreach'])) {
+					trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
+				}
 				$node->attrCode = $writer->write('<?php echo \' id="\' . $_control->getSnippetId(%var) . \'"\' ?>', (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
