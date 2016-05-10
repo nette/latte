@@ -161,6 +161,7 @@ class PhpWriter
 		$tokens = $this->removeCommentsFilter($tokens);
 		$tokens = $this->shortTernaryFilter($tokens);
 		$tokens = $this->inlineModifierFilter($tokens);
+		$tokens = $this->inOperatorFilter($tokens);
 		return $tokens;
 	}
 
@@ -277,6 +278,42 @@ class PhpWriter
 			);
 		}
 		return $res;
+	}
+
+
+	/**
+	 * Syntax $entry in [item1, item2].
+	 * @return MacroTokens
+	 */
+	public function inOperatorFilter(MacroTokens $tokens)
+	{
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent(MacroTokens::T_VARIABLE)) {
+				$start = $tokens->position;
+				$depth = $tokens->depth;
+				$expr = $arr = [];
+
+				$expr[] = $tokens->currentToken();
+				while ($tokens->isNext(MacroTokens::T_VARIABLE, MacroTokens::T_SYMBOL, MacroTokens::T_NUMBER, MacroTokens::T_STRING, '[', ']', '(', ')', '->')
+					&& !$tokens->isNext('in')) {
+					$expr[] = $tokens->nextToken();
+				}
+
+				if ($depth === $tokens->depth && $tokens->nextValue('in') && ($arr[] = $tokens->nextToken('['))) {
+					while ($tokens->isNext()) {
+						$arr[] = $tokens->nextToken();
+						if ($tokens->isCurrent(']') && $tokens->depth === $depth) {
+							$new = array_merge($tokens->parse('in_array('), $expr, $tokens->parse(', '), $arr, $tokens->parse(', TRUE)'));
+							array_splice($tokens->tokens, $start, $tokens->position - $start + 1, $new);
+							$tokens->position = $start + count($new) - 1;
+							continue 2;
+						}
+					}
+				}
+				$tokens->position = $start;
+			}
+		}
+		return $tokens->reset();
 	}
 
 

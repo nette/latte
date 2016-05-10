@@ -119,3 +119,11 @@ test(function () { // inline modifiers
 	Assert::same('call_user_func($this->filters->escape, @)',  formatArgs('(@|escape)'));
 	Assert::same('LFilters::safeUrl(@)',  formatArgs('(@|safeurl)'));
 });
+
+
+test(function () { // in operator
+	Assert::same("in_array(\$a, ['a', 'b'], TRUE), 1",  formatArgs('$a in [a, b], 1'));
+	Assert::same('$a, in_array($b->func(), [1, 2], TRUE)',  formatArgs('$a, $b->func() in [1, 2]'));
+	Assert::same('$a, in_array($b[1], [1, 2], TRUE)',  formatArgs('$a, $b[1] in [1, 2]'));
+	Assert::same('in_array($b, [1, [2], 3], TRUE)',  formatArgs('$b in [1, [2], 3]'));
+});
