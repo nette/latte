@@ -234,7 +234,10 @@ class Template
 	 */
 	protected function renderToContentType($type)
 	{
-		if ($type && $type !== $this->contentType) {
+		if ($type === "html$this->contentType" && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
+			echo Runtime\Filters::escapeHtmlRawText($this->renderToString());
+			return;
+		} elseif ($type && $type !== $this->contentType) {
 			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
 		}
 		$this->render();

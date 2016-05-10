@@ -201,9 +201,7 @@ Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');
 }, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLTAG.");
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('context4');
-}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLJS.");
+Assert::same('<script> <\/script></script>', $latte->renderToString('context4'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context5');

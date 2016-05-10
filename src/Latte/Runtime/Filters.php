@@ -157,6 +157,17 @@ class Filters
 
 
 	/**
+	 * Escapes CSS/JS for usage in <script> and <style>..
+	 * @param  string
+	 * @return string
+	 */
+	public static function escapeHtmlRawText($s)
+	{
+		return preg_replace('#</(script|style)#i', '<\\/$1', $s);
+	}
+
+
+	/**
 	 * Sanitizes string for use inside href attribute.
 	 * @param  string
 	 * @return string
