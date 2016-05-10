@@ -24,10 +24,10 @@ class MyMacros extends Latte\Macros\MacroSet
 $latte = new Latte\Engine;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.use.phtml',
+	__DIR__ . '/expected/CoreMacros.use.phtml',
 	$latte->compile(__DIR__ . '/templates/use.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.use.html',
+	__DIR__ . '/expected/CoreMacros.use.html',
 	$latte->renderToString(__DIR__ . '/templates/use.latte')
 );

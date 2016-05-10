@@ -13,6 +13,6 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.recursive.phtml',
+	__DIR__ . '/expected/Compiler.recursive.macro.phtml',
 	$latte->compile(__DIR__ . '/templates/recursive.latte')
 );

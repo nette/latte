@@ -13,10 +13,10 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.defineblock.phtml',
+	__DIR__ . '/expected/BlockMacros.defineblock.phtml',
 	$latte->compile(__DIR__ . '/templates/defineblock.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.defineblock.html',
+	__DIR__ . '/expected/BlockMacros.defineblock.html',
 	$latte->renderToString(__DIR__ . '/templates/defineblock.latte')
 );

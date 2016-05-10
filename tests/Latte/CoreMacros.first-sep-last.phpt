@@ -13,11 +13,11 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.first-sep-last.phtml',
+	__DIR__ . '/expected/CoreMacros.first-sep-last.phtml',
 	$latte->compile(__DIR__ . '/templates/first-sep-last.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.first-sep-last.html',
+	__DIR__ . '/expected/CoreMacros.first-sep-last.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/first-sep-last.latte',
 		array('people' => array('John', 'Mary', 'Paul'))

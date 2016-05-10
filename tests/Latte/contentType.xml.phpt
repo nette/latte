@@ -24,13 +24,13 @@ $params['comment'] = 'test -- comment';
 $params['el'] = new Html("<div title='1/2\"'></div>");
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.xml.phtml',
-	$latte->compile(__DIR__ . '/templates/xml.latte')
+	__DIR__ . '/expected/contentType.xml.phtml',
+	$latte->compile(__DIR__ . '/templates/contentType.xml.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.xml.html',
+	__DIR__ . '/expected/contentType.xml.html',
 	$latte->renderToString(
-		__DIR__ . '/templates/xml.latte',
+		__DIR__ . '/templates/contentType.xml.latte',
 		$params
 	)
 );
