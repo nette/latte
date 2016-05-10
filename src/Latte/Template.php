@@ -164,7 +164,7 @@ class Template
 			return TRUE;
 
 		} elseif ($parent) { // extends
-			$this->createTemplate($parent, $params, 'extends', $this->contentType)->render();
+			$this->createTemplate($parent, $params, 'extends')->renderToContentType($this->contentType);
 			return TRUE;
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
@@ -189,13 +189,10 @@ class Template
 	 * @return Template
 	 * @internal
 	 */
-	protected function createTemplate($name, array $params, $referenceType, $contentType = NULL)
+	protected function createTemplate($name, array $params, $referenceType)
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
-		if ($contentType && $contentType !== $child->contentType) {
-			trigger_error("Including '$name' with content type " . strtoupper($child->contentType) . ' into incompatible type ' . strtoupper($contentType) . '.', E_USER_WARNING);
-		}
 		$child->referringTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
@@ -228,6 +225,19 @@ class Template
 			throw $e;
 		}
 		return ob_get_clean();
+	}
+
+
+	/**
+	 * @return void
+	 * @internal
+	 */
+	protected function renderToContentType($type)
+	{
+		if ($type && $type !== $this->contentType) {
+			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
+		}
+		$this->render();
 	}
 
 
