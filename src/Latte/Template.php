@@ -237,6 +237,9 @@ class Template
 		if ($type === "html$this->contentType" && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
 			echo Runtime\Filters::escapeHtmlRawText($this->renderToString());
 			return;
+		} elseif ($this->contentType !== Engine::CONTENT_HTML && in_array($type, [Engine::CONTENT_HTML, 'htmlattr'], TRUE)) {
+			echo Runtime\Filters::escapeHtml($this->renderToString());
+			return;
 		} elseif ($type && $type !== $this->contentType) {
 			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
 		}

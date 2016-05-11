@@ -145,29 +145,23 @@ test(function () {
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'ical.latte' => '{contentType text/calendar; charset=utf-8}',
+	'ical.latte' => '{contentType text/calendar; charset=utf-8} <>',
 
 	'context1' => '<p>{include ical.latte}</p>',
 	'context2' => '{extends ical.latte}',
-	'context3' => '{includeblock ical.latte}',
+	'context3' => 'x{includeblock ical.latte}',
 	'context4' => '{contentType calendar} {include ical.latte}',
 	'context5' => '<p>{include ical.latte|nocheck}</p>',
+	'context6' => '{contentType javascript} {include ical.latte}',
 ]));
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('context1');
-}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
+Assert::same('<p> &lt;&gt;</p>', $latte->renderToString('context1'));
 
 Assert::noError(function () use ($latte) {
 	$latte->renderToString('context2');
 });
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('context3');
-}, [
-	[E_USER_DEPRECATED, '%a%'],
-	[E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML."],
-]);
+Assert::same('x &lt;&gt;', $latte->renderToString('context3'));
 
 Assert::noError(function () use ($latte) {
 	$latte->renderToString('context4');
@@ -176,6 +170,11 @@ Assert::noError(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->renderToString('context5');
 });
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context6');
+}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type JS.");
+
 
 
 $latte = new Latte\Engine;
@@ -189,13 +188,8 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context5' => '<style>{include js.latte}</style>',
 ]));
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('context1');
-}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTML.");
-
-Assert::error(function () use ($latte) {
-	$latte->renderToString('context2');
-}, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLATTR.");
+Assert::same('<p> &lt;/script&gt;</p>', $latte->renderToString('context1'));
+Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context2'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');
