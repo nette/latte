@@ -417,7 +417,7 @@ class PhpWriter
 						$res->prepend('LFilters::safeUrl(');
 						$inside = TRUE;
 					} else {
-						$res->prepend('call_user_func($this->filters->' . $tokens->currentValue() . ', ');
+						$res->prepend('call_user_func($this->filters->' . strtolower($tokens->currentValue()) . ', ');
 						$inside = TRUE;
 					}
 				} else {
