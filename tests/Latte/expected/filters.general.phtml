@@ -11,7 +11,7 @@ class Template%a% extends Latte\Template
 	<li>lower: <?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
 	<li>upper: <?php echo LFilters::escapeHtml(call_user_func($this->filters->upper, $hello)) ?></li>
 	<li>lower & capitalize: <?php echo LFilters::escapeHtml(call_user_func($this->filters->capitalize, call_user_func($this->filters->lower, $hello))) ?></li>
-	<li>nl2br: <?php echo LFilters::escapeHtml(call_user_func($this->filters->nl2br, $hello)) ?></li>
+	<li>breaklines: <?php echo LFilters::escapeHtml(call_user_func($this->filters->breaklines, $hello)) ?></li>
 	<li>truncate: <?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, call_user_func($this->filters->truncate, $hello, "10 "))) ?></li>
 	<li>date: <?php echo LFilters::escapeHtml(call_user_func($this->filters->date, $date, '%d.%m.%Y %H:%M:%S')) ?></li>
 	<li>translated: <?php echo LFilters::escapeHtml(call_user_func($this->filters->truncate, call_user_func($this->filters->translate, $hello), 3)) ?></li>
