@@ -727,15 +727,16 @@ class Compiler
 		}
 
 		if (preg_match('#\|(no)?safeurl(?!\w)#i', $modifiers, $m)) {
-			$hint = $m[1] ? 'nocheck' : 'checkurl';
-			trigger_error("Modifier |$m[1]safeurl is deprecated, please replace it with |$hint.", E_USER_DEPRECATED);
+			$hint = $m[1] ? '|nocheck' : '|checkurl';
+			$modifiers = str_replace($m[0], $hint, $modifiers);
+			trigger_error("Modifier $m[0] is deprecated, please replace it with $hint.", E_USER_DEPRECATED);
 		}
 
 		if (strpbrk($name, '=~%^&_')) {
 			if ($this->context[1] === self::CONTENT_URL) {
 				$modifiers = preg_replace('#\|(nosafeurl|nocheck)\s?(?=\||\z)#i', '', $modifiers, -1, $found);
 				if (!$found && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
-					$modifiers .= '|safeurl';
+					$modifiers .= '|checkurl';
 				}
 			}
 

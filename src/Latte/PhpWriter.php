@@ -413,7 +413,7 @@ class PhpWriter
 					if ($this->compiler && $tokens->isCurrent('escape')) {
 						$res = $this->escapeFilter($res);
 						$tokens->nextToken('|');
-					} elseif (!strcasecmp($tokens->currentValue(), 'safeurl')) {
+					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
 						$res->prepend('LFilters::safeUrl(');
 						$inside = TRUE;
 					} else {
