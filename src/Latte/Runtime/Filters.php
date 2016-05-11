@@ -11,7 +11,7 @@ use Latte;
 
 
 /**
- * Template filters.
+ * Template filters. Uses UTF-8 only.
  * @internal
  */
 class Filters
@@ -25,8 +25,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML.
-	 * @param  mixed  UTF-8 encoding
-	 * @return string
+	 * @param  mixed  plain text or IHtmlString
+	 * @return string HTML
 	 */
 	public static function escapeHtml($s)
 	{
@@ -38,8 +38,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML attribute value.
-	 * @param  mixed  UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string HTML
 	 */
 	public static function escapeHtmlAttr($s)
 	{
@@ -53,8 +53,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML attribute name.
-	 * @param  mixed  UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string HTML
 	 */
 	public static function escapeHtmlAttrUnquoted($s)
 	{
@@ -67,8 +67,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML comments.
-	 * @param  string  UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string HTML
 	 */
 	public static function escapeHtmlComment($s)
 	{
@@ -86,8 +86,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside XML 1.0 template.
-	 * @param  string UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string XML
 	 */
 	public static function escapeXml($s)
 	{
@@ -100,8 +100,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside XML attribute name.
-	 * @param  mixed  UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string XML
 	 */
 	public static function escapeXmlAttrUnquoted($s)
 	{
@@ -114,8 +114,8 @@ class Filters
 
 	/**
 	 * Escapes string for use inside CSS template.
-	 * @param  string UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string CSS
 	 */
 	public static function escapeCss($s)
 	{
@@ -126,8 +126,8 @@ class Filters
 
 	/**
 	 * Escapes variables for use inside <script>.
-	 * @param  mixed  UTF-8 encoding
-	 * @return string
+	 * @param  mixed  plain text
+	 * @return string JSON
 	 */
 	public static function escapeJs($s)
 	{
@@ -146,7 +146,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside iCal template.
-	 * @param  mixed  UTF-8 encoding
+	 * @param  string plain text
 	 * @return string
 	 */
 	public static function escapeICal($s)
@@ -158,8 +158,8 @@ class Filters
 
 	/**
 	 * Escapes CSS/JS for usage in <script> and <style>..
-	 * @param  string
-	 * @return string
+	 * @param  string CSS/JS
+	 * @return string HTML RAWTEXT
 	 */
 	public static function escapeHtmlRawText($s)
 	{
@@ -169,8 +169,8 @@ class Filters
 
 	/**
 	 * Sanitizes string for use inside href attribute.
-	 * @param  string
-	 * @return string
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function safeUrl($s)
 	{
@@ -180,8 +180,8 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string UTF-8 encoding or 8-bit
-	 * @return string
+	 * @param  string HTML
+	 * @return string HTML
 	 */
 	public static function strip($s)
 	{
@@ -197,10 +197,10 @@ class Filters
 
 	/**
 	 * Indents the HTML content from the left.
-	 * @param  string UTF-8 encoding or 8-bit
+	 * @param  string HTML
 	 * @param  int
 	 * @param  string
-	 * @return string
+	 * @return string HTML
 	 */
 	public static function indent($s, $level = 1, $chars = "\t")
 	{
@@ -222,7 +222,7 @@ class Filters
 	 * Date/time formatting.
 	 * @param  string|int|\DateTime|\DateTimeInterface|\DateInterval
 	 * @param  string
-	 * @return string
+	 * @return string plain text
 	 */
 	public static function date($time, $format = NULL)
 	{
@@ -254,7 +254,7 @@ class Filters
 	 * Converts to human readable file size.
 	 * @param  int
 	 * @param  int
-	 * @return string
+	 * @return string plain text
 	 */
 	public static function bytes($bytes, $precision = 2)
 	{
@@ -301,9 +301,9 @@ class Filters
 
 	/**
 	 * The data: URI generator.
+	 * @param  string plain text
 	 * @param  string
-	 * @param  string
-	 * @return string
+	 * @return string plain text
 	 */
 	public static function dataStream($data, $type = NULL)
 	{
@@ -326,7 +326,7 @@ class Filters
 
 
 	/**
-	 * @param  string
+	 * @param  string plain text
 	 * @return Html
 	 */
 	public static function breaklines($s)
@@ -336,7 +336,7 @@ class Filters
 
 
 	/**
-	 * Returns a part of UTF-8 string.
+	 * Returns a part of string.
 	 * @param  string
 	 * @param  int
 	 * @param  int
@@ -356,10 +356,10 @@ class Filters
 
 	/**
 	 * Truncates string to maximal length.
-	 * @param  string  UTF-8 encoding
+	 * @param  string plain text
 	 * @param  int
-	 * @param  string  UTF-8 encoding
-	 * @return string
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function truncate($s, $maxLen, $append = "\xE2\x80\xA6")
 	{
@@ -381,7 +381,8 @@ class Filters
 
 	/**
 	 * Convert to lower case.
-	 * @return string
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function lower($s)
 	{
@@ -391,7 +392,8 @@ class Filters
 
 	/**
 	 * Convert to upper case.
-	 * @return string
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function upper($s)
 	{
@@ -401,7 +403,8 @@ class Filters
 
 	/**
 	 * Convert first character to upper case.
-	 * @return string
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function firstUpper($s)
 	{
@@ -411,7 +414,8 @@ class Filters
 
 	/**
 	 * Capitalize string.
-	 * @return string
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function capitalize($s)
 	{
@@ -420,7 +424,8 @@ class Filters
 
 
 	/**
-	 * Returns UTF-8 string length.
+	 * Returns string length.
+	 * @param  array|\Countable|\Traversable|string
 	 * @return int
 	 */
 	public static function length($val)
@@ -437,9 +442,9 @@ class Filters
 
 	/**
 	 * Strips whitespace.
-	 * @param  string  UTF-8 encoding
-	 * @param  string
-	 * @return string
+	 * @param  string plain text
+	 * @param  string plain text
+	 * @return string plain text
 	 */
 	public static function trim($s, $charlist = " \t\n\r\0\x0B\xC2\xA0")
 	{
