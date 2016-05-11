@@ -158,9 +158,9 @@ Assert::error(function () use ($latte) {
 	$latte->renderToString('context1');
 }, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
 
-Assert::error(function () use ($latte) {
+Assert::noError(function () use ($latte) {
 	$latte->renderToString('context2');
-}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
+});
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');

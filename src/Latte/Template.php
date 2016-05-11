@@ -164,7 +164,7 @@ class Template
 			return TRUE;
 
 		} elseif ($parent) { // extends
-			$this->createTemplate($parent, $params, 'extends', $this->contentType)->render();
+			$this->createTemplate($parent, $params, 'extends')->render();
 			return TRUE;
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
