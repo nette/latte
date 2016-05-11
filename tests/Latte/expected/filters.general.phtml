@@ -44,23 +44,6 @@ class Template%a% extends Latte\Template
 
 
 
-<?php ob_start(function () {}) ?>  <a   href="#"
-> test</a
-
->
-AŠA
-
-<script>
-// comment
-alert();
-</script>
-<?php
-		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('strip', $_fi, ob_get_clean())) ?>
-
-
-
-
 <?php ob_start(function () {}) ?>
 <ul>
 	<li>lower: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>

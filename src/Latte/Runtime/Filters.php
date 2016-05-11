@@ -238,6 +238,7 @@ class Filters
 	 */
 	public static function strip(FilterInfo $info, $s)
 	{
+		trigger_error('Filter |strip is deprecated, use macro {spaceless}', E_USER_DEPRECATED);
 		if (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
 			return preg_replace_callback(
 				'#(</textarea|</pre|</script|^(?!<textarea|<pre|<script)).*?(?=<textarea|<pre|<script|\z)#si',
