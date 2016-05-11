@@ -247,7 +247,7 @@ class Engine
 
 	/**
 	 * Returns all run-time filters.
-	 * @return callable[]
+	 * @return string[]
 	 */
 	public function getFilters()
 	{

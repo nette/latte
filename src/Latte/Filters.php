@@ -73,11 +73,11 @@ class Filters
 
 	/**
 	 * Returns all run-time filters.
-	 * @return callable[]
+	 * @return string[]
 	 */
 	public function getAll()
 	{
-		return $this->_static;
+		return array_combine($tmp = array_keys($this->_static), $tmp);
 	}
 
 

@@ -24,7 +24,7 @@ test(function () {
 	$filters = new Filters;
 
 	Assert::true(count($filters->getAll()) > 28);
-	Assert::same('Latte\Runtime\Filters::upper', $filters->getAll()['upper']);
+	Assert::same('upper', $filters->getAll()['upper']);
 
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
