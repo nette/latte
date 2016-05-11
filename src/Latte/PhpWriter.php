@@ -48,7 +48,7 @@ class PhpWriter
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
 		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) {
-			return $this->escapeFilter(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
+			return $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
 		}, $mask);
 		$mask = preg_replace_callback('#%modify(\(([^()]*+|(?1))+\))#', function ($m) {
 			return $this->formatModifiers(substr($m[1], 1, -1));
@@ -106,8 +106,8 @@ class PhpWriter
 	{
 		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
 		$tokens = $this->preprocess($tokens);
-		$tokens = $this->modifiersFilter($tokens, $var);
-		$tokens = $this->quoteFilter($tokens);
+		$tokens = $this->modifierPass($tokens, $var);
+		$tokens = $this->quotingPass($tokens);
 		return $tokens->joinAll();
 	}
 
@@ -119,7 +119,7 @@ class PhpWriter
 	public function formatArgs(MacroTokens $tokens = NULL)
 	{
 		$tokens = $this->preprocess($tokens);
-		$tokens = $this->quoteFilter($tokens);
+		$tokens = $this->quotingPass($tokens);
 		return $tokens->joinAll();
 	}
 
@@ -131,8 +131,8 @@ class PhpWriter
 	public function formatArray(MacroTokens $tokens = NULL)
 	{
 		$tokens = $this->preprocess($tokens);
-		$tokens = $this->expandFilter($tokens);
-		$tokens = $this->quoteFilter($tokens);
+		$tokens = $this->expandCastPass($tokens);
+		$tokens = $this->quotingPass($tokens);
 		return $tokens->joinAll();
 	}
 
@@ -158,10 +158,10 @@ class PhpWriter
 	{
 		$tokens = $tokens === NULL ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
-		$tokens = $this->removeCommentsFilter($tokens);
-		$tokens = $this->shortTernaryFilter($tokens);
-		$tokens = $this->inlineModifierFilter($tokens);
-		$tokens = $this->inOperatorFilter($tokens);
+		$tokens = $this->removeCommentsPass($tokens);
+		$tokens = $this->shortTernaryPass($tokens);
+		$tokens = $this->inlineModifierPass($tokens);
+		$tokens = $this->inOperatorPass($tokens);
 		return $tokens;
 	}
 
@@ -191,7 +191,7 @@ class PhpWriter
 	 * Removes PHP comments.
 	 * @return MacroTokens
 	 */
-	public function removeCommentsFilter(MacroTokens $tokens)
+	public function removeCommentsPass(MacroTokens $tokens)
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
@@ -207,7 +207,7 @@ class PhpWriter
 	 * Simplified ternary expressions without third part.
 	 * @return MacroTokens
 	 */
-	public function shortTernaryFilter(MacroTokens $tokens)
+	public function shortTernaryPass(MacroTokens $tokens)
 	{
 		$res = new MacroTokens;
 		$inTernary = [];
@@ -236,7 +236,7 @@ class PhpWriter
 	 * Pseudocast (expand).
 	 * @return MacroTokens
 	 */
-	public function expandFilter(MacroTokens $tokens)
+	public function expandCastPass(MacroTokens $tokens)
 	{
 		$res = new MacroTokens('[');
 		$expand = NULL;
@@ -265,7 +265,7 @@ class PhpWriter
 	 * Quotes symbols to strings.
 	 * @return MacroTokens
 	 */
-	public function quoteFilter(MacroTokens $tokens)
+	public function quotingPass(MacroTokens $tokens)
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
@@ -285,7 +285,7 @@ class PhpWriter
 	 * Syntax $entry in [item1, item2].
 	 * @return MacroTokens
 	 */
-	public function inOperatorFilter(MacroTokens $tokens)
+	public function inOperatorPass(MacroTokens $tokens)
 	{
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent(MacroTokens::T_VARIABLE)) {
@@ -321,12 +321,12 @@ class PhpWriter
 	 * Process inline filters ($var|filter)
 	 * @return MacroTokens
 	 */
-	public function inlineModifierFilter(MacroTokens $tokens)
+	public function inlineModifierPass(MacroTokens $tokens)
 	{
 		$result = new MacroTokens;
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('(', '[')) {
-				$result->tokens = array_merge($result->tokens, $this->inlineModifiersFilterInner($tokens));
+				$result->tokens = array_merge($result->tokens, $this->inlineModifierInner($tokens));
 			} else {
 				$result->append($tokens->currentToken());
 			}
@@ -335,7 +335,7 @@ class PhpWriter
 	}
 
 
-	private function inlineModifiersFilterInner(MacroTokens $tokens)
+	private function inlineModifierInner(MacroTokens $tokens)
 	{
 		$isFunctionOrArray = $tokens->isPrev(MacroTokens::T_VARIABLE, MacroTokens::T_SYMBOL) || $tokens->isCurrent('[');
 		$result = new MacroTokens;
@@ -347,7 +347,7 @@ class PhpWriter
 
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('(', '[')) {
-				$current->tokens = array_merge($current->tokens, $this->inlineModifiersFilterInner($tokens));
+				$current->tokens = array_merge($current->tokens, $this->inlineModifierInner($tokens));
 
 			} elseif ($current !== $modifiers && $tokens->isCurrent('|')) {
 				$anyModifier = TRUE;
@@ -355,7 +355,7 @@ class PhpWriter
 
 			} elseif ($tokens->isCurrent(')', ']') || ($isFunctionOrArray && $tokens->isCurrent(','))) {
 				$partTokens = count($modifiers->tokens)
-					? $this->modifiersFilter($modifiers, $args->tokens)->tokens
+					? $this->modifierPass($modifiers, $args->tokens)->tokens
 					: $args->tokens;
 				$result->tokens = array_merge($result->tokens, $partTokens);
 				if ($tokens->isCurrent(',')) {
@@ -388,7 +388,7 @@ class PhpWriter
 	 * @throws CompileException
 	 * @return MacroTokens
 	 */
-	public function modifiersFilter(MacroTokens $tokens, $var)
+	public function modifierPass(MacroTokens $tokens, $var)
 	{
 		$inside = FALSE;
 		$res = new MacroTokens($var);
@@ -411,7 +411,7 @@ class PhpWriter
 			} else {
 				if ($tokens->isCurrent(MacroTokens::T_SYMBOL)) {
 					if ($this->compiler && $tokens->isCurrent('escape')) {
-						$res = $this->escapeFilter($res);
+						$res = $this->escapePass($res);
 						$tokens->nextToken('|');
 					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
 						$res->prepend('LFilters::safeUrl(');
@@ -436,7 +436,7 @@ class PhpWriter
 	 * Escapes expression in tokens.
 	 * @return MacroTokens
 	 */
-	public function escapeFilter(MacroTokens $tokens)
+	public function escapePass(MacroTokens $tokens)
 	{
 		$tokens = clone $tokens;
 		switch ($this->compiler->getContentType()) {
