@@ -248,7 +248,10 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer)
 	{
-		return $node->data->variable . $writer->write(' = %modify(ob_get_clean())');
+		$body = $node->context[0] === Latte\Engine::CONTENT_HTML
+			? "ob_get_length() ? new Latte\\Runtime\\Html(ob_get_clean()) : ob_get_clean()"
+			: 'ob_get_clean()';
+		return $node->data->variable . $writer->write(" = %modify($body)");
 	}
 
 

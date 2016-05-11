@@ -58,7 +58,7 @@ alert();
 <ul>
 	<li>lower: <?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
 </ul>
-<?php $capture = ob_get_clean() ?>
+<?php $capture = ob_get_length() ? new Latte\Runtime\Html(ob_get_clean()) : ob_get_clean() ?>
 
 <p>
 Captured: <?php echo LFilters::escapeHtml($capture) ?>
@@ -68,7 +68,7 @@ Captured: <?php echo LFilters::escapeHtml($capture) ?>
 
 <?php ob_start(function () {}) ?>
 Hello
-<?php $capture = call_user_func($this->filters->upper, ob_get_clean()) ?>
+<?php $capture = call_user_func($this->filters->upper, ob_get_length() ? new Latte\Runtime\Html(ob_get_clean()) : ob_get_clean()) ?>
 
 <p>
 Captured with modifier: <?php echo LFilters::escapeHtml($capture) ?>
