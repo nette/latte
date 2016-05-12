@@ -33,7 +33,7 @@ class Template
 	/** @var array [name => method]  @internal */
 	protected $blocks = [];
 
-	/** @var string|NULL  @internal */
+	/** @var string|NULL|FALSE  @internal */
 	protected $parentName;
 
 	/** @var Template|NULL  @internal */
@@ -121,7 +121,7 @@ class Template
 	 */
 	public function getParentName()
 	{
-		return $this->parentName;
+		return $this->parentName ?: NULL;
 	}
 
 
@@ -151,16 +151,19 @@ class Template
 	protected function initialize(& $params)
 	{
 		$params = $this->prepare();
-		$parent = $this->getParentName();
+
+		if ($this->parentName === NULL && isset($this->global->parentFinder)) {
+			$this->parentName = call_user_func($this->global->parentFinder, $this);
+		}
 
 		if ($this->referenceType === 'import') {
-			if ($parent) {
-				$this->createTemplate($parent, [], 'import')->render();
+			if ($this->parentName) {
+				$this->createTemplate($this->parentName, [], 'import')->render();
 			}
 			return TRUE;
 
-		} elseif ($parent) { // extends
-			$this->createTemplate($parent, $params, 'extends')->render();
+		} elseif ($this->parentName) { // extends
+			$this->createTemplate($this->parentName, $params, 'extends')->render();
 			return TRUE;
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering

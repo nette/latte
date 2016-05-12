@@ -39,3 +39,22 @@ Assert::same('file.latte', $template->getParentName());
 $template = $latte->createTemplate('{extends none}');
 $template->prepare();
 Assert::null($template->getParentName());
+
+
+$latte->addProvider('parentFinder', function ($template) {
+	if (!$template->getReferenceType()) {
+		return 'parent';
+	}
+});
+
+$template = $latte->createTemplate('');
+$template->renderToString();
+Assert::same('parent', $template->getParentName());
+
+$template = $latte->createTemplate('{extends "file.latte"}');
+$template->renderToString();
+Assert::same('file.latte', $template->getParentName());
+
+$template = $latte->createTemplate('{extends none}');
+$template->renderToString();
+Assert::null($template->getParentName());

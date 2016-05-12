@@ -175,7 +175,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Multiple {{$node->name}} declarations are not allowed.");
 		} elseif ($node->args === 'none') {
 			$this->extends = FALSE;
-			return $writer->write('$this->parentName = NULL');
+			return $writer->write('$this->parentName = FALSE');
 		} else {
 			$this->extends = TRUE;
 			return $writer->write('$this->parentName = %node.word%node.args');
