@@ -94,14 +94,14 @@ class MacroSet implements Latte\IMacro
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
 			$node->empty = TRUE;
-			$this->compiler->setContext(Latte\Compiler::CONTEXT_QUOTED_ATTRIBUTE);
+			$node->context[1] = Latte\Compiler::CONTEXT_QUOTED_ATTRIBUTE;
 			$res = $this->compile($node, $attr);
 			if ($res === FALSE) {
 				return FALSE;
 			} elseif (!$node->attrCode) {
 				$node->attrCode = "<?php $res ?>";
 			}
-			$this->compiler->setContext(NULL);
+			$node->context[1] = NULL;
 
 		} elseif ($begin) {
 			$res = $this->compile($node, $begin);
@@ -139,7 +139,7 @@ class MacroSet implements Latte\IMacro
 	private function compile(MacroNode $node, $def)
 	{
 		$node->tokenizer->reset();
-		$writer = Latte\PhpWriter::using($node, $this->compiler);
+		$writer = Latte\PhpWriter::using($node);
 		return is_string($def)
 			? $writer->write($def)
 			: call_user_func($def, $node, $writer);

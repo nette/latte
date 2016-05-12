@@ -206,7 +206,7 @@ class CoreMacros extends MacroSet
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
 		$code = $writer->write(
 			'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var)',
-			$noCheck ? NULL : $this->getCompiler()->getContentType() . implode((array) $this->getCompiler()->getContext())
+			$noCheck ? NULL : implode('', $node->context)
 		);
 		if ($node->modifiers) {
 			return $writer->write('ob_start(function () {}); %raw; echo %modify(ob_get_clean())', $code);

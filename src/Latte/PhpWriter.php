@@ -21,21 +21,21 @@ class PhpWriter
 	/** @var string */
 	private $modifiers;
 
-	/** @var Compiler */
-	private $compiler;
+	/** @var array|NULL */
+	private $context;
 
 
-	public static function using(MacroNode $node, Compiler $compiler = NULL)
+	public static function using(MacroNode $node)
 	{
-		return new static($node->tokenizer, $node->modifiers, $compiler);
+		return new static($node->tokenizer, $node->modifiers, $node->context);
 	}
 
 
-	public function __construct(MacroTokens $tokens, $modifiers = NULL, Compiler $compiler = NULL)
+	public function __construct(MacroTokens $tokens, $modifiers = NULL, array $context = NULL)
 	{
 		$this->tokens = $tokens;
 		$this->modifiers = $modifiers;
-		$this->compiler = $compiler;
+		$this->context = $context;
 	}
 
 
@@ -410,7 +410,7 @@ class PhpWriter
 				}
 			} else {
 				if ($tokens->isCurrent(MacroTokens::T_SYMBOL)) {
-					if ($this->compiler && $tokens->isCurrent('escape')) {
+					if ($tokens->isCurrent('escape')) {
 						$res = $this->escapePass($res);
 						$tokens->nextToken('|');
 					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
@@ -439,19 +439,19 @@ class PhpWriter
 	public function escapePass(MacroTokens $tokens)
 	{
 		$tokens = clone $tokens;
-		switch ($this->compiler->getContentType()) {
+		list($contentType, $context, $subContext) = $this->context;
+		switch ($contentType) {
 			case Compiler::CONTENT_XHTML:
 			case Compiler::CONTENT_HTML:
-				$context = $this->compiler->getContext();
-				switch ($context[0]) {
+				switch ($context) {
 					case Compiler::CONTEXT_QUOTED_ATTRIBUTE:
 					case Compiler::CONTEXT_TAG:
-						if ($context[1] === Compiler::CONTENT_JS) {
+						if ($subContext === Compiler::CONTENT_JS) {
 							$tokens->prepend('LFilters::escapeJs(')->append(')');
-						} elseif ($context[1] === Compiler::CONTENT_CSS) {
+						} elseif ($subContext === Compiler::CONTENT_CSS) {
 							$tokens->prepend('LFilters::escapeCss(')->append(')');
 						}
-						if ($context[0] === Compiler::CONTEXT_TAG) {
+						if ($context === Compiler::CONTEXT_TAG) {
 							$tokens->prepend('LFilters::escapeHtmlAttrUnquoted(')->append(')');
 						} else {
 							$tokens->prepend('LFilters::escapeHtmlAttr(')->append(')');
@@ -461,14 +461,13 @@ class PhpWriter
 						return $tokens->prepend('LFilters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTENT_JS:
 					case Compiler::CONTENT_CSS:
-						return $tokens->prepend('LFilters::escape' . ucfirst($context[0]) . '(')->append(')');
+						return $tokens->prepend('LFilters::escape' . ucfirst($context) . '(')->append(')');
 					default:
 						return $tokens->prepend('LFilters::escapeHtml(')->append(')');
 				}
 
 			case Compiler::CONTENT_XML:
-				$context = $this->compiler->getContext();
-				switch ($context[0]) {
+				switch ($context) {
 					case Compiler::CONTEXT_COMMENT:
 						return $tokens->prepend('LFilters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTEXT_TAG:
@@ -480,7 +479,7 @@ class PhpWriter
 			case Compiler::CONTENT_JS:
 			case Compiler::CONTENT_CSS:
 			case Compiler::CONTENT_ICAL:
-				return $tokens->prepend('LFilters::escape' . ucfirst($this->compiler->getContentType()) . '(')->append(')');
+				return $tokens->prepend('LFilters::escape' . ucfirst($contentType) . '(')->append(')');
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
 			default:

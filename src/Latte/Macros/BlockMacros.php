@@ -382,21 +382,11 @@ class BlockMacros extends MacroSet
 
 	private function exportBlockType(MacroNode $node)
 	{
-		$compiler = $this->getCompiler();
-		$type = $compiler->getContentType();
-		if ($node->prefix === MacroNode::PREFIX_INNER && ($tag = strtolower($node->htmlNode->name)) === 'script') {
-			$context = $compiler::CONTENT_JS;
-		} elseif ($node->prefix === MacroNode::PREFIX_INNER && $tag === 'style') {
-			$context = $compiler::CONTENT_CSS;
-		} elseif ($node->prefix) {
-			$context = '';
-		} else {
-			$context = $compiler->getContext();
-			if (in_array($type, [$compiler::CONTENT_HTML, $compiler::CONTENT_XHTML, $compiler::CONTENT_XML], TRUE) && $context === ['attr', NULL]) {
-				$context = '';
-			}
+		$context = $node->context;
+		if (in_array($context[0], [Latte\Engine::CONTENT_HTML, Latte\Engine::CONTENT_XHTML, Latte\Engine::CONTENT_XML], TRUE) && $context[1] === 'attr') {
+			$context[1] = '';
 		}
-		return $type . implode((array) $context);
+		return implode($context);
 	}
 
 }

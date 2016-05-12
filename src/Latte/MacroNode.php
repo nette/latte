@@ -70,6 +70,9 @@ class MacroNode
 	/** @var HtmlNode  closest HTML node */
 	public $htmlNode;
 
+	/** @var array [contentType, context, subcontext] */
+	public $context;
+
 	/** @var string  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
 	public $prefix;
 

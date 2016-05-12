@@ -750,8 +750,19 @@ class Compiler
 			}
 		}
 
+		if ($nPrefix === MacroNode::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'script')) {
+			$context = [$this->contentType, self::CONTENT_JS, NULL];
+		} elseif ($nPrefix === MacroNode::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'style')) {
+			$context = [$this->contentType, self::CONTENT_CSS, NULL];
+		} elseif ($nPrefix) {
+			$context = [$this->contentType, NULL, NULL];
+		} else {
+			$context = [$this->contentType, $this->context[0], $this->context[1]];
+		}
+
 		foreach (array_reverse($this->macros[$name]) as $macro) {
 			$node = new MacroNode($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
+			$node->context = $context;
 			if ($macro->nodeOpened($node) !== FALSE) {
 				return $node;
 			}
