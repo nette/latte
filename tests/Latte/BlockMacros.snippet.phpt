@@ -30,12 +30,12 @@ $template = <<<'EOD'
 
 	@{if true} Hello World @{/if}
 
-	{snippet title h2}Title 1{/snippet title}
+	{snippet title}Title 1{/snippet title}
 
-	{snippet title2 <h2>}Title 2{/snippet}
+	{snippet title2}Title 2{/snippet}
 EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.snippet.phtml',
-	@$latte->compile($template) // @ tag in {snippet} is deprecated
+	$latte->compile($template)
 );

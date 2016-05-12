@@ -23,7 +23,6 @@ $params['url5'] = '';
 Assert::match('
 <a href="" src="" action="" formaction="" title="javascript:alert(1)"></a>
 <a href="javascript:alert(1)"></a>
-<a href="javascript:alert(1)"></a>
 <a href="http://nette.org?val=ok"></a>
 <a data="javascript:alert(1)"></a>
 <OBJECT DATA=""></object>
@@ -33,13 +32,11 @@ Assert::match('
 <a href=""></a>
 <a href="data:%a%;base64,b2s="></a>
 <a href="data:%a%;base64,b2s="></a>
-<a href="data:%a%;base64,b2s="></a>
 <a href=""></a>
-', @$latte->renderToString( // @ safeurl & nosafeurl are deprecated
+', $latte->renderToString(
 '
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <a href={$url1|nocheck}></a>
-<a href={$url1|nosafeurl}></a>
 <a href="http://nette.org?val={$url4}"></a>
 <a data={$url1}></a>
 <OBJECT DATA={$url1}></object>
@@ -49,8 +46,7 @@ Assert::match('
 <a href={$url5}></a>
 <a href={$url4|dataStream}></a>
 <a href={$url4|dataStream|noCheck}></a>
-<a href={$url4|dataStream|noSafeURL}></a>
-<a href={$url4|dataStream|safeURL}></a>
+<a href={$url4|dataStream|checkURL}></a>
 ', $params));
 
 
@@ -62,3 +58,13 @@ Assert::match('
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <object data={$url1}></object>
 ', $params));
+
+
+// former |safeurl & |nosafeurl
+Assert::error(function () use ($latte, $params) {
+	$latte->renderToString('<a href={$url1|nosafeurl}></a>', $params);
+}, LogicException::class, "Filter 'nosafeurl' is not defined.");
+
+Assert::error(function () use ($latte, $params) {
+	$latte->renderToString('<a href={$url4|dataStream|safeURL}></a>', $params);
+}, LogicException::class, "Filter 'safeurl' is not defined.");

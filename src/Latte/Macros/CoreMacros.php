@@ -26,7 +26,6 @@ use Latte\PhpWriter;
  * - {=expression} echo with escaping
  * - {php expression} evaluate PHP statement
  * - {_expression} echo translation with escaping
- * - {attr ?} HTML element attributes
  * - {capture ?} ... {/capture} capture block to parameter
  * - {spaceless} ... {/spaceless} compress whitespaces
  * - {var var => value} set template parameter
@@ -34,7 +33,6 @@ use Latte\PhpWriter;
  * - {dump $var}
  * - {debugbreak}
  * - {contentType ...} HTTP Content-Type header
- * - {status ...} HTTP status
  * - {l} {r} to display { }
  */
 class CoreMacros extends MacroSet
@@ -75,14 +73,11 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('_', [$me, 'macroTranslate'], [$me, 'macroTranslate']);
 		$me->addMacro('=', [$me, 'macroExpr']);
-		$me->addMacro('?', [$me, 'macroExpr']);
 
 		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
 		$me->addMacro('spaceless', [$me, 'macroSpaceless'], [$me, 'macroSpaceless']);
 		$me->addMacro('include', [$me, 'macroInclude']);
-		$me->addMacro('use', [$me, 'macroUse']);
 		$me->addMacro('contentType', [$me, 'macroContentType'], NULL, NULL, self::ALLOWED_IN_HEAD);
-		$me->addMacro('status', [$me, 'macroStatus']);
 		$me->addMacro('php', [$me, 'macroExpr']);
 
 		$me->addMacro('class', NULL, NULL, [$me, 'macroClass']);
@@ -243,20 +238,6 @@ class CoreMacros extends MacroSet
 				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 				: var_export($noEscape ? NULL : implode($node->context), TRUE)
 		);
-	}
-
-
-	/**
-	 * {use class MacroSet}
-	 */
-	public function macroUse(MacroNode $node, PhpWriter $writer)
-	{
-		trigger_error('Macro {use} is deprecated.', E_USER_DEPRECATED);
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
-		call_user_func(Helpers::checkCallback([$node->tokenizer->fetchWord(), 'install']), $this->getCompiler())
-			->initialize();
 	}
 
 
@@ -486,9 +467,6 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
-		if ($node->name === '?') {
-			trigger_error('Macro {? ...} is deprecated, use {php ...}.', E_USER_DEPRECATED);
-		}
 		return $writer->write($node->name === '='
 			? "echo %modify(%node.args) /* line $node->startLine */"
 			: '%modify(%node.args);'
@@ -529,21 +507,6 @@ class CoreMacros extends MacroSet
 		if (strpos($node->args, '/') && !$node->htmlNode) {
 			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", NULL], TRUE)) header(%var);', "Content-Type: $node->args");
 		}
-	}
-
-
-	/**
-	 * {status ...}
-	 */
-	public function macroStatus(MacroNode $node, PhpWriter $writer)
-	{
-		trigger_error('Macro {status} is deprecated.', E_USER_DEPRECATED);
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
-		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
-			'http_response_code(%0.var);', (int) $node->args
-		);
 	}
 
 }

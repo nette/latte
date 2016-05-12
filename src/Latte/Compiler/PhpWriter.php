@@ -174,21 +174,11 @@ class PhpWriter
 	 */
 	public function validateTokens(MacroTokens $tokens)
 	{
-		$deprecatedVars = array_flip(['$template', '$_b', '$_l', '$_g', '$_args', '$_fi', '$_control', '$_presenter', '$_form', '$_input', '$_label', '$_snippetMode']);
 		$brackets = [];
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('?>')) {
 				throw new CompileException('Forbidden ?> inside macro');
-
-			} elseif ($tokens->isCurrent($tokens::T_VARIABLE) && isset($deprecatedVars[$tokens->currentValue()])) {
-				trigger_error("Variable {$tokens->currentValue()} is deprecated.", E_USER_DEPRECATED);
-
-			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)
-				&& !$tokens->isPrev('::') && !$tokens->isNext('::') && !$tokens->isPrev('->') && !$tokens->isNext('\\')
-				&& preg_match('#^[A-Z0-9]{3,}$#', $val = $tokens->currentValue())
-			) {
-				trigger_error("Replace literal $val with constant('$val')", E_USER_DEPRECATED);
 
 			} elseif ($tokens->isCurrent('(', '[', '{')) {
 				static $counterpart = ['(' => ')', '[' => ']', '{' => '}'];

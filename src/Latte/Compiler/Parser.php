@@ -31,9 +31,6 @@ class Parser
 	/** @var string default macro tag syntax */
 	public $defaultSyntax = 'latte';
 
-	/** @deprecated */
-	public $shortNoEscape;
-
 	/** @var array */
 	public $syntaxes = [
 		'latte' => ['\{(?![\s\'"{}])', '\}'], // {...}
@@ -396,7 +393,7 @@ class Parser
 			(?P<closing>/?)
 			(
 				(?P<name>\?|[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
-				(?P<noescape>!?)(?P<shortname>[=\~#%^&_]?)      ## !expression, !=expression, ...
+				(?P<shortname>[=\~#%^&_]?)      ## expression, =expression, ...
 			)(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
 			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
 			(?P<empty>/?\z)
@@ -408,10 +405,6 @@ class Parser
 		}
 		if ($match['name'] === '') {
 			$match['name'] = $match['shortname'] ?: ($match['closing'] ? '' : '=');
-			if ($match['noescape']) {
-				trigger_error("The noescape shortcut {!...} is deprecated, use {...|noescape} modifier on line {$this->getLine()}.", E_USER_DEPRECATED);
-				$match['modifiers'] .= '|noescape';
-			}
 		}
 		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty'], (bool) $match['closing']];
 	}
