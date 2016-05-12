@@ -144,8 +144,9 @@ class Filters
 
 		} else { // classic filter
 			array_shift($args);
-			if ($info->contentType !== Engine::CONTENT_TEXT && $info->contentType !== Engine::CONTENT_HTML) {
-				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType), E_USER_WARNING);
+			if ($info->contentType !== Engine::CONTENT_TEXT) {
+				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
+					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
 			}
 			return call_user_func_array($this->$name, $args);
 		}

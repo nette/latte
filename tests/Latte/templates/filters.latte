@@ -55,7 +55,7 @@ Captured: {$capture}
 </p>
 
 
-{capture$capture|upper}
+{capture$capture|striphtml|upper}
 Hello
 {/capture}
 
@@ -66,5 +66,5 @@ Captured with modifier: {$capture}
 
 
 <p>
-Nested blocks: {block|truncate:20} Outer   {block|upper} Inner Block {/block}  Block {/block}
+Nested blocks: {block|striphtml|truncate:20} Outer   {block|striphtml|upper} Inner Block {/block}  Block {/block}
 </p>
