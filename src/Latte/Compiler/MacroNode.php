@@ -30,9 +30,6 @@ class MacroNode
 	/** @var bool */
 	public $empty = FALSE;
 
-	/** @deprecated */
-	public $isEmpty;
-
 	/** @var string  raw arguments */
 	public $args;
 
@@ -97,7 +94,6 @@ class MacroNode
 		$this->htmlNode = $htmlNode;
 		$this->prefix = $prefix;
 		$this->data = new \stdClass;
-		$this->isEmpty = &$this->empty;
 		$this->setArgs($args);
 	}
 
