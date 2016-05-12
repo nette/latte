@@ -169,6 +169,22 @@ class Filters
 
 
 	/**
+	 * Converts HTML to plain text.
+	 * @param
+	 * @param  string HTML
+	 * @return string plain text
+	 */
+	public static function stripHtml(FilterInfo $info, $s)
+	{
+		if (!in_array($info->contentType, [NULL, Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE)) {
+			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+		}
+		$info->contentType = Engine::CONTENT_TEXT;
+		return html_entity_decode(strip_tags($s), ENT_QUOTES, 'UTF-8');
+	}
+
+
+	/**
 	 * Converts ... to ...
 	 * @param  string
 	 * @return string plain text
