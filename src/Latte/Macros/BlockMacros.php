@@ -125,7 +125,7 @@ class BlockMacros extends MacroSet
 		}
 
 		if ($node->modifiers) {
-			return $writer->write("ob_start(function () {}); $cmd; echo %modify(ob_get_clean())");
+			return $writer->write("ob_start(function () {}); $cmd; \$_fi = new LR\\FilterInfo(%var); echo %modifyContent(ob_get_clean())", $node->context[0]);
 		} else {
 			return $writer->write($cmd);
 		}
@@ -250,7 +250,7 @@ class BlockMacros extends MacroSet
 
 		$include = 'call_user_func(reset($this->blockQueue[%var]), ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
 		if ($node->modifiers) {
-			$include = "ob_start(function () {}); $include; echo %modify(ob_get_clean())";
+			$include = "ob_start(function () {}); $include; \$_fi = new LR\\FilterInfo('html'); echo %modifyContent(ob_get_clean())";
 		}
 
 		if ($node->name === 'snippet') {
@@ -340,7 +340,7 @@ class BlockMacros extends MacroSet
 			return ' '; // consume next new line
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
-			return $writer->write('echo %modify(ob_get_clean())');
+			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean())', $node->context[0]);
 		}
 	}
 

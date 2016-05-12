@@ -23,6 +23,7 @@ spl_autoload_register(function ($className) {
 		'Latte\\RuntimeException' => 'exceptions.php',
 		'Latte\\Runtime\\CachingIterator' => 'Runtime/CachingIterator.php',
 		'Latte\\Runtime\\Filters' => 'Runtime/Filters.php',
+		'Latte\\Runtime\\FilterInfo' => 'Runtime/FilterInfo.php',
 		'Latte\\Runtime\\Html' => 'Runtime/Html.php',
 		'Latte\\Runtime\\IHtmlString' => 'Runtime/IHtmlString.php',
 		'Latte\\Strict' => 'Strict.php',

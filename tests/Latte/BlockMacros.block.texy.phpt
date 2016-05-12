@@ -27,6 +27,7 @@ $params['hello'] = '<i>Hello</i>';
 $params['people'] = ['John', 'Mary', 'Paul'];
 
 $result = $latte->renderToString(<<<'EOD'
+{contentType text}
 {block|lower|texy}
 {$hello}
 ---------
@@ -45,12 +46,12 @@ EOD
 , $params);
 
 Assert::match(<<<EOD
-<pre>&lt;i&gt;hello&lt;/i&gt;
+<pre><i>hello</i>
 ---------
-- escaped: &lt;i&gt;hello&lt;/i&gt;
+- escaped: <i>hello</i>
 - non-escaped: <i>hello</i>
 
-- escaped expression: &lt;b&gt;hello&lt;/b&gt;
+- escaped expression: <b>hello</b>
 
 - non-escaped expression: <b>hello</b>
 

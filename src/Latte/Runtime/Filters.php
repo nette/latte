@@ -8,6 +8,7 @@
 namespace Latte\Runtime;
 
 use Latte;
+use Latte\Engine;
 
 
 /**
@@ -164,6 +165,23 @@ class Filters
 	public static function escapeHtmlRawText($s)
 	{
 		return preg_replace('#</(script|style)#i', '<\\/$1', $s);
+	}
+
+
+	/**
+	 * Converts ... to ...
+	 * @param  string
+	 * @return string plain text
+	 */
+	public static function convertTo(FilterInfo $info, $dest, $s)
+	{
+		if ($dest === $info->contentType) {
+			return $s;
+		} elseif ($dest === Engine::CONTENT_HTML && (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)) {
+			return self::escapeHtml($s);
+		} else {
+			trigger_error("Filters: unable to convert content type " . strtoupper($info->contentType) . " to " . strtoupper($dest), E_USER_WARNING);
+		}
 	}
 
 
