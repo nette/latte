@@ -203,16 +203,17 @@ class Compiler
 
 
 	/**
-	 * @return string
+	 * @deprecated
 	 */
 	public function getContentType()
 	{
+		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
 		return $this->contentType;
 	}
 
 
 	/**
-	 * @return self
+	 * @internal
 	 */
 	public function setContext($context, $sub = NULL)
 	{
@@ -222,10 +223,11 @@ class Compiler
 
 
 	/**
-	 * @return array [context, subcontext]
+	 * @deprecated
 	 */
 	public function getContext()
 	{
+		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
 		return $this->context;
 	}
 
