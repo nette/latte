@@ -197,37 +197,6 @@ class Compiler
 
 
 	/**
-	 * @deprecated
-	 */
-	public function getContentType()
-	{
-		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-		return $this->contentType;
-	}
-
-
-	/**
-	 * @internal
-	 */
-	public function setContext($context)
-	{
-		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-		$this->context = $context;
-		return $this;
-	}
-
-
-	/**
-	 * @deprecated
-	 */
-	public function getContext()
-	{
-		trigger_error(__METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-		return $this->context;
-	}
-
-
-	/**
 	 * @return MacroNode|NULL
 	 */
 	public function getMacroNode()
@@ -740,15 +709,9 @@ class Compiler
 			throw new CompileException("Unknown macro {{$name}}$hint" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : ''));
 		}
 
-		if ($modifiers && preg_match('#\|(no)?safeurl(?!\w)#i', $modifiers, $m)) {
-			$hint = $m[1] ? '|nocheck' : '|checkurl';
-			$modifiers = str_replace($m[0], $hint, $modifiers);
-			trigger_error("Modifier $m[0] is deprecated, please replace it with $hint.", E_USER_DEPRECATED);
-		}
-
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], TRUE)) {
-				if (!Helpers::removeFilter($modifiers, 'nosafeurl|nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
+				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
 					$modifiers .= '|checkurl';
 				}
 			}

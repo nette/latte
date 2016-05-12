@@ -197,7 +197,7 @@ class BlockMacros extends MacroSet
 
 	/**
 	 * {block [name]}
-	 * {snippet [name [,]] [tag]}
+	 * {snippet [name]}
 	 * {snippetArea [name]}
 	 * {define name}
 	 */
@@ -233,14 +233,9 @@ class BlockMacros extends MacroSet
 					$node->attrCode = $writer->write("<?php echo ' id=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write($enterCode);
 				}
-				$tag = trim((string) $node->tokenizer->fetchWord(), '<>');
-				if ($tag) {
-					trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
-				}
-				$tag = $tag ? $tag : 'div';
-				$node->closingCode .= "\n</$tag>";
+				$node->closingCode .= "\n</div>";
 				$this->checkExtraArgs($node);
-				return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
+				return $writer->write("?>\n<div id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
 
 			} else {
 				$node->data->leave = TRUE;
@@ -301,13 +296,8 @@ class BlockMacros extends MacroSet
 				$node->attrCode = $writer->write('<?php echo \' id="\' . htmlSpecialChars($this->global->snippetDriver->getHtmlId(%var)) . \'"\' ?>', (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
-			$tag = trim((string) $node->tokenizer->fetchWord(), '<>');
-			if ($tag) {
-				trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
-			}
-			$tag = $tag ? $tag : 'div';
 			$this->checkExtraArgs($node);
-			return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</$tag><?php ",
+			return $writer->write("?>\n<div id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
 				(string) substr($name, 1), $name
 			);
 

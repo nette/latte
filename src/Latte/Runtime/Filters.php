@@ -495,17 +495,6 @@ class Filters
 
 
 	/**
-	 * @param  string
-	 * @return string
-	 */
-	public static function nl2br($value)
-	{
-		trigger_error('Filter |nl2br is deprecated, use |breaklines which correctly handles escaping.', E_USER_DEPRECATED);
-		return nl2br($value, self::$xhtml);
-	}
-
-
-	/**
 	 * @param  string plain text
 	 * @return Html
 	 */
