@@ -450,6 +450,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroStatus(MacroNode $node, PhpWriter $writer)
 	{
+		trigger_error('Macro {status} is deprecated.', E_USER_DEPRECATED);
 		if ($node->modifiers) {
 			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
 		}
