@@ -23,25 +23,25 @@ class Template%a% extends Latte\Template
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator([1,2,3]) as $foo) {
 			?>	<b<?php if ($_tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>item</b>
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator([1, 2, 3]) as $foo) {
 			?><p<?php if ($_tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>><?php
 			echo LFilters::escapeHtml($foo) ?></p>
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 <p<?php if ($_tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class</p>
 
@@ -100,14 +100,14 @@ class Template%a% extends Latte\Template
 
 <ul title="tag if">
 <?php
-		if ($this->local->ifs[] = (true)) {
+		if ($this->global->ifs[] = (true)) {
 			?>	<li>
 <?php
 		}
 		?>		<?php echo LFilters::escapeHtml($person) ?>
 
 <?php
-		if (array_pop($this->local->ifs)) {
+		if (array_pop($this->global->ifs)) {
 			?>	</li>
 <?php
 		}
@@ -223,30 +223,30 @@ class Template%a% extends Latte\Template
 		?></ul>
 
 <?php
-		if ($this->local->ifs[] = (true)) {
+		if ($this->global->ifs[] = (true)) {
 			?><b><?php
 		}
 		?>bold<?php
-		if (array_pop($this->local->ifs)) {
+		if (array_pop($this->global->ifs)) {
 			?></b><?php
 		}
 		?> <?php
-		if ($this->local->ifs[] = (false)) {
+		if ($this->global->ifs[] = (false)) {
 			?><b><?php
 		}
 		?>normal<?php
-		if (array_pop($this->local->ifs)) {
+		if (array_pop($this->global->ifs)) {
 			?></b>
 <?php
 		}
 		?>
 
 <?php
-		if ($this->local->ifs[] = (true)) {
+		if ($this->global->ifs[] = (true)) {
 			?><b<?php if ($_tmp = array_filter(['first'])) echo ' class="', LFilters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>><?php
 		}
 		?>bold<?php
-		if (array_pop($this->local->ifs)) {
+		if (array_pop($this->global->ifs)) {
 			?></b>
 <?php
 		}
@@ -258,11 +258,11 @@ class Template%a% extends Latte\Template
 			?><meta>
 <?php
 		}
-		if ($this->local->ifs[] = (true)) {
+		if ($this->global->ifs[] = (true)) {
 			?><meta>
 <?php
 		}
-		if (array_pop($this->local->ifs)) {
+		if (array_pop($this->global->ifs)) {
 		}
 		?>
 <meta>
@@ -279,7 +279,7 @@ class Template%a% extends Latte\Template
 				$iterations = 0;
 				%a%
 				foreach ([1] as $foo) {
-					if ($this->local->ifs[] = (0)) {
+					if ($this->global->ifs[] = (0)) {
 						?><span><?php
 					}
 					$iterations++;
@@ -295,7 +295,7 @@ class Template%a% extends Latte\Template
 				$iterations = 0;
 				%a%
 				foreach ([1] as $foo) {
-					if (array_pop($this->local->ifs)) {
+					if (array_pop($this->global->ifs)) {
 						?></span>
 <?php
 					}

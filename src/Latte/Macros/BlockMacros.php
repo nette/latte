@@ -211,16 +211,16 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
-				$node->closingCode = "<?php \$this->local->dynSnippets[\$this->local->dynSnippetId] = ob_get_flush() ?>";
+				$node->closingCode = "<?php \$this->global->dynSnippets[\$this->global->dynSnippetId] = ob_get_flush() ?>";
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->local->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
+					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->global->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write('ob_start()');
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
-				return $writer->write("?>\n<$tag id=\"<?php echo \$this->local->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
+				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
 
 			} else {
 				$node->data->leave = TRUE;
@@ -309,7 +309,7 @@ class BlockMacros extends MacroSet
 					$node->content = "<?php \$_control->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$_control->snippetMode = FALSE; ?>";
 				}
 				if (!empty($node->data->dynamic)) {
-					$node->content .= '<?php if (isset($this->local->dynSnippets)) return $this->local->dynSnippets; ?>';
+					$node->content .= '<?php if (isset($this->global->dynSnippets)) return $this->global->dynSnippets; ?>';
 				}
 				if ($node->name === 'snippetArea') {
 					$node->content .= '<?php return FALSE; ?>';

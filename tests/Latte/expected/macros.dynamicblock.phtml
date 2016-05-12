@@ -26,7 +26,7 @@ class Template%a% extends Latte\Template
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator(['dynamic', 'static']) as $name) {
 			$this->checkBlockContentType('html', $name);
 			$this->blockQueue[$name][] = [$this, 'blockName'];
 			call_user_func(reset($this->blockQueue[$name]), get_defined_vars()) ?>
@@ -34,8 +34,8 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 <?php
 		if (isset($this->blockTypes['dynamic']) && $this->blockTypes['dynamic'] !== 'html') {

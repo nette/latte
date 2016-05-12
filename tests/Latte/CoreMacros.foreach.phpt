@@ -16,7 +16,7 @@ CoreMacros::install($compiler);
 
 $prefix = '<?php $iterations = 0; '
 	. 'if (isset($this->params[\'value\'])) trigger_error(\'Variable $value overwritten in foreach.\'); '
-	. 'foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(';
+	. 'foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator(';
 
 function expandMacro($compiler, $args, $modifiers = NULL) {
 	$node = $compiler->expandMacro('foreach', $args, $modifiers);
@@ -31,13 +31,13 @@ Assert::same(
 	'<?php $iterations = 0; '
 	. 'if (isset($this->params[\'key\'])) trigger_error(\'Variable $key overwritten in foreach.\'); '
 	. 'if (isset($this->params[\'value\'])) trigger_error(\'Variable $value overwritten in foreach.\'); '
-	. 'foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($array) as $key => $value) { ?>',
+	. 'foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($array) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value')->openingCode
 );
 
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($array) as $key => $value) { ?>',
+	. 'foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($array) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value', '|nocheck')->openingCode
 );
 

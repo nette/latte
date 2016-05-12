@@ -88,10 +88,10 @@ class Template%a% extends Latte\Template
 <?php
 		$iterations = 0;
 		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.');
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator(array(TRUE)) as $foo) {
 			$iterations = 0;
 			if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.');
-			foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
+			foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
 				?>	<?php
 				if ($iterator->isFirst()) {
 					?><ul><?php
@@ -109,12 +109,12 @@ class Template%a% extends Latte\Template
 <?php
 				$iterations++;
 			}
-			array_pop($this->local->its);
-			$iterator = end($this->local->its);
+			array_pop($this->global->its);
+			$iterator = end($this->global->its);
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 
 
@@ -218,23 +218,23 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 			echo ob_get_clean();
 		}
 		else {
-			$this->local->else = ob_get_clean();
+			$this->global->else = ob_get_clean();
 			ob_end_clean();
-			echo $this->local->else;
+			echo $this->global->else;
 		}
 		?>
 
 
 
 <?php
-		$this->local->switch[] = (2);
+		$this->global->switch[] = (2);
 		if (FALSE) {
 		}
-		elseif (end($this->local->switch) === ('x')) {
+		elseif (end($this->global->switch) === ('x')) {
 			?>x
 <?php
 		}
-		elseif (end($this->local->switch) === (2)) {
+		elseif (end($this->global->switch) === (2)) {
 			?>y
 <?php
 		}
@@ -242,7 +242,7 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 			?>z
 <?php
 		}
-		array_pop($this->local->switch) ?>
+		array_pop($this->global->switch) ?>
 
 <?php echo call_user_func($this->filters->breaklines, "\n") ?>
 
@@ -263,7 +263,7 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 <?php
 		$iterations = 0;
 		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.');
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($menu) as $item) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($menu) as $item) {
 			?>	<li><?php echo LFilters::escapeHtml($counter++) ?> <?php
 			if (is_array($item)) {
 				?> <?php
@@ -279,8 +279,8 @@ var prop2 = <?php echo LFilters::escapeJs($people) ?>;
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 </ul>
 <?php
 	}

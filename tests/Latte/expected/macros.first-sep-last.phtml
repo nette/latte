@@ -11,7 +11,7 @@ class Template%a% extends Latte\Template
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
 			?>	<?php
 			if ($iterator->isFirst()) {
 				?>(<?php
@@ -30,14 +30,14 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
 			?>	<?php
 			if ($iterator->isFirst(2)) {
 				?>(<?php
@@ -56,14 +56,14 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
 			?>	<?php
 			if ($iterator->isFirst(1)) {
 				?>(<?php
@@ -82,14 +82,14 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its) ?>
+		array_pop($this->global->its);
+		$iterator = end($this->global->its) ?>
 
 
 <?php
 		$iterations = 0;
 		%a%
-		foreach ($iterator = $this->local->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
+		foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator($people) as $person) {
 			if ($iterator->isFirst(0)) {
 				?>	<span>(</span><?php
 			}
@@ -105,8 +105,8 @@ class Template%a% extends Latte\Template
 			}
 			$iterations++;
 		}
-		array_pop($this->local->its);
-		$iterator = end($this->local->its);
+		array_pop($this->global->its);
+		$iterator = end($this->global->its);
 	}
 
 }

@@ -42,11 +42,8 @@ class Template
 	/** @var string|NULL  @internal */
 	private $referenceType;
 
-	/** @var \stdClass local accumulators for intermediate results */
-	protected $local;
-
 	/** @var \stdClass global accumulators for intermediate results */
-	protected $global;
+	public $global;
 
 	/** @var [name => [callbacks]]  @internal */
 	protected $blockQueue = [];
@@ -61,7 +58,6 @@ class Template
 		$this->params = $params;
 		$this->filters = $filters;
 		$this->name = $name;
-		$this->local = new \stdClass;
 		$this->global = new \stdClass;
 		foreach ($this->blocks as $nm => $method) {
 			$this->blockQueue[$nm][] = [$this, $method];
@@ -178,7 +174,7 @@ class Template
 
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 		// old accumulators for back compatibility
-		$this->params['_l'] = $params['_l'] = $this->local;
+		$this->params['_l'] = $params['_l'] = new \stdClass;
 		$this->params['_g'] = $params['_g'] = $this->global;
 		$params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 	}
