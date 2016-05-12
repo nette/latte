@@ -42,6 +42,9 @@ class Engine
 	/** @var Filters */
 	private $filters;
 
+	/** @var array */
+	private $providers = [];
+
 	/** @var string */
 	private $contentType = self::CONTENT_HTML;
 
@@ -94,7 +97,7 @@ class Engine
 		if (!class_exists($class, FALSE)) {
 			$this->loadTemplate($name);
 		}
-		return new $class($this, $params, $this->filters, $name);
+		return new $class($this, $params, $this->filters, $this->providers, $name);
 	}
 
 
@@ -274,6 +277,17 @@ class Engine
 	public function addMacro($name, IMacro $macro)
 	{
 		$this->getCompiler()->addMacro($name, $macro);
+		return $this;
+	}
+
+
+	/**
+	 * Adds new provider.
+	 * @return self
+	 */
+	public function addProvider($name, $value)
+	{
+		$this->providers[$name] = $value;
 		return $this;
 	}
 

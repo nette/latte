@@ -52,13 +52,13 @@ class Template
 	protected $blockTypes = [];
 
 
-	public function __construct(Engine $engine, array $params, Filters $filters, $name)
+	public function __construct(Engine $engine, array $params, Filters $filters, array $providers, $name)
 	{
 		$this->engine = $engine;
 		$this->params = $params;
 		$this->filters = $filters;
 		$this->name = $name;
-		$this->global = new \stdClass;
+		$this->global = (object) $providers;
 		foreach ($this->blocks as $nm => $method) {
 			$this->blockQueue[$nm][] = [$this, $method];
 		}
