@@ -5,6 +5,7 @@
  */
 
 use Latte\Filters;
+use Latte\Runtime\FilterInfo;
 use Tester\Assert;
 
 
@@ -80,4 +81,38 @@ test(function () {
 	Assert::exception(function () use ($filters) {
 		call_user_func($filters->unknown, '');
 	}, 'LogicException', "Filter 'unknown' is not defined.");
+});
+
+
+test(function () {
+	$filters = new Filters;
+
+	// FilterInfo aware called as classic
+	$filters->add('f1', function (FilterInfo $info, $val) {
+		return gettype($info->contentType) . ',' . strtolower($val);
+	}, TRUE);
+
+	Assert::same('NULL,aa', call_user_func($filters->f1, 'aA'));
+	Assert::same('NULL,aa', call_user_func($filters->f1, 'aA'));
+
+
+	// classic called as FilterInfo aware
+	$filters->add('f2', function ($val) {
+		return strtolower($val);
+	});
+	Assert::same(
+		'aa<b>',
+		$filters->filterContent('f2', new FilterInfo('html'), 'aA<B>')
+	);
+
+
+	// FilterInfo aware called as FilterInfo aware
+	$filters->add('f3', function (FilterInfo $info, $val) {
+		$type = $info->contentType; $info->contentType = 'new';
+		return $type . ',' . strtolower($val);
+	}, TRUE);
+
+	$info = new FilterInfo('html');
+	Assert::same('html,aa', $filters->filterContent('f3', $info, 'aA'));
+	Assert::same('new', $info->contentType);
 });

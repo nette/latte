@@ -52,8 +52,8 @@ class PhpWriter
 		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) {
 			return $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
 		}, $mask);
-		$mask = preg_replace_callback('#%modify(\(([^()]*+|(?1))+\))#', function ($m) {
-			return $this->formatModifiers(substr($m[1], 1, -1));
+		$mask = preg_replace_callback('#%modify(Content)?(\(([^()]*+|(?2))+\))#', function ($m) {
+			return $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]);
 		}, $mask);
 
 		$args = func_get_args();
@@ -104,11 +104,11 @@ class PhpWriter
 	 * @param  string
 	 * @return string
 	 */
-	public function formatModifiers($var)
+	public function formatModifiers($var, $isContent = FALSE)
 	{
 		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
 		$tokens = $this->preprocess($tokens);
-		$tokens = $this->modifierPass($tokens, $var);
+		$tokens = $this->modifierPass($tokens, $var, $isContent);
 		$tokens = $this->quotingPass($tokens);
 		return $tokens->joinAll();
 	}
@@ -390,7 +390,7 @@ class PhpWriter
 	 * @throws CompileException
 	 * @return MacroTokens
 	 */
-	public function modifierPass(MacroTokens $tokens, $var)
+	public function modifierPass(MacroTokens $tokens, $var, $isContent = FALSE)
 	{
 		$inside = FALSE;
 		$res = new MacroTokens($var);
@@ -419,7 +419,11 @@ class PhpWriter
 						$res->prepend('LR\Filters::safeUrl(');
 						$inside = TRUE;
 					} else {
-						$res->prepend('call_user_func($this->filters->' . strtolower($tokens->currentValue()) . ', ');
+						$name = strtolower($tokens->currentValue());
+						$res->prepend($isContent
+							? '$this->filters->filterContent('. var_export($name, TRUE) . ', $_fi, '
+							: 'call_user_func($this->filters->' . $name . ', '
+						);
 						$inside = TRUE;
 					}
 				} else {
@@ -429,6 +433,10 @@ class PhpWriter
 		}
 		if ($inside) {
 			$res->append(')');
+		}
+		if ($isContent) {
+			$res->prepend('LR\Filters::convertTo($_fi, ' . var_export($this->context[0], TRUE) . ', ')
+				->append(')');
 		}
 		return $res;
 	}
