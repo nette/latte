@@ -44,6 +44,7 @@ class Filters
 		'replacere' => ['Latte\Runtime\Filters::replaceRe', FALSE],
 		'safeurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
 		'strip' => ['Latte\Runtime\Filters::strip', FALSE],
+		'striphtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
 		'striptags' => ['strip_tags', FALSE],
 		'substr' => ['Latte\Runtime\Filters::substring', FALSE],
 		'trim' => ['Latte\Runtime\Filters::trim', FALSE],
