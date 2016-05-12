@@ -169,6 +169,37 @@ class Filters
 
 
 	/**
+	 * Converts HTML to plain text.
+	 * @param
+	 * @param  string HTML
+	 * @return string plain text
+	 */
+	public static function stripHtml(FilterInfo $info, $s)
+	{
+		if ($info->contentType && $info->contentType !== Engine::CONTENT_HTML) {
+			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+		}
+		$info->contentType = Engine::CONTENT_TEXT;
+		return html_entity_decode(strip_tags($s), ENT_QUOTES, 'UTF-8');
+	}
+
+
+	/**
+	 * Removes tags from HTML (but remains HTML entites).
+	 * @param
+	 * @param  string HTML
+	 * @return string HTML
+	 */
+	public static function stripTags(FilterInfo $info, $s)
+	{
+		if ($info->contentType && $info->contentType !== Engine::CONTENT_HTML) {
+			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+		}
+		return strip_tags($s);
+	}
+
+
+	/**
 	 * Converts ... to ...
 	 * @param  string
 	 * @return string plain text
@@ -198,31 +229,38 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string HTML
-	 * @return string HTML
+	 * @param
+	 * @param  string text|HTML
+	 * @return string text|HTML
 	 */
-	public static function strip($s)
+	public static function strip(FilterInfo $info, $s)
 	{
-		return preg_replace_callback(
-			'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
-			function ($m) {
-				return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
-			},
-			$s
-		);
+		if ($info->contentType === Engine::CONTENT_HTML) {
+			return preg_replace_callback(
+				'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
+				function ($m) {
+					return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
+				},
+				$s
+			);
+		} else {
+			return trim(preg_replace('#[ \t\r\n]+#', ' ', $s));
+		}
 	}
 
 
 	/**
-	 * Indents the HTML content from the left.
-	 * @param  string HTML
+	 * Indents the content from the left.
+	 * @param
+	 * @param  string text|HTML
 	 * @param  int
 	 * @param  string
-	 * @return string HTML
+	 * @return string text|HTML
 	 */
-	public static function indent($s, $level = 1, $chars = "\t")
+	public static function indent(FilterInfo $info, $s, $level = 1, $chars = "\t")
 	{
-		if ($level >= 1) {
+		if ($level < 1) {
+		} elseif ($info->contentType === Engine::CONTENT_HTML) {
 			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', function ($m) {
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
 			}, $s);
@@ -231,6 +269,8 @@ class Filters
 			}
 			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 			$s = strtr($s, "\x1F\x1E\x1D\x1A", " \t\r\n");
+		} else {
+			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 		}
 		return $s;
 	}
