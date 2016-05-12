@@ -79,7 +79,7 @@ Captured: <?php echo LR\Filters::escapeHtml($capture) ?>
 Hello
 <?php
 		$_fi = new LR\FilterInfo('html');
-		$capture = LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean())) ?>
+		$capture = LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()))) ?>
 
 <p>
 Captured with modifier: <?php echo LR\Filters::escapeHtml($capture) ?>
@@ -91,9 +91,9 @@ Captured with modifier: <?php echo LR\Filters::escapeHtml($capture) ?>
 <p>
 Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?> Inner Block <?php
 		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, ob_get_clean())) ?>  Block <?php
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean()))) ?>  Block <?php
 		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('truncate', $_fi, ob_get_clean(), 20)) ?>
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('truncate', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean()), 20)) ?>
 
 </p>
 <?php
