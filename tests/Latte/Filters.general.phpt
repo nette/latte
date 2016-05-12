@@ -4,6 +4,7 @@
  * Test: Latte\Engine: filters test.
  */
 
+use Latte\Runtime\FilterInfo;
 use Tester\Assert;
 
 
@@ -35,7 +36,7 @@ $latte = new Latte\Engine;
 $latte->addFilter('nl2br', 'nl2br');
 $latte->addFilter('h1', [new MyFilter, 'invoke']);
 $latte->addFilter('h2', 'strtoupper');
-$latte->addFilter('translate', 'strrev');
+$latte->addFilter('translate', function (FilterInfo $info, $s) { return strrev($s); });
 $latte->addFilter('types', 'types');
 $latte->addFilter(NULL, function ($name, $val) {
 	return $name === 'dynamic' ? "<$name $val>" : NULL;

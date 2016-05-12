@@ -50,7 +50,9 @@ AŠA
 // comment
 alert();
 </script>
-<?php echo call_user_func($this->filters->strip, ob_get_clean()) ?>
+<?php
+		$_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('strip', $_fi, ob_get_clean())) ?>
 
 
 
@@ -59,7 +61,9 @@ alert();
 <ul>
 	<li>lower: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
 </ul>
-<?php $capture = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean() ?>
+<?php
+		$_fi = new LR\FilterInfo('html');
+		$capture = LR\Filters::convertTo($_fi, 'html', ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()) ?>
 
 <p>
 Captured: <?php echo LR\Filters::escapeHtml($capture) ?>
@@ -69,7 +73,9 @@ Captured: <?php echo LR\Filters::escapeHtml($capture) ?>
 
 <?php ob_start(function () {}) ?>
 Hello
-<?php $capture = call_user_func($this->filters->upper, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()) ?>
+<?php
+		$_fi = new LR\FilterInfo('html');
+		$capture = LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean())) ?>
 
 <p>
 Captured with modifier: <?php echo LR\Filters::escapeHtml($capture) ?>
@@ -80,7 +86,10 @@ Captured with modifier: <?php echo LR\Filters::escapeHtml($capture) ?>
 
 <p>
 Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?> Inner Block <?php
-		echo call_user_func($this->filters->upper, ob_get_clean()) ?>  Block <?php echo call_user_func($this->filters->truncate, ob_get_clean(), 20) ?>
+		$_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, ob_get_clean())) ?>  Block <?php
+		$_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('truncate', $_fi, ob_get_clean(), 20)) ?>
 
 </p>
 <?php

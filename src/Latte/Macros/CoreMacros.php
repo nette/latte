@@ -209,7 +209,7 @@ class CoreMacros extends MacroSet
 			$noCheck ? NULL : implode('', $node->context)
 		);
 		if ($node->modifiers) {
-			return $writer->write('ob_start(function () {}); %raw; echo %modify(ob_get_clean())', $code);
+			return $writer->write('ob_start(function () {}); %raw; $_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean())', $code, $node->context[0]);
 		} else {
 			return $code;
 		}
@@ -251,7 +251,7 @@ class CoreMacros extends MacroSet
 		$body = $node->context[0] === Latte\Engine::CONTENT_HTML
 			? "ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()"
 			: 'ob_get_clean()';
-		return $node->data->variable . $writer->write(" = %modify($body)");
+		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body)", $node->context[0], $node->data->variable);
 	}
 
 
