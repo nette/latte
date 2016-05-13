@@ -17,6 +17,11 @@ class MyFilter
 	{
 		return strtolower($s);
 	}
+
+	function __invoke($s)
+	{
+		return strtoupper($s);
+	}
 }
 
 
@@ -40,6 +45,9 @@ test(function () {
 
 	$filters->add('f3', 'MyFilter::invoke');
 	Assert::same('aa', call_user_func($filters->f3, 'aA'));
+
+	$filters->add('f4', new MyFilter);
+	Assert::same('AA', call_user_func($filters->f4, 'aA'));
 
 	Assert::exception(function () use ($filters) {
 		call_user_func($filters->h3, '');

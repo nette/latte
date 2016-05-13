@@ -11,28 +11,41 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(TEMP_DIR);
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'main1' => '{define block}[block {$var}]{/} before {include block, var => 1} after',
+	'main2' => '{define block}[block {$var}]{/} before {include #block, var => 1} after',
+	'main3' => '{define block-2}[block {$var}]{/} before {include block-2, var => 1} after',
+	'main4' => '{define block.2}[block {$var}]{/} before {include block.2, var => 1} after',
+	'main5' => '{define block.2}[block {$var}]{/} before {include #block.2, var => 1} after',
 
-Assert::matchFile(
-	__DIR__ . '/expected/macros.include.phtml',
-	$latte->compile(__DIR__ . '/templates/include.latte')
+	'main6' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|striptags} after',
+]));
+
+Assert::match(
+	' before [block 1] after',
+	$latte->renderToString('main1')
 );
-Assert::matchFile(
-	__DIR__ . '/expected/macros.include.html',
-	$latte->renderToString(
-		__DIR__ . '/templates/include.latte',
-		['hello' => '<i>Hello</i>']
-	)
+
+Assert::match(
+	' before [block 1] after',
+	$latte->renderToString('main2')
 );
-Assert::matchFile(
-	__DIR__ . '/expected/macros.include.inc1.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/include1.latte'))
+
+Assert::match(
+	' before [block 1] after',
+	$latte->renderToString('main3')
 );
-Assert::matchFile(
-	__DIR__ . '/expected/macros.include.inc2.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/include2.latte'))
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('main4');
+}, 'RuntimeException', "Missing template 'block.2'.");
+
+Assert::match(
+	' before [block 1] after',
+	$latte->renderToString('main5')
 );
-Assert::matchFile(
-	__DIR__ . '/expected/macros.include.inc3.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/../include3.latte'))
+
+Assert::match(
+	' before block 1 after',
+	$latte->renderToString('main6')
 );
