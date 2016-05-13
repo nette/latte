@@ -40,7 +40,7 @@ class Filters
 		if ($quotes !== ENT_NOQUOTES && strpos($s, '`') !== FALSE && strpbrk($s, ' <>"\'') === FALSE) {
 			$s .= ' ';
 		}
-		return htmlSpecialChars($s, $quotes, 'UTF-8');
+		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
 	}
 
 
