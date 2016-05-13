@@ -27,7 +27,9 @@ class PhpWriter
 
 	public static function using(MacroNode $node)
 	{
-		return new static($node->tokenizer, $node->modifiers, $node->context);
+		$me = new static($node->tokenizer, NULL, $node->context);
+		$me->modifiers = & $node->modifiers;
+		return $me;
 	}
 
 
