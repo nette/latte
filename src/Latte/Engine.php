@@ -198,6 +198,8 @@ class Engine
 		}
 
 		flock($handle, LOCK_UN);
+		fclose($handle);
+		@unlink("$file.lock"); // @ file may become locked on Windows
 	}
 
 
