@@ -21,17 +21,17 @@ class Template%a% extends Latte\Template
 <?php header('Content-Type: application/xml; charset=utf-8') ?>
 
 <ul>
-	<li>Escaped: <?php echo LFilters::escapeXml($hello) ?></li>
+	<li>Escaped: <?php echo LR\Filters::escapeXml($hello) ?></li>
 	<li>Non-escaped: <?php echo $hello ?></li>
-	<li>Escaped expression: <?php echo LFilters::escapeXml('<' . 'b' . '>hello' . '</b>') ?></li>
+	<li>Escaped expression: <?php echo LR\Filters::escapeXml('<' . 'b' . '>hello' . '</b>') ?></li>
 	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' ?></li>
-	<li>Array access: <?php echo LFilters::escapeXml($people[1]) ?></li>
-	<li>Html: <?php echo LFilters::escapeXml($el) ?></li>
+	<li>Array access: <?php echo LR\Filters::escapeXml($people[1]) ?></li>
+	<li>Html: <?php echo LR\Filters::escapeXml($el) ?></li>
 </ul>
 
 <style type="text/css">
 <!--
-#<?php echo LFilters::escapeHtmlComment($id) ?> {
+#<?php echo LR\Filters::escapeHtmlComment($id) ?> {
 	background: blue;
 }
 -->
@@ -40,22 +40,22 @@ class Template%a% extends Latte\Template
 
 <script>
 <!--
-var html = <?php echo LFilters::escapeHtmlComment($el) ?>;
+var html = <?php echo LR\Filters::escapeHtmlComment($el) ?>;
 -->
 </script>
 
 
 <p onclick =
-'alert(<?php echo LFilters::escapeXml($id) ?>);alert("hello");'
- title='<?php echo LFilters::escapeXml($id) ?>"'
+'alert(<?php echo LR\Filters::escapeXml($id) ?>);alert("hello");'
+ title='<?php echo LR\Filters::escapeXml($id) ?>"'
  style =
- "color:<?php echo LFilters::escapeXml($id) ?>;'"
- alt='<?php echo LFilters::escapeXml($el) ?>'
- onfocus="alert(<?php echo LFilters::escapeXml($el) ?>)"
+ "color:<?php echo LR\Filters::escapeXml($id) ?>;'"
+ alt='<?php echo LR\Filters::escapeXml($el) ?>'
+ onfocus="alert(<?php echo LR\Filters::escapeXml($el) ?>)"
 >click on me</p>
 
 
-<!-- <?php echo LFilters::escapeHtmlComment($comment) ?> -->
+<!-- <?php echo LR\Filters::escapeHtmlComment($comment) ?> -->
 
 
 </ul>
@@ -66,7 +66,7 @@ var html = <?php echo LFilters::escapeHtmlComment($el) ?>;
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>	<li><?php echo LFilters::escapeXml($person) ?></li>
+			?>	<li><?php echo LR\Filters::escapeXml($person) ?></li>
 <?php
 			$iterations++;
 		}
@@ -93,11 +93,11 @@ var html = <?php echo LFilters::escapeHtmlComment($el) ?>;
 		}
 		?>> </p>
 
-<p val = <?php echo LFilters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo LFilters::escapeXmlAttrUnquoted($mxss) ?>> </p>
+<p val = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo LR\Filters::escapeXmlAttrUnquoted($mxss) ?>> </p>
 
-<p onclick = <?php echo LFilters::escapeXmlAttrUnquoted($xss) ?>> </p>
+<p onclick = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) ?>> </p>
 
-<p val = /><?php echo LFilters::escapeXml($xss) ?></p>
+<p val = /><?php echo LR\Filters::escapeXml($xss) ?></p>
 <?php
 	}
 

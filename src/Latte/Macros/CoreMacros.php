@@ -249,7 +249,7 @@ class CoreMacros extends MacroSet
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer)
 	{
 		$body = $node->context[0] === Latte\Engine::CONTENT_HTML
-			? "ob_get_length() ? new Latte\\Runtime\\Html(ob_get_clean()) : ob_get_clean()"
+			? "ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()"
 			: 'ob_get_clean()';
 		return $node->data->variable . $writer->write(" = %modify($body)");
 	}
@@ -274,7 +274,7 @@ class CoreMacros extends MacroSet
 			}
 		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
-			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new Latte\Runtime\CachingIterator('
+			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its) ?>';
 		} else {
@@ -318,7 +318,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('echo LFilters::htmlAttributes(%node.array)');
+		return $writer->write('echo LR\Filters::htmlAttributes(%node.array)');
 	}
 
 
