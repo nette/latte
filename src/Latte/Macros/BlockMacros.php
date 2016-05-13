@@ -214,13 +214,13 @@ class BlockMacros extends MacroSet
 				$node->closingCode = "<?php \$this->global->dynSnippets[\$this->global->dynSnippetId] = ob_get_flush() ?>";
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->global->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
+					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write('ob_start()');
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
-				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$_control->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
+				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
 
 			} else {
 				$node->data->leave = TRUE;
@@ -258,12 +258,12 @@ class BlockMacros extends MacroSet
 				if (isset($node->htmlNode->macroAttrs['foreach'])) {
 					trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
 				}
-				$node->attrCode = $writer->write('<?php echo \' id="\' . $_control->getSnippetId(%var) . \'"\' ?>', (string) substr($name, 1));
+				$node->attrCode = $writer->write('<?php echo \' id="\' . $this->global->uiControl->getSnippetId(%var) . \'"\' ?>', (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
 			$tag = trim($node->tokenizer->fetchWord(), '<>');
 			$tag = $tag ? $tag : 'div';
-			return $writer->write("?>\n<$tag id=\"<?php echo \$_control->getSnippetId(%var) ?>\"><?php $include ?>\n</$tag><?php ",
+			return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->uiControl->getSnippetId(%var) ?>\"><?php $include ?>\n</$tag><?php ",
 				(string) substr($name, 1), $name
 			);
 
@@ -306,7 +306,7 @@ class BlockMacros extends MacroSet
 
 			if (empty($node->data->leave)) {
 				if ($node->name === 'snippetArea' && empty($node->data->dynamic)) {
-					$node->content = "<?php \$_control->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$_control->snippetMode = FALSE; ?>";
+					$node->content = "<?php \$this->global->uiControl->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$this->global->uiControl->snippetMode = FALSE; ?>";
 				}
 				if (!empty($node->data->dynamic)) {
 					$node->content .= '<?php if (isset($this->global->dynSnippets)) return $this->global->dynSnippets; ?>';
@@ -314,7 +314,7 @@ class BlockMacros extends MacroSet
 				if ($node->name === 'snippetArea') {
 					$node->content .= '<?php return FALSE; ?>';
 				} elseif ($node->name === 'snippet') {
-					$node->content = '<?php $_control->redrawControl(' . var_export((string) substr($node->data->name, 1), TRUE) . ", FALSE);\n\n?>" . $node->content;
+					$node->content = '<?php $this->global->uiControl->redrawControl(' . var_export((string) substr($node->data->name, 1), TRUE) . ", FALSE);\n\n?>" . $node->content;
 				}
 				if (preg_match('#\$|n:#', $node->content)) {
 					$node->content = '<?php ' . (isset($node->data->args) ? $node->data->args : 'extract($_args);') . ' ?>' . $node->content;
