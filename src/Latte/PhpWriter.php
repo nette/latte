@@ -416,7 +416,7 @@ class PhpWriter
 						$res = $this->escapePass($res);
 						$tokens->nextToken('|');
 					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
-						$res->prepend('LFilters::safeUrl(');
+						$res->prepend('LR\Filters::safeUrl(');
 						$inside = TRUE;
 					} else {
 						$res->prepend('call_user_func($this->filters->' . strtolower($tokens->currentValue()) . ', ');
@@ -449,39 +449,39 @@ class PhpWriter
 					case Compiler::CONTEXT_QUOTED_ATTRIBUTE:
 					case Compiler::CONTEXT_TAG:
 						if ($subContext === Compiler::CONTENT_JS) {
-							$tokens->prepend('LFilters::escapeJs(')->append(')');
+							$tokens->prepend('LR\Filters::escapeJs(')->append(')');
 						} elseif ($subContext === Compiler::CONTENT_CSS) {
-							$tokens->prepend('LFilters::escapeCss(')->append(')');
+							$tokens->prepend('LR\Filters::escapeCss(')->append(')');
 						}
 						if ($context === Compiler::CONTEXT_TAG) {
-							$tokens->prepend('LFilters::escapeHtmlAttrUnquoted(')->append(')');
+							$tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
 						} else {
-							$tokens->prepend('LFilters::escapeHtmlAttr(')->append(')');
+							$tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
 						}
 						return $tokens;
 					case Compiler::CONTEXT_COMMENT:
-						return $tokens->prepend('LFilters::escapeHtmlComment(')->append(')');
+						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTENT_JS:
 					case Compiler::CONTENT_CSS:
-						return $tokens->prepend('LFilters::escape' . ucfirst($context) . '(')->append(')');
+						return $tokens->prepend('LR\Filters::escape' . ucfirst($context) . '(')->append(')');
 					default:
-						return $tokens->prepend('LFilters::escapeHtml(')->append(')');
+						return $tokens->prepend('LR\Filters::escapeHtml(')->append(')');
 				}
 
 			case Compiler::CONTENT_XML:
 				switch ($context) {
 					case Compiler::CONTEXT_COMMENT:
-						return $tokens->prepend('LFilters::escapeHtmlComment(')->append(')');
+						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTEXT_TAG:
-						return $tokens->prepend('LFilters::escapeXmlAttrUnquoted(')->append(')');
+						return $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')');
 					default:
-						return $tokens->prepend('LFilters::escapeXml(')->append(')');
+						return $tokens->prepend('LR\Filters::escapeXml(')->append(')');
 				}
 
 			case Compiler::CONTENT_JS:
 			case Compiler::CONTENT_CSS:
 			case Compiler::CONTENT_ICAL:
-				return $tokens->prepend('LFilters::escape' . ucfirst($contentType) . '(')->append(')');
+				return $tokens->prepend('LR\Filters::escape' . ucfirst($contentType) . '(')->append(')');
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
 			default:

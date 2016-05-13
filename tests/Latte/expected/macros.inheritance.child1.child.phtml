@@ -63,13 +63,13 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.');
 		foreach ($people as $person) {
-			?>		<li><?php echo LFilters::escapeHtml($person) ?></li>
+			?>		<li><?php echo LR\Filters::escapeHtml($person) ?></li>
 <?php
 			$iterations++;
 		}
 		?>
 	</ul>
-	Parent: <?php echo LFilters::escapeHtml(gettype($this->getReferringTemplate())) ?>
+	Parent: <?php echo LR\Filters::escapeHtml(gettype($this->getReferringTemplate())) ?>
 
 <?php
 	}

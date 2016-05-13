@@ -8,33 +8,34 @@ class Template%a% extends Latte\Template
 	{
 %A%?>
 <ul>
-	<li>lower: <?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
-	<li>upper: <?php echo LFilters::escapeHtml(call_user_func($this->filters->upper, $hello)) ?></li>
-	<li>lower & capitalize: <?php echo LFilters::escapeHtml(call_user_func($this->filters->capitalize, call_user_func($this->filters->lower, $hello))) ?></li>
-	<li>breaklines: <?php echo LFilters::escapeHtml(call_user_func($this->filters->breaklines, $hello)) ?></li>
-	<li>truncate: <?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, call_user_func($this->filters->truncate, $hello, "10 "))) ?></li>
-	<li>date: <?php echo LFilters::escapeHtml(call_user_func($this->filters->date, $date, '%d.%m.%Y %H:%M:%S')) ?></li>
-	<li>translated: <?php echo LFilters::escapeHtml(call_user_func($this->filters->truncate, call_user_func($this->filters->translate, $hello), 3)) ?></li>
-	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LFilters::escapeHtml(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
-	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LFilters::escapeHtml(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
-	<li>Translated HTML: <?php echo LFilters::escapeHtml(call_user_func($this->filters->translate, 'ahoj|ahojahojahojahoj')) ?></li>
-	<li>spaces: <?php echo LFilters::escapeHtml(call_user_func($this->filters->types, $hello , '' , "" , "$hello" )) ?></li>
-	<li>dynamic: <?php echo LFilters::escapeHtml(call_user_func($this->filters->dynamic, $hello)) ?> <?php echo LFilters::escapeHtml(call_user_func($this->filters->dynamic2, $hello)) ?></li>
+	<li>lower: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
+	<li>upper: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->upper, $hello)) ?></li>
+	<li>lower & capitalize: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->capitalize, call_user_func($this->filters->lower, $hello))) ?></li>
+	<li>breaklines: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->breaklines, $hello)) ?></li>
+	<li>truncate: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, call_user_func($this->filters->truncate, $hello, "10 "))) ?></li>
+	<li>date: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->date, $date, '%d.%m.%Y %H:%M:%S')) ?></li>
+	<li>translated: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->truncate, call_user_func($this->filters->translate, $hello), 3)) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
+	<li>Translated HTML: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, 'ahoj|ahojahojahojahoj')) ?></li>
+	<li>spaces: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello , '' , "" , "$hello" )) ?></li>
+	<li>dynamic: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->dynamic, $hello)) ?> <?php
+		echo LR\Filters::escapeHtml(call_user_func($this->filters->dynamic2, $hello)) ?></li>
 </ul>
 
 <ul>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->h2, call_user_func($this->filters->h1, $hello))) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->h2, call_user_func($this->filters->h1, $hello))) ?></li>
 	<li><?php echo call_user_func($this->filters->h2, call_user_func($this->filters->h1, $hello)) ?></li>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->h1, call_user_func($this->filters->h2, $hello))) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->h1, call_user_func($this->filters->h2, $hello))) ?></li>
 	<li><?php echo call_user_func($this->filters->h1, call_user_func($this->filters->h2, $hello)) ?></li>
 </ul>
 
 <ul>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->types, $hello*0, 0, 0.0, "0")) ?></li>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->types, $hello*1, 1, "1")) ?></li>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->types, $hello, true, null, false)) ?></li>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->types, $hello, TRUE, NULL, FALSE)) ?></li>
-	<li><?php echo LFilters::escapeHtml(call_user_func($this->filters->types, $hello, '', "", "$hello")) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello*0, 0, 0.0, "0")) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello*1, 1, "1")) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello, true, null, false)) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello, TRUE, NULL, FALSE)) ?></li>
+	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello, '', "", "$hello")) ?></li>
 </ul>
 
 
@@ -56,22 +57,22 @@ alert();
 
 <?php ob_start(function () {}) ?>
 <ul>
-	<li>lower: <?php echo LFilters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
+	<li>lower: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, $hello)) ?></li>
 </ul>
-<?php $capture = ob_get_length() ? new Latte\Runtime\Html(ob_get_clean()) : ob_get_clean() ?>
+<?php $capture = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean() ?>
 
 <p>
-Captured: <?php echo LFilters::escapeHtml($capture) ?>
+Captured: <?php echo LR\Filters::escapeHtml($capture) ?>
 
 </p>
 
 
 <?php ob_start(function () {}) ?>
 Hello
-<?php $capture = call_user_func($this->filters->upper, ob_get_length() ? new Latte\Runtime\Html(ob_get_clean()) : ob_get_clean()) ?>
+<?php $capture = call_user_func($this->filters->upper, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()) ?>
 
 <p>
-Captured with modifier: <?php echo LFilters::escapeHtml($capture) ?>
+Captured with modifier: <?php echo LR\Filters::escapeHtml($capture) ?>
 
 </p>
 

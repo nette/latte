@@ -46,7 +46,7 @@ class Template%a% extends Latte\Template
 	</div>
 </body>
 </html>
-Parent: <?php echo LFilters::escapeHtml(basename($this->getReferringTemplate()->getName())) ?>/<?php echo LFilters::escapeHtml($this->getReferenceType()) ?>
+Parent: <?php echo LR\Filters::escapeHtml(basename($this->getReferringTemplate()->getName())) ?>/<?php echo LR\Filters::escapeHtml($this->getReferenceType()) ?>
 
 <?php
 	}
