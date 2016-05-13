@@ -217,11 +217,11 @@ class Engine
 	 */
 	public function getCacheFile($name)
 	{
-		$file = $this->getTemplateClass($name);
-		if (preg_match('#\b\w.{10,50}$#', $name, $m)) {
-			$file = trim(preg_replace('#\W+#', '-', $m[0]), '-') . '-' . $file;
-		}
-		return $this->tempDirectory . '/' . $file . '.php';
+		$hash = substr($this->getTemplateClass($name), 8);
+		$base = preg_match('#([/\\\\][\w@.-]{3,35}){1,3}\z#', $name, $m)
+			? preg_replace('#[^\w@.-]+#', '-', substr($m[0], 1)) . '--'
+			: '';
+		return "$this->tempDirectory/$base$hash.php";
 	}
 
 
