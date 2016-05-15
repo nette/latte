@@ -92,6 +92,9 @@ class Compiler
 	/** @var array of [name => serialized value] */
 	private $properties = [];
 
+	/** @var callable|NULL */
+	private $invocationResolver;
+
 
 	/**
 	 * Adds new macro with IMacro flags.
@@ -187,6 +190,25 @@ class Compiler
 
 	/**
 	 * @return static
+	 */
+	public function setInvocationResolver(callable $resolver)
+	{
+		$this->invocationResolver = $resolver;
+		return $this;
+	}
+
+
+	/**
+	 * @return callable|NULL
+	 */
+	public function getInvocationResolver()
+	{
+		return $this->invocationResolver;
+	}
+
+
+	/**
+	 * @return self
 	 */
 	public function setContentType($type)
 	{

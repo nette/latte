@@ -26,20 +26,24 @@ class PhpWriter
 	/** @var array|null */
 	private $context;
 
+	/** @var callable|NULL */
+	private $resolver;
 
-	public static function using(MacroNode $node)
+
+	public static function using(MacroNode $node, callable $resolver = null)
 	{
-		$me = new static($node->tokenizer, null, $node->context);
+		$me = new static($node->tokenizer, null, $node->context, $resolver);
 		$me->modifiers = &$node->modifiers;
 		return $me;
 	}
 
 
-	public function __construct(MacroTokens $tokens, $modifiers = null, array $context = null)
+	public function __construct(MacroTokens $tokens, $modifiers = null, array $context = null, callable $resolver = null)
 	{
 		$this->tokens = $tokens;
 		$this->modifiers = $modifiers;
 		$this->context = $context;
+		$this->resolver = $resolver;
 	}
 
 
@@ -153,6 +157,7 @@ class PhpWriter
 		$tokens = $tokens === null ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
+		$tokens = $this->invocationPass($tokens);
 		$tokens = $this->shortTernaryPass($tokens);
 		$tokens = $this->inlineModifierPass($tokens);
 		$tokens = $this->inOperatorPass($tokens);
@@ -314,6 +319,55 @@ class PhpWriter
 			}
 		}
 		return $tokens->reset();
+	}
+
+
+	/**
+	 * Resolves all invocations via $resolver.
+	 * @return MacroTokens
+	 */
+	public function invocationPass(MacroTokens $tokens, $inner = false)
+	{
+		static $keywords = ['array' => 1, 'catch' => 1, 'clone' => 1, 'empty' => 1, 'for' => 1,
+			'foreach' => 1, 'function' => 1, 'if' => 1, 'isset' => 1, 'list' => 1, 'unset' => 1, ];
+
+		if (!$this->resolver) {
+			return $tokens;
+		}
+
+		$res = new MacroTokens;
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent($tokens::T_VARIABLE, $tokens::T_SYMBOL, '$') && empty($keywords[$tokens->currentValue()])) {
+				$buffer = [$tokens->currentToken()];
+				while ($tokens->nextToken()) {
+					if ($tokens->isCurrent('(')) {
+						$expr = array_reduce($buffer, function ($carry, $t) {
+							return $carry . ($t[Tokenizer::TYPE] === MacroTokens::T_WHITESPACE ? '' : $t[Tokenizer::VALUE]);
+						});
+						$resolved = call_user_func($this->resolver, $expr);
+						if (!$resolved) {
+							throw new CompileException("Calling '$expr()' is not allowed.");
+						}
+						$res->append($resolved);
+						$buffer = [];
+						break;
+					} elseif ($tokens->isCurrent('[', '{')) {
+						$buffer = array_merge($buffer, [$tokens->currentToken()], $this->invocationPass($tokens, true)->tokens);
+					} elseif ($tokens->isCurrent($tokens::T_KEYWORD, $tokens::T_STRING, $tokens::T_CAST, $tokens::T_CHAR) && !$tokens->isCurrent('->', '::', '\\')) {
+						break;
+					} else {
+						$buffer[] = $tokens->currentToken();
+					}
+				}
+				$res->tokens = array_merge($res->tokens, $buffer);
+			}
+
+			$res->append($tokens->currentToken());
+			if ($inner && $tokens->isCurrent(']', '}')) {
+				break;
+			}
+		}
+		return $res;
 	}
 
 
