@@ -95,6 +95,9 @@ class Compiler
 	/** @var array of [name => serialized value] */
 	private $properties = [];
 
+	/** @var Policy|null */
+	private $policy;
+
 
 	/**
 	 * Adds new macro with Macro flags.
@@ -204,6 +207,20 @@ class Compiler
 			. "final class $className extends Latte\\Runtime\\Template\n{\n"
 			. implode("\n\n", $members)
 			. "\n\n}\n";
+	}
+
+
+	/** @return static */
+	public function setPolicy(?Policy $policy)
+	{
+		$this->policy = $policy;
+		return $this;
+	}
+
+
+	public function getPolicy(): ?Policy
+	{
+		return $this->policy;
 	}
 
 
@@ -710,14 +727,21 @@ class Compiler
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')
 				. (in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true) ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : '');
 			throw new CompileException("Unknown macro {{$name}}$hint");
+
+		} elseif ($this->policy && !$this->policy->isMacroAllowed($name)) {
+			throw new SecurityViolation('Macro ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
 		}
 
 		$modifiers = (string) $modifiers;
 
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
-				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
-					$modifiers .= '|checkurl';
+				if (!Helpers::removeFilter($modifiers, 'nocheck')) {
+					if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
+						$modifiers .= '|checkurl';
+					}
+				} elseif ($this->policy && !$this->policy->isFilterAllowed('nocheck')) {
+					throw new SecurityViolation('Filter |nocheck is not allowed.');
 				}
 			}
 
@@ -726,6 +750,8 @@ class Compiler
 				if ($this->context === self::CONTEXT_HTML_JS && $name === '=' && preg_match('#["\'] *$#D', $this->tokens[$this->position - 1]->text)) {
 					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
 				}
+			} elseif ($this->policy && !$this->policy->isFilterAllowed('noescape')) {
+				throw new SecurityViolation('Filter |noescape is not allowed.');
 			}
 		}
 

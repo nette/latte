@@ -1,0 +1,19 @@
+<?php
+%A%
+object methods
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line 3 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, (string) 'method'])()) /* line 4 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, $method])()) /* line 5 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line 6 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call($this->call([$obj, 'method'])())()) /* line 7 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($this->call([$obj, 'method'])(), 'prop')->prop) /* line 8 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($this->call([$obj, 'method'])(), 'prop')->prop) /* line 9 */ ?>
+
+-%A%

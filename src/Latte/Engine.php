@@ -63,6 +63,12 @@ class Engine
 	/** @var bool */
 	private $strictTypes = false;
 
+	/** @var Policy|null */
+	private $policy;
+
+	/** @var bool */
+	private $sandboxed = false;
+
 
 	public function __construct()
 	{
@@ -103,7 +109,7 @@ class Engine
 			$this->loadTemplate($name);
 		}
 		$this->providers['fn'] = $this->functions;
-		return new $class($this, $params, $this->filters, $this->providers, $name);
+		return new $class($this, $params, $this->filters, $this->providers, $name, $this->sandboxed ? $this->policy : null);
 	}
 
 
@@ -127,11 +133,12 @@ class Engine
 			$code = $this->getCompiler()
 				->setContentType($this->contentType)
 				->setFunctions(array_keys((array) $this->functions))
+				->setPolicy($this->sandboxed ? $this->policy : null)
 				->compile($tokens, $this->getTemplateClass($name));
 
 		} catch (\Exception $e) {
 			if (!$e instanceof CompileException) {
-				$e = new CompileException("Thrown exception '{$e->getMessage()}'", 0, $e);
+				$e = new CompileException($e instanceof SecurityViolation ? $e->getMessage() : "Thrown exception '{$e->getMessage()}'", 0, $e);
 			}
 			$line = isset($tokens) ? $this->getCompiler()->getLine() : $this->getParser()->getLine();
 			throw $e->setSource($source, $line, $name);
@@ -247,7 +254,7 @@ class Engine
 
 	public function getTemplateClass(string $name): string
 	{
-		$key = serialize([$this->getLoader()->getUniqueId($name), self::VERSION, array_keys((array) $this->functions)]);
+		$key = serialize([$this->getLoader()->getUniqueId($name), self::VERSION, array_keys((array) $this->functions), $this->sandboxed]);
 		return 'Template' . substr(md5($key), 0, 10);
 	}
 
@@ -322,6 +329,22 @@ class Engine
 	public function getProviders(): array
 	{
 		return $this->providers;
+	}
+
+
+	/** @return static */
+	public function setPolicy(?Policy $policy)
+	{
+		$this->policy = $policy;
+		return $this;
+	}
+
+
+	/** @return static */
+	public function setSandboxMode(bool $on = true)
+	{
+		$this->sandboxed = $on;
+		return $this;
 	}
 
 
