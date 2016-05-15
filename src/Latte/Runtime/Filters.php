@@ -240,7 +240,7 @@ class Filters
 	{
 		if (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
 			return preg_replace_callback(
-				'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
+				'#(</textarea|</pre|</script|^(?!<textarea|<pre|<script)).*?(?=<textarea|<pre|<script|\z)#si',
 				function ($m) {
 					return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
 				},
