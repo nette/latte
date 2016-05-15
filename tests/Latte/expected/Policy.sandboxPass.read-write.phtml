@@ -1,0 +1,9 @@
+<?php
+%A%
+read-write
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, 'bar')->bar++) /* line 3 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, 'static')::$static++) /* line 4 */ ?>
+
+-%A%

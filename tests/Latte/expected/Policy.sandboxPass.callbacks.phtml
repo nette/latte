@@ -1,0 +1,17 @@
+<?php
+%A%
+callbacks
+
+<?php echo LR\Filters::escapeHtmlText($this->call($var)()) /* line 3 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call(($var))()) /* line 4 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call(${'var'})()) /* line 5 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call($$var)()) /* line 6 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call(['a', 'b'])()) /* line 7 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call(['trim'][0])()) /* line 8 */ ?>
+
+-%A%

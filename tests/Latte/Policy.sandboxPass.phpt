@@ -1,0 +1,187 @@
+<?php
+
+declare(strict_types=1);
+
+use Tester\Assert;
+
+
+require __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/Policy.Logger.php';
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte->setPolicy(new PolicyLogger);
+$latte->setSandboxMode();
+
+
+// vars - no checks
+$template = <<<'EOD'
+vars
+
+{=$var['x']}
+{=$var[ '' . change( 10 + inner() ) ]->prop}
+{=$var[ 0 + 1]->method()}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.vars.phtml',
+	$latte->compile($template)
+);
+
+
+// functions
+$template = <<<'EOD'
+functions
+
+{func()}     {* compile-time check *}
+{='func'()}
+{('fu' . 'nc')()}
+{=\func()}   {* compile-time check *}
+{=ns\func()} {* compile-time check *}
+{func()->prop}
+{func()()}
+{func( $a->prop )( func() )}
+{func()['x']()}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.functions.phtml',
+	$latte->compile($template)
+);
+
+
+// callbacks
+$template = <<<'EOD'
+callbacks
+
+{$var()}
+{($var)()}
+{=${'var'}()}
+{=$ $var()}
+{['a', 'b']()}
+{['trim'][0]()}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.callbacks.phtml',
+	$latte->compile($template)
+);
+
+
+
+// static methods
+$template = <<<'EOD'
+static methods
+
+{=MyClass::method()}
+{=\Name\MyClass :: method()}
+{=\Name\MyClass::{('method')}()}
+{=\Name\MyClass::$method()}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.static.methods.phtml',
+	$latte->compile($template)
+);
+
+
+// static props
+$template = <<<'EOD'
+static props
+
+{=\Name\MyClass::$prop}
+{=\Name\MyClass::$prop->x}
+{=\Name\MyClass::$prop[1]}
+{=\Name\MyClass::$prop[1]->x}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.static.props.phtml',
+	$latte->compile($template)
+);
+
+
+// object methods
+$template = <<<'EOD'
+object methods
+
+{=$obj -> method()}
+{=$obj->{'method'}()}
+{=$obj->$method()}
+{=$obj::method()}
+{=$obj->method()()}
+{=$obj->method()->prop}
+{=$obj::method()->prop}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.object.methods.phtml',
+	$latte->compile($template)
+);
+
+
+// props
+$template = <<<'EOD'
+props
+
+{=$obj -> prop}
+{=$obj->prop->prop}
+{=$obj->prop->$prop}
+{=$obj->prop->{"prop"}}
+{=$obj->prop[$x]}
+{=$obj->prop[($x)]}
+{=$obj->prop[$x]->prop}
+{=$obj->prop['x']->$prop}
+{=$obj->prop['x']->{"prop"}}
+{=$obj->prop['x']['y']->prop}
+{=$obj->prop['x']->method()}
+{=$obj->{"prop"}}
+{=$obj->{"prop"}->prop}
+{=$obj->$prop}
+{=$obj->$$prop}
+{=$obj->$$prop->$prop}
+{=$obj->$prop[$x]}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.props.phtml',
+	$latte->compile($template)
+);
+
+
+// read-write
+$template = <<<'EOD'
+read-write
+
+{=$obj->bar++}
+{=$obj::$static++}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.read-write.phtml',
+	$latte->compile($template)
+);
+
+
+// optional chaining
+$template = <<<'EOD'
+optional chaining
+
+{=$obj?->bar?}
+{=$obj?::$static?}
+-
+EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/Policy.sandboxPass.optional-chaining.phtml',
+	$latte->compile($template)
+);

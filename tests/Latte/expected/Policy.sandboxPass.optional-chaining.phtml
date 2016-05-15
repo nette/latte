@@ -1,0 +1,9 @@
+<?php
+%A%
+optional chaining
+
+<?php echo LR\Filters::escapeHtmlText((($_tmp = $obj ?? null) === null ? null : ($this->prop($_tmp, 'bar')->bar ?? null))) /* line 3 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText((($_tmp = $obj ?? null) === null ? null : ($this->prop($_tmp, 'static')::$static ?? null))) /* line 4 */ ?>
+
+-%A%
