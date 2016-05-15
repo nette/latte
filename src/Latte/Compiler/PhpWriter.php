@@ -26,6 +26,9 @@ class PhpWriter
 	/** @var array|null */
 	private $context;
 
+	/** @var Policy|null */
+	private $policy;
+
 	/** @var array */
 	private $functions = [];
 
@@ -35,6 +38,7 @@ class PhpWriter
 		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
+		$me->policy = $compiler ? $compiler->getPolicy() : null;
 		return $me;
 	}
 
@@ -163,9 +167,10 @@ class PhpWriter
 		$tokens = $tokens === null ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
-		$tokens = $this->replaceFunctionsPass($tokens);
 		$tokens = $this->optionalChainingPass($tokens);
 		$tokens = $this->shortTernaryPass($tokens);
+		$tokens = $this->sandboxPass($tokens);
+		$tokens = $this->replaceFunctionsPass($tokens);
 		$tokens = $this->inlineModifierPass($tokens);
 		$tokens = $this->inOperatorPass($tokens);
 		return $tokens;
@@ -195,6 +200,9 @@ class PhpWriter
 				&& !$brackets
 			) {
 				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
+
+			} elseif ($tokens->isCurrent('$this') && $this->policy) {
+				throw new CompileException('Forbidden variable $this.');
 			}
 		}
 		if ($brackets) {
@@ -433,6 +441,109 @@ class PhpWriter
 
 
 	/**
+	 * Applies sandbox policy.
+	 */
+	public function sandboxPass(MacroTokens $tokens): MacroTokens
+	{
+		static $keywords = [
+			'array' => 1, 'catch' => 1, 'clone' => 1, 'empty' => 1, 'for' => 1,
+			'foreach' => 1, 'function' => 1, 'if' => 1, 'elseif', 'isset' => 1, 'list' => 1, 'unset' => 1,
+		];
+
+		if (!$this->policy) {
+			return $tokens;
+		}
+
+		$startDepth = $tokens->depth;
+		$res = new MacroTokens;
+
+		while ($tokens->depth >= $startDepth && $tokens->nextToken()) {
+			$symbol = false;
+			if ($tokens->isCurrent('[', '(')) {
+				$expr = new MacroTokens(array_merge([$tokens->currentToken()], $this->sandboxPass($tokens)->tokens));
+
+			} elseif ($tokens->isCurrent($tokens::T_SYMBOL, '\\') && empty($keywords[$tokens->currentValue()])) {
+				$expr = new MacroTokens(array_merge([$tokens->currentToken()], $tokens->nextAll($tokens::T_SYMBOL, '\\')));
+				$symbol = true;
+			} elseif ($tokens->isCurrent($tokens::T_VARIABLE, $tokens::T_STRING)) {
+				$expr = new MacroTokens([$tokens->currentToken()]);
+			} elseif ($tokens->isCurrent('$')) {
+				$expr = new MacroTokens(array_merge([$tokens->currentToken()], $tokens->nextAll($tokens::T_VARIABLE, '$')));
+			} else {
+				$res->append($tokens->currentToken());
+				continue;
+			}
+
+			do {
+				if ($tokens->nextToken('(')) {
+					if ($symbol) {
+						$name = $expr->joinAll();
+						if (!$this->policy->isFunctionAllowed($name)) {
+							throw new SecurityViolation("Function $name() is not allowed.");
+						}
+						$symbol = false;
+						$expr->append('(');
+					} else {
+						$expr->prepend('$this->call(');
+						$expr->append(')(');
+					}
+
+				} elseif ($tokens->nextToken('->', '::')) {
+					$op = $tokens->currentValue();
+					if ($symbol) {
+						$expr->append('::class');
+						$symbol = false;
+					}
+					$expr->append(', ');
+
+					if ($tokens->nextToken('{')) {
+						$member = array_merge([$tokens->currentToken()], $this->sandboxPass($tokens)->tokens);
+						$expr->append('(string) ');
+						$expr->tokens = array_merge($expr->tokens, array_slice($member, 1, -1));
+					} elseif ($tokens->nextToken($tokens::T_SYMBOL)) {
+						$member = [$tokens->currentToken()];
+						$expr->append(var_export($tokens->currentValue(), true));
+					} elseif ($tokens->nextToken($tokens::T_VARIABLE)) {
+						$member = [$tokens->currentToken()];
+						if ($op === '::' && !$tokens->isNext('(')) {
+							$expr->append(var_export(substr($tokens->currentValue(), 1), true));
+						} else {
+							$expr->append($tokens->currentValue());
+						}
+					} else {
+						$member = $tokens->nextAll($tokens::T_VARIABLE, '$');
+						if ($op === '::' && !$tokens->isNext('(')) {
+							$expr->tokens = array_merge($expr->tokens, array_slice($member, 1));
+						} else {
+							$expr->tokens = array_merge($expr->tokens, $member);
+						}
+					}
+
+					if ($tokens->nextToken('(')) {
+						$expr->prepend('$this->call([');
+						$expr->append('])(');
+					} else {
+						$expr->prepend('$this->prop(');
+						$expr->append(')' . $op);
+						$expr->tokens = array_merge($expr->tokens, $member);
+					}
+
+				} elseif ($tokens->nextToken('[', '{')) {
+					$expr->tokens = array_merge($expr->tokens, [$tokens->currentToken()], $this->sandboxPass($tokens)->tokens);
+
+				} else {
+					break;
+				}
+			} while (true);
+
+			$res->tokens = array_merge($res->tokens, $expr->tokens);
+		}
+
+		return $res;
+	}
+
+
+	/**
 	 * Process inline filters ($var|filter)
 	 */
 	public function inlineModifierPass(MacroTokens $tokens): MacroTokens
@@ -531,7 +642,11 @@ class PhpWriter
 					$res->prepend('LR\Filters::safeUrl(');
 					$inside = true;
 				} else {
-					$name = strtolower($tokens->currentValue());
+					$name = $tokens->currentValue();
+					if ($this->policy && !$this->policy->isFilterAllowed($name)) {
+						throw new SecurityViolation("Filter |$name is not allowed.");
+					}
+					$name = strtolower($name);
 					$res->prepend($isContent
 						? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
 						: '($this->filters->' . $name . ')('

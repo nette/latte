@@ -1,0 +1,74 @@
+<?php
+%A%
+		echo LR\Filters::escapeHtmlText(global()) /* line 1 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call('global')()) /* line 2 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call($global)()) /* line 3 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call(($global))()) /* line 4 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call(('gl' . 'obal'))()) /* line 5 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText(\global()) /* line 6 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText(ns\global()) /* line 7 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText($this->call(['a', 'b'])()) /* line 9 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText($this->call([MyClass::class, 'method'])()) /* line 11 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, 'method'])()) /* line 12 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, (string) ('method')])()) /* line 13 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, $method])()) /* line 14 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop(\Name\MyClass::class, 'prop')::$prop) /* line 15 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line 17 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, (string) 'method'])()) /* line 18 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, $method])()) /* line 19 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line 20 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText($this->call(${'var'})()) /* line 22 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call($$var)()) /* line 23 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$var[ '' . change( 10 + inner() ) ], 'method'])()) /* line 24 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$var[ 0 + 1], 'method'])()) /* line 25 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop) /* line 27 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, (string) "prop")->{"prop"}) /* line 28 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, $prop)->$prop) /* line 29 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, $$prop)->$$prop) /* line 30 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, 'prop')->prop) /* line 31 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop[$x], 'prop')->prop) /* line 32 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->call([$this->prop($obj, 'prop')->prop[$x], 'method'])()) /* line 33 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, 'bar')->bar++) /* line 35 */ ?>
+
+<?php echo LR\Filters::escapeHtmlText($this->prop($obj, 'static')::$static++) /* line 36 */ ?>
+
+
+<?php echo LR\Filters::escapeHtmlText((($_tmp = $obj ?? null) === null ? null : ($this->prop($_tmp, 'bar')->bar ?? null))) /* line 38 */ ?>
+
+<?php
+		echo LR\Filters::escapeHtmlText((($_tmp = $obj ?? null) === null ? null : ($this->prop($_tmp, 'static')::$static ?? null))) /* line 39 */;
+%A%
