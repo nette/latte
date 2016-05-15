@@ -1,0 +1,86 @@
+<?php
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+	public $blocks = [
+		'block1' => 'blockBlock1',
+		'_snippet' => 'blockSnippet',
+		'_outer' => 'blockOuter',
+		'block2' => 'blockBlock2',
+	];
+
+	public $blockTypes = [
+		'block1' => 'html',
+		'_snippet' => 'html',
+		'_outer' => 'html',
+		'block2' => 'html',
+	];
+
+
+	function render()
+	{
+%A%
+		// main template
+		call_user_func(reset($this->blockQueue['block1']), get_defined_vars());
+		?>
+
+
+<div id="<?php echo $this->global->snippetDriver->getHtmlId('outer') ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div><?php
+
+	}
+
+
+	function blockBlock1($_args)
+	{
+		extract($_args);
+		?><div<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('snippet') . '"' ?>>
+<?php call_user_func(reset($this->blockQueue['_snippet']), $this->params) ?>
+</div>
+<?php
+
+	}
+
+
+	function blockSnippet($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("snippet", \Latte\SnippetDriver::TYPE_STATIC);
+		?>		static
+<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockOuter($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
+		?>
+begin
+<?php
+		call_user_func(reset($this->blockQueue['block2']), get_defined_vars());
+		?>
+end
+<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockBlock2($_args)
+	{
+		extract($_args);
+		?><div<?php echo ' id="' . $this->global->snippetDriver->getHtmlId("inner-$id") . '"' ?>>
+<?php
+		$this->global->snippetDriver->enter("inner-$id", \Latte\SnippetDriver::TYPE_DYNAMIC);
+		?>		dynamic
+<?php
+		$this->global->snippetDriver->leave();
+		?></div>
+<?php
+
+	}
+
+}

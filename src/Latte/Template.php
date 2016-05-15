@@ -173,6 +173,8 @@ class Template
 				$this->renderBlock($this->params['_renderblock'], $this->params);
 				return TRUE;
 			}
+		} elseif (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
+			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
 
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
@@ -180,6 +182,9 @@ class Template
 		$this->params['_l'] = $params['_l'] = new \stdClass;
 		$this->params['_g'] = $params['_g'] = $this->global;
 		$params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
+		if (isset($this->global->snippetDriver) && $this->global->snippetBridge->isSnippetMode()) {
+			return $this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params);
+		}
 	}
 
 

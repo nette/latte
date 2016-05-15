@@ -1,0 +1,48 @@
+<?php
+// source: %A%
+
+class Template%a% extends Latte\Template
+{
+	public $blocks = [
+		'_outer' => 'blockOuter',
+	];
+
+	public $blockTypes = [
+		'_outer' => 'html',
+	];
+
+
+	function render()
+	{
+%A%
+
+		// main template
+		?><div id="<?php echo $this->global->snippetDriver->getHtmlId('outer') ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div><?php
+
+	}
+
+
+	function blockOuter($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
+		$iterations = 0;
+		%a%
+		foreach (array(1,2,3) as $id) {
+			?>		<div id="<?php echo $this->global->snippetDriver->getHtmlId("inner-$id") ?>"><?php
+			$this->global->snippetDriver->enter("inner-$id", \Latte\SnippetDriver::TYPE_DYNAMIC);
+			?>
+
+				#<?php echo LR\Filters::escapeHtml($id) ?>
+
+<?php
+			$this->global->snippetDriver->leave();
+			?></div><?php
+			$iterations++;
+		}
+		?>	<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+}
