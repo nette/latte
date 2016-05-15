@@ -138,7 +138,7 @@ class Filters
 	public static function strip($s)
 	{
 		return preg_replace_callback(
-			'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
+			'#(</textarea|</pre|</script|^(?!<textarea|<pre|<script)).*?(?=<textarea|<pre|<script|\z)#si',
 			function ($m) {
 				return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
 			},

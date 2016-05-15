@@ -16,3 +16,5 @@ Assert::same('', Filters::strip(''));
 Assert::same('', Filters::strip("\r\n "));
 
 Assert::same('<p> Hello </p>', Filters::strip("<p> Hello </p>\r\n "));
+
+Assert::same("<pre>  \r\n </pre>", Filters::strip("<pre>  \r\n </pre>\r\n "));
