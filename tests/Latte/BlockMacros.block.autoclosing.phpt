@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: {block} autoclosing
+ * Test: {block} autoclosing
  */
 
 use Tester\Assert;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: unclosed macro.
+ * Test: unclosed macro.
  */
 
 use Tester\Assert;

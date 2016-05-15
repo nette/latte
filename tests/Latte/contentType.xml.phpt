@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: {contentType application/xml}
+ * Test: {contentType application/xml}
  */
 
 use Latte\Runtime\Html;

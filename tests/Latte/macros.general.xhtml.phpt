@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: general XHTML test.
+ * Test: general XHTML test.
  */
 
 use Latte\Runtime\Html;

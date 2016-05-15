@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: general n:attributes test.
+ * Test: general n:attributes test.
  */
 
 use Latte\Runtime\Html;

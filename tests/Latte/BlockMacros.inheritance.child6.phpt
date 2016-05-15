@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: {extends ...} test VI.
+ * Test: {extends ...} test VI.
  */
 
 use Tester\Assert;
