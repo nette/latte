@@ -268,6 +268,18 @@ class Engine
 
 
 	/**
+	 * Registers run-time function.
+	 * @return static
+	 */
+	public function addFunction(string $name, callable $callback)
+	{
+		$id = $this->getCompiler()->addFunction($name);
+		$this->providers[$id] = $callback;
+		return $this;
+	}
+
+
+	/**
 	 * Adds new provider.
 	 * @return static
 	 */

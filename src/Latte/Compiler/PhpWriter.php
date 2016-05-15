@@ -26,11 +26,15 @@ class PhpWriter
 	/** @var array|null */
 	private $context;
 
+	/** @var array */
+	private $functions = [];
 
-	public static function using(MacroNode $node): self
+
+	public static function using(MacroNode $node, Compiler $compiler = null): self
 	{
 		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;
+		$me->functions = $compiler ? $compiler->getFunctions() : [];
 		return $me;
 	}
 
@@ -159,6 +163,7 @@ class PhpWriter
 		$tokens = $tokens === null ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
+		$tokens = $this->replaceFunctionsPass($tokens);
 		$tokens = $this->optionalChainingPass($tokens);
 		$tokens = $this->shortTernaryPass($tokens);
 		$tokens = $this->inlineModifierPass($tokens);
@@ -209,6 +214,32 @@ class PhpWriter
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
 			if (!$tokens->isCurrent($tokens::T_COMMENT)) {
+				$res->append($tokens->currentToken());
+			}
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Replace global functions with custom ones.
+	 */
+	public function replaceFunctionsPass(MacroTokens $tokens): MacroTokens
+	{
+		$res = new MacroTokens;
+		while ($tokens->nextToken()) {
+			$name = $tokens->currentValue();
+			if (
+				$tokens->isCurrent($tokens::T_SYMBOL)
+				&& ($orig = $this->functions[strtolower($name)] ?? null)
+				&& $tokens->isNext('(')
+				&& !$tokens->isPrev('::', '->', '\\')
+			) {
+				if ($name !== $orig) {
+					trigger_error("Case mismatch on function name '$name', correct name is '$orig'.", E_USER_WARNING);
+				}
+				$res->append('($this->global->_fn' . strtolower($name) . ')');
+			} else {
 				$res->append($tokens->currentToken());
 			}
 		}

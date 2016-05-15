@@ -143,7 +143,7 @@ class MacroSet implements Latte\IMacro
 	private function compile(MacroNode $node, $def)
 	{
 		$node->tokenizer->reset();
-		$writer = Latte\PhpWriter::using($node);
+		$writer = Latte\PhpWriter::using($node, $this->compiler);
 		return is_string($def)
 			? $writer->write($def)
 			: $def($node, $writer);
