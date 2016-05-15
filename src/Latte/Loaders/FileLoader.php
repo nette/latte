@@ -26,6 +26,7 @@ class FileLoader implements Latte\ILoader
 		$this->baseDir = $baseDir ? $this->normalizePath("$baseDir/") : NULL;
 	}
 
+
 	/**
 	 * Returns template source code.
 	 * @return string

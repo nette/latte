@@ -62,7 +62,6 @@ class Engine
 	}
 
 
-
 	/**
 	 * Renders template to output.
 	 * @return void

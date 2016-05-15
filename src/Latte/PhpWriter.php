@@ -197,7 +197,7 @@ class PhpWriter
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
-			if (!$tokens->isCurrent(MacroTokens::T_COMMENT)) {
+			if (!$tokens->isCurrent($tokens::T_COMMENT)) {
 				$res->append($tokens->currentToken());
 			}
 		}
@@ -271,7 +271,7 @@ class PhpWriter
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
-			$res->append($tokens->isCurrent(MacroTokens::T_SYMBOL)
+			$res->append($tokens->isCurrent($tokens::T_SYMBOL)
 				&& (!$tokens->isPrev() || $tokens->isPrev(',', '(', '[', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '=', 'and', 'or', 'xor', '??'))
 				&& (!$tokens->isNext() || $tokens->isNext(',', ';', ')', ']', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', 'and', 'or', 'xor', '??'))
 				&& !preg_match('#^[A-Z_][A-Z0-9_]{2,}$#', $tokens->currentValue())
@@ -290,13 +290,13 @@ class PhpWriter
 	public function inOperatorPass(MacroTokens $tokens)
 	{
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent(MacroTokens::T_VARIABLE)) {
+			if ($tokens->isCurrent($tokens::T_VARIABLE)) {
 				$start = $tokens->position;
 				$depth = $tokens->depth;
 				$expr = $arr = [];
 
 				$expr[] = $tokens->currentToken();
-				while ($tokens->isNext(MacroTokens::T_VARIABLE, MacroTokens::T_SYMBOL, MacroTokens::T_NUMBER, MacroTokens::T_STRING, '[', ']', '(', ')', '->')
+				while ($tokens->isNext($tokens::T_VARIABLE, $tokens::T_SYMBOL, $tokens::T_NUMBER, $tokens::T_STRING, '[', ']', '(', ')', '->')
 					&& !$tokens->isNext('in')) {
 					$expr[] = $tokens->nextToken();
 				}
@@ -339,7 +339,7 @@ class PhpWriter
 
 	private function inlineModifierInner(MacroTokens $tokens)
 	{
-		$isFunctionOrArray = $tokens->isPrev(MacroTokens::T_VARIABLE, MacroTokens::T_SYMBOL) || $tokens->isCurrent('[');
+		$isFunctionOrArray = $tokens->isPrev($tokens::T_VARIABLE, $tokens::T_SYMBOL) || $tokens->isCurrent('[');
 		$result = new MacroTokens;
 		$args = new MacroTokens;
 		$modifiers = new MacroTokens;
@@ -381,8 +381,6 @@ class PhpWriter
 	}
 
 
-
-
 	/**
 	 * Formats modifiers calling.
 	 * @param  MacroTokens
@@ -395,13 +393,13 @@ class PhpWriter
 		$inside = FALSE;
 		$res = new MacroTokens($var);
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent(MacroTokens::T_WHITESPACE)) {
+			if ($tokens->isCurrent($tokens::T_WHITESPACE)) {
 				$res->append(' ');
 
 			} elseif ($inside) {
 				if ($tokens->isCurrent(':', ',')) {
 					$res->append(', ');
-					$tokens->nextAll(MacroTokens::T_WHITESPACE);
+					$tokens->nextAll($tokens::T_WHITESPACE);
 
 				} elseif ($tokens->isCurrent('|')) {
 					$res->append(')');
@@ -411,7 +409,7 @@ class PhpWriter
 					$res->append($tokens->currentToken());
 				}
 			} else {
-				if ($tokens->isCurrent(MacroTokens::T_SYMBOL)) {
+				if ($tokens->isCurrent($tokens::T_SYMBOL)) {
 					if ($tokens->isCurrent('escape')) {
 						$res = $this->escapePass($res);
 						$tokens->nextToken('|');
