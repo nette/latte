@@ -95,6 +95,9 @@ class Compiler
 	/** @var array of [name => serialized value] */
 	private $properties = [];
 
+	/** @var Policy|null */
+	private $policy;
+
 
 	/**
 	 * Adds new macro with Macro flags.
@@ -201,6 +204,20 @@ class Compiler
 			. "class $className extends Latte\\Runtime\\Template\n{\n"
 			. implode("\n\n", $members)
 			. "\n\n}\n";
+	}
+
+
+	/** @return static */
+	public function setPolicy(?Policy $policy)
+	{
+		$this->policy = $policy;
+		return $this;
+	}
+
+
+	public function getPolicy(): ?Policy
+	{
+		return $this->policy;
 	}
 
 
@@ -707,6 +724,9 @@ class Compiler
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')
 				. (in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true) ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : '');
 			throw new CompileException("Unknown macro {{$name}}$hint");
+
+		} elseif ($this->policy && !$this->policy->isMacroAllowed($name)) {
+			throw new SecurityViolation("Macro {{$name}} is not allowed.");
 		}
 
 		$modifiers = (string) $modifiers;

@@ -62,8 +62,8 @@ class RegexpException extends \Exception
 
 
 /**
- * The exception that indicates error during rendering template.
+ * Exception thrown when a not allowed construction is used in a template.
  */
-class RuntimeException extends \Exception
+class SecurityViolation extends \Exception
 {
 }
