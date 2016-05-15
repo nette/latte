@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: comments HTML test.
+ * Test: comments HTML test.
  */
 
 use Tester\Assert;

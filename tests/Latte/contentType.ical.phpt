@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: iCal template
+ * Test: iCal template
  */
 
 use Tester\Assert;

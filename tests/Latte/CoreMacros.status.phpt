@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: {status}
+ * Test: {status}
  */
 
 use Latte\Macros\CoreMacros;

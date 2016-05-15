@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: unknown macro.
+ * Test: unknown macro.
  */
 
 use Tester\Assert;

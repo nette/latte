@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: {includeblock ...}
+ * Test: {includeblock ...}
  */
 
 use Tester\Assert;

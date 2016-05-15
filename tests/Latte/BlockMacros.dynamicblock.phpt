@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: {block $name} dynamic blocks.
+ * Test: {block $name} dynamic blocks.
  */
 
 use Tester\Assert;

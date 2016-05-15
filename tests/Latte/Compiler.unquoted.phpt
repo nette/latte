@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: unquoted attributes.
+ * Test: unquoted attributes.
  */
 
 use Tester\Assert;

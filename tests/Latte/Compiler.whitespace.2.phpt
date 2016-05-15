@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: whitespace test II.
+ * Test: whitespace test II.
  */
 
 use Tester\Assert;

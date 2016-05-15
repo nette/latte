@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: filters test.
+ * Test: filters test.
  */
 
 use Latte\Runtime\FilterInfo;

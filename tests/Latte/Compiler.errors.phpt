@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: errors.
+ * Test: Compile errors.
  */
 
 use Tester\Assert;

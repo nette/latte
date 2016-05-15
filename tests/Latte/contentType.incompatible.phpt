@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine: block types compatibility
+ * Test: block types compatibility
  */
 
 use Tester\Assert;
