@@ -201,17 +201,18 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
-				$node->closingCode = "<?php \$this->global->dynSnippets[\$this->global->dynSnippetId] = ob_get_flush(); ?>";
+				$node->closingCode = "<?php \$this->global->snippetDriver->leave(); ?>";
+				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . Latte\Runtime\SnippetDriver::TYPE_DYNAMIC . '");';
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
-					return $writer->write('ob_start();');
+					$node->attrCode = $writer->write("<?php echo ' id=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
+					return $writer->write($enterCode);
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
 				$this->checkExtraArgs($node);
-				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start();");
+				return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
 
 			} else {
 				$node->data->leave = TRUE;
@@ -250,13 +251,13 @@ class BlockMacros extends MacroSet
 				if (isset($node->htmlNode->macroAttrs['foreach'])) {
 					trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
 				}
-				$node->attrCode = $writer->write('<?php echo \' id="\' . $this->global->uiControl->getSnippetId(%var) . \'"\' ?>', (string) substr($name, 1));
+				$node->attrCode = $writer->write('<?php echo \' id="\' . htmlSpecialChars($this->global->snippetDriver->getHtmlId(%var)) . \'"\' ?>', (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
 			$tag = trim($node->tokenizer->fetchWord(), '<>');
 			$tag = $tag ? $tag : 'div';
 			$this->checkExtraArgs($node);
-			return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->uiControl->getSnippetId(%var) ?>\"><?php $include ?>\n</$tag><?php ",
+			return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</$tag><?php ",
 				(string) substr($name, 1), $name
 			);
 
@@ -294,18 +295,14 @@ class BlockMacros extends MacroSet
 				$node->content = $node->innerContent;
 			}
 
+			if (($node->name === 'snippet' || $node->name === 'snippetArea') && strpos($node->data->name, '$') === FALSE) {
+				$type = $node->name === 'snippet' ? Latte\Runtime\SnippetDriver::TYPE_STATIC : Latte\Runtime\SnippetDriver::TYPE_AREA;
+				$node->content = '<?php $this->global->snippetDriver->enter('
+					. $writer->formatWord(substr($node->data->name, 1))
+					. ', "' . $type . '"); ?>'
+					. preg_replace('#(?<=\n)[ \t]+\z#', '', $node->content) . '<?php $this->global->snippetDriver->leave(); ?>';
+			}
 			if (empty($node->data->leave)) {
-				if ($node->name === 'snippetArea' && empty($node->data->dynamic)) {
-					$node->content = "<?php \$this->global->uiControl->snippetMode = isset(\$_snippetMode) && \$_snippetMode; ?>{$node->content}<?php \$this->global->uiControl->snippetMode = FALSE; ?>";
-				}
-				if (!empty($node->data->dynamic)) {
-					$node->content .= '<?php if (isset($this->global->dynSnippets)) return $this->global->dynSnippets; ?>';
-				}
-				if ($node->name === 'snippetArea') {
-					$node->content .= '<?php return FALSE; ?>';
-				} elseif ($node->name === 'snippet') {
-					$node->content = '<?php $this->global->uiControl->redrawControl(' . var_export((string) substr($node->data->name, 1), TRUE) . ", FALSE);\n\n?>" . $node->content;
-				}
 				if (preg_match('#\$|n:#', $node->content)) {
 					$node->content = '<?php ' . (isset($node->data->args) ? $node->data->args : 'extract($_args);') . ' ?>' . $node->content;
 				}

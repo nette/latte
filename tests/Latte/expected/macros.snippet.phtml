@@ -1,0 +1,101 @@
+<?php
+%A%
+
+class Template%a% extends Latte\Template
+{
+	public $blocks = [
+		'_' => 'block_b14a7',
+		'_outer' => 'blockOuter',
+		'_inner' => 'blockInner',
+		'_title' => 'blockTitle',
+		'_title2' => 'blockTitle2',
+	];
+
+	public $blockTypes = [
+		'_' => 'html',
+		'_outer' => 'html',
+		'_inner' => 'html',
+		'_title' => 'html',
+		'_title2' => 'html',
+	];
+
+
+	function render()
+	{
+%A%
+
+		// main template
+		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('')) ?>"><?php call_user_func(reset($this->blockQueue['_']), $this->params) ?></div>
+
+
+<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div>
+
+
+	@<?php
+		if (true) {
+			?> Hello World @<?php
+		}
+?>
+
+
+	<h2 id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php call_user_func(reset($this->blockQueue['_title']), $this->params) ?></h2>
+	<h2 id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php call_user_func(reset($this->blockQueue['_title2']), $this->params) ?></h2><?php
+
+	}
+
+
+	function block_%h%($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("", "static");
+?>
+
+<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockOuter($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("outer", "static");
+?>
+	Outer
+		<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php call_user_func(reset($this->blockQueue['_inner']), $this->params) ?></div>	/Outer
+<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockInner($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("inner", "static");
+		?>Inner<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockTitle($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("title", "static");
+		?>Title 1<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockTitle2($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("title2", "static");
+		?>Title 2<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+}
