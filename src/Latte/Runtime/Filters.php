@@ -185,6 +185,21 @@ class Filters
 
 
 	/**
+	 * Removes tags from HTML (but remains HTML entites).
+	 * @param
+	 * @param  string HTML
+	 * @return string HTML
+	 */
+	public static function stripTags(FilterInfo $info, $s)
+	{
+		if (!in_array($info->contentType, [NULL, Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE)) {
+			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+		}
+		return strip_tags($s);
+	}
+
+
+	/**
 	 * Converts ... to ...
 	 * @param  string
 	 * @return string plain text
@@ -193,10 +208,13 @@ class Filters
 	{
 		if ($dest === $info->contentType) {
 			return $s;
-		} elseif ($dest === Engine::CONTENT_HTML && (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)) {
+		} elseif (($dest === Engine::CONTENT_HTML || $dest === Engine::CONTENT_XHTML)
+			&& (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)
+		) {
 			return self::escapeHtml($s);
 		} else {
 			trigger_error("Filters: unable to convert content type " . strtoupper($info->contentType) . " to " . strtoupper($dest), E_USER_WARNING);
+			return $s;
 		}
 	}
 
@@ -214,31 +232,39 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string HTML
-	 * @return string HTML
+	 * @param
+	 * @param  string text|HTML
+	 * @return string text|HTML
 	 */
-	public static function strip($s)
+	public static function strip(FilterInfo $info, $s)
 	{
-		return preg_replace_callback(
-			'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
-			function ($m) {
-				return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
-			},
-			$s
-		);
+		if (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
+			return preg_replace_callback(
+				'#(</textarea|</pre|</script|^).*?(?=<textarea|<pre|<script|\z)#si',
+				function ($m) {
+					return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
+				},
+				$s
+			);
+		} else {
+			return trim(preg_replace('#[ \t\r\n]+#', ' ', $s));
+		}
 	}
 
 
 	/**
-	 * Indents the HTML content from the left.
-	 * @param  string HTML
+	 * Indents the content from the left.
+	 * @param
+	 * @param  string text|HTML
 	 * @param  int
 	 * @param  string
-	 * @return string HTML
+	 * @return string text|HTML
 	 */
-	public static function indent($s, $level = 1, $chars = "\t")
+	public static function indent(FilterInfo $info, $s, $level = 1, $chars = "\t")
 	{
-		if ($level >= 1) {
+		if ($level < 1) {
+			// do nothing
+		} elseif (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
 			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', function ($m) {
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
 			}, $s);
@@ -247,8 +273,23 @@ class Filters
 			}
 			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 			$s = strtr($s, "\x1F\x1E\x1D\x1A", " \t\r\n");
+		} else {
+			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 		}
 		return $s;
+	}
+
+
+	/**
+	 * Repeats text.
+	 * @param
+	 * @param  string
+	 * @param  int
+	 * @return string plain text
+	 */
+	public static function repeat(FilterInfo $info, $s, $count)
+	{
+		return str_repeat($s, $count);
 	}
 
 
@@ -306,12 +347,13 @@ class Filters
 
 	/**
 	 * Performs a search and replace.
+	 * @param
 	 * @param  string
 	 * @param  string
 	 * @param  string
 	 * @return string
 	 */
-	public static function replace($subject, $search, $replacement = '')
+	public static function replace(FilterInfo $info, $subject, $search, $replacement = '')
 	{
 		return str_replace($search, $replacement, $subject);
 	}

@@ -15,8 +15,12 @@ class Template%a% extends Latte\Template
 	<li>truncate: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, call_user_func($this->filters->truncate, $hello, "10 "))) ?></li>
 	<li>date: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->date, $date, '%d.%m.%Y %H:%M:%S')) ?></li>
 	<li>translated: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->truncate, call_user_func($this->filters->translate, $hello), 3)) ?></li>
-	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
-	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, ob_get_clean())) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php
+		$_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent("translate", $_fi, ob_get_clean())) ?></li>
+	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php
+		$_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent("translate", $_fi, ob_get_clean())) ?></li>
 	<li>Translated HTML: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, 'ahoj|ahojahojahojahoj')) ?></li>
 	<li>spaces: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->types, $hello , '' , "" , "$hello" )) ?></li>
 	<li>dynamic: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->dynamic, $hello)) ?> <?php
