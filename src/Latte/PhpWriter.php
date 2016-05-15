@@ -174,16 +174,33 @@ class PhpWriter
 	 */
 	public function validateTokens(MacroTokens $tokens)
 	{
+		$brackets = [];
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('?>')) {
 				throw new CompileException('Forbidden ?> inside macro');
-			} elseif ($tokens->isCurrent(MacroTokens::T_SYMBOL)
+
+			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)
 				&& !$tokens->isPrev('::') && !$tokens->isPrev('->')
 				&& preg_match('#^[A-Z0-9]{3,}$#', $val = $tokens->currentValue())
 			) {
 				trigger_error("Replace literal $val with constant('$val')", E_USER_DEPRECATED);
+
+			} elseif ($tokens->isCurrent('(', '[', '{')) {
+				static $counterpart = ['(' => ')', '[' => ']', '{' => '}'];
+				$brackets[] = $counterpart[$tokens->currentValue()];
+
+			} elseif ($tokens->isCurrent(')', ']', '}') && $tokens->currentValue() !== array_pop($brackets)) {
+				throw new CompileException('Unexpected ' . $tokens->currentValue());
+
+			} elseif ($tokens->isCurrent('function', 'class', 'interface', 'trait') && $tokens->isNext($tokens::T_SYMBOL, '&')
+				|| $tokens->isCurrent('return', 'yield') && !$brackets
+			) {
+				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
 			}
+		}
+		if ($brackets) {
+			throw new CompileException('Missing ' . array_pop($brackets));
 		}
 		$tokens->position = $pos;
 	}

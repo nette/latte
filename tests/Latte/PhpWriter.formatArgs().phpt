@@ -114,7 +114,7 @@ test(function () { // inline modifiers
 	Assert::same("[call_user_func(\$this->filters->bar, \$val),call_user_func(\$this->filters->lorem,  \$val)]", formatArgs('[$val|bar, $val|lorem]'));
 	Assert::exception(function () {
 		formatArgs('($val|mod:param:"param2"');
-	}, 'Latte\CompileException', 'Unbalanced brackets.');
+	}, 'Latte\CompileException', 'Missing )');
 
 	Assert::same('call_user_func($this->filters->escape, @)',  formatArgs('(@|escape)'));
 	Assert::same('LR\Filters::safeUrl(@)',  formatArgs('(@|checkurl)'));

@@ -42,3 +42,55 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{time() /}');
 }, 'Latte\CompileException', 'Unexpected /} in tag {time() /}');
+
+
+// brackets balaning
+Assert::exception(function () use ($latte) {
+	$latte->compile('{=)}');
+}, 'Latte\CompileException', 'Unexpected )');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{=[(])}');
+}, 'Latte\CompileException', 'Unexpected ]');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{=[}');
+}, 'Latte\CompileException', 'Missing ]');
+
+
+// forbidden keywords
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php function test() }');
+}, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php function /*comment*/ test() }');
+}, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php function & test() }');
+}, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php class test }');
+}, 'Latte\CompileException', "Forbidden keyword 'class' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php interface test }');
+}, 'Latte\CompileException', "Forbidden keyword 'interface' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php return}');
+}, 'Latte\CompileException', "Forbidden keyword 'return' inside macro.");
+
+Assert::noError(function () use ($latte) {
+	$latte->compile('{php function () { return; }}');
+});
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php yield}');
+}, 'Latte\CompileException', "Forbidden keyword 'yield' inside macro.");
+
+Assert::noError(function () use ($latte) {
+	$latte->compile('{php function () { yield; }}');
+});
