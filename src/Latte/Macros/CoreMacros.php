@@ -66,6 +66,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
 		$me->addMacro('spaceless', [$me, 'macroSpaceless'], [$me, 'macroSpaceless']);
 		$me->addMacro('include', [$me, 'macroInclude']);
+		$me->addMacro('sandbox', [$me, 'macroInclude']);
 		$me->addMacro('contentType', [$me, 'macroContentType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('php', [$me, 'macroExpr']);
 		$me->addMacro('do', [$me, 'macroExpr']);
@@ -220,20 +221,22 @@ class CoreMacros extends MacroSet
 
 	/**
 	 * {include "file" [,] [params]}
+	 * {sandbox "file" [,] [params]}
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
 		$node->replaced = false;
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Macro {include} provides auto-escaping, remove |escape.');
+			trigger_error("Macro {{$node->name}} provides auto-escaping, remove |escape.");
 		}
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
 			'/* line ' . $node->startLine . ' */
-			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
+			$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);',
+			$node->name,
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 				: PhpHelpers::dump($noEscape ? null : implode($node->context))
