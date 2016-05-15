@@ -187,7 +187,10 @@ class CoreMacros extends MacroSet
 	public function macroTranslate(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->closing) {
-			return $writer->write('echo %modify(call_user_func($this->filters->translate, ob_get_clean()))');
+			if (substr($node->modifiers, -7) === '|escape') {
+				$node->modifiers = substr($node->modifiers, 0, -7);
+			}
+			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, ob_get_clean()))', $node->context[0]);
 
 		} elseif ($node->empty = ($node->args !== '')) {
 			return $writer->write('echo %modify(call_user_func($this->filters->translate, %node.args))');
@@ -248,7 +251,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer)
 	{
-		$body = $node->context[0] === Latte\Engine::CONTENT_HTML
+		$body = in_array($node->context[0], [Latte\Engine::CONTENT_HTML, Latte\Engine::CONTENT_XHTML], TRUE)
 			? "ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()"
 			: 'ob_get_clean()';
 		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body)", $node->context[0], $node->data->variable);
