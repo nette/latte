@@ -298,9 +298,9 @@ class BlockMacros extends MacroSet
 			if (($node->name === 'snippet' || $node->name === 'snippetArea') && strpos($node->data->name, '$') === FALSE) {
 				$type = $node->name === 'snippet' ? 'TYPE_STATIC' : 'TYPE_AREA';
 				$node->content = '<?php $this->global->snippetDriver->enter('
-					. $writer->formatWord(substr($node->data->name, isset($node->data->leave) ? 0 : 1))
+					. $writer->formatWord(substr($node->data->name, 1))
 					. ', \\Latte\\SnippetDriver::' . $type . '); ?>'
-					. $node->content . '<?php $this->global->snippetDriver->leave(); ?>';
+					. preg_replace('#(?<=\n)[ \t]+\z#', '', $node->content) . '<?php $this->global->snippetDriver->leave(); ?>';
 			}
 			if (empty($node->data->leave)) {
 				if (preg_match('#\$|n:#', $node->content)) {

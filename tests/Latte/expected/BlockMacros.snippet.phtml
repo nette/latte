@@ -44,13 +44,13 @@ class Template%a% extends Latte\Template
 	}
 
 
-	function block_b14a7($_args)
+	function block_%h%($_args)
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("", \Latte\SnippetDriver::TYPE_STATIC);
 		?>
 
-	<?php
+<?php
 		$this->global->snippetDriver->leave();
 
 	}
@@ -63,7 +63,7 @@ class Template%a% extends Latte\Template
 		?>
 	Outer
 		<div id="<?php echo $this->global->snippetDriver->getHtmlId('inner') ?>"><?php call_user_func(reset($this->blockQueue['_inner']), $this->params) ?></div>	/Outer
-	<?php
+<?php
 		$this->global->snippetDriver->leave();
 
 	}
