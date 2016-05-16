@@ -1,9 +1,18 @@
 <?php
+
+/**
+ * This file is part of the Latte (https://latte.nette.org)
+ * Copyright (c) 2008 David Grudl (https://davidgrudl.com)
+ */
+
 namespace Latte;
 
+
+/**
+ * Snippet bridge
+ */
 interface ISnippetBridge
 {
-
 
 	/**
 	 * @return bool
@@ -44,6 +53,5 @@ interface ISnippetBridge
 	 * @return void
 	 */
 	public function renderChildren();
-
 
 }

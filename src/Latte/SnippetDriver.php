@@ -8,15 +8,17 @@
 namespace Latte;
 
 
-use Latte;
-
+/**
+ * Snippet driver
+ * @internal
+ */
 class SnippetDriver
 {
 	use Strict;
 
-	const TYPE_STATIC = 'static';
-	const TYPE_DYNAMIC = 'dynamic';
-	const TYPE_AREA = 'area';
+	const TYPE_STATIC = 'static',
+		TYPE_DYNAMIC = 'dynamic',
+		TYPE_AREA = 'area';
 
 	/** @var array */
 	protected $stack = [];
@@ -96,6 +98,5 @@ class SnippetDriver
 
 		return TRUE;
 	}
-
 
 }
