@@ -19,7 +19,7 @@ class SnippetDriver
 	const TYPE_AREA = 'area';
 
 	/** @var array */
-	protected $stack = array();
+	protected $stack = [];
 
 	/** @var int */
 	protected $renderingLevel = 0;
@@ -51,7 +51,7 @@ class SnippetDriver
 		} elseif ($this->renderingLevel > 0) {
 			$this->renderingLevel++;
 		}
-		$this->stack[] = array($name, $obStarted);
+		$this->stack[] = [$name, $obStarted];
 		if($name !== "") {
 			$this->bridge->markRedrawn($name);
 		}
