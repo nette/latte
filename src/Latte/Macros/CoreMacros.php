@@ -56,7 +56,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
 		$me->addMacro('for', 'for (%node.args) {', '}');
-		$me->addMacro('while', 'while (%node.args) {', '}');
+		$me->addMacro('while', [$me, 'macroWhile'], [$me, 'macroEndWhile']);
 		$me->addMacro('continueIf', [$me, 'macroBreakContinueIf']);
 		$me->addMacro('breakIf', [$me, 'macroBreakContinueIf']);
 		$me->addMacro('first', 'if ($iterator->isFirst(%node.args)) {', '}');
@@ -281,6 +281,36 @@ class CoreMacros extends MacroSet
 				$node->content = $parts[1] . $node->content . $parts[3];
 			}
 		}
+	}
+
+
+	/**
+	 * {while ...}
+	 */
+	public function macroWhile(MacroNode $node, PhpWriter $writer)
+	{
+		if ($node->modifiers) {
+			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+		}
+		if ($node->data->do = ($node->args === '')) {
+			return 'do {';
+		}
+		return $writer->write('while (%node.args) {');
+	}
+
+
+	/**
+	 * {/while ...}
+	 */
+	public function macroEndWhile(MacroNode $node, PhpWriter $writer)
+	{
+		if ($node->data->do) {
+			if ($node->args === '') {
+				throw new CompileException('Missing condition in {while} macro.');
+			}
+			return $writer->write('} while (%node.args);');
+		}
+		return '}';
 	}
 
 
