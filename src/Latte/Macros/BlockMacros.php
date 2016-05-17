@@ -156,7 +156,9 @@ class BlockMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
-		return $writer->write('$this->createTemplate(%node.word, [], "import")->render()');
+		$destination = $node->tokenizer->fetchWord();
+		$this->checkExtraArgs($node);
+		return $writer->write('$this->createTemplate(%word, [], "import")->render()', $destination);
 	}
 
 
@@ -221,6 +223,7 @@ class BlockMacros extends MacroSet
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
+				$this->checkExtraArgs($node);
 				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
 
 			} else {
@@ -229,6 +232,7 @@ class BlockMacros extends MacroSet
 				$fname = $writer->formatWord($name);
 				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$this->blockQueue[$fname]), get_defined_vars())") . ' ?>';
 				$blockType = var_export($this->exportBlockType($node), TRUE);
+				$this->checkExtraArgs($node);
 				return "\$this->checkBlockContentType($blockType, $fname);"
 					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
 			}
@@ -264,6 +268,7 @@ class BlockMacros extends MacroSet
 			}
 			$tag = trim($node->tokenizer->fetchWord(), '<>');
 			$tag = $tag ? $tag : 'div';
+			$this->checkExtraArgs($node);
 			return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->uiControl->getSnippetId(%var) ?>\"><?php $include ?>\n</$tag><?php ",
 				(string) substr($name, 1), $name
 			);
@@ -287,6 +292,7 @@ class BlockMacros extends MacroSet
 			return;
 
 		} else { // block, snippetArea
+			$this->checkExtraArgs($node);
 			return $writer->write($include, $name);
 		}
 	}

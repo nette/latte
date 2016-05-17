@@ -154,4 +154,14 @@ class MacroSet implements Latte\IMacro
 		return $this->compiler;
 	}
 
+
+	/** @internal */
+	protected function checkExtraArgs(MacroNode $node)
+	{
+		if ($node->tokenizer->isNext()) {
+			$args = Latte\Runtime\Filters::truncate($node->tokenizer->joinAll(), 20);
+			trigger_error("Unexpected arguments '$args' in " . $node->getNotation());
+		}
+	}
+
 }

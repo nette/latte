@@ -243,6 +243,7 @@ class CoreMacros extends MacroSet
 		if (substr($variable, 0, 1) !== '$') {
 			throw new CompileException("Invalid capture block variable '$variable'");
 		}
+		$this->checkExtraArgs($node);
 		$node->data->variable = $variable;
 		return 'ob_start(function () {})';
 	}
