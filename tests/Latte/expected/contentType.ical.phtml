@@ -14,13 +14,13 @@ VERSION:2.0
 PRODID:-//example.org//iCal 4.0.3//CS
 METHOD:PUBLISH
 BEGIN:VEVENT
-DTSTAMP:<?php echo LR\Filters::escapeIcal(call_user_func($this->filters->date, $start, 'Ymd\THis')) ?>
+DTSTAMP:<?php echo LR\Filters::escapeIcal(call_user_func($this->filters->date, $start, 'Ymd\THis')) /* line 8 */ ?>
 
-DTSTART;TZID=Europe/Prague:<?php echo LR\Filters::escapeIcal(call_user_func($this->filters->date, $start, 'Ymd\THis')) ?>
+DTSTART;TZID=Europe/Prague:<?php echo LR\Filters::escapeIcal(call_user_func($this->filters->date, $start, 'Ymd\THis')) /* line 9 */ ?>
 
-DTEND;TZID=Europe/Prague:<?php echo LR\Filters::escapeIcal(call_user_func($this->filters->date, $end, 'Ymd\THis')) ?>
+DTEND;TZID=Europe/Prague:<?php echo LR\Filters::escapeIcal(call_user_func($this->filters->date, $end, 'Ymd\THis')) /* line 10 */ ?>
 
-SUMMARY;LANGUAGE=cs:<?php echo LR\Filters::escapeIcal($info) ?>
+SUMMARY;LANGUAGE=cs:<?php echo LR\Filters::escapeIcal($info) /* line 11 */ ?>
 
 DESCRIPTION:
 CLASS:PUBLIC

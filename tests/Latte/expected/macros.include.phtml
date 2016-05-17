@@ -8,7 +8,9 @@ class Template%a% extends Latte\Template
 	{
 %A%
 <?php
+
 		ob_start(function () {});
+		/* line 2 */
 		$this->createTemplate('subdir/include1.latte' . '', ['localvar' => 10] + $this->params, "include")->renderToContentType('html');
 		$_fi = new LR\FilterInfo('html');
 		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('indent', $_fi, ob_get_clean()));

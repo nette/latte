@@ -209,11 +209,17 @@ class CoreMacros extends MacroSet
 	{
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
 		$code = $writer->write(
-			'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
+			'/* line ' . $this->getCompiler()->getLine() . ' */
+			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
 			$noCheck ? NULL : implode('', $node->context)
 		);
 		if ($node->modifiers) {
-			return $writer->write('ob_start(function () {}); %raw $_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $code, $node->context[0]);
+			return $writer->write('
+				ob_start(function () {});
+				%raw
+				$_fi = new LR\FilterInfo(%var);
+				echo %modifyContent(ob_get_clean());
+			', $code, $node->context[0]);
 		} else {
 			return $code;
 		}
@@ -472,7 +478,10 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write($node->name === '=' ? 'echo %modify(%node.args)' : '%modify(%node.args);');
+		return $writer->write($node->name === '='
+			? "echo %modify(%node.args) /* line {$this->getCompiler()->getLine()} */"
+			: '%modify(%node.args);'
+		);
 	}
 
 

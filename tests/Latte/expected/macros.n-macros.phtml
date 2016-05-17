@@ -39,7 +39,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator([1, 2, 3]) as $foo) {
 			?><p<?php if ($_tmp = array_filter([$iterator->even ? 'even' : NULL])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>><?php
-			echo LR\Filters::escapeHtml($foo) ?></p>
+			echo LR\Filters::escapeHtml($foo) /* line 10 */ ?></p>
 <?php
 			$iterations++;
 		}
@@ -66,7 +66,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>	<li><?php echo LR\Filters::escapeHtml($person) ?></li>
+			?>	<li><?php echo LR\Filters::escapeHtml($person) /* line 27 */ ?></li>
 <?php
 			$iterations++;
 		}
@@ -79,7 +79,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			?>	<li>
-		<?php echo LR\Filters::escapeHtml($person) ?>
+		<?php echo LR\Filters::escapeHtml($person) /* line 32 */ ?>
 
 	</li>
 <?php
@@ -94,7 +94,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>		<?php echo LR\Filters::escapeHtml($person) ?>
+			?>		<?php echo LR\Filters::escapeHtml($person) /* line 38 */ ?>
 
 <?php
 			$iterations++;
@@ -108,7 +108,7 @@ class Template%a% extends Latte\Template
 			?>	<li>
 <?php
 		}
-		?>		<?php echo LR\Filters::escapeHtml($person) ?>
+		?>		<?php echo LR\Filters::escapeHtml($person) /* line 44 */ ?>
 
 <?php
 		if (array_pop($this->global->ifs)) {
@@ -123,7 +123,7 @@ class Template%a% extends Latte\Template
 		for ($i=0;
 		$i<3;
 		$i++) {
-			?>	<li><?php echo LR\Filters::escapeHtml($i) ?></li>
+			?>	<li><?php echo LR\Filters::escapeHtml($i) /* line 49 */ ?></li>
 <?php
 		}
 		?>
@@ -132,7 +132,7 @@ class Template%a% extends Latte\Template
 <ul title="white">
 <?php
 		while (--$i>0) {
-			?>	<li><?php echo LR\Filters::escapeHtml($i) ?></li>
+			?>	<li><?php echo LR\Filters::escapeHtml($i) /* line 53 */ ?></li>
 <?php
 		}
 		?>
@@ -187,7 +187,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LR\Filters::escapeHtml($person) ?></li>
+				?>	<li><?php echo LR\Filters::escapeHtml($person) /* line 75 */ ?></li>
 <?php
 			}
 			$iterations++;
@@ -203,7 +203,7 @@ class Template%a% extends Latte\Template
 			%a%
 			foreach ($people as $person) {
 				if (strlen($person)===4) {
-					echo LR\Filters::escapeHtml($person);
+					echo LR\Filters::escapeHtml($person) /* line 79 */;
 				}
 				$iterations++;
 			}
@@ -219,7 +219,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, $person)) ?></li>
+				?>	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->lower, $person)) /* line 83 */ ?></li>
 <?php
 			}
 			$iterations++;
@@ -317,7 +317,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			?>	<li><?php
-			echo LR\Filters::escapeHtml($person);
+			echo LR\Filters::escapeHtml($person) /* line 100 */;
 			if (TRUE) {
 				echo "</li>\n";
 				break;
@@ -335,7 +335,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			?>	<li><?php
-			echo LR\Filters::escapeHtml($person);
+			echo LR\Filters::escapeHtml($person) /* line 104 */;
 			if (TRUE) {
 				echo "</li>\n";
 				continue;
@@ -353,7 +353,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			echo LR\Filters::escapeHtml($person);
+			echo LR\Filters::escapeHtml($person) /* line 109 */;
 			if (TRUE) break;
 			$iterations++;
 		}
@@ -365,7 +365,7 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			echo LR\Filters::escapeHtml($person);
+			echo LR\Filters::escapeHtml($person) /* line 113 */;
 			if (TRUE) continue;
 			$iterations++;
 		}
@@ -384,7 +384,7 @@ class Template%a% extends Latte\Template
 		%a%
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LR\Filters::escapeHtml($person) ?></li>
+				?>	<li><?php echo LR\Filters::escapeHtml($person) /* line 19 */ ?></li>
 <?php
 			}
 			$iterations++;

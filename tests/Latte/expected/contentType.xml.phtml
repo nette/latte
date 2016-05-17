@@ -23,17 +23,17 @@ class Template%a% extends Latte\Template
 		?>
 
 <ul>
-	<li>Escaped: <?php echo LR\Filters::escapeXml($hello) ?></li>
-	<li>Non-escaped: <?php echo $hello ?></li>
-	<li>Escaped expression: <?php echo LR\Filters::escapeXml('<' . 'b' . '>hello' . '</b>') ?></li>
-	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' ?></li>
-	<li>Array access: <?php echo LR\Filters::escapeXml($people[1]) ?></li>
-	<li>Html: <?php echo LR\Filters::escapeXml($el) ?></li>
+	<li>Escaped: <?php echo LR\Filters::escapeXml($hello) /* line 8 */ ?></li>
+	<li>Non-escaped: <?php echo $hello /* line 9 */ ?></li>
+	<li>Escaped expression: <?php echo LR\Filters::escapeXml('<' . 'b' . '>hello' . '</b>') /* line 10 */ ?></li>
+	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' /* line 11 */ ?></li>
+	<li>Array access: <?php echo LR\Filters::escapeXml($people[1]) /* line 12 */ ?></li>
+	<li>Html: <?php echo LR\Filters::escapeXml($el) /* line 13 */ ?></li>
 </ul>
 
 <style type="text/css">
 <!--
-#<?php echo LR\Filters::escapeHtmlComment($id) ?> {
+#<?php echo LR\Filters::escapeHtmlComment($id) /* line 18 */ ?> {
 	background: blue;
 }
 -->
@@ -42,22 +42,22 @@ class Template%a% extends Latte\Template
 
 <script>
 <!--
-var html = <?php echo LR\Filters::escapeHtmlComment($el) ?>;
+var html = <?php echo LR\Filters::escapeHtmlComment($el) /* line 27 */ ?>;
 -->
 </script>
 
 
 <p onclick =
-'alert(<?php echo LR\Filters::escapeXml($id) ?>);alert("hello");'
- title='<?php echo LR\Filters::escapeXml($id) ?>"'
+'alert(<?php echo LR\Filters::escapeXml($id) /* line 33 */ ?>);alert("hello");'
+ title='<?php echo LR\Filters::escapeXml($id) /* line 34 */ ?>"'
  style =
- "color:<?php echo LR\Filters::escapeXml($id) ?>;'"
- alt='<?php echo LR\Filters::escapeXml($el) ?>'
- onfocus="alert(<?php echo LR\Filters::escapeXml($el) ?>)"
+ "color:<?php echo LR\Filters::escapeXml($id) /* line 36 */ ?>;'"
+ alt='<?php echo LR\Filters::escapeXml($el) /* line 37 */ ?>'
+ onfocus="alert(<?php echo LR\Filters::escapeXml($el) /* line 38 */ ?>)"
 >click on me</p>
 
 
-<!-- <?php echo LR\Filters::escapeHtmlComment($comment) ?> -->
+<!-- <?php echo LR\Filters::escapeHtmlComment($comment) /* line 42 */ ?> -->
 
 
 </ul>
@@ -68,7 +68,7 @@ var html = <?php echo LR\Filters::escapeHtmlComment($el) ?>;
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>	<li><?php echo LR\Filters::escapeXml($person) ?></li>
+			?>	<li><?php echo LR\Filters::escapeXml($person) /* line 49 */ ?></li>
 <?php
 			$iterations++;
 		}
@@ -95,11 +95,11 @@ var html = <?php echo LR\Filters::escapeHtmlComment($el) ?>;
 		}
 		?>> </p>
 
-<p val = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) ?> val2=<?php echo LR\Filters::escapeXmlAttrUnquoted($mxss) ?>> </p>
+<p val = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 60 */ ?> val2=<?php echo LR\Filters::escapeXmlAttrUnquoted($mxss) /* line 60 */ ?>> </p>
 
-<p onclick = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) ?>> </p>
+<p onclick = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 62 */ ?>> </p>
 
-<p val = /><?php echo LR\Filters::escapeXml($xss) ?></p>
+<p val = /><?php echo LR\Filters::escapeXml($xss) /* line 64 */ ?></p>
 <?php
 	}
 

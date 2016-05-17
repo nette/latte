@@ -25,8 +25,8 @@ class Template%a% extends Latte\Template
 	function blockTest($_args)
 	{
 		extract($_args);
-		?>	Parent: <?php echo LR\Filters::escapeHtml(basename($this->getReferringTemplate()->getName())) ?>/<?php
-		echo LR\Filters::escapeHtml($this->getReferenceType()) ?>
+		?>	Parent: <?php echo LR\Filters::escapeHtml(basename($this->getReferringTemplate()->getName())) /* line 3 */ ?>/<?php
+		echo LR\Filters::escapeHtml($this->getReferenceType()) /* line 3 */ ?>
 
 <?php
 	}
