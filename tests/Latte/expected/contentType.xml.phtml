@@ -18,7 +18,9 @@ class Template%a% extends Latte\Template
 		?>
 </script>
 
-<?php header('Content-Type: application/xml; charset=utf-8') ?>
+<?php
+		header('Content-Type: application/xml; charset=utf-8');
+		?>
 
 <ul>
 	<li>Escaped: <?php echo LR\Filters::escapeXml($hello) ?></li>

@@ -16,7 +16,9 @@ class Template%a% extends Latte\Template
 	{
 %A%
 
-<p<?php echo LR\Filters::htmlAttributes(['title' => 'hello', 'lang' => isset($lang) ? $lang : NULL]) ?>> </p>
+<p<?php
+		echo LR\Filters::htmlAttributes(['title' => 'hello', 'lang' => isset($lang) ? $lang : NULL]);
+		?>> </p>
 
 
 
@@ -29,7 +31,8 @@ class Template%a% extends Latte\Template
 			$iterations++;
 		}
 		array_pop($this->global->its);
-		$iterator = end($this->global->its) ?>
+		$iterator = end($this->global->its);
+		?>
 
 <?php
 		$iterations = 0;
@@ -41,7 +44,8 @@ class Template%a% extends Latte\Template
 			$iterations++;
 		}
 		array_pop($this->global->its);
-		$iterator = end($this->global->its) ?>
+		$iterator = end($this->global->its);
+		?>
 
 <p<?php if ($_tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class</p>
 

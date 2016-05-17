@@ -176,9 +176,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer)
 	{
-		$node->openingCode = '<?php ob_start(function () {}) ?>';
-		$node->innerContent = '<?php ob_start() ?>' . $node->innerContent . '<?php $this->global->ifcontent = ob_get_flush() ?>';
-		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") ob_end_clean(); else echo ob_get_clean() ?>';
+		$node->openingCode = '<?php ob_start(function () {}); ?>';
+		$node->innerContent = '<?php ob_start(); ?>' . $node->innerContent . '<?php $this->global->ifcontent = ob_get_flush(); ?>';
+		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") ob_end_clean(); else echo ob_get_clean(); ?>';
 	}
 
 
@@ -209,11 +209,11 @@ class CoreMacros extends MacroSet
 	{
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
 		$code = $writer->write(
-			'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var)',
+			'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
 			$noCheck ? NULL : implode('', $node->context)
 		);
 		if ($node->modifiers) {
-			return $writer->write('ob_start(function () {}); %raw; $_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean())', $code, $node->context[0]);
+			return $writer->write('ob_start(function () {}); %raw $_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $code, $node->context[0]);
 		} else {
 			return $code;
 		}
@@ -257,7 +257,7 @@ class CoreMacros extends MacroSet
 		$body = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)
 			? "ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()"
 			: 'ob_get_clean()';
-		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body)", $node->context[0], $node->data->variable);
+		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body);", $node->context[0], $node->data->variable);
 	}
 
 
@@ -338,7 +338,7 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
 			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
-			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its) ?>';
+			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its); ?>';
 		} else {
 			$node->openingCode .= 'foreach (' . $args . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } ?>';
@@ -359,7 +359,7 @@ class CoreMacros extends MacroSet
 		if ($node->parentNode && $node->parentNode->prefix === $node::PREFIX_NONE) {
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
 		}
-		return $writer->write("if (%node.args) $cmd");
+		return $writer->write("if (%node.args) $cmd;");
 	}
 
 
@@ -380,7 +380,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('echo LR\Filters::htmlAttributes(%node.array)');
+		return $writer->write('echo LR\Filters::htmlAttributes(%node.array);');
 	}
 
 
@@ -394,7 +394,7 @@ class CoreMacros extends MacroSet
 		}
 		$args = $writer->formatArgs();
 		return $writer->write(
-			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()'). ', %var)',
+			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()'). ', %var);',
 			$args ?: 'variables'
 		);
 	}
@@ -409,7 +409,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
-			return $writer->write($node->args == NULL ? "$func()" : "if (%node.args) $func()");
+			return $writer->write($node->args == NULL ? "$func()" : "if (%node.args) $func();");
 		}
 	}
 
@@ -468,10 +468,11 @@ class CoreMacros extends MacroSet
 	/**
 	 * {= ...}
 	 * {? ...}
+	 * {php ...}
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write(($node->name === '=' ? 'echo ' : '') . '%modify(%node.args)');
+		return $writer->write($node->name === '=' ? 'echo %modify(%node.args)' : '%modify(%node.args);');
 	}
 
 
@@ -502,7 +503,7 @@ class CoreMacros extends MacroSet
 
 		// temporary solution
 		if (strpos($node->args, '/')) {
-			return $writer->write('header(%var)', "Content-Type: $node->args");
+			return $writer->write('header(%var);', "Content-Type: $node->args");
 		}
 	}
 
@@ -517,7 +518,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
-			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var)', (int) $node->args
+			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var);', (int) $node->args
 		);
 	}
 

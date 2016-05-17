@@ -119,13 +119,13 @@ class BlockMacros extends MacroSet
 		}
 
 		if (isset($this->namedBlocks[$destination]) && !$parent) {
-			$cmd .= "call_user_func(reset(\$this->blockQueue[$phpName]), %node.array? + get_defined_vars())";
+			$cmd .= "call_user_func(reset(\$this->blockQueue[$phpName]), %node.array? + get_defined_vars());";
 		} else {
-			$cmd .= '$this->renderBlock' . ($parent ? 'Parent' : '') . "($phpName, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ')'; //  + ["_b" => $_bl]
+			$cmd .= '$this->renderBlock' . ($parent ? 'Parent' : '') . "($phpName, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ');'; //  + ["_b" => $_bl]
 		}
 
 		if ($node->modifiers) {
-			return $writer->write("ob_start(function () {}); $cmd; \$_fi = new LR\\FilterInfo(%var); echo %modifyContent(ob_get_clean())", $node->context[0]);
+			return $writer->write("ob_start(function () {}); $cmd; \$_fi = new LR\\FilterInfo(%var); echo %modifyContent(ob_get_clean());", $node->context[0]);
 		} else {
 			return $writer->write($cmd);
 		}
@@ -142,7 +142,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write(
-			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var); echo rtrim(ob_get_clean())',
+			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var); echo rtrim(ob_get_clean());',
 			$this->exportBlockType($node)
 		);
 	}
@@ -158,7 +158,7 @@ class BlockMacros extends MacroSet
 		}
 		$destination = $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
-		return $writer->write('$this->createTemplate(%word, [], "import")->render()', $destination);
+		return $writer->write('$this->createTemplate(%word, [], "import")->render();', $destination);
 	}
 
 
@@ -178,10 +178,10 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Multiple $notation declarations are not allowed.");
 		} elseif ($node->args === 'none') {
 			$this->extends = FALSE;
-			return $writer->write('$this->parentName = FALSE');
+			return $writer->write('$this->parentName = FALSE;');
 		} else {
 			$this->extends = TRUE;
-			return $writer->write('$this->parentName = %node.word%node.args');
+			return $writer->write('$this->parentName = %node.word%node.args;');
 		}
 	}
 
@@ -214,23 +214,23 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
-				$node->closingCode = "<?php \$this->global->dynSnippets[\$this->global->dynSnippetId] = ob_get_flush() ?>";
+				$node->closingCode = "<?php \$this->global->dynSnippets[\$this->global->dynSnippetId] = ob_get_flush(); ?>";
 
 				if ($node->prefix) {
 					$node->attrCode = $writer->write("<?php echo ' id=\"' . (\$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)})) . '\"' ?>");
-					return $writer->write('ob_start()');
+					return $writer->write('ob_start();');
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
 				$this->checkExtraArgs($node);
-				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start()");
+				return $writer->write("?>\n<$tag id=\"<?php echo \$this->global->dynSnippetId = \$this->global->uiControl->getSnippetId({$writer->formatWord($name)}) ?>\"><?php ob_start();");
 
 			} else {
 				$node->data->leave = TRUE;
 				$node->data->func = $this->generateMethodName($name);
 				$fname = $writer->formatWord($name);
-				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$this->blockQueue[$fname]), get_defined_vars())") . ' ?>';
+				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$this->blockQueue[$fname]), get_defined_vars());") . ' ?>';
 				$blockType = var_export($this->exportBlockType($node), TRUE);
 				$this->checkExtraArgs($node);
 				return "\$this->checkBlockContentType($blockType, $fname);"
@@ -347,7 +347,7 @@ class BlockMacros extends MacroSet
 			return ' '; // consume next new line
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
-			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean())', $node->context[0]);
+			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
 		}
 	}
 

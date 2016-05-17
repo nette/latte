@@ -114,7 +114,8 @@ class Template%a% extends Latte\Template
 			$iterations++;
 		}
 		array_pop($this->global->its);
-		$iterator = end($this->global->its) ?>
+		$iterator = end($this->global->its);
+		?>
 
 
 
@@ -197,7 +198,9 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) ?>;
 </ul>
 
 
-<?php echo 'test' ?>
+<?php
+		echo 'test';
+		?>
 
 
 { }
@@ -270,7 +273,8 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) ?>;
 				if (isset($this->blockTypes['menu']) && $this->blockTypes['menu'] !== 'html') {
 					trigger_error('Including block menu with content type ' . strtoupper($this->blockTypes['menu']) . ' into incompatible type HTML.', E_USER_WARNING);
 				}
-				call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars()) ?> <?php
+				call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars());
+				?> <?php
 			}
 			else {
 				echo LR\Filters::escapeHtml($item);
@@ -280,7 +284,8 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) ?>;
 			$iterations++;
 		}
 		array_pop($this->global->its);
-		$iterator = end($this->global->its) ?>
+		$iterator = end($this->global->its);
+		?>
 </ul>
 <?php
 	}

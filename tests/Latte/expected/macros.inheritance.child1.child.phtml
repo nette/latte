@@ -51,6 +51,7 @@ class Template%a% extends Latte\Template
 			trigger_error('Including block title with content type ' . strtoupper($this->blockTypes['title']) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
 		$this->renderBlockParent('title', get_defined_vars());
+
 	}
 
 

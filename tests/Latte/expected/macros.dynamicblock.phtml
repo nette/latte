@@ -29,42 +29,49 @@ class Template%a% extends Latte\Template
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(['dynamic', 'static']) as $name) {
 			$this->checkBlockContentType('html', $name);
 			$this->blockQueue[$name][] = [$this, 'blockName'];
-			call_user_func(reset($this->blockQueue[$name]), get_defined_vars()) ?>
+			call_user_func(reset($this->blockQueue[$name]), get_defined_vars());
+			?>
 
 <?php
 			$iterations++;
 		}
 		array_pop($this->global->its);
-		$iterator = end($this->global->its) ?>
+		$iterator = end($this->global->its);
+		?>
 
 <?php
 		if (isset($this->blockTypes['dynamic']) && $this->blockTypes['dynamic'] !== 'html') {
 			trigger_error('Including block dynamic with content type ' . strtoupper($this->blockTypes['dynamic']) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
-		$this->renderBlock('dynamic', ['var' => 20] + $this->params) ?>
+		$this->renderBlock('dynamic', ['var' => 20] + $this->params);
+		?>
 
 <?php
 		if (isset($this->blockTypes['static']) && $this->blockTypes['static'] !== 'html') {
 			trigger_error('Including block static with content type ' . strtoupper($this->blockTypes['static']) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
-		call_user_func(reset($this->blockQueue['static']), ['var' => 30] + get_defined_vars()) ?>
+		call_user_func(reset($this->blockQueue['static']), ['var' => 30] + get_defined_vars());
+		?>
 
 <?php
 		$_tmp = $name . '';
 		if (isset($this->blockTypes[$_tmp]) && $this->blockTypes[$_tmp] !== 'html') {
 			trigger_error('Including block $name . \'\' with content type ' . strtoupper($this->blockTypes[$_tmp]) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
-		$this->renderBlock($_tmp, ['var' => 40] + $this->params) ?>
+		$this->renderBlock($_tmp, ['var' => 40] + $this->params);
+		?>
 
 <?php
 		$this->checkBlockContentType('html', "word$name");
 		$this->blockQueue["word$name"][] = [$this, 'blockWord_name'];
-		call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars()) ?>
+		call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars());
+		?>
 
 <?php
 		$this->checkBlockContentType('html', "word$name");
 		$this->blockQueue["word$name"][] = [$this, 'blockWord_name_%h%'];
-		call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars()) ?>
+		call_user_func(reset($this->blockQueue["word$name"]), get_defined_vars());
+		?>
 
 <?php
 	}
