@@ -34,9 +34,9 @@ EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.use.phtml',
-	$latte->compile($template)
+	@$latte->compile($template) // @ is deprecated
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.use.html',
-	$latte->renderToString($template)
+	@$latte->renderToString($template)
 );
