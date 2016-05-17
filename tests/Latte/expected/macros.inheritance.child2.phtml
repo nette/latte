@@ -21,7 +21,7 @@ class Template%a% extends Latte\Template
 %A%
 <?php
 		call_user_func(reset($this->blockQueue['content']), get_defined_vars());
-		?>
+?>
 
 <?php
 		call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars());
@@ -42,7 +42,7 @@ class Template%a% extends Latte\Template
 		extract($_args);
 		?>	<h1><?php
 		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
-		?></h1>
+?></h1>
 
 	<ul>
 <?php
@@ -53,7 +53,7 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		?>
+?>
 	</ul>
 <?php
 	}

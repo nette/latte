@@ -72,6 +72,8 @@ class Helpers
 							$res .= '<?php' . ($inline ? ' ' : "\n" . str_repeat("\t", $openLevel));
 							if (strpos($next[1], "\n") === FALSE) {
 								$token = rtrim($token, "\n");
+							} else {
+								$php = rtrim($php, "\t");
 							}
 							$res .= $php . $token;
 						}

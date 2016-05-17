@@ -15,12 +15,12 @@ class Template%a% extends Latte\Template
 		if (1) {
 			?><meta /><?php
 		}
-		?>
+?>
 </script>
 
 <?php
 		header('Content-Type: application/xml; charset=utf-8');
-		?>
+?>
 
 <ul>
 	<li>Escaped: <?php echo LR\Filters::escapeXml($hello) /* line 8 */ ?></li>
@@ -72,17 +72,17 @@ var html = <?php echo LR\Filters::escapeHtmlComment($el) /* line 27 */ ?>;
 <?php
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 
 <?php
 		if (true) {
-			?><p>
+?><p>
 	<div><p>true</div>
 </p>
 <?php
 		}
-		?>
+?>
 
 <input/> <input />
 
@@ -93,7 +93,7 @@ var html = <?php echo LR\Filters::escapeHtmlComment($el) /* line 27 */ ?>;
 		else {
 			?>"b"<?php
 		}
-		?>> </p>
+?>> </p>
 
 <p val = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 60 */ ?> val2=<?php echo LR\Filters::escapeXmlAttrUnquoted($mxss) /* line 60 */ ?>> </p>
 

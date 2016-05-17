@@ -18,7 +18,7 @@ class Template%a% extends Latte\Template
 
 <p<?php
 		echo LR\Filters::htmlAttributes(['title' => 'hello', 'lang' => isset($lang) ? $lang : NULL]);
-		?>> </p>
+?>> </p>
 
 
 
@@ -32,7 +32,7 @@ class Template%a% extends Latte\Template
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 
 <?php
 		$iterations = 0;
@@ -45,7 +45,7 @@ class Template%a% extends Latte\Template
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 
 <p<?php if ($_tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class</p>
 
@@ -55,7 +55,7 @@ class Template%a% extends Latte\Template
 
 <?php
 		call_user_func(reset($this->blockQueue['bl']), get_defined_vars());
-		?>
+?>
 
 
 
@@ -70,7 +70,7 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 
 <ul title="foreach">
@@ -78,14 +78,14 @@ class Template%a% extends Latte\Template
 		$iterations = 0;
 		%a%
 		foreach ($people as $person) {
-			?>	<li>
+?>	<li>
 		<?php echo LR\Filters::escapeHtml($person) /* line 32 */ ?>
 
 	</li>
 <?php
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 
 <ul title="inner foreach">
@@ -99,23 +99,23 @@ class Template%a% extends Latte\Template
 <?php
 			$iterations++;
 		}
-		?>	</li>
+?>	</li>
 </ul>
 
 <ul title="tag if">
 <?php
 		if ($this->global->ifs[] = (true)) {
-			?>	<li>
+?>	<li>
 <?php
 		}
 		?>		<?php echo LR\Filters::escapeHtml($person) /* line 44 */ ?>
 
 <?php
 		if (array_pop($this->global->ifs)) {
-			?>	</li>
+?>	</li>
 <?php
 		}
-		?>
+?>
 </ul>
 
 <ul title="for">
@@ -126,7 +126,7 @@ class Template%a% extends Latte\Template
 			?>	<li><?php echo LR\Filters::escapeHtml($i) /* line 49 */ ?></li>
 <?php
 		}
-		?>
+?>
 </ul>
 
 <ul title="white">
@@ -135,51 +135,51 @@ class Template%a% extends Latte\Template
 			?>	<li><?php echo LR\Filters::escapeHtml($i) /* line 53 */ ?></li>
 <?php
 		}
-		?>
+?>
 </ul>
 
 <?php
 		if (true) {
-			?><p>
+?><p>
 	<div><p>true</div>
 </p>
 <?php
 		}
-		?>
+?>
 
 <?php
 		if (true) {
-			?><p>
+?><p>
 	<div><p>true</p></div>
 </p>
 <?php
 		}
-		?>
+?>
 
 <?php
 		if (false) {
-			?><p>
+?><p>
 	<div><p>false</div>
 </p>
 <?php
 		}
-		?>
+?>
 
 <?php
 		if (false) {
-			?><p>
+?><p>
 	<div><p>false</p></div>
 </p>
 <?php
 		}
-		?>
+?>
 
 <?php
 		if (strlen('{$name}') > 5) {
-			?><p>noLatte</p>
+?><p>noLatte</p>
 <?php
 		}
-		?>
+?>
 
 <ul title="if + foreach">
 <?php
@@ -192,7 +192,7 @@ class Template%a% extends Latte\Template
 			}
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 
 <ul title="if + inner-if + inner-foreach">
@@ -207,10 +207,10 @@ class Template%a% extends Latte\Template
 				}
 				$iterations++;
 			}
-			?></li>
+?></li>
 <?php
 		}
-		?>
+?>
 </ul>
 
 <ul title="inner-if + inner-foreach">
@@ -224,7 +224,7 @@ class Template%a% extends Latte\Template
 			}
 			$iterations++;
 		}
-		?></ul>
+?></ul>
 
 <?php
 		if ($this->global->ifs[] = (true)) {
@@ -240,10 +240,10 @@ class Template%a% extends Latte\Template
 		}
 		?>normal<?php
 		if (array_pop($this->global->ifs)) {
-			?></b>
+?></b>
 <?php
 		}
-		?>
+?>
 
 <?php
 		if ($this->global->ifs[] = (true)) {
@@ -251,29 +251,29 @@ class Template%a% extends Latte\Template
 		}
 		?>bold<?php
 		if (array_pop($this->global->ifs)) {
-			?></b>
+?></b>
 <?php
 		}
-		?>
+?>
 
 <meta>
 <?php
 		if (true) {
-			?><meta>
+?><meta>
 <?php
 		}
 		if ($this->global->ifs[] = (true)) {
-			?><meta>
+?><meta>
 <?php
 		}
 		if (array_pop($this->global->ifs)) {
 		}
-		?>
+?>
 <meta>
 <?php
 		if (true) {
 		}
-		?><meta>
+?><meta>
 
 <?php
 		$iterations = 0;
@@ -300,7 +300,7 @@ class Template%a% extends Latte\Template
 				%a%
 				foreach ([1] as $foo) {
 					if (array_pop($this->global->ifs)) {
-						?></span>
+?></span>
 <?php
 					}
 					$iterations++;
@@ -308,7 +308,7 @@ class Template%a% extends Latte\Template
 			}
 			$iterations++;
 		}
-		?>
+?>
 
 
 <ul title="foreach break">
@@ -322,11 +322,11 @@ class Template%a% extends Latte\Template
 				echo "</li>\n";
 				break;
 			}
-			?></li>
+?></li>
 <?php
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 
 <ul title="foreach continue">
@@ -340,11 +340,11 @@ class Template%a% extends Latte\Template
 				echo "</li>\n";
 				continue;
 			}
-			?></li>
+?></li>
 <?php
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 
 
@@ -357,7 +357,7 @@ class Template%a% extends Latte\Template
 			if (TRUE) break;
 			$iterations++;
 		}
-		?></li>
+?></li>
 </ul>
 
 <ul title="inner foreach continue">
@@ -369,7 +369,7 @@ class Template%a% extends Latte\Template
 			if (TRUE) continue;
 			$iterations++;
 		}
-		?></li>
+?></li>
 </ul>
 <?php
 	}
@@ -378,7 +378,7 @@ class Template%a% extends Latte\Template
 	function blockBl($_args)
 	{
 		extract($_args);
-		?><ul title="block + if + foreach">
+?><ul title="block + if + foreach">
 <?php
 		$iterations = 0;
 		%a%
@@ -389,7 +389,7 @@ class Template%a% extends Latte\Template
 			}
 			$iterations++;
 		}
-		?>
+?>
 </ul>
 <?php
 	}

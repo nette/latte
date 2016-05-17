@@ -51,7 +51,7 @@ class Template%a% extends Latte\Template
 <?php
 		$_fi = new LR\FilterInfo('html');
 		$capture = LR\Filters::convertTo($_fi, 'html', ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean());
-		?>
+?>
 
 <p>
 Captured: <?php echo LR\Filters::escapeHtml($capture) /* line 40 */ ?>
@@ -64,7 +64,7 @@ Hello
 <?php
 		$_fi = new LR\FilterInfo('html');
 		$capture = LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean())));
-		?>
+?>
 
 <p>
 Captured with modifier: <?php echo LR\Filters::escapeHtml($capture) /* line 49 */ ?>
@@ -80,7 +80,7 @@ Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function
 		?>  Block <?php
 		$_fi = new LR\FilterInfo('html');
 		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('truncate', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean()), 20));
-		?>
+?>
 
 </p>
 <?php

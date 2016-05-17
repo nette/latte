@@ -25,14 +25,14 @@ class Template%a% extends Latte\Template
 			if ($iterator->isLast()) {
 				?>)<?php
 			}
-			?>
+?>
 
 <?php
 			$iterations++;
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 
 
 <?php
@@ -52,14 +52,14 @@ class Template%a% extends Latte\Template
 			if ($iterator->isLast(2)) {
 				?>)<?php
 			}
-			?>
+?>
 
 <?php
 			$iterations++;
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 
 
 <?php
@@ -79,14 +79,14 @@ class Template%a% extends Latte\Template
 			if ($iterator->isLast(1)) {
 				?>)<?php
 			}
-			?>
+?>
 
 <?php
 			$iterations++;
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 
 
 <?php
@@ -103,7 +103,7 @@ class Template%a% extends Latte\Template
 			}
 			?> <?php
 			if ($iterator->isLast()) {
-				?><span>)</span>
+?><span>)</span>
 <?php
 			}
 			$iterations++;

@@ -20,7 +20,7 @@ class Template%a% extends Latte\Template
 		extract($_args);
 
 		// main template
-		?>
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <ul>
@@ -51,7 +51,7 @@ class Template%a% extends Latte\Template
 		else {
 			?>"b"<?php
 		}
-		?>> </p>
+?>> </p>
 
 <p val0 val1 = tmp val2=tmp val3="x"></p> </p>
 
@@ -78,11 +78,11 @@ class Template%a% extends Latte\Template
 <?php
 		}
 		else {
-			?>
+?>
 	none
 <?php
 		}
-		?>
+?>
 
 
 <?php
@@ -96,7 +96,7 @@ class Template%a% extends Latte\Template
 				if ($iterator->isFirst()) {
 					?><ul><?php
 				}
-				?>
+?>
 
 	<li id="item-<?php echo LR\Filters::escapeHtmlAttr($iterator->getCounter()) /* line 49 */ ?>" class="<?php
 				echo LR\Filters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') /* line 49 */ ?>"><?php echo LR\Filters::escapeHtml($person) /* line 49 */ ?></li>
@@ -104,7 +104,7 @@ class Template%a% extends Latte\Template
 				if ($iterator->isLast()) {
 					?></ul><?php
 				}
-				?>
+?>
 
 <?php
 				$iterations++;
@@ -115,7 +115,7 @@ class Template%a% extends Latte\Template
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 
 
 
@@ -167,7 +167,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <?php
 		$counter = 0;
 		call_user_func(reset($this->blockQueue['menu']), get_defined_vars());
-		?>
+?>
 
 
 <?php
@@ -200,7 +200,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 <?php
 		echo 'test';
-		?>
+?>
 
 
 { }
@@ -208,12 +208,12 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <?php ob_start(function () {}) ?>TRUE<?php
 		if (TRUE) echo ob_get_clean();
 		else ob_end_clean();
-		?>
+?>
 
 <?php ob_start(function () {}) ?>FALSE<?php
 		if (FALSE) echo ob_get_clean();
 		else ob_end_clean();
-		?>
+?>
 
 <?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php
 		if (TRUE) {
@@ -225,7 +225,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 			ob_end_clean();
 			echo $this->global->else;
 		}
-		?>
+?>
 
 
 
@@ -234,15 +234,15 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 		if (FALSE) {
 		}
 		elseif (end($this->global->switch) === ('x')) {
-			?>x
+?>x
 <?php
 		}
 		elseif (end($this->global->switch) === (2)) {
-			?>y
+?>y
 <?php
 		}
 		else {
-			?>z
+?>z
 <?php
 		}
 		array_pop($this->global->switch) ?>
@@ -261,7 +261,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 	function blockMenu($_args)
 	{
 		extract($_args);
-		?>
+?>
 <ul>
 <?php
 		$iterations = 0;
@@ -279,13 +279,13 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 			else {
 				echo LR\Filters::escapeHtml($item) /* line 105 */;
 			}
-			?></li>
+?></li>
 <?php
 			$iterations++;
 		}
 		array_pop($this->global->its);
 		$iterator = end($this->global->its);
-		?>
+?>
 </ul>
 <?php
 	}

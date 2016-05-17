@@ -22,19 +22,19 @@ class Template%a% extends Latte\Template
 		extract($_args);
 
 		// main template
-		?>
+?>
 <!DOCTYPE html>
 <head>
 	<title><?php
 		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
-		?></title>
+?></title>
 </head>
 
 <body>
 	<div id="sidebar">
 <?php
 		call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars());
-		?>
+?>
 	</div>
 
 	<div id="content">
@@ -43,7 +43,7 @@ class Template%a% extends Latte\Template
 			trigger_error('Including block content with content type ' . strtoupper($this->blockTypes['content']) . ' into incompatible type HTML.', E_USER_WARNING);
 		}
 		$this->renderBlock('content', $this->params);
-		?>
+?>
 	</div>
 </body>
 </html>
@@ -70,7 +70,7 @@ Parent: <?php echo LR\Filters::escapeHtml(basename($this->getReferringTemplate()
 
 	function blockSidebar($_args)
 	{
-		?>		<ul>
+?>		<ul>
 			<li><a href="/">Homepage</a></li>
 		</ul>
 <?php
