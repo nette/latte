@@ -139,7 +139,7 @@ class BlockMacros extends MacroSet
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write(
 			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var); echo rtrim(ob_get_clean())',
@@ -154,7 +154,7 @@ class BlockMacros extends MacroSet
 	public function macroImport(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write('$this->createTemplate(%node.word, [], "import")->render()');
 	}
@@ -165,14 +165,15 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroExtends(MacroNode $node, PhpWriter $writer)
 	{
+		$notation = $node->getNotation();
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException("Modifiers are not allowed in $notation");
 		} elseif (!$node->args) {
-			throw new CompileException("Missing destination in {{$node->name}}");
+			throw new CompileException("Missing destination in $notation");
 		} elseif ($node->parentNode) {
-			throw new CompileException("{{$node->name}} must be placed outside any macro.");
+			throw new CompileException("$notation must be placed outside any macro.");
 		} elseif ($this->extends !== NULL) {
-			throw new CompileException("Multiple {{$node->name}} declarations are not allowed.");
+			throw new CompileException("Multiple $notation declarations are not allowed.");
 		} elseif ($node->args === 'none') {
 			$this->extends = FALSE;
 			return $writer->write('$this->parentName = FALSE');
@@ -277,7 +278,7 @@ class BlockMacros extends MacroSet
 						$tokens->nextToken();
 					}
 				} elseif (!$tokens->isCurrent(MacroTokens::T_WHITESPACE, MacroTokens::T_COMMENT)) {
-					throw new CompileException("Unexpected '{$tokens->currentValue()}' in {define $node->args}");
+					throw new CompileException("Unexpected '{$tokens->currentValue()}' in " . $node->getNotation());
 				}
 			}
 			if ($args) {
@@ -352,7 +353,7 @@ class BlockMacros extends MacroSet
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if (!preg_match('~#|[\w-]+\z~A', $node->args)) {
 			return FALSE;

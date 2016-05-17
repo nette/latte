@@ -81,7 +81,7 @@ class MacroSet implements Latte\IMacro
 			&& (!$end || (is_string($end) && strpos($end, '%modify') === FALSE))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%modify') === FALSE))
 		) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 
 		if ($node->args
@@ -89,7 +89,7 @@ class MacroSet implements Latte\IMacro
 			&& (!$end || (is_string($end) && strpos($end, '%node') === FALSE))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%node') === FALSE))
 		) {
-			throw new CompileException("Arguments are not allowed in {{$node->name}}");
+			throw new CompileException('Arguments are not allowed in ' . $node->getNotation());
 		}
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {

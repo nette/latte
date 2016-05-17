@@ -100,4 +100,12 @@ class MacroNode
 		$this->tokenizer = new MacroTokens($this->args);
 	}
 
+
+	public function getNotation()
+	{
+		return $this->prefix
+			? Parser::N_PREFIX . ($this->prefix === MacroNode::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
+			: '{' . $this->name . '}';
+	}
+
 }

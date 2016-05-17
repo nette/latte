@@ -106,7 +106,7 @@ class CoreMacros extends MacroSet
 	public function macroIf(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if ($node->data->capture = ($node->args === '')) {
 			return 'ob_start(function () {})';
@@ -143,10 +143,10 @@ class CoreMacros extends MacroSet
 	public function macroElse(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		} elseif ($node->args) {
 			$hint = substr($node->args, 0, 2) === 'if' ? ', did you mean {elseif}?' : '';
-			throw new CompileException("Arguments are not allowed in {{$node->name}}$hint");
+			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
 		}
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
@@ -165,10 +165,8 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroIfContent(MacroNode $node, PhpWriter $writer)
 	{
-		if (!$node->prefix) {
-			throw new CompileException("Unknown macro {{$node->name}}, use n:{$node->name} attribute.");
-		} elseif ($node->prefix !== MacroNode::PREFIX_NONE) {
-			throw new CompileException("Unknown attribute n:{$node->prefix}-{$node->name}, use n:{$node->name} attribute.");
+		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
+			throw new CompileException('Unknown ' . $node->getNotation() . ", use n:{$node->name} attribute.");
 		}
 	}
 
@@ -229,7 +227,7 @@ class CoreMacros extends MacroSet
 	{
 		trigger_error('Macro {use} is deprecated.', E_USER_DEPRECATED);
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		call_user_func(Latte\Helpers::checkCallback([$node->tokenizer->fetchWord(), 'install']), $this->getCompiler())
 			->initialize();
@@ -267,6 +265,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroSpaceless(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers || $node->args) {
+			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
+		}
 		if (!$node->closing) {
 			return;
 		} elseif ($node->prefix) { // preserve trailing whitespaces
@@ -291,7 +292,7 @@ class CoreMacros extends MacroSet
 	public function macroWhile(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if ($node->data->do = ($node->args === '')) {
 			return 'do {';
@@ -351,7 +352,7 @@ class CoreMacros extends MacroSet
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		$cmd = str_replace('If', '', $node->name);
 		if ($node->parentNode && $node->parentNode->prefix === $node::PREFIX_NONE) {
@@ -388,7 +389,7 @@ class CoreMacros extends MacroSet
 	public function macroDump(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		$args = $writer->formatArgs();
 		return $writer->write(
@@ -404,7 +405,7 @@ class CoreMacros extends MacroSet
 	public function macroDebugbreak(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
 			return $writer->write($node->args == NULL ? "$func()" : "if (%node.args) $func()");
@@ -419,7 +420,7 @@ class CoreMacros extends MacroSet
 	public function macroVar(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if ($node->args === '' && $node->parentNode && $node->parentNode->name === 'switch') {
 			return '} else {';
@@ -480,7 +481,7 @@ class CoreMacros extends MacroSet
 	{
 		$compiler = $this->getCompiler();
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		} elseif (strpos($node->args, 'xhtml') !== FALSE) {
 			$type = $compiler::CONTENT_XHTML;
 		} elseif (strpos($node->args, 'html') !== FALSE) {
@@ -512,7 +513,7 @@ class CoreMacros extends MacroSet
 	{
 		trigger_error('Macro {status} is deprecated.', E_USER_DEPRECATED);
 		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in {{$node->name}}");
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
 			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var)', (int) $node->args
