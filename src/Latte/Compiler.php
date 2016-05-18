@@ -357,6 +357,7 @@ class Compiler
 				$this->htmlNode = new HtmlNode($token->name);
 			}
 			$this->htmlNode->closing = TRUE;
+			$this->htmlNode->endLine = $this->getLine();
 			$this->setContext(NULL);
 
 		} elseif ($token->text === '<!--') {
@@ -364,6 +365,7 @@ class Compiler
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
+			$this->htmlNode->startLine = $this->getLine();
 			$this->setContext(self::CONTEXT_TAG);
 		}
 		$this->tagOffset = strlen($this->output);
@@ -568,6 +570,7 @@ class Compiler
 		}
 
 		$node->closing = TRUE;
+		$node->endLine = $node->prefix ? $node->htmlNode->endLine : $this->getLine();
 		$node->macro->nodeClosed($node);
 
 		if (isset($parts[1]) && $node->innerContent !== $parts[1]) {
@@ -765,6 +768,7 @@ class Compiler
 		foreach (array_reverse($this->macros[$name]) as $macro) {
 			$node = new MacroNode($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
 			$node->context = $context;
+			$node->startLine = $nPrefix ? $this->htmlNode->startLine : $this->getLine();
 			if ($macro->nodeOpened($node) !== FALSE) {
 				return $node;
 			}

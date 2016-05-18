@@ -419,7 +419,7 @@ class Parser
 		$this->output[] = $token = new Token;
 		$token->type = $type;
 		$token->text = $text;
-		$token->line = $this->getLine();
+		$token->line = $this->getLine() - substr_count(ltrim($text), "\n");
 		return $token;
 	}
 

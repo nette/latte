@@ -39,6 +39,12 @@ class HtmlNode
 	/** @var string */
 	public $attrCode;
 
+	/** @var int  position of start tag in source template */
+	public $startLine;
+
+	/** @var int  position of end tag in source template */
+	public $endLine;
+
 	/** @var string @internal */
 	public $innerMarker;
 

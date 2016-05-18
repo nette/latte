@@ -76,6 +76,12 @@ class MacroNode
 	/** @var string  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
 	public $prefix;
 
+	/** @var int  position of start tag in source template */
+	public $startLine;
+
+	/** @var int  position of end tag in source template */
+	public $endLine;
+
 	/** @internal */
 	public $saved;
 

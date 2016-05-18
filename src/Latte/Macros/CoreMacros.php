@@ -209,7 +209,7 @@ class CoreMacros extends MacroSet
 	{
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
 		$code = $writer->write(
-			'/* line ' . $this->getCompiler()->getLine() . ' */
+			'/* line ' . $node->startLine . ' */
 			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
 			$noCheck ? NULL : implode('', $node->context)
 		);
@@ -479,7 +479,7 @@ class CoreMacros extends MacroSet
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
 		return $writer->write($node->name === '='
-			? "echo %modify(%node.args) /* line {$this->getCompiler()->getLine()} */"
+			? "echo %modify(%node.args) /* line $node->startLine */"
 			: '%modify(%node.args);'
 		);
 	}
