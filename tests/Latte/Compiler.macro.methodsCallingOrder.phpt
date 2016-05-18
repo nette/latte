@@ -36,9 +36,9 @@ class MockMacro implements IMacro
 			$node->closing,
 			$node->prefix,
 			$node->content,
-			$node->isEmpty,
+			$node->empty,
 		];
-		$node->isEmpty = FALSE;
+		$node->empty = FALSE;
 	}
 
 	public function nodeClosed(MacroNode $node)
@@ -49,7 +49,7 @@ class MockMacro implements IMacro
 			$node->closing,
 			$node->prefix,
 			preg_replace('#n:\w+#', 'n:#', $node->content),
-			$node->isEmpty,
+			$node->empty,
 		];
 	}
 }

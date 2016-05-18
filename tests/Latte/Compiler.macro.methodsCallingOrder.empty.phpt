@@ -37,7 +37,7 @@ class MockMacro implements IMacro
 			$node->prefix,
 			$node->content,
 		];
-		$node->isEmpty = TRUE;
+		$node->empty = TRUE;
 	}
 
 	public function nodeClosed(MacroNode $node)

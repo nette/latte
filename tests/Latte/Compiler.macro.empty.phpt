@@ -20,7 +20,7 @@ class TestMacro implements IMacro
 		$node->openingCode = 'opening';
 		$node->closingCode = 'closing';
 		$node->attrCode = ' attr';
-		$node->isEmpty = TRUE;
+		$node->empty = TRUE;
 	}
 
 	function nodeClosed(MacroNode $node)

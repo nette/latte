@@ -18,7 +18,7 @@ test(function () use ($set) {
 	$node = new MacroNode($set, 'void');
 	Assert::null($set->nodeOpened($node));
 	Assert::same('<?php begin ?>', $node->openingCode);
-	Assert::true($node->isEmpty);
+	Assert::true($node->empty);
 
 	$node = new MacroNode($set, 'void');
 	$node->prefix = $node::PREFIX_NONE;
@@ -32,7 +32,7 @@ test(function () use ($set) {
 	$node = new MacroNode($set, 'nonvoid');
 	Assert::null($set->nodeOpened($node));
 	Assert::same('<?php begin ?>', $node->openingCode);
-	Assert::false($node->isEmpty);
+	Assert::false($node->empty);
 
 	Assert::null($set->nodeClosed($node));
 	Assert::same('<?php end ?>', $node->closingCode);
@@ -55,7 +55,7 @@ test(function () use ($set) {
 	$node = new MacroNode($set, 'attr');
 	Assert::null($set->nodeOpened($node));
 	Assert::same('<?php begin ?>', $node->openingCode);
-	Assert::false($node->isEmpty);
+	Assert::false($node->empty);
 
 	Assert::null($set->nodeClosed($node));
 	Assert::same('<?php end ?>', $node->closingCode);
@@ -104,12 +104,12 @@ test(function () use ($set) {
 test(function () use ($set) {
 	$set->addMacro('dynamic', function (MacroNode $node) use (& $called) {
 		$called = TRUE;
-		$node->isEmpty = FALSE;
+		$node->empty = FALSE;
 	});
 
 	$node = new MacroNode($set, 'dynamic');
 	Assert::null($set->nodeOpened($node));
-	Assert::false($node->isEmpty);
+	Assert::false($node->empty);
 	Assert::true($called);
 
 	Assert::null($set->nodeClosed($node));
