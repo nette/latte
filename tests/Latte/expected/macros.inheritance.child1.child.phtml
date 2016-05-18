@@ -62,7 +62,6 @@ class Template%a% extends Latte\Template
 	<ul>
 <?php
 		$iterations = 0;
-		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.');
 		foreach ($people as $person) {
 			?>		<li><?php echo LR\Filters::escapeHtml($person) /* line 12 */ ?></li>
 <?php

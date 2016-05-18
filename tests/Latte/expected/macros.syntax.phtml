@@ -10,7 +10,6 @@ class Template%a% extends Latte\Template
 <ul>
 <?php
 		$iterations = 0;
-		%a%
 		foreach ($people as $person) {
 			?>	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->upper, $person)) /* line 3 */ ?></li>
 <?php

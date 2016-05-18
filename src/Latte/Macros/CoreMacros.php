@@ -38,6 +38,8 @@ use Latte\PhpWriter;
  */
 class CoreMacros extends MacroSet
 {
+	/** @var array */
+	private $overwrittenVars;
 
 
 	public static function install(Latte\Compiler $compiler)
@@ -88,12 +90,28 @@ class CoreMacros extends MacroSet
 
 
 	/**
+	 * Initializes before template parsing.
+	 * @return void
+	 */
+	public function initialize()
+	{
+		$this->overwrittenVars = [];
+	}
+
+
+	/**
 	 * Finishes template parsing.
 	 * @return array(prolog, epilog)
 	 */
 	public function finalize()
 	{
-		return ['if ($this->initialize($_args)) return; extract($_args);'];
+		$code = 'if ($this->initialize($_args)) return; extract($_args);';
+		foreach ($this->overwrittenVars as $var => $lines) {
+			$s = var_export($var, TRUE);
+			$code .= 'if (isset($this->params[' . var_export($var, TRUE)
+			. "])) trigger_error('Variable $" . addcslashes($var, "'") . ' overwritten in foreach on line ' . implode(', ', $lines) . "'); ";
+		}
+		return [$code];
 	}
 
 
@@ -334,11 +352,10 @@ class CoreMacros extends MacroSet
 		}
 		$node->openingCode = '<?php $iterations = 0; ';
 		$args = $writer->formatArgs();
-		preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
 		if (!$noCheck) {
+			preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
 			for ($i = 1; $i < count($m); $i++) {
-				$s = var_export($m[$i], TRUE);
-				$node->openingCode .= "if (isset(\$this->params[$s])) trigger_error('Variable \${$m[$i]} overwritten in foreach.'); ";
+				$this->overwrittenVars[$m[$i]][] = $node->startLine;
 			}
 		}
 		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {

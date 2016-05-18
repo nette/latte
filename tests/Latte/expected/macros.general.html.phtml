@@ -18,6 +18,9 @@ class Template%a% extends Latte\Template
 		// prolog Latte\Macros\CoreMacros
 		if ($this->initialize($_args)) return;
 		extract($_args);
+		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 47');
+		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach on line 46');
+		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach on line 104');
 
 		// main template
 ?>
@@ -87,10 +90,8 @@ class Template%a% extends Latte\Template
 
 <?php
 		$iterations = 0;
-		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach.');
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(array(TRUE)) as $foo) {
 			$iterations = 0;
-			if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach.');
 			foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
 				?>	<?php
 				if ($iterator->isFirst()) {
@@ -265,7 +266,6 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <ul>
 <?php
 		$iterations = 0;
-		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach.');
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($menu) as $item) {
 			?>	<li><?php echo LR\Filters::escapeHtml($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {

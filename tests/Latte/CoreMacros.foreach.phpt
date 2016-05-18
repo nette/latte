@@ -15,7 +15,6 @@ $compiler = new Latte\Compiler;
 CoreMacros::install($compiler);
 
 $prefix = '<?php $iterations = 0; '
-	. 'if (isset($this->params[\'value\'])) trigger_error(\'Variable $value overwritten in foreach.\'); '
 	. 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator(';
 
 function expandMacro($compiler, $args, $modifiers = NULL) {
@@ -29,8 +28,6 @@ function expandMacro($compiler, $args, $modifiers = NULL) {
 Assert::same($prefix . '$array) as $value) { ?>',  expandMacro($compiler, '$array as $value')->openingCode);
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'if (isset($this->params[\'key\'])) trigger_error(\'Variable $key overwritten in foreach.\'); '
-	. 'if (isset($this->params[\'value\'])) trigger_error(\'Variable $value overwritten in foreach.\'); '
 	. 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator($array) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value')->openingCode
 );
@@ -47,7 +44,6 @@ Assert::same($prefix . '$obj->data("X as Y, Z as W")) as $value) { ?>',  expandM
 
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'if (isset($this->params[\'value\'])) trigger_error(\'Variable $value overwritten in foreach.\'); '
 	. 'foreach ($array as $value) { ?>',
 	expandMacro($compiler, '$array as $value', '|noiterator')->openingCode
 );
