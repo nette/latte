@@ -212,6 +212,8 @@ class Filters
 			&& (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)
 		) {
 			return self::escapeHtml($s);
+		} elseif ($dest === Engine::CONTENT_XML && (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)) {
+			return self::escapeXml($s);
 		} else {
 			trigger_error("Filters: unable to convert content type " . strtoupper($info->contentType) . " to " . strtoupper($dest), E_USER_WARNING);
 			return $s;
