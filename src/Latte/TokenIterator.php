@@ -165,6 +165,25 @@ class TokenIterator
 
 
 	/**
+	 * Returns next expected token or throws exception.
+	 * @param  int|string  (optional) desired token type or value
+	 * @return string
+	 * @throws CompileException
+	 */
+	public function expectNextValue()
+	{
+		if ($token = $this->scan(func_get_args(), TRUE, TRUE)) { // onlyFirst, advance
+			return $token[Tokenizer::VALUE];
+		}
+		$pos = $this->position + 1;
+		while (isset($this->tokens[$pos]) && ($next = $this->tokens[$pos]) && in_array($next[Tokenizer::TYPE], $this->ignored, TRUE)) {
+			$pos++;
+		}
+		throw new CompileException("Unexpected token '" . $next[Tokenizer::VALUE] . "'.");
+	}
+
+
+	/**
 	 * @return self
 	 */
 	public function reset()

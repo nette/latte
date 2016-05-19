@@ -276,14 +276,10 @@ class BlockMacros extends MacroSet
 		} elseif ($node->name === 'define') {
 			$tokens = $node->tokenizer;
 			$args = [];
-			while ($tokens->nextToken()) {
-				if ($tokens->isCurrent(MacroTokens::T_VARIABLE)) {
-					$args[] = $tokens->currentValue();
-					if ($tokens->isNext(',')) {
-						$tokens->nextToken();
-					}
-				} elseif (!$tokens->isCurrent(MacroTokens::T_WHITESPACE, MacroTokens::T_COMMENT)) {
-					throw new CompileException("Unexpected '{$tokens->currentValue()}' in " . $node->getNotation());
+			while ($tokens->isNext()) {
+				$args[] = $tokens->expectNextValue(MacroTokens::T_VARIABLE);
+				if ($tokens->isNext()) {
+					$tokens->expectNextValue(',');
 				}
 			}
 			if ($args) {

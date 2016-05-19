@@ -119,3 +119,26 @@ test(function () {
 	Assert::same([], $traverser->nextUntil(T_STRING, T_DNUMBER, T_WHITESPACE));
 	Assert::same(2, $traverser->position);
 });
+
+
+test(function () {
+	$tokenizer = new Tokenizer([
+		T_DNUMBER => '\d+',
+		T_WHITESPACE => '\s+',
+		T_STRING => '\w+',
+	]);
+	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
+	$traverser->ignored[] = T_WHITESPACE;
+
+	Assert::same(-1, $traverser->position);
+	Assert::same('say', $traverser->expectNextValue());
+	Assert::same(0, $traverser->position);
+
+	$traverser->position = -1;
+	Assert::exception(function () use ($traverser) {
+		$traverser->expectNextValue(T_DNUMBER);
+	}, 'Latte\CompileException', "Unexpected token 'say'.");
+	Assert::same(-1, $traverser->position);
+	Assert::same('say', $traverser->expectNextValue(T_STRING));
+	Assert::same(0, $traverser->position);
+});
