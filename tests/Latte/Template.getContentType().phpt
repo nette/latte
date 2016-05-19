@@ -18,9 +18,8 @@ Assert::same($latte::CONTENT_XML, $template->getContentType());
 
 // ignored
 $template = $latte->createTemplate('{block}{contentType xml}{/block}');
-Assert::same($latte::CONTENT_XML, $template->getContentType());
+Assert::same($latte::CONTENT_HTML, $template->getContentType());
 
-// ignored
 $template = $latte->createTemplate('<div>{contentType xml}</div>');
 Assert::same($latte::CONTENT_XML, $template->getContentType());
 
