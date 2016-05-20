@@ -6,6 +6,7 @@
 
 use Latte\Filters;
 use Latte\Runtime\FilterInfo;
+use Latte\Runtime\Html;
 use Tester\Assert;
 
 
@@ -122,4 +123,33 @@ test(function () {
 	$info = new FilterInfo('html');
 	Assert::same('html,aa', $filters->filterContent('f3', $info, 'aA'));
 	Assert::same('new', $info->contentType);
+});
+
+
+test(function () {
+	$filters = new Filters;
+
+	// FilterInfo aware called as classic with Latte\Runtime\Html
+	$filters->add('f4', function (FilterInfo $info, $val, $newType) {
+		$type = $info->contentType;
+		$info->contentType = $newType;
+		return $type . ',' . gettype($val) . ',' . strtolower($val);
+	}, TRUE);
+
+	Assert::equal(new Html('html,string,aa'), call_user_func($filters->f4, new Html('aA'), 'html'));
+	Assert::equal('html,string,aa', call_user_func($filters->f4, new Html('aA'), 'text'));
+	Assert::equal('html,string,aa', call_user_func($filters->f4, new Html('aA'), NULL));
+
+
+	// classic called as FilterInfo aware with Latte\Runtime\Html
+	$filters->add('f5', function ($val) {
+		return new Html(strtolower($val));
+	});
+	Assert::error(function () use ($filters) {
+		$filters->filterContent('f5', new FilterInfo('text'), 'aA');
+	}, E_USER_NOTICE, 'Filter |f5 should be changed to content-aware filter.');
+
+	$info = new FilterInfo('text');
+	Assert::same('aa', @$filters->filterContent('f5', $info, 'aA')); // @ ignore E_USER_NOTICE
+	Assert::same('html', $info->contentType);
 });

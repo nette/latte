@@ -97,8 +97,15 @@ class Filters
 			if ($aware) { // FilterInfo aware filter
 				return $this->$lname = function ($arg) use ($callback) {
 					$args = func_get_args();
-					array_unshift($args, new Runtime\FilterInfo);
-					return call_user_func_array($callback, $args);
+					array_unshift($args, $info = new Runtime\FilterInfo);
+					if ($arg instanceof Runtime\IHtmlString) {
+						$args[1] = $arg->__toString();
+						$info->contentType = Engine::CONTENT_HTML;
+					}
+					$res = call_user_func_array($callback, $args);
+					return $info->contentType === Engine::CONTENT_HTML
+						? new Runtime\Html($res)
+						: $res;
 				};
 			} else { // classic filter
 				return $this->$lname = $callback;
@@ -148,7 +155,13 @@ class Filters
 				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
 					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
 			}
-			return call_user_func_array($this->$name, $args);
+			$res = call_user_func_array($this->$name, $args);
+			if ($res instanceof Runtime\IHtmlString) {
+				trigger_error("Filter |$name should be changed to content-aware filter.");
+				$info->contentType = Engine::CONTENT_HTML;
+				$res = $res->__toString();
+			}
+			return $res;
 		}
 	}
 
