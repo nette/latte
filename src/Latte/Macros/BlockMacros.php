@@ -103,26 +103,13 @@ class BlockMacros extends MacroSet
 			$destination = $item->data->name;
 		}
 
-		$cmd = '';
-		if (strpos($destination, '$') === FALSE) {
-			$phpName = var_export($destination, TRUE);
-		} else {
-			$phpName = '$_tmp';
-			$cmd .= "\$_tmp = $destination;";
-		}
-
 		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
-		if (!$noCheck) {
-			$type = $this->exportBlockType($node);
-			$cmd .= "if (isset(\$this->blockTypes[$phpName]) && \$this->blockTypes[$phpName] !== '$type') { "
-				. "trigger_error('Including block " . addcslashes($destination, "'") . " with content type ' . strtoupper(\$this->blockTypes[$phpName]) . ' into incompatible type " . strtoupper($type) . ".', E_USER_WARNING); }\n";
-		}
-
-		if (isset($this->namedBlocks[$destination]) && !$parent) {
-			$cmd .= "call_user_func(reset(\$this->blockQueue[$phpName]), %node.array? + get_defined_vars());";
-		} else {
-			$cmd .= '$this->renderBlock' . ($parent ? 'Parent' : '') . "($phpName, %node.array? + " . ($parent ? 'get_defined_vars()' : '$this->params') . ');'; //  + ["_b" => $_bl]
-		}
+		$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . '('
+			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
+			. ', %node.array? + '
+			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
+			. ($noCheck || $parent ? '' : ', ' . var_export($this->exportBlockType($node), TRUE))
+			. ');';
 
 		if ($node->modifiers) {
 			return $writer->write("ob_start(function () {}); $cmd; \$_fi = new LR\\FilterInfo(%var); echo %modifyContent(ob_get_clean());", $node->context[0]);

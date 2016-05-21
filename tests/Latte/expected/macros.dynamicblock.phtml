@@ -39,25 +39,15 @@ class Template%a% extends Latte\Template
 ?>
 
 <?php
-		if (isset($this->blockTypes['dynamic']) && $this->blockTypes['dynamic'] !== 'html') {
-			trigger_error('Including block dynamic with content type ' . strtoupper($this->blockTypes['dynamic']) . ' into incompatible type HTML.', E_USER_WARNING);
-		}
-		$this->renderBlock('dynamic', ['var' => 20] + $this->params);
+		$this->renderBlock('dynamic', ['var' => 20] + $this->params, 'html');
 ?>
 
 <?php
-		if (isset($this->blockTypes['static']) && $this->blockTypes['static'] !== 'html') {
-			trigger_error('Including block static with content type ' . strtoupper($this->blockTypes['static']) . ' into incompatible type HTML.', E_USER_WARNING);
-		}
-		call_user_func(reset($this->blockQueue['static']), ['var' => 30] + get_defined_vars());
+		$this->renderBlock('static', ['var' => 30] + get_defined_vars(), 'html');
 ?>
 
 <?php
-		$_tmp = $name . '';
-		if (isset($this->blockTypes[$_tmp]) && $this->blockTypes[$_tmp] !== 'html') {
-			trigger_error('Including block $name . \'\' with content type ' . strtoupper($this->blockTypes[$_tmp]) . ' into incompatible type HTML.', E_USER_WARNING);
-		}
-		$this->renderBlock($_tmp, ['var' => 40] + $this->params);
+		$this->renderBlock($name . '', ['var' => 40] + $this->params, 'html');
 ?>
 
 <?php

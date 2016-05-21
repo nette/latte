@@ -264,11 +264,14 @@ class Template
 	 * @return void
 	 * @internal
 	 */
-	protected function renderBlock($name, array $params)
+	protected function renderBlock($name, array $params, $type = NULL)
 	{
 		if (empty($this->blockQueue[$name])) {
 			$hint = isset($this->blockQueue) && ($t = Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
+		}
+		if ($type && isset($this->blockTypes[$name]) && $this->blockTypes[$name] !== $type) {
+			trigger_error("Including block $name with content type " . strtoupper($this->blockTypes[$name]) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
 		}
 		$block = reset($this->blockQueue[$name]);
 		$block($params);

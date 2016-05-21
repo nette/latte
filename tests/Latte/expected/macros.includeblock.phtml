@@ -8,10 +8,7 @@ class Template%a% extends Latte\Template
 	{
 %A%
 <?php
-		if (isset($this->blockTypes['test']) && $this->blockTypes['test'] !== 'html') {
-			trigger_error('Including block test with content type ' . strtoupper($this->blockTypes['test']) . ' into incompatible type HTML.', E_USER_WARNING);
-		}
-		$this->renderBlock('test', $this->params);
+		$this->renderBlock('test', $this->params, 'html');
 		?>	<?php
 	}
 

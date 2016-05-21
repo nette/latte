@@ -272,10 +272,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 			?>	<li><?php echo LR\Filters::escapeHtml($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {
 				?> <?php
-				if (isset($this->blockTypes['menu']) && $this->blockTypes['menu'] !== 'xhtml') {
-					trigger_error('Including block menu with content type ' . strtoupper($this->blockTypes['menu']) . ' into incompatible type XHTML.', E_USER_WARNING);
-				}
-				call_user_func(reset($this->blockQueue['menu']), ['menu' => $item] + get_defined_vars());
+				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'xhtml');
 				?> <?php
 			}
 			else {
