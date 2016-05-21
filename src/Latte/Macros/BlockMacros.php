@@ -145,7 +145,7 @@ class BlockMacros extends MacroSet
 		}
 		$destination = $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
-		return $writer->write('$this->createTemplate(%word, [], "import")->render();', $destination);
+		return $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $destination);
 	}
 
 

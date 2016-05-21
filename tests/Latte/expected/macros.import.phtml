@@ -15,7 +15,7 @@ class Template%a% extends Latte\Template
 	function prepare()
 	{
 		extract($this->params);
-		$this->createTemplate("inc", [], "import")->render();
+		$this->createTemplate("inc", $this->params, "import")->render();
 		return get_defined_vars();
 	}
 

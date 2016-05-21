@@ -31,7 +31,7 @@ class Template%a% extends Latte\Template
 	{
 		extract($this->params);
 		$this->parentName = "parent";
-		$this->createTemplate("inc", [], "import")->render();
+		$this->createTemplate("inc", $this->params, "import")->render();
 		ob_start(function () {});
 		$this->createTemplate("inc", get_defined_vars(), "includeblock")->renderToContentType('html');
 		echo rtrim(ob_get_clean());
