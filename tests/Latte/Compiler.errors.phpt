@@ -94,3 +94,7 @@ Assert::exception(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{php function () { yield; }}');
 });
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{$_form[$name]}');
+}, E_USER_DEPRECATED, 'Variable $_form is deprecated.');
