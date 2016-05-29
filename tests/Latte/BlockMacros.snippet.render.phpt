@@ -57,14 +57,24 @@ $dataSets = [
 		'<div id="foo"><div id="subFoo">hello</div></div>',
 		['foo'],
 	],
-	//included template - expected empty payload
+	//included template 2
 	[
 		[
 			'main' => '{snippet foo}{include "sub"}{/snippet}',
 			'sub'  => '{snippet subFoo}hello{/snippet}',
 		],
-		[],
+		['foo' => '<div id="subFoo">hello</div>'],
 		'<div id="foo"><div id="subFoo">hello</div></div>',
+		['foo', 'subFoo'],
+	],
+	//included template - expected empty payload
+	[
+		[
+			'main' => '{include "sub"}',
+			'sub'  => '{snippet subFoo}hello{/snippet}',
+		],
+		[],
+		'<div id="subFoo">hello</div>',
 		['subFoo'],
 	],
 	//included template - snippetArea

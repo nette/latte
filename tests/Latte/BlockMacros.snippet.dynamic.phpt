@@ -14,6 +14,6 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 
 Assert::matchFile(
-	__DIR__ . '/expected/BlockMacros.dynamicsnippets.phtml',
-	$latte->compile(__DIR__ . '/templates/dynamicsnippets.latte')
+	__DIR__ . '/expected/macros.snippet.dynamic.phtml',
+	$latte->compile(__DIR__ . '/templates/snippet.dynamic.latte')
 );

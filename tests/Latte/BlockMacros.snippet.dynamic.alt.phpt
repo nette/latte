@@ -13,6 +13,6 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 
 Assert::matchFile(
-	__DIR__ . '/expected/BlockMacros.dynamicsnippets.alt.phtml',
-	$latte->compile(__DIR__ . '/templates/dynamicsnippets.alt.latte')
+	__DIR__ . '/expected/macros.snippet.dynamic.alt.phtml',
+	$latte->compile(__DIR__ . '/templates/snippet.dynamic.alt.latte')
 );
