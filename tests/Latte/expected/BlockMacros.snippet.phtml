@@ -1,5 +1,5 @@
 <?php
-// source: %A%
+%A%
 
 class Template%a% extends Latte\Template
 {
@@ -35,7 +35,7 @@ class Template%a% extends Latte\Template
 		if (true) {
 			?> Hello World @<?php
 		}
-		?>
+?>
 
 
 	<h2 id="<?php echo $this->global->snippetDriver->getHtmlId('title') ?>"><?php call_user_func(reset($this->blockQueue['_title']), $this->params) ?></h2>
@@ -48,7 +48,7 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("", \Latte\SnippetDriver::TYPE_STATIC);
-		?>
+?>
 
 <?php
 		$this->global->snippetDriver->leave();
@@ -60,7 +60,7 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
-		?>
+?>
 	Outer
 		<div id="<?php echo $this->global->snippetDriver->getHtmlId('inner') ?>"><?php call_user_func(reset($this->blockQueue['_inner']), $this->params) ?></div>	/Outer
 <?php

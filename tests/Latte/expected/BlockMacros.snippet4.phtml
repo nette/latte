@@ -1,5 +1,5 @@
 <?php
-// source: %A%
+%A%
 
 class Template%a% extends Latte\Template
 {
@@ -23,7 +23,7 @@ class Template%a% extends Latte\Template
 %A%
 		// main template
 		call_user_func(reset($this->blockQueue['block1']), get_defined_vars());
-		?>
+?>
 
 
 <div id="<?php echo $this->global->snippetDriver->getHtmlId('outer') ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div><?php
@@ -46,7 +46,7 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("snippet", \Latte\SnippetDriver::TYPE_STATIC);
-		?>		static
+?>		static
 <?php
 		$this->global->snippetDriver->leave();
 
@@ -57,11 +57,11 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
-		?>
+?>
 begin
 <?php
 		call_user_func(reset($this->blockQueue['block2']), get_defined_vars());
-		?>
+?>
 end
 <?php
 		$this->global->snippetDriver->leave();
@@ -75,10 +75,10 @@ end
 		?><div<?php echo ' id="' . $this->global->snippetDriver->getHtmlId("inner-$id") . '"' ?>>
 <?php
 		$this->global->snippetDriver->enter("inner-$id", \Latte\SnippetDriver::TYPE_DYNAMIC);
-		?>		dynamic
+?>		dynamic
 <?php
 		$this->global->snippetDriver->leave();
-		?></div>
+?></div>
 <?php
 
 	}

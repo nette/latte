@@ -1,5 +1,5 @@
 <?php
-// source: %A%
+%A%
 
 class Template%a% extends Latte\Template
 {
@@ -28,9 +28,9 @@ class Template%a% extends Latte\Template
 	<div class="test"<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('inner') . '"' ?>>
 <?php
 		call_user_func(reset($this->blockQueue['_inner']), $this->params);
-		?>	</div>
+?>	</div>
 
-	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') ?>"<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('gallery') . '"' ?>><?php
+	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') /* line 9 */ ?>"<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('gallery') . '"' ?>><?php
 		call_user_func(reset($this->blockQueue['_gallery']), $this->params) ?>
 </div>
 <?php
@@ -42,7 +42,7 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
-		?>	<p>Outer</p>
+?>	<p>Outer</p>
 <?php
 		$this->global->snippetDriver->leave();
 
@@ -53,7 +53,7 @@ class Template%a% extends Latte\Template
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("inner", \Latte\SnippetDriver::TYPE_STATIC);
-		?>	<p>Inner</p>
+?>	<p>Inner</p>
 <?php
 		$this->global->snippetDriver->leave();
 
