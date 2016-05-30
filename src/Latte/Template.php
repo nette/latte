@@ -238,7 +238,7 @@ class Template
 		if ($type === "html$this->contentType" && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
 			echo Runtime\Filters::escapeHtmlRawText($this->renderToString());
 			return;
-		} elseif ($this->contentType !== Engine::CONTENT_HTML && in_array($type, [Engine::CONTENT_HTML, 'htmlattr'], TRUE)) {
+		} elseif ($type === 'htmlattr' || ($type === Engine::CONTENT_HTML && $this->contentType !== Engine::CONTENT_HTML)) {
 			echo Runtime\Filters::escapeHtml($this->renderToString());
 			return;
 		} elseif ($type && $type !== $this->contentType) {
