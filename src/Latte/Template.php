@@ -152,8 +152,8 @@ class Template
 	{
 		$params = $this->prepare();
 
-		if ($this->parentName === NULL && isset($this->global->parentFinder)) {
-			$this->parentName = call_user_func($this->global->parentFinder, $this);
+		if ($this->parentName === NULL && isset($this->global->coreParentFinder)) {
+			$this->parentName = call_user_func($this->global->coreParentFinder, $this);
 		}
 
 		if ($this->referenceType === 'import') {

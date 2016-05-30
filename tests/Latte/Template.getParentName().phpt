@@ -41,7 +41,7 @@ $template->prepare();
 Assert::null($template->getParentName());
 
 
-$latte->addProvider('parentFinder', function ($template) {
+$latte->addProvider('coreParentFinder', function ($template) {
 	if (!$template->getReferenceType()) {
 		return 'parent';
 	}
