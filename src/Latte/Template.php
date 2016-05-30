@@ -215,11 +215,13 @@ class Template
 	{
 		ob_start(function () {});
 		try {
+			$this->global->coreCaptured = TRUE;
 			$this->render();
 		} catch (\Throwable $e) {
-			ob_end_clean();
-			throw $e;
 		} catch (\Exception $e) {
+		}
+		$this->global->coreCaptured = FALSE;
+		if (isset($e)) {
 			ob_end_clean();
 			throw $e;
 		}

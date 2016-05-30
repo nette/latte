@@ -527,9 +527,8 @@ class CoreMacros extends MacroSet
 		}
 		$compiler->setContentType($type);
 
-		// temporary solution
-		if (strpos($node->args, '/')) {
-			return $writer->write('header(%var);', "Content-Type: $node->args");
+		if (strpos($node->args, '/') && !$node->parentNode) {
+			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", NULL], TRUE)) header(%var);', "Content-Type: $node->args");
 		}
 	}
 
