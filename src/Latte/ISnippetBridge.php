@@ -24,7 +24,7 @@ interface ISnippetBridge
 	 * @param string
 	 * @return bool
 	 */
-	public function isInvalid($name);
+	public function needsRedraw($name);
 
 
 	/**
@@ -46,7 +46,7 @@ interface ISnippetBridge
 	 * @param string html content
 	 * @return mixed
 	 */
-	public function addToPayload($name, $content);
+	public function addSnippet($name, $content);
 
 
 	/**

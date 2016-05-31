@@ -17,7 +17,7 @@ class SnippetBridgeMock implements \Latte\ISnippetBridge
 	}
 
 
-	public function isInvalid($name)
+	public function needsRedraw($name)
 	{
 		return $this->invalid === TRUE || isset($this->invalid[$name]);
 	}
@@ -37,7 +37,7 @@ class SnippetBridgeMock implements \Latte\ISnippetBridge
 	}
 
 
-	public function addToPayload($name, $content)
+	public function addSnippet($name, $content)
 	{
 		$this->payload[$name] = $content;
 	}

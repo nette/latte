@@ -202,7 +202,7 @@ class BlockMacros extends MacroSet
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
 				$node->closingCode = "<?php \$this->global->snippetDriver->leave(); ?>";
-				$enterCode = "\$this->global->snippetDriver->enter(" . $writer->formatWord($name) . ", \\Latte\\SnippetDriver::TYPE_DYNAMIC);";
+				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . Latte\Runtime\SnippetDriver::TYPE_DYNAMIC . '");';
 
 				if ($node->prefix) {
 					$node->attrCode = $writer->write("<?php echo ' id=\"' . \$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)}) . '\"' ?>");
@@ -296,10 +296,10 @@ class BlockMacros extends MacroSet
 			}
 
 			if (($node->name === 'snippet' || $node->name === 'snippetArea') && strpos($node->data->name, '$') === FALSE) {
-				$type = $node->name === 'snippet' ? 'TYPE_STATIC' : 'TYPE_AREA';
+				$type = $node->name === 'snippet' ? Latte\Runtime\SnippetDriver::TYPE_STATIC : Latte\Runtime\SnippetDriver::TYPE_AREA;
 				$node->content = '<?php $this->global->snippetDriver->enter('
 					. $writer->formatWord(substr($node->data->name, 1))
-					. ', \\Latte\\SnippetDriver::' . $type . '); ?>'
+					. ', "' . $type . '"); ?>'
 					. preg_replace('#(?<=\n)[ \t]+\z#', '', $node->content) . '<?php $this->global->snippetDriver->leave(); ?>';
 			}
 			if (empty($node->data->leave)) {

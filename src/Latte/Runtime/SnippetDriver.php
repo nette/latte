@@ -5,7 +5,9 @@
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
  */
 
-namespace Latte;
+namespace Latte\Runtime;
+
+use Latte;
 
 
 /**
@@ -14,26 +16,26 @@ namespace Latte;
  */
 class SnippetDriver
 {
-	use Strict;
+	use Latte\Strict;
 
 	const TYPE_STATIC = 'static',
 		TYPE_DYNAMIC = 'dynamic',
 		TYPE_AREA = 'area';
 
 	/** @var array */
-	protected $stack = [];
+	private $stack = [];
 
 	/** @var int */
-	protected $renderingLevel = 0;
+	private $nestingLevel = 0;
 
 	/** @var bool */
-	protected $renderingSnippets = FALSE;
+	private $renderingSnippets = FALSE;
 
-	/** @var ISnippetBridge */
+	/** @var Latte\ISnippetBridge */
 	private $bridge;
 
 
-	public function __construct(ISnippetBridge $bridge)
+	public function __construct(Latte\ISnippetBridge $bridge)
 	{
 		$this->bridge = $bridge;
 	}
@@ -45,18 +47,16 @@ class SnippetDriver
 			return;
 		}
 		$obStarted = FALSE;
-		if (($this->renderingLevel === 0 && $this->bridge->isInvalid($name))
+		if (($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
 			|| ($type === self::TYPE_DYNAMIC && ($previous = end($this->stack)) && $previous[1] === TRUE)) {
 			ob_start(function () {});
-			$this->renderingLevel = $type === self::TYPE_AREA ? 0 : 1;
+			$this->nestingLevel = $type === self::TYPE_AREA ? 0 : 1;
 			$obStarted = TRUE;
-		} elseif ($this->renderingLevel > 0) {
-			$this->renderingLevel++;
+		} elseif ($this->nestingLevel > 0) {
+			$this->nestingLevel++;
 		}
 		$this->stack[] = [$name, $obStarted];
-		if($name !== "") {
-			$this->bridge->markRedrawn($name);
-		}
+		$this->bridge->markRedrawn($name);
 	}
 
 
@@ -66,9 +66,9 @@ class SnippetDriver
 			return;
 		}
 		list($name, $obStarted) = array_pop($this->stack);
-		if ($this->renderingLevel > 0 && --$this->renderingLevel === 0) {
+		if ($this->nestingLevel > 0 && --$this->nestingLevel === 0) {
 			$content = ob_get_clean();
-			$this->bridge->addToPayload($name, $content);
+			$this->bridge->addSnippet($name, $content);
 		} elseif ($obStarted) { //dynamic snippet wrapper or snippet area
 			ob_end_clean();
 		}
@@ -88,7 +88,7 @@ class SnippetDriver
 		}
 		$this->renderingSnippets = TRUE;
 		foreach ($blocks as $name => $function) {
-			if ($name[0] !== '_' || !$this->bridge->isInvalid(substr($name, 1))) {
+			if ($name[0] !== '_' || !$this->bridge->needsRedraw(substr($name, 1))) {
 				continue;
 			}
 			$function = reset($function);

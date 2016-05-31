@@ -41,7 +41,7 @@ class Template%a% extends Latte\Template
 	function blockOuter($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("outer", "static");
 ?>	<p>Outer</p>
 <?php
 		$this->global->snippetDriver->leave();
@@ -52,7 +52,7 @@ class Template%a% extends Latte\Template
 	function blockInner($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("inner", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("inner", "static");
 ?>	<p>Inner</p>
 <?php
 		$this->global->snippetDriver->leave();
@@ -63,7 +63,7 @@ class Template%a% extends Latte\Template
 	function blockGallery($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("gallery", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("gallery", "static");
 		$this->global->snippetDriver->leave();
 
 	}

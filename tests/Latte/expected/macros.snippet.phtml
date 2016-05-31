@@ -47,7 +47,7 @@ class Template%a% extends Latte\Template
 	function block_%h%($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("", "static");
 ?>
 
 <?php
@@ -59,7 +59,7 @@ class Template%a% extends Latte\Template
 	function blockOuter($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("outer", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("outer", "static");
 ?>
 	Outer
 		<div id="<?php echo $this->global->snippetDriver->getHtmlId('inner') ?>"><?php call_user_func(reset($this->blockQueue['_inner']), $this->params) ?></div>	/Outer
@@ -72,7 +72,7 @@ class Template%a% extends Latte\Template
 	function blockInner($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("inner", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("inner", "static");
 		?>Inner<?php
 		$this->global->snippetDriver->leave();
 
@@ -82,7 +82,7 @@ class Template%a% extends Latte\Template
 	function blockTitle($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("title", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("title", "static");
 		?>Title 1<?php
 		$this->global->snippetDriver->leave();
 
@@ -92,7 +92,7 @@ class Template%a% extends Latte\Template
 	function blockTitle2($_args)
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("title2", \Latte\SnippetDriver::TYPE_STATIC);
+		$this->global->snippetDriver->enter("title2", "static");
 		?>Title 2<?php
 		$this->global->snippetDriver->leave();
 

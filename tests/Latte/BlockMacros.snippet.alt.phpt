@@ -4,8 +4,6 @@
  * Test: general snippets test.
  */
 
-use Nette\Utils\Html;
-use Nette\Bridges\ApplicationLatte\UIMacros;
 use Tester\Assert;
 
 

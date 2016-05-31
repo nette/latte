@@ -4,7 +4,6 @@
  * Test: dynamic snippets test.
  */
 
-use Nette\Bridges\ApplicationLatte\UIMacros;
 use Tester\Assert;
 
 

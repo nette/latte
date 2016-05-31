@@ -4,7 +4,6 @@
  * Test: snippets.
  */
 
-use Nette\Bridges\ApplicationLatte\UIMacros;
 use Tester\Assert;
 
 

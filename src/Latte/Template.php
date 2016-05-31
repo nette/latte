@@ -174,7 +174,7 @@ class Template
 				return TRUE;
 			}
 		} elseif (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
-			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
+			$this->global->snippetDriver = new Runtime\SnippetDriver($this->global->snippetBridge);
 		}
 
 		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
