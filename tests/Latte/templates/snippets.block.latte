@@ -1,0 +1,12 @@
+<div n:snippet="snippet" n:block="block1">
+		static
+</div>
+
+
+{snippet outer}
+begin
+<div n:snippet="inner-$id" n:block="block2">
+		dynamic
+</div>
+end
+{/snippet}

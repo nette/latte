@@ -1,0 +1,71 @@
+<?php
+%A%
+
+class Template%a% extends Latte\Template
+{
+	public $blocks = [
+		'_outer' => 'blockOuter',
+		'_inner' => 'blockInner',
+		'_gallery' => 'blockGallery',
+	];
+
+	public $blockTypes = [
+		'_outer' => 'html',
+		'_inner' => 'html',
+		'_gallery' => 'html',
+	];
+
+
+	function render()
+	{
+%A%
+
+		// main template
+		?>	<div class="test"<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('outer') . '"' ?>>
+<?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?>
+	</div>
+
+	<div class="test"<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('inner') . '"' ?>>
+<?php
+		call_user_func(reset($this->blockQueue['_inner']), $this->params);
+?>	</div>
+
+	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') /* line 9 */ ?>"<?php echo ' id="' . $this->global->snippetDriver->getHtmlId('gallery') . '"' ?>><?php
+		call_user_func(reset($this->blockQueue['_gallery']), $this->params) ?>
+</div>
+<?php
+
+	}
+
+
+	function blockOuter($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("outer", "static");
+?>	<p>Outer</p>
+<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockInner($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("inner", "static");
+?>	<p>Inner</p>
+<?php
+		$this->global->snippetDriver->leave();
+
+	}
+
+
+	function blockGallery($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("gallery", "static");
+		$this->global->snippetDriver->leave();
+
+	}
+
+}
