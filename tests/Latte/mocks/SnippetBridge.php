@@ -1,7 +1,7 @@
 <?php
 
 
-class SnippetBridgeMock implements \Latte\ISnippetBridge
+class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 {
 
 	public $snippetMode = TRUE;

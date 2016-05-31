@@ -5,7 +5,7 @@
  * Copyright (c) 2008 David Grudl (https://davidgrudl.com)
  */
 
-namespace Latte;
+namespace Latte\Runtime;
 
 
 /**

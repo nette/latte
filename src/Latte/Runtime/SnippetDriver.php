@@ -31,11 +31,11 @@ class SnippetDriver
 	/** @var bool */
 	private $renderingSnippets = FALSE;
 
-	/** @var Latte\ISnippetBridge */
+	/** @var Latte\Runtime\ISnippetBridge */
 	private $bridge;
 
 
-	public function __construct(Latte\ISnippetBridge $bridge)
+	public function __construct(Latte\Runtime\ISnippetBridge $bridge)
 	{
 		$this->bridge = $bridge;
 	}
