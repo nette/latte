@@ -177,7 +177,7 @@ class Compiler
 		}
 
 		foreach ($this->properties as $name => $value) {
-			$members[] = "\tpublic $$name = " . Helpers::dumpPhp($value) . ';';
+			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value) . ';';
 		}
 		foreach (array_filter($this->methods) as $name => $method) {
 			$members[] = "\n\tfunction $name($method[arguments])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";

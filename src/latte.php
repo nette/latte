@@ -17,6 +17,7 @@ spl_autoload_register(function ($className) {
 		'Latte\\Macros\\MacroSet' => 'Macros/MacroSet.php',
 		'Latte\\MacroTokens' => 'MacroTokens.php',
 		'Latte\\Parser' => 'Parser.php',
+		'Latte\\PhpHelpers' => 'PhpHelpers.php',
 		'Latte\\PhpWriter' => 'PhpWriter.php',
 		'Latte\\RegexpException' => 'exceptions.php',
 		'Latte\\Runtime\\CachingIterator' => 'Runtime/CachingIterator.php',

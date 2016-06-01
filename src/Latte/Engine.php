@@ -131,7 +131,7 @@ class Engine
 		if (!preg_match('#\n|\?#', $name)) {
 			$code = "<?php\n// source: $name\n?>" . $code;
 		}
-		$code = Helpers::optimizePhp($code);
+		$code = PhpHelpers::reformatCode($code);
 		return $code;
 	}
 
