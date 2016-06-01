@@ -8,8 +8,8 @@
 namespace Latte\Macros;
 
 use Latte;
-use Latte\Engine;
 use Latte\CompileException;
+use Latte\Engine;
 use Latte\MacroNode;
 use Latte\PhpWriter;
 
@@ -454,7 +454,7 @@ class CoreMacros extends MacroSet
 		$tokens = $writer->preprocess();
 		$res = new Latte\MacroTokens;
 		while ($tokens->nextToken()) {
-			if ($var && $tokens->isCurrent(Latte\MacroTokens::T_SYMBOL, Latte\MacroTokens::T_VARIABLE)) {
+			if ($var && $tokens->isCurrent($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 				if ($node->name === 'default') {
 					$res->append("'" . ltrim($tokens->currentValue(), '$') . "'");
 				} else {
@@ -473,7 +473,7 @@ class CoreMacros extends MacroSet
 				$res->append($node->name === 'default' ? ',' : ';');
 				$var = TRUE;
 
-			} elseif ($var === NULL && $node->name === 'default' && !$tokens->isCurrent(Latte\MacroTokens::T_WHITESPACE)) {
+			} elseif ($var === NULL && $node->name === 'default' && !$tokens->isCurrent($tokens::T_WHITESPACE)) {
 				throw new CompileException("Unexpected '{$tokens->currentValue()}' in {default $node->args}");
 
 			} else {

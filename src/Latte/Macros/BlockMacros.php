@@ -8,10 +8,11 @@
 namespace Latte\Macros;
 
 use Latte;
-use Latte\MacroNode;
-use Latte\MacroTokens;
-use Latte\PhpWriter;
 use Latte\CompileException;
+use Latte\Engine;
+use Latte\MacroNode;
+use Latte\PhpWriter;
+use Latte\Runtime\SnippetDriver;
 
 
 /**
@@ -202,7 +203,7 @@ class BlockMacros extends MacroSet
 				$parent->data->dynamic = TRUE;
 				$node->data->leave = TRUE;
 				$node->closingCode = "<?php \$this->global->snippetDriver->leave(); ?>";
-				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . Latte\Runtime\SnippetDriver::TYPE_DYNAMIC . '");';
+				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . SnippetDriver::TYPE_DYNAMIC . '");';
 
 				if ($node->prefix) {
 					$node->attrCode = $writer->write("<?php echo ' id=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
@@ -265,7 +266,7 @@ class BlockMacros extends MacroSet
 			$tokens = $node->tokenizer;
 			$args = [];
 			while ($tokens->isNext()) {
-				$args[] = $tokens->expectNextValue(MacroTokens::T_VARIABLE);
+				$args[] = $tokens->expectNextValue($tokens::T_VARIABLE);
 				if ($tokens->isNext()) {
 					$tokens->expectNextValue(',');
 				}
@@ -296,7 +297,7 @@ class BlockMacros extends MacroSet
 			}
 
 			if (($node->name === 'snippet' || $node->name === 'snippetArea') && strpos($node->data->name, '$') === FALSE) {
-				$type = $node->name === 'snippet' ? Latte\Runtime\SnippetDriver::TYPE_STATIC : Latte\Runtime\SnippetDriver::TYPE_AREA;
+				$type = $node->name === 'snippet' ? SnippetDriver::TYPE_STATIC : SnippetDriver::TYPE_AREA;
 				$node->content = '<?php $this->global->snippetDriver->enter('
 					. $writer->formatWord(substr($node->data->name, 1))
 					. ', "' . $type . '"); ?>'
@@ -370,7 +371,7 @@ class BlockMacros extends MacroSet
 	private function exportBlockType(MacroNode $node)
 	{
 		$context = $node->context;
-		if (in_array($context[0], [Latte\Engine::CONTENT_HTML, Latte\Engine::CONTENT_XHTML, Latte\Engine::CONTENT_XML], TRUE) && $context[1] === 'attr') {
+		if (in_array($context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE) && $context[1] === 'attr') {
 			$context[1] = '';
 		}
 		return implode($context);
