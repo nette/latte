@@ -23,6 +23,6 @@ Assert::match(
 Assert::match(
 	'%A%$a = \'test\' ? [] : NULL%A%',
 	$latte->compile('
-{?}
-{? $a = test ? []}
+{php}
+{php $a = test ? []}
 '));

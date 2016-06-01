@@ -23,7 +23,7 @@ use Latte\PhpWriter;
  * - {foreach ?} ... {/foreach}
  * - {$variable} with escaping
  * - {=expression} echo with escaping
- * - {?expression} evaluate PHP statement
+ * - {php expression} evaluate PHP statement
  * - {_expression} echo translation with escaping
  * - {attr ?} HTML element attributes
  * - {capture ?} ... {/capture} capture block to parameter
@@ -490,11 +490,13 @@ class CoreMacros extends MacroSet
 
 	/**
 	 * {= ...}
-	 * {? ...}
 	 * {php ...}
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->name === '?') {
+			trigger_error('Macro {? ...} is deprecated, use {php ...}.', E_USER_DEPRECATED);
+		}
 		return $writer->write($node->name === '='
 			? "echo %modify(%node.args) /* line $node->startLine */"
 			: '%modify(%node.args);'
