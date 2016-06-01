@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Test: Latte\Filters
+ * Test: Latte\Runtime\FilterExecutor
  */
 
-use Latte\Filters;
+use Latte\Runtime\FilterExecutor;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
 use Tester\Assert;
@@ -28,7 +28,7 @@ class MyFilter
 
 
 test(function () {
-	$filters = new Filters;
+	$filters = new FilterExecutor;
 
 	Assert::true(count($filters->getAll()) > 28);
 	Assert::same('upper', $filters->getAll()['upper']);
@@ -58,7 +58,7 @@ test(function () {
 
 
 test(function () {
-	$filters = new Filters;
+	$filters = new FilterExecutor;
 	$filters->add(NULL, function ($name, $val) {
 		return implode(',', func_get_args());
 	});
@@ -67,7 +67,7 @@ test(function () {
 	Assert::same('dynamic,1,2', call_user_func($filters->Dynamic, 1, 2));
 	Assert::same('another,1,2', call_user_func($filters->another, 1, 2));
 
-	$filters2 = new Filters;
+	$filters2 = new FilterExecutor;
 	$filters2->add(NULL, function ($name, $val) {
 		return 'different';
 	});
@@ -76,7 +76,7 @@ test(function () {
 
 
 test(function () {
-	$filters = new Filters;
+	$filters = new FilterExecutor;
 	$filters->add(NULL, function ($name, $val) use ($filters) {
 		if ($name === 'dynamic') {
 			$filters->add($name, function ($val) {
@@ -94,7 +94,7 @@ test(function () {
 
 
 test(function () {
-	$filters = new Filters;
+	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic
 	$filters->add('f1', function (FilterInfo $info, $val) {
@@ -127,7 +127,7 @@ test(function () {
 
 
 test(function () {
-	$filters = new Filters;
+	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic with Latte\Runtime\Html
 	$filters->add('f4', function (FilterInfo $info, $val, $newType) {

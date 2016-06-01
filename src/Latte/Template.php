@@ -27,7 +27,7 @@ class Template
 	/** @var array  @internal */
 	protected $params = [];
 
-	/** @var Filters */
+	/** @var Runtime\FilterExecutor */
 	protected $filters;
 
 	/** @var array [name => method]  @internal */
@@ -52,7 +52,7 @@ class Template
 	protected $blockTypes = [];
 
 
-	public function __construct(Engine $engine, array $params, Filters $filters, array $providers, $name)
+	public function __construct(Engine $engine, array $params, Runtime\FilterExecutor $filters, array $providers, $name)
 	{
 		$this->engine = $engine;
 		$this->params = $params;

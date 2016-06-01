@@ -39,7 +39,7 @@ class Engine
 	/** @var ILoader */
 	private $loader;
 
-	/** @var Filters */
+	/** @var Runtime\FilterExecutor */
 	private $filters;
 
 	/** @var array */
@@ -58,7 +58,7 @@ class Engine
 
 	public function __construct()
 	{
-		$this->filters = new Filters;
+		$this->filters = new Runtime\FilterExecutor;
 	}
 
 

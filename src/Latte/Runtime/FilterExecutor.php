@@ -5,14 +5,17 @@
  * Copyright (c) 2008 David Grudl (https://davidgrudl.com)
  */
 
-namespace Latte;
+namespace Latte\Runtime;
+
+use Latte\Engine;
+use Latte\Helpers;
 
 
 /**
- * Filters.
+ * Filter executor.
  * @internal
  */
-class Filters
+class FilterExecutor
 {
 	/** @var array */
 	private $_dynamic = [];
@@ -97,14 +100,14 @@ class Filters
 			if ($aware) { // FilterInfo aware filter
 				return $this->$lname = function ($arg) use ($callback) {
 					$args = func_get_args();
-					array_unshift($args, $info = new Runtime\FilterInfo);
-					if ($arg instanceof Runtime\IHtmlString) {
+					array_unshift($args, $info = new FilterInfo);
+					if ($arg instanceof IHtmlString) {
 						$args[1] = $arg->__toString();
 						$info->contentType = Engine::CONTENT_HTML;
 					}
 					$res = call_user_func_array($callback, $args);
 					return $info->contentType === Engine::CONTENT_HTML
-						? new Runtime\Html($res)
+						? new Html($res)
 						: $res;
 				};
 			} else { // classic filter
@@ -134,7 +137,7 @@ class Filters
 	 * Calls filter with FilterInfo.
 	 * @return mixed
 	 */
-	public function filterContent($name, Runtime\FilterInfo $info, $arg)
+	public function filterContent($name, FilterInfo $info, $arg)
 	{
 		$lname = strtolower($name);
 		$args = func_get_args();
@@ -156,7 +159,7 @@ class Filters
 					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
 			}
 			$res = call_user_func_array($this->$name, $args);
-			if ($res instanceof Runtime\IHtmlString) {
+			if ($res instanceof IHtmlString) {
 				trigger_error("Filter |$name should be changed to content-aware filter.");
 				$info->contentType = Engine::CONTENT_HTML;
 				$res = $res->__toString();
