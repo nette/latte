@@ -88,7 +88,7 @@ class Engine
 
 	/**
 	 * Creates template object.
-	 * @return Template
+	 * @return Runtime\Template
 	 */
 	public function createTemplate($name, array $params = [])
 	{

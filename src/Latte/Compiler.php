@@ -185,7 +185,7 @@ class Compiler
 
 		return "<?php\n"
 			. "use Latte\\Runtime as LR;\n\n"
-			. "class $className extends Latte\\Template\n{\n"
+			. "class $className extends Latte\\Runtime\\Template\n{\n"
 			. implode("\n\n", $members)
 			. "\n\n}\n";
 	}

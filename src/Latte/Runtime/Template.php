@@ -5,7 +5,10 @@
  * Copyright (c) 2008 David Grudl (https://davidgrudl.com)
  */
 
-namespace Latte;
+namespace Latte\Runtime;
+
+use Latte;
+use Latte\Engine;
 
 
 /**
@@ -13,7 +16,7 @@ namespace Latte;
  */
 class Template
 {
-	use Strict;
+	use Latte\Strict;
 
 	/** @var Engine */
 	private $engine;
@@ -27,7 +30,7 @@ class Template
 	/** @var array  @internal */
 	protected $params = [];
 
-	/** @var Runtime\FilterExecutor */
+	/** @var FilterExecutor */
 	protected $filters;
 
 	/** @var array [name => method]  @internal */
@@ -52,7 +55,7 @@ class Template
 	protected $blockTypes = [];
 
 
-	public function __construct(Engine $engine, array $params, Runtime\FilterExecutor $filters, array $providers, $name)
+	public function __construct(Engine $engine, array $params, FilterExecutor $filters, array $providers, $name)
 	{
 		$this->engine = $engine;
 		$this->params = $params;
@@ -174,10 +177,10 @@ class Template
 				return TRUE;
 			}
 		} elseif (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
-			$this->global->snippetDriver = new Runtime\SnippetDriver($this->global->snippetBridge);
+			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
 
-		Runtime\Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
+		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 		// old accumulators for back compatibility
 		$this->params['_l'] = $params['_l'] = new \stdClass;
 		$this->params['_g'] = $params['_g'] = $this->global;
@@ -241,10 +244,10 @@ class Template
 	protected function renderToContentType($type)
 	{
 		if ($type === "html$this->contentType" && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
-			echo Runtime\Filters::escapeHtmlRawText($this->renderToString());
+			echo Filters::escapeHtmlRawText($this->renderToString());
 			return;
 		} elseif ($type === 'htmlattr' || ($type === Engine::CONTENT_HTML && $this->contentType !== Engine::CONTENT_HTML)) {
-			echo Runtime\Filters::escapeHtml($this->renderToString());
+			echo Filters::escapeHtml($this->renderToString());
 			return;
 		} elseif ($type && $type !== $this->contentType) {
 			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
@@ -274,7 +277,7 @@ class Template
 	protected function renderBlock($name, array $params, $type = NULL)
 	{
 		if (empty($this->blockQueue[$name])) {
-			$hint = isset($this->blockQueue) && ($t = Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
+			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 		if ($type && isset($this->blockTypes[$name]) && $this->blockTypes[$name] !== $type) {
