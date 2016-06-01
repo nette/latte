@@ -18,8 +18,9 @@ Assert::false($loader->isExpired(__FILE__, filemtime(__FILE__)));
 Assert::false($loader->isExpired(__FILE__, filemtime(__FILE__) + 1));
 Assert::true($loader->isExpired(__FILE__, filemtime(__FILE__) - 1));
 
-Assert::same(__DIR__ . '/inner', $loader->getReferredName('inner', __FILE__));
-Assert::same(__FILE__, $loader->getReferredName(__FILE__, __FILE__));
+Assert::same('/a/b/inner', strtr($loader->getReferredName('inner', '/a\\b/c'), '\\', '/'));
+Assert::same('/a/b/c', strtr($loader->getReferredName('/a/b/c', '/a/b/c'), '\\', '/'));
+Assert::same('/a/c', strtr($loader->getReferredName('../c', '/a/b/c'), '\\', '/'));
 
 Assert::exception(function () {
 	$loader = new FileLoader;
@@ -37,6 +38,6 @@ Assert::exception(function () use ($loader) {
 Assert::false($loader->isExpired('Latte/' . basename(__FILE__), filemtime(__FILE__) + 1));
 Assert::true($loader->isExpired('Latte/' . basename(__FILE__), filemtime(__FILE__) - 1));
 
-Assert::same('Latte/' . basename(__FILE__), $loader->getReferredName(basename(__FILE__), 'Latte/file'));
+Assert::same('Latte' . DIRECTORY_SEPARATOR . 'new', $loader->getReferredName('new', 'Latte/file'));
 Assert::same('Latte', $loader->getReferredName('Latte', 'file'));
-Assert::same('../tests', $loader->getReferredName('../tests', 'file'));
+Assert::same('..' . DIRECTORY_SEPARATOR . 'tests', $loader->getReferredName('../tests', 'file'));

@@ -26,13 +26,13 @@ Assert::matchFile(
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.include.inc1.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/include1.latte'))
+	file_get_contents($latte->getCacheFile(__DIR__ . strtr('/templates/subdir/include1.latte', '/', DIRECTORY_SEPARATOR)))
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.include.inc2.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/include2.latte'))
+	file_get_contents($latte->getCacheFile(__DIR__ . strtr('/templates/subdir/include2.latte', '/', DIRECTORY_SEPARATOR)))
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.include.inc3.phtml',
-	file_get_contents($latte->getCacheFile(__DIR__ . '/templates/subdir/../include3.latte'))
+	file_get_contents($latte->getCacheFile(__DIR__ . strtr('/templates/include3.latte', '/', DIRECTORY_SEPARATOR)))
 );

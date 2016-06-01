@@ -65,8 +65,7 @@ class FileLoader implements Latte\ILoader
 	public function getReferredName($file, $referringFile)
 	{
 		if ($this->baseDir || !preg_match('#/|\\\\|[a-z][a-z0-9+.-]*:#iA', $file)) {
-			$file = dirname($this->baseDir . $referringFile) . '/' . $file;
-			$file = substr($file, strlen($this->baseDir));
+			$file = $this->normalizePath($referringFile . '/../' . $file);
 		}
 		return $file;
 	}
@@ -89,7 +88,7 @@ class FileLoader implements Latte\ILoader
 	{
 		$res = [];
 		foreach (explode('/', strtr($path, '\\', '/')) as $part) {
-			if ($part === '..') {
+			if ($part === '..' && $res) {
 				array_pop($res);
 			} elseif ($part !== '.') {
 				$res[] = $part;
