@@ -294,6 +294,16 @@ class Engine
 
 
 	/**
+	 * Returns all providers.
+	 * @return array
+	 */
+	public function getProviders()
+	{
+		return $this->providers;
+	}
+
+
+	/**
 	 * @return self
 	 */
 	public function setContentType($type)
