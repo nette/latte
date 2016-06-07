@@ -372,7 +372,7 @@ class BlockMacros extends MacroSet
 	{
 		$context = $node->context;
 		if (in_array($context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE) && $context[1] === 'attr') {
-			$context[1] = '';
+			$context = [$context[0]];
 		}
 		return implode($context);
 	}

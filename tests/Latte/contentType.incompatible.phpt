@@ -30,6 +30,10 @@ test(function () {
 		$latte->renderToString('<meta content="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
 	);
 
+	Assert::same('<a href="b&quot;ar"><meta content="b&quot;ar">',
+		$latte->renderToString('<a href="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
+	);
+
 	Assert::same('<meta content="b&quot;ar"><meta content="b&quot;ar">',
 		$latte->renderToString('<meta content={block foo}{$value}{/block}><meta content={include foo}>', ['value' => 'b"ar'])
 	);
