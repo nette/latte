@@ -579,8 +579,6 @@ class Compiler
 
 		if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 			$this->htmlNode->attrCode .= $node->attrCode;
-		} elseif (!$node->prefix) {
-			list($this->contentType, $this->context[0], $this->context[1]) = $node->context;
 		}
 		$this->output = & $node->saved[0];
 		$this->writeCode($node->openingCode, $node->replaced, $node->saved[1]);
