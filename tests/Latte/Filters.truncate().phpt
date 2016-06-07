@@ -47,3 +47,23 @@ Assert::same('Řekněte, jak se (dnes) máte?', Filters::truncate($s, 29)); // l
 Assert::same('Řekněte, jak se (dnes) máte?', Filters::truncate($s, 30)); // length=30
 Assert::same('Řekněte, jak se (dnes) máte?', Filters::truncate($s, 31)); // length=31
 Assert::same('Řekněte, jak se (dnes) máte?', Filters::truncate($s, 32)); // length=32
+
+
+class CountableTraversableStringClass implements Countable, IteratorAggregate
+{
+	function __toString()
+	{
+		return 'Hello';
+	}
+
+	function count()
+	{
+	}
+
+	function getIterator()
+	{
+	}
+}
+
+// Filters::length() is not used
+Assert::same('He…', Filters::truncate(new CountableTraversableStringClass($s), 3)); // length=13

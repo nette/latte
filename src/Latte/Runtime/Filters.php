@@ -424,7 +424,7 @@ class Filters
 	public static function substring($s, $start, $length = NULL)
 	{
 		if ($length === NULL) {
-			$length = self::length($s);
+			$length = strlen(utf8_decode($s));
 		}
 		if (function_exists('mb_substr')) {
 			return mb_substr($s, $start, $length, 'UTF-8'); // MB is much faster
@@ -442,8 +442,8 @@ class Filters
 	 */
 	public static function truncate($s, $maxLen, $append = "\xE2\x80\xA6")
 	{
-		if (self::length($s) > $maxLen) {
-			$maxLen = $maxLen - self::length($append);
+		if (strlen(utf8_decode($s)) > $maxLen) {
+			$maxLen = $maxLen - strlen(utf8_decode($append));
 			if ($maxLen < 1) {
 				return $append;
 
