@@ -16,13 +16,13 @@ Assert::same($latte::CONTENT_HTML, $template->getContentType());
 $template = $latte->createTemplate('{contentType xml}');
 Assert::same($latte::CONTENT_XML, $template->getContentType());
 
-// ignored
-$template = $latte->createTemplate('{block}{contentType xml}{/block}');
-Assert::same($latte::CONTENT_XML, $template->getContentType());
+Assert::exception(function () use ($latte) {
+	$latte->createTemplate('{block}{contentType xml}{/block}');
+}, 'Latte\CompileException', '{contentType} is allowed only in template header.');
 
-// ignored
-$template = $latte->createTemplate('<div>{contentType xml}</div>');
-Assert::same($latte::CONTENT_XML, $template->getContentType());
+Assert::exception(function () use ($latte) {
+	$latte->createTemplate('<div>{contentType xml}</div>');
+}, 'Latte\CompileException', '{contentType} is allowed only in template header.');
 
 // defined on $latte
 $latte = new Latte\Engine;

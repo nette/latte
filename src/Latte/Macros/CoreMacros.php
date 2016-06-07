@@ -509,6 +509,11 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroContentType(MacroNode $node, PhpWriter $writer)
 	{
+		if (($node->parentNode || $node->htmlNode)
+			&& !($node->htmlNode && strtolower($node->htmlNode->name) === 'script' && strpos($node->args, 'html') !== FALSE)
+		) {
+			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
+		}
 		$compiler = $this->getCompiler();
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
@@ -529,7 +534,7 @@ class CoreMacros extends MacroSet
 		}
 		$compiler->setContentType($type);
 
-		if (strpos($node->args, '/') && !$node->parentNode) {
+		if (strpos($node->args, '/') && !$node->htmlNode) {
 			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", NULL], TRUE)) header(%var);', "Content-Type: $node->args");
 		}
 	}
