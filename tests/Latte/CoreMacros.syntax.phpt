@@ -31,7 +31,9 @@ $template = <<<'EOD'
 <p n:syntax="off">Default: {$person}</p>
 
 {syntax off}
-
+{a}
+{ {/ {/syntax
+{/syntax}
 EOD;
 
 Assert::matchFile(
