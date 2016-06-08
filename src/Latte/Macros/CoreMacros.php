@@ -227,6 +227,9 @@ class CoreMacros extends MacroSet
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
+		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
+			trigger_error('Macro {include} provides auto-escaping, remove |escape.');
+		}
 		$code = $writer->write(
 			'/* line ' . $node->startLine . ' */
 			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',

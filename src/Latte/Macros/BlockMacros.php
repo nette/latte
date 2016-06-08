@@ -10,6 +10,7 @@ namespace Latte\Macros;
 use Latte;
 use Latte\CompileException;
 use Latte\Engine;
+use Latte\Helpers;
 use Latte\MacroNode;
 use Latte\PhpWriter;
 use Latte\Runtime\SnippetDriver;
@@ -104,7 +105,10 @@ class BlockMacros extends MacroSet
 			$destination = $item->data->name;
 		}
 
-		$noEscape = Latte\Helpers::removeFilter($node->modifiers, 'noescape');
+		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
+		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
+			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
+		}
 		$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
 			. ', %node.array? + '
@@ -243,6 +247,9 @@ class BlockMacros extends MacroSet
 		$this->blockTypes[$name] = $this->exportBlockType($node);
 
 		$include = 'call_user_func(reset($this->blockQueue[%var]), ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
+		if (Helpers::removeFilter($node->modifiers, 'escape')) {
+			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
+		}
 		if ($node->modifiers) {
 			$include = "ob_start(function () {}); $include; \$_fi = new LR\\FilterInfo('html'); echo %modifyContent(ob_get_clean())";
 		}
