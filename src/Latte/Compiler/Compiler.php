@@ -739,19 +739,16 @@ class Compiler
 
 		if (strpbrk($name, '=~%^&_')) {
 			if ($this->context[1] === self::CONTENT_URL) {
-				$modifiers = preg_replace('#\|(nosafeurl|nocheck)\s?(?=\||\z)#i', '', $modifiers, -1, $found);
-				if (!$found && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
+				if (!Helpers::removeFilter($modifiers, 'nosafeurl|nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
 					$modifiers .= '|checkurl';
 				}
 			}
 
-			$modifiers = preg_replace('#\|noescape\s?(?=\||\z)#i', '', $modifiers, -1, $found);
-			if (!$found) {
+			if (!Helpers::removeFilter($modifiers, 'noescape')) {
 				$modifiers .= '|escape';
-			}
-
-			if (!$found && $inScript && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
-				throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
+				if ($inScript && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
+					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
+				}
 			}
 		}
 

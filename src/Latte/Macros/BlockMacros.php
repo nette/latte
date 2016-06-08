@@ -104,7 +104,7 @@ class BlockMacros extends MacroSet
 			$destination = $item->data->name;
 		}
 
-		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
+		$noCheck = Latte\Helpers::removeFilter($node->modifiers, 'nocheck');
 		$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
 			. ', %node.array? + '

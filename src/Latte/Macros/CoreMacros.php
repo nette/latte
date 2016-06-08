@@ -10,6 +10,7 @@ namespace Latte\Macros;
 use Latte;
 use Latte\CompileException;
 use Latte\Engine;
+use Latte\Helpers;
 use Latte\MacroNode;
 use Latte\PhpWriter;
 
@@ -225,7 +226,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
-		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
+		$noCheck = Helpers::removeFilter($node->modifiers, 'nocheck');
 		$code = $writer->write(
 			'/* line ' . $node->startLine . ' */
 			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
@@ -253,7 +254,7 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
-		call_user_func(Latte\Helpers::checkCallback([$node->tokenizer->fetchWord(), 'install']), $this->getCompiler())
+		call_user_func(Helpers::checkCallback([$node->tokenizer->fetchWord(), 'install']), $this->getCompiler())
 			->initialize();
 	}
 
@@ -346,8 +347,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndForeach(MacroNode $node, PhpWriter $writer)
 	{
-		$node->modifiers = preg_replace('#\|nocheck\s?(?=\||\z)#i', '', $node->modifiers, -1, $noCheck);
-		if ($node->modifiers && $node->modifiers !== '|noiterator') {
+		$noCheck = Helpers::removeFilter($node->modifiers, 'nocheck');
+		$noIterator = Helpers::removeFilter($node->modifiers, 'noiterator');
+		if ($node->modifiers) {
 			throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.');
 		}
 		$node->openingCode = '<?php $iterations = 0; ';
@@ -358,7 +360,7 @@ class CoreMacros extends MacroSet
 				$this->overwrittenVars[$m[$i]][] = $node->startLine;
 			}
 		}
-		if ($node->modifiers !== '|noiterator' && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
+		if (!$noIterator && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
 			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its); ?>';

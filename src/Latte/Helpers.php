@@ -52,4 +52,14 @@ class Helpers
 		return $best;
 	}
 
+
+	/**
+	 * @return bool
+	 */
+	public static function removeFilter(& $modifier, $filter)
+	{
+		$modifier = preg_replace('#\|(' . $filter . ')\s?(?=\||\z)#i', '', $modifier, -1, $found);
+		return (bool) $found;
+	}
+
 }
