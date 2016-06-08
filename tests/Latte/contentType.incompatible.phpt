@@ -23,7 +23,7 @@ test(function () {
 	}, E_USER_WARNING, 'Including block foo with content type HTML into incompatible type HTMLTAG.');
 
 	Assert::same('<meta content=b&quot;ar>b&quot;ar',
-		$latte->renderToString('<meta content={include foo|nocheck}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
+		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
 	Assert::same('<meta content="b&quot;ar"><meta content="b&quot;ar">',
@@ -155,7 +155,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context2' => '{extends ical.latte}',
 	'context3' => 'x{includeblock ical.latte}',
 	'context4' => '{contentType calendar} {include ical.latte}',
-	'context5' => '<p>{include ical.latte|nocheck}</p>',
+	'context5' => '<p>{include ical.latte|noescape}</p>',
 	'context6' => '{contentType javascript} {include ical.latte}',
 ]));
 

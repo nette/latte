@@ -226,11 +226,11 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
-		$noCheck = Helpers::removeFilter($node->modifiers, 'nocheck');
+		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		$code = $writer->write(
 			'/* line ' . $node->startLine . ' */
 			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
-			$noCheck ? NULL : implode('', $node->context)
+			$noEscape ? NULL : implode('', $node->context)
 		);
 		if ($node->modifiers) {
 			return $writer->write('

@@ -14,7 +14,7 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main1' => 'before {include inc.latte var => 1} after',
 	'main2' => 'before {include inc.latte var => 1|striptags} after',
-	'main3' => 'before {include inc.latte var => 1|striptags|nocheck} after',
+	'main3' => 'before {include inc.latte var => 1|striptags|noescape} after',
 
 	'inc.latte' => '<b>included {$var}</b>',
 ]));

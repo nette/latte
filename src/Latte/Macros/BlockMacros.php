@@ -104,12 +104,12 @@ class BlockMacros extends MacroSet
 			$destination = $item->data->name;
 		}
 
-		$noCheck = Latte\Helpers::removeFilter($node->modifiers, 'nocheck');
+		$noEscape = Latte\Helpers::removeFilter($node->modifiers, 'noescape');
 		$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
 			. ', %node.array? + '
 			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
-			. ($noCheck || $parent ? '' : ', ' . var_export($this->exportBlockType($node), TRUE))
+			. ($noEscape || $parent ? '' : ', ' . var_export($this->exportBlockType($node), TRUE))
 			. ');';
 
 		if ($node->modifiers) {
