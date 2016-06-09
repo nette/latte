@@ -25,9 +25,12 @@ Assert::same([
 ], parse('<0>'));
 
 Assert::same([
-	['text', '<?xml encoding="'],
+	['htmlTagBegin', '<?'],
+	['text', 'xml encoding="'],
 	['macroTag', '{$enc}'],
-	['text', '" ?>text'],
+	['text', '" ?'],
+	['htmlTagEnd', '>'],
+	['text', 'text'],
 ], parse('<?xml encoding="{$enc}" ?>text'));
 
 Assert::same([
@@ -39,15 +42,30 @@ Assert::same([
 ], parse('<?= $abc ?>text'));
 
 Assert::same([
-	['text', '<?bogus>text'],
+	['htmlTagBegin', '<?'],
+	['text', 'bogus'],
+	['htmlTagEnd', '>'],
+	['text', 'text'],
 ], parse('<?bogus>text'));
 
 Assert::same([
-	['text', '<!doctype html>text'],
+	['macroTag', '{contentType xml}'],
+	['htmlTagBegin', '<?'],
+	['text', 'bogus>text'],
+], parse('{contentType xml}<?bogus>text'));
+
+Assert::same([
+	['htmlTagBegin', '<!'],
+	['text', 'doctype html'],
+	['htmlTagEnd', '>'],
+	['text', 'text'],
 ], parse('<!doctype html>text'));
 
 Assert::same([
-	['text', '<!--> text> --> text'],
+	['htmlTagBegin', '<!'],
+	['text', '--'],
+	['htmlTagEnd', '>'],
+	['text', ' text> --> text'],
 ], parse('<!--> text> --> text'));
 
 Assert::same([
@@ -58,7 +76,10 @@ Assert::same([
 ], parse('<!-- text> --> text'));
 
 Assert::same([
-	['text', '<!bogus>text'],
+	['htmlTagBegin', '<!'],
+	['text', 'bogus'],
+	['htmlTagEnd', '>'],
+	['text', 'text'],
 ], parse('<!bogus>text'));
 
 Assert::same([

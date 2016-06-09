@@ -22,7 +22,7 @@ Assert::error(function () use ($latte) {
 
 
 Assert::error(function () use ($latte) {
-	$latte->compile('<? ?>');
+	$latte->compile('<?= ?>');
 }, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
 
 
@@ -32,17 +32,17 @@ Assert::error(function () use ($latte) {
 
 
 Assert::error(function () use ($latte) {
-	$latte->compile('<!-- <? -->');
+	$latte->compile('<!-- <?= -->');
 }, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
 
 
 Assert::error(function () use ($latte) {
-	$latte->compile('<div <? >');
+	$latte->compile('<div <?= >');
 }, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
 
 
 Assert::error(function () use ($latte) {
-	$latte->compile('<div a="<?">');
+	$latte->compile('<div a="<?=">');
 }, E_USER_DEPRECATED, 'Inline <?php ... ?> is deprecated, use {php ... } on line 1');
 
 

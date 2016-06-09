@@ -128,13 +128,14 @@ class Parser
 	{
 		$matches = $this->match('~
 			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>[a-z][a-z0-9:]*)|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
-			<(?P<htmlcomment>!--(?!>))|     ##  begin of HTML comment <!--, but not <!-->
+			<(?P<htmlcomment>!(?:--(?!>))?|\?(?!=|php))|     ##  begin of <!, <!--, <!DOCTYPE, <?, but not <?php and <?=
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
-		if (!empty($matches['htmlcomment'])) { // <!--
+		if (!empty($matches['htmlcomment'])) { // <! <?
 			$this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
-			$this->setContext(self::CONTEXT_HTML_COMMENT);
+			$end = $matches['htmlcomment'] === '!--' ? '--' : ($matches['htmlcomment'] === '?' && $this->xmlMode ? '\?' : '');
+			$this->setContext(self::CONTEXT_HTML_COMMENT, $end);
 
 		} elseif (!empty($matches['tag'])) { // <tag or </tag
 			$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
@@ -233,7 +234,7 @@ class Parser
 	private function contextHtmlComment()
 	{
 		$matches = $this->match('~
-			(?P<htmlcomment>-->)|   ##  end of HTML comment
+			(?P<htmlcomment>' . $this->context[1] . '>)|   ##  end of HTML comment
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 

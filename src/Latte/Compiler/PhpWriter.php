@@ -488,6 +488,8 @@ class PhpWriter
 						return $tokens;
 					case Compiler::CONTEXT_COMMENT:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
+					case Compiler::CONTEXT_BOGUS_COMMENT:
+						return $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
 					case Compiler::CONTENT_JS:
 					case Compiler::CONTENT_CSS:
 						return $tokens->prepend('LR\Filters::escape' . ucfirst($context) . '(')->append(')');

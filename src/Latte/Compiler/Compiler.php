@@ -68,7 +68,9 @@ class Compiler
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
 	/** @internal Context-aware escaping HTML contexts */
-	const CONTEXT_COMMENT = 'comment',
+	const
+		CONTEXT_COMMENT = 'comment',
+		CONTEXT_BOGUS_COMMENT = 'bogus',
 		CONTEXT_QUOTED_ATTRIBUTE = 'attr',
 		CONTEXT_TAG = 'tag';
 
@@ -362,6 +364,11 @@ class Compiler
 		} elseif ($token->text === '<!--') {
 			$this->setContext(self::CONTEXT_COMMENT);
 
+		} elseif ($token->text === '<?' || $token->text === '<!') {
+			$this->setContext(self::CONTEXT_BOGUS_COMMENT);
+			$this->output .= $token->text === '<?' ? '<<?php ?>?' : '<!'; // bypass error in escape()
+			return;
+
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
 			$this->htmlNode->startLine = $this->getLine();
@@ -374,7 +381,7 @@ class Compiler
 
 	private function processHtmlTagEnd(Token $token)
 	{
-		if ($token->text === '-->') {
+		if (in_array($this->context[0], [self::CONTEXT_COMMENT, self::CONTEXT_BOGUS_COMMENT], TRUE)) {
 			$this->output .= $token->text;
 			$this->setContext(NULL);
 			return;
