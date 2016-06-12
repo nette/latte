@@ -15,10 +15,14 @@ class Template%a% extends Latte\Runtime\Template
 	function render()
 	{
 %A%
-
-		// main template
 		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div><?php
 
+	}
+
+
+	function prepare()
+	{
+%A%
 	}
 
 

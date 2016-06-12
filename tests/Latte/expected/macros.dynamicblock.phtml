@@ -15,7 +15,6 @@ class Template%a% extends Latte\Runtime\Template
 	function render()
 	{
 %A%
-		// main template
 ?>
 
 <?php
@@ -70,6 +69,7 @@ class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		$var = 10;
+		if (isset($this->params['name'])) trigger_error('Variable $name overwritten in foreach on line 8');
 		return get_defined_vars();
 	}
 

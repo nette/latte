@@ -157,17 +157,16 @@ class Compiler
 			$this->closeMacro($this->macroNode->name);
 		}
 
-		$prologs = $epilogs = '';
+		$epilogs = '';
 		foreach ($macroHandlers as $handler) {
 			$res = $handler->finalize();
 			$handlerName = get_class($handler);
-			$prologs .= empty($res[0]) ? '' : "<?php\n// prolog $handlerName\n$res[0]\n?>";
-			$epilogs = (empty($res[1]) ? '' : "<?php\n// epilog $handlerName\n$res[1]\n?>") . $epilogs;
-			$prepare .= (empty($res[2]) ? '' : "<?php $res[2] ?>");
+			$prepare .= empty($res[0]) ? '' : "<?php $res[0] ?>";
+			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
 
-		$output = $this->expandTokens(($prologs ? $prologs . "<?php\n// main template\n?>\n" : '') . $output . $epilogs);
-		$this->addMethod('render', "?>$output<?php");
+		$output = '<?php if ($this->initialize($_args)) return; extract($_args); ?>' . "\n" . $output . $epilogs;
+		$this->addMethod('render', '?>' . $this->expandTokens($output) . '<?php');
 
 		if ($prepare) {
 			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php return get_defined_vars();");

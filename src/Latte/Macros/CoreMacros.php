@@ -106,7 +106,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
-		$code = 'if ($this->initialize($_args)) return; extract($_args);';
+		$code = '';
 		foreach ($this->overwrittenVars as $var => $lines) {
 			$s = var_export($var, TRUE);
 			$code .= 'if (isset($this->params[' . var_export($var, TRUE)

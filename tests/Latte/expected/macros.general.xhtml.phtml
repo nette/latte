@@ -16,15 +16,8 @@ class Template%a% extends Latte\Runtime\Template
 
 	function render()
 	{
-
-		// prolog Latte\Macros\CoreMacros
 		if ($this->initialize($_args)) return;
 		extract($_args);
-		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 47');
-		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach on line 46');
-		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach on line 104');
-
-		// main template
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -258,6 +251,16 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 <button></button> xx
 <?php
+	}
+
+
+	function prepare()
+	{
+		extract($this->params);
+		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 47');
+		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach on line 46');
+		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach on line 104');
+		return get_defined_vars();
 	}
 
 
