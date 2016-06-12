@@ -14,35 +14,42 @@ test(function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
-	Assert::noError(function () use ($latte) {
-		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}{/block}', ['value' => 'b"ar']);
-	});
+	Assert::same(
+		'<meta content="b&quot;ar">b&quot;ar',
+		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}{/block}', ['value' => 'b"ar'])
+	);
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']);
 	}, E_USER_WARNING, 'Including block foo with content type HTML into incompatible type HTMLTAG.');
 
-	Assert::same('<meta content=b&quot;ar>b&quot;ar',
+	Assert::same(
+		'<meta content=b&quot;ar>b&quot;ar',
 		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
-	Assert::same('<meta content="b&quot;ar"><meta content="b&quot;ar">',
+	Assert::same(
+		'<meta content="b&quot;ar"><meta content="b&quot;ar">',
 		$latte->renderToString('<meta content="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
 	);
 
-	Assert::same('<a href="b&quot;ar"><meta content="b&quot;ar">',
+	Assert::same(
+		'<a href="b&quot;ar"><meta content="b&quot;ar">',
 		$latte->renderToString('<a href="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
 	);
 
-	Assert::same('<meta content="b&quot;ar"><meta content="b&quot;ar">',
+	Assert::same(
+		'<meta content="b&quot;ar"><meta content="b&quot;ar">',
 		$latte->renderToString('<meta content={block foo}{$value}{/block}><meta content={include foo}>', ['value' => 'b"ar'])
 	);
 
-	Assert::same('foo<div>foo</div>',
+	Assert::same(
+		'foo<div>foo</div>',
 		$latte->renderToString('{block main}foo{/block}<div>{include main}</div>')
 	);
 
-	Assert::same('<div>foo</div><div>foo</div>',
+	Assert::same(
+		'<div>foo</div><div>foo</div>',
 		$latte->renderToString('{include main}{block main}<div>foo</div>{/block}')
 	);
 });
@@ -161,19 +168,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::same('<p> &lt;&gt;</p>', $latte->renderToString('context1'));
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('context2');
-});
+Assert::same(' <>', $latte->renderToString('context2'));
 
 Assert::same('x &lt;&gt;', $latte->renderToString('context3'));
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('context4');
-});
+Assert::same(' <>', $latte->renderToString('context4'));
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('context5');
-});
+Assert::same('<p> <></p>', $latte->renderToString('context5'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context6');

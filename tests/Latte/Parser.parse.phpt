@@ -12,9 +12,66 @@ use Latte\Token;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
-	$parser = new Parser;
-	$tokens = $parser->parse('<0>');
-	Assert::same(Token::TEXT, $tokens[0]->type);
-	Assert::same('<0>', $tokens[0]->text);
-});
+function parse($s)
+{
+	$parser = new Latte\Parser;
+	return array_map(function (Token $token) {
+		return [$token->type, $token->text];
+	}, $parser->parse($s));
+}
+
+Assert::same([
+	['text', '<0>']
+], parse('<0>'));
+
+Assert::same([
+	['text', '<?xml encoding="'],
+	['macroTag', '{$enc}'],
+	['text', '" ?>text'],
+], parse('<?xml encoding="{$enc}" ?>text'));
+
+Assert::same([
+	['text', '<?php $abc ?>text'],
+], parse('<?php $abc ?>text'));
+
+Assert::same([
+	['text', '<?= $abc ?>text'],
+], parse('<?= $abc ?>text'));
+
+Assert::same([
+	['text', '<?bogus>text'],
+], parse('<?bogus>text'));
+
+Assert::same([
+	['text', '<!doctype html>text'],
+], parse('<!doctype html>text'));
+
+Assert::same([
+	['text', '<!--> text> --> text'],
+], parse('<!--> text> --> text'));
+
+Assert::same([
+	['htmlTagBegin', '<!--'],
+	['text', ' text> '],
+	['htmlTagEnd', '-->'],
+	['text', ' text'],
+], parse('<!-- text> --> text'));
+
+Assert::same([
+	['text', '<!bogus>text'],
+], parse('<!bogus>text'));
+
+Assert::same([
+	['htmlTagBegin', '<div'],
+	['comment', ' n:syntax="off"'],
+	['htmlTagEnd', '>'],
+	['htmlTagBegin', '<div'],
+	['htmlTagEnd', '>'],
+	['text', '{foo}'],
+	['htmlTagBegin', '</div'],
+	['htmlTagEnd', '>'],
+	['text', '{bar}'],
+	['htmlTagBegin', '</div'],
+	['htmlTagEnd', '>'],
+	['macroTag', '{lorem}'],
+], parse('<div n:syntax="off"><div>{foo}</div>{bar}</div>{lorem}'));
