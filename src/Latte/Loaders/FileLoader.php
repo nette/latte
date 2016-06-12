@@ -77,7 +77,7 @@ class FileLoader implements Latte\ILoader
 	 */
 	public function getUniqueId($file)
 	{
-		return $this->baseDir . $file;
+		return $this->baseDir . strtr($file, '/', DIRECTORY_SEPARATOR);
 	}
 
 
