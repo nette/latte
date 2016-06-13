@@ -90,6 +90,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
+		$node->replaced = FALSE;
 		$destination = $node->tokenizer->fetchWord(); // destination [,] [params]
 		if (!preg_match('~#|[\w-]+\z~A', $destination)) {
 			return FALSE;
@@ -130,6 +131,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
 	{
+		$node->replaced = FALSE;
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
