@@ -48,13 +48,13 @@ $latte->addProvider('coreParentFinder', function ($template) {
 });
 
 $template = $latte->createTemplate('');
-$template->renderToString();
+$template->render();
 Assert::same('parent', $template->getParentName());
 
 $template = $latte->createTemplate('{extends "file.latte"}');
-$template->renderToString();
+$template->render();
 Assert::same('file.latte', $template->getParentName());
 
 $template = $latte->createTemplate('{extends none}');
-$template->renderToString();
+$template->render();
 Assert::null($template->getParentName());

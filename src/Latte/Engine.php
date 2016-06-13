@@ -68,8 +68,7 @@ class Engine
 	 */
 	public function render($name, array $params = [], $block = NULL)
 	{
-		$params += ['_renderblock' => $block];
-		$this->createTemplate($name, $params)
+		$this->createTemplate($name, $params + ['_renderblock' => $block])
 			->render();
 	}
 
@@ -80,9 +79,8 @@ class Engine
 	 */
 	public function renderToString($name, array $params = [], $block = NULL)
 	{
-		$params += ['_renderblock' => $block];
-		return $this->createTemplate($name, $params)
-			->renderToString();
+		$template = $this->createTemplate($name, $params + ['_renderblock' => $block]);
+		return $template->capture([$template, 'render']);
 	}
 
 

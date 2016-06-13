@@ -216,38 +216,16 @@ class Template
 
 
 	/**
-	 * Renders template to string.
-	 * @return string
-	 */
-	public function renderToString()
-	{
-		ob_start(function () {});
-		try {
-			$this->global->coreCaptured = TRUE;
-			$this->render();
-		} catch (\Throwable $e) {
-		} catch (\Exception $e) {
-		}
-		$this->global->coreCaptured = FALSE;
-		if (isset($e)) {
-			ob_end_clean();
-			throw $e;
-		}
-		return ob_get_clean();
-	}
-
-
-	/**
 	 * @return void
 	 * @internal
 	 */
 	protected function renderToContentType($type)
 	{
 		if ($type === "html$this->contentType" && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
-			echo Filters::escapeHtmlRawText($this->renderToString());
+			echo Filters::escapeHtmlRawText($this->capture([$this, 'render']));
 			return;
 		} elseif ($type === 'htmlattr' || ($type === Engine::CONTENT_HTML && $this->contentType !== Engine::CONTENT_HTML)) {
-			echo Filters::escapeHtml($this->renderToString());
+			echo Filters::escapeHtml($this->capture([$this, 'render']));
 			return;
 		} elseif ($type && $type !== $this->contentType) {
 			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
@@ -315,6 +293,29 @@ class Template
 		} elseif ($expected !== $current) {
 			trigger_error("Overridden block $name with content type " . strtoupper($expected) . ' by incompatible type ' . strtoupper($current) . '.', E_USER_WARNING);
 		}
+	}
+
+
+	/**
+	 * Captures output to string.
+	 * @return string
+	 * @internal
+	 */
+	public function capture(callable $function)
+	{
+		ob_start(function () {});
+		try {
+			$this->global->coreCaptured = TRUE;
+			$function();
+		} catch (\Throwable $e) {
+		} catch (\Exception $e) {
+		}
+		$this->global->coreCaptured = FALSE;
+		if (isset($e)) {
+			ob_end_clean();
+			throw $e;
+		}
+		return ob_get_clean();
 	}
 
 
