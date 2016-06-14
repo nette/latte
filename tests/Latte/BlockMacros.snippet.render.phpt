@@ -180,7 +180,6 @@ $dataSets = [
 ];
 
 foreach ($dataSets as $data) {
-dump($data);
 	//snippet mode
 	$bridge = new SnippetBridgeMock;
 	$bridge->invalid = array_fill_keys($data[3], TRUE);

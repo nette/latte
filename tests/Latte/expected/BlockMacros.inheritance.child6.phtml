@@ -4,11 +4,14 @@
 class Template%a% extends Latte\Runtime\Template
 {
 
-	function render()
+	function main()
 	{
-%A%
+		extract($this->params);
+		$foo = 1;
+?>
 This should be erased
 <?php
+		return get_defined_vars();
 	}
 
 
@@ -16,8 +19,7 @@ This should be erased
 	{
 		extract($this->params);
 		$this->parentName = "parent";
-		$foo = 1;
-		return get_defined_vars();
+
 	}
 
 }

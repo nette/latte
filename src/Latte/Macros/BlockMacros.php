@@ -30,15 +30,18 @@ class BlockMacros extends MacroSet
 	/** @var bool */
 	private $extends;
 
+	/** @var string[] */
+	private $imports;
+
 
 	public static function install(Latte\Compiler $compiler)
 	{
 		$me = new static($compiler);
 		$me->addMacro('include', [$me, 'macroInclude']);
 		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']); // deprecated
-		$me->addMacro('import', [$me, 'macroImport']);
-		$me->addMacro('extends', [$me, 'macroExtends']);
-		$me->addMacro('layout', [$me, 'macroExtends']);
+		$me->addMacro('import', [$me, 'macroImport'], NULL, NULL, self::ALLOWED_IN_HEAD);
+		$me->addMacro('extends', [$me, 'macroExtends'], NULL, NULL, self::ALLOWED_IN_HEAD);
+		$me->addMacro('layout', [$me, 'macroExtends'], NULL, NULL, self::ALLOWED_IN_HEAD);
 		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd'], NULL, self::AUTO_CLOSE);
 		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
@@ -57,6 +60,7 @@ class BlockMacros extends MacroSet
 		$this->namedBlocks = [];
 		$this->blockTypes = [];
 		$this->extends = NULL;
+		$this->imports = [];
 	}
 
 
@@ -79,6 +83,10 @@ class BlockMacros extends MacroSet
 			$compiler->addProperty('blocks', $functions);
 			$compiler->addProperty('blockTypes', $this->blockTypes);
 		}
+
+		return [
+			($this->extends === NULL ? '' : '$this->parentName = ' . $this->extends . ';') . implode($this->imports)
+		];
 	}
 
 
@@ -153,7 +161,12 @@ class BlockMacros extends MacroSet
 		}
 		$destination = $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
-		return $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $destination);
+		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $destination);
+		if ($this->getCompiler()->isInHead()) {
+			$this->imports[] = $code;
+		} else {
+			return $code;
+		}
 	}
 
 
@@ -172,11 +185,9 @@ class BlockMacros extends MacroSet
 		} elseif ($this->extends !== NULL) {
 			throw new CompileException("Multiple $notation declarations are not allowed.");
 		} elseif ($node->args === 'none') {
-			$this->extends = FALSE;
-			return $writer->write('$this->parentName = FALSE;');
+			$this->extends = 'FALSE';
 		} else {
-			$this->extends = TRUE;
-			return $writer->write('$this->parentName = %node.word%node.args;');
+			$this->extends = $writer->write('%node.word%node.args');
 		}
 	}
 
@@ -246,6 +257,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
 
+		$extendsCheck = $this->namedBlocks ? '' : 'if ($this->getParentName()) return get_defined_vars();';
 		$this->namedBlocks[$name] = TRUE;
 		$this->blockTypes[$name] = $node->context[0] . $node->context[1];
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
@@ -285,11 +297,11 @@ class BlockMacros extends MacroSet
 			if ($args) {
 				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
 			}
-			return;
+			return $extendsCheck;
 
 		} else { // block, snippetArea
 			$this->checkExtraArgs($node);
-			return $writer->write($include, $name);
+			return $writer->write($extendsCheck . $include, $name);
 		}
 	}
 

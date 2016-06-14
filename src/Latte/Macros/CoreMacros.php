@@ -81,7 +81,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('spaceless', [$me, 'macroSpaceless'], [$me, 'macroSpaceless']);
 		$me->addMacro('include', [$me, 'macroInclude']);
 		$me->addMacro('use', [$me, 'macroUse']);
-		$me->addMacro('contentType', [$me, 'macroContentType']);
+		$me->addMacro('contentType', [$me, 'macroContentType'], NULL, NULL, self::ALLOWED_IN_HEAD);
 		$me->addMacro('status', [$me, 'macroStatus']);
 		$me->addMacro('php', [$me, 'macroExpr']);
 

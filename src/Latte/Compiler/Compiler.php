@@ -51,6 +51,9 @@ class Compiler
 	/** @var int */
 	private $tagOffset;
 
+	/** @var bool */
+	private $inHead;
+
 	/** @var array of [name => [body, arguments]] */
 	private $methods = [];
 
@@ -99,9 +102,12 @@ class Compiler
 	public function compile(array $tokens, $className)
 	{
 		$this->tokens = $tokens;
+		$output = '';
+		$this->output = & $output;
+		$this->inHead = TRUE;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
 		$this->placeholders = $this->properties = [];
-		$this->methods = ['render' => NULL, 'prepare' => NULL];
+		$this->methods = ['main' => NULL, 'prepare' => NULL];
 
 		$macroHandlers = new \SplObjectStorage;
 		array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
@@ -110,38 +116,13 @@ class Compiler
 			$handler->initialize($this);
 		}
 
-		$depth = 0; $contentPos = -1; $line = 1;
-		foreach ($tokens as $i => $token) {
-			if ($token->type === $token::MACRO_TAG && in_array($token->name, ['if', 'ifset', 'foreach'], TRUE)) {
-				$depth += $token->empty ? 0 : ($token->closing ? -1 : 1);
-			} elseif ($token->type === $token::MACRO_TAG && $token->name === 'includeblock') {
-				trigger_error("Macro {includeblock} used in template header on line $line should be replaced with similar macro {import} which imports only blocks.", E_USER_DEPRECATED);
-			} elseif (!($token->type === $token::COMMENT
-				|| $token->type === $token::MACRO_TAG && in_array($token->name, ['extends', 'layout', 'import', 'var', 'default', 'contentType', 'else', 'elseif', 'elseifset'], TRUE)
+		foreach ($tokens as $this->position => $token) {
+			if ($this->inHead && !($token->type === $token::COMMENT
+				|| $token->type === $token::MACRO_TAG && isset($this->flags[$token->name]) && $this->flags[$token->name] & IMacro::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
-				break;
+				$this->inHead = FALSE;
 			}
-			$contentPos = $depth || $token->type === $token::TEXT ? $contentPos : $i;
-			$line += substr_count($token->text, "\n");
-		}
-
-		$position = & $this->position;
-		$prepare = '';
-		$this->output = & $prepare;
-
-		for ($position = 0; $position <= $contentPos; $position++) {
-			$token = $tokens[$position];
-			if ($token->type !== $token::TEXT) {
-				$this->{"process$token->type"}($token);
-			}
-		}
-
-		$output = $prepare ? '<?php ?>' : ''; // consume next new line
-		$this->output = & $output;
-
-		for (; $position < count($this->tokens); $position++) {
-			$token = $tokens[$position];
 			$this->{"process$token->type"}($token);
 		}
 
@@ -159,19 +140,17 @@ class Compiler
 			$this->closeMacro($this->macroNode->name);
 		}
 
-		$epilogs = '';
+		$prepare = $epilogs = '';
 		foreach ($macroHandlers as $handler) {
 			$res = $handler->finalize();
-			$handlerName = get_class($handler);
 			$prepare .= empty($res[0]) ? '' : "<?php $res[0] ?>";
 			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
 
-		$output = '<?php if ($this->initialize($_args)) return; extract($_args); ?>' . "\n" . $output . $epilogs;
-		$this->addMethod('render', '?>' . $this->expandTokens($output) . '<?php');
+		$this->addMethod('main', $this->expandTokens("extract(\$this->params);?>\n$output$epilogs<?php return get_defined_vars();"));
 
 		if ($prepare) {
-			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php return get_defined_vars();");
+			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php");
 		}
 		if ($this->contentType !== self::CONTENT_HTML) {
 			$this->addProperty('contentType', $this->contentType);
@@ -249,6 +228,15 @@ class Compiler
 	public function getLine()
 	{
 		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position]->line : NULL;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isInHead()
+	{
+		return $this->inHead;
 	}
 
 

@@ -14,14 +14,14 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function render()
+	function main()
 	{
-		if ($this->initialize($_args)) return;
-		extract($_args);
-?>
+		extract($this->params);
+		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) ?>
 <!DOCTYPE html>
 <head>
 	<title><?php
+		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, $s)));
@@ -54,13 +54,6 @@ Parent: <?php echo LR\Filters::escapeHtmlText(basename($this->getReferringTempla
 		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line 23 */ ?>
 
 <?php
-	}
-
-
-	function prepare()
-	{
-		extract($this->params);
-		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP);
 		return get_defined_vars();
 	}
 

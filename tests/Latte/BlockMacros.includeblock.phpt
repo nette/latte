@@ -13,7 +13,6 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main' => '
-
 {includeblock "inc"}
 
 {include test}

@@ -14,11 +14,18 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function render()
+	function main()
 	{
-%A%
+		extract($this->params);
 ?>
 
+<?php
+		$var = 10;
+?>
+
+<?php
+		if ($this->getParentName()) return get_defined_vars();
+?>
 
 <?php
 		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html');
@@ -27,14 +34,6 @@ class Template%a% extends Latte\Runtime\Template
 
 <?php
 		$this->renderBlock('testargs', [1] + get_defined_vars(), 'html');
-
-	}
-
-
-	function prepare()
-	{
-		extract($this->params);
-		$var = 10;
 		return get_defined_vars();
 	}
 

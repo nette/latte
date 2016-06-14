@@ -4,22 +4,18 @@
 class Template%a% extends Latte\Runtime\Template
 {
 
-	function render()
+	function main()
 	{
 %A%
-<?php
-		$this->renderBlock('test', $this->params, 'html');
-		?>	<?php
-	}
-
-
-	function prepare()
-	{
-		extract($this->params);
 		ob_start(function () {});
 		$this->createTemplate("inc", get_defined_vars(), "includeblock")->renderToContentType('html');
 		echo rtrim(ob_get_clean());
-		return get_defined_vars();
+?>
+
+<?php
+		$this->renderBlock('test', $this->params, 'html');
+		?>	<?php
+%A%
 	}
 
 }

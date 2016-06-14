@@ -147,13 +147,13 @@ class Template
 
 
 	/**
-	 * Initializes template.
-	 * @return bool
+	 * Renders template.
+	 * @return void
 	 * @internal
 	 */
-	protected function initialize(& $params)
+	public function render()
 	{
-		$params = $this->prepare();
+		$this->prepare();
 
 		if ($this->parentName === NULL && isset($this->global->coreParentFinder)) {
 			$this->parentName = call_user_func($this->global->coreParentFinder, $this);
@@ -163,18 +163,21 @@ class Template
 			if ($this->parentName) {
 				$this->createTemplate($this->parentName, [], 'import')->render();
 			}
-			return TRUE;
+			return;
 
 		} elseif ($this->parentName) { // extends
+			ob_start(function () {});
+			$params = $this->main();
+			ob_end_clean();
 			$this->createTemplate($this->parentName, $params, 'extends')->render();
-			return TRUE;
+			return;
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
 			$tmp = $this;
 			while (in_array($this->referenceType, ['extends', NULL], TRUE) && ($tmp = $tmp->referringTemplate));
 			if (!$tmp) {
 				$this->renderBlock($this->params['_renderblock'], $this->params);
-				return TRUE;
+				return;
 			}
 		} elseif (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
@@ -182,12 +185,16 @@ class Template
 
 		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 		// old accumulators for back compatibility
-		$this->params['_l'] = $params['_l'] = new \stdClass;
-		$this->params['_g'] = $params['_g'] = $this->global;
-		$params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
+		$this->params['_l'] = new \stdClass;
+		$this->params['_g'] = $this->global;
+		$this->params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
 		if (isset($this->global->snippetDriver) && $this->global->snippetBridge->isSnippetMode()) {
-			return $this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params);
+			if ($this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params)) {
+				return;
+			}
 		}
+
+		$this->main();
 	}
 
 
@@ -234,12 +241,11 @@ class Template
 
 
 	/**
-	 * @return array
+	 * @return void
 	 * @internal
 	 */
 	public function prepare()
 	{
-		return $this->params;
 	}
 
 

@@ -14,10 +14,9 @@ class Template%a% extends Latte\Runtime\Template
 	public $contentType = 'xhtml';
 
 
-	function render()
+	function main()
 	{
-		if ($this->initialize($_args)) return;
-		extract($_args);
+		extract($this->params);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -162,6 +161,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 <?php
 		$counter = 0;
+		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('menu', get_defined_vars());
 ?>
 
@@ -251,6 +251,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 <button></button> xx
 <?php
+		return get_defined_vars();
 	}
 
 
@@ -260,7 +261,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 47');
 		if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach on line 46');
 		if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach on line 104');
-		return get_defined_vars();
+
 	}
 
 

@@ -16,25 +16,27 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function render()
+	function main()
 	{
 %A%
 <?php
+		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('content', get_defined_vars());
 ?>
 
 <?php
 		$this->renderBlock('sidebar', get_defined_vars());
 		?>	<?php
+%A%
 	}
 
 
 	function prepare()
 	{
 		extract($this->params);
-		$this->parentName = "parent";
 		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 8');
-		return get_defined_vars();
+		$this->parentName = "parent";
+
 	}
 
 

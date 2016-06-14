@@ -16,7 +16,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function render()
+	function main()
 	{
 %A%
 		?>	<div class="test"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) . '"' ?>>
@@ -32,7 +32,7 @@ class Template%a% extends Latte\Runtime\Template
 		$this->renderBlock('_gallery', $this->params) ?>
 </div>
 <?php
-
+%A%
 	}
 
 

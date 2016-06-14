@@ -14,29 +14,33 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function render()
+	function main()
 	{
 %A%
+		ob_start(function () {});
+		$this->createTemplate("inc", get_defined_vars(), "includeblock")->renderToContentType('html');
+		echo rtrim(ob_get_clean());
+?>
+
 <?php
+		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('title', get_defined_vars());
 ?>
 
 <?php
 		$this->renderBlock('content', get_defined_vars());
 		?>	<?php
+%A%
 	}
 
 
 	function prepare()
 	{
 		extract($this->params);
+		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 11');
 		$this->parentName = "parent";
 		$this->createTemplate("inc", $this->params, "import")->render();
-		ob_start(function () {});
-		$this->createTemplate("inc", get_defined_vars(), "includeblock")->renderToContentType('html');
-		echo rtrim(ob_get_clean());
-		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 11');
-		return get_defined_vars();
+
 	}
 
 

@@ -12,7 +12,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function render()
+	function main()
 	{
 %A%
 
@@ -52,6 +52,7 @@ class Template%a% extends Latte\Runtime\Template
 
 
 <?php
+		if ($this->getParentName()) return get_defined_vars();
 		$this->renderBlock('bl', get_defined_vars());
 ?>
 
@@ -356,6 +357,7 @@ class Template%a% extends Latte\Runtime\Template
 ?></li>
 </ul>
 <?php
+%A%
 	}
 
 
