@@ -26,14 +26,25 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML.
-	 * @param  mixed  plain text or IHtmlString
+	 * @param  mixed  plain text
 	 * @return string HTML
 	 */
 	public static function escapeHtml($s)
 	{
+		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
+	}
+
+
+	/**
+	 * Escapes string for use inside HTML.
+	 * @param  mixed  plain text or IHtmlString
+	 * @return string HTML
+	 */
+	public static function escapeHtmlText($s)
+	{
 		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
 			? $s->__toString(TRUE)
-			: htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
+			: htmlSpecialChars($s, ENT_NOQUOTES, 'UTF-8');
 	}
 
 
@@ -235,9 +246,9 @@ class Filters
 	public static function getConvertor($source, $dest)
 	{
 		static $table = [
-			Engine::CONTENT_TEXT => ['html' => 'escapeHtml', 'xhtml' => 'escapeHtml', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'xml' => 'escapeXml'],
-			Engine::CONTENT_JS => ['html' => 'escapeHtml', 'xhtml' => 'escapeHtml', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmljs' => 'escapeHtmlRawText'],
-			Engine::CONTENT_CSS => ['html' => 'escapeHtml', 'xhtml' => 'escapeHtml', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmlcss' => 'escapeHtmlRawText'],
+			Engine::CONTENT_TEXT => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'xml' => 'escapeXml'],
+			Engine::CONTENT_JS => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmljs' => 'escapeHtmlRawText'],
+			Engine::CONTENT_CSS => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmlcss' => 'escapeHtmlRawText'],
 			Engine::CONTENT_HTML => ['htmlattr' => 'escapeHtmlAttrConv'],
 			Engine::CONTENT_XHTML => ['xhtmlattr' => 'escapeHtmlAttrConv'],
 		];

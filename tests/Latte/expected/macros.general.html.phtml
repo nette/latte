@@ -20,18 +20,18 @@ class Template%a% extends Latte\Runtime\Template
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <ul>
-	<li>Escaped: <?php echo LR\Filters::escapeHtml($hello) /* line 4 */ ?></li>
+	<li>Escaped: <?php echo LR\Filters::escapeHtmlText($hello) /* line 4 */ ?></li>
 	<li>Non-escaped: <?php echo $hello /* line 5 */ ?></li>
-	<li>Escaped expression: <?php echo LR\Filters::escapeHtml('<' . 'b' . '>hello' . '</b>') /* line 6 */ ?></li>
+	<li>Escaped expression: <?php echo LR\Filters::escapeHtmlText('<' . 'b' . '>hello' . '</b>') /* line 6 */ ?></li>
 	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' /* line 7 */ ?></li>
-	<li>Array access: <?php echo LR\Filters::escapeHtml($people[1]) /* line 8 */ ?></li>
-	<li>Html: <?php echo LR\Filters::escapeHtml($el) /* line 9 */ ?></li>
-	<li>Translated: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, $people[1])) ?></li>
-	<li>Translated string: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->translate, 'ahoj')) ?></li>
+	<li>Array access: <?php echo LR\Filters::escapeHtmlText($people[1]) /* line 8 */ ?></li>
+	<li>Html: <?php echo LR\Filters::escapeHtmlText($el) /* line 9 */ ?></li>
+	<li>Translated: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->translate, $people[1])) ?></li>
+	<li>Translated string: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->translate, 'ahoj')) ?></li>
 	<li>Non-escaped and translated: <?php echo call_user_func($this->filters->translate, $people[1]) ?></li>
-	<li>Condition: <?php echo LR\Filters::escapeHtml($hello ? 'yes' : NULL) /* line 13 */ ?> <?php echo LR\Filters::escapeHtml($hello ? 'yes' : NULL) /* line 13 */ ?></li>
-	<li>Array: <?php echo LR\Filters::escapeHtml(call_user_func($this->filters->join, $hello ? ['a', 'b', 'c'] : NULL)) /* line 14 */ ?> <?php
-		echo LR\Filters::escapeHtml(call_user_func($this->filters->join, ['a', 'b', $hello ? 'c' : NULL])) /* line 14 */ ?></li>
+	<li>Condition: <?php echo LR\Filters::escapeHtmlText($hello ? 'yes' : NULL) /* line 13 */ ?> <?php echo LR\Filters::escapeHtmlText($hello ? 'yes' : NULL) /* line 13 */ ?></li>
+	<li>Array: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->join, $hello ? ['a', 'b', 'c'] : NULL)) /* line 14 */ ?> <?php
+		echo LR\Filters::escapeHtmlText(call_user_func($this->filters->join, ['a', 'b', $hello ? 'c' : NULL])) /* line 14 */ ?></li>
 </ul>
 
 <input> <input> <input>
@@ -57,19 +57,19 @@ class Template%a% extends Latte\Runtime\Template
 
 <p ONCLICK ="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 31 */ ?>" <?php echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 31 */ ?>> </p>
 
-<p val = /><?php echo LR\Filters::escapeHtml($xss) /* line 33 */ ?></p>
+<p val = /><?php echo LR\Filters::escapeHtmlText($xss) /* line 33 */ ?></p>
 
-<?php echo LR\Filters::escapeHtml((string) (bool) (float) (int) (array) 10) /* line 35 */ ?>
+<?php echo LR\Filters::escapeHtmlText((string) (bool) (float) (int) (array) 10) /* line 35 */ ?>
 
 
 <?php
 		if ($hello) {
-			?>	<?php echo LR\Filters::escapeHtml($hello) /* line 38 */ ?>
+			?>	<?php echo LR\Filters::escapeHtmlText($hello) /* line 38 */ ?>
 
 <?php
 		}
 		elseif ($any) {
-			?>	<?php echo LR\Filters::escapeHtml($any) /* line 40 */ ?>
+			?>	<?php echo LR\Filters::escapeHtmlText($any) /* line 40 */ ?>
 
 <?php
 		}
@@ -93,7 +93,7 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 
 	<li id="item-<?php echo LR\Filters::escapeHtmlAttr($iterator->getCounter()) /* line 49 */ ?>" class="<?php
-				echo LR\Filters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') /* line 49 */ ?>"><?php echo LR\Filters::escapeHtml($person) /* line 49 */ ?></li>
+				echo LR\Filters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') /* line 49 */ ?>"><?php echo LR\Filters::escapeHtmlText($person) /* line 49 */ ?></li>
 	<?php
 				if ($iterator->isLast()) {
 					?></ul><?php
@@ -154,7 +154,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
  onblur="alert(<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 94 */ ?>)"
  alt='<?php echo LR\Filters::escapeHtmlAttr($el) /* line 95 */ ?>'
  onfocus="alert(<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($el)) /* line 96 */ ?>)"
->click on me <?php echo LR\Filters::escapeHtml($xss) /* line 97 */ ?></p>
+>click on me <?php echo LR\Filters::escapeHtmlText($xss) /* line 97 */ ?></p>
 
 
 
@@ -166,20 +166,20 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 <?php
 		extract(['varx' => 2], EXTR_SKIP);
-		echo LR\Filters::escapeHtml($varx) /* line 111 */ ?>
+		echo LR\Filters::escapeHtmlText($varx) /* line 111 */ ?>
 
 <?php
 		extract(['varx' => 4], EXTR_SKIP);
-		echo LR\Filters::escapeHtml($varx) /* line 112 */ ?>
+		echo LR\Filters::escapeHtmlText($varx) /* line 112 */ ?>
 
 
 <?php
 		$varx = 8;
-		echo LR\Filters::escapeHtml($varx) /* line 114 */ ?>
+		echo LR\Filters::escapeHtmlText($varx) /* line 114 */ ?>
 
 <?php
 		$varx = 9;
-		echo LR\Filters::escapeHtml($varx) /* line 115 */ ?>
+		echo LR\Filters::escapeHtmlText($varx) /* line 115 */ ?>
 
 
 <?php
@@ -270,14 +270,14 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <?php
 		$iterations = 0;
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($menu) as $item) {
-			?>	<li><?php echo LR\Filters::escapeHtml($counter++) /* line 105 */ ?> <?php
+			?>	<li><?php echo LR\Filters::escapeHtmlText($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {
 				?> <?php
 				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'html');
 				?> <?php
 			}
 			else {
-				echo LR\Filters::escapeHtml($item) /* line 105 */;
+				echo LR\Filters::escapeHtmlText($item) /* line 105 */;
 			}
 ?></li>
 <?php

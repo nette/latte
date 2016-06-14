@@ -28,7 +28,7 @@ class FilterExecutor
 		'datastream' => ['Latte\Runtime\Filters::dataStream', FALSE],
 		'date' => ['Latte\Runtime\Filters::date', FALSE],
 		'escapecss' => ['Latte\Runtime\Filters::escapeCss', FALSE],
-		'escapehtml' => ['Latte\Runtime\Filters::escapeHtmlAttr', FALSE],
+		'escapehtml' => ['Latte\Runtime\Filters::escapeHtml', FALSE],
 		'escapehtmlcomment' => ['Latte\Runtime\Filters::escapeHtmlComment', FALSE],
 		'escapeical' => ['Latte\Runtime\Filters::escapeICal', FALSE],
 		'escapejs' => ['Latte\Runtime\Filters::escapeJs', FALSE],

@@ -15,7 +15,7 @@ test(function () {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
 	Assert::same(
-		'<meta content="b&quot;ar&quot;&lt;&gt;&amp;">b&quot;ar"<>&amp;',
+		'<meta content="b&quot;ar&quot;&lt;&gt;&amp;">b"ar"<>&amp;',
 		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar'])
 	);
 
@@ -24,7 +24,7 @@ test(function () {
 	}, E_USER_WARNING, 'Including block foo with content type HTML into incompatible type HTMLTAG.');
 
 	Assert::same(
-		'<meta content=b&quot;ar>b&quot;ar',
+		'<meta content=b"ar>b"ar',
 		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
 	);
 
@@ -235,7 +235,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1'));
 
 Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1a'));
-Assert::same('<p> &quot; &quot;</p>', $latte->renderToString('context1b'));
+Assert::same('<p> " "</p>', $latte->renderToString('context1b'));
 Assert::same('<p> " "</p>', $latte->renderToString('context1c'));
 
 Assert::same('<p title="&lt;hr&gt; &quot; &quot;"></p>', $latte->renderToString('context2'));

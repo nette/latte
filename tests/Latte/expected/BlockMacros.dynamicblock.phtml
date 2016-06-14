@@ -77,7 +77,7 @@ class Template%a% extends Latte\Runtime\Template
 	function blockName($_args)
 	{
 		extract($_args);
-		?>		Dynamic block #<?php echo LR\Filters::escapeHtml($var) /* line 10 */ ?>
+		?>		Dynamic block #<?php echo LR\Filters::escapeHtmlText($var) /* line 10 */ ?>
 
 <?php
 	}
@@ -100,7 +100,7 @@ class Template%a% extends Latte\Runtime\Template
 	function blockStatic($_args)
 	{
 		extract($_args);
-		?>	Static block #<?php echo LR\Filters::escapeHtml($var) /* line 4 */ ?>
+		?>	Static block #<?php echo LR\Filters::escapeHtmlText($var) /* line 4 */ ?>
 
 <?php
 	}

@@ -7,10 +7,10 @@ class Template%a% extends Latte\Runtime\Template
 	function render()
 	{
 %A%
-		?><p>Included file #2 (<?php echo LR\Filters::escapeHtml($localvar) /* line 1 */ ?>, <?php echo LR\Filters::escapeHtml($hello) /* line 1 */ ?>)</p>
+		?><p>Included file #2 (<?php echo LR\Filters::escapeHtmlText($localvar) /* line 1 */ ?>, <?php echo LR\Filters::escapeHtmlText($hello) /* line 1 */ ?>)</p>
 
-Parent: <?php echo LR\Filters::escapeHtml(basename($this->getReferringTemplate()->getName())) /* line 3 */ ?>/<?php
-		echo LR\Filters::escapeHtml($this->getReferenceType()) /* line 3 */ ?>
+Parent: <?php echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line 3 */ ?>/<?php
+		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line 3 */ ?>
 
 <?php
 	}

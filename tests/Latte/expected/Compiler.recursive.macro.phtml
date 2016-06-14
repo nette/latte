@@ -1,20 +1,20 @@
 <?php
 %A%
 <ul>
-	<li><?php echo LR\Filters::escapeHtml($hello->{'item'}) /* line 2 */ ?></li>
-	<li><?php echo LR\Filters::escapeHtml(function(){}) /* line 3 */ ?></li>
-	<li><?php echo LR\Filters::escapeHtml(function(){return}) /* line 4 */ ?></li>
+	<li><?php echo LR\Filters::escapeHtmlText($hello->{'item'}) /* line 2 */ ?></li>
+	<li><?php echo LR\Filters::escapeHtmlText(function(){}) /* line 3 */ ?></li>
+	<li><?php echo LR\Filters::escapeHtmlText(function(){return}) /* line 4 */ ?></li>
 	<li><?php
-		echo LR\Filters::escapeHtml(function() {
+		echo LR\Filters::escapeHtmlText(function() {
 			return;
 		}) /* line 5 */ ?></li>
-	<li><?php echo LR\Filters::escapeHtml(call_user_func($this->filters->upper, function(){return})) /* line 6 */ ?></li>
+	<li><?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->upper, function(){return})) /* line 6 */ ?></li>
 	<li><?php
-		echo LR\Filters::escapeHtml(call_user_func($this->filters->upper, function() {
+		echo LR\Filters::escapeHtmlText(call_user_func($this->filters->upper, function() {
 			return;
 		})) /* line 7 */ ?></li>
 	<li><?php
-		echo LR\Filters::escapeHtml(call_user_func($this->filters->upper, function() {
+		echo LR\Filters::escapeHtmlText(call_user_func($this->filters->upper, function() {
 			return;
 		}, $item->{10})) /* line 8 */ ?></li>
 </ul>
