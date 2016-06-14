@@ -140,6 +140,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
 	{
+		trigger_error('Macro {includeblock} is deprecated, use similar macro {import}.', E_USER_DEPRECATED);
 		$node->replaced = FALSE;
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());

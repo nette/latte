@@ -176,7 +176,10 @@ Assert::same(' <>', $latte->renderToString('context2'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');
-}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
+}, [
+	[E_USER_DEPRECATED, ''],
+	[E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML."],
+]);
 
 Assert::same(' <>', $latte->renderToString('context4'));
 
