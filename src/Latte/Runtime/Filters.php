@@ -201,23 +201,32 @@ class Filters
 
 	/**
 	 * Converts ... to ...
-	 * @param  string
-	 * @return string plain text
+	 * @return string
 	 */
 	public static function convertTo(FilterInfo $info, $dest, $s)
 	{
-		if ($dest === $info->contentType) {
+		$source = $info->contentType ?: Engine::CONTENT_TEXT;
+		if ($source === $dest) {
 			return $s;
-		} elseif (($dest === Engine::CONTENT_HTML || $dest === Engine::CONTENT_XHTML)
-			&& (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)
-		) {
-			return self::escapeHtml($s);
-		} elseif ($dest === Engine::CONTENT_XML && (!$info->contentType || $info->contentType === Engine::CONTENT_TEXT)) {
-			return self::escapeXml($s);
+		} elseif ($conv = self::getConvertor($source, $dest)) {
+			$info->contentType = $dest;
+			return $conv($s);
 		} else {
-			trigger_error("Filters: unable to convert content type " . strtoupper($info->contentType) . " to " . strtoupper($dest), E_USER_WARNING);
+			trigger_error("Filters: unable to convert content type " . strtoupper($source) . " to " . strtoupper($dest), E_USER_WARNING);
 			return $s;
 		}
+	}
+
+
+	/**
+	 * @return callable
+	 */
+	public static function getConvertor($source, $dest)
+	{
+		static $table = [
+			Engine::CONTENT_TEXT => [Engine::CONTENT_HTML => 'escapeHtml', Engine::CONTENT_XHTML => 'escapeHtml', Engine::CONTENT_XML => 'escapeXml'],
+		];
+		return isset($table[$source][$dest]) ? [__CLASS__, $table[$source][$dest]] : NULL;
 	}
 
 
