@@ -26,6 +26,9 @@
 		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
 		"ext-fileinfo": "to use filter |datastream"
 	},
+	"conflict": {
+		"nette/application": "<2.4"
+	},
 	"autoload": {
 		"classmap": ["src/"]
 	},
