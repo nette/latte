@@ -22,7 +22,9 @@ class Parser
 	const N_PREFIX = 'n:';
 
 	/** Context-aware escaping content types */
-	const CONTENT_HTML = Engine::CONTENT_HTML,
+	const
+		CONTENT_HTML = Engine::CONTENT_HTML,
+		CONTENT_XHTML = Engine::CONTENT_XHTML,
 		CONTENT_XML = Engine::CONTENT_XML,
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
@@ -52,7 +54,7 @@ class Parser
 	private $offset;
 
 	/** @var array */
-	private $context;
+	private $context = [self::CONTEXT_HTML_TEXT, NULL];
 
 	/** @var string */
 	private $lastHtmlTag;
@@ -67,7 +69,8 @@ class Parser
 	private $xmlMode;
 
 	/** @internal states */
-	const CONTEXT_HTML_TEXT = 'htmlText',
+	const
+		CONTEXT_HTML_TEXT = 'htmlText',
 		CONTEXT_CDATA = 'cdata',
 		CONTEXT_HTML_TAG = 'htmlTag',
 		CONTEXT_HTML_ATTRIBUTE = 'htmlAttribute',
@@ -98,7 +101,6 @@ class Parser
 		}
 
 		$this->setSyntax($this->defaultSyntax);
-		$this->setContext(self::CONTEXT_HTML_TEXT);
 		$this->lastHtmlTag = $this->syntaxEndTag = NULL;
 
 		$tokenCount = 0;
@@ -327,12 +329,12 @@ class Parser
 
 
 	/**
-	 * @param  string  Parser::CONTENT_HTML, CONTENT_XML or CONTENT_TEXT
+	 * @param  string  Parser::CONTENT_HTML, CONTENT_XHTML, CONTENT_XML or CONTENT_TEXT
 	 * @return self
 	 */
 	public function setContentType($type)
 	{
-		if ($type === self::CONTENT_HTML || $type === self::CONTENT_XML) {
+		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XHTML, self::CONTENT_XML], TRUE)) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
 			$this->xmlMode = $type === self::CONTENT_XML;
 		} else {

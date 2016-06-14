@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * Test: Latte\Parser::parse()
+ */
+
+use Tester\Assert;
+use Latte\Engine;
+use Latte\Token;
+
+
+require __DIR__ . '/../bootstrap.php';
+
+
+function parse($s, $contentType = NULL)
+{
+	$parser = new Latte\Parser;
+	$parser->setContentType($contentType);
+	return array_map(function (Token $token) {
+		return [$token->type, $token->text];
+	}, $parser->parse($s));
+}
+
+Assert::same([
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', '>'],
+	['text', ' <div /> '],
+	['htmlTagBegin', '</script'],
+	['htmlTagEnd', '>'],
+], parse('<script> <div /> </script>', Engine::CONTENT_HTML));
+
+Assert::same([
+	['macroTag', '{contentType html}'],
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', '>'],
+	['text', ' <div /> '],
+	['htmlTagBegin', '</script'],
+	['htmlTagEnd', '>'],
+], parse('{contentType html}<script> <div /> </script>'));
+
+Assert::same([
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', '>'],
+	['text', ' <div /> '],
+	['htmlTagBegin', '</script'],
+	['htmlTagEnd', '>'],
+], parse('<script> <div /> </script>', Engine::CONTENT_XHTML));
+
+Assert::same([
+	['macroTag', '{contentType xhtml}'],
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', '>'],
+	['text', ' <div /> '],
+	['htmlTagBegin', '</script'],
+	['htmlTagEnd', '>'],
+], parse('{contentType xhtml}<script> <div /> </script>'));
+
+Assert::same([
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', '>'],
+	['text', ' '],
+	['htmlTagBegin', '<div'],
+	['htmlTagEnd', ' />'],
+	['text', ' '],
+	['htmlTagBegin', '</script'],
+	['htmlTagEnd', '>'],
+], parse('<script> <div /> </script>', Engine::CONTENT_XML));
+
+Assert::same([
+	['macroTag', '{contentType xml}'],
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', '>'],
+	['text', ' '],
+	['htmlTagBegin', '<div'],
+	['htmlTagEnd', ' />'],
+	['text', ' '],
+	['htmlTagBegin', '</script'],
+	['htmlTagEnd', '>'],
+], parse('{contentType xml}<script> <div /> </script>'));
+
+Assert::same([
+	['text', '<script> <div /> </script>'],
+], parse('<script> <div /> </script>', Engine::CONTENT_TEXT));
+
+Assert::same([
+	['macroTag', '{contentType text}'],
+	['text', '<script> <div /> </script>'],
+], parse('{contentType text}<script> <div /> </script>'));
+
+Assert::same([
+	['text', '<script> <div /> </script>'],
+], parse('<script> <div /> </script>', Engine::CONTENT_ICAL));
+
+Assert::same([
+	['macroTag', '{contentType ical}'],
+	['text', '<script> <div /> </script>'],
+], parse('{contentType ical}<script> <div /> </script>'));
