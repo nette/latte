@@ -25,6 +25,6 @@ end
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.snippet.block.phtml',
+	__DIR__ . '/expected/BlockMacros.snippet.block.phtml',
 	$latte->compile($template)
 );

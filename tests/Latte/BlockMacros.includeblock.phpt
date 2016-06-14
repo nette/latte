@@ -27,14 +27,14 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.includeblock.phtml',
+	__DIR__ . '/expected/BlockMacros.includeblock.phtml',
 	@$latte->compile('main') // @ false temporary warning for {includeblock}
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.includeblock.html',
+	__DIR__ . '/expected/BlockMacros.includeblock.html',
 	@$latte->renderToString('main') // @ false temporary warning for {includeblock}
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.includeblock.inc.phtml',
+	__DIR__ . '/expected/BlockMacros.includeblock.inc.phtml',
 	$latte->compile('inc')
 );

@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'parent' => file_get_contents(__DIR__ . '/templates/inheritance.parent.latte'),
+	'parent' => file_get_contents(__DIR__ . '/templates/BlockMacros.parent.latte'),
 
 	'main' => '
 {extends "parent"}
@@ -32,10 +32,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.inheritance.child2.phtml',
+	__DIR__ . '/expected/BlockMacros.inheritance.child2.phtml',
 	$latte->compile('main')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.inheritance.child2.html',
+	__DIR__ . '/expected/BlockMacros.inheritance.child2.html',
 	$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']])
 );

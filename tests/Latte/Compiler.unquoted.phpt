@@ -23,10 +23,10 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/compiler.unquoted.phtml',
+	__DIR__ . '/expected/Compiler.unquoted.attrs.phtml',
 	$latte->compile($template)
 );
 Assert::matchFile(
-	__DIR__ . '/expected/compiler.unquoted.html',
+	__DIR__ . '/expected/Compiler.unquoted.attrs.html',
 	$latte->renderToString($template, ['x' => '\' & "'])
 );

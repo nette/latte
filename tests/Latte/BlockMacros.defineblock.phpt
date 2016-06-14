@@ -32,10 +32,10 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.defineblock.phtml',
+	__DIR__ . '/expected/BlockMacros.defineblock.phtml',
 	$latte->compile($template)
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.defineblock.html',
+	__DIR__ . '/expected/BlockMacros.defineblock.html',
 	$latte->renderToString($template)
 );

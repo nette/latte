@@ -27,6 +27,6 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.while.phtml',
+	__DIR__ . '/expected/CoreMacros.while.phtml',
 	$latte->compile($template)
 );

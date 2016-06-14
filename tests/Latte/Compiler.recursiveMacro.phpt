@@ -27,6 +27,6 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/compiler.recursiveMacro.phtml',
+	__DIR__ . '/expected/Compiler.recursive.macro.phtml',
 	$latte->compile($template)
 );

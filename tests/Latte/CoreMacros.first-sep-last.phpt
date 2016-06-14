@@ -37,10 +37,10 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.first-sep-last.phtml',
+	__DIR__ . '/expected/CoreMacros.first-sep-last.phtml',
 	$latte->compile($template)
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.first-sep-last.html',
+	__DIR__ . '/expected/CoreMacros.first-sep-last.html',
 	$latte->renderToString($template, ['people' => ['John', 'Mary', 'Paul']])
 );

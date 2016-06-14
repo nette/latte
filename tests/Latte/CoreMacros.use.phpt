@@ -33,10 +33,10 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.use.phtml',
+	__DIR__ . '/expected/CoreMacros.use.phtml',
 	@$latte->compile($template) // @ is deprecated
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.use.html',
+	__DIR__ . '/expected/CoreMacros.use.html',
 	@$latte->renderToString($template)
 );

@@ -39,10 +39,10 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.dynamicblock.phtml',
+	__DIR__ . '/expected/BlockMacros.dynamicblock.phtml',
 	$latte->compile($template)
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.dynamicblock.html',
+	__DIR__ . '/expected/BlockMacros.dynamicblock.html',
 	$latte->renderToString($template)
 );

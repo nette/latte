@@ -25,7 +25,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.import.phtml',
+	__DIR__ . '/expected/BlockMacros.import.phtml',
 	$latte->compile('main')
 );
 Assert::match(

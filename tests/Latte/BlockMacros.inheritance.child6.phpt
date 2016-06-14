@@ -24,7 +24,7 @@ EOD
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.inheritance.child6.phtml',
+	__DIR__ . '/expected/BlockMacros.inheritance.child6.phtml',
 	$latte->compile('main')
 );
 Assert::same(

@@ -17,12 +17,12 @@ $params['people'] = ['John', 'Mary', 'Paul'];
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.n-macros.phtml',
-	$latte->compile(__DIR__ . '/templates/n-macros.latte')
+	$latte->compile(__DIR__ . '/templates/macros.n-macros.latte')
 );
 Assert::matchFile(
 	__DIR__ . '/expected/macros.n-macros.html',
 	$latte->renderToString(
-		__DIR__ . '/templates/n-macros.latte',
+		__DIR__ . '/templates/macros.n-macros.latte',
 		$params
 	)
 );
