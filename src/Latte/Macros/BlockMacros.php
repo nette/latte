@@ -189,6 +189,9 @@ class BlockMacros extends MacroSet
 		} else {
 			$this->extends = $writer->write('%node.word%node.args');
 		}
+		if (!$this->getCompiler()->isInHead()) {
+			trigger_error("$notation must be placed in template head.", E_USER_WARNING);
+		}
 	}
 
 

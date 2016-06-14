@@ -507,7 +507,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroContentType(MacroNode $node, PhpWriter $writer)
 	{
-		if (($node->parentNode || $node->htmlNode)
+		if (!$this->getCompiler()->isInHead()
 			&& !($node->htmlNode && strtolower($node->htmlNode->name) === 'script' && strpos($node->args, 'html') !== FALSE)
 		) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
