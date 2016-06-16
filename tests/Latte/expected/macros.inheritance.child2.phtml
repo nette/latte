@@ -20,11 +20,11 @@ class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 <?php
-		call_user_func(reset($this->blockQueue['content']), get_defined_vars());
+		$this->renderBlock('content', get_defined_vars());
 ?>
 
 <?php
-		call_user_func(reset($this->blockQueue['sidebar']), get_defined_vars());
+		$this->renderBlock('sidebar', get_defined_vars());
 		?>	<?php
 	}
 
@@ -42,7 +42,7 @@ class Template%a% extends Latte\Runtime\Template
 	{
 		extract($_args);
 		?>	<h1><?php
-		call_user_func(reset($this->blockQueue['title']), get_defined_vars());
+		$this->renderBlock('title', get_defined_vars());
 ?></h1>
 
 	<ul>

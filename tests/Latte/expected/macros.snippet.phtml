@@ -23,10 +23,10 @@ class Template%a% extends Latte\Runtime\Template
 	function render()
 	{
 %A%
-		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('')) ?>"><?php call_user_func(reset($this->blockQueue['_']), $this->params) ?></div>
+		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('_', $this->params) ?></div>
 
 
-<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div>
+<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div>
 
 
 	@<?php
@@ -36,8 +36,8 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 
 
-	<h2 id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php call_user_func(reset($this->blockQueue['_title']), $this->params) ?></h2>
-	<h2 id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php call_user_func(reset($this->blockQueue['_title2']), $this->params) ?></h2><?php
+	<h2 id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php $this->renderBlock('_title', $this->params) ?></h2>
+	<h2 id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php $this->renderBlock('_title2', $this->params) ?></h2><?php
 
 	}
 
@@ -60,7 +60,7 @@ class Template%a% extends Latte\Runtime\Template
 		$this->global->snippetDriver->enter("outer", "static");
 ?>
 	Outer
-		<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php call_user_func(reset($this->blockQueue['_inner']), $this->params) ?></div>	/Outer
+		<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('_inner', $this->params) ?></div>	/Outer
 <?php
 		$this->global->snippetDriver->leave();
 

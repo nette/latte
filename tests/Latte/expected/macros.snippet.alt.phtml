@@ -20,16 +20,16 @@ class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		?>	<div class="test"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) . '"' ?>>
-<?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?>
+<?php $this->renderBlock('_outer', $this->params) ?>
 	</div>
 
 	<div class="test"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) . '"' ?>>
 <?php
-		call_user_func(reset($this->blockQueue['_inner']), $this->params);
+		$this->renderBlock('_inner', $this->params);
 ?>	</div>
 
 	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') /* line 9 */ ?>"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('gallery')) . '"' ?>><?php
-		call_user_func(reset($this->blockQueue['_gallery']), $this->params) ?>
+		$this->renderBlock('_gallery', $this->params) ?>
 </div>
 <?php
 

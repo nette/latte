@@ -223,7 +223,7 @@ class BlockMacros extends MacroSet
 				$node->data->leave = TRUE;
 				$node->data->func = $this->generateMethodName($name);
 				$fname = $writer->formatWord($name);
-				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "call_user_func(reset(\$this->blockQueue[$fname]), get_defined_vars());") . ' ?>';
+				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "\$this->renderBlock($fname, get_defined_vars());") . ' ?>';
 				$blockType = var_export($this->exportBlockType($node), TRUE);
 				$this->checkExtraArgs($node);
 				return "\$this->checkBlockContentType($blockType, $fname);"
@@ -246,7 +246,7 @@ class BlockMacros extends MacroSet
 		$this->namedBlocks[$name] = TRUE;
 		$this->blockTypes[$name] = $this->exportBlockType($node);
 
-		$include = 'call_user_func(reset($this->blockQueue[%var]), ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
+		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}

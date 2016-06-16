@@ -160,7 +160,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 <?php
 		$counter = 0;
-		call_user_func(reset($this->blockQueue['menu']), get_defined_vars());
+		$this->renderBlock('menu', get_defined_vars());
 ?>
 
 

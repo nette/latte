@@ -21,11 +21,11 @@ class Template%a% extends Latte\Runtime\Template
 	function render()
 	{
 %A%
-		call_user_func(reset($this->blockQueue['block1']), get_defined_vars());
+		$this->renderBlock('block1', get_defined_vars());
 ?>
 
 
-<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php call_user_func(reset($this->blockQueue['_outer']), $this->params) ?></div><?php
+<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div><?php
 
 	}
 
@@ -34,7 +34,7 @@ class Template%a% extends Latte\Runtime\Template
 	{
 		extract($_args);
 		?><div<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('snippet')) . '"' ?>>
-<?php call_user_func(reset($this->blockQueue['_snippet']), $this->params) ?>
+<?php $this->renderBlock('_snippet', $this->params) ?>
 </div>
 <?php
 
@@ -59,7 +59,7 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 begin
 <?php
-		call_user_func(reset($this->blockQueue['block2']), get_defined_vars());
+		$this->renderBlock('block2', get_defined_vars());
 ?>
 end
 <?php
