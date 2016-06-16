@@ -198,7 +198,7 @@ class Filters
 	 */
 	public static function stripHtml(FilterInfo $info, $s)
 	{
-		if (!in_array($info->contentType, [NULL, Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE)) {
+		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlattr', 'xhtmlattr', 'xml', 'xmlattr'], TRUE)) {
 			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
@@ -214,7 +214,7 @@ class Filters
 	 */
 	public static function stripTags(FilterInfo $info, $s)
 	{
-		if (!in_array($info->contentType, [NULL, Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE)) {
+		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlattr', 'xhtmlattr', 'xml', 'xmlattr'], TRUE)) {
 			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		return strip_tags($s);
@@ -246,7 +246,7 @@ class Filters
 	public static function getConvertor($source, $dest)
 	{
 		static $table = [
-			Engine::CONTENT_TEXT => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'xml' => 'escapeXml'],
+			Engine::CONTENT_TEXT => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'xml' => 'escapeXml', 'xmlattr' => 'escapeXml'],
 			Engine::CONTENT_JS => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmljs' => 'escapeHtmlRawText'],
 			Engine::CONTENT_CSS => ['html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmlcss' => 'escapeHtmlRawText'],
 			Engine::CONTENT_HTML => ['htmlattr' => 'escapeHtmlAttrConv'],
