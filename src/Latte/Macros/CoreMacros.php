@@ -231,21 +231,13 @@ class CoreMacros extends MacroSet
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro {include} provides auto-escaping, remove |escape.');
 		}
-		$code = $writer->write(
+		return $writer->write(
 			'/* line ' . $node->startLine . ' */
-			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%var);',
-			$noEscape ? NULL : implode('', $node->context)
+			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
+			$node->modifiers
+				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
+				: var_export($noEscape ? NULL : $node->context[0] . $node->context[1], TRUE)
 		);
-		if ($node->modifiers) {
-			return $writer->write('
-				ob_start(function () {});
-				%raw
-				$_fi = new LR\FilterInfo(%var);
-				echo %modifyContent(ob_get_clean());
-			', $code, $node->context[0]);
-		} else {
-			return $code;
-		}
 	}
 
 

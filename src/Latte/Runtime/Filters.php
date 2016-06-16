@@ -42,13 +42,24 @@ class Filters
 	 * @param  string plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlAttr($s)
+	public static function escapeHtmlAttr($s, $double = TRUE)
 	{
 		$s = (string) $s;
 		if (strpos($s, '`') !== FALSE && strpbrk($s, ' <>"\'') === FALSE) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
-		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
+		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8', $double);
+	}
+
+
+	/**
+	 * Escapes HTML for use inside HTML attribute.
+	 * @param  mixed  HTML text
+	 * @return string HTML
+	 */
+	public static function escapeHtmlAttrConv($s)
+	{
+		return self::escapeHtmlAttr($s, FALSE);
 	}
 
 
@@ -224,7 +235,11 @@ class Filters
 	public static function getConvertor($source, $dest)
 	{
 		static $table = [
-			Engine::CONTENT_TEXT => [Engine::CONTENT_HTML => 'escapeHtml', Engine::CONTENT_XHTML => 'escapeHtml', Engine::CONTENT_XML => 'escapeXml'],
+			Engine::CONTENT_TEXT => ['html' => 'escapeHtml', 'xhtml' => 'escapeHtml', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'xml' => 'escapeXml'],
+			Engine::CONTENT_JS => ['html' => 'escapeHtml', 'xhtml' => 'escapeHtml', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmljs' => 'escapeHtmlRawText'],
+			Engine::CONTENT_CSS => ['html' => 'escapeHtml', 'xhtml' => 'escapeHtml', 'htmlattr' => 'escapeHtmlAttr', 'xhtmlattr' => 'escapeHtmlAttr', 'htmlcss' => 'escapeHtmlRawText'],
+			Engine::CONTENT_HTML => ['htmlattr' => 'escapeHtmlAttrConv'],
+			Engine::CONTENT_XHTML => ['xhtmlattr' => 'escapeHtmlAttrConv'],
 		];
 		return isset($table[$source][$dest]) ? [__CLASS__, $table[$source][$dest]] : NULL;
 	}

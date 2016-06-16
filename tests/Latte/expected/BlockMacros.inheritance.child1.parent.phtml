@@ -22,10 +22,10 @@ class Template%a% extends Latte\Runtime\Template
 <!DOCTYPE html>
 <head>
 	<title><?php
-		ob_start(function () {});
-		$this->renderBlock('title', get_defined_vars());
-		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean())));
+		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
+			$_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, $s)));
+		});
 ?></title>
 </head>
 
@@ -42,11 +42,10 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 
 <?php
-		ob_start(function () {});
-		$this->renderBlock('content', $this->params, 'html');
-		;
-		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean())));
+		$this->renderBlock('content', $this->params, function ($s, $type) {
+			$_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, $s)));
+		});
 ?>
 	</div>
 </body>

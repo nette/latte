@@ -15,8 +15,8 @@ test(function () {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
 	Assert::same(
-		'<meta content="b&quot;ar">b&quot;ar',
-		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}{/block}', ['value' => 'b"ar'])
+		'<meta content="b&quot;ar&quot;&lt;&gt;&amp;">b&quot;ar"<>&amp;',
+		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar'])
 	);
 
 	Assert::error(function () use ($latte) {
@@ -29,8 +29,8 @@ test(function () {
 	);
 
 	Assert::same(
-		'<meta content="b&quot;ar"><meta content="b&quot;ar">',
-		$latte->renderToString('<meta content="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
+		'<meta content="b&quot;ar&quot;"><meta content="b&quot;ar&quot;">',
+		$latte->renderToString('<meta content="{block foo}{$value}&quot;{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
 	);
 
 	Assert::same(
@@ -104,23 +104,25 @@ test(function () {
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context2', ['foo' => 'b"ar']));
 
-	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context7', ['foo' => 'b"ar']));
-
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context3', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context4', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context5', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTMLATTR.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context6', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTML by incompatible type HTMLTAG.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTMLATTR.');
+
+	Assert::error(function () use ($latte) {
+		$latte->renderToString('context7', ['foo' => 'b"ar']);
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLATTR by incompatible type HTML.');
 });
 
 
@@ -166,11 +168,15 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context6' => '{contentType javascript} {include ical.latte}',
 ]));
 
-Assert::same('<p> &lt;&gt;</p>', $latte->renderToString('context1'));
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context1');
+}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
 
 Assert::same(' <>', $latte->renderToString('context2'));
 
-Assert::same('x &lt;&gt;', $latte->renderToString('context3'));
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context3');
+}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
 
 Assert::same(' <>', $latte->renderToString('context4'));
 
@@ -194,6 +200,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::same('<p> &lt;/script&gt;</p>', $latte->renderToString('context1'));
+
 Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context2'));
 
 Assert::error(function () use ($latte) {
@@ -210,18 +217,32 @@ Assert::error(function () use ($latte) {
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'html.latte' => '<hr> "',
+	'html.latte' => '<hr> " &quot;',
 
 	'context1' => '<p>{include html.latte}</p>',
+	'context1a' => '<p>{include html.latte|noescape}</p>',
+	'context1b' => '<p>{include html.latte|stripHtml|upper}</p>',
+	'context1c' => '<p>{include html.latte|stripHtml|upper|noescape}</p>',
 	'context2' => '<p title="{include html.latte}"></p>',
+	'context2a' => '<p title="{include html.latte|noescape}"></p>',
+	'context2b' => '<p title="{include html.latte|stripHtml|upper}"></p>',
+	'context2c' => '<p title="{include html.latte|stripHtml|upper|noescape}"></p>',
 	'context3' => '<p title={include html.latte}></p>',
 	'context4' => '<script>{include html.latte}</script>',
 	'context5' => '<style>{include html.latte}</style>',
 ]));
 
-Assert::same('<p><hr> "</p>', $latte->renderToString('context1'));
+Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1'));
 
-Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
+Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1a'));
+Assert::same('<p> &quot; &quot;</p>', $latte->renderToString('context1b'));
+Assert::same('<p> &quot; &quot;</p>', $latte->renderToString('context1c'));
+
+Assert::same('<p title="&lt;hr&gt; &quot; &quot;"></p>', $latte->renderToString('context2'));
+
+Assert::same('<p title="<hr> " &quot;"></p>', $latte->renderToString('context2a'));
+Assert::same('<p title=" &quot; &quot;"></p>', $latte->renderToString('context2b'));
+Assert::same('<p title=" &quot; &quot;"></p>', $latte->renderToString('context2c'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');

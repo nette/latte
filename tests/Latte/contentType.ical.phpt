@@ -11,7 +11,6 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->addFilter('escape', 'Latte\Runtime\Filters::escapeICal');
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'

@@ -216,19 +216,18 @@ class Template
 
 
 	/**
+	 * @param  string|\Closure content-type name or modifier closure
 	 * @return void
 	 * @internal
 	 */
-	protected function renderToContentType($type)
+	protected function renderToContentType($mod)
 	{
-		if ($type === "html$this->contentType" && in_array($this->contentType, [Engine::CONTENT_JS, Engine::CONTENT_CSS], TRUE)) {
-			echo Filters::escapeHtmlRawText($this->capture([$this, 'render']));
-			return;
-		} elseif ($type === 'htmlattr' || ($type === Engine::CONTENT_HTML && $this->contentType !== Engine::CONTENT_HTML)) {
-			echo Filters::escapeHtml($this->capture([$this, 'render']));
-			return;
-		} elseif ($type && $type !== $this->contentType) {
-			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
+		if ($mod && $mod !== $this->contentType) {
+			if ($filter = (is_string($mod) ? Filters::getConvertor($this->contentType, $mod) : $mod)) {
+				echo $filter($this->capture([$this, 'render']), $this->contentType);
+				return;
+			}
+			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
 		}
 		$this->render();
 	}
@@ -248,26 +247,34 @@ class Template
 
 
 	/**
-	 * Calls block.
+	 * Renders block.
+	 * @param  string
+	 * @param  array
+	 * @param  string|\Closure content-type name or modifier closure
 	 * @return void
 	 * @internal
 	 */
-	protected function renderBlock($name, array $params, $type = NULL)
+	protected function renderBlock($name, array $params, $mod = NULL)
 	{
 		if (empty($this->blockQueue[$name])) {
 			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
-		if ($type && isset($this->blockTypes[$name]) && $this->blockTypes[$name] !== $type) {
-			trigger_error("Including block $name with content type " . strtoupper($this->blockTypes[$name]) . ' into incompatible type ' . strtoupper($type) . '.', E_USER_WARNING);
-		}
+
 		$block = reset($this->blockQueue[$name]);
+		if ($mod && $mod !== ($blockType = $this->blockTypes[$name])) {
+			if ($filter = (is_string($mod) ? Filters::getConvertor($blockType, $mod) : $mod)) {
+				echo $filter($this->capture(function () use ($block, $params) { $block($params); }), $blockType);
+				return;
+			}
+			trigger_error("Including block $name with content type " . strtoupper($blockType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
+		}
 		$block($params);
 	}
 
 
 	/**
-	 * Calls parent block.
+	 * Renders parent block.
 	 * @return void
 	 * @internal
 	 */
@@ -291,7 +298,7 @@ class Template
 		if ($expected === NULL) {
 			$expected = $current;
 		} elseif ($expected !== $current) {
-			trigger_error("Overridden block $name with content type " . strtoupper($expected) . ' by incompatible type ' . strtoupper($current) . '.', E_USER_WARNING);
+			trigger_error("Overridden block $name with content type " . strtoupper($current) . ' by incompatible type ' . strtoupper($expected) . '.', E_USER_WARNING);
 		}
 	}
 

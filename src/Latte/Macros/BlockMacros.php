@@ -110,18 +110,16 @@ class BlockMacros extends MacroSet
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
-		$cmd = '$this->renderBlock' . ($parent ? 'Parent' : '') . '('
+		return $writer->write(
+			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
 			. ', %node.array? + '
 			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
-			. ($noEscape || $parent ? '' : ', ' . var_export($this->exportBlockType($node), TRUE))
-			. ');';
-
-		if ($node->modifiers) {
-			return $writer->write("ob_start(function () {}); $cmd; \$_fi = new LR\\FilterInfo(%var); echo %modifyContent(ob_get_clean());", $node->context[0]);
-		} else {
-			return $writer->write($cmd);
-		}
+			. ($node->modifiers
+				? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
+				: ($noEscape || $parent ? '' : ', ' . var_export($node->context[0] . $node->context[1], TRUE)))
+			. ');'
+		);
 	}
 
 
@@ -137,7 +135,7 @@ class BlockMacros extends MacroSet
 		}
 		return $writer->write(
 			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var); echo rtrim(ob_get_clean());',
-			$this->exportBlockType($node)
+			$node->context[0] . $node->context[1]
 		);
 	}
 
@@ -226,7 +224,7 @@ class BlockMacros extends MacroSet
 				$node->data->func = $this->generateMethodName($name);
 				$fname = $writer->formatWord($name);
 				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "\$this->renderBlock($fname, get_defined_vars());") . ' ?>';
-				$blockType = var_export($this->exportBlockType($node), TRUE);
+				$blockType = var_export($node->context[0] . $node->context[1], TRUE);
 				$this->checkExtraArgs($node);
 				return "\$this->checkBlockContentType($blockType, $fname);"
 					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
@@ -246,15 +244,13 @@ class BlockMacros extends MacroSet
 		}
 
 		$this->namedBlocks[$name] = TRUE;
-		$this->blockTypes[$name] = $this->exportBlockType($node);
-
-		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()') . ')';
+		$this->blockTypes[$name] = $node->context[0] . $node->context[1];
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
-		if ($node->modifiers) {
-			$include = "ob_start(function () {}); $include; \$_fi = new LR\\FilterInfo('html'); echo %modifyContent(ob_get_clean())";
-		}
+
+		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
+			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
 
 		if ($node->name === 'snippet') {
 			if ($node->prefix) {
@@ -374,16 +370,6 @@ class BlockMacros extends MacroSet
 			$name .=  '_' . substr(md5($blockName), 0, 5);
 		}
 		return $name;
-	}
-
-
-	private function exportBlockType(MacroNode $node)
-	{
-		$context = $node->context;
-		if (in_array($context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML, Engine::CONTENT_XML], TRUE) && $context[1] === 'attr') {
-			$context = [$context[0]];
-		}
-		return implode($context);
 	}
 
 }

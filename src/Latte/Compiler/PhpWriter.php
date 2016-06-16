@@ -454,7 +454,7 @@ class PhpWriter
 			$res->append(')');
 		}
 		if ($isContent) {
-			$res->prepend('LR\Filters::convertTo($_fi, ' . var_export($this->context[0], TRUE) . ', ')
+			$res->prepend('LR\Filters::convertTo($_fi, ' . var_export($this->context[0] . $this->context[1], TRUE) . ', ')
 				->append(')');
 		}
 		return $res;

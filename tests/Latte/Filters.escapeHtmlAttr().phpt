@@ -16,6 +16,7 @@ Assert::same('', Filters::escapeHtmlAttr(''));
 Assert::same('1', Filters::escapeHtmlAttr(1));
 Assert::same('string', Filters::escapeHtmlAttr('string'));
 Assert::same('&lt; &amp; &#039; &quot; &gt;', Filters::escapeHtmlAttr('< & \' " >'));
+Assert::same('&amp;quot;', Filters::escapeHtmlAttr('&quot;'));
 Assert::same('&lt;br&gt;', Filters::escapeHtmlAttr(new Latte\Runtime\Html('<br>')));
 
 // mXSS
