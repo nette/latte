@@ -85,11 +85,12 @@ class Compiler
 	 */
 	public function addMacro($name, IMacro $macro, $flags = NULL)
 	{
-		if ($flags && isset($this->flags[$name]) && $this->flags[$name] !== $flags) {
+		if (!isset($this->flags[$name])) {
+			$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
+		} elseif ($flags && $this->flags[$name] !== $flags) {
 			throw new \LogicException("Incompatible flags for macro $name.");
 		}
 		$this->macros[$name][] = $macro;
-		$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
 		return $this;
 	}
 
