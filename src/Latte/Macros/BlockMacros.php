@@ -110,6 +110,9 @@ class BlockMacros extends MacroSet
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
+		if ($node->modifiers && !$noEscape) {
+			$node->modifiers .= '|escape';
+		}
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
@@ -248,6 +251,9 @@ class BlockMacros extends MacroSet
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
+		if ($node->modifiers) {
+			$node->modifiers .= '|escape';
+		}
 
 		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
 			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
@@ -333,6 +339,7 @@ class BlockMacros extends MacroSet
 			return ' '; // consume next new line
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
+			$node->modifiers .= '|escape';
 			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
 		}
 	}

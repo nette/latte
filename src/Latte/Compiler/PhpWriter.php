@@ -432,7 +432,12 @@ class PhpWriter
 			} else {
 				if ($tokens->isCurrent($tokens::T_SYMBOL)) {
 					if ($tokens->isCurrent('escape')) {
-						$res = $this->escapePass($res);
+						if ($isContent) {
+							$res->prepend('LR\Filters::convertTo($_fi, ' . var_export($this->context[0] . $this->context[1], TRUE) . ', ')
+								->append(')');
+						} else {
+							$res = $this->escapePass($res);
+						}
 						$tokens->nextToken('|');
 					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
 						$res->prepend('LR\Filters::safeUrl(');
@@ -452,10 +457,6 @@ class PhpWriter
 		}
 		if ($inside) {
 			$res->append(')');
-		}
-		if ($isContent) {
-			$res->prepend('LR\Filters::convertTo($_fi, ' . var_export($this->context[0] . $this->context[1], TRUE) . ', ')
-				->append(')');
 		}
 		return $res;
 	}

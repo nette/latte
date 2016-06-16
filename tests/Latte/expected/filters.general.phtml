@@ -50,7 +50,7 @@ class Template%a% extends Latte\Runtime\Template
 </ul>
 <?php
 		$_fi = new LR\FilterInfo('html');
-		$capture = LR\Filters::convertTo($_fi, 'html', ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean());
+		$capture = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
 ?>
 
 <p>
@@ -63,7 +63,7 @@ Captured: <?php echo LR\Filters::escapeHtml($capture) /* line 40 */ ?>
 Hello
 <?php
 		$_fi = new LR\FilterInfo('html');
-		$capture = LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean())));
+		$capture = $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()));
 ?>
 
 <p>

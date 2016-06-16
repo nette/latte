@@ -55,6 +55,6 @@ test(function() { // inline modifiers
 });
 
 test(function() { // FilterInfo aware modifiers
-	Assert::same('LR\Filters::convertTo($_fi, \'htmlx\', $this->filters->filterContent(\'mod\', $_fi, @))',  formatModifiers('@', 'mod', TRUE));
-	Assert::same('LR\Filters::convertTo($_fi, \'htmlx\', $this->filters->filterContent(\'mod2\', $_fi, $this->filters->filterContent(\'mod1\', $_fi, @)))',  formatModifiers('@', 'mod1|mod2', TRUE));
+	Assert::same('$this->filters->filterContent(\'mod\', $_fi, @)',  formatModifiers('@', 'mod', TRUE));
+	Assert::same('LR\Filters::convertTo($_fi, \'htmlx\', $this->filters->filterContent(\'mod2\', $_fi, $this->filters->filterContent(\'mod1\', $_fi, @)))',  formatModifiers('@', 'mod1|mod2|escape', TRUE));
 });

@@ -236,13 +236,13 @@ Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1'));
 
 Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1a'));
 Assert::same('<p> &quot; &quot;</p>', $latte->renderToString('context1b'));
-Assert::same('<p> &quot; &quot;</p>', $latte->renderToString('context1c'));
+Assert::same('<p> " "</p>', $latte->renderToString('context1c'));
 
 Assert::same('<p title="&lt;hr&gt; &quot; &quot;"></p>', $latte->renderToString('context2'));
 
 Assert::same('<p title="<hr> " &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<p title=" &quot; &quot;"></p>', $latte->renderToString('context2b'));
-Assert::same('<p title=" &quot; &quot;"></p>', $latte->renderToString('context2c'));
+Assert::same('<p title=" " ""></p>', $latte->renderToString('context2c'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');

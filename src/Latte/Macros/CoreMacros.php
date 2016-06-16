@@ -207,9 +207,6 @@ class CoreMacros extends MacroSet
 	public function macroTranslate(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->closing) {
-			if (substr($node->modifiers, -7) === '|escape') {
-				$node->modifiers = substr($node->modifiers, 0, -7);
-			}
 			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, ob_get_clean()))', $node->context[0]);
 
 		} elseif ($node->empty = ($node->args !== '')) {
@@ -230,6 +227,9 @@ class CoreMacros extends MacroSet
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro {include} provides auto-escaping, remove |escape.');
+		}
+		if ($node->modifiers && !$noEscape) {
+			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
 			'/* line ' . $node->startLine . ' */
