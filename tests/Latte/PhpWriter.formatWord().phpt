@@ -37,6 +37,8 @@ Assert::same('FALSE',  $writer->formatWord('FALSE'));
 Assert::same('"Null"',  $writer->formatWord('Null'));
 Assert::same('"True"',  $writer->formatWord('True'));
 Assert::same('"False"',  $writer->formatWord('False'));
+Assert::same('Class::CONST',  $writer->formatWord('Class::CONST'));
+Assert::same('\Namespace0\Class_1::CONST_X',  $writer->formatWord('\Namespace0\Class_1::CONST_X'));
 
 
 Assert::exception(function () use ($writer) {
