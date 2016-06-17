@@ -92,11 +92,11 @@ test(function () {
 <meta name="{block foo}{$foo}{/block}">
 		',
 
-		'parentattr' => '<meta name="{block foo}{/block}">',
+		'parentattr' => '<meta name="{block foo}{$foo}{/block}">',
 
 		'context7' => '
 {extends "parentattr"}
-{block foo}{$foo}{/block}
+{block foo}{$foo} {include parent} "<>&amp;{/block}
 		',
 	]));
 
@@ -114,15 +114,13 @@ test(function () {
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context5', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTMLATTR.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
 
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('context6', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTMLATTR.');
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
 
-	Assert::error(function () use ($latte) {
-		$latte->renderToString('context7', ['foo' => 'b"ar']);
-	}, E_USER_WARNING, 'Overridden block foo with content type HTMLATTR by incompatible type HTML.');
+	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
 });
 
 
