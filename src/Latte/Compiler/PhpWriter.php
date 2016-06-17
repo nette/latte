@@ -474,25 +474,25 @@ class PhpWriter
 			case Compiler::CONTENT_XHTML:
 			case Compiler::CONTENT_HTML:
 				switch ($context) {
-					case Compiler::CONTEXT_QUOTED_ATTRIBUTE:
-					case Compiler::CONTEXT_TAG:
-						if ($subContext === Compiler::CONTENT_JS) {
+					case Compiler::CONTEXT_HTML_ATTRIBUTE:
+					case Compiler::CONTEXT_HTML_TAG:
+						if ($subContext === Compiler::CONTEXT_HTML_JS) {
 							$tokens->prepend('LR\Filters::escapeJs(')->append(')');
-						} elseif ($subContext === Compiler::CONTENT_CSS) {
+						} elseif ($subContext === Compiler::CONTEXT_HTML_CSS) {
 							$tokens->prepend('LR\Filters::escapeCss(')->append(')');
 						}
-						if ($context === Compiler::CONTEXT_TAG) {
+						if ($context === Compiler::CONTEXT_HTML_TAG) {
 							$tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
 						} else {
 							$tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
 						}
 						return $tokens;
-					case Compiler::CONTEXT_COMMENT:
+					case Compiler::CONTEXT_HTML_COMMENT:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
-					case Compiler::CONTEXT_BOGUS_COMMENT:
+					case Compiler::CONTEXT_HTML_BOGUS_COMMENT:
 						return $tokens->prepend('LR\Filters::escapeHtml(')->append(')');
-					case Compiler::CONTENT_JS:
-					case Compiler::CONTENT_CSS:
+					case Compiler::CONTEXT_HTML_JS:
+					case Compiler::CONTEXT_HTML_CSS:
 						return $tokens->prepend('LR\Filters::escape' . ucfirst($context) . '(')->append(')');
 					default:
 						return $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')');
@@ -500,9 +500,9 @@ class PhpWriter
 
 			case Compiler::CONTENT_XML:
 				switch ($context) {
-					case Compiler::CONTEXT_COMMENT:
+					case Compiler::CONTEXT_XML_COMMENT:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
-					case Compiler::CONTEXT_TAG:
+					case Compiler::CONTEXT_XML_TAG:
 						return $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')');
 					default:
 						return $tokens->prepend('LR\Filters::escapeXml(')->append(')');

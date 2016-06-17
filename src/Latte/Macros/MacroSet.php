@@ -94,7 +94,7 @@ class MacroSet implements Latte\IMacro
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
 			$node->empty = TRUE;
-			$node->context[1] = Latte\Compiler::CONTEXT_QUOTED_ATTRIBUTE;
+			$node->context[1] = Latte\Compiler::CONTEXT_HTML_ATTRIBUTE;
 			$res = $this->compile($node, $attr);
 			if ($res === FALSE) {
 				return FALSE;

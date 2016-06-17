@@ -70,13 +70,13 @@ class Parser
 
 	/** @internal states */
 	const
+		CONTEXT_NONE = 'none',
+		CONTEXT_MACRO = 'macro',
 		CONTEXT_HTML_TEXT = 'htmlText',
-		CONTEXT_CDATA = 'cdata',
 		CONTEXT_HTML_TAG = 'htmlTag',
 		CONTEXT_HTML_ATTRIBUTE = 'htmlAttribute',
-		CONTEXT_RAW = 'raw',
 		CONTEXT_HTML_COMMENT = 'htmlComment',
-		CONTEXT_MACRO = 'macro';
+		CONTEXT_HTML_CDATA = 'htmlCData';
 
 
 	/**
@@ -153,9 +153,9 @@ class Parser
 
 
 	/**
-	 * Handles CONTEXT_CDATA.
+	 * Handles CONTEXT_HTML_CDATA.
 	 */
-	private function contextCData()
+	private function contextHtmlCData()
 	{
 		$matches = $this->match('~
 			</(?P<tag>' . $this->lastHtmlTag . ')(?![a-z0-9:])| ##  end HTML tag </tag
@@ -187,7 +187,7 @@ class Parser
 
 		if (!empty($matches['end'])) { // end of HTML tag />
 			$this->addToken(Token::HTML_TAG_END, $matches[0]);
-			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], TRUE) ? self::CONTEXT_CDATA : self::CONTEXT_HTML_TEXT);
+			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], TRUE) ? self::CONTEXT_HTML_CDATA : self::CONTEXT_HTML_TEXT);
 
 		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
 			$token = $this->addToken(Token::HTML_ATTRIBUTE_BEGIN, $matches[0]);
@@ -250,9 +250,9 @@ class Parser
 
 
 	/**
-	 * Handles CONTEXT_RAW.
+	 * Handles CONTEXT_NONE.
 	 */
-	private function contextRaw()
+	private function contextNone()
 	{
 		$matches = $this->match('~
 			(?P<macro>' . $this->delimiters[0] . ')
@@ -338,7 +338,7 @@ class Parser
 			$this->setContext(self::CONTEXT_HTML_TEXT);
 			$this->xmlMode = $type === self::CONTENT_XML;
 		} else {
-			$this->setContext(self::CONTEXT_RAW);
+			$this->setContext(self::CONTEXT_NONE);
 		}
 		return $this;
 	}

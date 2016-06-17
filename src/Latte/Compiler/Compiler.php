@@ -61,21 +61,28 @@ class Compiler
 	private $properties = [];
 
 	/** Context-aware escaping content types */
-	const CONTENT_HTML = Engine::CONTENT_HTML,
+	const
+		CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
 		CONTENT_XML = Engine::CONTENT_XML,
 		CONTENT_JS = Engine::CONTENT_JS,
 		CONTENT_CSS = Engine::CONTENT_CSS,
-		CONTENT_URL = Engine::CONTENT_URL,
 		CONTENT_ICAL = Engine::CONTENT_ICAL,
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
 	/** @internal Context-aware escaping HTML contexts */
 	const
-		CONTEXT_COMMENT = 'comment',
-		CONTEXT_BOGUS_COMMENT = 'bogus',
-		CONTEXT_QUOTED_ATTRIBUTE = 'attr',
-		CONTEXT_TAG = 'tag';
+		// for CONTENT_HTML, CONTENT_XHTML
+		CONTEXT_HTML_TAG = 'tag',
+		CONTEXT_HTML_ATTRIBUTE = 'attr',
+		CONTEXT_HTML_ATTRIBUTE_URL = 'attrurl',
+		CONTEXT_HTML_COMMENT = 'comment',
+		CONTEXT_HTML_BOGUS_COMMENT = 'bogus',
+		CONTEXT_HTML_CSS = 'css',
+		CONTEXT_HTML_JS = 'js',
+
+		CONTEXT_XML_TAG = self::CONTEXT_HTML_TAG,
+		CONTEXT_XML_COMMENT = self::CONTEXT_HTML_COMMENT;
 
 
 	/**
@@ -294,7 +301,7 @@ class Compiler
 
 	private function processText(Token $token)
 	{
-		if ($this->context[0] === self::CONTEXT_QUOTED_ATTRIBUTE && $this->lastAttrValue === '') {
+		if ($this->context[0] === self::CONTEXT_HTML_ATTRIBUTE && $this->lastAttrValue === '') {
 			$this->lastAttrValue = $token->text;
 		}
 		$this->output .= $this->escape($token->text);
@@ -303,7 +310,7 @@ class Compiler
 
 	private function processMacroTag(Token $token)
 	{
-		if (in_array($this->context[0], [self::CONTEXT_QUOTED_ATTRIBUTE, self::CONTEXT_TAG], TRUE)) {
+		if (in_array($this->context[0], [self::CONTEXT_HTML_ATTRIBUTE, self::CONTEXT_HTML_TAG], TRUE)) {
 			$this->lastAttrValue = TRUE;
 		}
 
@@ -351,17 +358,17 @@ class Compiler
 			$this->setContext(NULL);
 
 		} elseif ($token->text === '<!--') {
-			$this->setContext(self::CONTEXT_COMMENT);
+			$this->setContext(self::CONTEXT_HTML_COMMENT);
 
 		} elseif ($token->text === '<?' || $token->text === '<!') {
-			$this->setContext(self::CONTEXT_BOGUS_COMMENT);
+			$this->setContext(self::CONTEXT_HTML_BOGUS_COMMENT);
 			$this->output .= $token->text === '<?' ? '<<?php ?>?' : '<!'; // bypass error in escape()
 			return;
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
 			$this->htmlNode->startLine = $this->getLine();
-			$this->setContext(self::CONTEXT_TAG);
+			$this->setContext(self::CONTEXT_HTML_TAG);
 		}
 		$this->tagOffset = strlen($this->output);
 		$this->output .= $token->text;
@@ -370,7 +377,7 @@ class Compiler
 
 	private function processHtmlTagEnd(Token $token)
 	{
-		if (in_array($this->context[0], [self::CONTEXT_COMMENT, self::CONTEXT_BOGUS_COMMENT], TRUE)) {
+		if (in_array($this->context[0], [self::CONTEXT_HTML_COMMENT, self::CONTEXT_HTML_BOGUS_COMMENT], TRUE)) {
 			$this->output .= $token->text;
 			$this->setContext(NULL);
 			return;
@@ -419,7 +426,7 @@ class Compiler
 		} elseif ((($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
 			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|json|css#i', $htmlNode->attrs['type']))
 		) {
-			$this->setContext($lower === 'script' ? self::CONTENT_JS : self::CONTENT_CSS);
+			$this->setContext($lower === 'script' ? self::CONTEXT_HTML_JS : self::CONTEXT_HTML_CSS);
 		}
 	}
 
@@ -445,24 +452,24 @@ class Compiler
 		$lower = strtolower($token->name);
 		if (in_array($token->value, ['"', "'"], TRUE)) {
 			$this->lastAttrValue = '';
-			$contextMain = self::CONTEXT_QUOTED_ATTRIBUTE;
+			$contextMain = self::CONTEXT_HTML_ATTRIBUTE;
 			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
 				if (Helpers::startsWith($lower, 'on')) {
-					$context = self::CONTENT_JS;
+					$context = self::CONTEXT_HTML_JS;
 				} elseif ($lower === 'style') {
-					$context = self::CONTENT_CSS;
+					$context = self::CONTEXT_HTML_CSS;
 				}
 			}
 		} else {
 			$this->lastAttrValue = $token->value;
-			$contextMain = self::CONTEXT_TAG;
+			$contextMain = self::CONTEXT_HTML_TAG;
 		}
 
 		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)
 			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], TRUE)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object'))
 		) {
-			$context = self::CONTENT_URL;
+			$context = self::CONTEXT_HTML_ATTRIBUTE_URL;
 		}
 
 		$this->setContext($contextMain, $context);
@@ -471,7 +478,7 @@ class Compiler
 
 	private function processHtmlAttributeEnd(Token $token)
 	{
-		$this->setContext(self::CONTEXT_TAG);
+		$this->setContext(self::CONTEXT_HTML_TAG);
 		$this->output .= $token->text;
 	}
 
@@ -721,7 +728,7 @@ class Compiler
 	 */
 	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL)
 	{
-		$inScript = in_array($this->context[0], [self::CONTENT_JS, self::CONTENT_CSS], TRUE);
+		$inScript = in_array($this->context[0], [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], TRUE);
 
 		if (empty($this->macros[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '';
@@ -735,7 +742,7 @@ class Compiler
 		}
 
 		if (strpbrk($name, '=~%^&_')) {
-			if ($this->context[1] === self::CONTENT_URL) {
+			if ($this->context[1] === self::CONTEXT_HTML_ATTRIBUTE_URL) {
 				if (!Helpers::removeFilter($modifiers, 'nosafeurl|nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
 					$modifiers .= '|checkurl';
 				}
@@ -750,9 +757,9 @@ class Compiler
 		}
 
 		if ($nPrefix === MacroNode::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'script')) {
-			$context = [$this->contentType, self::CONTENT_JS, NULL];
+			$context = [$this->contentType, self::CONTEXT_HTML_JS, NULL];
 		} elseif ($nPrefix === MacroNode::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'style')) {
-			$context = [$this->contentType, self::CONTENT_CSS, NULL];
+			$context = [$this->contentType, self::CONTEXT_HTML_CSS, NULL];
 		} elseif ($nPrefix) {
 			$context = [$this->contentType, NULL, NULL];
 		} else {
