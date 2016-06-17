@@ -28,6 +28,15 @@ Assert::same('"v\\"ar"',  $writer->formatWord('"v\\"ar"'));
 Assert::same("'var'.'var'",  $writer->formatWord("var.'var'"));
 Assert::same("\$var['var']",  $writer->formatWord('$var[var]'));
 Assert::same('$x["[x]"]',  $writer->formatWord('$x["[x]"]'));
+Assert::same('null',  $writer->formatWord('null'));
+Assert::same('NULL',  $writer->formatWord('NULL'));
+Assert::same('true',  $writer->formatWord('true'));
+Assert::same('TRUE',  $writer->formatWord('TRUE'));
+Assert::same('false',  $writer->formatWord('false'));
+Assert::same('FALSE',  $writer->formatWord('FALSE'));
+Assert::same('"Null"',  $writer->formatWord('Null'));
+Assert::same('"True"',  $writer->formatWord('True'));
+Assert::same('"False"',  $writer->formatWord('False'));
 
 
 Assert::exception(function () use ($writer) {

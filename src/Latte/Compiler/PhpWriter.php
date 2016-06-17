@@ -146,7 +146,7 @@ class PhpWriter
 	 */
 	public function formatWord($s)
 	{
-		return (is_numeric($s) || preg_match('#^\$|[\'"]|^true\z|^false\z|^null\z#i', $s))
+		return (is_numeric($s) || preg_match('#^\$|[\'"]|^(true|TRUE)\z|^(false|FALSE)\z|^(null|NULL)\z#', $s))
 			? $this->formatArgs(new MacroTokens($s))
 			: '"' . $s . '"';
 	}
