@@ -187,6 +187,8 @@ class Engine
 			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
 				@unlink("$file.tmp"); // @ - file may not exist
 				throw new \RuntimeException("Unable to create '$file'.");
+			} elseif (function_exists('opcache_invalidate')) {
+				@opcache_invalidate($file, TRUE); // @ can be restricted
 			}
 		}
 
