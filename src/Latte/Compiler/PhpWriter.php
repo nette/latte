@@ -433,7 +433,7 @@ class PhpWriter
 				if ($tokens->isCurrent($tokens::T_SYMBOL)) {
 					if ($tokens->isCurrent('escape')) {
 						if ($isContent) {
-							$res->prepend('LR\Filters::convertTo($_fi, ' . var_export($this->context[0] . $this->context[1], TRUE) . ', ')
+							$res->prepend('LR\Filters::convertTo($_fi, ' . var_export(implode($this->context), TRUE) . ', ')
 								->append(')');
 						} else {
 							$res = $this->escapePass($res);
@@ -469,24 +469,23 @@ class PhpWriter
 	public function escapePass(MacroTokens $tokens)
 	{
 		$tokens = clone $tokens;
-		list($contentType, $context, $subContext) = $this->context;
+		list($contentType, $context) = $this->context;
 		switch ($contentType) {
 			case Compiler::CONTENT_XHTML:
 			case Compiler::CONTENT_HTML:
 				switch ($context) {
-					case Compiler::CONTEXT_HTML_ATTRIBUTE:
+					case Compiler::CONTEXT_HTML_TEXT:
+						return $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')');
 					case Compiler::CONTEXT_HTML_TAG:
-						if ($subContext === Compiler::CONTEXT_HTML_JS) {
-							$tokens->prepend('LR\Filters::escapeJs(')->append(')');
-						} elseif ($subContext === Compiler::CONTEXT_HTML_CSS) {
-							$tokens->prepend('LR\Filters::escapeCss(')->append(')');
-						}
-						if ($context === Compiler::CONTEXT_HTML_TAG) {
-							$tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
-						} else {
-							$tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
-						}
-						return $tokens;
+					case Compiler::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL:
+						return $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
+					case Compiler::CONTEXT_HTML_ATTRIBUTE:
+					case Compiler::CONTEXT_HTML_ATTRIBUTE_URL:
+						return $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
+					case Compiler::CONTEXT_HTML_ATTRIBUTE_JS:
+						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))');
+					case Compiler::CONTEXT_HTML_ATTRIBUTE_CSS:
+						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))');
 					case Compiler::CONTEXT_HTML_COMMENT:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTEXT_HTML_BOGUS_COMMENT:
@@ -495,17 +494,21 @@ class PhpWriter
 					case Compiler::CONTEXT_HTML_CSS:
 						return $tokens->prepend('LR\Filters::escape' . ucfirst($context) . '(')->append(')');
 					default:
-						return $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')');
+						throw new CompileException("Unknown context $contentType, $context.");
 				}
 
 			case Compiler::CONTENT_XML:
 				switch ($context) {
+					case Compiler::CONTEXT_XML_TEXT:
+					case Compiler::CONTEXT_XML_ATTRIBUTE:
+					case Compiler::CONTEXT_XML_BOGUS_COMMENT:
+						return $tokens->prepend('LR\Filters::escapeXml(')->append(')');
 					case Compiler::CONTEXT_XML_COMMENT:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
 					case Compiler::CONTEXT_XML_TAG:
 						return $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')');
 					default:
-						return $tokens->prepend('LR\Filters::escapeXml(')->append(')');
+						throw new CompileException("Unknown context $contentType, $context.");
 				}
 
 			case Compiler::CONTENT_JS:
@@ -514,8 +517,10 @@ class PhpWriter
 				return $tokens->prepend('LR\Filters::escape' . ucfirst($contentType) . '(')->append(')');
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
-			default:
+			case NULL:
 				return $tokens->prepend('call_user_func($this->filters->escape, ')->append(')');
+			default:
+				throw new CompileException("Unknown context $contentType.");
 		}
 	}
 

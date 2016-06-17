@@ -101,7 +101,7 @@ class MacroSet implements Latte\IMacro
 			} elseif (!$node->attrCode) {
 				$node->attrCode = "<?php $res ?>";
 			}
-			$node->context[1] = NULL;
+			$node->context[1] = Latte\Compiler::CONTEXT_HTML_TEXT;
 
 		} elseif ($begin) {
 			$res = $this->compile($node, $begin);

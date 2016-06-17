@@ -236,7 +236,7 @@ class CoreMacros extends MacroSet
 			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
-				: var_export($noEscape ? NULL : $node->context[0] . $node->context[1], TRUE)
+				: var_export($noEscape ? NULL : implode($node->context), TRUE)
 		);
 	}
 
