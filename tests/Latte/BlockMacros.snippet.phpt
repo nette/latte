@@ -37,5 +37,5 @@ EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.snippet.phtml',
-	$latte->compile($template)
+	@$latte->compile($template) // @ tag in {snippet} is deprecated
 );

@@ -232,6 +232,9 @@ class BlockMacros extends MacroSet
 					return $writer->write($enterCode);
 				}
 				$tag = trim($node->tokenizer->fetchWord(), '<>');
+				if ($tag) {
+					trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
+				}
 				$tag = $tag ? $tag : 'div';
 				$node->closingCode .= "\n</$tag>";
 				$this->checkExtraArgs($node);
@@ -286,6 +289,9 @@ class BlockMacros extends MacroSet
 				return $writer->write($include, $name);
 			}
 			$tag = trim($node->tokenizer->fetchWord(), '<>');
+			if ($tag) {
+				trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
+			}
 			$tag = $tag ? $tag : 'div';
 			$this->checkExtraArgs($node);
 			return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</$tag><?php ",
