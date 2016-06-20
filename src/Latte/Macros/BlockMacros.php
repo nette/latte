@@ -47,7 +47,7 @@ class BlockMacros extends MacroSet
 		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('snippetArea', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('ifset', [$me, 'macroIfset'], '}');
-		$me->addMacro('elseifset', [$me, 'macroIfset'], '}');
+		$me->addMacro('elseifset', [$me, 'macroIfset']);
 	}
 
 
