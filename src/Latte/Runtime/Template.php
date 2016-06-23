@@ -158,6 +158,10 @@ class Template
 		if ($this->parentName === NULL && isset($this->global->coreParentFinder)) {
 			$this->parentName = call_user_func($this->global->coreParentFinder, $this);
 		}
+		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
+			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
+		}
+		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
@@ -179,11 +183,8 @@ class Template
 				$this->renderBlock($this->params['_renderblock'], $this->params);
 				return;
 			}
-		} elseif (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
-			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
 
-		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
 		// old accumulators for back compatibility
 		$this->params['_l'] = new \stdClass;
 		$this->params['_g'] = $this->global;
