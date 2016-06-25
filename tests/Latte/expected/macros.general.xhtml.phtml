@@ -54,7 +54,7 @@ class Template%a% extends Latte\Runtime\Template
 
 <p val = <?php echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 27 */ ?> val2=<?php echo LR\Filters::escapeHtmlAttrUnquoted($mxss) /* line 27 */ ?>> </p>
 
-<p onclick = <?php echo LR\Filters::escapeHtmlAttrUnquoted(LR\Filters::escapeJs($xss)) /* line 29 */ ?>> </p>
+<p onclick = <?php echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 29 */ ?>> </p>
 
 <p ONCLICK ="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 31 */ ?>" <?php echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 31 */ ?>> </p>
 

@@ -441,26 +441,28 @@ class Compiler
 		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
 		$this->output .= $this->escape($token->text);
 
+		$context = NULL;
+		$lower = strtolower($token->name);
 		if (in_array($token->value, ['"', "'"], TRUE)) {
 			$this->lastAttrValue = '';
 			$contextMain = self::CONTEXT_QUOTED_ATTRIBUTE;
+			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
+				if (Helpers::startsWith($lower, 'on')) {
+					$context = self::CONTENT_JS;
+				} elseif ($lower === 'style') {
+					$context = self::CONTENT_CSS;
+				}
+			}
 		} else {
 			$this->lastAttrValue = $token->value;
 			$contextMain = self::CONTEXT_TAG;
 		}
 
-		$context = NULL;
-		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
-			$lower = strtolower($token->name);
-			if (Helpers::startsWith($lower, 'on')) {
-				$context = self::CONTENT_JS;
-			} elseif ($lower === 'style') {
-				$context = self::CONTENT_CSS;
-			} elseif (in_array($lower, ['href', 'src', 'action', 'formaction'], TRUE)
-				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object')
-			) {
-				$context = self::CONTENT_URL;
-			}
+		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)
+			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], TRUE)
+				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object'))
+		) {
+			$context = self::CONTENT_URL;
 		}
 
 		$this->setContext($contextMain, $context);
