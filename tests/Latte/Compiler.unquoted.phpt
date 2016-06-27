@@ -14,9 +14,15 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
-<span title={$x}></span>
+<span title={$x} class={$x}></span>
 
 <span title={$x} {$x}></span>
+
+<span title={if true}{$x}{else}{$y}{/if}></span>
+
+<span title={if true}{$x}{else}"item"{/if}></span>
+
+<span title={if true}{$x} {$x}{else}"item"{/if}></span>
 
 <span {='title'}={$x}></span>
 
