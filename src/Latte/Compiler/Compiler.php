@@ -40,7 +40,7 @@ class Compiler
 	private $placeholders = [];
 
 	/** @var string */
-	private $contentType;
+	private $contentType = self::CONTENT_HTML;
 
 	/** @var array [context, subcontext] */
 	private $context;
