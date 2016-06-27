@@ -86,7 +86,7 @@ class Parser
 	 */
 	public function parse($input)
 	{
-		if (substr($input, 0, 3) === "\xEF\xBB\xBF") { // BOM
+		if (Helpers::startsWith($input, "\xEF\xBB\xBF")) { // BOM
 			$input = substr($input, 3);
 		}
 
@@ -195,7 +195,7 @@ class Parser
 			$token->value = isset($matches['value']) ? $matches['value'] : '';
 
 			if ($token->value === '"' || $token->value === "'") { // attribute = "'
-				if (strncmp($token->name, self::N_PREFIX, strlen(self::N_PREFIX)) === 0) {
+				if (Helpers::startsWith($token->name, self::N_PREFIX)) {
 					$token->value = '';
 					if ($m = $this->match('~(.*?)' . $matches['value'] . '~xsi')) {
 						$token->value = $m[1];

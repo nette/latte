@@ -164,7 +164,7 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		} elseif ($node->args) {
-			$hint = substr($node->args, 0, 2) === 'if' ? ', did you mean {elseif}?' : '';
+			$hint = Helpers::startsWith($node->args, 'if') ? ', did you mean {elseif}?' : '';
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
 		}
 		$ifNode = $node->parentNode;
@@ -261,7 +261,7 @@ class CoreMacros extends MacroSet
 	public function macroCapture(MacroNode $node, PhpWriter $writer)
 	{
 		$variable = $node->tokenizer->fetchWord();
-		if (substr($variable, 0, 1) !== '$') {
+		if (!Helpers::startsWith($variable, '$')) {
 			throw new CompileException("Invalid capture block variable '$variable'");
 		}
 		$this->checkExtraArgs($node);

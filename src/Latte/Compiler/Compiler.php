@@ -426,7 +426,7 @@ class Compiler
 
 	private function processHtmlAttributeBegin(Token $token)
 	{
-		if (strncmp($token->name, Parser::N_PREFIX, strlen(Parser::N_PREFIX)) === 0) {
+		if (Helpers::startsWith($token->name, Parser::N_PREFIX)) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
 			if (isset($this->htmlNode->macroAttrs[$name])) {
 				throw new CompileException("Found multiple attributes $token->name.");
@@ -452,7 +452,7 @@ class Compiler
 		$context = NULL;
 		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
 			$lower = strtolower($token->name);
-			if (substr($lower, 0, 2) === 'on') {
+			if (Helpers::startsWith($lower, 'on')) {
 				$context = self::CONTENT_JS;
 			} elseif ($lower === 'style') {
 				$context = self::CONTENT_CSS;
@@ -543,7 +543,7 @@ class Compiler
 		$node = $this->macroNode;
 
 		if (!$node || ($node->name !== $name && '' !== $name) || $modifiers
-			|| ($args && $node->args && strncmp("$node->args ", "$args ", strlen($args) + 1))
+			|| ($args && $node->args && !Helpers::startsWith("$node->args ", "$args "))
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix

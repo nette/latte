@@ -34,7 +34,7 @@ class FileLoader implements Latte\ILoader
 	public function getContent($file)
 	{
 		$file = $this->baseDir . $file;
-		if ($this->baseDir && strncmp($this->normalizePath($file), $this->baseDir, strlen($this->baseDir))) {
+		if ($this->baseDir && !Latte\Helpers::startsWith($this->normalizePath($file), $this->baseDir)) {
 			throw new \RuntimeException("Template '$file' is not within the allowed path '$this->baseDir'.");
 
 		} elseif (!is_file($file)) {
