@@ -207,13 +207,18 @@ class CoreMacros extends MacroSet
 	public function macroTranslate(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->closing) {
-			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, ob_get_clean()))', $node->context[0]);
+			if (strpos($node->content, '<?php') === FALSE) {
+				$value = var_export($node->content, TRUE);
+				$node->content = '';
+			} else {
+				$node->openingCode = '<?php ob_start(function () {}) ?>' . $node->openingCode;
+				$value = 'ob_get_clean()';
+			}
+
+			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, %raw))', $node->context[0], $value);
 
 		} elseif ($node->empty = ($node->args !== '')) {
 			return $writer->write('echo %modify(call_user_func($this->filters->translate, %node.args))');
-
-		} else {
-			return 'ob_start(function () {})';
 		}
 	}
 
