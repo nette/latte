@@ -47,11 +47,11 @@ $latte->addFilter(null, function ($name, $val) {
 $latte->addFilter(null, function ($name, $val) {
 	return $name === 'dynamic' ? "[$name $val]" : null;
 });
-$latte->addFilter(null, function ($name, $val) use ($latte) {
+$latte->addFilterLoader(function ($name) use ($latte) {
 	if ($name === 'dynamic2') {
-		$latte->addFilter($name, function ($val) {
+		return function ($val) {
 			return "[$val]";
-		});
+		};
 	}
 });
 
