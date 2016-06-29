@@ -282,6 +282,21 @@ class Engine
 
 
 	/**
+	 * Registers run-time filter loader.
+	 * @return static
+	 */
+	public function addFilterLoader(callable $callback)
+	{
+		$this->filters->add(null, function ($name) use ($callback) {
+			if ($filter = $callback($name)) {
+				$this->filters->add($name, $callback($name));
+			}
+		});
+		return $this;
+	}
+
+
+	/**
 	 * Returns all run-time filters.
 	 * @return string[]
 	 */
