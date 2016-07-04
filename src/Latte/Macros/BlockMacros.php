@@ -351,7 +351,7 @@ class BlockMacros extends MacroSet
 				$node->content = rtrim($node->content, " \t");
 				$this->getCompiler()->addMethod(
 					$node->data->func,
-					"extract(\$_args);\n?>$node->content<?php",
+					$this->getCompiler()->expandTokens("extract(\$_args);\n?>$node->content<?php"),
 					'$_args'
 				);
 				$node->content = '';
