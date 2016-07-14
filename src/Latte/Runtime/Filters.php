@@ -303,17 +303,43 @@ class Filters
 	public static function strip(FilterInfo $info, $s)
 	{
 		trigger_error('Filter |strip is deprecated, use macro {spaceless}', E_USER_DEPRECATED);
-		if (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
-			return preg_replace_callback(
-				'#(</textarea|</pre|</script|^(?!<textarea|<pre|<script)).*?(?=<textarea|<pre|<script|\z)#si',
-				function ($m) {
-					return trim(preg_replace('#[ \t\r\n]+#', ' ', $m[0]));
-				},
-				$s
-			);
-		} else {
-			return trim(preg_replace('#[ \t\r\n]+#', ' ', $s));
-		}
+		return in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)
+			? trim(self::spacelessHtml($s))
+			: trim(self::spacelessText($s));
+	}
+
+
+	/**
+	 * Replaces all repeated white spaces with a single space.
+	 * @param  string HTML
+	 * @return string HTML
+	 */
+	public static function spacelessHtml($s)
+	{
+		$strip = TRUE;
+		return preg_replace_callback(
+			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#si',
+			function ($m) use (& $strip) {
+				if (empty($m[2])) {
+					return $strip ? ' ' : $m[0];
+				} else {
+					$strip = !empty($m[1]);
+					return $m[0];
+				}
+			},
+			$s
+		);
+	}
+
+
+	/**
+	 * Replaces all repeated white spaces with a single space.
+	 * @param  string text
+	 * @return string text
+	 */
+	public static function spacelessText($s)
+	{
+		return preg_replace('#[ \t\r\n]+#', ' ', $s);
 	}
 
 
