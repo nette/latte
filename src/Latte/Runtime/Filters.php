@@ -302,7 +302,6 @@ class Filters
 	 */
 	public static function strip(FilterInfo $info, $s)
 	{
-		trigger_error('Filter |strip is deprecated, use macro {spaceless}', E_USER_DEPRECATED);
 		return in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)
 			? trim(self::spacelessHtml($s))
 			: trim(self::spacelessText($s));
