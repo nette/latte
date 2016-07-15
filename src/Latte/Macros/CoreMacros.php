@@ -290,21 +290,10 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers || $node->args) {
 			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
 		}
-		if (!$node->closing) {
-			return;
-		} elseif ($node->prefix) { // preserve trailing whitespaces
-			preg_match('#^(\s*)(.*?)(\s*)\z#s', $node->content, $parts);
-			$node->content = $parts[2];
-		}
-
-		$node->content = preg_replace('#[ \t\r\n]+#', ' ', $node->content);
-
-		if (in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)) {
-			$node->content = preg_replace('#(?<=>) | (?=<)#', '', $node->content);
-			if ($node->prefix) {
-				$node->content = $parts[1] . $node->content . $parts[3];
-			}
-		}
+		$node->openingCode = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)
+			? '<?php ob_start(function ($s, $phase) { static $strip = TRUE; return LR\Filters::spacelessHtml($s, $phase, $strip); }, 4096); ?>'
+			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096); ?>";
+		$node->closingCode = '<?php ob_end_flush(); ?>';
 	}
 
 

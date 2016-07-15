@@ -311,11 +311,18 @@ class Filters
 	/**
 	 * Replaces all repeated white spaces with a single space.
 	 * @param  string HTML
+	 * @param  int output buffering phase
+	 * @param  bool stripping mode
 	 * @return string HTML
 	 */
-	public static function spacelessHtml($s)
+	public static function spacelessHtml($s, $phase = NULL, & $strip = TRUE)
 	{
-		$strip = TRUE;
+		if ($phase & PHP_OUTPUT_HANDLER_START) {
+			$s = ltrim($s);
+		}
+		if ($phase & PHP_OUTPUT_HANDLER_FINAL) {
+			$s = rtrim($s);
+		}
 		return preg_replace_callback(
 			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#si',
 			function ($m) use (& $strip) {

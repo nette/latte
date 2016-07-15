@@ -15,8 +15,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 '	<hr>
-<div id="main space" class = 1><p>Text</p>block</div><!-- /main -->
-	<hr>',
+<div id="main space" class = 1> <p> Text </p> block </div> <!-- /main -->	<hr>',
 
 	$latte->renderToString(<<<EOD
 	<hr>
@@ -36,8 +35,7 @@ EOD
 
 Assert::match(
 '	<hr>
-	<div class = a><p>Text</p></div>
-	<hr>',
+<div class = a> <p> Text </p> </div>	<hr>',
 
 	$latte->renderToString(<<<EOD
 	<hr>
@@ -49,3 +47,19 @@ Assert::match(
 	<hr>
 EOD
 ));
+
+
+Assert::match(
+	"<p> </p><pre>\n\n\n"
+	. str_repeat('x', 10000)
+	. "\n\n\n</pre> <p> </p>",
+
+	$latte->renderToString(
+		"{spaceless}<p>\n\n\n</p>"
+		. "<pre>\n\n\n"
+		. str_repeat('x', 5000)
+		. "{if true}{/if}"
+		. str_repeat('x', 5000)
+		. "\n\n\n</pre> <p>\n\n\n</p>{/spaceless}"
+	)
+);
