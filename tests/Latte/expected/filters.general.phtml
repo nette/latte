@@ -13,7 +13,7 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 	<li>upper: <?php echo Latte\Runtime\Filters::escapeHtml($template->upper($hello), ENT_NOQUOTES) ?></li>
 	<li>lower & capitalize: <?php echo Latte\Runtime\Filters::escapeHtml($template->capitalize($template->lower($hello)), ENT_NOQUOTES) ?></li>
 	<li>nl2br: <?php echo Latte\Runtime\Filters::escapeHtml($template->nl2br($hello), ENT_NOQUOTES) ?></li>
-	<li>truncate: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($template->truncate($hello, "10 ")), ENT_NOQUOTES) ?></li>
+	<li>truncate: <?php echo Latte\Runtime\Filters::escapeHtml($template->lower($template->truncate($hello, "10")), ENT_NOQUOTES) ?></li>
 	<li>date: <?php echo Latte\Runtime\Filters::escapeHtml($template->date($date, '%d.%m.%Y %H:%M:%S'), ENT_NOQUOTES) ?></li>
 	<li>translated: <?php echo Latte\Runtime\Filters::escapeHtml($template->truncate($template->translate($hello), 3), ENT_NOQUOTES) ?></li>
 	<li>Translated HTML: <?php ob_start(function () {}) ?>ahoj<?php echo Latte\Runtime\Filters::escapeHtml($template->translate(ob_get_clean()), ENT_NOQUOTES) ?></li>
@@ -32,8 +32,8 @@ list($_b, $_g, $_l) = $template->initialize('%[a-z0-9]+%', 'html')
 </ul>
 
 <ul>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello*0, 0, 0.0, "0"), ENT_NOQUOTES) ?></li>
-	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello*1, 1, "1"), ENT_NOQUOTES) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types((int)$hello*0, 0, 0.0, "0"), ENT_NOQUOTES) ?></li>
+	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types((int)$hello*1, 1, "1"), ENT_NOQUOTES) ?></li>
 	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello, true, null, false), ENT_NOQUOTES) ?></li>
 	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello, TRUE, NULL, FALSE), ENT_NOQUOTES) ?></li>
 	<li><?php echo Latte\Runtime\Filters::escapeHtml($template->types($hello, '', "", "$hello"), ENT_NOQUOTES) ?></li>

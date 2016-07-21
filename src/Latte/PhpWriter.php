@@ -67,7 +67,7 @@ class PhpWriter extends Object
 				case '':
 					$arg = next($args); break;
 				default:
-					$arg = $args[$source + 1]; break;
+					$arg = $args[(int) $source + 1]; break;
 			}
 
 			switch ($format) {
