@@ -29,7 +29,7 @@
 		"ext-xml": "to use filters like length, substring, ..."
 	},
 	"conflict": {
-		"nette/application": "<2.4"
+		"nette/application": "<2.4.1"
 	},
 	"autoload": {
 		"classmap": ["src/"]

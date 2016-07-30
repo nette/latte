@@ -43,7 +43,7 @@ class SnippetDriver
 
 	public function enter($name, $type)
 	{
-		if (!$this->bridge->isSnippetMode()) {
+		if (!$this->renderingSnippets) {
 			return;
 		}
 		$obStarted = FALSE;
@@ -63,7 +63,7 @@ class SnippetDriver
 
 	public function leave()
 	{
-		if (!$this->bridge->isSnippetMode()) {
+		if (!$this->renderingSnippets) {
 			return;
 		}
 		list($name, $obStarted) = array_pop($this->stack);
@@ -88,6 +88,7 @@ class SnippetDriver
 			return FALSE;
 		}
 		$this->renderingSnippets = TRUE;
+		$this->bridge->setSnippetMode(FALSE);
 		foreach ($blocks as $name => $function) {
 			if ($name[0] !== '_' || !$this->bridge->needsRedraw(substr($name, 1))) {
 				continue;
@@ -95,6 +96,7 @@ class SnippetDriver
 			$function = reset($function);
 			$function($params);
 		}
+		$this->bridge->setSnippetMode(TRUE);
 		$this->bridge->renderChildren();
 		return TRUE;
 	}

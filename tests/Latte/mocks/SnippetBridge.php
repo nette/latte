@@ -17,6 +17,12 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 	}
 
 
+	public function setSnippetMode($snippetMode)
+	{
+		$this->snippetMode = $snippetMode;
+	}
+
+
 	public function needsRedraw($name)
 	{
 		return $this->invalid === TRUE || isset($this->invalid[$name]);

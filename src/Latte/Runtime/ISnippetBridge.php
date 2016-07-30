@@ -22,6 +22,13 @@ interface ISnippetBridge
 
 
 	/**
+	 * @param  bool
+	 * @return void
+	 */
+	function setSnippetMode($snippetMode);
+
+
+	/**
 	 * @param  string
 	 * @return bool
 	 */
