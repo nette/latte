@@ -16,6 +16,7 @@
 	],
 	"require": {
 		"php": ">=5.4.4",
+		"ext-json": "*",
 		"ext-tokenizer": "*"
 	},
 	"require-dev": {
@@ -24,7 +25,8 @@
 	},
 	"suggest": {
 		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
-		"ext-fileinfo": "to use filter |datastream"
+		"ext-fileinfo": "to use filter |datastream",
+		"ext-xml": "to use filters like length, substring, ..."
 	},
 	"conflict": {
 		"nette/application": "<2.4"
