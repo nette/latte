@@ -58,6 +58,9 @@ class StringLoader implements Latte\ILoader
 	 */
 	public function getReferredName($name, $referringName)
 	{
+		if ($this->templates === NULL) {
+			throw new \LogicException("Missing template '$name'.");
+		}
 		return $name;
 	}
 

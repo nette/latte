@@ -41,20 +41,26 @@ $template->prepare();
 Assert::null($template->getParentName());
 
 
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'empty' => '',
+	'extends' => '{extends "parent"}',
+	'extendsNone' => '{extends none}',
+	'parent' => '',
+]));
 $latte->addProvider('coreParentFinder', function ($template) {
 	if (!$template->getReferenceType()) {
 		return 'parent';
 	}
 });
 
-$template = $latte->createTemplate('');
+$template = $latte->createTemplate('empty');
 $template->render();
 Assert::same('parent', $template->getParentName());
 
-$template = $latte->createTemplate('{extends "file.latte"}');
+$template = $latte->createTemplate('extends');
 $template->render();
-Assert::same('file.latte', $template->getParentName());
+Assert::same('parent', $template->getParentName());
 
-$template = $latte->createTemplate('{extends none}');
+$template = $latte->createTemplate('extendsNone');
 $template->render();
 Assert::null($template->getParentName());
