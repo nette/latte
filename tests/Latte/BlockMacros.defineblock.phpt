@@ -24,7 +24,7 @@ $template = <<<'EOD'
 {include #test, var => 20}
 
 {define testargs $var1, $var2}
-	Variables {$var1}, {$var2}
+	Variables {$var1}, {$var2}, {$hello}
 {/define}
 
 {include testargs, 1}
@@ -37,5 +37,5 @@ Assert::matchFile(
 );
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.defineblock.html',
-	$latte->renderToString($template)
+	$latte->renderToString($template, ['hello' => 'world'])
 );
