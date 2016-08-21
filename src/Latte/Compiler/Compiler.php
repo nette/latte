@@ -328,11 +328,7 @@ class Compiler
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
 			if (!$token->empty && isset($this->flags[$token->name]) && $this->flags[$token->name] & IMacro::AUTO_EMPTY) {
-				$pos = $this->position;
-				while (($t = isset($this->tokens[++$pos]) ? $this->tokens[$pos] : NULL)
-					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)
-					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
-				$token->empty = $t ? !$t->closing : TRUE;
+				$token->empty = !$this->isAutoEmptyPair($token, $this->position);
 			}
 			$node = $this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
@@ -342,6 +338,49 @@ class Compiler
 				$this->closeMacro($token->name, NULL, NULL, $isRightmost);
 			}
 		}
+	}
+
+
+	private function isAutoEmptyPair(Token $token, $pos)
+	{
+		$pairMacrosLevel = 0;
+		while (($t = isset($this->tokens[++$pos]) ? $this->tokens[$pos] : NULL)) {
+			if ($t->type === Token::HTML_ATTRIBUTE_BEGIN && $t->name === Parser::N_PREFIX . $token->name) {
+				return FALSE;
+			} elseif ($t->type === Token::MACRO_TAG) {
+				if ($t->name === $token->name) {
+					return $t->closing;
+				} elseif ($this->isClosingTagExpected($t, $pos)) {
+					$pairMacrosLevel++;
+				} elseif ($t->closing) {
+					if ($pairMacrosLevel === 0) {
+						return TRUE;
+					} else {
+						$pairMacrosLevel--;
+					}
+				}
+			}
+		}
+
+		return FALSE;
+	}
+
+
+	private function isClosingTagExpected(Token $token, $pos)
+	{
+		if ($token->closing || $token->empty) {
+			return FALSE;
+		}
+
+		if ($this->flags[$token->name] & IMacro::AUTO_EMPTY) {
+			return $this->isAutoEmptyPair($token, $pos);
+		}
+		if ($token->name === "_") {
+			$value = trim($token->value);
+			return empty($value);
+		}
+
+		return (bool) ($this->flags[$token->name] & IMacro::PAIR);
 	}
 
 

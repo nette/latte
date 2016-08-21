@@ -50,9 +50,9 @@ test(function () use ($set) {
 
 
 test(function () use ($set) {
-	$set->addMacro('attr', 'begin', 'end', 'attr');
+	$set->addMacro('attr2', 'begin', 'end', 'attr');
 
-	$node = new MacroNode($set, 'attr');
+	$node = new MacroNode($set, 'attr2');
 	Assert::null($set->nodeOpened($node));
 	Assert::same('<?php begin ?>', $node->openingCode);
 	Assert::false($node->empty);
@@ -60,12 +60,12 @@ test(function () use ($set) {
 	Assert::null($set->nodeClosed($node));
 	Assert::same('<?php end ?>', $node->closingCode);
 
-	$node = new MacroNode($set, 'attr');
+	$node = new MacroNode($set, 'attr2');
 	$node->prefix = $node::PREFIX_NONE;
 	Assert::null($set->nodeOpened($node));
 	Assert::same('<?php attr ?>', $node->attrCode);
 
-	$node = new MacroNode($set, 'attr');
+	$node = new MacroNode($set, 'attr2');
 	$node->prefix = $node::PREFIX_INNER;
 	Assert::null($set->nodeOpened($node));
 	Assert::null($node->attrCode);

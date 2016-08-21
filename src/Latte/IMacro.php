@@ -17,6 +17,7 @@ interface IMacro
 		AUTO_EMPTY = 4,
 		AUTO_CLOSE = 64,
 		ALLOWED_IN_HEAD = 128,
+		PAIR = 256,
 		DEFAULT_FLAGS = 0;
 
 	/**
