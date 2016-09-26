@@ -52,6 +52,11 @@ test(function () {
 		'<div>foo</div><div>foo</div>',
 		$latte->renderToString('{include main}{block main}<div>foo</div>{/block}')
 	);
+
+	Assert::same(
+		'<!-- - - - -->---',
+		$latte->renderToString('<!--{include main}-->{block main}---{/block}')
+	);
 });
 
 
@@ -98,6 +103,11 @@ test(function () {
 {extends "parentattr"}
 {block foo}{$foo} {include parent} "<>&amp;{/block}
 		',
+
+		'context8' => '
+{extends "parent"}
+<!--{block foo}{$foo}{/block}-->
+		',
 	]));
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context1', ['foo' => 'b"ar']));
@@ -121,6 +131,10 @@ test(function () {
 	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
 
 	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
+
+	Assert::error(function () use ($latte) {
+		$latte->renderToString('context8', ['foo' => 'b"ar']);
+	}, E_USER_WARNING, 'Overridden block foo with content type HTMLTAG by incompatible type HTMLCOMMENT.');
 });
 
 
@@ -164,6 +178,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context4' => '{contentType calendar} {include ical.latte}',
 	'context5' => '<p>{include ical.latte|noescape}</p>',
 	'context6' => '{contentType javascript} {include ical.latte}',
+	'context7' => '<!--{include ical.latte}-->',
 ]));
 
 Assert::error(function () use ($latte) {
@@ -187,6 +202,10 @@ Assert::error(function () use ($latte) {
 	$latte->renderToString('context6');
 }, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type JS.");
 
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context7');
+}, E_USER_WARNING, "Including 'ical.latte' with content type ICAL into incompatible type HTMLCOMMENT.");
+
 
 
 $latte = new Latte\Engine;
@@ -198,6 +217,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context3' => '<p title={include js.latte}></p>',
 	'context4' => '<script>{include js.latte}</script>',
 	'context5' => '<style>{include js.latte}</style>',
+	'context6' => '<!--{include js.latte}-->',
 ]));
 
 Assert::same('<p> &lt;/script&gt;</p>', $latte->renderToString('context1'));
@@ -213,6 +233,8 @@ Assert::same('<script> <\/script></script>', $latte->renderToString('context4'))
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context5');
 }, E_USER_WARNING, "Including 'js.latte' with content type JS into incompatible type HTMLCSS.");
+
+Assert::same('<!-- </script>-->', $latte->renderToString('context6'));
 
 
 
@@ -231,6 +253,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context3' => '<p title={include html.latte}></p>',
 	'context4' => '<script>{include html.latte}</script>',
 	'context5' => '<style>{include html.latte}</style>',
+	'context6' => '<!--{include html.latte}-->',
 ]));
 
 Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1'));
@@ -256,3 +279,5 @@ Assert::error(function () use ($latte) {
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context5');
 }, E_USER_WARNING, "Including 'html.latte' with content type HTML into incompatible type HTMLCSS.");
+
+Assert::same('<!--<hr> " &quot;-->', $latte->renderToString('context6'));
