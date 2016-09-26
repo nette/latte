@@ -72,6 +72,7 @@ test(function () { // special
 	Assert::same("'symbol' => M_PI, NAN, INF ",  formatArgs('symbol => M_PI, NAN, INF '));
 	Assert::same("'symbol' => Class::CONST, ",  formatArgs('symbol => Class::CONST, '));
 	Assert::same("'symbol' => CLASS::CONST, ",  formatArgs('symbol => CLASS::CONST, '));
+	Assert::same("'symbol' => NAMESPACE\\CLASS::CONST, ",  formatArgs('symbol => NAMESPACE\CLASS::CONST, '));
 	Assert::same("'symbol' => Class::method(), ",  formatArgs('symbol => Class::method(), '));
 	Assert::same("'symbol' => Namespace\\Class::method()",  formatArgs('symbol => Namespace\Class::method()'));
 	Assert::same("'symbol' => Namespace \\ Class :: method ()",  formatArgs('symbol => Namespace \ Class :: method ()'));
