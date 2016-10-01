@@ -86,15 +86,20 @@ class FileLoader implements Latte\ILoader
 	 */
 	private static function normalizePath($path)
 	{
-		$res = [];
+		$res = $prefixes = [];
 		foreach (explode('/', strtr($path, '\\', '/')) as $part) {
-			if ($part === '..' && $res) {
-				array_pop($res);
+			if ($part === '..') {
+				if ($res) {
+					array_pop($res);
+				} else {
+					$prefixes[] = $part;
+				}
 			} elseif ($part !== '.') {
 				$res[] = $part;
 			}
 		}
-		return implode(DIRECTORY_SEPARATOR, $res);
+		return implode(DIRECTORY_SEPARATOR, array_merge($prefixes, $res));
+
 	}
 
 }

@@ -41,3 +41,5 @@ Assert::true($loader->isExpired('Latte/' . basename(__FILE__), filemtime(__FILE_
 Assert::same('Latte' . DIRECTORY_SEPARATOR . 'new', $loader->getReferredName('new', 'Latte/file'));
 Assert::same('Latte', $loader->getReferredName('Latte', 'file'));
 Assert::same('..' . DIRECTORY_SEPARATOR . 'tests', $loader->getReferredName('../tests', 'file'));
+Assert::same('..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'tests', $loader->getReferredName('../tests', '../file'));
+Assert::same(str_repeat('..' . DIRECTORY_SEPARATOR, 7) . 'tests', $loader->getReferredName('../../../../tests', '../../../file'));
