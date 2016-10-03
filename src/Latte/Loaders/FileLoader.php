@@ -88,7 +88,7 @@ class FileLoader implements Latte\ILoader
 	{
 		$res = [];
 		foreach (explode('/', strtr($path, '\\', '/')) as $part) {
-			if ($part === '..' && $res) {
+			if ($part === '..' && $res && end($res) !== '..') {
 				array_pop($res);
 			} elseif ($part !== '.') {
 				$res[] = $part;
