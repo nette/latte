@@ -356,6 +356,19 @@ class Filters
 
 
 	/**
+	 * Transforms a string in the form suitable for URL.
+	 * @param
+	 * @param  string text
+	 * @return string text
+	 */
+	public static function webalize($s)
+	{
+		$s = preg_replace('/^-+|-+$/', '', strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', $s)));
+		return $s;
+	}
+
+
+	/**
 	 * Indents the content from the left.
 	 * @param
 	 * @param  string text|HTML
