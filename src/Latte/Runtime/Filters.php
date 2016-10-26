@@ -637,6 +637,36 @@ class Filters
 
 
 	/**
+	 * Pad a string to a certain length with another string.
+	 * @param  string plain text
+	 * @param  int
+	 * @param  string
+	 * @return string
+	 */
+	public static function padLeft($s, $length, $pad = ' ')
+	{
+		$length = max(0, $length - strlen(utf8_decode($s)));
+		$padLen = strlen(utf8_decode($pad));
+		return str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen) . $s;
+	}
+
+
+	/**
+	 * Pad a string to a certain length with another string.
+	 * @param  string plain text
+	 * @param  int
+	 * @param  string
+	 * @return string
+	 */
+	public static function padRight($s, $length, $pad = ' ')
+	{
+		$length = max(0, $length - strlen(utf8_decode($s)));
+		$padLen = strlen(utf8_decode($pad));
+		return $s . str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen);
+	}
+
+
+	/**
 	 * Returns element's attributes.
 	 * @return string
 	 */

@@ -42,6 +42,8 @@ class FilterExecutor
 		'lower' => ['Latte\Runtime\Filters::lower', FALSE],
 		'nl2br' => ['Latte\Runtime\Filters::nl2br', FALSE],
 		'number' => ['number_format', FALSE],
+		'padleft' => ['Latte\Runtime\Filters::padLeft', FALSE],
+		'padright' => ['Latte\Runtime\Filters::padRight', FALSE],
 		'repeat' => ['Latte\Runtime\Filters::repeat', TRUE],
 		'replace' => ['Latte\Runtime\Filters::replace', TRUE],
 		'replacere' => ['Latte\Runtime\Filters::replaceRe', FALSE],

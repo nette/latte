@@ -106,6 +106,12 @@ Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function
 ?>
 
 </p>
+
+
+<ul>
+	<li>padLeft: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->padleft, $hello, 20)) /* line 75 */ ?></li>
+	<li>padRight: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->padright, $hello, 20, '*')) /* line 76 */ ?></li>
+</ul>
 <?php
 %A%
 	}
