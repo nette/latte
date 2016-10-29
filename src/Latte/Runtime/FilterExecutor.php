@@ -158,7 +158,7 @@ class FilterExecutor
 			array_shift($args);
 			if ($info->contentType !== Engine::CONTENT_TEXT) {
 				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
-					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
+					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |striphtml.' : '.'), E_USER_WARNING);
 			}
 			$res = call_user_func_array($this->$name, $args);
 			if ($res instanceof IHtmlString) {

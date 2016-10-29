@@ -47,10 +47,10 @@ Assert::match('
 <a href={$url3}></a>
 <a href={$url4}>ok</a>
 <a href={$url5}></a>
-<a href={$url4|dataStream}></a>
-<a href={$url4|dataStream|noCheck}></a>
-<a href={$url4|dataStream|noSafeURL}></a>
-<a href={$url4|dataStream|safeURL}></a>
+<a href={$url4|datastream}></a>
+<a href={$url4|datastream|noCheck}></a>
+<a href={$url4|datastream|noSafeURL}></a>
+<a href={$url4|datastream|safeURL}></a>
 ', $params));
 
 

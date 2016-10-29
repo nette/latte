@@ -15,15 +15,15 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('{define title} <h1>title</h1> {/define}  {include title|upper}');
-}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |striphtml.');
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('{block|upper} <h1>title</h1> {/block}');
-}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |striphtml.');
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('{capture $var|upper} <h1>title</h1> {/capture}');
-}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |striphtml.');
 
 Assert::same(
 	' title ',
@@ -32,7 +32,7 @@ Assert::same(
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('{block|striptags|upper} <h1>title</h1> {/block}');
-}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |striphtml.');
 
 Assert::same(
 	' title ',
@@ -61,12 +61,12 @@ Assert::same(
 
 Assert::same(
 	'<meta content="val">',
-	$latte->renderToString('<meta content="{block|stripHtml}val{/block}">')
+	$latte->renderToString('<meta content="{block|striphtml}val{/block}">')
 );
 
 Assert::same(
 	'<meta content="val">',
-	$latte->renderToString('<meta content="{block name|stripHtml}val{/block}">')
+	$latte->renderToString('<meta content="{block name|striphtml}val{/block}">')
 );
 
 
@@ -88,10 +88,10 @@ Assert::same(
 
 Assert::same(
 	'<meta content="val" />',
-	$latte->renderToString('{contentType xml}<meta content="{block|stripHtml}val{/block}" />')
+	$latte->renderToString('{contentType xml}<meta content="{block|striphtml}val{/block}" />')
 );
 
 Assert::same(
 	'<meta content="val" />',
-	$latte->renderToString('{contentType xml}<meta content="{block name|stripHtml}val{/block}" />')
+	$latte->renderToString('{contentType xml}<meta content="{block name|striphtml}val{/block}" />')
 );
