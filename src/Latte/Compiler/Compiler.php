@@ -747,7 +747,7 @@ class Compiler
 
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], TRUE)) {
-				if (!Helpers::removeFilter($modifiers, 'nosafeurl|nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
+				if (!Helpers::removeFilter($modifiers, 'nosafeurl|nocheck') && !preg_match('#\|dataStream(?=\s|\||\z)#i', $modifiers)) {
 					$modifiers .= '|checkurl';
 				}
 			}

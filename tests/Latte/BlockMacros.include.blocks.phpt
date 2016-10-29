@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main4' => '{define block.2}[block {$var}]{/} before {include block.2, var => 1} after',
 	'main5' => '{define block.2}[block {$var}]{/} before {include #block.2, var => 1} after',
 
-	'main6' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|striptags} after',
+	'main6' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|stripTags} after',
 ]));
 
 Assert::match(

@@ -17,7 +17,7 @@ test(function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
 	Assert::error(function () use ($info) {
 		Filters::stripHtml($info, '');
-	}, E_USER_WARNING, 'Filter |striphtml used with incompatible type TEXT');
+	}, E_USER_WARNING, 'Filter |stripHtml used with incompatible type TEXT');
 
 	Assert::same('',  @Filters::stripHtml($info, ''));
 	Assert::same('abc',  @Filters::stripHtml($info, 'abc'));

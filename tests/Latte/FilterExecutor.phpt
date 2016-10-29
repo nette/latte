@@ -127,7 +127,7 @@ test(function () {
 	});
 	Assert::error(function () use ($filters) {
 		$filters->filterContent('f2', new FilterInfo('html'), 'aA<b>');
-	}, E_USER_WARNING, 'Filter |f2 is called with incompatible content type HTML, try to prepend |striphtml.');
+	}, E_USER_WARNING, 'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 
 	// FilterInfo aware called as FilterInfo aware

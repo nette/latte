@@ -1,7 +1,7 @@
 {default $class = NULL, $namespace = NULL, $top = TRUE}
 <!DOCTYPE html>
 <head>
-	<title>{block title|striphtml|upper}My website{/block}</title>
+	<title>{block title|stripHtml|upper}My website{/block}</title>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
 	<div id="content">
 		{include content}
 
-		{include content|striphtml|upper}
+		{include content|stripHtml|upper}
 	</div>
 </body>
 </html>

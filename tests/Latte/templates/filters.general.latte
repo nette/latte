@@ -2,7 +2,7 @@
 	<li>lower: {$hello |lower}</li>
 	<li>upper: {$hello |upper}</li>
 	<li>lower & capitalize: {$hello |lower|capitalize}</li>
-	<li>breaklines: {$hello |breaklines}</li>
+	<li>breakLines: {$hello |breakLines}</li>
 	<li>truncate: {$hello |truncate:"10"|lower}</li>
 	<li>date: {$date|date:'%d.%m.%Y %H:%M:%S'}</li>
 	<li>translated: {_$hello|truncate:3}</li>
@@ -56,7 +56,7 @@ Captured: {$capture}
 </p>
 
 
-{capture$capture|striphtml|upper}
+{capture$capture|stripHtml|upper}
 Hello
 {/capture}
 
@@ -67,11 +67,11 @@ Captured with modifier: {$capture}
 
 
 <p>
-Nested blocks: {block|striphtml|truncate:20} Outer   {block|striphtml|upper} Inner Block {/block}  Block {/block}
+Nested blocks: {block|stripHtml|truncate:20} Outer   {block|stripHtml|upper} Inner Block {/block}  Block {/block}
 </p>
 
 
 <ul>
-	<li>padLeft: {$hello |padleft:20}</li>
-	<li>padRight: {$hello |padright:20:'*'}</li>
+	<li>padLeft: {$hello |padLeft:20}</li>
+	<li>padRight: {$hello |padRight:20:'*'}</li>
 </ul>

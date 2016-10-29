@@ -6,13 +6,13 @@ class Template%a% extends Latte\Runtime\Template
 
 	function main()
 	{
-%A%
+%a%
 ?>
 <ul>
 	<li>lower: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->lower, $hello)) /* line 2 */ ?></li>
 	<li>upper: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->upper, $hello)) /* line 3 */ ?></li>
 	<li>lower & capitalize: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->capitalize, call_user_func($this->filters->lower, $hello))) /* line 4 */ ?></li>
-	<li>breaklines: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->breaklines, $hello)) /* line 5 */ ?></li>
+	<li>breakLines: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->breakLines, $hello)) /* line 5 */ ?></li>
 	<li>truncate: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->lower, call_user_func($this->filters->truncate, $hello, "10"))) /* line 6 */ ?></li>
 	<li>date: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->date, $date, '%d.%m.%Y %H:%M:%S')) /* line 7 */ ?></li>
 	<li>translated: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->truncate, call_user_func($this->filters->translate, $hello), 3)) ?></li>
@@ -87,7 +87,7 @@ Captured: <?php echo LR\Filters::escapeHtmlText($capture) /* line 55 */ ?>
 Hello
 <?php
 		$_fi = new LR\FilterInfo('html');
-		$capture = $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()));
+		$capture = $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('stripHtml', $_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()));
 ?>
 
 <p>
@@ -100,18 +100,18 @@ Captured with modifier: <?php echo LR\Filters::escapeHtmlText($capture) /* line 
 <p>
 Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?> Inner Block <?php
 		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean())));
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('stripHtml', $_fi, ob_get_clean())));
 		?>  Block <?php
 		$_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('truncate', $_fi, $this->filters->filterContent('striphtml', $_fi, ob_get_clean()), 20));
+		echo LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('truncate', $_fi, $this->filters->filterContent('stripHtml', $_fi, ob_get_clean()), 20));
 ?>
 
 </p>
 
 
 <ul>
-	<li>padLeft: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->padleft, $hello, 20)) /* line 75 */ ?></li>
-	<li>padRight: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->padright, $hello, 20, '*')) /* line 76 */ ?></li>
+	<li>padLeft: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->padLeft, $hello, 20)) /* line 75 */ ?></li>
+	<li>padRight: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->padRight, $hello, 20, '*')) /* line 76 */ ?></li>
 </ul>
 <?php
 %A%

@@ -200,7 +200,7 @@ class Filters
 	public static function stripHtml(FilterInfo $info, $s)
 	{
 		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], TRUE)) {
-			trigger_error("Filter |striphtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
 		return html_entity_decode(strip_tags($s), ENT_QUOTES, 'UTF-8');
@@ -499,7 +499,7 @@ class Filters
 	 */
 	public static function nl2br($value)
 	{
-		trigger_error('Filter |nl2br is deprecated, use |breaklines which correctly handles escaping.', E_USER_DEPRECATED);
+		trigger_error('Filter |nl2br is deprecated, use |breakLines which correctly handles escaping.', E_USER_DEPRECATED);
 		return nl2br($value, self::$xhtml);
 	}
 

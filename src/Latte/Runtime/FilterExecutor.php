@@ -22,41 +22,40 @@ class FilterExecutor
 
 	/** @var array [name => [callback, FilterInfo aware] */
 	private $_static = [
-		'breaklines' => ['Latte\Runtime\Filters::breakLines', FALSE],
+		'breakLines' => ['Latte\Runtime\Filters::breakLines', FALSE],
 		'bytes' => ['Latte\Runtime\Filters::bytes', FALSE],
 		'capitalize' => ['Latte\Runtime\Filters::capitalize', FALSE],
-		'datastream' => ['Latte\Runtime\Filters::dataStream', FALSE],
+		'dataStream' => ['Latte\Runtime\Filters::dataStream', FALSE],
 		'date' => ['Latte\Runtime\Filters::date', FALSE],
-		'escapecss' => ['Latte\Runtime\Filters::escapeCss', FALSE],
-		'escapehtml' => ['Latte\Runtime\Filters::escapeHtml', FALSE],
-		'escapehtmlcomment' => ['Latte\Runtime\Filters::escapeHtmlComment', FALSE],
-		'escapeical' => ['Latte\Runtime\Filters::escapeICal', FALSE],
-		'escapejs' => ['Latte\Runtime\Filters::escapeJs', FALSE],
-		'escapeurl' => ['rawurlencode', FALSE],
-		'escapexml' => ['Latte\Runtime\Filters::escapeXml', FALSE],
-		'firstupper' => ['Latte\Runtime\Filters::firstUpper', FALSE],
-		'checkurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
+		'escapeCss' => ['Latte\Runtime\Filters::escapeCss', FALSE],
+		'escapeHtml' => ['Latte\Runtime\Filters::escapeHtml', FALSE],
+		'escapeHtmlComment' => ['Latte\Runtime\Filters::escapeHtmlComment', FALSE],
+		'escapeICal' => ['Latte\Runtime\Filters::escapeICal', FALSE],
+		'escapeJs' => ['Latte\Runtime\Filters::escapeJs', FALSE],
+		'escapeUrl' => ['rawurlencode', FALSE],
+		'escapeXml' => ['Latte\Runtime\Filters::escapeXml', FALSE],
+		'firstUpper' => ['Latte\Runtime\Filters::firstUpper', FALSE],
+		'checkUrl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
 		'implode' => ['implode', FALSE],
 		'indent' => ['Latte\Runtime\Filters::indent', TRUE],
 		'length' => ['Latte\Runtime\Filters::length', FALSE],
 		'lower' => ['Latte\Runtime\Filters::lower', FALSE],
 		'nl2br' => ['Latte\Runtime\Filters::nl2br', FALSE],
 		'number' => ['number_format', FALSE],
-		'padleft' => ['Latte\Runtime\Filters::padLeft', FALSE],
-		'padright' => ['Latte\Runtime\Filters::padRight', FALSE],
+		'padLeft' => ['Latte\Runtime\Filters::padLeft', FALSE],
+		'padRight' => ['Latte\Runtime\Filters::padRight', FALSE],
 		'repeat' => ['Latte\Runtime\Filters::repeat', TRUE],
 		'replace' => ['Latte\Runtime\Filters::replace', TRUE],
-		'replacere' => ['Latte\Runtime\Filters::replaceRe', FALSE],
-		'safeurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
+		'replaceRe' => ['Latte\Runtime\Filters::replaceRe', FALSE],
+		'safeUrl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
 		'strip' => ['Latte\Runtime\Filters::strip', TRUE],
-		'striphtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
-		'striptags' => ['Latte\Runtime\Filters::stripTags', TRUE],
+		'stripHtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
+		'stripTags' => ['Latte\Runtime\Filters::stripTags', TRUE],
 		'substr' => ['Latte\Runtime\Filters::substring', FALSE],
 		'trim' => ['Latte\Runtime\Filters::trim', FALSE],
 		'truncate' => ['Latte\Runtime\Filters::truncate', FALSE],
 		'upper' => ['Latte\Runtime\Filters::upper', FALSE],
 	];
-
 
 	/**
 	 * Registers run-time filter.
@@ -157,7 +156,7 @@ class FilterExecutor
 			array_shift($args);
 			if ($info->contentType !== Engine::CONTENT_TEXT) {
 				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
-					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |striphtml.' : '.'), E_USER_WARNING);
+					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
 			}
 			$res = call_user_func_array($this->$name, $args);
 			if ($res instanceof IHtmlString) {

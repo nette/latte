@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->addFilter('datastream', 'Latte\Runtime\Filters::dataStream');
+$latte->addFilter('dataStream', 'Latte\Runtime\Filters::dataStream');
 $params['url1'] = 'javascript:alert(1)';
 $params['url2'] = ' javascript:alert(1)';
 $params['url3'] = 'data:text/html;base64,PHN2Zy9vbmxvYWQ9YWxlcnQoMik+';
@@ -47,10 +47,10 @@ Assert::match('
 <a href={$url3}></a>
 <a href={$url4}>ok</a>
 <a href={$url5}></a>
-<a href={$url4|datastream}></a>
-<a href={$url4|datastream|noCheck}></a>
-<a href={$url4|datastream|noSafeURL}></a>
-<a href={$url4|datastream|safeURL}></a>
+<a href={$url4|dataStream}></a>
+<a href={$url4|dataStream|noCheck}></a>
+<a href={$url4|dataStream|noSafeURL}></a>
+<a href={$url4|dataStream|safeURL}></a>
 ', $params));
 
 
