@@ -508,7 +508,7 @@ class Filters
 	 * @param  string plain text
 	 * @return Html
 	 */
-	public static function breaklines($s)
+	public static function breakLines($s)
 	{
 		return new Html(nl2br(htmlSpecialChars($s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
 	}

@@ -22,7 +22,7 @@ class FilterExecutor
 
 	/** @var array [name => [callback, FilterInfo aware] */
 	private $_static = [
-		'breaklines' => ['Latte\Runtime\Filters::breaklines', FALSE],
+		'breaklines' => ['Latte\Runtime\Filters::breakLines', FALSE],
 		'bytes' => ['Latte\Runtime\Filters::bytes', FALSE],
 		'capitalize' => ['Latte\Runtime\Filters::capitalize', FALSE],
 		'datastream' => ['Latte\Runtime\Filters::dataStream', FALSE],
