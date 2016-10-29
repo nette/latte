@@ -35,12 +35,10 @@ test(function () {
 
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
-	Assert::same('strtoupper', $filters->F1);
 	Assert::same('AA', call_user_func($filters->f1, 'aa'));
 
 	$filters->add('f1', 'trim');
 	Assert::same('trim', $filters->f1);
-	Assert::same('trim', $filters->F1);
 
 	$filters->add('f2', [new MyFilter, 'invoke']);
 	Assert::same('aa', call_user_func($filters->f2, 'aA'));
@@ -59,12 +57,30 @@ test(function () {
 
 test(function () {
 	$filters = new FilterExecutor;
+
+	$filters->add('camelCase', 'strtolower');
+	Assert::same('strtolower', $filters->camelCase);
+
+	Assert::exception(function () use ($filters) {
+		call_user_func($filters->camelcase, '');
+	}, 'LogicException', "Filters are case-sensitive. Call 'camelCase' instead of 'camelcase'.");
+
+	$filters2 = new FilterExecutor;
+
+	$filters2->add(NULL, function ($name, $val) {
+		return $name . ',' . $val;
+	});
+	Assert::same('myFilter,1', call_user_func($filters2->myFilter, 1));
+});
+
+
+test(function () {
+	$filters = new FilterExecutor;
 	$filters->add(NULL, function ($name, $val) {
 		return implode(',', func_get_args());
 	});
 	Assert::same('dynamic,1,2', call_user_func($filters->dynamic, 1, 2));
 	Assert::same('dynamic,1,2', call_user_func($filters->dynamic, 1, 2));
-	Assert::same('dynamic,1,2', call_user_func($filters->Dynamic, 1, 2));
 	Assert::same('another,1,2', call_user_func($filters->another, 1, 2));
 
 	$filters2 = new FilterExecutor;

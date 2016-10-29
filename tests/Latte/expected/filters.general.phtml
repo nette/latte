@@ -6,7 +6,8 @@ class Template%a% extends Latte\Runtime\Template
 
 	function main()
 	{
-%A%?>
+%A%
+?>
 <ul>
 	<li>lower: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->lower, $hello)) /* line 2 */ ?></li>
 	<li>upper: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->upper, $hello)) /* line 3 */ ?></li>

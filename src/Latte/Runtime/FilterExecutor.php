@@ -69,7 +69,6 @@ class FilterExecutor
 		if ($name == NULL) { // intentionally ==
 			array_unshift($this->_dynamic, $callback);
 		} else {
-			$name = strtolower($name);
 			$this->_static[$name] = [$callback, NULL];
 			unset($this->$name);
 		}
@@ -93,14 +92,11 @@ class FilterExecutor
 	 */
 	public function __get($name)
 	{
-		$lname = strtolower($name);
-		if (isset($this->$lname)) { // case mismatch
-			return $this->$lname;
 
-		} elseif (isset($this->_static[$lname])) {
-			list($callback, $aware) = $this->prepareFilter($lname);
+		if (isset($this->_static[$name])) {
+			list($callback, $aware) = $this->prepareFilter($name);
 			if ($aware) { // FilterInfo aware filter
-				return $this->$lname = function ($arg) use ($callback) {
+				return $this->$name = function ($arg) use ($callback) {
 					$args = func_get_args();
 					array_unshift($args, $info = new FilterInfo);
 					if ($arg instanceof IHtmlString) {
@@ -113,24 +109,28 @@ class FilterExecutor
 						: $res;
 				};
 			} else { // classic filter
-				return $this->$lname = $callback;
+				return $this->$name = $callback;
 			}
 		}
 
-		return $this->$lname = function ($arg) use ($lname, $name) { // dynamic filter
+		return $this->$name = function ($arg) use ($name) { // dynamic filter
 			$args = func_get_args();
-			array_unshift($args, $lname);
+			array_unshift($args, $name);
 			foreach ($this->_dynamic as $filter) {
 				$res = call_user_func_array(Helpers::checkCallback($filter), $args);
 				if ($res !== NULL) {
 					return $res;
-				} elseif (isset($this->_static[$lname])) { // dynamic converted to classic
-					$this->$name = Helpers::checkCallback($this->_static[$lname][0]);
+				} elseif (isset($this->_static[$name])) { // dynamic converted to classic
+					$this->$name = Helpers::checkCallback($this->_static[$name][0]);
 					return call_user_func_array($this->$name, func_get_args());
 				}
 			}
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
-			throw new \LogicException("Filter '$name' is not defined$hint");
+			throw new \LogicException(
+				($t && strtolower($t) === strtolower($name)) ?
+					"Filters are case-sensitive. Call '$t' instead of '$name'." :
+					"Filter '$name' is not defined$hint"
+			);
 		};
 	}
 
@@ -141,16 +141,15 @@ class FilterExecutor
 	 */
 	public function filterContent($name, FilterInfo $info, $arg)
 	{
-		$lname = strtolower($name);
 		$args = func_get_args();
 		array_shift($args);
 
-		if (!isset($this->_static[$lname])) {
+		if (!isset($this->_static[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \LogicException("Filter |$name is not defined$hint");
 		}
 
-		list($callback, $aware) = $this->prepareFilter($lname);
+		list($callback, $aware) = $this->prepareFilter($name);
 		if ($aware) { // FilterInfo aware filter
 			return call_user_func_array($callback, $args);
 

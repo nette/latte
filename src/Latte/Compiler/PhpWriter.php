@@ -443,7 +443,7 @@ class PhpWriter
 						$res->prepend('LR\Filters::safeUrl(');
 						$inside = TRUE;
 					} else {
-						$name = strtolower($tokens->currentValue());
+						$name = $tokens->currentValue();
 						$res->prepend($isContent
 							? '$this->filters->filterContent('. var_export($name, TRUE) . ', $_fi, '
 							: 'call_user_func($this->filters->' . $name . ', '
