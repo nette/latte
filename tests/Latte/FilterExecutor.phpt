@@ -93,6 +93,15 @@ test(function () {
 
 test(function () {
 	$filters = new FilterExecutor;
+
+	Assert::error(function () use ($filters) {
+		call_user_func($filters->striphtml, '');
+	}, E_USER_DEPRECATED, "Macro striphtml is deprecated. Use its camelCase version.");
+});
+
+
+test(function () {
+	$filters = new FilterExecutor;
 	$filters->add(NULL, function ($name, $val) use ($filters) {
 		if ($name === 'dynamic') {
 			$filters->add($name, function ($val) {

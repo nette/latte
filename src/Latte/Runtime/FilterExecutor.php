@@ -57,6 +57,28 @@ class FilterExecutor
 		'upper' => ['Latte\Runtime\Filters::upper', FALSE],
 	];
 
+	/** @var array [name => [callback, FilterInfo aware] Deprecated lowercase filters */
+	private $_deprecated = [
+		'breaklines' => ['Latte\Runtime\Filters::breakLines', FALSE],
+		'datastream' => ['Latte\Runtime\Filters::dataStream', FALSE],
+		'escapecss' => ['Latte\Runtime\Filters::escapeCss', FALSE],
+		'escapehtml' => ['Latte\Runtime\Filters::escapeHtml', FALSE],
+		'escapehtmlcomment' => ['Latte\Runtime\Filters::escapeHtmlComment', FALSE],
+		'escapeical' => ['Latte\Runtime\Filters::escapeICal', FALSE],
+		'escapejs' => ['Latte\Runtime\Filters::escapeJs', FALSE],
+		'escapeurl' => ['rawurlencode', FALSE],
+		'escapexml' => ['Latte\Runtime\Filters::escapeXml', FALSE],
+		'firstupper' => ['Latte\Runtime\Filters::firstUpper', FALSE],
+		'checkurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
+		'padleft' => ['Latte\Runtime\Filters::padLeft', FALSE],
+		'padright' => ['Latte\Runtime\Filters::padRight', FALSE],
+		'replacere' => ['Latte\Runtime\Filters::replaceRe', FALSE],
+		'safeurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
+		'striphtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
+		'striptags' => ['Latte\Runtime\Filters::stripTags', TRUE],
+	];
+
+
 	/**
 	 * Registers run-time filter.
 	 * @param  string|NULL
@@ -91,6 +113,10 @@ class FilterExecutor
 	 */
 	public function __get($name)
 	{
+		if (isset($this->_deprecated[$name])) {
+			trigger_error("Macro {$name} is deprecated. Use its camelCase version.", E_USER_DEPRECATED);
+			$this->_static[$name] = $this->_deprecated[$name];
+		}
 
 		if (isset($this->_static[$name])) {
 			list($callback, $aware) = $this->prepareFilter($name);
@@ -142,6 +168,11 @@ class FilterExecutor
 	{
 		$args = func_get_args();
 		array_shift($args);
+
+		if (isset($this->_deprecated[$name])) {
+			trigger_error("Macro {$name} is deprecated. Use its camelCase version.", E_USER_DEPRECATED);
+			$this->_static[$name] = $this->_deprecated[$name];
+		}
 
 		if (!isset($this->_static[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
