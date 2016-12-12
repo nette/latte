@@ -14,7 +14,7 @@ matrix:
 
 script:
     - vendor/bin/tester tests -s -p php -c tests/php-unix.ini
-    - php code-checker/src/code-checker.php -i use.latte
+    - php code-checker/src/code-checker.php -i *.latte
 
 after_failure:
     # Print *.actual content
