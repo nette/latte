@@ -110,7 +110,7 @@ class Template extends Object
 	/**
 	 * Sets all parameters.
 	 * @param  array
-	 * @return self
+	 * @return static
 	 */
 	public function setParameters(array $params)
 	{

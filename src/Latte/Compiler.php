@@ -75,7 +75,7 @@ class Compiler extends Object
 	/**
 	 * Adds new macro.
 	 * @param  string
-	 * @return self
+	 * @return static
 	 */
 	public function addMacro($name, IMacro $macro)
 	{
@@ -138,7 +138,7 @@ class Compiler extends Object
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContentType($type)
 	{
@@ -158,7 +158,7 @@ class Compiler extends Object
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContext($context, $sub = NULL)
 	{

@@ -163,7 +163,7 @@ class TokenIterator extends Object
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function reset()
 	{

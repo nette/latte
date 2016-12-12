@@ -321,7 +321,7 @@ class Parser extends Object
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContentType($type)
 	{
@@ -339,7 +339,7 @@ class Parser extends Object
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContext($context, $quote = NULL)
 	{
@@ -351,7 +351,7 @@ class Parser extends Object
 	/**
 	 * Changes macro tag delimiters.
 	 * @param  string
-	 * @return self
+	 * @return static
 	 */
 	public function setSyntax($type)
 	{
@@ -369,7 +369,7 @@ class Parser extends Object
 	 * Changes macro tag delimiters.
 	 * @param  string  left regular expression
 	 * @param  string  right regular expression
-	 * @return self
+	 * @return static
 	 */
 	public function setDelimiters($left, $right)
 	{
