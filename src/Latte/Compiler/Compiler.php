@@ -94,7 +94,7 @@ class Compiler
 	/**
 	 * Adds new macro with IMacro flags.
 	 * @param  string
-	 * @return self
+	 * @return static
 	 */
 	public function addMacro($name, IMacro $macro, $flags = NULL)
 	{
@@ -186,7 +186,7 @@ class Compiler
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContentType($type)
 	{

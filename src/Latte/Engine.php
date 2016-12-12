@@ -239,7 +239,7 @@ class Engine
 	 * Registers run-time filter.
 	 * @param  string|NULL
 	 * @param  callable
-	 * @return self
+	 * @return static
 	 */
 	public function addFilter($name, $callback)
 	{
@@ -272,7 +272,7 @@ class Engine
 
 	/**
 	 * Adds new macro.
-	 * @return self
+	 * @return static
 	 */
 	public function addMacro($name, IMacro $macro)
 	{
@@ -283,7 +283,7 @@ class Engine
 
 	/**
 	 * Adds new provider.
-	 * @return self
+	 * @return static
 	 */
 	public function addProvider($name, $value)
 	{
@@ -303,7 +303,7 @@ class Engine
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContentType($type)
 	{
@@ -314,7 +314,7 @@ class Engine
 
 	/**
 	 * Sets path to temporary directory.
-	 * @return self
+	 * @return static
 	 */
 	public function setTempDirectory($path)
 	{
@@ -325,7 +325,7 @@ class Engine
 
 	/**
 	 * Sets auto-refresh mode.
-	 * @return self
+	 * @return static
 	 */
 	public function setAutoRefresh($on = TRUE)
 	{
@@ -361,7 +361,7 @@ class Engine
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setLoader(ILoader $loader)
 	{

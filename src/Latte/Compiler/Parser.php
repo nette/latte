@@ -330,7 +330,7 @@ class Parser
 
 	/**
 	 * @param  string  Parser::CONTENT_HTML, CONTENT_XHTML, CONTENT_XML or CONTENT_TEXT
-	 * @return self
+	 * @return static
 	 */
 	public function setContentType($type)
 	{
@@ -345,7 +345,7 @@ class Parser
 
 
 	/**
-	 * @return self
+	 * @return static
 	 */
 	public function setContext($context, $quote = NULL)
 	{
@@ -357,7 +357,7 @@ class Parser
 	/**
 	 * Changes macro tag delimiters.
 	 * @param  string
-	 * @return self
+	 * @return static
 	 */
 	public function setSyntax($type)
 	{
@@ -375,7 +375,7 @@ class Parser
 	 * Changes macro tag delimiters.
 	 * @param  string  left regular expression
 	 * @param  string  right regular expression
-	 * @return self
+	 * @return static
 	 */
 	public function setDelimiters($left, $right)
 	{

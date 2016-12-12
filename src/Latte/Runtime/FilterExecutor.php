@@ -62,7 +62,7 @@ class FilterExecutor
 	 * Registers run-time filter.
 	 * @param  string|NULL
 	 * @param  callable
-	 * @return self
+	 * @return static
 	 */
 	public function add($name, $callback)
 	{
