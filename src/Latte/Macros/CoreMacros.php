@@ -542,7 +542,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write((substr($node->args, -1) === '?' ? 'if (!headers_sent()) ' : '') .
-			'header((isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : "HTTP/1.1") . " " . %0.var, TRUE, %0.var);', (int) $node->args
+			'http_response_code(%0.var);', (int) $node->args
 		);
 	}
 
