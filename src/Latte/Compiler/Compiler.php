@@ -117,7 +117,7 @@ class Compiler
 	{
 		$this->tokens = $tokens;
 		$output = '';
-		$this->output = & $output;
+		$this->output = &$output;
 		$this->inHead = TRUE;
 		$this->htmlNode = $this->macroNode = $this->context = NULL;
 		$this->placeholders = $this->properties = [];
@@ -452,7 +452,7 @@ class Compiler
 			return;
 		}
 
-		$this->lastAttrValue = & $this->htmlNode->attrs[$token->name];
+		$this->lastAttrValue = &$this->htmlNode->attrs[$token->name];
 		$this->output .= $this->escape($token->text);
 
 		$lower = strtolower($token->name);
@@ -535,8 +535,8 @@ class Compiler
 			}
 		} else {
 			$this->macroNode = $node;
-			$node->saved = [& $this->output, $isRightmost];
-			$this->output = & $node->content;
+			$node->saved = [&$this->output, $isRightmost];
+			$this->output = &$node->content;
 		}
 		return $node;
 	}
@@ -588,7 +588,7 @@ class Compiler
 		if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 			$this->htmlNode->attrCode .= $node->attrCode;
 		}
-		$this->output = & $node->saved[0];
+		$this->output = &$node->saved[0];
 		$this->writeCode($node->openingCode, $node->replaced, $node->saved[1]);
 		$this->output .= $node->content;
 		$this->writeCode($node->closingCode, $node->replaced, $isRightmost);
@@ -654,7 +654,7 @@ class Compiler
 				$this->output .= $this->htmlNode->innerMarker;
 			};
 		} else {
-			array_unshift($right, function () use (& $innerMarker) {
+			array_unshift($right, function () use (&$innerMarker) {
 				$this->output .= $innerMarker;
 			});
 		}
@@ -682,7 +682,7 @@ class Compiler
 						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_NONE);
 					};
 				} else {
-					array_unshift($left, function () use ($name, $attrs, & $innerMarker) {
+					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
 						$node = $this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
@@ -702,7 +702,7 @@ class Compiler
 		}
 
 		if (!$this->htmlNode->closing) {
-			$this->htmlNode->attrCode = & $this->placeholders[$uniq = ' n:q' . count($this->placeholders) . 'q'];
+			$this->htmlNode->attrCode = &$this->placeholders[$uniq = ' n:q' . count($this->placeholders) . 'q'];
 			$html = substr_replace($html, $uniq, strrpos($html, '/>') ?: strrpos($html, '>'), 0);
 		}
 

@@ -68,7 +68,7 @@ Assert::exception(function () use ($latte) {
 }, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{php function & test() }');
+	$latte->compile('{php function &test() }');
 }, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
 
 Assert::exception(function () use ($latte) {

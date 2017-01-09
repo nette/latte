@@ -188,7 +188,7 @@ class Template
 		// old accumulators for back compatibility
 		$this->params['_l'] = new \stdClass;
 		$this->params['_g'] = $this->global;
-		$this->params['_b'] = (object) ['blocks' => & $this->blockQueue, 'types' => & $this->blockTypes];
+		$this->params['_b'] = (object) ['blocks' => &$this->blockQueue, 'types' => &$this->blockTypes];
 		if (isset($this->global->snippetDriver) && $this->global->snippetBridge->isSnippetMode()) {
 			if ($this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params)) {
 				return;
@@ -216,8 +216,8 @@ class Template
 			foreach ($child->blockTypes as $nm => $type) {
 				$this->checkBlockContentType($type, $nm);
 			}
-			$child->blockQueue = & $this->blockQueue;
-			$child->blockTypes = & $this->blockTypes;
+			$child->blockQueue = &$this->blockQueue;
+			$child->blockTypes = &$this->blockTypes;
 		}
 		return $child;
 	}
@@ -301,7 +301,7 @@ class Template
 	 */
 	protected function checkBlockContentType($current, $name)
 	{
-		$expected = & $this->blockTypes[$name];
+		$expected = &$this->blockTypes[$name];
 		if ($expected === NULL) {
 			$expected = $current;
 		} elseif ($expected !== $current) {

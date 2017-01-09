@@ -95,7 +95,7 @@ class MacroNode
 		$this->htmlNode = $htmlNode;
 		$this->prefix = $prefix;
 		$this->data = new \stdClass;
-		$this->isEmpty = & $this->empty;
+		$this->isEmpty = &$this->empty;
 		$this->setArgs($args);
 	}
 

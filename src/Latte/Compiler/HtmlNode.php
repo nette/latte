@@ -53,7 +53,7 @@ class HtmlNode
 	{
 		$this->name = $name;
 		$this->parentNode = $parentNode;
-		$this->isEmpty = & $this->empty;
+		$this->isEmpty = &$this->empty;
 	}
 
 }

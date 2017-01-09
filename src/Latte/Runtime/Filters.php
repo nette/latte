@@ -321,7 +321,7 @@ class Filters
 	 * @param  bool stripping mode
 	 * @return string HTML
 	 */
-	public static function spacelessHtml($s, $phase = NULL, & $strip = TRUE)
+	public static function spacelessHtml($s, $phase = NULL, &$strip = TRUE)
 	{
 		if ($phase & PHP_OUTPUT_HANDLER_START) {
 			$s = ltrim($s);
@@ -331,7 +331,7 @@ class Filters
 		}
 		return preg_replace_callback(
 			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#si',
-			function ($m) use (& $strip) {
+			function ($m) use (&$strip) {
 				if (empty($m[2])) {
 					return $strip ? ' ' : $m[0];
 				} else {

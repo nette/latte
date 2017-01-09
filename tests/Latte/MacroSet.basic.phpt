@@ -73,7 +73,7 @@ test(function () use ($set) {
 
 
 test(function () use ($set) {
-	$set->addMacro('noattr', function () use (& $called) {
+	$set->addMacro('noattr', function () use (&$called) {
 		$called = TRUE;
 	}, NULL, function () { return FALSE; });
 
@@ -102,7 +102,7 @@ test(function () use ($set) {
 
 
 test(function () use ($set) {
-	$set->addMacro('dynamic', function (MacroNode $node) use (& $called) {
+	$set->addMacro('dynamic', function (MacroNode $node) use (&$called) {
 		$called = TRUE;
 		$node->empty = FALSE;
 	});

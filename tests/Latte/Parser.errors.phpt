@@ -18,42 +18,42 @@ test(function () {
 	Assert::same(1, $parser->getLine());
 });
 
-Assert::exception(function () use (& $parser) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("\xA0\xA0");
 }, 'InvalidArgumentException', 'Template is not valid UTF-8 stream.');
 Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function () use (& $parser) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("žluťoučký\n\xA0\xA0");
 }, 'InvalidArgumentException', 'Template is not valid UTF-8 stream.');
 Assert::same(2, $parser->getLine());
 
 
-Assert::exception(function () use (& $parser) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("{var \n'abc}");
 }, 'Latte\CompileException', 'Malformed macro');
 Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function () use (& $parser) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("\n{* \n'abc}");
 }, 'Latte\CompileException', 'Malformed macro');
 Assert::same(2, $parser->getLine());
 
 
-Assert::exception(function () use (& $parser) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse('{');
 }, 'Latte\CompileException', 'Malformed macro');
 Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function () use (& $parser) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("\n{");
 }, 'Latte\CompileException', 'Malformed macro');

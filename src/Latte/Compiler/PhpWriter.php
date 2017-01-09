@@ -28,7 +28,7 @@ class PhpWriter
 	public static function using(MacroNode $node)
 	{
 		$me = new static($node->tokenizer, NULL, $node->context);
-		$me->modifiers = & $node->modifiers;
+		$me->modifiers = &$node->modifiers;
 		return $me;
 	}
 
@@ -61,7 +61,7 @@ class PhpWriter
 		$word = strpos($mask, '%node_word') === FALSE ? NULL : $this->tokens->fetchWord();
 
 		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
-		function ($m) use ($word, & $args) {
+		function ($m) use ($word, &$args) {
 			list(, $l, $source, $format, $cond, $r) = $m;
 
 			switch ($source) {
