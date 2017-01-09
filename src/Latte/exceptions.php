@@ -49,6 +49,7 @@ class RegexpException extends \Exception
 		PREG_RECURSION_LIMIT_ERROR => 'Recursion limit was exhausted',
 		PREG_BAD_UTF8_ERROR => 'Malformed UTF-8 data',
 		5 => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point', // PREG_BAD_UTF8_OFFSET_ERROR
+		6 => 'Failed due to limited JIT stack space', // PREG_JIT_STACKLIMIT_ERROR
 	];
 
 	public function __construct($message, $code = NULL)
