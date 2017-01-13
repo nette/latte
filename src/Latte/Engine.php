@@ -55,6 +55,9 @@ class Engine
 	/** @var bool */
 	private $autoRefresh = TRUE;
 
+	/** @var bool */
+	private $strictTypes = FALSE;
+
 
 
 	public function __construct()
@@ -126,6 +129,9 @@ class Engine
 
 		if (!preg_match('#\n|\?#', $name)) {
 			$code = "<?php\n// source: $name\n?>" . $code;
+		}
+		if ($this->strictTypes) {
+			$code = "<?php\ndeclare(strict_types=1);\n?>" . $code;
 		}
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
@@ -315,6 +321,17 @@ class Engine
 	public function setAutoRefresh(bool $on = TRUE)
 	{
 		$this->autoRefresh = $on;
+		return $this;
+	}
+
+
+	/**
+	 * Enables declare(strict_types=1) in templates.
+	 * @return static
+	 */
+	public function setStrictTypes(bool $on = TRUE)
+	{
+		$this->strictTypes = $on;
 		return $this;
 	}
 
