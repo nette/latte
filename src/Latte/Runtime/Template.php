@@ -230,14 +230,17 @@ class Template
 	 */
 	protected function renderToContentType($mod)
 	{
-		if ($mod && $mod !== $this->contentType) {
-			if ($filter = (is_string($mod) ? Filters::getConvertor($this->contentType, $mod) : $mod)) {
-				echo $filter($this->capture([$this, 'render']), $this->contentType);
-				return;
+		if ($mod instanceof \Closure) {
+			echo $mod($this->capture([$this, 'render']), $this->contentType);
+		} elseif ($mod && $mod !== $this->contentType) {
+			if ($filter = Filters::getConvertor($this->contentType, $mod)) {
+				echo $filter($this->capture([$this, 'render']));
+			} else {
+				trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
 			}
-			trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
+		} else {
+			$this->render();
 		}
-		$this->render();
 	}
 
 
