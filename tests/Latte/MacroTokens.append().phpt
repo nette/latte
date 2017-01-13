@@ -18,7 +18,7 @@ test(function () { // constructor
 	$tokenizer2 = new MacroTokens($tokenizer->tokens);
 	Assert::same($tokenizer2->tokens, $tokenizer->tokens);
 
-	$tokenizer3 = new MacroTokens(NULL);
+	$tokenizer3 = new MacroTokens('');
 	Assert::count(0, $tokenizer3->tokens);
 });
 
@@ -63,9 +63,6 @@ test(function () { // append with position
 
 	$res = $tokenizer->append('*', -1);
 	Assert::same('hello world*!', $tokenizer->reset()->joinAll());
-
-	$res = $tokenizer->append('false', FALSE);
-	Assert::same('falsehello world*!', $tokenizer->reset()->joinAll());
 });
 
 

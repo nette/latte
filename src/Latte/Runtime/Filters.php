@@ -31,7 +31,7 @@ class Filters
 	 */
 	public static function escapeHtml($s)
 	{
-		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8');
+		return htmlSpecialChars((string) $s, ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -44,7 +44,7 @@ class Filters
 	{
 		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
 			? $s->__toString(TRUE)
-			: htmlSpecialChars($s, ENT_NOQUOTES, 'UTF-8');
+			: htmlSpecialChars((string) $s, ENT_NOQUOTES, 'UTF-8');
 	}
 
 
@@ -118,7 +118,7 @@ class Filters
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,
 		//   \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
-		return htmlSpecialChars(preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F]+#', '', $s), ENT_QUOTES, 'UTF-8');
+		return htmlSpecialChars(preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F]+#', '', (string) $s), ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -144,7 +144,7 @@ class Filters
 	public static function escapeCss($s)
 	{
 		// http://www.w3.org/TR/2006/WD-CSS21-20060411/syndata.html#q6
-		return addcslashes($s, "\x00..\x1F!\"#$%&'()*+,./:;<=>?@[\\]^`{|}~");
+		return addcslashes((string) $s, "\x00..\x1F!\"#$%&'()*+,./:;<=>?@[\\]^`{|}~");
 	}
 
 
@@ -176,7 +176,7 @@ class Filters
 	public static function escapeICal($s)
 	{
 		// https://www.ietf.org/rfc/rfc5545.txt
-		return addcslashes(preg_replace('#[\x00-\x08\x0B\x0C-\x1F]+#', '', $s), "\";\\,:\n");
+		return addcslashes(preg_replace('#[\x00-\x08\x0B\x0C-\x1F]+#', '', (string) $s), "\";\\,:\n");
 	}
 
 
@@ -187,7 +187,7 @@ class Filters
 	 */
 	public static function escapeHtmlRawText($s)
 	{
-		return preg_replace('#</(script|style)#i', '<\\/$1', $s);
+		return preg_replace('#</(script|style)#i', '<\\/$1', (string) $s);
 	}
 
 
@@ -203,7 +203,7 @@ class Filters
 			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
-		return html_entity_decode(strip_tags($s), ENT_QUOTES, 'UTF-8');
+		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -218,7 +218,7 @@ class Filters
 		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], TRUE)) {
 			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
 		}
-		return strip_tags($s);
+		return strip_tags((string) $s);
 	}
 
 
@@ -296,6 +296,7 @@ class Filters
 	 */
 	public static function safeUrl($s)
 	{
+		$s = (string) $s;
 		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)\z~i', $s) ? $s : '';
 	}
 
@@ -392,7 +393,7 @@ class Filters
 	 */
 	public static function repeat(FilterInfo $info, $s, $count)
 	{
-		return str_repeat($s, $count);
+		return str_repeat((string) $s, $count);
 	}
 
 
@@ -424,7 +425,7 @@ class Filters
 		}
 		return strpos($format, '%') === FALSE
 			? $time->format($format) // formats using date()
-			: strftime($format, $time->format('U')); // formats according to locales
+			: strftime($format, $time->format('U') + 0); // formats according to locales
 	}
 
 
@@ -510,7 +511,7 @@ class Filters
 	 */
 	public static function breaklines($s)
 	{
-		return new Html(nl2br(htmlSpecialChars($s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
+		return new Html(nl2br(htmlSpecialChars((string) $s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
 	}
 
 
@@ -523,6 +524,7 @@ class Filters
 	 */
 	public static function substring($s, $start, $length = NULL)
 	{
+		$s = (string) $s;
 		if ($length === NULL) {
 			$length = strlen(utf8_decode($s));
 		}
@@ -542,6 +544,7 @@ class Filters
 	 */
 	public static function truncate($s, $maxLen, $append = "\xE2\x80\xA6")
 	{
+		$s = (string) $s;
 		if (strlen(utf8_decode($s)) > $maxLen) {
 			$maxLen = $maxLen - strlen(utf8_decode($append));
 			if ($maxLen < 1) {
@@ -565,7 +568,7 @@ class Filters
 	 */
 	public static function lower($s)
 	{
-		return mb_strtolower($s, 'UTF-8');
+		return mb_strtolower((string) $s, 'UTF-8');
 	}
 
 
@@ -576,7 +579,7 @@ class Filters
 	 */
 	public static function upper($s)
 	{
-		return mb_strtoupper($s, 'UTF-8');
+		return mb_strtoupper((string) $s, 'UTF-8');
 	}
 
 
@@ -587,6 +590,7 @@ class Filters
 	 */
 	public static function firstUpper($s)
 	{
+		$s = (string) $s;
 		return self::upper(self::substring($s, 0, 1)) . self::substring($s, 1);
 	}
 
@@ -598,7 +602,7 @@ class Filters
 	 */
 	public static function capitalize($s)
 	{
-		return mb_convert_case($s, MB_CASE_TITLE, 'UTF-8');
+		return mb_convert_case((string) $s, MB_CASE_TITLE, 'UTF-8');
 	}
 
 
@@ -628,7 +632,7 @@ class Filters
 	public static function trim($s, $charlist = " \t\n\r\0\x0B\xC2\xA0")
 	{
 		$charlist = preg_quote($charlist, '#');
-		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', $s);
+		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', (string) $s);
 		if (preg_last_error()) {
 			throw new Latte\RegexpException(NULL, preg_last_error());
 		}
@@ -645,6 +649,7 @@ class Filters
 	 */
 	public static function padLeft($s, $length, $pad = ' ')
 	{
+		$s = (string) $s;
 		$length = max(0, $length - strlen(utf8_decode($s)));
 		$padLen = strlen(utf8_decode($pad));
 		return str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen) . $s;
@@ -660,6 +665,7 @@ class Filters
 	 */
 	public static function padRight($s, $length, $pad = ' ')
 	{
+		$s = (string) $s;
 		$length = max(0, $length - strlen(utf8_decode($s)));
 		$padLen = strlen(utf8_decode($pad));
 		return $s . str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen);

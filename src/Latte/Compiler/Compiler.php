@@ -308,7 +308,7 @@ class Compiler
 
 	private function processText(Token $token)
 	{
-		if ($this->lastAttrValue === '' && Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
+		if ($this->lastAttrValue === '' && $this->context && Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
 			$this->lastAttrValue = $token->text;
 		}
 		$this->output .= $this->escape($token->text);
@@ -317,7 +317,7 @@ class Compiler
 
 	private function processMacroTag(Token $token)
 	{
-		if ($this->context === self::CONTEXT_HTML_TAG || Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
+		if ($this->context === self::CONTEXT_HTML_TAG || $this->context && Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
 			$this->lastAttrValue = TRUE;
 		}
 
@@ -529,7 +529,7 @@ class Compiler
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
-			$this->writeCode($node->openingCode, $node->replaced, $isRightmost);
+			$this->writeCode((string) $node->openingCode, $node->replaced, $isRightmost);
 			if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 				$this->htmlNode->attrCode .= $node->attrCode;
 			}
@@ -537,6 +537,7 @@ class Compiler
 			$this->macroNode = $node;
 			$node->saved = [&$this->output, $isRightmost];
 			$this->output = &$node->content;
+			$this->output = '';
 		}
 		return $node;
 	}
@@ -589,9 +590,9 @@ class Compiler
 			$this->htmlNode->attrCode .= $node->attrCode;
 		}
 		$this->output = &$node->saved[0];
-		$this->writeCode($node->openingCode, $node->replaced, $node->saved[1]);
+		$this->writeCode((string) $node->openingCode, $node->replaced, $node->saved[1]);
 		$this->output .= $node->content;
-		$this->writeCode($node->closingCode, $node->replaced, $isRightmost);
+		$this->writeCode((string) $node->closingCode, $node->replaced, $isRightmost);
 		return $node;
 	}
 
@@ -739,7 +740,7 @@ class Compiler
 			throw new CompileException("Unknown macro {{$name}}$hint" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : ''));
 		}
 
-		if (preg_match('#\|(no)?safeurl(?!\w)#i', $modifiers, $m)) {
+		if ($modifiers && preg_match('#\|(no)?safeurl(?!\w)#i', $modifiers, $m)) {
 			$hint = $m[1] ? '|nocheck' : '|checkurl';
 			$modifiers = str_replace($m[0], $hint, $modifiers);
 			trigger_error("Modifier $m[0] is deprecated, please replace it with $hint.", E_USER_DEPRECATED);

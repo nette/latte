@@ -38,17 +38,17 @@ $latte->compile('{test_auto} ... {/test_auto}');
 Assert::same(' ... ', $macro->nodes[0]->content);
 
 $latte->compile('{test_auto}');
-Assert::null($macro->nodes[0]->content);
+Assert::same('', $macro->nodes[0]->content);
 
 $latte->compile('{test_auto} {if true} {/if} {/test_auto}');
 Assert::match('%A% if (true) %A%', $macro->nodes[0]->content);
 
 $latte->compile('{test_auto} {test_auto} ... {/test_auto}');
-Assert::null($macro->nodes[0]->content);
+Assert::same('', $macro->nodes[0]->content);
 Assert::same(' ... ', $macro->nodes[1]->content);
 
 $latte->compile('{test_auto} <div n:test_auto></div>');
-Assert::null($macro->nodes[0]->content);
+Assert::same('', $macro->nodes[0]->content);
 Assert::match('<div%A%</div>', $macro->nodes[1]->content);
 
 Assert::exception(function () use ($latte) {

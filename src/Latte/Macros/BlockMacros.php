@@ -209,7 +209,7 @@ class BlockMacros extends MacroSet
 			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
 		}
 
-		$node->data->name = $name = ltrim($name, '#');
+		$node->data->name = $name = ltrim((string) $name, '#');
 		if ($name == NULL) {
 			if ($node->name === 'define') {
 				throw new CompileException('Missing block name.');
@@ -230,7 +230,7 @@ class BlockMacros extends MacroSet
 					$node->attrCode = $writer->write("<?php echo ' id=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write($enterCode);
 				}
-				$tag = trim($node->tokenizer->fetchWord(), '<>');
+				$tag = trim((string) $node->tokenizer->fetchWord(), '<>');
 				if ($tag) {
 					trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
 				}
@@ -268,7 +268,7 @@ class BlockMacros extends MacroSet
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
-		if (Helpers::startsWith($node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
+		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
 			$node->context[1] = '';
 			$node->modifiers .= '|escape';
 		} elseif ($node->modifiers) {
@@ -287,7 +287,7 @@ class BlockMacros extends MacroSet
 				$node->attrCode = $writer->write('<?php echo \' id="\' . htmlSpecialChars($this->global->snippetDriver->getHtmlId(%var)) . \'"\' ?>', (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
-			$tag = trim($node->tokenizer->fetchWord(), '<>');
+			$tag = trim((string) $node->tokenizer->fetchWord(), '<>');
 			if ($tag) {
 				trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
 			}
