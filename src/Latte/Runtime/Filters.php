@@ -285,7 +285,7 @@ class Filters
 				'xhtmlComment' => 'escapeHtmlComment',
 			],
 		];
-		return isset($table[$source][$dest]) ? [__CLASS__, $table[$source][$dest]] : NULL;
+		return isset($table[$source][$dest]) ? [self::class, $table[$source][$dest]] : NULL;
 	}
 
 

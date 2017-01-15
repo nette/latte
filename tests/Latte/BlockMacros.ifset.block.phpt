@@ -25,7 +25,7 @@ Assert::same(
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var');
-}, 'Latte\CompileException', 'Unknown macro {ifset $var}');
+}, Latte\CompileException::class, 'Unknown macro {ifset $var}');
 
 
 // {elseifset ... }
