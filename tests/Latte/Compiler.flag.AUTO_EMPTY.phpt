@@ -53,8 +53,8 @@ Assert::match('<div%A%</div>', $macro->nodes[1]->content);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{test_auto} <div n:test_auto>');
-}, 'Latte\CompileException', 'Missing </div> for n:test_auto');
+}, Latte\CompileException::class, 'Missing </div> for n:test_auto');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{test_auto} <div n:test_auto></div> {/test_auto}');
-}, 'Latte\CompileException', 'Unexpected {/test_auto}');
+}, Latte\CompileException::class, 'Unexpected {/test_auto}');

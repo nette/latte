@@ -48,4 +48,4 @@ Assert::error(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	echo $latte->compile('{var ?> }');
-}, 'Latte\CompileException', 'Forbidden ?> inside macro');
+}, Latte\CompileException::class, 'Forbidden ?> inside macro');

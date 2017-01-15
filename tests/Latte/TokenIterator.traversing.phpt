@@ -137,7 +137,7 @@ test(function () {
 	$traverser->position = -1;
 	Assert::exception(function () use ($traverser) {
 		$traverser->expectNextValue(T_DNUMBER);
-	}, 'Latte\CompileException', "Unexpected token 'say'.");
+	}, Latte\CompileException::class, "Unexpected token 'say'.");
 	Assert::same(-1, $traverser->position);
 	Assert::same('say', $traverser->expectNextValue(T_STRING));
 	Assert::same(0, $traverser->position);

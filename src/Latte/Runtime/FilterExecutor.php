@@ -22,38 +22,37 @@ class FilterExecutor
 
 	/** @var array [name => [callback, FilterInfo aware] */
 	private $_static = [
-		'breaklines' => ['Latte\Runtime\Filters::breaklines', FALSE],
-		'bytes' => ['Latte\Runtime\Filters::bytes', FALSE],
-		'capitalize' => ['Latte\Runtime\Filters::capitalize', FALSE],
-		'datastream' => ['Latte\Runtime\Filters::dataStream', FALSE],
-		'date' => ['Latte\Runtime\Filters::date', FALSE],
-		'escapecss' => ['Latte\Runtime\Filters::escapeCss', FALSE],
-		'escapehtml' => ['Latte\Runtime\Filters::escapeHtml', FALSE],
-		'escapehtmlcomment' => ['Latte\Runtime\Filters::escapeHtmlComment', FALSE],
-		'escapeical' => ['Latte\Runtime\Filters::escapeICal', FALSE],
-		'escapejs' => ['Latte\Runtime\Filters::escapeJs', FALSE],
+		'breaklines' => [[Filters::class, 'breaklines'], FALSE],
+		'bytes' => [[Filters::class, 'bytes'], FALSE],
+		'capitalize' => [[Filters::class, 'capitalize'], FALSE],
+		'datastream' => [[Filters::class, 'dataStream'], FALSE],
+		'date' => [[Filters::class, 'date'], FALSE],
+		'escapecss' => [[Filters::class, 'escapeCss'], FALSE],
+		'escapehtml' => [[Filters::class, 'escapeHtml'], FALSE],
+		'escapehtmlcomment' => [[Filters::class, 'escapeHtmlComment'], FALSE],
+		'escapeical' => [[Filters::class, 'escapeICal'], FALSE],
+		'escapejs' => [[Filters::class, 'escapeJs'], FALSE],
 		'escapeurl' => ['rawurlencode', FALSE],
-		'escapexml' => ['Latte\Runtime\Filters::escapeXml', FALSE],
-		'firstupper' => ['Latte\Runtime\Filters::firstUpper', FALSE],
-		'checkurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
+		'escapexml' => [[Filters::class, 'escapeXml'], FALSE],
+		'firstupper' => [[Filters::class, 'firstUpper'], FALSE],
+		'checkurl' => [[Filters::class, 'safeUrl'], FALSE],
 		'implode' => ['implode', FALSE],
-		'indent' => ['Latte\Runtime\Filters::indent', TRUE],
-		'length' => ['Latte\Runtime\Filters::length', FALSE],
-		'lower' => ['Latte\Runtime\Filters::lower', FALSE],
-
+		'indent' => [[Filters::class, 'indent'], TRUE],
+		'length' => [[Filters::class, 'length'], FALSE],
+		'lower' => [[Filters::class, 'lower'], FALSE],
 		'number' => ['number_format', FALSE],
-		'padleft' => ['Latte\Runtime\Filters::padLeft', FALSE],
-		'padright' => ['Latte\Runtime\Filters::padRight', FALSE],
-		'repeat' => ['Latte\Runtime\Filters::repeat', TRUE],
-		'replace' => ['Latte\Runtime\Filters::replace', TRUE],
-		'replacere' => ['Latte\Runtime\Filters::replaceRe', FALSE],
-		'strip' => ['Latte\Runtime\Filters::strip', TRUE],
-		'striphtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
-		'striptags' => ['Latte\Runtime\Filters::stripTags', TRUE],
-		'substr' => ['Latte\Runtime\Filters::substring', FALSE],
-		'trim' => ['Latte\Runtime\Filters::trim', FALSE],
-		'truncate' => ['Latte\Runtime\Filters::truncate', FALSE],
-		'upper' => ['Latte\Runtime\Filters::upper', FALSE],
+		'padleft' => [[Filters::class, 'padLeft'], FALSE],
+		'padright' => [[Filters::class, 'padRight'], FALSE],
+		'repeat' => [[Filters::class, 'repeat'], TRUE],
+		'replace' => [[Filters::class, 'replace'], TRUE],
+		'replacere' => [[Filters::class, 'replaceRe'], FALSE],
+		'strip' => [[Filters::class, 'strip'], TRUE],
+		'striphtml' => [[Filters::class, 'stripHtml'], TRUE],
+		'striptags' => [[Filters::class, 'stripTags'], TRUE],
+		'substr' => [[Filters::class, 'substring'], FALSE],
+		'trim' => [[Filters::class, 'trim'], FALSE],
+		'truncate' => [[Filters::class, 'truncate'], FALSE],
+		'upper' => [[Filters::class, 'upper'], FALSE],
 	];
 
 
@@ -183,7 +182,7 @@ class FilterExecutor
 				? new \ReflectionMethod($callback[0], $callback[1])
 				: new \ReflectionFunction($callback);
 			$this->_static[$name][1] = ($tmp = $ref->getParameters())
-				&& $tmp[0]->getClass() && $tmp[0]->getClass()->getName() === 'Latte\Runtime\FilterInfo';
+				&& $tmp[0]->getClass() && $tmp[0]->getClass()->getName() === FilterInfo::class;
 		}
 		return $this->_static[$name];
 	}

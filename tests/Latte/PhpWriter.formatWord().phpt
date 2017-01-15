@@ -43,4 +43,4 @@ Assert::same('\Namespace0\Class_1::CONST_X',  $writer->formatWord('\Namespace0\C
 
 Assert::exception(function () use ($writer) {
 	$writer->formatWord("'var\"");
-}, 'Latte\CompileException', "Unexpected ''var\"' on line 1, column 1.");
+}, Latte\CompileException::class, "Unexpected ''var\"' on line 1, column 1.");

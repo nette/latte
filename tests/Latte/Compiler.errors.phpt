@@ -15,12 +15,12 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<a {if}n:href>');
-}, 'Latte\CompileException', 'n:attributes must not appear inside macro; found n:href inside {if}.');
+}, Latte\CompileException::class, 'n:attributes must not appear inside macro; found n:href inside {if}.');
 
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<a n:href n:href>');
-}, 'Latte\CompileException', 'Found multiple attributes n:href.');
+}, Latte\CompileException::class, 'Found multiple attributes n:href.');
 
 
 Assert::match(
@@ -31,57 +31,57 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<a n:class class>');
-}, 'Latte\CompileException', 'It is not possible to combine class with n:class.');
+}, Latte\CompileException::class, 'It is not possible to combine class with n:class.');
 
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{forech}');
-}, 'Latte\CompileException', 'Unknown macro {forech}, did you mean {foreach}?');
+}, Latte\CompileException::class, 'Unknown macro {forech}, did you mean {foreach}?');
 
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{time() /}');
-}, 'Latte\CompileException', 'Unexpected /} in tag {time() /}');
+}, Latte\CompileException::class, 'Unexpected /} in tag {time() /}');
 
 
 // brackets balaning
 Assert::exception(function () use ($latte) {
 	$latte->compile('{=)}');
-}, 'Latte\CompileException', 'Unexpected )');
+}, Latte\CompileException::class, 'Unexpected )');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{=[(])}');
-}, 'Latte\CompileException', 'Unexpected ]');
+}, Latte\CompileException::class, 'Unexpected ]');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{=[}');
-}, 'Latte\CompileException', 'Missing ]');
+}, Latte\CompileException::class, 'Missing ]');
 
 
 // forbidden keywords
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php function test() }');
-}, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'function' inside macro.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php function /*comment*/ test() }');
-}, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'function' inside macro.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php function &test() }');
-}, 'Latte\CompileException', "Forbidden keyword 'function' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'function' inside macro.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php class test }');
-}, 'Latte\CompileException', "Forbidden keyword 'class' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'class' inside macro.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php interface test }');
-}, 'Latte\CompileException', "Forbidden keyword 'interface' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'interface' inside macro.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php return}');
-}, 'Latte\CompileException', "Forbidden keyword 'return' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'return' inside macro.");
 
 Assert::noError(function () use ($latte) {
 	$latte->compile('{php function () { return; }}');
@@ -89,7 +89,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php yield}');
-}, 'Latte\CompileException', "Forbidden keyword 'yield' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'yield' inside macro.");
 
 Assert::noError(function () use ($latte) {
 	$latte->compile('{php function () { yield; }}');

@@ -36,7 +36,7 @@ test(function () { // strings
 	Assert::same("('hello')",  formatArgs('(hello)'));
 	Assert::exception(function () {
 		formatArgs("'\\\\'1, 2, symbol1, symbol2'");
-	}, 'Latte\CompileException', 'Unexpected %a% on line 1, column 27.');
+	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 27.');
 });
 
 
@@ -113,7 +113,7 @@ test(function () { // inline modifiers
 	Assert::same("[call_user_func(\$this->filters->bar, \$val),call_user_func(\$this->filters->lorem,  \$val)]", formatArgs('[$val|bar, $val|lorem]'));
 	Assert::exception(function () {
 		formatArgs('($val|mod:param:"param2"');
-	}, 'Latte\CompileException', 'Missing )');
+	}, Latte\CompileException::class, 'Missing )');
 
 	Assert::same('call_user_func($this->filters->escape, @)',  formatArgs('(@|escape)'));
 	Assert::same('LR\Filters::safeUrl(@)',  formatArgs('(@|checkurl)'));
