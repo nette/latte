@@ -4,6 +4,8 @@
  * Test: Latte\Tokenizer::tokenize with names
  */
 
+declare(strict_types=1);
+
 use Latte\Tokenizer;
 use Tester\Assert;
 

@@ -4,6 +4,8 @@
  * Test: Latte\Compiler and htmlNode.
  */
 
+declare(strict_types=1);
+
 use Latte\IMacro;
 use Latte\MacroNode;
 use Latte\Parser;

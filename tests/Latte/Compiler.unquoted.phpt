@@ -4,6 +4,8 @@
  * Test: unquoted attributes.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

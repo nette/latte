@@ -4,6 +4,8 @@
  * Test: Latte\Parser and former shortNoEscape.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

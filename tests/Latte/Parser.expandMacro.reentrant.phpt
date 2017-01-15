@@ -4,6 +4,8 @@
  * Test: Latte\Compiler::expandMacro() and reentrant.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

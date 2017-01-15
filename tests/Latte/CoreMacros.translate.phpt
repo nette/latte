@@ -4,6 +4,8 @@
  * Test: Latte\Macros\CoreMacros: {_translate}
  */
 
+declare(strict_types=1);
+
 use Latte\Macros\CoreMacros;
 use Tester\Assert;
 

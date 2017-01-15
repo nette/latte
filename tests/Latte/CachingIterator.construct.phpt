@@ -4,6 +4,8 @@
  * Test: Latte\Runtime\CachingIterator constructor.
  */
 
+declare(strict_types=1);
+
 use Latte\Runtime\CachingIterator;
 use Tester\Assert;
 

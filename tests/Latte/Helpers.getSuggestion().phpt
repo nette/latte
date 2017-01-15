@@ -4,6 +4,8 @@
  * Test: Latte\Helpers::getSuggestion()
  */
 
+declare(strict_types=1);
+
 use Latte\Helpers;
 use Tester\Assert;
 

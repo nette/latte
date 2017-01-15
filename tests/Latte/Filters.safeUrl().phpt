@@ -4,6 +4,8 @@
  * Test: Latte\Runtime\Filters::safeUrl()
  */
 
+declare(strict_types=1);
+
 use Latte\Runtime\Filters;
 use Tester\Assert;
 

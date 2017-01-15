@@ -4,6 +4,8 @@
  * Test: dynamic snippets test.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

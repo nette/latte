@@ -4,6 +4,8 @@
  * Test: Latte\MacroTokens::fetchWord()
  */
 
+declare(strict_types=1);
+
 use Latte\MacroTokens;
 use Tester\Assert;
 

@@ -4,6 +4,8 @@
  * Test: Latte\Runtime\Filters::replace()
  */
 
+declare(strict_types=1);
+
 use Latte\Engine;
 use Latte\Runtime\Filters;
 use Latte\Runtime\FilterInfo;

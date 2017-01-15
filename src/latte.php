@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 spl_autoload_register(function ($className) {
 	static $classMap = [
 		Latte\CompileException::class => 'exceptions.php',
