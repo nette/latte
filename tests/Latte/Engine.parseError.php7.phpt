@@ -2,7 +2,6 @@
 
 /**
  * Test: Latte\Engine & parseError
- * @phpversion 7
  */
 
 use Tester\Assert;
