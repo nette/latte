@@ -319,19 +319,17 @@ class Template
 	 */
 	public function capture(callable $function)
 	{
-		ob_start(function () {});
 		try {
+			ob_start(function () {});
 			$this->global->coreCaptured = TRUE;
 			$function();
+			return ob_get_clean();
 		} catch (\Throwable $e) {
-		} catch (\Exception $e) {
-		}
-		$this->global->coreCaptured = FALSE;
-		if (isset($e)) {
 			ob_end_clean();
 			throw $e;
+		} finally {
+			$this->global->coreCaptured = FALSE;
 		}
-		return ob_get_clean();
 	}
 
 }
