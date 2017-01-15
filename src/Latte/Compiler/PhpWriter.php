@@ -46,7 +46,7 @@ class PhpWriter
 	 * @param  string
 	 * @return string
 	 */
-	public function write($mask)
+	public function write($mask, ...$args)
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
 		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) {
@@ -56,7 +56,6 @@ class PhpWriter
 			return $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]);
 		}, $mask);
 
-		$args = func_get_args();
 		$pos = $this->tokens->position;
 		$word = strpos($mask, '%node_word') === FALSE ? NULL : $this->tokens->fetchWord();
 
@@ -68,9 +67,9 @@ class PhpWriter
 				case 'node_':
 					$arg = $word; break;
 				case '':
-					$arg = next($args); break;
+					list(, $arg) = each($args); break;
 				default:
-					$arg = $args[(int) $source + 1]; break;
+					$arg = $args[(int) $source]; break;
 			}
 
 			switch ($format) {

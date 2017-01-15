@@ -54,7 +54,7 @@ class RegexpException extends \Exception
 
 	public function __construct($message, $code = NULL)
 	{
-		parent::__construct($message ?: (isset(self::$messages[$code]) ? self::$messages[$code] : 'Unknown error'), $code);
+		parent::__construct($message ?: (self::$messages[$code] ?? 'Unknown error'), $code);
 	}
 
 }

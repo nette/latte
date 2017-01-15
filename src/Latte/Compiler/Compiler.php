@@ -124,7 +124,7 @@ class Compiler
 		$this->methods = ['main' => NULL, 'prepare' => NULL];
 
 		$macroHandlers = new \SplObjectStorage;
-		array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
+		array_map([$macroHandlers, 'attach'], array_merge(...array_values($this->macros)));
 
 		foreach ($macroHandlers as $handler) {
 			$handler->initialize($this);
@@ -132,7 +132,7 @@ class Compiler
 
 		foreach ($tokens as $this->position => $token) {
 			if ($this->inHead && !($token->type === $token::COMMENT
-				|| $token->type === $token::MACRO_TAG && isset($this->flags[$token->name]) && $this->flags[$token->name] & IMacro::ALLOWED_IN_HEAD
+				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? NULL) & IMacro::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
 				$this->inHead = FALSE;
@@ -296,9 +296,9 @@ class Compiler
 		if ($token->closing) {
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
-			if (!$token->empty && isset($this->flags[$token->name]) && $this->flags[$token->name] & IMacro::AUTO_EMPTY) {
+			if (!$token->empty && ($this->flags[$token->name] ?? NULL) & IMacro::AUTO_EMPTY) {
 				$pos = $this->position;
-				while (($t = isset($this->tokens[++$pos]) ? $this->tokens[$pos] : NULL)
+				while (($t = $this->tokens[++$pos] ?? NULL)
 					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)
 					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
 				$token->empty = $t ? !$t->closing : TRUE;
