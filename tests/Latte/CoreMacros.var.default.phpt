@@ -4,6 +4,8 @@
  * Test: Latte\CoreMacros: {var ...} {default ...}
  */
 
+declare(strict_types=1);
+
 use Latte\Macros\CoreMacros;
 use Tester\Assert;
 

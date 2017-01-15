@@ -4,6 +4,8 @@
  * Test: general XHTML test.
  */
 
+declare(strict_types=1);
+
 use Latte\Runtime\Html;
 use Tester\Assert;
 

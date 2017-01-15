@@ -4,6 +4,8 @@
  * Test: Latte\Engine and Texy.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

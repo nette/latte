@@ -4,6 +4,8 @@
  * Test: Latte\Macros\BlockMacros {ifset block}
  */
 
+declare(strict_types=1);
+
 use Latte\Macros\BlockMacros;
 use Tester\Assert;
 

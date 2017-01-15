@@ -4,6 +4,8 @@
  * Test: Latte\Runtime\Filters::breaklines()
  */
 
+declare(strict_types=1);
+
 use Latte\Runtime\Filters;
 use Latte\Runtime\Html;
 use Tester\Assert;

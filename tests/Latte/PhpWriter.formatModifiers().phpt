@@ -4,6 +4,8 @@
  * Test: Latte\PhpWriter::formatModifiers()
  */
 
+declare(strict_types=1);
+
 use Latte\PhpWriter;
 use Latte\MacroTokens;
 use Tester\Assert;

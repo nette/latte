@@ -4,6 +4,8 @@
  * Test: Latte\Tokenizer::getCoordinates
  */
 
+declare(strict_types=1);
+
 use Latte\Tokenizer;
 use Tester\Assert;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Latte\Macros\MacroSet;
 use Latte\MacroNode;
 use Tester\Assert;

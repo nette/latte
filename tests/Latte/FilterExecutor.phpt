@@ -4,6 +4,8 @@
  * Test: Latte\Runtime\FilterExecutor
  */
 
+declare(strict_types=1);
+
 use Latte\Runtime\FilterExecutor;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;

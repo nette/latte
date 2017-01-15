@@ -4,6 +4,8 @@
  * Test: {block} autoclosing
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

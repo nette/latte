@@ -4,6 +4,8 @@
  * Test: Latte\Parser errors.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 use Latte\Parser;
 

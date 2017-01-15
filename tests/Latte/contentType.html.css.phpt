@@ -4,6 +4,8 @@
  * Test: Latte\Engine and CSS in HTML.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

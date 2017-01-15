@@ -4,6 +4,8 @@
  * Test: Latte\TokenIterator traversing
  */
 
+declare(strict_types=1);
+
 use Latte\Tokenizer;
 use Latte\TokenIterator;
 use Tester\Assert;

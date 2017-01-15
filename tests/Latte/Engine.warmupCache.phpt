@@ -4,6 +4,8 @@
  * Test: Latte\Engine::warmupCache()
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

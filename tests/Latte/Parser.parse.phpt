@@ -4,6 +4,8 @@
  * Test: Latte\Parser::parse()
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 use Latte\Parser;
 use Latte\Token;

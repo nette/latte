@@ -4,6 +4,8 @@
  * Test: {block $name} dynamic blocks.
  */
 
+declare(strict_types=1);
+
 use Tester\Assert;
 
 

@@ -4,6 +4,8 @@
  * Test: Latte\PhpHelpers::reformatCode()
  */
 
+declare(strict_types=1);
+
 use Latte\PhpHelpers;
 use Tester\Assert;
 

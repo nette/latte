@@ -4,6 +4,8 @@
  * Test: Latte\Compiler and macro methods calling order.
  */
 
+declare(strict_types=1);
+
 use Latte\IMacro;
 use Latte\MacroNode;
 use Latte\Parser;
