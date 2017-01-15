@@ -164,7 +164,7 @@ class Filters
 			throw new \RuntimeException(json_last_error_msg(), $error);
 		}
 
-		return str_replace(["\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'], ['\u2028', '\u2029', ']]\x3E', '\x3C!'], $json);
+		return str_replace(["\u{2028}", "\u{2029}", ']]>', '<!'], ['\u2028', '\u2029', ']]\x3E', '\x3C!'], $json);
 	}
 
 
@@ -399,7 +399,7 @@ class Filters
 
 	/**
 	 * Date/time formatting.
-	 * @param  string|int|\DateTime|\DateTimeInterface|\DateInterval
+	 * @param  string|int|\DateTimeInterface|\DateInterval
 	 * @param  string
 	 * @return string|NULL
 	 */
@@ -420,7 +420,7 @@ class Filters
 			$time = new \DateTime('@' . $time);
 			$time->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
-		} elseif (!$time instanceof \DateTime && !$time instanceof \DateTimeInterface) {
+		} elseif (!$time instanceof \DateTimeInterface) {
 			$time = new \DateTime($time);
 		}
 		return strpos($format, '%') === FALSE
@@ -531,7 +531,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function truncate($s, $maxLen, $append = "\xE2\x80\xA6")
+	public static function truncate($s, $maxLen, $append = "\u{2026}")
 	{
 		$s = (string) $s;
 		if (strlen(utf8_decode($s)) > $maxLen) {
@@ -618,7 +618,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function trim($s, $charlist = " \t\n\r\0\x0B\xC2\xA0")
+	public static function trim($s, $charlist = " \t\n\r\0\x0B\u{A0}")
 	{
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', (string) $s);

@@ -38,7 +38,7 @@ class PhpHelpers
 					$openLevel = $level;
 
 				} elseif ($name === T_CLOSE_TAG) {
-					$next = isset($tokens[$n + 1]) ? $tokens[$n + 1] : NULL;
+					$next = $tokens[$n + 1] ?? NULL;
 					if (is_array($next) && $next[0] === T_OPEN_TAG) { // remove ?)<?php
 						if (!strspn($lastChar, ';{}:/')) {
 							$php = rtrim($php) . ($lastChar = ';') . "\n" . str_repeat("\t", $level);
@@ -95,7 +95,7 @@ class PhpHelpers
 				} elseif ($token === '}' || $token === ']') {
 					$level--;
 					$php .= "\x08";
-				} elseif ($token === ';' && !(isset($tokens[$n + 1]) && $tokens[$n + 1][0] === T_WHITESPACE)) {
+				} elseif ($token === ';' && !(($tokens[$n + 1][0] ?? NULL) === T_WHITESPACE)) {
 					$token .= "\n" . str_repeat("\t", $level); // indent last line
 				}
 				$lastChar = $token;

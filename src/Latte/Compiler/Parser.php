@@ -83,7 +83,7 @@ class Parser
 	 */
 	public function parse($input)
 	{
-		if (Helpers::startsWith($input, "\xEF\xBB\xBF")) { // BOM
+		if (Helpers::startsWith($input, "\u{FEFF}")) { // BOM
 			$input = substr($input, 3);
 		}
 
@@ -189,7 +189,7 @@ class Parser
 		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
 			$token = $this->addToken(Token::HTML_ATTRIBUTE_BEGIN, $matches[0]);
 			$token->name = $matches['attr'];
-			$token->value = isset($matches['value']) ? $matches['value'] : '';
+			$token->value = $matches['value'] ?? '';
 
 			if ($token->value === '"' || $token->value === "'") { // attribute = "'
 				if (Helpers::startsWith($token->name, self::N_PREFIX)) {

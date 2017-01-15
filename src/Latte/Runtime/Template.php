@@ -155,7 +155,7 @@ class Template
 		$this->prepare();
 
 		if ($this->parentName === NULL && isset($this->global->coreParentFinder)) {
-			$this->parentName = call_user_func($this->global->coreParentFinder, $this);
+			$this->parentName = ($this->global->coreParentFinder)($this);
 		}
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);

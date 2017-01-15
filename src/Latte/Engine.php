@@ -104,7 +104,7 @@ class Engine
 	public function compile($name)
 	{
 		foreach ($this->onCompile ?: [] as $cb) {
-			call_user_func(Helpers::checkCallback($cb), $this);
+			(Helpers::checkCallback($cb))($this);
 		}
 		$this->onCompile = [];
 
@@ -266,7 +266,7 @@ class Engine
 	 */
 	public function invokeFilter($name, array $args)
 	{
-		return call_user_func_array($this->filters->$name, $args);
+		return ($this->filters->$name)(...$args);
 	}
 
 

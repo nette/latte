@@ -142,7 +142,7 @@ class MacroSet implements Latte\IMacro
 		$writer = Latte\PhpWriter::using($node);
 		return is_string($def)
 			? $writer->write($def)
-			: call_user_func($def, $node, $writer);
+			: $def($node, $writer);
 	}
 
 

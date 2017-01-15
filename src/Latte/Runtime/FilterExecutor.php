@@ -98,14 +98,13 @@ class FilterExecutor
 		} elseif (isset($this->_static[$lname])) {
 			list($callback, $aware) = $this->prepareFilter($lname);
 			if ($aware) { // FilterInfo aware filter
-				return $this->$lname = function ($arg) use ($callback) {
-					$args = func_get_args();
+				return $this->$lname = function (...$args) use ($callback) {
 					array_unshift($args, $info = new FilterInfo);
-					if ($arg instanceof IHtmlString) {
-						$args[1] = $arg->__toString();
+					if ($args[1] instanceof IHtmlString) {
+						$args[1] = $args[1]->__toString();
 						$info->contentType = Engine::CONTENT_HTML;
 					}
-					$res = call_user_func_array($callback, $args);
+					$res = $callback(...$args);
 					return $info->contentType === Engine::CONTENT_HTML
 						? new Html($res)
 						: $res;
@@ -115,16 +114,15 @@ class FilterExecutor
 			}
 		}
 
-		return $this->$lname = function ($arg) use ($lname, $name) { // dynamic filter
-			$args = func_get_args();
+		return $this->$lname = function (...$args) use ($lname, $name) { // dynamic filter
 			array_unshift($args, $lname);
 			foreach ($this->_dynamic as $filter) {
-				$res = call_user_func_array(Helpers::checkCallback($filter), $args);
+				$res = (Helpers::checkCallback($filter))(...$args);
 				if ($res !== NULL) {
 					return $res;
 				} elseif (isset($this->_static[$lname])) { // dynamic converted to classic
 					$this->$name = Helpers::checkCallback($this->_static[$lname][0]);
-					return call_user_func_array($this->$name, func_get_args());
+					return ($this->$name)(...func_get_args());
 				}
 			}
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
@@ -137,12 +135,9 @@ class FilterExecutor
 	 * Calls filter with FilterInfo.
 	 * @return mixed
 	 */
-	public function filterContent($name, FilterInfo $info, $arg)
+	public function filterContent($name, FilterInfo $info, ...$args)
 	{
 		$lname = strtolower($name);
-		$args = func_get_args();
-		array_shift($args);
-
 		if (!isset($this->_static[$lname])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
 			throw new \LogicException("Filter |$name is not defined$hint");
@@ -150,15 +145,15 @@ class FilterExecutor
 
 		list($callback, $aware) = $this->prepareFilter($lname);
 		if ($aware) { // FilterInfo aware filter
-			return call_user_func_array($callback, $args);
+			array_unshift($args, $info);
+			return $callback(...$args);
 
 		} else { // classic filter
-			array_shift($args);
 			if ($info->contentType !== Engine::CONTENT_TEXT) {
 				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
 					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
 			}
-			$res = call_user_func_array($this->$name, $args);
+			$res = ($this->$name)(...$args);
 			if ($res instanceof IHtmlString) {
 				trigger_error("Filter |$name should be changed to content-aware filter.");
 				$info->contentType = Engine::CONTENT_HTML;
@@ -182,7 +177,7 @@ class FilterExecutor
 				? new \ReflectionMethod($callback[0], $callback[1])
 				: new \ReflectionFunction($callback);
 			$this->_static[$name][1] = ($tmp = $ref->getParameters())
-				&& $tmp[0]->getClass() && $tmp[0]->getClass()->getName() === FilterInfo::class;
+				&& (string) $tmp[0]->getType() === FilterInfo::class;
 		}
 		return $this->_static[$name];
 	}

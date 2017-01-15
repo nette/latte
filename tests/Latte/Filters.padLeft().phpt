@@ -13,11 +13,11 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::same('ŤOUŤOUŤŽLU', Filters::padLeft("\xc5\xbdLU", 10, "\xc5\xa4OU"));
-Assert::same('ŤOUŤOUŽLU', Filters::padLeft("\xc5\xbdLU", 9, "\xc5\xa4OU"));
-Assert::same('ŽLU', Filters::padLeft("\xc5\xbdLU", 3, "\xc5\xa4OU"));
-Assert::same('ŽLU', Filters::padLeft("\xc5\xbdLU", 0, "\xc5\xa4OU"));
-Assert::same('ŽLU', Filters::padLeft("\xc5\xbdLU", -1, "\xc5\xa4OU"));
-Assert::same('ŤŤŤŤŤŤŤŽLU', Filters::padLeft("\xc5\xbdLU", 10, "\xc5\xa4"));
-Assert::same('ŽLU', Filters::padLeft("\xc5\xbdLU", 3, "\xc5\xa4"));
-Assert::same('       ŽLU', Filters::padLeft("\xc5\xbdLU", 10));
+Assert::same('ŤOUŤOUŤŽLU', Filters::padLeft("\u{17D}LU", 10, "\u{164}OU"));
+Assert::same('ŤOUŤOUŽLU', Filters::padLeft("\u{17D}LU", 9, "\u{164}OU"));
+Assert::same('ŽLU', Filters::padLeft("\u{17D}LU", 3, "\u{164}OU"));
+Assert::same('ŽLU', Filters::padLeft("\u{17D}LU", 0, "\u{164}OU"));
+Assert::same('ŽLU', Filters::padLeft("\u{17D}LU", -1, "\u{164}OU"));
+Assert::same('ŤŤŤŤŤŤŤŽLU', Filters::padLeft("\u{17D}LU", 10, "\u{164}"));
+Assert::same('ŽLU', Filters::padLeft("\u{17D}LU", 3, "\u{164}"));
+Assert::same('       ŽLU', Filters::padLeft("\u{17D}LU", 10));
