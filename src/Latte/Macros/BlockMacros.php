@@ -207,6 +207,9 @@ class BlockMacros extends MacroSet
 
 		if ($node->name === 'block' && $name === FALSE) { // anonymous block
 			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
+
+		} elseif ($node->name === 'define' && $node->modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 
 		$node->data->name = $name = ltrim((string) $name, '#');
