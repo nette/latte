@@ -63,7 +63,7 @@ class Template%a% extends Latte\Runtime\Template
 		$this->blockQueue["strip$name"][] = [$this, 'blockStrip_name'];
 		$this->renderBlock("strip$name", get_defined_vars(), function ($s, $type) {
 			$_fi = new LR\FilterInfo($type);
-			return $this->filters->filterContent('striptags', $_fi, $s);
+			return LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('striptags', $_fi, $s));
 		});
 ?>
 

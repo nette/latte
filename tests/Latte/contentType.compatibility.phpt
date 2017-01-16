@@ -54,6 +54,11 @@ test(function () {
 	);
 
 	Assert::same(
+		'a"B<p title="a&quot;B"></p>',
+		$latte->renderToString('{block main}a"B{/block}{var $name = main}<p title="{block $name}xx{/block}"></p>')
+	);
+
+	Assert::same(
 		'<!-- - - - -->---',
 		$latte->renderToString('<!--{include main}-->{block main}---{/block}')
 	);
@@ -340,7 +345,7 @@ Assert::error(function () use ($latte) {
 },E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
-Assert::same('<p title="<hr> &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title="&lt;hr&gt; &quot;"</p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 

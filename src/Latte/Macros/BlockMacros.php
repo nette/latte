@@ -249,7 +249,10 @@ class BlockMacros extends MacroSet
 				if ($node->name === 'define') {
 					$node->closingCode = '<?php ?>';
 				} else {
-					if ($node->modifiers) {
+					if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
+						$node->context[1] = '';
+						$node->modifiers .= '|escape';
+					} elseif ($node->modifiers) {
 						$node->modifiers .= '|escape';
 					}
 					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, get_defined_vars()'
