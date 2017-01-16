@@ -240,7 +240,7 @@ Assert::same('<!-- </script>-->', $latte->renderToString('context6'));
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'html.latte' => '<hr> " &quot;',
+	'html.latte' => '<hr> " &quot; &lt;',
 
 	'context1' => '<p>{include html.latte}</p>',
 	'context1a' => '<p>{include html.latte|noescape}</p>',
@@ -256,17 +256,17 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context6' => '<!--{include html.latte}-->',
 ]));
 
-Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1'));
+Assert::same('<p><hr> " &quot; &lt;</p>', $latte->renderToString('context1'));
 
-Assert::same('<p><hr> " &quot;</p>', $latte->renderToString('context1a'));
-Assert::same('<p> " "</p>', $latte->renderToString('context1b'));
-Assert::same('<p> " "</p>', $latte->renderToString('context1c'));
+Assert::same('<p><hr> " &quot; &lt;</p>', $latte->renderToString('context1a'));
+Assert::same('<p> " " &lt;</p>', $latte->renderToString('context1b'));
+Assert::same('<p> " " <</p>', $latte->renderToString('context1c'));
 
-Assert::same('<p title="&lt;hr&gt; &quot; &quot;"></p>', $latte->renderToString('context2'));
+Assert::same('<p title="&lt;hr&gt; &quot; &quot; &lt;"></p>', $latte->renderToString('context2'));
 
-Assert::same('<p title="<hr> " &quot;"></p>', $latte->renderToString('context2a'));
-Assert::same('<p title=" &quot; &quot;"></p>', $latte->renderToString('context2b'));
-Assert::same('<p title=" " ""></p>', $latte->renderToString('context2c'));
+Assert::same('<p title="<hr> " &quot; &lt;"></p>', $latte->renderToString('context2a'));
+Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2b'));
+Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context3');
@@ -280,4 +280,67 @@ Assert::error(function () use ($latte) {
 	$latte->renderToString('context5');
 }, E_USER_WARNING, "Including 'html.latte' with content type HTML into incompatible type HTMLCSS.");
 
-Assert::same('<!--<hr> " &quot;-->', $latte->renderToString('context6'));
+Assert::same('<!--<hr> " &quot; &lt;-->', $latte->renderToString('context6'));
+
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'context1' => '<p>{block html}<hr> " &lt;{/block}</p>',
+	'context1a' => '<p>{block html|noescape}<hr> " &lt;{/block}</p>',
+	'context1b' => '<p>{block html|upper}<hr> " &lt;{/block}</p>',
+	'context1c' => '<p>{block html|stripHtml|upper}<hr> " &lt;{/block}</p>',
+	'context2' => '<p title="{block html}<hr> &quot;{/block}"</p>',
+	'context2a' => '<p title="{block html|stripHtml|upper}<hr> &quot;{/block}"></p>',
+	'context6' => '<!--{block html}<hr> &lt;{/block}-->',
+	'context6a' => '<!--{block html|stripHtml|upper}<hr> &lt;{/block}-->',
+]));
+
+Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('context1a');
+}, 'LogicException', 'Filter |noescape is not defined.');
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context1b');
+},E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+
+Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
+Assert::same('<p title="&lt;hr&gt; &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
+Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context6a');
+}, E_USER_WARNING, 'Filter |stripHtml used with incompatible type HTMLCOMMENT');
+
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'context1' => '<p>{block}<hr> " &lt;{/block}</p>',
+	'context1a' => '<p>{block|noescape}<hr> " &lt;{/block}</p>',
+	'context1b' => '<p>{block|upper}<hr> " &lt;{/block}</p>',
+	'context1c' => '<p>{block|stripHtml|upper}<hr> " &lt;{/block}</p>',
+	'context2' => '<p title="{block}<hr> &quot;{/block}"</p>',
+	'context2a' => '<p title="{block|stripHtml|upper}<hr> &quot;{/block}"></p>',
+	'context6' => '<!--{block}<hr> &lt;{/block}-->',
+	'context6a' => '<!--{block|stripHtml|upper}<hr> &lt;{/block}-->',
+]));
+
+Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('context1a');
+}, 'LogicException', 'Filter |noescape is not defined.');
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context1b');
+},E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+
+Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
+Assert::same('<p title="<hr> &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
+Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
+Assert::same('<!-- <-->', $latte->renderToString('context6a'));
