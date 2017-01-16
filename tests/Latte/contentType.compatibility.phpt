@@ -319,6 +319,39 @@ Assert::error(function () use ($latte) {
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
+	'context1' => '<p>{var $n=html}{block $n}<hr> " &lt;{/block}</p>',
+	'context1a' => '<p>{var $n=html}{block $n|noescape}<hr> " &lt;{/block}</p>',
+	'context1b' => '<p>{var $n=html}{block $n|upper}<hr> " &lt;{/block}</p>',
+	'context1c' => '<p>{var $n=html}{block $n|stripHtml|upper}<hr> " &lt;{/block}</p>',
+	'context2' => '<p title="{var $n=html}{block $n}<hr> &quot;{/block}"</p>',
+	'context2a' => '<p title="{var $n=html}{block $n|stripHtml|upper}<hr> &quot;{/block}"></p>',
+	'context6' => '<!--{var $n=html}{block $n}<hr> &lt;{/block}-->',
+	'context6a' => '<!--{var $n=html}{block $n|stripHtml|upper}<hr> &lt;{/block}-->',
+]));
+
+Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('context1a');
+}, 'LogicException', 'Filter |noescape is not defined.');
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context1b');
+},E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+
+Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
+Assert::same('<p title="<hr> &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
+Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context6a');
+}, E_USER_WARNING, 'Filter |stripHtml used with incompatible type HTMLCOMMENT');
+
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
 	'context1' => '<p>{block}<hr> " &lt;{/block}</p>',
 	'context1a' => '<p>{block|noescape}<hr> " &lt;{/block}</p>',
 	'context1b' => '<p>{block|upper}<hr> " &lt;{/block}</p>',

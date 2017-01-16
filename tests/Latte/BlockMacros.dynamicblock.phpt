@@ -34,7 +34,8 @@ $template = <<<'EOD'
 {include #$name . '', var => 40}
 
 {block word$name}<div n:if="false"></div>{/block}
-{block "word$name"}{/block}
+
+{block "strip$name"|striptags}<span>hello</span>{/block}
 
 EOD;
 

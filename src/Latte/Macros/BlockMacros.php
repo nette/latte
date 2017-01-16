@@ -246,7 +246,15 @@ class BlockMacros extends MacroSet
 				$node->data->leave = TRUE;
 				$node->data->func = $this->generateMethodName($name);
 				$fname = $writer->formatWord($name);
-				$node->closingCode = '<?php ' . ($node->name === 'define' ? '' : "\$this->renderBlock($fname, get_defined_vars());") . ' ?>';
+				if ($node->name === 'define') {
+					$node->closingCode = '<?php ?>';
+				} else {
+					if ($node->modifiers) {
+						$node->modifiers .= '|escape';
+					}
+					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, get_defined_vars()'
+						. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
+				}
 				$blockType = var_export(implode($node->context), TRUE);
 				$this->checkExtraArgs($node);
 				return "\$this->checkBlockContentType($blockType, $fname);"
