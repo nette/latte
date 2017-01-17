@@ -332,11 +332,18 @@ class CoreMacros extends MacroSet
 
 
 	/**
-	 * {include [file] "file" [,] [params]}
+	 * {include [file] "file" [with blocks] [,] [params]}
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer): string
 	{
 		[$file, ] = $node->tokenizer->fetchWordWithModifier('file');
+		$mode = 'include';
+		if ($node->tokenizer->isNext('with') && !$node->tokenizer->isPrev(',')) {
+			$node->tokenizer->consumeValue('with');
+			$node->tokenizer->consumeValue('blocks');
+			$mode = 'includeblock';
+		}
+
 		$node->replaced = false;
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
@@ -347,8 +354,9 @@ class CoreMacros extends MacroSet
 		}
 		return $writer->write(
 			'/* line ' . $node->startLine . ' */
-			$this->createTemplate(%word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
+			$this->createTemplate(%word, %node.array? + $this->params, %var)->renderToContentType(%raw);',
 			$file,
+			$mode,
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 				: PhpHelpers::dump($noEscape ? null : implode($node->context))

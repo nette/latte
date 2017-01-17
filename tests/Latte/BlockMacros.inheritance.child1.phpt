@@ -20,7 +20,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 {extends "parent"}
 
 {import "inc"}
-{includeblock "inc"}
+{include "inc" with blocks}
 
 {block title}Homepage | {include parent}{include parent}{/block}
 
