@@ -44,7 +44,7 @@ class MacroSet implements Latte\IMacro
 		}
 
 		$this->macros[$name] = [$begin, $end, $attr];
-		$this->compiler->addMacro($name, $this, $flags);
+		$this->compiler->addMacro($name, $this, $flags | ($end !== NULL && $begin !== NULL ? Latte\IMacro::PAIR : 0));
 		return $this;
 	}
 
