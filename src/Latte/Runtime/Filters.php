@@ -500,7 +500,7 @@ class Filters
 	 */
 	public static function nl2br($value)
 	{
-		trigger_error('Filter |nl2br is deprecated, use |breaklines which correctly handles escaping.', E_USER_DEPRECATED);
+		trigger_error('Filter |nl2br is deprecated, use |breakLines which correctly handles escaping.', E_USER_DEPRECATED);
 		return nl2br($value, self::$xhtml);
 	}
 
@@ -509,7 +509,7 @@ class Filters
 	 * @param  string plain text
 	 * @return Html
 	 */
-	public static function breaklines($s)
+	public static function breakLines($s)
 	{
 		return new Html(nl2br(htmlSpecialChars((string) $s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
 	}

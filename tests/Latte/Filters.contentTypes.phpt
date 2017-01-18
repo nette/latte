@@ -27,36 +27,36 @@ Assert::error(function () use ($latte) {
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{block|striptags} <h1>title</h1> {/block}')
+	$latte->renderToString('{block|stripTags} <h1>title</h1> {/block}')
 );
 
 Assert::error(function () use ($latte) {
-	$latte->renderToString('{block|striptags|upper} <h1>title</h1> {/block}');
+	$latte->renderToString('{block|stripTags|upper} <h1>title</h1> {/block}');
 }, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{block|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{block|stripHtml} <h1>title</h1> {/block}')
 );
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{block name|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{block name|stripHtml} <h1>title</h1> {/block}')
 );
 
 Assert::same(
 	' TITLE ',
-	$latte->renderToString('{block|striphtml|upper} <h1>title</h1> {/block}')
+	$latte->renderToString('{block|stripHtml|upper} <h1>title</h1> {/block}')
 );
 
 Assert::same(
 	' ONE &lt; TWO ',
-	$latte->renderToString('{block|striphtml|upper} one < two {/block}')
+	$latte->renderToString('{block|stripHtml|upper} one < two {/block}')
 );
 
 Assert::same(
 	' one &amp; two ',
-	$latte->renderToString('{block|striptags} one &amp; two {/block}')
+	$latte->renderToString('{block|stripTags} one &amp; two {/block}')
 );
 
 Assert::same(
@@ -73,17 +73,17 @@ Assert::same(
 
 Assert::same(
 	' one &amp; two ',
-	$latte->renderToString('{contentType xml}{block|striptags} one &amp; two {/block}')
+	$latte->renderToString('{contentType xml}{block|stripTags} one &amp; two {/block}')
 );
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{contentType xml}{block|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{contentType xml}{block|stripHtml} <h1>title</h1> {/block}')
 );
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{contentType xml}{block name|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{contentType xml}{block name|stripHtml} <h1>title</h1> {/block}')
 );
 
 Assert::same(
