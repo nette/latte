@@ -37,11 +37,11 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.inheritance.child1.phtml',
-	@$latte->compile('main') // @ false temporary warning for {includeblock}
+	$latte->compile('main')
 );
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.inheritance.child1.html',
-	@$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']]) // @ false temporary warning for {includeblock}
+	$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']])
 );
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.inheritance.child1.parent.phtml',
