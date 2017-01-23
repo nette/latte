@@ -459,7 +459,7 @@ class Filters
 	 */
 	public static function replace(FilterInfo $info, $subject, $search, $replacement = '')
 	{
-		return str_replace($search, $replacement, $subject);
+		return str_replace($search, $replacement, (string) $subject);
 	}
 
 

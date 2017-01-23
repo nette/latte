@@ -636,11 +636,11 @@ class Compiler
 			if (isset($attrs[$attrName])) {
 				if ($this->htmlNode->closing) {
 					$left[] = function () use ($name) {
-						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_INNER);
+						$this->closeMacro($name, '', NULL, FALSE, MacroNode::PREFIX_INNER);
 					};
 				} else {
 					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_INNER)->empty) {
+						if ($this->openMacro($name, $attrs[$attrName], NULL, FALSE, MacroNode::PREFIX_INNER)->empty) {
 							throw new CompileException("Unable to use empty macro as n:$attrName.");
 						}
 					});
@@ -665,12 +665,12 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
 				$left[] = function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], NULL, NULL, MacroNode::PREFIX_TAG)->empty) {
+					if ($this->openMacro($name, $attrs[$attrName], NULL, FALSE, MacroNode::PREFIX_TAG)->empty) {
 						throw new CompileException("Unable to use empty macro as n:$attrName.");
 					}
 				};
 				array_unshift($right, function () use ($name) {
-					$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_TAG);
+					$this->closeMacro($name, '', NULL, FALSE, MacroNode::PREFIX_TAG);
 				});
 				unset($attrs[$attrName]);
 			}
@@ -680,11 +680,11 @@ class Compiler
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
 					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', NULL, NULL, MacroNode::PREFIX_NONE);
+						$this->closeMacro($name, '', NULL, FALSE, MacroNode::PREFIX_NONE);
 					};
 				} else {
 					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
-						$node = $this->openMacro($name, $attrs[$name], NULL, NULL, MacroNode::PREFIX_NONE);
+						$node = $this->openMacro($name, $attrs[$name], NULL, FALSE, MacroNode::PREFIX_NONE);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {

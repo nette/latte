@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 function parse($s, $contentType = NULL)
 {
 	$parser = new Latte\Parser;
-	$parser->setContentType($contentType);
+	$parser->setContentType($contentType ?: Engine::CONTENT_HTML);
 	return array_map(function (Token $token) {
 		return [$token->type, $token->text];
 	}, $parser->parse($s));
