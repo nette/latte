@@ -238,7 +238,7 @@ class Compiler
 
 	/**
 	 * Returns current line number.
-	 * @return int
+	 * @return int|NULL
 	 */
 	public function getLine()
 	{

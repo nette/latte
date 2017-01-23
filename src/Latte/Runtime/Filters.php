@@ -242,7 +242,7 @@ class Filters
 
 
 	/**
-	 * @return callable
+	 * @return callable|NULL
 	 */
 	public static function getConvertor($source, $dest)
 	{
@@ -401,7 +401,7 @@ class Filters
 	 * Date/time formatting.
 	 * @param  string|int|\DateTime|\DateTimeInterface|\DateInterval
 	 * @param  string
-	 * @return string plain text
+	 * @return string|NULL
 	 */
 	public static function date($time, $format = NULL)
 	{
@@ -431,7 +431,7 @@ class Filters
 
 	/**
 	 * Converts to human readable file size.
-	 * @param  int
+	 * @param  float
 	 * @param  int
 	 * @return string plain text
 	 */

@@ -405,7 +405,7 @@ class PhpWriter
 	/**
 	 * Formats modifiers calling.
 	 * @param  MacroTokens
-	 * @param  string
+	 * @param  string|array
 	 * @throws CompileException
 	 * @return MacroTokens
 	 */

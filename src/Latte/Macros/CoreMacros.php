@@ -102,7 +102,7 @@ class CoreMacros extends MacroSet
 
 	/**
 	 * Finishes template parsing.
-	 * @return array(prolog, epilog)
+	 * @return array|NULL [prolog, epilog]
 	 */
 	public function finalize()
 	{

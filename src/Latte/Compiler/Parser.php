@@ -387,7 +387,7 @@ class Parser
 	/**
 	 * Parses macro tag to name, arguments a modifiers parts.
 	 * @param  string {name arguments | modifiers}
-	 * @return array
+	 * @return array|NULL
 	 * @internal
 	 */
 	public function parseMacroTag($tag)
@@ -404,7 +404,7 @@ class Parser
 			if (preg_last_error()) {
 				throw new RegexpException(NULL, preg_last_error());
 			}
-			return FALSE;
+			return NULL;
 		}
 		if ($match['name'] === '') {
 			$match['name'] = $match['shortname'] ?: ($match['closing'] ? '' : '=');

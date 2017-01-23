@@ -60,7 +60,7 @@ class MacroSet implements Latte\IMacro
 
 	/**
 	 * Finishes template parsing.
-	 * @return array(prolog, epilog)
+	 * @return array|NULL [prolog, epilog]
 	 */
 	public function finalize()
 	{
@@ -69,7 +69,7 @@ class MacroSet implements Latte\IMacro
 
 	/**
 	 * New node is found.
-	 * @return bool
+	 * @return bool|NULL
 	 */
 	public function nodeOpened(MacroNode $node)
 	{
@@ -134,7 +134,7 @@ class MacroSet implements Latte\IMacro
 
 	/**
 	 * Generates code.
-	 * @return string
+	 * @return string|bool|NULL
 	 */
 	private function compile(MacroNode $node, $def)
 	{
