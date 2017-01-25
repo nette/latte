@@ -92,12 +92,12 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Reads single token (optionally delimited by comma) from string.
-	 * @return string
+	 * @return string|NULL
 	 */
 	public function fetchWord()
 	{
 		$words = $this->fetchWords();
-		return $words ? implode(':', $words) : FALSE;
+		return $words ? implode(':', $words) : NULL;
 	}
 
 

@@ -207,7 +207,7 @@ class BlockMacros extends MacroSet
 	{
 		$name = $node->tokenizer->fetchWord();
 
-		if ($node->name === 'block' && $name === FALSE) { // anonymous block
+		if ($node->name === 'block' && $name === NULL) { // anonymous block
 			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
 
 		} elseif ($node->name === 'define' && $node->modifiers) {
@@ -389,7 +389,7 @@ class BlockMacros extends MacroSet
 			return FALSE;
 		}
 		$list = [];
-		while (($name = $node->tokenizer->fetchWord()) !== FALSE) {
+		while (($name = $node->tokenizer->fetchWord()) !== NULL) {
 			$list[] = preg_match('~#|[\w-]+\z~A', $name)
 				? '$this->blockQueue["' . ltrim($name, '#') . '"]'
 				: $writer->formatArgs(new Latte\MacroTokens($name));
