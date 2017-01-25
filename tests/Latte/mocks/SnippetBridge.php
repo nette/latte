@@ -13,25 +13,25 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 	public $invalid = [];
 
 
-	public function isSnippetMode()
+	public function isSnippetMode(): bool
 	{
 		return $this->snippetMode;
 	}
 
 
-	public function setSnippetMode($snippetMode)
+	public function setSnippetMode(bool $snippetMode)
 	{
 		$this->snippetMode = $snippetMode;
 	}
 
 
-	public function needsRedraw($name)
+	public function needsRedraw(string $name): bool
 	{
 		return $this->invalid === TRUE || isset($this->invalid[$name]);
 	}
 
 
-	public function markRedrawn($name)
+	public function markRedrawn(string $name)
 	{
 		if ($this->invalid !== TRUE) {
 			unset($this->invalid[$name]);
@@ -39,13 +39,13 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 	}
 
 
-	public function getHtmlId($name)
+	public function getHtmlId(string $name): string
 	{
 		return $name;
 	}
 
 
-	public function addSnippet($name, $content)
+	public function addSnippet(string $name, string $content)
 	{
 		$this->payload[$name] = $content;
 	}

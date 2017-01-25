@@ -25,9 +25,8 @@ class Helpers
 
 	/**
 	 * Checks callback.
-	 * @return callable
 	 */
-	public static function checkCallback($callable)
+	public static function checkCallback($callable): callable
 	{
 		if (!is_callable($callable, FALSE, $text)) {
 			throw new \InvalidArgumentException("Callback '$text' is not callable.");
@@ -55,10 +54,7 @@ class Helpers
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	public static function removeFilter(&$modifier, $filter)
+	public static function removeFilter(&$modifier, $filter): bool
 	{
 		$modifier = preg_replace('#\|(' . $filter . ')\s?(?=\||\z)#i', '', $modifier, -1, $found);
 		return (bool) $found;
@@ -67,9 +63,8 @@ class Helpers
 
 	/**
 	 * Starts the $haystack string with the prefix $needle?
-	 * @return bool
 	 */
-	public static function startsWith($haystack, $needle)
+	public static function startsWith($haystack, $needle): bool
 	{
 		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}

@@ -61,10 +61,9 @@ class FilterExecutor
 	/**
 	 * Registers run-time filter.
 	 * @param  string|NULL
-	 * @param  callable
 	 * @return static
 	 */
-	public function add($name, $callback)
+	public function add($name, callable $callback)
 	{
 		if ($name == NULL) { // intentionally ==
 			array_unshift($this->_dynamic, $callback);
@@ -81,7 +80,7 @@ class FilterExecutor
 	 * Returns all run-time filters.
 	 * @return string[]
 	 */
-	public function getAll()
+	public function getAll(): array
 	{
 		return array_combine($tmp = array_keys($this->_static), $tmp);
 	}
@@ -89,9 +88,8 @@ class FilterExecutor
 
 	/**
 	 * Returns filter for classic calling.
-	 * @return callable
 	 */
-	public function __get($name)
+	public function __get($name): callable
 	{
 		$lname = strtolower($name);
 		if (isset($this->$lname)) { // case mismatch

@@ -95,10 +95,9 @@ class Compiler
 
 	/**
 	 * Adds new macro with IMacro flags.
-	 * @param  string
 	 * @return static
 	 */
-	public function addMacro($name, IMacro $macro, $flags = NULL)
+	public function addMacro(string $name, IMacro $macro, $flags = NULL)
 	{
 		if (!isset($this->flags[$name])) {
 			$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
@@ -113,9 +112,8 @@ class Compiler
 	/**
 	 * Compiles tokens to PHP code.
 	 * @param  Token[]
-	 * @return string
 	 */
-	public function compile(array $tokens, $className)
+	public function compile(array $tokens, $className): string
 	{
 		$this->tokens = $tokens;
 		$output = '';
@@ -217,10 +215,7 @@ class Compiler
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	public function isInHead()
+	public function isInHead(): bool
 	{
 		return $this->inHead;
 	}
@@ -231,7 +226,7 @@ class Compiler
 	 * @return void
 	 * @internal
 	 */
-	public function addMethod($name, $body, $arguments = '')
+	public function addMethod($name, $body, string $arguments = '')
 	{
 		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments];
 	}
@@ -239,10 +234,9 @@ class Compiler
 
 	/**
 	 * Returns custom methods.
-	 * @return array
 	 * @internal
 	 */
-	public function getMethods()
+	public function getMethods(): array
 	{
 		return $this->methods;
 	}
@@ -261,10 +255,9 @@ class Compiler
 
 	/**
 	 * Returns custom properites.
-	 * @return array
 	 * @internal
 	 */
-	public function getProperties()
+	public function getProperties(): array
 	{
 		return $this->properties;
 	}
@@ -489,14 +482,9 @@ class Compiler
 
 	/**
 	 * Generates code for {macro ...} to the output.
-	 * @param  string
-	 * @param  string
-	 * @param  string
-	 * @param  bool
-	 * @return MacroNode
 	 * @internal
 	 */
-	public function openMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL)
+	public function openMacro(string $name, string $args = NULL, string $modifiers = NULL, bool $isRightmost = FALSE, $nPrefix = NULL): MacroNode
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -516,14 +504,9 @@ class Compiler
 
 	/**
 	 * Generates code for {/macro ...} to the output.
-	 * @param  string
-	 * @param  string
-	 * @param  string
-	 * @param  bool
-	 * @return MacroNode
 	 * @internal
 	 */
-	public function closeMacro($name, $args = NULL, $modifiers = NULL, $isRightmost = FALSE, $nPrefix = NULL)
+	public function closeMacro(string $name, string $args = NULL, string $modifiers = NULL, bool $isRightmost = FALSE, $nPrefix = NULL): MacroNode
 	{
 		$node = $this->macroNode;
 
@@ -595,7 +578,7 @@ class Compiler
 	 * @return void
 	 * @internal
 	 */
-	public function writeAttrsMacro($html)
+	public function writeAttrsMacro(string $html)
 	{
 		//     none-2 none-1 tag-1 tag-2       <el attr-1 attr-2>   /tag-2 /tag-1 [none-2] [none-1] inner-2 inner-1
 		// /inner-1 /inner-2 [none-1] [none-2] tag-1 tag-2  </el>   /tag-2 /tag-1 /none-1 /none-2
@@ -696,13 +679,9 @@ class Compiler
 
 	/**
 	 * Expands macro and returns node & code.
-	 * @param  string
-	 * @param  string
-	 * @param  string
-	 * @return MacroNode
 	 * @internal
 	 */
-	public function expandMacro($name, $args, $modifiers = NULL, $nPrefix = NULL)
+	public function expandMacro(string $name, string $args, string $modifiers = NULL, $nPrefix = NULL): MacroNode
 	{
 		$inScript = in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], TRUE);
 

@@ -80,10 +80,9 @@ class Parser
 
 	/**
 	 * Process all {macros} and <tags/>.
-	 * @param  string
 	 * @return Token[]
 	 */
-	public function parse($input)
+	public function parse(string $input): array
 	{
 		if (Helpers::startsWith($input, "\u{FEFF}")) { // BOM
 			$input = substr($input, 3);
@@ -303,10 +302,8 @@ class Parser
 
 	/**
 	 * Matches next token.
-	 * @param  string
-	 * @return array
 	 */
-	private function match($re)
+	private function match(string $re): array
 	{
 		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE, $this->offset)) {
 			if (preg_last_error()) {
@@ -331,7 +328,7 @@ class Parser
 	 * @param  string  Parser::CONTENT_HTML, CONTENT_XHTML, CONTENT_XML or CONTENT_TEXT
 	 * @return static
 	 */
-	public function setContentType($type)
+	public function setContentType(string $type)
 	{
 		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XHTML, self::CONTENT_XML], TRUE)) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
@@ -355,10 +352,9 @@ class Parser
 
 	/**
 	 * Changes macro tag delimiters.
-	 * @param  string
 	 * @return static
 	 */
-	public function setSyntax($type)
+	public function setSyntax(string $type)
 	{
 		$type = $type ?: $this->defaultSyntax;
 		if (isset($this->syntaxes[$type])) {
@@ -376,7 +372,7 @@ class Parser
 	 * @param  string  right regular expression
 	 * @return static
 	 */
-	public function setDelimiters($left, $right)
+	public function setDelimiters(string $left, string $right)
 	{
 		$this->delimiters = [$left, $right];
 		return $this;
@@ -389,7 +385,7 @@ class Parser
 	 * @return array|NULL
 	 * @internal
 	 */
-	public function parseMacroTag($tag)
+	public function parseMacroTag(string $tag)
 	{
 		if (!preg_match('~^
 			(?P<closing>/?)
@@ -412,7 +408,7 @@ class Parser
 	}
 
 
-	private function addToken($type, $text)
+	private function addToken($type, $text): Token
 	{
 		$this->output[] = $token = new Token;
 		$token->type = $type;
@@ -422,7 +418,7 @@ class Parser
 	}
 
 
-	public function getLine()
+	public function getLine(): int
 	{
 		return $this->offset
 			? substr_count(substr($this->input, 0, $this->offset - 1), "\n") + 1

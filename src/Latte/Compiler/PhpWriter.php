@@ -45,10 +45,8 @@ class PhpWriter
 
 	/**
 	 * Expands %node.word, %node.array, %node.args, %escape(), %modify(), %var, %raw, %word in code.
-	 * @param  string
-	 * @return string
 	 */
-	public function write($mask, ...$args)
+	public function write(string $mask, ...$args): string
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
 		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) {
@@ -102,10 +100,8 @@ class PhpWriter
 
 	/**
 	 * Formats modifiers calling.
-	 * @param  string
-	 * @return string
 	 */
-	public function formatModifiers($var, $isContent = FALSE)
+	public function formatModifiers(string $var, bool $isContent = FALSE): string
 	{
 		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
 		$tokens = $this->preprocess($tokens);
@@ -117,9 +113,8 @@ class PhpWriter
 
 	/**
 	 * Formats macro arguments to PHP code. (It advances tokenizer to the end as a side effect.)
-	 * @return string
 	 */
-	public function formatArgs(MacroTokens $tokens = NULL)
+	public function formatArgs(MacroTokens $tokens = NULL): string
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->quotingPass($tokens);
@@ -129,9 +124,8 @@ class PhpWriter
 
 	/**
 	 * Formats macro arguments to PHP array. (It advances tokenizer to the end as a side effect.)
-	 * @return string
 	 */
-	public function formatArray(MacroTokens $tokens = NULL)
+	public function formatArray(MacroTokens $tokens = NULL): string
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->expandCastPass($tokens);
@@ -142,10 +136,8 @@ class PhpWriter
 
 	/**
 	 * Formats parameter to PHP string.
-	 * @param  string
-	 * @return string
 	 */
-	public function formatWord($s)
+	public function formatWord(string $s): string
 	{
 		return (is_numeric($s) || preg_match('#^\$|[\'"]|^(true|TRUE)\z|^(false|FALSE)\z|^(null|NULL)\z|^[\w\\\\]{3,}::[A-Z0-9_]{2,}\z#', $s))
 			? $this->formatArgs(new MacroTokens($s))
@@ -155,9 +147,8 @@ class PhpWriter
 
 	/**
 	 * Preprocessor for tokens. (It advances tokenizer to the end as a side effect.)
-	 * @return MacroTokens
 	 */
-	public function preprocess(MacroTokens $tokens = NULL)
+	public function preprocess(MacroTokens $tokens = NULL): MacroTokens
 	{
 		$tokens = $tokens === NULL ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
@@ -203,9 +194,8 @@ class PhpWriter
 
 	/**
 	 * Removes PHP comments.
-	 * @return MacroTokens
 	 */
-	public function removeCommentsPass(MacroTokens $tokens)
+	public function removeCommentsPass(MacroTokens $tokens): MacroTokens
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
@@ -219,9 +209,8 @@ class PhpWriter
 
 	/**
 	 * Simplified ternary expressions without third part.
-	 * @return MacroTokens
 	 */
-	public function shortTernaryPass(MacroTokens $tokens)
+	public function shortTernaryPass(MacroTokens $tokens): MacroTokens
 	{
 		$res = new MacroTokens;
 		$inTernary = [];
@@ -248,9 +237,8 @@ class PhpWriter
 
 	/**
 	 * Pseudocast (expand).
-	 * @return MacroTokens
 	 */
-	public function expandCastPass(MacroTokens $tokens)
+	public function expandCastPass(MacroTokens $tokens): MacroTokens
 	{
 		$res = new MacroTokens('[');
 		$expand = NULL;
@@ -277,9 +265,8 @@ class PhpWriter
 
 	/**
 	 * Quotes symbols to strings.
-	 * @return MacroTokens
 	 */
-	public function quotingPass(MacroTokens $tokens)
+	public function quotingPass(MacroTokens $tokens): MacroTokens
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
@@ -297,9 +284,8 @@ class PhpWriter
 
 	/**
 	 * Syntax $entry in [item1, item2].
-	 * @return MacroTokens
 	 */
-	public function inOperatorPass(MacroTokens $tokens)
+	public function inOperatorPass(MacroTokens $tokens): MacroTokens
 	{
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent($tokens::T_VARIABLE)) {
@@ -333,9 +319,8 @@ class PhpWriter
 
 	/**
 	 * Process inline filters ($var|filter)
-	 * @return MacroTokens
 	 */
-	public function inlineModifierPass(MacroTokens $tokens)
+	public function inlineModifierPass(MacroTokens $tokens): MacroTokens
 	{
 		$result = new MacroTokens;
 		while ($tokens->nextToken()) {
@@ -398,9 +383,8 @@ class PhpWriter
 	 * @param  MacroTokens
 	 * @param  string|array
 	 * @throws CompileException
-	 * @return MacroTokens
 	 */
-	public function modifierPass(MacroTokens $tokens, $var, $isContent = FALSE)
+	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = FALSE): MacroTokens
 	{
 		$inside = FALSE;
 		$res = new MacroTokens($var);
@@ -455,9 +439,8 @@ class PhpWriter
 
 	/**
 	 * Escapes expression in tokens.
-	 * @return MacroTokens
 	 */
-	public function escapePass(MacroTokens $tokens)
+	public function escapePass(MacroTokens $tokens): MacroTokens
 	{
 		$tokens = clone $tokens;
 		list($contentType, $context) = $this->context;

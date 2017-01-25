@@ -19,10 +19,8 @@ class PhpHelpers
 
 	/**
 	 * Optimizes code readability.
-	 * @param  string
-	 * @return string
 	 */
-	public static function reformatCode($source)
+	public static function reformatCode(string $source): string
 	{
 		$res = $php = '';
 		$lastChar = ';';
