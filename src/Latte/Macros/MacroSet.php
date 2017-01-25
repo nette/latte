@@ -148,10 +148,7 @@ class MacroSet implements Latte\IMacro
 	}
 
 
-	/**
-	 * @return Latte\Compiler
-	 */
-	public function getCompiler()
+	public function getCompiler(): Latte\Compiler
 	{
 		return $this->compiler;
 	}

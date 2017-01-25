@@ -31,7 +31,7 @@ class Filters
 	 * @param  mixed  plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtml($s)
+	public static function escapeHtml($s): string
 	{
 		return htmlSpecialChars((string) $s, ENT_QUOTES, 'UTF-8');
 	}
@@ -42,7 +42,7 @@ class Filters
 	 * @param  mixed  plain text or IHtmlString
 	 * @return string HTML
 	 */
-	public static function escapeHtmlText($s)
+	public static function escapeHtmlText($s): string
 	{
 		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
 			? $s->__toString(TRUE)
@@ -55,7 +55,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlAttr($s, $double = TRUE)
+	public static function escapeHtmlAttr($s, bool $double = TRUE): string
 	{
 		$double = $double && $s instanceof IHtmlString ? FALSE : $double;
 		$s = (string) $s;
@@ -71,7 +71,7 @@ class Filters
 	 * @param  mixed  HTML text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlAttrConv($s)
+	public static function escapeHtmlAttrConv($s): string
 	{
 		return self::escapeHtmlAttr($s, FALSE);
 	}
@@ -82,7 +82,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlAttrUnquoted($s)
+	public static function escapeHtmlAttrUnquoted($s): string
 	{
 		$s = (string) $s;
 		return preg_match('#^[a-z0-9:-]+$#i', $s)
@@ -96,7 +96,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlComment($s)
+	public static function escapeHtmlComment($s): string
 	{
 		$s = (string) $s;
 		if ($s && ($s[0] === '-' || $s[0] === '>' || $s[0] === '!')) {
@@ -115,7 +115,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string XML
 	 */
-	public static function escapeXml($s)
+	public static function escapeXml($s): string
 	{
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,
@@ -129,7 +129,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string XML
 	 */
-	public static function escapeXmlAttrUnquoted($s)
+	public static function escapeXmlAttrUnquoted($s): string
 	{
 		$s = (string) $s;
 		return preg_match('#^[a-z0-9:-]+$#i', $s)
@@ -143,7 +143,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string CSS
 	 */
-	public static function escapeCss($s)
+	public static function escapeCss($s): string
 	{
 		// http://www.w3.org/TR/2006/WD-CSS21-20060411/syndata.html#q6
 		return addcslashes((string) $s, "\x00..\x1F!\"#$%&'()*+,./:;<=>?@[\\]^`{|}~");
@@ -155,7 +155,7 @@ class Filters
 	 * @param  mixed  plain text
 	 * @return string JSON
 	 */
-	public static function escapeJs($s)
+	public static function escapeJs($s): string
 	{
 		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
 			$s = $s->__toString(TRUE);
@@ -173,9 +173,8 @@ class Filters
 	/**
 	 * Escapes string for use inside iCal template.
 	 * @param  string plain text
-	 * @return string
 	 */
-	public static function escapeICal($s)
+	public static function escapeICal($s): string
 	{
 		// https://www.ietf.org/rfc/rfc5545.txt
 		return addcslashes(preg_replace('#[\x00-\x08\x0B\x0C-\x1F]+#', '', (string) $s), "\";\\,:\n");
@@ -187,7 +186,7 @@ class Filters
 	 * @param  string CSS/JS
 	 * @return string HTML RAWTEXT
 	 */
-	public static function escapeHtmlRawText($s)
+	public static function escapeHtmlRawText($s): string
 	{
 		return preg_replace('#</(script|style)#i', '<\\/$1', (string) $s);
 	}
@@ -199,7 +198,7 @@ class Filters
 	 * @param  string HTML
 	 * @return string plain text
 	 */
-	public static function stripHtml(FilterInfo $info, $s)
+	public static function stripHtml(FilterInfo $info, $s): string
 	{
 		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], TRUE)) {
 			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
@@ -215,7 +214,7 @@ class Filters
 	 * @param  string HTML
 	 * @return string HTML
 	 */
-	public static function stripTags(FilterInfo $info, $s)
+	public static function stripTags(FilterInfo $info, $s): string
 	{
 		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], TRUE)) {
 			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
@@ -226,9 +225,8 @@ class Filters
 
 	/**
 	 * Converts ... to ...
-	 * @return string
 	 */
-	public static function convertTo(FilterInfo $info, $dest, $s)
+	public static function convertTo(FilterInfo $info, $dest, $s): string
 	{
 		$source = $info->contentType ?: Engine::CONTENT_TEXT;
 		if ($source === $dest) {
@@ -296,7 +294,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function safeUrl($s)
+	public static function safeUrl($s): string
 	{
 		$s = (string) $s;
 		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)\z~i', $s) ? $s : '';
@@ -309,7 +307,7 @@ class Filters
 	 * @param  string text|HTML
 	 * @return string text|HTML
 	 */
-	public static function strip(FilterInfo $info, $s)
+	public static function strip(FilterInfo $info, string $s): string
 	{
 		return in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], TRUE)
 			? trim(self::spacelessHtml($s))
@@ -324,7 +322,7 @@ class Filters
 	 * @param  bool stripping mode
 	 * @return string HTML
 	 */
-	public static function spacelessHtml($s, $phase = NULL, &$strip = TRUE)
+	public static function spacelessHtml(string $s, int $phase = NULL, bool &$strip = TRUE): string
 	{
 		if ($phase & PHP_OUTPUT_HANDLER_START) {
 			$s = ltrim($s);
@@ -352,21 +350,17 @@ class Filters
 	 * @param  string text
 	 * @return string text
 	 */
-	public static function spacelessText($s)
+	public static function spacelessText(string $s): string
 	{
 		return preg_replace('#[ \t\r\n]+#', ' ', $s);
 	}
 
 
 	/**
-	 * Indents the content from the left.
-	 * @param
-	 * @param  string text|HTML
-	 * @param  int
-	 * @param  string
-	 * @return string text|HTML
+	 * Indents plain text or HTML the content from the left.
+	 * @return string
 	 */
-	public static function indent(FilterInfo $info, $s, $level = 1, $chars = "\t")
+	public static function indent(FilterInfo $info, string $s, int $level = 1, string $chars = "\t"): string
 	{
 		if ($level < 1) {
 			// do nothing
@@ -389,11 +383,9 @@ class Filters
 	/**
 	 * Repeats text.
 	 * @param
-	 * @param  string
-	 * @param  int
 	 * @return string plain text
 	 */
-	public static function repeat(FilterInfo $info, $s, $count)
+	public static function repeat(FilterInfo $info, $s, int $count): string
 	{
 		return str_repeat((string) $s, $count);
 	}
@@ -402,10 +394,9 @@ class Filters
 	/**
 	 * Date/time formatting.
 	 * @param  string|int|\DateTimeInterface|\DateInterval
-	 * @param  string
 	 * @return string|NULL
 	 */
-	public static function date($time, $format = NULL)
+	public static function date($time, string $format = NULL)
 	{
 		if ($time == NULL) { // intentionally ==
 			return NULL;
@@ -433,11 +424,9 @@ class Filters
 
 	/**
 	 * Converts to human readable file size.
-	 * @param  float
-	 * @param  int
 	 * @return string plain text
 	 */
-	public static function bytes($bytes, $precision = 2)
+	public static function bytes(float $bytes, int $precision = 2): string
 	{
 		$bytes = round($bytes);
 		$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
@@ -454,12 +443,8 @@ class Filters
 	/**
 	 * Performs a search and replace.
 	 * @param
-	 * @param  string
-	 * @param  string
-	 * @param  string
-	 * @return string
 	 */
-	public static function replace(FilterInfo $info, $subject, $search, $replacement = '')
+	public static function replace(FilterInfo $info, $subject, string $search, string $replacement = ''): string
 	{
 		return str_replace($search, $replacement, (string) $subject);
 	}
@@ -467,11 +452,8 @@ class Filters
 
 	/**
 	 * Perform a regular expression search and replace.
-	 * @param  string
-	 * @param  string
-	 * @return string
 	 */
-	public static function replaceRe($subject, $pattern, $replacement = '')
+	public static function replaceRe(string $subject, string $pattern, string $replacement = ''): string
 	{
 		$res = preg_replace($pattern, $replacement, $subject);
 		if (preg_last_error()) {
@@ -484,10 +466,9 @@ class Filters
 	/**
 	 * The data: URI generator.
 	 * @param  string plain text
-	 * @param  string
 	 * @return string plain text
 	 */
-	public static function dataStream($data, $type = NULL)
+	public static function dataStream(string $data, string $type = NULL): string
 	{
 		if ($type === NULL) {
 			$type = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $data);
@@ -498,9 +479,8 @@ class Filters
 
 	/**
 	 * @param  string plain text
-	 * @return Html
 	 */
-	public static function breaklines($s)
+	public static function breaklines($s): Html
 	{
 		return new Html(nl2br(htmlSpecialChars((string) $s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
 	}
@@ -508,12 +488,8 @@ class Filters
 
 	/**
 	 * Returns a part of string.
-	 * @param  string
-	 * @param  int
-	 * @param  int
-	 * @return string
 	 */
-	public static function substring($s, $start, $length = NULL)
+	public static function substring($s, int $start, int $length = NULL): string
 	{
 		$s = (string) $s;
 		if ($length === NULL) {
@@ -529,11 +505,10 @@ class Filters
 	/**
 	 * Truncates string to maximal length.
 	 * @param  string plain text
-	 * @param  int
-	 * @param  string plain text
+	 * @param  string $append plain text
 	 * @return string plain text
 	 */
-	public static function truncate($s, $maxLen, $append = "\u{2026}")
+	public static function truncate($s, $maxLen, $append = "\u{2026}"): string
 	{
 		$s = (string) $s;
 		if (strlen(utf8_decode($s)) > $maxLen) {
@@ -557,7 +532,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function lower($s)
+	public static function lower($s): string
 	{
 		return mb_strtolower((string) $s, 'UTF-8');
 	}
@@ -568,7 +543,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function upper($s)
+	public static function upper($s): string
 	{
 		return mb_strtoupper((string) $s, 'UTF-8');
 	}
@@ -579,7 +554,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function firstUpper($s)
+	public static function firstUpper($s): string
 	{
 		$s = (string) $s;
 		return self::upper(self::substring($s, 0, 1)) . self::substring($s, 1);
@@ -591,7 +566,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function capitalize($s)
+	public static function capitalize($s): string
 	{
 		return mb_convert_case((string) $s, MB_CASE_TITLE, 'UTF-8');
 	}
@@ -600,9 +575,8 @@ class Filters
 	/**
 	 * Returns string length.
 	 * @param  array|\Countable|\Traversable|string
-	 * @return int
 	 */
-	public static function length($val)
+	public static function length($val): int
 	{
 		if (is_array($val) || $val instanceof \Countable) {
 			return count($val);
@@ -620,7 +594,7 @@ class Filters
 	 * @param  string plain text
 	 * @return string plain text
 	 */
-	public static function trim($s, $charlist = " \t\n\r\0\x0B\u{A0}")
+	public static function trim($s, $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', (string) $s);
@@ -634,11 +608,8 @@ class Filters
 	/**
 	 * Pad a string to a certain length with another string.
 	 * @param  string plain text
-	 * @param  int
-	 * @param  string
-	 * @return string
 	 */
-	public static function padLeft($s, $length, $pad = ' ')
+	public static function padLeft($s, int $length, string $pad = ' '): string
 	{
 		$s = (string) $s;
 		$length = max(0, $length - strlen(utf8_decode($s)));
@@ -650,11 +621,8 @@ class Filters
 	/**
 	 * Pad a string to a certain length with another string.
 	 * @param  string plain text
-	 * @param  int
-	 * @param  string
-	 * @return string
 	 */
-	public static function padRight($s, $length, $pad = ' ')
+	public static function padRight($s, int $length, string $pad = ' '): string
 	{
 		$s = (string) $s;
 		$length = max(0, $length - strlen(utf8_decode($s)));
@@ -665,9 +633,8 @@ class Filters
 
 	/**
 	 * Returns element's attributes.
-	 * @return string
 	 */
-	public static function htmlAttributes($attrs)
+	public static function htmlAttributes($attrs): string
 	{
 		if (!is_array($attrs)) {
 			return '';

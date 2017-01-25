@@ -29,7 +29,7 @@ class TokenIterator
 
 
 	/**
-	 * @param array[]
+	 * @param  array[]
 	 */
 	public function __construct(array $tokens)
 	{
@@ -86,7 +86,7 @@ class TokenIterator
 	 * @param  int|string  (optional) desired token type or value
 	 * @return array[]
 	 */
-	public function nextAll(...$args)
+	public function nextAll(...$args): array
 	{
 		return $this->scan($args, FALSE, TRUE); // advance
 	}
@@ -97,7 +97,7 @@ class TokenIterator
 	 * @param  int|string  token type or value to stop before
 	 * @return array[]
 	 */
-	public function nextUntil(...$args)
+	public function nextUntil(...$args): array
 	{
 		return $this->scan($args, FALSE, TRUE, FALSE, TRUE); // advance, until
 	}
@@ -106,9 +106,8 @@ class TokenIterator
 	/**
 	 * Returns concatenation of all next token values.
 	 * @param  int|string  (optional) token type or value to be joined
-	 * @return string
 	 */
-	public function joinAll(...$args)
+	public function joinAll(...$args): string
 	{
 		return $this->scan($args, FALSE, TRUE, TRUE); // advance, strings
 	}
@@ -117,9 +116,8 @@ class TokenIterator
 	/**
 	 * Returns concatenation of all next tokens until it sees a given token type or value.
 	 * @param  int|string  token type or value to stop before
-	 * @return string
 	 */
-	public function joinUntil(...$args)
+	public function joinUntil(...$args): string
 	{
 		return $this->scan($args, FALSE, TRUE, TRUE, TRUE); // advance, strings, until
 	}
@@ -128,9 +126,8 @@ class TokenIterator
 	/**
 	 * Checks the current token.
 	 * @param  int|string  token type or value
-	 * @return bool
 	 */
-	public function isCurrent(...$args)
+	public function isCurrent(...$args): bool
 	{
 		if (!isset($this->tokens[$this->position])) {
 			return FALSE;
@@ -144,9 +141,8 @@ class TokenIterator
 	/**
 	 * Checks the next token existence.
 	 * @param  int|string  (optional) token type or value
-	 * @return bool
 	 */
-	public function isNext(...$args)
+	public function isNext(...$args): bool
 	{
 		return (bool) $this->scan($args, TRUE, FALSE); // onlyFirst
 	}
@@ -155,9 +151,8 @@ class TokenIterator
 	/**
 	 * Checks the previous token existence.
 	 * @param  int|string  (optional) token type or value
-	 * @return bool
 	 */
-	public function isPrev(...$args)
+	public function isPrev(...$args): bool
 	{
 		return (bool) $this->scan($args, TRUE, FALSE, FALSE, FALSE, TRUE); // onlyFirst, prev
 	}
@@ -166,10 +161,9 @@ class TokenIterator
 	/**
 	 * Returns next expected token or throws exception.
 	 * @param  int|string  (optional) desired token type or value
-	 * @return string
 	 * @throws CompileException
 	 */
-	public function expectNextValue(...$args)
+	public function expectNextValue(...$args): string
 	{
 		if ($token = $this->scan($args, TRUE, TRUE)) { // onlyFirst, advance
 			return $token[Tokenizer::VALUE];
@@ -204,14 +198,9 @@ class TokenIterator
 	/**
 	 * Looks for (first) (not) wanted tokens.
 	 * @param  array of desired token types or values
-	 * @param  bool
-	 * @param  bool
-	 * @param  bool
-	 * @param  bool
-	 * @param  bool
 	 * @return mixed
 	 */
-	protected function scan($wanted, $onlyFirst, $advance, $strings = FALSE, $until = FALSE, $prev = FALSE)
+	protected function scan(array $wanted, bool $onlyFirst, bool $advance, bool $strings = FALSE, bool $until = FALSE, bool $prev = FALSE)
 	{
 		$res = $onlyFirst ? NULL : ($strings ? '' : []);
 		$pos = $this->position + ($prev ? -1 : 1);

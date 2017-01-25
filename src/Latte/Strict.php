@@ -22,7 +22,7 @@ trait Strict
 	 * Call to undefined method.
 	 * @throws LogicException
 	 */
-	public function __call($name, $args)
+	public function __call(string $name, array $args)
 	{
 		$class = method_exists($this, $name) ? 'parent' : get_class($this);
 		$items = (new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -35,7 +35,7 @@ trait Strict
 	 * Call to undefined static method.
 	 * @throws LogicException
 	 */
-	public static function __callStatic($name, $args)
+	public static function __callStatic(string $name, array $args)
 	{
 		$rc = new \ReflectionClass(get_called_class());
 		$items = array_intersect($rc->getMethods(\ReflectionMethod::IS_PUBLIC), $rc->getMethods(\ReflectionMethod::IS_STATIC));
@@ -48,7 +48,7 @@ trait Strict
 	 * Access to undeclared property.
 	 * @throws LogicException
 	 */
-	public function &__get($name)
+	public function &__get(string $name)
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
@@ -61,7 +61,7 @@ trait Strict
 	 * Access to undeclared property.
 	 * @throws LogicException
 	 */
-	public function __set($name, $value)
+	public function __set(string $name, $value)
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
@@ -70,10 +70,7 @@ trait Strict
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	public function __isset($name)
+	public function __isset(string $name): bool
 	{
 		return FALSE;
 	}
@@ -83,7 +80,7 @@ trait Strict
 	 * Access to undeclared property.
 	 * @throws LogicException
 	 */
-	public function __unset($name)
+	public function __unset(string $name)
 	{
 		$class = get_class($this);
 		throw new LogicException("Attempt to unset undeclared property $class::$$name.");

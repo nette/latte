@@ -70,19 +70,13 @@ class Template
 	}
 
 
-	/**
-	 * @return Engine
-	 */
-	public function getEngine()
+	public function getEngine(): Engine
 	{
 		return $this->engine;
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public function getName()
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -90,9 +84,8 @@ class Template
 
 	/**
 	 * Returns array of all parameters.
-	 * @return array
 	 */
-	public function getParameters()
+	public function getParameters(): array
 	{
 		return $this->params;
 	}
@@ -111,10 +104,7 @@ class Template
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public function getContentType()
+	public function getContentType(): string
 	{
 		return $this->contentType;
 	}
@@ -202,10 +192,9 @@ class Template
 
 	/**
 	 * Renders template.
-	 * @return Template
 	 * @internal
 	 */
-	protected function createTemplate($name, array $params, $referenceType)
+	protected function createTemplate($name, array $params, $referenceType): Template
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
@@ -259,13 +248,11 @@ class Template
 
 	/**
 	 * Renders block.
-	 * @param  string
-	 * @param  array
-	 * @param  string|\Closure content-type name or modifier closure
+	 * @param  string|\Closure $mod content-type name or modifier closure
 	 * @return void
 	 * @internal
 	 */
-	protected function renderBlock($name, array $params, $mod = NULL)
+	protected function renderBlock(string $name, array $params, $mod = NULL)
 	{
 		if (empty($this->blockQueue[$name])) {
 			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
@@ -316,10 +303,9 @@ class Template
 
 	/**
 	 * Captures output to string.
-	 * @return string
 	 * @internal
 	 */
-	public function capture(callable $function)
+	public function capture(callable $function): string
 	{
 		try {
 			ob_start(function () {});

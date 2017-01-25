@@ -29,10 +29,7 @@ class Html implements IHtmlString
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->value;
 	}

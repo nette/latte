@@ -103,9 +103,8 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Reads single tokens delimited by colon from string.
-	 * @return array
 	 */
-	public function fetchWords()
+	public function fetchWords(): array
 	{
 		do {
 			$words[] = $this->joinUntil(self::T_WHITESPACE, ',', ':');
