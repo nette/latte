@@ -86,7 +86,7 @@ class MacroNode
 	public $saved;
 
 
-	public function __construct(IMacro $macro, $name, $args = null, $modifiers = null, self $parentNode = null, HtmlNode $htmlNode = null, $prefix = null)
+	public function __construct(IMacro $macro, string $name, string $args = null, string $modifiers = null, self $parentNode = null, HtmlNode $htmlNode = null, string $prefix = null)
 	{
 		$this->macro = $macro;
 		$this->name = (string) $name;
@@ -99,14 +99,14 @@ class MacroNode
 	}
 
 
-	public function setArgs($args)
+	public function setArgs(?string $args): void
 	{
 		$this->args = (string) $args;
 		$this->tokenizer = new MacroTokens($this->args);
 	}
 
 
-	public function getNotation()
+	public function getNotation(): string
 	{
 		return $this->prefix
 			? Parser::N_PREFIX . ($this->prefix === self::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name

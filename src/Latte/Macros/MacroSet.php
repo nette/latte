@@ -34,7 +34,7 @@ class MacroSet implements Latte\IMacro
 	}
 
 
-	public function addMacro($name, $begin, $end = null, $attr = null, $flags = null)
+	public function addMacro(string $name, $begin, $end = null, $attr = null, int $flags = null)
 	{
 		if (!$begin && !$end && !$attr) {
 			throw new \InvalidArgumentException("At least one argument must be specified for macro '$name'.");
@@ -155,7 +155,7 @@ class MacroSet implements Latte\IMacro
 
 
 	/** @internal */
-	protected function checkExtraArgs(MacroNode $node)
+	protected function checkExtraArgs(MacroNode $node): void
 	{
 		if ($node->tokenizer->isNext()) {
 			$args = Latte\Runtime\Filters::truncate($node->tokenizer->joinAll(), 20);

@@ -48,7 +48,7 @@ class HtmlNode
 	public $innerMarker;
 
 
-	public function __construct($name, self $parentNode = null)
+	public function __construct(string $name, self $parentNode = null)
 	{
 		$this->name = $name;
 		$this->parentNode = $parentNode;

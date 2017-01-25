@@ -27,7 +27,7 @@ class PhpWriter
 	private $context;
 
 
-	public static function using(MacroNode $node)
+	public static function using(MacroNode $node): self
 	{
 		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;
@@ -35,7 +35,7 @@ class PhpWriter
 	}
 
 
-	public function __construct(MacroTokens $tokens, $modifiers = null, array $context = null)
+	public function __construct(MacroTokens $tokens, string $modifiers = null, array $context = null)
 	{
 		$this->tokens = $tokens;
 		$this->modifiers = $modifiers;
@@ -162,9 +162,8 @@ class PhpWriter
 
 	/**
 	 * @throws CompileException
-	 * @return void
 	 */
-	public function validateTokens(MacroTokens $tokens)
+	public function validateTokens(MacroTokens $tokens): void
 	{
 		$brackets = [];
 		$pos = $tokens->position;
@@ -334,7 +333,7 @@ class PhpWriter
 	}
 
 
-	private function inlineModifierInner(MacroTokens $tokens)
+	private function inlineModifierInner(MacroTokens $tokens): array
 	{
 		$isFunctionOrArray = $tokens->isPrev($tokens::T_VARIABLE, $tokens::T_SYMBOL) || $tokens->isCurrent('[');
 		$result = new MacroTokens;
@@ -380,8 +379,7 @@ class PhpWriter
 
 	/**
 	 * Formats modifiers calling.
-	 * @param  MacroTokens
-	 * @param  string|array
+	 * @param  string|array $var
 	 * @throws CompileException
 	 */
 	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens

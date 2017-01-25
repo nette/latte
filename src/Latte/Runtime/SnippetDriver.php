@@ -44,7 +44,7 @@ class SnippetDriver
 	}
 
 
-	public function enter($name, $type)
+	public function enter(string $name, string $type): void
 	{
 		if (!$this->renderingSnippets) {
 			return;
@@ -64,7 +64,7 @@ class SnippetDriver
 	}
 
 
-	public function leave()
+	public function leave(): void
 	{
 		if (!$this->renderingSnippets) {
 			return;
@@ -79,13 +79,13 @@ class SnippetDriver
 	}
 
 
-	public function getHtmlId($name)
+	public function getHtmlId(string $name): string
 	{
 		return $this->bridge->getHtmlId($name);
 	}
 
 
-	public function renderSnippets(array $blocks, array $params)
+	public function renderSnippets(array $blocks, array $params): bool
 	{
 		if ($this->renderingSnippets || !$this->bridge->isSnippetMode()) {
 			return false;

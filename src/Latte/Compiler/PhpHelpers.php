@@ -111,7 +111,7 @@ class PhpHelpers
 	}
 
 
-	public static function dump($value)
+	public static function dump($value): string
 	{
 		if (is_array($value)) {
 			$s = "[\n";

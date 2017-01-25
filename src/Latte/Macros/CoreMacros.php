@@ -43,7 +43,7 @@ class CoreMacros extends MacroSet
 	private $overwrittenVars;
 
 
-	public static function install(Latte\Compiler $compiler)
+	public static function install(Latte\Compiler $compiler): void
 	{
 		$me = new static($compiler);
 

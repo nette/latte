@@ -29,7 +29,7 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 	}
 
 
-	public function markRedrawn(string $name)
+	public function markRedrawn(string $name): void
 	{
 		if ($this->invalid !== true) {
 			unset($this->invalid[$name]);
@@ -43,13 +43,13 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 	}
 
 
-	public function addSnippet(string $name, string $content)
+	public function addSnippet(string $name, string $content): void
 	{
 		$this->payload[$name] = $content;
 	}
 
 
-	public function renderChildren()
+	public function renderChildren(): void
 	{
 	}
 }

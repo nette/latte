@@ -27,7 +27,7 @@ register_shutdown_function(function ($level) {
 }, ob_get_level());
 
 
-function test(\Closure $function)
+function test(\Closure $function): void
 {
 	$function();
 }

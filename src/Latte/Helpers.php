@@ -37,9 +37,8 @@ class Helpers
 
 	/**
 	 * Finds the best suggestion.
-	 * @return string|null
 	 */
-	public static function getSuggestion(array $items, $value)
+	public static function getSuggestion(array $items, $value): ?string
 	{
 		$best = null;
 		$min = (strlen($value) / 4 + 1) * 10 + .1;
@@ -54,7 +53,7 @@ class Helpers
 	}
 
 
-	public static function removeFilter(&$modifier, $filter): bool
+	public static function removeFilter(string &$modifier, string $filter): bool
 	{
 		$modifier = preg_replace('#\|(' . $filter . ')\s?(?=\||\z)#i', '', $modifier, -1, $found);
 		return (bool) $found;
@@ -64,7 +63,7 @@ class Helpers
 	/**
 	 * Starts the $haystack string with the prefix $needle?
 	 */
-	public static function startsWith($haystack, $needle): bool
+	public static function startsWith(string $haystack, string $needle): bool
 	{
 		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
