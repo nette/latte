@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 
 test(function () {
 	$tokenizer = new MacroTokens('');
-	Assert::false($tokenizer->fetchWord());
+	Assert::null($tokenizer->fetchWord());
 	Assert::same('',  $tokenizer->joinAll());
 });
 
