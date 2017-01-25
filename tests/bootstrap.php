@@ -22,12 +22,12 @@ define('TEMP_DIR', __DIR__ . '/tmp/' . lcg_value());
 
 
 // output buffer level check
-register_shutdown_function(function ($level) {
+register_shutdown_function(function ($level): void {
 	Tester\Assert::same($level, ob_get_level());
 }, ob_get_level());
 
 
-function test(\Closure $function)
+function test(\Closure $function): void
 {
 	$function();
 }

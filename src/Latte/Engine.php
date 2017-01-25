@@ -68,9 +68,8 @@ class Engine
 
 	/**
 	 * Renders template to output.
-	 * @return void
 	 */
-	public function render($name, array $params = [], $block = null)
+	public function render(string $name, array $params = [], string $block = null): void
 	{
 		$this->createTemplate($name, $params + ['_renderblock' => $block])
 			->render();
@@ -80,7 +79,7 @@ class Engine
 	/**
 	 * Renders template to string.
 	 */
-	public function renderToString($name, array $params = [], $block = null): string
+	public function renderToString(string $name, array $params = [], string $block = null): string
 	{
 		$template = $this->createTemplate($name, $params + ['_renderblock' => $block]);
 		return $template->capture([$template, 'render']);
@@ -90,7 +89,7 @@ class Engine
 	/**
 	 * Creates template object.
 	 */
-	public function createTemplate($name, array $params = []): Runtime\Template
+	public function createTemplate(string $name, array $params = []): Runtime\Template
 	{
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, false)) {
@@ -103,7 +102,7 @@ class Engine
 	/**
 	 * Compiles template to PHP code.
 	 */
-	public function compile($name): string
+	public function compile(string $name): string
 	{
 		foreach ($this->onCompile ?: [] as $cb) {
 			(Helpers::checkCallback($cb))($this);
@@ -140,10 +139,9 @@ class Engine
 
 	/**
 	 * Compiles template to cache.
-	 * @return void
 	 * @throws \LogicException
 	 */
-	public function warmupCache(string $name)
+	public function warmupCache(string $name): void
 	{
 		if (!$this->tempDirectory) {
 			throw new \LogicException('Path to temporary directory is not set.');
@@ -156,10 +154,7 @@ class Engine
 	}
 
 
-	/**
-	 * @return void
-	 */
-	private function loadTemplate($name)
+	private function loadTemplate(string $name): void
 	{
 		if (!$this->tempDirectory) {
 			$code = $this->compile($name);
@@ -213,7 +208,7 @@ class Engine
 	}
 
 
-	public function getCacheFile($name): string
+	public function getCacheFile(string $name): string
 	{
 		$hash = substr($this->getTemplateClass($name), 8);
 		$base = preg_match('#([/\\\\][\w@.-]{3,35}){1,3}\z#', $name, $m)
@@ -223,7 +218,7 @@ class Engine
 	}
 
 
-	public function getTemplateClass($name): string
+	public function getTemplateClass(string $name): string
 	{
 		$key = $this->getLoader()->getUniqueId($name) . "\00" . self::VERSION;
 		return 'Template' . substr(md5($key), 0, 10);
@@ -232,10 +227,9 @@ class Engine
 
 	/**
 	 * Registers run-time filter.
-	 * @param  string|null
 	 * @return static
 	 */
-	public function addFilter($name, callable $callback)
+	public function addFilter(?string $name, callable $callback)
 	{
 		$this->filters->add($name, $callback);
 		return $this;
@@ -268,7 +262,7 @@ class Engine
 	 * Adds new macro.
 	 * @return static
 	 */
-	public function addMacro($name, IMacro $macro)
+	public function addMacro(string $name, IMacro $macro)
 	{
 		$this->getCompiler()->addMacro($name, $macro);
 		return $this;
@@ -279,7 +273,7 @@ class Engine
 	 * Adds new provider.
 	 * @return static
 	 */
-	public function addProvider($name, $value)
+	public function addProvider(string $name, $value)
 	{
 		$this->providers[$name] = $value;
 		return $this;
@@ -298,7 +292,7 @@ class Engine
 	/**
 	 * @return static
 	 */
-	public function setContentType($type)
+	public function setContentType(string $type)
 	{
 		$this->contentType = $type;
 		return $this;
@@ -309,7 +303,7 @@ class Engine
 	 * Sets path to temporary directory.
 	 * @return static
 	 */
-	public function setTempDirectory($path)
+	public function setTempDirectory(string $path)
 	{
 		$this->tempDirectory = $path;
 		return $this;

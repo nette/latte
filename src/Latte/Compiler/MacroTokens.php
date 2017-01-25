@@ -43,7 +43,7 @@ class MacroTokens extends TokenIterator
 	}
 
 
-	public function parse($s)
+	public function parse(string $s): array
 	{
 		self::$tokenizer = self::$tokenizer ?: new Tokenizer([
 			self::T_WHITESPACE => '\s+',
@@ -64,7 +64,7 @@ class MacroTokens extends TokenIterator
 	 * Appends simple token or string (will be parsed).
 	 * @return static
 	 */
-	public function append($val, $position = null)
+	public function append($val, int $position = null)
 	{
 		if ($val != null) { // intentionally @
 			array_splice(
@@ -93,9 +93,8 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Reads single token (optionally delimited by comma) from string.
-	 * @return string|null
 	 */
-	public function fetchWord()
+	public function fetchWord(): ?string
 	{
 		$words = $this->fetchWords();
 		return $words ? implode(':', $words) : null;
@@ -128,7 +127,7 @@ class MacroTokens extends TokenIterator
 	}
 
 
-	protected function next()
+	protected function next(): void
 	{
 		parent::next();
 		if ($this->isCurrent('[', '(', '{')) {

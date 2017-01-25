@@ -57,7 +57,7 @@ class Template
 	private $referenceType;
 
 
-	public function __construct(Engine $engine, array $params, FilterExecutor $filters, array $providers, $name)
+	public function __construct(Engine $engine, array $params, FilterExecutor $filters, array $providers, string $name)
 	{
 		$this->engine = $engine;
 		$this->params = $params;
@@ -95,7 +95,7 @@ class Template
 	 * Returns parameter.
 	 * @return mixed
 	 */
-	public function getParameter($name)
+	public function getParameter(string $name)
 	{
 		if (!array_key_exists($name, $this->params)) {
 			trigger_error("The variable '$name' does not exist in template.", E_USER_NOTICE);
@@ -110,28 +110,19 @@ class Template
 	}
 
 
-	/**
-	 * @return string|null
-	 */
-	public function getParentName()
+	public function getParentName(): ?string
 	{
 		return $this->parentName ?: null;
 	}
 
 
-	/**
-	 * @return Template|null
-	 */
-	public function getReferringTemplate()
+	public function getReferringTemplate(): ?self
 	{
 		return $this->referringTemplate;
 	}
 
 
-	/**
-	 * @return string|null
-	 */
-	public function getReferenceType()
+	public function getReferenceType(): ?string
 	{
 		return $this->referenceType;
 	}
@@ -139,10 +130,9 @@ class Template
 
 	/**
 	 * Renders template.
-	 * @return void
 	 * @internal
 	 */
-	public function render()
+	public function render(): void
 	{
 		$this->prepare();
 
@@ -194,7 +184,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	protected function createTemplate($name, array $params, $referenceType): self
+	protected function createTemplate(string $name, array $params, string $referenceType): self
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
@@ -215,10 +205,9 @@ class Template
 
 	/**
 	 * @param  string|\Closure content-type name or modifier closure
-	 * @return void
 	 * @internal
 	 */
-	protected function renderToContentType($mod)
+	protected function renderToContentType($mod): void
 	{
 		if ($mod instanceof \Closure) {
 			echo $mod($this->capture([$this, 'render']), $this->contentType);
@@ -249,10 +238,9 @@ class Template
 	/**
 	 * Renders block.
 	 * @param  string|\Closure $mod content-type name or modifier closure
-	 * @return void
 	 * @internal
 	 */
-	protected function renderBlock(string $name, array $params, $mod = null)
+	protected function renderBlock(string $name, array $params, $mod = null): void
 	{
 		if (empty($this->blockQueue[$name])) {
 			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
@@ -262,7 +250,7 @@ class Template
 		$block = reset($this->blockQueue[$name]);
 		if ($mod && $mod !== ($blockType = $this->blockTypes[$name])) {
 			if ($filter = (is_string($mod) ? Filters::getConvertor($blockType, $mod) : $mod)) {
-				echo $filter($this->capture(function () use ($block, $params) { $block($params); }), $blockType);
+				echo $filter($this->capture(function () use ($block, $params): void { $block($params); }), $blockType);
 				return;
 			}
 			trigger_error("Including block $name with content type " . strtoupper($blockType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
@@ -273,10 +261,9 @@ class Template
 
 	/**
 	 * Renders parent block.
-	 * @return void
 	 * @internal
 	 */
-	protected function renderBlockParent($name, array $params)
+	protected function renderBlockParent(string $name, array $params): void
 	{
 		if (empty($this->blockQueue[$name]) || ($block = next($this->blockQueue[$name])) === false) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
@@ -287,10 +274,9 @@ class Template
 
 
 	/**
-	 * @return void
 	 * @internal
 	 */
-	protected function checkBlockContentType($current, $name)
+	protected function checkBlockContentType(string $current, string $name): void
 	{
 		$expected = &$this->blockTypes[$name];
 		if ($expected === null) {

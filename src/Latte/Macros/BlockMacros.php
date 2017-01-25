@@ -35,7 +35,7 @@ class BlockMacros extends MacroSet
 	private $imports;
 
 
-	public static function install(Latte\Compiler $compiler)
+	public static function install(Latte\Compiler $compiler): void
 	{
 		$me = new static($compiler);
 		$me->addMacro('include', [$me, 'macroInclude']);
@@ -399,7 +399,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function generateMethodName($blockName)
+	private function generateMethodName(string $blockName): string
 	{
 		$clean = trim(preg_replace('#\W+#', '_', $blockName), '_');
 		$name = 'block' . ucfirst($clean);

@@ -39,9 +39,8 @@ class TokenIterator
 
 	/**
 	 * Returns current token.
-	 * @return array|null
 	 */
-	public function currentToken()
+	public function currentToken(): ?array
 	{
 		return $this->tokens[$this->position] ?? null;
 	}
@@ -49,9 +48,8 @@ class TokenIterator
 
 	/**
 	 * Returns current token value.
-	 * @return string|null
 	 */
-	public function currentValue()
+	public function currentValue(): ?string
 	{
 		return $this->tokens[$this->position][Tokenizer::VALUE] ?? null;
 	}
@@ -60,9 +58,8 @@ class TokenIterator
 	/**
 	 * Returns next token.
 	 * @param  int|string  (optional) desired token type or value
-	 * @return array|null
 	 */
-	public function nextToken(...$args)
+	public function nextToken(...$args): ?array
 	{
 		return $this->scan($args, true, true); // onlyFirst, advance
 	}
@@ -71,9 +68,8 @@ class TokenIterator
 	/**
 	 * Returns next token value.
 	 * @param  int|string  (optional) desired token type or value
-	 * @return string|null
 	 */
-	public function nextValue(...$args)
+	public function nextValue(...$args): ?string
 	{
 		return $this->scan($args, true, true, true); // onlyFirst, advance, strings
 	}
@@ -187,7 +183,7 @@ class TokenIterator
 	/**
 	 * Moves cursor to next token.
 	 */
-	protected function next()
+	protected function next(): void
 	{
 		$this->position++;
 	}

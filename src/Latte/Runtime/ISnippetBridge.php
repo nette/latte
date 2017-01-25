@@ -22,20 +22,11 @@ interface ISnippetBridge
 
 	function needsRedraw(string $name): bool;
 
-	/**
-	 * @return void
-	 */
-	function markRedrawn(string $name);
+	function markRedrawn(string $name): void;
 
 	function getHtmlId(string $name): string;
 
-	/**
-	 * @return void
-	 */
-	function addSnippet(string $name, string $content);
+	function addSnippet(string $name, string $content): void;
 
-	/**
-	 * @return void
-	 */
-	function renderChildren();
+	function renderChildren(): void;
 }

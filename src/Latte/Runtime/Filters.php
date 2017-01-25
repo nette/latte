@@ -226,7 +226,7 @@ class Filters
 	/**
 	 * Converts ... to ...
 	 */
-	public static function convertTo(FilterInfo $info, $dest, $s): string
+	public static function convertTo(FilterInfo $info, string $dest, $s): string
 	{
 		$source = $info->contentType ?: Engine::CONTENT_TEXT;
 		if ($source === $dest) {
@@ -241,10 +241,7 @@ class Filters
 	}
 
 
-	/**
-	 * @return callable|null
-	 */
-	public static function getConvertor($source, $dest)
+	public static function getConvertor(string $source, string $dest): ?callable
 	{
 		static $table = [
 			Engine::CONTENT_TEXT => [
@@ -358,7 +355,6 @@ class Filters
 
 	/**
 	 * Indents plain text or HTML the content from the left.
-	 * @return string
 	 */
 	public static function indent(FilterInfo $info, string $s, int $level = 1, string $chars = "\t"): string
 	{
@@ -394,9 +390,8 @@ class Filters
 	/**
 	 * Date/time formatting.
 	 * @param  string|int|\DateTimeInterface|\DateInterval
-	 * @return string|null
 	 */
-	public static function date($time, string $format = null)
+	public static function date($time, string $format = null): ?string
 	{
 		if ($time == null) { // intentionally ==
 			return null;
@@ -600,7 +595,7 @@ class Filters
 	 * @param  string
 	 * @return string
 	 */
-	public static function trim(FilterInfo $info, $s, $charlist = " \t\n\r\0\x0B\u{A0}"): string
+	public static function trim(FilterInfo $info, $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+\z#u', '', (string) $s);
@@ -641,7 +636,7 @@ class Filters
 	 * Reverses string or array.
 	 * @param  string|array|\Traversable
 	 */
-	public static function reverse($val, $preserveKeys = false)
+	public static function reverse($val, bool $preserveKeys = false)
 	{
 		if (is_array($val)) {
 			return array_reverse($val, $preserveKeys);

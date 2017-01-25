@@ -263,7 +263,7 @@ class Parser
 	/**
 	 * Handles CONTEXT_MACRO.
 	 */
-	private function contextMacro()
+	private function contextMacro(): void
 	{
 		$matches = $this->match('~
 			(?P<comment>\\*.*?\\*' . $this->delimiters[1] . '\n{0,2})|
@@ -291,7 +291,7 @@ class Parser
 	}
 
 
-	private function processMacro($matches)
+	private function processMacro(array $matches)
 	{
 		if (!empty($matches['macro'])) { // {macro} or {* *}
 			$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
@@ -344,7 +344,7 @@ class Parser
 	/**
 	 * @return static
 	 */
-	public function setContext($context, $quote = null)
+	public function setContext(string $context, $quote = null)
 	{
 		$this->context = [$context, $quote];
 		return $this;
@@ -383,10 +383,9 @@ class Parser
 	/**
 	 * Parses macro tag to name, arguments a modifiers parts.
 	 * @param  string {name arguments | modifiers}
-	 * @return array|null
 	 * @internal
 	 */
-	public function parseMacroTag(string $tag)
+	public function parseMacroTag(string $tag): ?array
 	{
 		if (!preg_match('~^
 			(?P<closing>/?)
@@ -409,7 +408,7 @@ class Parser
 	}
 
 
-	private function addToken($type, $text): Token
+	private function addToken(string $type, string $text): Token
 	{
 		$this->output[] = $token = new Token;
 		$token->type = $type;
@@ -430,7 +429,7 @@ class Parser
 	/**
 	 * Process low-level macros.
 	 */
-	protected function filter(Token $token)
+	protected function filter(Token $token): void
 	{
 		if ($token->type === Token::MACRO_TAG && $token->name === '/syntax') {
 			$this->setSyntax($this->defaultSyntax);
