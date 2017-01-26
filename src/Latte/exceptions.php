@@ -25,11 +25,11 @@ class CompileException extends \Exception
 	public $sourceLine;
 
 
-	public function setSource($code, $line, $name = NULL)
+	public function setSource(string $code, int $line, string $name = NULL)
 	{
-		$this->sourceCode = (string) $code;
-		$this->sourceLine = (int) $line;
-		$this->sourceName = (string) $name;
+		$this->sourceCode = $code;
+		$this->sourceLine = $line;
+		$this->sourceName = $name;
 		if (@is_file($name)) { // @ - may trigger error
 			$this->message = rtrim($this->message, '.')
 				. ' in ' . str_replace(dirname(dirname($name)), '...', $name) . ($line ? ":$line" : '');
