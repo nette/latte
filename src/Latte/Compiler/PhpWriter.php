@@ -421,7 +421,7 @@ class PhpWriter
 						$name = strtolower($tokens->currentValue());
 						$res->prepend($isContent
 							? '$this->filters->filterContent('. var_export($name, TRUE) . ', $_fi, '
-							: 'call_user_func($this->filters->' . $name . ', '
+							: '($this->filters->' . $name . ')('
 						);
 						$inside = TRUE;
 					}
@@ -492,7 +492,7 @@ class PhpWriter
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
 			case NULL:
-				return $tokens->prepend('call_user_func($this->filters->escape, ')->append(')');
+				return $tokens->prepend('($this->filters->escape)(')->append(')');
 			default:
 				throw new CompileException("Unknown context $contentType.");
 		}

@@ -215,7 +215,7 @@ class CoreMacros extends MacroSet
 			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, %raw))', $node->context[0], $value);
 
 		} elseif ($node->empty = ($node->args !== '')) {
-			return $writer->write('echo %modify(call_user_func($this->filters->translate, %node.args))');
+			return $writer->write('echo %modify(($this->filters->translate)(%node.args))');
 		}
 	}
 
