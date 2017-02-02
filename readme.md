@@ -283,6 +283,27 @@ If `$movie` variable stores `'Amarcord & 8 1/2'` string it generates the followi
 Thanks to Context-Aware Escaping the template is simple and your application perfectly secured against Cross Site Scripting. You can use PHP variables natively inside the JavaScript!
 
 
+Limitation
+----------
+
+Note that Latte macros inside JavaScript strings are not supported and Context-Aware Escaping may produce unexpected results as seen in example below:
+
+```html
+<p onclick='alert("My favorite movie is {$movie}.")'>{$movie}</p>
+```
+
+It generates the following output. Notice the excessive ```&quot;```'s that will break the script:
+
+```html
+<p onclick='alert("My favorite movie is &quot;Amarcord &amp; 8 1\/2&quot;.")'>Amarcord &amp; 8 1/2</p>
+```
+
+The workaround for this is to concatenate strings manually:
+
+```html
+<p onclick='alert("My favorite movie is " + {$movie} + ".")'>{$movie}</p>
+```
+
 
 A pretty output
 ===============
