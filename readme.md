@@ -283,6 +283,18 @@ If `$movie` variable stores `'Amarcord & 8 1/2'` string it generates the followi
 Thanks to Context-Aware Escaping the template is simple and your application perfectly secured against Cross Site Scripting. You can use PHP variables natively inside the JavaScript!
 
 
+JavaScript
+----------
+
+Strings in JavaScript are escaped including quotes. If you want to put variable into another string, simply concatenate them:
+
+```html
+<script>
+	alert('Hello ' + {$name} + '!');  # good
+	alert('Hello {$name} !');  # bad
+</script>
+```
+
 
 A pretty output
 ===============
