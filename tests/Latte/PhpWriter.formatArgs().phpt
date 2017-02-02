@@ -95,29 +95,29 @@ test(function () { // special UTF-8
 
 
 test(function () { // inline modifiers
-	Assert::same('call_user_func($this->filters->mod, @)',  formatArgs('(@|mod)'));
-	Assert::same('call_user_func($this->filters->mod3, call_user_func($this->filters->mod2, call_user_func($this->filters->mod1, @)))',  formatArgs('(@|mod1|mod2|mod3)'));
-	Assert::same('call_user_func($this->filters->mod3, call_user_func($this->filters->mod2, call_user_func($this->filters->mod1, @)))',  formatArgs('((@|mod1)|mod2|mod3)'));
-	Assert::same('call_user_func($this->filters->mod, @, 1, 2, $var["pocet"])',  formatArgs('(@|mod:1:2:$var["pocet"])'));
-	Assert::same('call_user_func($this->filters->mod, @, 1, 2, $var["pocet"])',  formatArgs('(@|mod,1,2,$var["pocet"])'));
-	Assert::same('call_user_func($this->filters->mod, @, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')',  formatArgs('(@|mod, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')'));
-	Assert::same('call_user_func($this->filters->mod, @, array(1))',  formatArgs('(@|mod: array(1))'));
-	Assert::same('call_user_func($this->filters->mod, $a ? $b : NULL)',  formatArgs('($a ? $b|mod)'));
+	Assert::same('($this->filters->mod)(@)',  formatArgs('(@|mod)'));
+	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))',  formatArgs('(@|mod1|mod2|mod3)'));
+	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))',  formatArgs('((@|mod1)|mod2|mod3)'));
+	Assert::same('($this->filters->mod)(@, 1, 2, $var["pocet"])',  formatArgs('(@|mod:1:2:$var["pocet"])'));
+	Assert::same('($this->filters->mod)(@, 1, 2, $var["pocet"])',  formatArgs('(@|mod,1,2,$var["pocet"])'));
+	Assert::same('($this->filters->mod)(@, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')',  formatArgs('(@|mod, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')'));
+	Assert::same('($this->filters->mod)(@, array(1))',  formatArgs('(@|mod: array(1))'));
+	Assert::same('($this->filters->mod)($a ? $b : NULL)',  formatArgs('($a ? $b|mod)'));
 
-	Assert::same("'foo' => call_user_func(\$this->filters->mod, \$val, 'param', \"param2)\")", formatArgs('foo => ($val|mod:param:"param2)")'));
-	Assert::same("'foo' => call_user_func(\$this->filters->mod2, call_user_func(\$this->filters->mod, \$val))", formatArgs('foo => ($val|mod|mod2)'));
-	Assert::same("'foo' => call_user_func(\$this->filters->mod, \$val, 'param', call_user_func(\$this->filters->mod2, 1))", formatArgs('foo => ($val|mod:param:(1|mod2))'));
-	Assert::same("'foo' => call_user_func(\$this->filters->mod, \$val, 'param', call_user_func(\$this->filters->mod2, 1, round(call_user_func(\$this->filters->foo, 2))))", formatArgs('foo => ($val|mod:param:(1|mod2:round((2|foo))))'));
+	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', \"param2)\")", formatArgs('foo => ($val|mod:param:"param2)")'));
+	Assert::same("'foo' => (\$this->filters->mod2)((\$this->filters->mod)(\$val))", formatArgs('foo => ($val|mod|mod2)'));
+	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1))", formatArgs('foo => ($val|mod:param:(1|mod2))'));
+	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1, round((\$this->filters->foo)(2))))", formatArgs('foo => ($val|mod:param:(1|mod2:round((2|foo))))'));
 	Assert::same("'foo' => foo(\$val)", formatArgs('foo => foo($val)'));
-	Assert::same("'foo' => foo(call_user_func(\$this->filters->bar, \$val))", formatArgs('foo => foo($val|bar)'));
-	Assert::same("foo(call_user_func(\$this->filters->bar, \$val),call_user_func(\$this->filters->lorem,  \$val))", formatArgs('foo($val|bar, $val|lorem)'));
-	Assert::same("'foo' => array(call_user_func(\$this->filters->bar, \$val),)", formatArgs('foo => array($val|bar,)'));
-	Assert::same("[call_user_func(\$this->filters->bar, \$val),call_user_func(\$this->filters->lorem,  \$val)]", formatArgs('[$val|bar, $val|lorem]'));
+	Assert::same("'foo' => foo((\$this->filters->bar)(\$val))", formatArgs('foo => foo($val|bar)'));
+	Assert::same("foo((\$this->filters->bar)(\$val),(\$this->filters->lorem)( \$val))", formatArgs('foo($val|bar, $val|lorem)'));
+	Assert::same("'foo' => array((\$this->filters->bar)(\$val),)", formatArgs('foo => array($val|bar,)'));
+	Assert::same("[(\$this->filters->bar)(\$val),(\$this->filters->lorem)( \$val)]", formatArgs('[$val|bar, $val|lorem]'));
 	Assert::exception(function () {
 		formatArgs('($val|mod:param:"param2"');
 	}, Latte\CompileException::class, 'Missing )');
 
-	Assert::same('call_user_func($this->filters->escape, @)',  formatArgs('(@|escape)'));
+	Assert::same('($this->filters->escape)(@)',  formatArgs('(@|escape)'));
 	Assert::same('LR\Filters::safeUrl(@)',  formatArgs('(@|checkurl)'));
 });
 

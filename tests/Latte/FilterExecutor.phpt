@@ -38,23 +38,23 @@ test(function () {
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
 	Assert::same('strtoupper', $filters->F1);
-	Assert::same('AA', call_user_func($filters->f1, 'aa'));
+	Assert::same('AA', ($filters->f1)('aa'));
 
 	$filters->add('f1', 'trim');
 	Assert::same('trim', $filters->f1);
 	Assert::same('trim', $filters->F1);
 
 	$filters->add('f2', [new MyFilter, 'invoke']);
-	Assert::same('aa', call_user_func($filters->f2, 'aA'));
+	Assert::same('aa', ($filters->f2)('aA'));
 
 	$filters->add('f3', 'MyFilter::invoke');
-	Assert::same('aa', call_user_func($filters->f3, 'aA'));
+	Assert::same('aa', ($filters->f3)('aA'));
 
 	$filters->add('f4', new MyFilter);
-	Assert::same('AA', call_user_func($filters->f4, 'aA'));
+	Assert::same('AA', ($filters->f4)('aA'));
 
 	Assert::exception(function () use ($filters) {
-		call_user_func($filters->h3, '');
+		($filters->h3)('');
 	}, 'LogicException', "Filter 'h3' is not defined, did you mean 'f3'?");
 });
 
@@ -64,16 +64,16 @@ test(function () {
 	$filters->add(NULL, function ($name, $val) {
 		return implode(',', func_get_args());
 	});
-	Assert::same('dynamic,1,2', call_user_func($filters->dynamic, 1, 2));
-	Assert::same('dynamic,1,2', call_user_func($filters->dynamic, 1, 2));
-	Assert::same('dynamic,1,2', call_user_func($filters->Dynamic, 1, 2));
-	Assert::same('another,1,2', call_user_func($filters->another, 1, 2));
+	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
+	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
+	Assert::same('dynamic,1,2', ($filters->Dynamic)(1, 2));
+	Assert::same('another,1,2', ($filters->another)(1, 2));
 
 	$filters2 = new FilterExecutor;
 	$filters2->add(NULL, function ($name, $val) {
 		return 'different';
 	});
-	Assert::same('different', call_user_func($filters2->dynamic, 1, 2));
+	Assert::same('different', ($filters2->dynamic)(1, 2));
 });
 
 
@@ -86,11 +86,11 @@ test(function () {
 			});
 		}
 	});
-	Assert::same('1,2', call_user_func($filters->dynamic, 1, 2));
-	Assert::same('1,2', call_user_func($filters->dynamic, 1, 2));
+	Assert::same('1,2', ($filters->dynamic)(1, 2));
+	Assert::same('1,2', ($filters->dynamic)(1, 2));
 
 	Assert::exception(function () use ($filters) {
-		call_user_func($filters->unknown, '');
+		($filters->unknown)('');
 	}, 'LogicException', "Filter 'unknown' is not defined.");
 });
 
@@ -103,8 +103,8 @@ test(function () {
 		return gettype($info->contentType) . ',' . strtolower($val);
 	}, TRUE);
 
-	Assert::same('NULL,aa', call_user_func($filters->f1, 'aA'));
-	Assert::same('NULL,aa', call_user_func($filters->f1, 'aA'));
+	Assert::same('NULL,aa', ($filters->f1)('aA'));
+	Assert::same('NULL,aa', ($filters->f1)('aA'));
 
 
 	// classic called as FilterInfo aware
@@ -138,9 +138,9 @@ test(function () {
 		return $type . ',' . gettype($val) . ',' . strtolower($val);
 	}, TRUE);
 
-	Assert::equal(new Html('html,string,aa'), call_user_func($filters->f4, new Html('aA'), 'html'));
-	Assert::equal('html,string,aa', call_user_func($filters->f4, new Html('aA'), 'text'));
-	Assert::equal('html,string,aa', call_user_func($filters->f4, new Html('aA'), NULL));
+	Assert::equal(new Html('html,string,aa'), ($filters->f4)(new Html('aA'), 'html'));
+	Assert::equal('html,string,aa', ($filters->f4)(new Html('aA'), 'text'));
+	Assert::equal('html,string,aa', ($filters->f4)(new Html('aA'), NULL));
 
 
 	// classic called as FilterInfo aware with Latte\Runtime\Html

@@ -212,7 +212,7 @@ class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
-				?>	<li><?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->lower, $person)) /* line 83 */ ?></li>
+				?>	<li><?php echo LR\Filters::escapeHtmlText(($this->filters->lower)($person)) /* line 83 */ ?></li>
 <?php
 			}
 			$iterations++;

@@ -27,12 +27,12 @@ class Template%a% extends Latte\Runtime\Template
 	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' /* line 7 */ ?></li>
 	<li>Array access: <?php echo LR\Filters::escapeHtmlText($people[1]) /* line 8 */ ?></li>
 	<li>Html: <?php echo LR\Filters::escapeHtmlText($el) /* line 9 */ ?></li>
-	<li>Translated: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->translate, $people[1])) ?></li>
-	<li>Translated string: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->translate, 'ahoj')) ?></li>
-	<li>Non-escaped and translated: <?php echo call_user_func($this->filters->translate, $people[1]) ?></li>
+	<li>Translated: <?php echo LR\Filters::escapeHtmlText(($this->filters->translate)($people[1])) ?></li>
+	<li>Translated string: <?php echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj')) ?></li>
+	<li>Non-escaped and translated: <?php echo ($this->filters->translate)($people[1]) ?></li>
 	<li>Condition: <?php echo LR\Filters::escapeHtmlText($hello ? 'yes' : NULL) /* line 13 */ ?> <?php echo LR\Filters::escapeHtmlText($hello ? 'yes' : NULL) /* line 13 */ ?></li>
-	<li>Array: <?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->join, $hello ? ['a', 'b', 'c'] : NULL)) /* line 14 */ ?> <?php
-		echo LR\Filters::escapeHtmlText(call_user_func($this->filters->join, ['a', 'b', $hello ? 'c' : NULL])) /* line 14 */ ?></li>
+	<li>Array: <?php echo LR\Filters::escapeHtmlText(($this->filters->join)($hello ? ['a', 'b', 'c'] : NULL)) /* line 14 */ ?> <?php
+		echo LR\Filters::escapeHtmlText(($this->filters->join)(['a', 'b', $hello ? 'c' : NULL])) /* line 14 */ ?></li>
 </ul>
 
 <input /> <input /> <input />
@@ -243,7 +243,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 		}
 		array_pop($this->global->switch) ?>
 
-<?php echo call_user_func($this->filters->breaklines, "\n") /* line 145 */ ?>
+<?php echo ($this->filters->breaklines)("\n") /* line 145 */ ?>
 
 
 
