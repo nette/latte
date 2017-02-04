@@ -67,7 +67,7 @@ class PhpWriter
 				case 'node_':
 					$arg = $word; break;
 				case '':
-					list(, $arg) = each($args); break;
+					$arg = current($args); next($args); break;
 				default:
 					$arg = $args[(int) $source]; break;
 			}
