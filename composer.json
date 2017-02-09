@@ -1,7 +1,7 @@
 {
 	"name": "latte/latte",
-	"description": "Latte: the amazing template engine for PHP",
-	"keywords": ["templating", "twig"],
+	"description": "☕ Latte: the intuitive and fast template engine for those who want the most secure PHP sites. Introduces context-sensitive escaping.",
+	"keywords": ["template", "nette", "security", "engine", "html", "twig", "context-sensitive", "escaping"],
 	"homepage": "https://latte.nette.org",
 	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
