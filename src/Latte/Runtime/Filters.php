@@ -526,7 +526,7 @@ class Filters
 	{
 		$s = (string) $s;
 		if ($length === NULL) {
-			$length = strlen(utf8_decode($s));
+			$length = self::strLength($s);
 		}
 		if (function_exists('mb_substr')) {
 			return mb_substr($s, $start, $length, 'UTF-8'); // MB is much faster
@@ -545,8 +545,8 @@ class Filters
 	public static function truncate($s, $maxLen, $append = "\xE2\x80\xA6")
 	{
 		$s = (string) $s;
-		if (strlen(utf8_decode($s)) > $maxLen) {
-			$maxLen = $maxLen - strlen(utf8_decode($append));
+		if (self::strLength($s) > $maxLen) {
+			$maxLen = $maxLen - self::strLength($append);
 			if ($maxLen < 1) {
 				return $append;
 
@@ -618,8 +618,18 @@ class Filters
 		} elseif ($val instanceof \Traversable) {
 			return iterator_count($val);
 		} else {
-			return strlen(utf8_decode($val)); // fastest way
+			return self::strLength($val);
 		}
+	}
+
+
+	/**
+	 * @param  string
+	 * @return int
+	 */
+	private static function strLength($s)
+	{
+		return function_exists('mb_strlen') ? mb_strlen($s, 'UTF-8') : strlen(utf8_decode($s));
 	}
 
 
@@ -650,8 +660,8 @@ class Filters
 	public static function padLeft($s, $length, $pad = ' ')
 	{
 		$s = (string) $s;
-		$length = max(0, $length - strlen(utf8_decode($s)));
-		$padLen = strlen(utf8_decode($pad));
+		$length = max(0, $length - self::strLength($s));
+		$padLen = self::strLength($pad);
 		return str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen) . $s;
 	}
 
@@ -666,8 +676,8 @@ class Filters
 	public static function padRight($s, $length, $pad = ' ')
 	{
 		$s = (string) $s;
-		$length = max(0, $length - strlen(utf8_decode($s)));
-		$padLen = strlen(utf8_decode($pad));
+		$length = max(0, $length - self::strLength($s));
+		$padLen = self::strLength($pad);
 		return $s . str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen);
 	}
 
