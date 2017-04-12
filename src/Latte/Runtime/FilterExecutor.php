@@ -52,7 +52,7 @@ class FilterExecutor
 		'striphtml' => [[Filters::class, 'stripHtml'], TRUE],
 		'striptags' => [[Filters::class, 'stripTags'], TRUE],
 		'substr' => [[Filters::class, 'substring'], FALSE],
-		'trim' => [[Filters::class, 'trim'], FALSE],
+		'trim' => [[Filters::class, 'trim'], TRUE],
 		'truncate' => [[Filters::class, 'truncate'], FALSE],
 		'upper' => [[Filters::class, 'upper'], FALSE],
 	];

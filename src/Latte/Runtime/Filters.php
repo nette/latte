@@ -596,11 +596,11 @@ class Filters
 
 	/**
 	 * Strips whitespace.
-	 * @param  string plain text
-	 * @param  string plain text
-	 * @return string plain text
+	 * @param  string
+	 * @param  string
+	 * @return string
 	 */
-	public static function trim($s, $charlist = " \t\n\r\0\x0B\u{A0}"): string
+	public static function trim(FilterInfo $info, $s, $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', (string) $s);
