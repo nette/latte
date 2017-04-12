@@ -52,7 +52,7 @@ class FilterExecutor
 		'striphtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
 		'striptags' => ['Latte\Runtime\Filters::stripTags', TRUE],
 		'substr' => ['Latte\Runtime\Filters::substring', FALSE],
-		'trim' => ['Latte\Runtime\Filters::trim', FALSE],
+		'trim' => ['Latte\Runtime\Filters::trim', TRUE],
 		'truncate' => ['Latte\Runtime\Filters::truncate', FALSE],
 		'upper' => ['Latte\Runtime\Filters::upper', FALSE],
 	];
