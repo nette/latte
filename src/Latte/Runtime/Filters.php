@@ -212,14 +212,15 @@ class Filters
 	 * Removes tags from HTML (but remains HTML entites).
 	 * @param
 	 * @param  string HTML
+	 * @param  string tags which should not be stripped
 	 * @return string HTML
 	 */
-	public static function stripTags(FilterInfo $info, $s): string
+	public static function stripTags(FilterInfo $info, $s, $allowableTags = NULL): string
 	{
 		if (!in_array($info->contentType, [NULL, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], TRUE)) {
 			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
 		}
-		return strip_tags((string) $s);
+		return strip_tags((string) $s, $allowableTags);
 	}
 
 
