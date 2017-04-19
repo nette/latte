@@ -68,9 +68,9 @@ Installation
 
 The best way how to install Latte is to [download a latest package](https://github.com/nette/latte/releases) or use a Composer:
 
-/--
+```bash
 composer require latte/latte
-\--
+```
 
 The Latte requires PHP version 5.4.4 or newer (is compatible with PHP 7.0 and 7.1). The dev-master version requires PHP 7.0.
 
