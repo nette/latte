@@ -50,7 +50,7 @@ class MacroTokens extends TokenIterator
 			self::T_CAST => '\((?:expand|string|array|int|integer|float|bool|boolean|object)\)', // type casting
 			self::T_VARIABLE => '\$[\w\pL_]+',
 			self::T_NUMBER => '[+-]?[0-9]+(?:\.[0-9]+)?(?:e[0-9]+)?',
-			self::T_SYMBOL => '[\w\pL_]+(?:-[\w\pL_]+)*',
+			self::T_SYMBOL => '[\w\pL_]+(?:-+[\w\pL_]+)*',
 			self::T_CHAR => '::|=>|->|\+\+|--|<<|>>|<=>|<=|>=|===|!==|==|!=|<>|&&|\|\||\?\?|\?>|\*\*|\.\.\.|[^"\']', // =>, any char except quotes
 		], 'u');
 		return self::$tokenizer->tokenize($s);

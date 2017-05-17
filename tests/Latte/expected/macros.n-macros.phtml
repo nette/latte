@@ -52,7 +52,7 @@ class Template%a% extends Latte\Runtime\Template
 <p<?php if ($_tmp = array_filter(['foo', (false ? 'first' : NULL), 'odd', (true ? 'foo' : 'bar')])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class</p>
 
 <p<?php if ($_tmp = array_filter([false ? 'first' : NULL])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class empty</p>
-
+<p<?php if ($_tmp = array_filter([true ? 'bem--modifier' : NULL])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>>n:class with BEM</p>
 
 
 <?php
