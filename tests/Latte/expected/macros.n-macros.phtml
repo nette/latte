@@ -17,10 +17,14 @@ class Template%a% extends Latte\Runtime\Template
 %A%
 
 <p<?php
-		echo LR\Filters::htmlAttributes(['title' => 'hello', 'lang' => isset($lang) ? $lang : NULL]);
+		$_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : NULL];
+		echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);
 ?>> </p>
 
-
+<p<?php
+		$_tmp = [['title' => 'hello']];
+		echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);
+?>> </p>
 
 <?php
 		$iterations = 0;

@@ -395,7 +395,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write('echo LR\Filters::htmlAttributes(%node.array);');
+		return $writer->write('$_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);');
 	}
 
 
