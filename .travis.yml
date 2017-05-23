@@ -2,7 +2,6 @@ language: php
 php:
     - 7.0
     - 7.1
-    - hhvm
 
 env:
 matrix:
@@ -11,7 +10,6 @@ matrix:
           env: coverage=on
 
     allow_failures:
-        - php: hhvm
         - php: 7.0
           env: coverage=on
 
