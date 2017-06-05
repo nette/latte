@@ -374,4 +374,22 @@ class Engine
 		return $this->loader;
 	}
 
+
+	/**
+	 * @deprecated
+	 */
+	public function & __get($name)
+	{
+		switch (strtolower($name)) {
+			case 'parser':
+			case 'compiler':
+				$method = 'get' . ucfirst($name);
+				trigger_error("Magic getters are deprecated. Use $method() method insted.", E_USER_DEPRECATED);
+				$return = $this->$method(); // return by reference
+				return $return;
+		}
+
+		return parent::__get($name);
+	}
+
 }
