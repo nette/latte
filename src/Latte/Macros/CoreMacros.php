@@ -84,6 +84,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('class', NULL, NULL, [$me, 'macroClass']);
 		$me->addMacro('attr', NULL, NULL, [$me, 'macroAttr']);
+		$me->addMacro('attr-expand', NULL, NULL, [$me, 'macroAttrExpand']);
 	}
 
 
@@ -379,6 +380,16 @@ class CoreMacros extends MacroSet
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
 		return $writer->write('$_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);');
+	}
+
+
+	/**
+	 * Expand an array of attributes.
+	 * n:attr-expand="..."
+	 */
+	public function macroAttrExpand(MacroNode $node, PhpWriter $writer)
+	{
+		return $writer->write('echo LR\Filters::htmlAttributes( %node.word );');
 	}
 
 
