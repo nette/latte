@@ -84,6 +84,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('class', NULL, NULL, [$me, 'macroClass']);
 		$me->addMacro('attr', NULL, NULL, [$me, 'macroAttr']);
+		$me->addMacro('integrity', NULL, NULL, [$me, 'macroIntegrity']);
 	}
 
 
@@ -379,6 +380,29 @@ class CoreMacros extends MacroSet
 	public function macroAttr(MacroNode $node, PhpWriter $writer)
 	{
 		return $writer->write('$_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);');
+	}
+
+
+	/**
+	 * n:integrity
+	 */
+	public function macroIntegrity(MacroNode $node, PhpWriter $writer)
+	{
+		$attrs = $node->htmlNode->attrs;
+		if (empty($attrs['src']) && empty($attrs['href'])) {
+			throw new CompileException('n:integrity requires attribute src or href.');
+		}
+		$src = empty($attrs['src']) ? $attrs['href'] : $attrs['src'];
+		if (!preg_match('#^(https?:)?//#', $src, $m)) {
+			throw new CompileException('n:integrity requires absolute URL.');
+		} elseif (empty($m[1])) {
+			$src = 'http:' . $src;
+		}
+		$content = @file_get_contents($src); // @ is escalated to exception
+		if ($content === FALSE) {
+			throw new CompileException("Unable to download '$src'.");
+		}
+		$node->attrCode = ' integrity="sha256-' . base64_encode(hash('sha256', $content, TRUE)) . '"';
 	}
 
 
