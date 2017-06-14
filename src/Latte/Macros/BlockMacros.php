@@ -126,7 +126,7 @@ class BlockMacros extends MacroSet
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === FALSE ? var_export($destination, TRUE) : $destination)
 			. ', %node.array? + '
-			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
+			. ($parent ? '$_args' : '[]')
 			. ($node->modifiers
 				? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . var_export(implode($node->context), TRUE)))
