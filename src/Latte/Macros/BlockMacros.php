@@ -221,7 +221,7 @@ class BlockMacros extends MacroSet
 			$tokens = $node->tokenizer;
 			while ($tokens->isNext()) {
 				$args[] = $varName = $tokens->expectNextValue($tokens::T_VARIABLE);
-				$variablePassCode .= "'" . ltrim($varName, '$') . "' => $varName,";
+				$variablePassCode .= "'" . ltrim($varName, '$') . "' => $varName, ";
 				if ($tokens->isNext()) {
 					$tokens->expectNextValue(',');
 				}

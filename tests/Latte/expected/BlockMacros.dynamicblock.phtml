@@ -20,7 +20,7 @@ class Template%a% extends Latte\Runtime\Template
 
 <?php
 		if ($this->getParentName()) return get_defined_vars();
-		$this->renderBlock('static', ['var' => $var,]);
+		$this->renderBlock('static', ['var' => $var, ]);
 ?>
 
 
@@ -29,7 +29,7 @@ class Template%a% extends Latte\Runtime\Template
 		foreach (['dynamic', 'static'] as $name) {
 			$this->checkBlockContentType('html', $name);
 			$this->blockQueue[$name][] = [$this, 'blockName'];
-			$this->renderBlock($name, ['var' => $var,]);
+			$this->renderBlock($name, ['var' => $var, ]);
 ?>
 
 <?php
