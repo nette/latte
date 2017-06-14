@@ -287,7 +287,7 @@ class BlockMacros extends MacroSet
 		}
 		$this->blockTypes[$name] = implode($node->context);
 
-		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
+		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '[]' : 'get_defined_vars()')
 			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
 
 		if ($node->name === 'snippet') {
@@ -346,7 +346,7 @@ class BlockMacros extends MacroSet
 			}
 			if (empty($node->data->leave)) {
 				if (preg_match('#\$|n:#', $node->content)) {
-					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : '') . 'extract($_args);' . ' ?>'
+					$node->content = '<?php extract($this->params); ' . (isset($node->data->args) ? $node->data->args : '') . ' extract($_args);' . ' ?>'
 						. $node->content;
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+\z#', '', $node->content);
@@ -357,7 +357,7 @@ class BlockMacros extends MacroSet
 				$node->content = rtrim($node->content, " \t");
 				$this->getCompiler()->addMethod(
 					$node->data->func,
-					$this->getCompiler()->expandTokens("extract(\$_args);\n?>$node->content<?php"),
+					$this->getCompiler()->expandTokens("extract(\$this->params); extract(\$_args);\n?>$node->content<?php"),
 					'$_args'
 				);
 				$node->content = '';
