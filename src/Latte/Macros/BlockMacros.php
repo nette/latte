@@ -215,6 +215,23 @@ class BlockMacros extends MacroSet
 		}
 
 		$node->data->name = $name = ltrim((string) $name, '#');
+		$args = [];
+		$variableScopePassCode = '[';
+		if ($node->name === 'define' || $node->name === 'block') {
+			$tokens = $node->tokenizer;
+			while ($tokens->isNext()) {
+				$args[] = $varName = $tokens->expectNextValue($tokens::T_VARIABLE);
+				$variableScopePassCode .= "'" . ltrim($varName, '$') . "' => $varName,";
+				if ($tokens->isNext()) {
+					$tokens->expectNextValue(',');
+				}
+			}
+			if ($args) {
+				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
+			}
+		}
+		$variableScopePassCode .= ']';
+
 		if ($name == NULL) {
 			if ($node->name === 'define') {
 				throw new CompileException('Missing block name.');
@@ -252,7 +269,7 @@ class BlockMacros extends MacroSet
 					} elseif ($node->modifiers) {
 						$node->modifiers .= '|escape';
 					}
-					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, get_defined_vars()'
+					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, ' . $variableScopePassCode
 						. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
 				}
 				$blockType = var_export(implode($node->context), TRUE);
@@ -287,7 +304,7 @@ class BlockMacros extends MacroSet
 		}
 		$this->blockTypes[$name] = implode($node->context);
 
-		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '[]' : 'get_defined_vars()')
+		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '[]' : $variableScopePassCode)
 			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
 
 		if ($node->name === 'snippet') {
@@ -304,19 +321,7 @@ class BlockMacros extends MacroSet
 			);
 
 		} elseif ($node->name === 'define') {
-			$tokens = $node->tokenizer;
-			$args = [];
-			while ($tokens->isNext()) {
-				$args[] = $tokens->expectNextValue($tokens::T_VARIABLE);
-				if ($tokens->isNext()) {
-					$tokens->expectNextValue(',');
-				}
-			}
-			if ($args) {
-				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
-			}
 			return $extendsCheck;
-
 		} else { // block, snippetArea
 			$this->checkExtraArgs($node);
 			return $writer->write($extendsCheck . $include, $name);
