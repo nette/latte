@@ -18,13 +18,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 $template = <<<'EOD'
 {var $var = 10}
 
-{block static}
+{block static $var}
 	Static block #{$var}
 {/block}
 
 
 {foreach [dynamic, static] as $name}
-	{block $name}
+	{block $name $var}
 		Dynamic block #{$var}
 	{/block}
 {/foreach}

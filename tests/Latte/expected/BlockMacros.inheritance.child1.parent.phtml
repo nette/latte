@@ -22,7 +22,7 @@ class Template%a% extends Latte\Runtime\Template
 <head>
 	<title><?php
 		if ($this->getParentName()) return get_defined_vars();
-		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
+		$this->renderBlock('title', [], function ($s, $type) {
 			$_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('upper', $_fi, $this->filters->filterContent('striphtml', $_fi, $s)));
 		});
@@ -32,7 +32,7 @@ class Template%a% extends Latte\Runtime\Template
 <body>
 	<div id="sidebar">
 <?php
-		$this->renderBlock('sidebar', get_defined_vars());
+		$this->renderBlock('sidebar', []);
 ?>
 	</div>
 

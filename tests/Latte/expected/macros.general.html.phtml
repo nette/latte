@@ -160,7 +160,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <?php
 		$counter = 0;
 		if ($this->getParentName()) return get_defined_vars();
-		$this->renderBlock('menu', get_defined_vars());
+		$this->renderBlock('menu', ['counter' => $counter,]);
 ?>
 
 
@@ -266,6 +266,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 	function blockMenu($_args)
 	{
 		extract($this->params);
+		list($counter) = $_args + [NULL, ];
 		extract($_args);
 ?>
 <ul>
@@ -275,7 +276,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 			?>	<li><?php echo LR\Filters::escapeHtmlText($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {
 				?> <?php
-				$this->renderBlock('menu', ['menu' => $item, 'counter' => $counter] + [], 'html');
+				$this->renderBlock('menu', [$counter, 'menu' => $item] + [], 'html');
 				?> <?php
 			}
 			else {

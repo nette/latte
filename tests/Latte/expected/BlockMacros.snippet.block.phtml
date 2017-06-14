@@ -21,7 +21,7 @@ class Template%a% extends Latte\Runtime\Template
 	function main()
 	{
 %A%
-		$this->renderBlock('block1', get_defined_vars());
+		$this->renderBlock('block1', []);
 ?>
 
 
@@ -62,7 +62,7 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 begin
 <?php
-		$this->renderBlock('block2', get_defined_vars());
+		$this->renderBlock('block2', []);
 ?>
 end
 <?php

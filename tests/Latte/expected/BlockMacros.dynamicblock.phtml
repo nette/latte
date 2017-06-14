@@ -20,23 +20,21 @@ class Template%a% extends Latte\Runtime\Template
 
 <?php
 		if ($this->getParentName()) return get_defined_vars();
-		$this->renderBlock('static', get_defined_vars());
+		$this->renderBlock('static', ['var' => $var,]);
 ?>
 
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(['dynamic', 'static']) as $name) {
+		foreach (['dynamic', 'static'] as $name) {
 			$this->checkBlockContentType('html', $name);
 			$this->blockQueue[$name][] = [$this, 'blockName'];
-			$this->renderBlock($name, get_defined_vars());
+			$this->renderBlock($name, ['var' => $var,]);
 ?>
 
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
 ?>
 
 <?php
@@ -54,14 +52,14 @@ class Template%a% extends Latte\Runtime\Template
 <?php
 		$this->checkBlockContentType('html', "word$name");
 		$this->blockQueue["word$name"][] = [$this, 'blockWord_name'];
-		$this->renderBlock("word$name", get_defined_vars());
+		$this->renderBlock("word$name", []);
 ?>
 
 
 <?php
 		$this->checkBlockContentType('html', "strip$name");
 		$this->blockQueue["strip$name"][] = [$this, 'blockStrip_name'];
-		$this->renderBlock("strip$name", get_defined_vars(), function ($s, $type) {
+		$this->renderBlock("strip$name", [], function ($s, $type) {
 			$_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($_fi, 'html', $this->filters->filterContent('striptags', $_fi, $s));
 		});
@@ -112,6 +110,7 @@ class Template%a% extends Latte\Runtime\Template
 	function blockStatic($_args)
 	{
 		extract($this->params);
+		list($var) = $_args + [NULL, ];
 		extract($_args);
 		?>	Static block #<?php echo LR\Filters::escapeHtmlText($var) /* line 4 */ ?>
 
