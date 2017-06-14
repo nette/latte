@@ -102,7 +102,7 @@ var prop2 = {$people};
 {block menu}
 <ul>
 	{foreach $menu as $item}
-	<li>{$counter++} {if is_array($item)} {include this, 'menu' => $item} {else}{$item}{/if}</li>
+	<li>{$counter++} {if is_array($item)} {include this, 'menu' => $item, 'counter' => $counter} {else}{$item}{/if}</li>
 	{/foreach}
 </ul>
 {/block}

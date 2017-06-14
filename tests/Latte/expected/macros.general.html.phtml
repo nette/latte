@@ -265,16 +265,17 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 	function blockMenu($_args)
 	{
+		extract($this->params);
 		extract($_args);
 ?>
 <ul>
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($menu) as $item) {
+		foreach ($menu as $item) {
 			?>	<li><?php echo LR\Filters::escapeHtmlText($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {
 				?> <?php
-				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'html');
+				$this->renderBlock('menu', ['menu' => $item, 'counter' => $counter] + [], 'html');
 				?> <?php
 			}
 			else {
@@ -284,8 +285,6 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
 ?>
 </ul>
 <?php

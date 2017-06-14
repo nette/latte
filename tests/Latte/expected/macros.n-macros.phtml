@@ -373,6 +373,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockBl($_args)
 	{
+		extract($this->params);
 		extract($_args);
 ?><ul title="block + if + foreach">
 <?php

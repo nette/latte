@@ -42,6 +42,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockContent($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		?>	<h1><?php
 		$this->renderBlock('title', get_defined_vars());

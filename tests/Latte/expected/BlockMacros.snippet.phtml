@@ -23,10 +23,10 @@ class Template%a% extends Latte\Runtime\Template
 	function main()
 	{
 %A%
-		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('_', $this->params) ?></div>
+		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('_', []) ?></div>
 
 
-<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div>
+<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', []) ?></div>
 
 
 	@<?php
@@ -36,14 +36,15 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 
 
-	<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php $this->renderBlock('_title', $this->params) ?></div>
-	<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php $this->renderBlock('_title2', $this->params) ?></div><?php
+	<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php $this->renderBlock('_title', []) ?></div>
+	<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php $this->renderBlock('_title2', []) ?></div><?php
 		return get_defined_vars();
 	}
 
 
 	function block_%h%($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("", "static");
 ?>
@@ -56,11 +57,12 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockOuter($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", "static");
 ?>
 	Outer
-		<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('_inner', $this->params) ?></div>	/Outer
+		<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('_inner', []) ?></div>	/Outer
 <?php
 		$this->global->snippetDriver->leave();
 
@@ -69,6 +71,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockInner($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("inner", "static");
 		?>Inner<?php
@@ -79,6 +82,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockTitle($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("title", "static");
 		?>Title 1<?php
@@ -89,6 +93,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockTitle2($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("title2", "static");
 		?>Title 2<?php

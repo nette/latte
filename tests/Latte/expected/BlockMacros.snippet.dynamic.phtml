@@ -15,7 +15,7 @@ class Template%a% extends Latte\Runtime\Template
 	function main()
 	{
 %A%
-		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div><?php
+		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', []) ?></div><?php
 %A%
 	}
 
@@ -28,6 +28,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockOuter($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", "static");
 		$iterations = 0;

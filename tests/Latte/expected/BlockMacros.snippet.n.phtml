@@ -20,16 +20,16 @@ class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		?>	<div class="test"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) . '"' ?>>
-<?php $this->renderBlock('_outer', $this->params) ?>
+<?php $this->renderBlock('_outer', []) ?>
 	</div>
 
 	<div class="test"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('inner')) . '"' ?>>
 <?php
-		$this->renderBlock('_inner', $this->params);
+		$this->renderBlock('_inner', []);
 ?>	</div>
 
 	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') /* line 9 */ ?>"<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('gallery')) . '"' ?>><?php
-		$this->renderBlock('_gallery', $this->params) ?>
+		$this->renderBlock('_gallery', []) ?>
 </div>
 <?php
 %A%
@@ -38,6 +38,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockOuter($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", "static");
 ?>	<p>Outer</p>
@@ -49,6 +50,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockInner($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("inner", "static");
 ?>	<p>Inner</p>
@@ -60,6 +62,7 @@ class Template%a% extends Latte\Runtime\Template
 
 	function blockGallery($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		$this->global->snippetDriver->enter("gallery", "static");
 		$this->global->snippetDriver->leave();

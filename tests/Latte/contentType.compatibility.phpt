@@ -176,6 +176,7 @@ test(function () {
 
 
 $latte = new Latte\Engine;
+$latte->setTempDirectory(__DIR__ . '/../tmp/');
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'ical.latte' => '{contentType text/calendar; charset=utf-8} <>',
 

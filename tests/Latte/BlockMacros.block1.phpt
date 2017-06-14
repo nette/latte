@@ -13,6 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
+$latte->setTempDirectory(__DIR__ . '/../tmp');
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(<<<EOD

@@ -28,18 +28,19 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 
 <?php
-		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html');
+		$this->renderBlock('test', ['var' => 20] + [], 'html');
 ?>
 
 
 <?php
-		$this->renderBlock('testargs', [1] + get_defined_vars(), 'html');
+		$this->renderBlock('testargs', [1] + [], 'html');
 		return get_defined_vars();
 	}
 
 
 	function blockTest($_args)
 	{
+		extract($this->params);
 		extract($_args);
 		?>	This is definition #<?php echo LR\Filters::escapeHtmlText($var) /* line 5 */ ?>
 
@@ -51,6 +52,7 @@ class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		list($var1, $var2) = $_args + [NULL, NULL, ];
+		extract($_args);
 		?>	Variables <?php echo LR\Filters::escapeHtmlText($var1) /* line 11 */ ?>, <?php echo LR\Filters::escapeHtmlText($var2) /* line 11 */ ?>, <?php
 		echo LR\Filters::escapeHtmlText($hello) /* line 11 */ ?>
 
