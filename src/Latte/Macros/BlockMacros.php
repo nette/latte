@@ -216,12 +216,12 @@ class BlockMacros extends MacroSet
 
 		$node->data->name = $name = ltrim((string) $name, '#');
 		$args = [];
-		$variableScopePassCode = '[';
+		$variablePassCode = '[';
 		if ($node->name === 'define' || $node->name === 'block') {
 			$tokens = $node->tokenizer;
 			while ($tokens->isNext()) {
 				$args[] = $varName = $tokens->expectNextValue($tokens::T_VARIABLE);
-				$variableScopePassCode .= "'" . ltrim($varName, '$') . "' => $varName,";
+				$variablePassCode .= "'" . ltrim($varName, '$') . "' => $varName,";
 				if ($tokens->isNext()) {
 					$tokens->expectNextValue(',');
 				}
@@ -230,7 +230,7 @@ class BlockMacros extends MacroSet
 				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
 			}
 		}
-		$variableScopePassCode .= ']';
+		$variablePassCode .= ']';
 
 		if ($name == NULL) {
 			if ($node->name === 'define') {
@@ -269,7 +269,7 @@ class BlockMacros extends MacroSet
 					} elseif ($node->modifiers) {
 						$node->modifiers .= '|escape';
 					}
-					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, ' . $variableScopePassCode
+					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, ' . $variablePassCode
 						. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
 				}
 				$blockType = var_export(implode($node->context), TRUE);
@@ -304,7 +304,7 @@ class BlockMacros extends MacroSet
 		}
 		$this->blockTypes[$name] = implode($node->context);
 
-		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '[]' : $variableScopePassCode)
+		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '[]' : $variablePassCode)
 			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
 
 		if ($node->name === 'snippet') {
