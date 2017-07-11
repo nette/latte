@@ -11,5 +11,5 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::notContains('declare(strict_types=1)', $latte->compile(''));
 
-$latte->setStrictTypes(TRUE);
+$latte->setStrictTypes(true);
 Assert::contains('declare(strict_types=1)', $latte->compile(''));

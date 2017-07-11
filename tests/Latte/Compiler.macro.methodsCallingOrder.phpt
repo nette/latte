@@ -37,13 +37,13 @@ class MockMacro implements IMacro
 	{
 		$this->calls[] = [
 			__FUNCTION__,
-			isset($node->htmlNode) ? $node->htmlNode->name : NULL,
+			isset($node->htmlNode) ? $node->htmlNode->name : null,
 			$node->closing,
 			$node->prefix,
 			$node->content,
 			$node->empty,
 		];
-		$node->empty = FALSE;
+		$node->empty = false;
 	}
 
 
@@ -51,7 +51,7 @@ class MockMacro implements IMacro
 	{
 		$this->calls[] = [
 			__FUNCTION__,
-			isset($node->htmlNode) ? $node->htmlNode->name : NULL,
+			isset($node->htmlNode) ? $node->htmlNode->name : null,
 			$node->closing,
 			$node->prefix,
 			preg_replace('#n:\w+#', 'n:#', $node->content),
@@ -80,36 +80,36 @@ Assert::same([
 	'initialize',
 
 	// {foo}Text{/foo}
-	['nodeOpened', NULL, FALSE, NULL, NULL, FALSE],
-	['nodeClosed', NULL, TRUE, NULL, 'Text', FALSE],
+	['nodeOpened', null, false, null, null, false],
+	['nodeClosed', null, true, null, 'Text', false],
 
 	// {foo}{/foo}
-	['nodeOpened', NULL, FALSE, NULL, NULL, FALSE],
-	['nodeClosed', NULL, TRUE, NULL, '', FALSE],
+	['nodeOpened', null, false, null, null, false],
+	['nodeClosed', null, true, null, '', false],
 
 	// {foo/}
-	['nodeOpened', NULL, FALSE, NULL, NULL, FALSE],
-	['nodeClosed', NULL, TRUE, NULL, '', FALSE],
+	['nodeOpened', null, false, null, null, false],
+	['nodeClosed', null, true, null, '', false],
 
 	// <div1>{foo}Text{/foo}</div1>
-	['nodeOpened', 'div1', FALSE, NULL, NULL, FALSE],
-	['nodeClosed', 'div1', TRUE, NULL, 'Text', FALSE],
+	['nodeOpened', 'div1', false, null, null, false],
+	['nodeClosed', 'div1', true, null, 'Text', false],
 
 	// <div2 n:foo>Text</div2>
-	['nodeOpened', 'div2', FALSE, 'none', NULL, FALSE],
-	['nodeClosed', 'div2', TRUE, 'none', "\t<div2 n:#><n:#>Text<n:#></div2>\n", FALSE],
+	['nodeOpened', 'div2', false, 'none', null, false],
+	['nodeClosed', 'div2', true, 'none', "\t<div2 n:#><n:#>Text<n:#></div2>\n", false],
 
 	// <div3 n:inner-foo>Text</div3>
-	['nodeOpened', 'div3', FALSE, 'inner', NULL, FALSE],
-	['nodeClosed', 'div3', TRUE, 'inner', 'Text', FALSE],
+	['nodeOpened', 'div3', false, 'inner', null, false],
+	['nodeClosed', 'div3', true, 'inner', 'Text', false],
 
 	// <div4 n:tag-foo>Text</div4>
-	['nodeOpened', 'div4', FALSE, 'tag', NULL, FALSE],
-	['nodeClosed', 'div4', TRUE, 'tag', '	<div4 n:#>', FALSE],
+	['nodeOpened', 'div4', false, 'tag', null, false],
+	['nodeClosed', 'div4', true, 'tag', '	<div4 n:#>', false],
 
 	// <div4 n:tag-foo>Text</div4>
-	['nodeOpened', 'div4', FALSE, 'tag', NULL, FALSE],
-	['nodeClosed', 'div4', TRUE, 'tag', "</div4>\n", FALSE],
+	['nodeOpened', 'div4', false, 'tag', null, false],
+	['nodeClosed', 'div4', true, 'tag', "</div4>\n", false],
 
 	'finalize',
 ], $macro->calls);

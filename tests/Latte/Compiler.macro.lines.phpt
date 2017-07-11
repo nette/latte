@@ -11,7 +11,7 @@ require __DIR__ . '/../bootstrap.php';
 
 class TestMacro implements IMacro
 {
-	public $empty = TRUE;
+	public $empty = true;
 
 
 	function initialize()
@@ -67,7 +67,7 @@ Assert::match(
 );
 
 
-$macro->empty = FALSE;
+$macro->empty = false;
 
 Assert::match(
 	'%A%opening(1)closing(1)%A%',

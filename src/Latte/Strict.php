@@ -72,7 +72,7 @@ trait Strict
 
 	public function __isset(string $name): bool
 	{
-		return FALSE;
+		return false;
 	}
 
 

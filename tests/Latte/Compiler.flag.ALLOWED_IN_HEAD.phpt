@@ -16,7 +16,7 @@ class TestMacro implements IMacro
 
 	function initialize()
 	{
-		$this->inHead = NULL;
+		$this->inHead = null;
 	}
 
 
@@ -27,7 +27,7 @@ class TestMacro implements IMacro
 
 	function nodeOpened(MacroNode $node)
 	{
-		$node->empty = TRUE;
+		$node->empty = true;
 		$this->inHead = $this->compiler->isInHead();
 	}
 

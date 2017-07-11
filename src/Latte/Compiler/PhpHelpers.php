@@ -38,7 +38,7 @@ class PhpHelpers
 					$openLevel = $level;
 
 				} elseif ($name === T_CLOSE_TAG) {
-					$next = $tokens[$n + 1] ?? NULL;
+					$next = $tokens[$n + 1] ?? null;
 					if (is_array($next) && $next[0] === T_OPEN_TAG) { // remove ?)<?php
 						if (!strspn($lastChar, ';{}:/')) {
 							$php = rtrim($php) . ($lastChar = ';') . "\n" . str_repeat("\t", $level);
@@ -49,9 +49,9 @@ class PhpHelpers
 
 					} else {
 						if (trim($php) !== '' || substr($res, -1) === '<') { // skip <?php ?) but preserve <<?php
-							$inline = strpos($php, "\n") === FALSE && strlen($res) - strrpos($res, "\n") < $lineLength;
+							$inline = strpos($php, "\n") === false && strlen($res) - strrpos($res, "\n") < $lineLength;
 							$res .= '<?php' . ($inline ? ' ' : "\n" . str_repeat("\t", $openLevel));
-							if (is_array($next) && strpos($next[1], "\n") === FALSE) {
+							if (is_array($next) && strpos($next[1], "\n") === false) {
 								$token = rtrim($token, "\n");
 							} else {
 								$php = rtrim($php, "\t");
@@ -83,7 +83,7 @@ class PhpHelpers
 					$php .= $token;
 
 				} else {
-					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], TRUE)) {
+					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true)) {
 						$level++;
 					}
 					$lastChar = '';
@@ -95,7 +95,7 @@ class PhpHelpers
 				} elseif ($token === '}' || $token === ']') {
 					$level--;
 					$php .= "\x08";
-				} elseif ($token === ';' && !(($tokens[$n + 1][0] ?? NULL) === T_WHITESPACE)) {
+				} elseif ($token === ';' && !(($tokens[$n + 1][0] ?? null) === T_WHITESPACE)) {
 					$token .= "\n" . str_repeat("\t", $level); // indent last line
 				}
 				$lastChar = $token;
@@ -117,12 +117,12 @@ class PhpHelpers
 			$s = "[\n";
 			foreach ($value as $k => $v) {
 				$v = is_array($v) && (!$v || array_keys($v) === range(0, count($v) - 1))
-					? '[' . implode(', ', array_map(function($s) { return var_export($s, TRUE); }, $v)) . ']'
-					: var_export($v, TRUE);
-				$s .= "\t\t" . var_export($k, TRUE) . ' => ' . $v . ",\n";
+					? '[' . implode(', ', array_map(function($s) { return var_export($s, true); }, $v)) . ']'
+					: var_export($v, true);
+				$s .= "\t\t" . var_export($k, true) . ' => ' . $v . ",\n";
 			}
 			return $s. "\t]";
 		}
-		return var_export($value, TRUE);
+		return var_export($value, true);
 	}
 }

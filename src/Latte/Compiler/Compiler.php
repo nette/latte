@@ -44,7 +44,7 @@ class Compiler
 	/** @var string */
 	private $contentType = self::CONTENT_HTML;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $context;
 
 	/** @var mixed */
@@ -74,7 +74,7 @@ class Compiler
 
 	/** @internal Context-aware escaping HTML contexts */
 	const
-		CONTEXT_HTML_TEXT = NULL,
+		CONTEXT_HTML_TEXT = null,
 		CONTEXT_HTML_TAG = 'Tag',
 		CONTEXT_HTML_ATTRIBUTE = 'Attr',
 		CONTEXT_HTML_ATTRIBUTE_JS = 'AttrJs',
@@ -97,7 +97,7 @@ class Compiler
 	 * Adds new macro with IMacro flags.
 	 * @return static
 	 */
-	public function addMacro(string $name, IMacro $macro, $flags = NULL)
+	public function addMacro(string $name, IMacro $macro, $flags = null)
 	{
 		if (!isset($this->flags[$name])) {
 			$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
@@ -118,10 +118,10 @@ class Compiler
 		$this->tokens = $tokens;
 		$output = '';
 		$this->output = &$output;
-		$this->inHead = TRUE;
-		$this->htmlNode = $this->macroNode = $this->context = NULL;
+		$this->inHead = true;
+		$this->htmlNode = $this->macroNode = $this->context = null;
 		$this->placeholders = $this->properties = [];
-		$this->methods = ['main' => NULL, 'prepare' => NULL];
+		$this->methods = ['main' => null, 'prepare' => null];
 
 		$macroHandlers = new \SplObjectStorage;
 		array_map([$macroHandlers, 'attach'], array_merge(...array_values($this->macros)));
@@ -132,10 +132,10 @@ class Compiler
 
 		foreach ($tokens as $this->position => $token) {
 			if ($this->inHead && !($token->type === $token::COMMENT
-				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? NULL) & IMacro::ALLOWED_IN_HEAD
+				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & IMacro::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
-				$this->inHead = FALSE;
+				$this->inHead = false;
 			}
 			$this->{"process$token->type"}($token);
 		}
@@ -191,13 +191,13 @@ class Compiler
 	public function setContentType($type)
 	{
 		$this->contentType = $type;
-		$this->context = NULL;
+		$this->context = null;
 		return $this;
 	}
 
 
 	/**
-	 * @return MacroNode|NULL
+	 * @return MacroNode|null
 	 */
 	public function getMacroNode()
 	{
@@ -207,11 +207,11 @@ class Compiler
 
 	/**
 	 * Returns current line number.
-	 * @return int|NULL
+	 * @return int|null
 	 */
 	public function getLine()
 	{
-		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position]->line : NULL;
+		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position]->line : null;
 	}
 
 
@@ -282,7 +282,7 @@ class Compiler
 	private function processMacroTag(Token $token)
 	{
 		if ($this->context === self::CONTEXT_HTML_TAG || $this->context && Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
-			$this->lastAttrValue = TRUE;
+			$this->lastAttrValue = true;
 		}
 
 		$isRightmost = !isset($this->tokens[$this->position + 1])
@@ -291,19 +291,19 @@ class Compiler
 		if ($token->closing) {
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
-			if (!$token->empty && ($this->flags[$token->name] ?? NULL) & IMacro::AUTO_EMPTY) {
+			if (!$token->empty && ($this->flags[$token->name] ?? null) & IMacro::AUTO_EMPTY) {
 				$pos = $this->position;
-				while (($t = $this->tokens[++$pos] ?? NULL)
+				while (($t = $this->tokens[++$pos] ?? null)
 					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)
 					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
-				$token->empty = $t ? !$t->closing : TRUE;
+				$token->empty = $t ? !$t->closing : true;
 			}
 			$node = $this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
 				if ($node->empty) {
 					throw new CompileException("Unexpected /} in tag {$token->text}");
 				}
-				$this->closeMacro($token->name, NULL, NULL, $isRightmost);
+				$this->closeMacro($token->name, null, null, $isRightmost);
 			}
 		}
 	}
@@ -324,7 +324,7 @@ class Compiler
 			if (!$this->htmlNode) {
 				$this->htmlNode = new HtmlNode($token->name);
 			}
-			$this->htmlNode->closing = TRUE;
+			$this->htmlNode->closing = true;
 			$this->htmlNode->endLine = $this->getLine();
 			$this->context = self::CONTEXT_HTML_TEXT;
 
@@ -346,7 +346,7 @@ class Compiler
 
 	private function processHtmlTagEnd(Token $token)
 	{
-		if (in_array($this->context, [self::CONTEXT_HTML_COMMENT, self::CONTEXT_HTML_BOGUS_COMMENT], TRUE)) {
+		if (in_array($this->context, [self::CONTEXT_HTML_COMMENT, self::CONTEXT_HTML_BOGUS_COMMENT], true)) {
 			$this->output .= $token->text;
 			$this->context = self::CONTEXT_HTML_TEXT;
 			return;
@@ -356,8 +356,8 @@ class Compiler
 		$end = '';
 
 		if (!$htmlNode->closing) {
-			$htmlNode->empty = strpos($token->text, '/') !== FALSE;
-			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
+			$htmlNode->empty = strpos($token->text, '/') !== false;
+			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)) {
 				$emptyElement = isset(Helpers::$emptyElements[strtolower($htmlNode->name)]);
 				$htmlNode->empty = $htmlNode->empty || $emptyElement;
 				if ($htmlNode->empty) { // auto-correct
@@ -381,7 +381,7 @@ class Compiler
 		}
 
 		if ($htmlNode->empty) {
-			$htmlNode->closing = TRUE;
+			$htmlNode->closing = true;
 			if ($htmlNode->macroAttrs) {
 				$this->writeAttrsMacro($end);
 			}
@@ -418,10 +418,10 @@ class Compiler
 		$this->output .= $this->escape($token->text);
 
 		$lower = strtolower($token->name);
-		if (in_array($token->value, ['"', "'"], TRUE)) {
+		if (in_array($token->value, ['"', "'"], true)) {
 			$this->lastAttrValue = '';
 			$this->context = self::CONTEXT_HTML_ATTRIBUTE;
-			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)) {
+			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)) {
 				if (Helpers::startsWith($lower, 'on')) {
 					$this->context = self::CONTEXT_HTML_ATTRIBUTE_JS;
 				} elseif ($lower === 'style') {
@@ -433,8 +433,8 @@ class Compiler
 			$this->context = self::CONTEXT_HTML_TAG;
 		}
 
-		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], TRUE)
-			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], TRUE)
+		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)
+			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], true)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object'))
 		) {
 			$this->context = $this->context === self::CONTEXT_HTML_TAG ? self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL : self::CONTEXT_HTML_ATTRIBUTE_URL;
@@ -451,7 +451,7 @@ class Compiler
 
 	private function processComment(Token $token)
 	{
-		$leftOfs = ($tmp = strrpos($this->output, "\n")) === FALSE ? 0 : $tmp + 1;
+		$leftOfs = ($tmp = strrpos($this->output, "\n")) === false ? 0 : $tmp + 1;
 		$isLeftmost = trim(substr($this->output, $leftOfs)) === '';
 		$isRightmost = substr($token->text, -1) === "\n";
 		if ($isLeftmost && $isRightmost) {
@@ -475,7 +475,7 @@ class Compiler
 	 * Generates code for {macro ...} to the output.
 	 * @internal
 	 */
-	public function openMacro(string $name, string $args = NULL, string $modifiers = NULL, bool $isRightmost = FALSE, $nPrefix = NULL): MacroNode
+	public function openMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, $nPrefix = null): MacroNode
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -497,7 +497,7 @@ class Compiler
 	 * Generates code for {/macro ...} to the output.
 	 * @internal
 	 */
-	public function closeMacro(string $name, string $args = NULL, string $modifiers = NULL, bool $isRightmost = FALSE, $nPrefix = NULL): MacroNode
+	public function closeMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, $nPrefix = null): MacroNode
 	{
 		$node = $this->macroNode;
 
@@ -523,7 +523,7 @@ class Compiler
 			}
 		}
 
-		$node->closing = TRUE;
+		$node->closing = true;
 		$node->endLine = $node->prefix ? $node->htmlNode->endLine : $this->getLine();
 		$node->macro->nodeClosed($node);
 
@@ -545,9 +545,9 @@ class Compiler
 	private function writeCode($code, $isReplaced, $isRightmost)
 	{
 		if ($isRightmost) {
-			$leftOfs = ($tmp = strrpos($this->output, "\n")) === FALSE ? 0 : $tmp + 1;
+			$leftOfs = ($tmp = strrpos($this->output, "\n")) === false ? 0 : $tmp + 1;
 			$isLeftmost = trim(substr($this->output, $leftOfs)) === '';
-			if ($isReplaced === NULL) {
+			if ($isReplaced === null) {
 				$isReplaced = preg_match('#<\?php.*\secho\s#As', $code);
 			}
 			if ($isLeftmost && !$isReplaced) {
@@ -581,11 +581,11 @@ class Compiler
 			if (isset($attrs[$attrName])) {
 				if ($this->htmlNode->closing) {
 					$left[] = function () use ($name) {
-						$this->closeMacro($name, '', NULL, FALSE, MacroNode::PREFIX_INNER);
+						$this->closeMacro($name, '', null, false, MacroNode::PREFIX_INNER);
 					};
 				} else {
 					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						if ($this->openMacro($name, $attrs[$attrName], NULL, FALSE, MacroNode::PREFIX_INNER)->empty) {
+						if ($this->openMacro($name, $attrs[$attrName], null, false, MacroNode::PREFIX_INNER)->empty) {
 							throw new CompileException("Unable to use empty macro as n:$attrName.");
 						}
 					});
@@ -610,12 +610,12 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
 				$left[] = function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], NULL, FALSE, MacroNode::PREFIX_TAG)->empty) {
+					if ($this->openMacro($name, $attrs[$attrName], null, false, MacroNode::PREFIX_TAG)->empty) {
 						throw new CompileException("Unable to use empty macro as n:$attrName.");
 					}
 				};
 				array_unshift($right, function () use ($name) {
-					$this->closeMacro($name, '', NULL, FALSE, MacroNode::PREFIX_TAG);
+					$this->closeMacro($name, '', null, false, MacroNode::PREFIX_TAG);
 				});
 				unset($attrs[$attrName]);
 			}
@@ -625,11 +625,11 @@ class Compiler
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
 					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', NULL, FALSE, MacroNode::PREFIX_NONE);
+						$this->closeMacro($name, '', null, false, MacroNode::PREFIX_NONE);
 					};
 				} else {
 					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
-						$node = $this->openMacro($name, $attrs[$name], NULL, FALSE, MacroNode::PREFIX_NONE);
+						$node = $this->openMacro($name, $attrs[$name], null, false, MacroNode::PREFIX_NONE);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {
@@ -672,9 +672,9 @@ class Compiler
 	 * Expands macro and returns node & code.
 	 * @internal
 	 */
-	public function expandMacro(string $name, string $args, string $modifiers = NULL, $nPrefix = NULL): MacroNode
+	public function expandMacro(string $name, string $args, string $modifiers = null, $nPrefix = null): MacroNode
 	{
-		$inScript = in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], TRUE);
+		$inScript = in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true);
 
 		if (empty($this->macros[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '';
@@ -682,7 +682,7 @@ class Compiler
 		}
 
 		if (strpbrk($name, '=~%^&_')) {
-			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], TRUE)) {
+			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
 				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
 					$modifiers .= '|checkurl';
 				}
@@ -710,7 +710,7 @@ class Compiler
 			$node = new MacroNode($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
 			$node->context = $context;
 			$node->startLine = $nPrefix ? $this->htmlNode->startLine : $this->getLine();
-			if ($macro->nodeOpened($node) !== FALSE) {
+			if ($macro->nodeOpened($node) !== false) {
 				return $node;
 			}
 		}

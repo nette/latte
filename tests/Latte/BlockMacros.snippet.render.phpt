@@ -184,7 +184,7 @@ $dataSets = [
 foreach ($dataSets as $data) {
 	//snippet mode
 	$bridge = new SnippetBridgeMock;
-	$bridge->invalid = array_fill_keys($data[3], TRUE);
+	$bridge->invalid = array_fill_keys($data[3], true);
 
 	$engine = new Latte\Engine;
 	$engine->addProvider('snippetBridge', $bridge);
@@ -195,8 +195,8 @@ foreach ($dataSets as $data) {
 
 	//non snippet mode
 	$bridge = new SnippetBridgeMock;
-	$bridge->snippetMode = FALSE;
-	$bridge->invalid = array_fill_keys($data[3], TRUE);
+	$bridge->snippetMode = false;
+	$bridge->invalid = array_fill_keys($data[3], true);
 
 	$engine = new Latte\Engine;
 	$engine->addProvider('snippetBridge', $bridge);

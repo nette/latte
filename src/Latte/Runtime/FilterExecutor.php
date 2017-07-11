@@ -24,52 +24,52 @@ class FilterExecutor
 
 	/** @var array [name => [callback, FilterInfo aware] */
 	private $_static = [
-		'breaklines' => [[Filters::class, 'breaklines'], FALSE],
-		'bytes' => [[Filters::class, 'bytes'], FALSE],
-		'capitalize' => [[Filters::class, 'capitalize'], FALSE],
-		'datastream' => [[Filters::class, 'dataStream'], FALSE],
-		'date' => [[Filters::class, 'date'], FALSE],
-		'escapecss' => [[Filters::class, 'escapeCss'], FALSE],
-		'escapehtml' => [[Filters::class, 'escapeHtml'], FALSE],
-		'escapehtmlcomment' => [[Filters::class, 'escapeHtmlComment'], FALSE],
-		'escapeical' => [[Filters::class, 'escapeICal'], FALSE],
-		'escapejs' => [[Filters::class, 'escapeJs'], FALSE],
-		'escapeurl' => ['rawurlencode', FALSE],
-		'escapexml' => [[Filters::class, 'escapeXml'], FALSE],
-		'firstupper' => [[Filters::class, 'firstUpper'], FALSE],
-		'checkurl' => [[Filters::class, 'safeUrl'], FALSE],
-		'implode' => ['implode', FALSE],
-		'indent' => [[Filters::class, 'indent'], TRUE],
-		'length' => [[Filters::class, 'length'], FALSE],
-		'lower' => [[Filters::class, 'lower'], FALSE],
-		'number' => ['number_format', FALSE],
-		'padleft' => [[Filters::class, 'padLeft'], FALSE],
-		'padright' => [[Filters::class, 'padRight'], FALSE],
-		'repeat' => [[Filters::class, 'repeat'], TRUE],
-		'replace' => [[Filters::class, 'replace'], TRUE],
-		'replacere' => [[Filters::class, 'replaceRe'], FALSE],
-		'strip' => [[Filters::class, 'strip'], TRUE],
-		'striphtml' => [[Filters::class, 'stripHtml'], TRUE],
-		'striptags' => [[Filters::class, 'stripTags'], TRUE],
-		'substr' => [[Filters::class, 'substring'], FALSE],
-		'trim' => [[Filters::class, 'trim'], TRUE],
-		'truncate' => [[Filters::class, 'truncate'], FALSE],
-		'upper' => [[Filters::class, 'upper'], FALSE],
+		'breaklines' => [[Filters::class, 'breaklines'], false],
+		'bytes' => [[Filters::class, 'bytes'], false],
+		'capitalize' => [[Filters::class, 'capitalize'], false],
+		'datastream' => [[Filters::class, 'dataStream'], false],
+		'date' => [[Filters::class, 'date'], false],
+		'escapecss' => [[Filters::class, 'escapeCss'], false],
+		'escapehtml' => [[Filters::class, 'escapeHtml'], false],
+		'escapehtmlcomment' => [[Filters::class, 'escapeHtmlComment'], false],
+		'escapeical' => [[Filters::class, 'escapeICal'], false],
+		'escapejs' => [[Filters::class, 'escapeJs'], false],
+		'escapeurl' => ['rawurlencode', false],
+		'escapexml' => [[Filters::class, 'escapeXml'], false],
+		'firstupper' => [[Filters::class, 'firstUpper'], false],
+		'checkurl' => [[Filters::class, 'safeUrl'], false],
+		'implode' => ['implode', false],
+		'indent' => [[Filters::class, 'indent'], true],
+		'length' => [[Filters::class, 'length'], false],
+		'lower' => [[Filters::class, 'lower'], false],
+		'number' => ['number_format', false],
+		'padleft' => [[Filters::class, 'padLeft'], false],
+		'padright' => [[Filters::class, 'padRight'], false],
+		'repeat' => [[Filters::class, 'repeat'], true],
+		'replace' => [[Filters::class, 'replace'], true],
+		'replacere' => [[Filters::class, 'replaceRe'], false],
+		'strip' => [[Filters::class, 'strip'], true],
+		'striphtml' => [[Filters::class, 'stripHtml'], true],
+		'striptags' => [[Filters::class, 'stripTags'], true],
+		'substr' => [[Filters::class, 'substring'], false],
+		'trim' => [[Filters::class, 'trim'], true],
+		'truncate' => [[Filters::class, 'truncate'], false],
+		'upper' => [[Filters::class, 'upper'], false],
 	];
 
 
 	/**
 	 * Registers run-time filter.
-	 * @param  string|NULL
+	 * @param  string|null
 	 * @return static
 	 */
 	public function add($name, callable $callback)
 	{
-		if ($name == NULL) { // intentionally ==
+		if ($name == null) { // intentionally ==
 			array_unshift($this->_dynamic, $callback);
 		} else {
 			$name = strtolower($name);
-			$this->_static[$name] = [$callback, NULL];
+			$this->_static[$name] = [$callback, null];
 			unset($this->$name);
 		}
 		return $this;
@@ -118,7 +118,7 @@ class FilterExecutor
 			array_unshift($args, $lname);
 			foreach ($this->_dynamic as $filter) {
 				$res = (Helpers::checkCallback($filter))(...$args);
-				if ($res !== NULL) {
+				if ($res !== null) {
 					return $res;
 				} elseif (isset($this->_static[$lname])) { // dynamic converted to classic
 					$this->$name = Helpers::checkCallback($this->_static[$lname][0]);

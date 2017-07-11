@@ -14,7 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 class MockTexy
 {
-	function process($text, $singleLine = FALSE)
+	function process($text, $singleLine = false)
 	{
 		return '<pre>' . $text . '</pre>';
 	}

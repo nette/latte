@@ -46,36 +46,36 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 $macro = new MockMacro;
 $latte->addMacro('foo', $macro);
 
-$macro->empty = TRUE;
+$macro->empty = true;
 Assert::match('%A%<input>%A%', $latte->compile('<input n:foo>'));
 Assert::match('%A%<input>%A%', $latte->compile('<input n:foo />'));
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo />'));
 Assert::match("%A%<textarea></textarea>\n %A%", $latte->compile("<textarea n:foo />\n "));
 
-$macro->empty = FALSE;
+$macro->empty = false;
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></textarea>'));
 
 
 $latte->setContentType($latte::CONTENT_XHTML);
 
-$macro->empty = TRUE;
+$macro->empty = true;
 Assert::match('%A%<input />%A%', $latte->compile('<input n:foo>'));
 Assert::match('%A%<input />%A%', $latte->compile('<input n:foo />'));
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo />'));
 Assert::match("%A%<textarea></textarea>\n %A%", $latte->compile("<textarea n:foo />\n "));
 
-$macro->empty = FALSE;
+$macro->empty = false;
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></textarea>'));
 
 
 $latte->setContentType($latte::CONTENT_XML);
 
-$macro->empty = TRUE;
+$macro->empty = true;
 Assert::match('%A%<input />%A%', $latte->compile('<input n:foo />'));
 Assert::match('%A%<textarea />%A%', $latte->compile('<textarea n:foo />'));
 Assert::match("%A%<textarea />\n %A%", $latte->compile("<textarea n:foo />\n "));
 
-$macro->empty = FALSE;
+$macro->empty = false;
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></textarea>'));
 
 Assert::exception(function () use ($latte) {

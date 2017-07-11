@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-function parse($s, $contentType = NULL)
+function parse($s, $contentType = null)
 {
 	$parser = new Latte\Parser;
 	$parser->setContentType($contentType ?: Engine::CONTENT_HTML);

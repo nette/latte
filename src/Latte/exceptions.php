@@ -25,7 +25,7 @@ class CompileException extends \Exception
 	public $sourceLine;
 
 
-	public function setSource(string $code, int $line, string $name = NULL)
+	public function setSource(string $code, int $line, string $name = null)
 	{
 		$this->sourceCode = $code;
 		$this->sourceLine = $line;
@@ -54,7 +54,7 @@ class RegexpException extends \Exception
 	];
 
 
-	public function __construct($message, $code = NULL)
+	public function __construct($message, $code = null)
 	{
 		parent::__construct($message ?: (self::$messages[$code] ?? 'Unknown error'), $code);
 	}

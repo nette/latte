@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::same('', Filters::escapeXml(NULL));
+Assert::same('', Filters::escapeXml(null));
 Assert::same('', Filters::escapeXml(''));
 Assert::same('1', Filters::escapeXml(1));
 Assert::same('string', Filters::escapeXml('string'));

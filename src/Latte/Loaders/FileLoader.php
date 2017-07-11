@@ -19,13 +19,13 @@ class FileLoader implements Latte\ILoader
 {
 	use Latte\Strict;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $baseDir;
 
 
-	public function __construct($baseDir = NULL)
+	public function __construct($baseDir = null)
 	{
-		$this->baseDir = $baseDir ? $this->normalizePath("$baseDir/") : NULL;
+		$this->baseDir = $baseDir ? $this->normalizePath("$baseDir/") : null;
 	}
 
 
@@ -42,7 +42,7 @@ class FileLoader implements Latte\ILoader
 			throw new \RuntimeException("Missing template file '$file'.");
 
 		} elseif ($this->isExpired($file, time())) {
-			if (@touch($file) === FALSE) {
+			if (@touch($file) === false) {
 				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
 			}
 		}

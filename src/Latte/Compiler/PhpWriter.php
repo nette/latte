@@ -23,19 +23,19 @@ class PhpWriter
 	/** @var string */
 	private $modifiers;
 
-	/** @var array|NULL */
+	/** @var array|null */
 	private $context;
 
 
 	public static function using(MacroNode $node)
 	{
-		$me = new static($node->tokenizer, NULL, $node->context);
+		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;
 		return $me;
 	}
 
 
-	public function __construct(MacroTokens $tokens, $modifiers = NULL, array $context = NULL)
+	public function __construct(MacroTokens $tokens, $modifiers = null, array $context = null)
 	{
 		$this->tokens = $tokens;
 		$this->modifiers = $modifiers;
@@ -57,7 +57,7 @@ class PhpWriter
 		}, $mask);
 
 		$pos = $this->tokens->position;
-		$word = strpos($mask, '%node_word') === FALSE ? NULL : $this->tokens->fetchWord();
+		$word = strpos($mask, '%node_word') === false ? null : $this->tokens->fetchWord();
 
 		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
 		function ($m) use ($word, &$args) {
@@ -81,7 +81,7 @@ class PhpWriter
 					$code = $this->formatArray();
 					$code = $cond && $code === '[]' ? '' : $code; break;
 				case 'var':
-					$code = var_export($arg, TRUE); break;
+					$code = var_export($arg, true); break;
 				case 'raw':
 					$code = (string) $arg; break;
 			}
@@ -101,7 +101,7 @@ class PhpWriter
 	/**
 	 * Formats modifiers calling.
 	 */
-	public function formatModifiers(string $var, bool $isContent = FALSE): string
+	public function formatModifiers(string $var, bool $isContent = false): string
 	{
 		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
 		$tokens = $this->preprocess($tokens);
@@ -114,7 +114,7 @@ class PhpWriter
 	/**
 	 * Formats macro arguments to PHP code. (It advances tokenizer to the end as a side effect.)
 	 */
-	public function formatArgs(MacroTokens $tokens = NULL): string
+	public function formatArgs(MacroTokens $tokens = null): string
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->quotingPass($tokens);
@@ -125,7 +125,7 @@ class PhpWriter
 	/**
 	 * Formats macro arguments to PHP array. (It advances tokenizer to the end as a side effect.)
 	 */
-	public function formatArray(MacroTokens $tokens = NULL): string
+	public function formatArray(MacroTokens $tokens = null): string
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->expandCastPass($tokens);
@@ -148,9 +148,9 @@ class PhpWriter
 	/**
 	 * Preprocessor for tokens. (It advances tokenizer to the end as a side effect.)
 	 */
-	public function preprocess(MacroTokens $tokens = NULL): MacroTokens
+	public function preprocess(MacroTokens $tokens = null): MacroTokens
 	{
-		$tokens = $tokens === NULL ? $this->tokens : $tokens;
+		$tokens = $tokens === null ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
 		$tokens = $this->shortTernaryPass($tokens);
@@ -241,20 +241,20 @@ class PhpWriter
 	public function expandCastPass(MacroTokens $tokens): MacroTokens
 	{
 		$res = new MacroTokens('[');
-		$expand = NULL;
+		$expand = null;
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent('(expand)') && $tokens->depth === 0) {
-				$expand = TRUE;
+				$expand = true;
 				$res->append('],');
 			} elseif ($expand && $tokens->isCurrent(',') && !$tokens->depth) {
-				$expand = FALSE;
+				$expand = false;
 				$res->append(', [');
 			} else {
 				$res->append($tokens->currentToken());
 			}
 		}
 
-		if ($expand === NULL) {
+		if ($expand === null) {
 			$res->append(']');
 		} else {
 			$res->prepend('array_merge(')->append($expand ? ', [])' : '])');
@@ -341,7 +341,7 @@ class PhpWriter
 		$args = new MacroTokens;
 		$modifiers = new MacroTokens;
 		$current = $args;
-		$anyModifier = FALSE;
+		$anyModifier = false;
 		$result->append($tokens->currentToken());
 
 		while ($tokens->nextToken()) {
@@ -349,7 +349,7 @@ class PhpWriter
 				$current->tokens = array_merge($current->tokens, $this->inlineModifierInner($tokens));
 
 			} elseif ($current !== $modifiers && $tokens->isCurrent('|')) {
-				$anyModifier = TRUE;
+				$anyModifier = true;
 				$current = $modifiers;
 
 			} elseif ($tokens->isCurrent(')', ']') || ($isFunctionOrArray && $tokens->isCurrent(','))) {
@@ -384,9 +384,9 @@ class PhpWriter
 	 * @param  string|array
 	 * @throws CompileException
 	 */
-	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = FALSE): MacroTokens
+	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens
 	{
-		$inside = FALSE;
+		$inside = false;
 		$res = new MacroTokens($var);
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent($tokens::T_WHITESPACE)) {
@@ -399,7 +399,7 @@ class PhpWriter
 
 				} elseif ($tokens->isCurrent('|')) {
 					$res->append(')');
-					$inside = FALSE;
+					$inside = false;
 
 				} else {
 					$res->append($tokens->currentToken());
@@ -408,7 +408,7 @@ class PhpWriter
 				if ($tokens->isCurrent($tokens::T_SYMBOL)) {
 					if ($tokens->isCurrent('escape')) {
 						if ($isContent) {
-							$res->prepend('LR\Filters::convertTo($_fi, ' . var_export(implode($this->context), TRUE) . ', ')
+							$res->prepend('LR\Filters::convertTo($_fi, ' . var_export(implode($this->context), true) . ', ')
 								->append(')');
 						} else {
 							$res = $this->escapePass($res);
@@ -416,14 +416,14 @@ class PhpWriter
 						$tokens->nextToken('|');
 					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
 						$res->prepend('LR\Filters::safeUrl(');
-						$inside = TRUE;
+						$inside = true;
 					} else {
 						$name = strtolower($tokens->currentValue());
 						$res->prepend($isContent
-							? '$this->filters->filterContent('. var_export($name, TRUE) . ', $_fi, '
+							? '$this->filters->filterContent('. var_export($name, true) . ', $_fi, '
 							: '($this->filters->' . $name . ')('
 						);
-						$inside = TRUE;
+						$inside = true;
 					}
 				} else {
 					throw new CompileException("Modifier name must be alphanumeric string, '{$tokens->currentValue()}' given.");
@@ -491,7 +491,7 @@ class PhpWriter
 				return $tokens->prepend('LR\Filters::escape' . ucfirst($contentType) . '(')->append(')');
 			case Compiler::CONTENT_TEXT:
 				return $tokens;
-			case NULL:
+			case null:
 				return $tokens->prepend('($this->filters->escape)(')->append(')');
 			default:
 				throw new CompileException("Unknown context $contentType.");

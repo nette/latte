@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/mocks/SnippetBridge.php';
 
 $bridge = new SnippetBridgeMock;
-$bridge->snippetMode = FALSE;
+$bridge->snippetMode = false;
 
 
 $latte = new Latte\Engine;

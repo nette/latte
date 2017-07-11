@@ -29,13 +29,13 @@ interface IMacro
 
 	/**
 	 * Finishes template parsing.
-	 * @return array|NULL [prolog, epilog]
+	 * @return array|null [prolog, epilog]
 	 */
 	function finalize();
 
 	/**
-	 * New node is found. Returns FALSE to reject.
-	 * @return bool|NULL
+	 * New node is found. Returns false to reject.
+	 * @return bool|null
 	 */
 	function nodeOpened(MacroNode $node);
 

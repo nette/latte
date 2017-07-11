@@ -23,7 +23,7 @@ class TestMacro implements IMacro
 
 	function nodeOpened(MacroNode $node)
 	{
-		$node->empty = FALSE;
+		$node->empty = false;
 		// should be replaced by nodeClosed()
 		$node->openingCode = 'ERROR';
 		$node->closingCode = 'ERROR';

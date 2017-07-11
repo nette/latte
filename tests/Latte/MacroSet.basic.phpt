@@ -75,8 +75,8 @@ test(function () use ($set) {
 
 test(function () use ($set) {
 	$set->addMacro('noattr', function () use (&$called) {
-		$called = TRUE;
-	}, NULL, function () { return FALSE; });
+		$called = true;
+	}, null, function () { return false; });
 
 	$node = new MacroNode($set, 'noattr');
 	$node->prefix = $node::PREFIX_NONE;
@@ -86,7 +86,7 @@ test(function () use ($set) {
 
 
 test(function () use ($set) {
-	$set->addMacro('onlyattr', NULL, NULL, 'attr');
+	$set->addMacro('onlyattr', null, null, 'attr');
 
 	$node = new MacroNode($set, 'onlyattr');
 	Assert::false($set->nodeOpened($node));
@@ -104,8 +104,8 @@ test(function () use ($set) {
 
 test(function () use ($set) {
 	$set->addMacro('dynamic', function (MacroNode $node) use (&$called) {
-		$called = TRUE;
-		$node->empty = FALSE;
+		$called = true;
+		$node->empty = false;
 	});
 
 	$node = new MacroNode($set, 'dynamic');
@@ -114,13 +114,13 @@ test(function () use ($set) {
 	Assert::true($called);
 
 	Assert::null($set->nodeClosed($node));
-	Assert::same(NULL, $node->closingCode);
+	Assert::same(null, $node->closingCode);
 });
 
 
 test(function () use ($set) {
 	$set->addMacro('reject', function (MacroNode $node) {
-		return FALSE;
+		return false;
 	});
 
 	$node = new MacroNode($set, 'reject');
@@ -130,54 +130,54 @@ test(function () use ($set) {
 
 test(function () use ($set) {
 	$set->addMacro('modifyOk1', function () {});
-	$set->nodeOpened(new MacroNode($set, 'modifyOk1', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk1', null, '|filter'));
 
-	$set->addMacro('modifyOk2', NULL, function () {});
-	$set->nodeOpened(new MacroNode($set, 'modifyOk2', NULL, '|filter'));
+	$set->addMacro('modifyOk2', null, function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk2', null, '|filter'));
 
-	$set->addMacro('modifyOk3', NULL, NULL, function () {});
-	$set->nodeOpened(new MacroNode($set, 'modifyOk3', NULL, '|filter'));
+	$set->addMacro('modifyOk3', null, null, function () {});
+	$set->nodeOpened(new MacroNode($set, 'modifyOk3', null, '|filter'));
 
 	$set->addMacro('modifyOk4', function () {}, '-');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk4', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk4', null, '|filter'));
 
 	$set->addMacro('modifyOk5', '-', function () {});
-	$set->nodeOpened(new MacroNode($set, 'modifyOk5', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk5', null, '|filter'));
 
 	$set->addMacro('modifyOk6', '-', '-', function () {});
-	$set->nodeOpened(new MacroNode($set, 'modifyOk6', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk6', null, '|filter'));
 
 	$set->addMacro('modifyOk7', '%modify');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk7', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk7', null, '|filter'));
 
-	$set->addMacro('modifyOk8', NULL, '%modify');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk8', NULL, '|filter'));
+	$set->addMacro('modifyOk8', null, '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk8', null, '|filter'));
 
-	$set->addMacro('modifyOk9', NULL, NULL, '%modify');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk9', NULL, '|filter'));
+	$set->addMacro('modifyOk9', null, null, '%modify');
+	$set->nodeOpened(new MacroNode($set, 'modifyOk9', null, '|filter'));
 
 	$set->addMacro('modifyOk10', '%modify', '-');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk10', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk10', null, '|filter'));
 
 	$set->addMacro('modifyOk11', '-', '%modify');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk11', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk11', null, '|filter'));
 
 	$set->addMacro('modifyOk12', '-', '-', '%modify');
-	$set->nodeOpened(new MacroNode($set, 'modifyOk12', NULL, '|filter'));
+	$set->nodeOpened(new MacroNode($set, 'modifyOk12', null, '|filter'));
 
 	Assert::exception(function () use ($set) {
 		$set->addMacro('modifyError1', '-');
-		$set->nodeOpened(new MacroNode($set, 'modifyError1', NULL, '|filter'));
+		$set->nodeOpened(new MacroNode($set, 'modifyError1', null, '|filter'));
 	}, Latte\CompileException::class, 'Modifiers are not allowed in {modifyError1}');
 
 	Assert::exception(function () use ($set) {
-		$set->addMacro('modifyError2', NULL, '-');
-		$set->nodeOpened(new MacroNode($set, 'modifyError2', NULL, '|filter'));
+		$set->addMacro('modifyError2', null, '-');
+		$set->nodeOpened(new MacroNode($set, 'modifyError2', null, '|filter'));
 	}, Latte\CompileException::class, 'Modifiers are not allowed in {modifyError2}');
 
 	Assert::exception(function () use ($set) {
-		$set->addMacro('modifyError3', NULL, NULL, '-');
-		$set->nodeOpened(new MacroNode($set, 'modifyError3', NULL, '|filter'));
+		$set->addMacro('modifyError3', null, null, '-');
+		$set->nodeOpened(new MacroNode($set, 'modifyError3', null, '|filter'));
 	}, Latte\CompileException::class, 'Modifiers are not allowed in {modifyError3}');
 });
 
@@ -186,10 +186,10 @@ test(function () use ($set) {
 	$set->addMacro('paramsOk1', function () {});
 	$set->nodeOpened(new MacroNode($set, 'paramsOk1', 'params'));
 
-	$set->addMacro('paramsOk2', NULL, function () {});
+	$set->addMacro('paramsOk2', null, function () {});
 	$set->nodeOpened(new MacroNode($set, 'paramsOk2', 'params'));
 
-	$set->addMacro('paramsOk3', NULL, NULL, function () {});
+	$set->addMacro('paramsOk3', null, null, function () {});
 	$set->nodeOpened(new MacroNode($set, 'paramsOk3', 'params'));
 
 	$set->addMacro('paramsOk4', function () {}, '-');
@@ -204,10 +204,10 @@ test(function () use ($set) {
 	$set->addMacro('paramsOk7', '%node');
 	$set->nodeOpened(new MacroNode($set, 'paramsOk7', 'params'));
 
-	$set->addMacro('paramsOk8', NULL, '%node');
+	$set->addMacro('paramsOk8', null, '%node');
 	$set->nodeOpened(new MacroNode($set, 'paramsOk8', 'params'));
 
-	$set->addMacro('paramsOk9', NULL, NULL, '%node');
+	$set->addMacro('paramsOk9', null, null, '%node');
 	$set->nodeOpened(new MacroNode($set, 'paramsOk9', 'params'));
 
 	$set->addMacro('paramsOk10', '%node', '-');
@@ -225,12 +225,12 @@ test(function () use ($set) {
 	}, Latte\CompileException::class, 'Arguments are not allowed in {paramsError1}');
 
 	Assert::exception(function () use ($set) {
-		$set->addMacro('paramsError2', NULL, '-');
+		$set->addMacro('paramsError2', null, '-');
 		$set->nodeOpened(new MacroNode($set, 'paramsError2', 'params'));
 	}, Latte\CompileException::class, 'Arguments are not allowed in {paramsError2}');
 
 	Assert::exception(function () use ($set) {
-		$set->addMacro('paramsError3', NULL, NULL, '-');
+		$set->addMacro('paramsError3', null, null, '-');
 		$set->nodeOpened(new MacroNode($set, 'paramsError3', 'params'));
 	}, Latte\CompileException::class, 'Arguments are not allowed in {paramsError3}');
 });

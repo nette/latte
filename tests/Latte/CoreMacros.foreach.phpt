@@ -20,11 +20,11 @@ $prefix = '<?php $iterations = 0; '
 	. 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator(';
 
 
-function expandMacro($compiler, $args, $modifiers = NULL)
+function expandMacro($compiler, $args, $modifiers = null)
 {
 	$node = $compiler->expandMacro('foreach', $args, $modifiers);
 	$node->content = ' $iterator ';
-	$node->closing = TRUE;
+	$node->closing = true;
 	$node->macro->nodeClosed($node);
 	return $node;
 }

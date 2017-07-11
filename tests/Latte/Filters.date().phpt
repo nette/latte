@@ -16,7 +16,7 @@ require __DIR__ . '/../bootstrap.php';
 setlocale(LC_TIME, 'C');
 
 
-Assert::null(Filters::date(NULL));
+Assert::null(Filters::date(null));
 
 
 Assert::same('01/23/78', Filters::date(254400000));

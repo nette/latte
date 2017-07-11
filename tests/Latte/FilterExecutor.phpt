@@ -62,7 +62,7 @@ test(function () {
 
 test(function () {
 	$filters = new FilterExecutor;
-	$filters->add(NULL, function ($name, $val) {
+	$filters->add(null, function ($name, $val) {
 		return implode(',', func_get_args());
 	});
 	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
@@ -71,7 +71,7 @@ test(function () {
 	Assert::same('another,1,2', ($filters->another)(1, 2));
 
 	$filters2 = new FilterExecutor;
-	$filters2->add(NULL, function ($name, $val) {
+	$filters2->add(null, function ($name, $val) {
 		return 'different';
 	});
 	Assert::same('different', ($filters2->dynamic)(1, 2));
@@ -80,7 +80,7 @@ test(function () {
 
 test(function () {
 	$filters = new FilterExecutor;
-	$filters->add(NULL, function ($name, $val) use ($filters) {
+	$filters->add(null, function ($name, $val) use ($filters) {
 		if ($name === 'dynamic') {
 			$filters->add($name, function ($val) {
 				return implode(',', func_get_args());
@@ -102,7 +102,7 @@ test(function () {
 	// FilterInfo aware called as classic
 	$filters->add('f1', function (FilterInfo $info, $val) {
 		return gettype($info->contentType) . ',' . strtolower($val);
-	}, TRUE);
+	}, true);
 
 	Assert::same('NULL,aa', ($filters->f1)('aA'));
 	Assert::same('NULL,aa', ($filters->f1)('aA'));
@@ -122,7 +122,7 @@ test(function () {
 		$type = $info->contentType;
 		$info->contentType = 'new';
 		return $type . ',' . strtolower($val);
-	}, TRUE);
+	}, true);
 
 	$info = new FilterInfo('html');
 	Assert::same('html,aa', $filters->filterContent('f3', $info, 'aA'));
@@ -138,11 +138,11 @@ test(function () {
 		$type = $info->contentType;
 		$info->contentType = $newType;
 		return $type . ',' . gettype($val) . ',' . strtolower($val);
-	}, TRUE);
+	}, true);
 
 	Assert::equal(new Html('html,string,aa'), ($filters->f4)(new Html('aA'), 'html'));
 	Assert::equal('html,string,aa', ($filters->f4)(new Html('aA'), 'text'));
-	Assert::equal('html,string,aa', ($filters->f4)(new Html('aA'), NULL));
+	Assert::equal('html,string,aa', ($filters->f4)(new Html('aA'), null));
 
 
 	// classic called as FilterInfo aware with Latte\Runtime\Html

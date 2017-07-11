@@ -31,7 +31,7 @@ class SnippetDriver
 	private $nestingLevel = 0;
 
 	/** @var bool */
-	private $renderingSnippets = FALSE;
+	private $renderingSnippets = false;
 
 	/** @var ISnippetBridge */
 	private $bridge;
@@ -48,13 +48,13 @@ class SnippetDriver
 		if (!$this->renderingSnippets) {
 			return;
 		}
-		$obStarted = FALSE;
+		$obStarted = false;
 		if (($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
-			|| ($type === self::TYPE_DYNAMIC && ($previous = end($this->stack)) && $previous[1] === TRUE)
+			|| ($type === self::TYPE_DYNAMIC && ($previous = end($this->stack)) && $previous[1] === true)
 		) {
 			ob_start(function () {});
 			$this->nestingLevel = $type === self::TYPE_AREA ? 0 : 1;
-			$obStarted = TRUE;
+			$obStarted = true;
 		} elseif ($this->nestingLevel > 0) {
 			$this->nestingLevel++;
 		}
@@ -87,10 +87,10 @@ class SnippetDriver
 	public function renderSnippets(array $blocks, array $params)
 	{
 		if ($this->renderingSnippets || !$this->bridge->isSnippetMode()) {
-			return FALSE;
+			return false;
 		}
-		$this->renderingSnippets = TRUE;
-		$this->bridge->setSnippetMode(FALSE);
+		$this->renderingSnippets = true;
+		$this->bridge->setSnippetMode(false);
 		foreach ($blocks as $name => $function) {
 			if ($name[0] !== '_' || !$this->bridge->needsRedraw(substr($name, 1))) {
 				continue;
@@ -98,8 +98,8 @@ class SnippetDriver
 			$function = reset($function);
 			$function($params);
 		}
-		$this->bridge->setSnippetMode(TRUE);
+		$this->bridge->setSnippetMode(true);
 		$this->bridge->renderChildren();
-		return TRUE;
+		return true;
 	}
 }
