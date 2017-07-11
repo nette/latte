@@ -420,7 +420,7 @@ class PhpWriter
 					} else {
 						$name = strtolower($tokens->currentValue());
 						$res->prepend($isContent
-							? '$this->filters->filterContent('. var_export($name, true) . ', $_fi, '
+							? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
 							: '($this->filters->' . $name . ')('
 						);
 						$inside = true;
@@ -470,7 +470,7 @@ class PhpWriter
 					default:
 						throw new CompileException("Unknown context $contentType, $context.");
 				}
-
+				// break omitted
 			case Compiler::CONTENT_XML:
 				switch ($context) {
 					case Compiler::CONTEXT_XML_TEXT:
@@ -484,7 +484,7 @@ class PhpWriter
 					default:
 						throw new CompileException("Unknown context $contentType, $context.");
 				}
-
+				// break omitted
 			case Compiler::CONTENT_JS:
 			case Compiler::CONTENT_CSS:
 			case Compiler::CONTENT_ICAL:

@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::match(<<<EOD
+Assert::match(<<<'EOD'
 	<div id="main">
 		side	</div> <!-- /main -->
 
@@ -23,7 +23,7 @@ side
 	<div id="main">
 		side	</div> <!-- /main -->
 EOD
-, $latte->renderToString(<<<EOD
+, $latte->renderToString(<<<'EOD'
 	{block main}
 	<div id="main">
 		{block sidebar}side{/block}

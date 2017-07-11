@@ -264,7 +264,7 @@ class CoreMacros extends MacroSet
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer)
 	{
 		$body = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
-			? "ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()"
+			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body);", $node->context[0], $node->data->variable);
 	}
@@ -392,7 +392,7 @@ class CoreMacros extends MacroSet
 		}
 		$args = $writer->formatArgs();
 		return $writer->write(
-			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()'). ', %var);',
+			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()') . ', %var);',
 			$args ?: 'variables'
 		);
 	}

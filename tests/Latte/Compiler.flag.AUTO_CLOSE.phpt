@@ -10,24 +10,24 @@ require __DIR__ . '/../bootstrap.php';
 
 class TestMacro implements IMacro
 {
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		$node->openingCode = 'opening';
 		$node->closingCode = 'closing';
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 	}
 }

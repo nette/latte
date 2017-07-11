@@ -14,28 +14,28 @@ class TestMacro implements IMacro
 	public $delimiter;
 
 
-	function __construct($delimiter)
+	public function __construct($delimiter)
 	{
 		$this->delimiter = $delimiter;
 	}
 
 
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 		$node->innerContent = $this->delimiter[0] . $node->innerContent . $this->delimiter[1];
 	}

@@ -159,7 +159,7 @@ $dataSets = [
 	//import
 	[
 		[
-			'main'   => '{import "blocks1"}{import "blocks2"}{snippet foo}{include block1}{include block2}{/snippet}',
+			'main' => '{import "blocks1"}{import "blocks2"}{snippet foo}{include block1}{include block2}{/snippet}',
 			'blocks1' => '{block block1}hello{/block}',
 			'blocks2' => '{block block2} world{/block}',
 		],
@@ -170,8 +170,8 @@ $dataSets = [
 	//import and extends
 	[
 		[
-			'main'    => '{extends "layout"}{import "blocks1"}{import "blocks2"}{block content}{snippet foo}{include block1}{include block2}{/snippet}',
-			"layout" => '{include content}',
+			'main' => '{extends "layout"}{import "blocks1"}{import "blocks2"}{block content}{snippet foo}{include block1}{include block2}{/snippet}',
+			'layout' => '{include content}',
 			'blocks1' => '{block block1}hello{/block}',
 			'blocks2' => '{block block2} world{/block}',
 		],

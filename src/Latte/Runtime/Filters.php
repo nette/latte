@@ -33,7 +33,7 @@ class Filters
 	 */
 	public static function escapeHtml($s): string
 	{
-		return htmlSpecialChars((string) $s, ENT_QUOTES, 'UTF-8');
+		return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -46,7 +46,7 @@ class Filters
 	{
 		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
 			? $s->__toString(true)
-			: htmlSpecialChars((string) $s, ENT_NOQUOTES, 'UTF-8');
+			: htmlspecialchars((string) $s, ENT_NOQUOTES, 'UTF-8');
 	}
 
 
@@ -62,7 +62,7 @@ class Filters
 		if (strpos($s, '`') !== false && strpbrk($s, ' <>"\'') === false) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
-		return htmlSpecialChars($s, ENT_QUOTES, 'UTF-8', $double);
+		return htmlspecialchars($s, ENT_QUOTES, 'UTF-8', $double);
 	}
 
 
@@ -120,7 +120,7 @@ class Filters
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,
 		//   \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
-		return htmlSpecialChars(preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F]+#', '', (string) $s), ENT_QUOTES, 'UTF-8');
+		return htmlspecialchars(preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F]+#', '', (string) $s), ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -201,7 +201,7 @@ class Filters
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
 		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
-			trigger_error("Filter |stripHtml used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+			trigger_error('Filter |stripHtml used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
 		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES, 'UTF-8');
@@ -217,7 +217,7 @@ class Filters
 	public static function stripTags(FilterInfo $info, $s): string
 	{
 		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
-			trigger_error("Filter |stripTags used with incompatible type " . strtoupper($info->contentType), E_USER_WARNING);
+			trigger_error('Filter |stripTags used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		return strip_tags((string) $s);
 	}
@@ -235,7 +235,7 @@ class Filters
 			$info->contentType = $dest;
 			return $conv($s);
 		} else {
-			trigger_error("Filters: unable to convert content type " . strtoupper($source) . " to " . strtoupper($dest), E_USER_WARNING);
+			trigger_error('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest), E_USER_WARNING);
 			return $s;
 		}
 	}
@@ -482,7 +482,7 @@ class Filters
 	 */
 	public static function breaklines($s): Html
 	{
-		return new Html(nl2br(htmlSpecialChars((string) $s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
+		return new Html(nl2br(htmlspecialchars((string) $s, ENT_NOQUOTES, 'UTF-8'), self::$xhtml));
 	}
 
 
@@ -516,7 +516,7 @@ class Filters
 			if ($maxLen < 1) {
 				return $append;
 
-			} elseif (preg_match('#^.{1,'.$maxLen.'}(?=[\s\x00-/:-@\[-`{-~])#us', $s, $matches)) {
+			} elseif (preg_match('#^.{1,' . $maxLen . '}(?=[\s\x00-/:-@\[-`{-~])#us', $s, $matches)) {
 				return $matches[0] . $append;
 
 			} else {
@@ -603,7 +603,7 @@ class Filters
 	public static function trim(FilterInfo $info, $s, $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
-		$s = preg_replace('#^['.$charlist.']+|['.$charlist.']+\z#u', '', (string) $s);
+		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+\z#u', '', (string) $s);
 		if (preg_last_error()) {
 			throw new Latte\RegexpException(null, preg_last_error());
 		}

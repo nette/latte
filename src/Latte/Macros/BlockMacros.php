@@ -86,7 +86,7 @@ class BlockMacros extends MacroSet
 		}
 
 		return [
-			($this->extends === null ? '' : '$this->parentName = ' . $this->extends . ';') . implode($this->imports)
+			($this->extends === null ? '' : '$this->parentName = ' . $this->extends . ';') . implode($this->imports),
 		];
 	}
 
@@ -228,7 +228,7 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = true;
 				$node->data->leave = true;
-				$node->closingCode = "<?php \$this->global->snippetDriver->leave(); ?>";
+				$node->closingCode = '<?php $this->global->snippetDriver->leave(); ?>';
 				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . SnippetDriver::TYPE_DYNAMIC . '");';
 
 				if ($node->prefix) {
@@ -404,8 +404,8 @@ class BlockMacros extends MacroSet
 		$clean = trim(preg_replace('#\W+#', '_', $blockName), '_');
 		$name = 'block' . ucfirst($clean);
 		$methods = array_keys($this->getCompiler()->getMethods());
-		if (!$clean || in_array(strtolower($name), array_map('strtolower', $methods))) {
-			$name .=  '_' . substr(md5($blockName), 0, 5);
+		if (!$clean || in_array(strtolower($name), array_map('strtolower', $methods), true)) {
+			$name .= '_' . substr(md5($blockName), 0, 5);
 		}
 		return $name;
 	}

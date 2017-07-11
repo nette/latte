@@ -23,7 +23,7 @@ class MyFilter
 	}
 
 
-	function __invoke($s)
+	public function __invoke($s)
 	{
 		return strtoupper($s);
 	}

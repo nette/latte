@@ -11,17 +11,17 @@ require __DIR__ . '/../bootstrap.php';
 
 class TestMacro implements IMacro
 {
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		$node->empty = false;
 		// should be replaced by nodeClosed()
@@ -31,7 +31,7 @@ class TestMacro implements IMacro
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 		$node->openingCode = 'opening';
 		$node->closingCode = 'closing';
@@ -48,7 +48,7 @@ $latte->addMacro('one', new TestMacro);
 
 
 Assert::match(
-	"%A%opening[]closing<?%A%",
+	'%A%opening[]closing<?%A%',
 	$latte->compile('{one/}')
 );
 

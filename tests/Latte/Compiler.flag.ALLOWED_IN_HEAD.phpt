@@ -14,25 +14,25 @@ class TestMacro implements IMacro
 	public $compiler;
 
 
-	function initialize()
+	public function initialize()
 	{
 		$this->inHead = null;
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		$node->empty = true;
 		$this->inHead = $this->compiler->isInHead();
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 	}
 }

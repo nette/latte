@@ -23,7 +23,7 @@ $template = <<<'EOD'
 {/block}
 EOD;
 
-Assert::match(<<<EOD
+Assert::match(<<<'EOD'
 
 	Content
 EOD
