@@ -58,7 +58,7 @@ class SkipMacro implements IMacro
 
 	function nodeOpened(MacroNode $node)
 	{
-		return FALSE;
+		return false;
 	}
 
 

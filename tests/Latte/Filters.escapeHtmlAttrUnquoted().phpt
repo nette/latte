@@ -11,7 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::same('""', Filters::escapeHtmlAttrUnquoted(NULL));
+Assert::same('""', Filters::escapeHtmlAttrUnquoted(null));
 Assert::same('""', Filters::escapeHtmlAttrUnquoted(''));
 Assert::same('1', Filters::escapeHtmlAttrUnquoted(1));
 Assert::same('string', Filters::escapeHtmlAttrUnquoted('string'));

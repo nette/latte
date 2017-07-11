@@ -54,7 +54,7 @@ class Parser
 	private $offset;
 
 	/** @var array */
-	private $context = [self::CONTEXT_HTML_TEXT, NULL];
+	private $context = [self::CONTEXT_HTML_TEXT, null];
 
 	/** @var string */
 	private $lastHtmlTag;
@@ -101,11 +101,11 @@ class Parser
 		}
 
 		$this->setSyntax($this->defaultSyntax);
-		$this->lastHtmlTag = $this->syntaxEndTag = NULL;
+		$this->lastHtmlTag = $this->syntaxEndTag = null;
 
 		$tokenCount = 0;
 		while ($this->offset < strlen($input)) {
-			if ($this->{'context' . $this->context[0]}() === FALSE) {
+			if ($this->{'context' . $this->context[0]}() === false) {
 				break;
 			}
 			while ($tokenCount < count($this->output)) {
@@ -165,7 +165,7 @@ class Parser
 		if (!empty($matches['tag'])) { // </tag
 			$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
 			$token->name = $this->lastHtmlTag;
-			$token->closing = TRUE;
+			$token->closing = true;
 			$this->lastHtmlTag = '/' . $this->lastHtmlTag;
 			$this->setContext(self::CONTEXT_HTML_TAG);
 		} else {
@@ -187,7 +187,7 @@ class Parser
 
 		if (!empty($matches['end'])) { // end of HTML tag />
 			$this->addToken(Token::HTML_TAG_END, $matches[0]);
-			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], TRUE) ? self::CONTEXT_HTML_CDATA : self::CONTEXT_HTML_TEXT);
+			$this->setContext(!$this->xmlMode && in_array($this->lastHtmlTag, ['script', 'style'], true) ? self::CONTEXT_HTML_CDATA : self::CONTEXT_HTML_TEXT);
 
 		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
 			$token = $this->addToken(Token::HTML_ATTRIBUTE_BEGIN, $matches[0]);
@@ -297,7 +297,7 @@ class Parser
 		if (!empty($matches['macro'])) { // {macro} or {* *}
 			$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -311,7 +311,7 @@ class Parser
 	{
 		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE, $this->offset)) {
 			if (preg_last_error()) {
-				throw new RegexpException(NULL, preg_last_error());
+				throw new RegexpException(null, preg_last_error());
 			}
 			return [];
 		}
@@ -334,7 +334,7 @@ class Parser
 	 */
 	public function setContentType($type)
 	{
-		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XHTML, self::CONTENT_XML], TRUE)) {
+		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XHTML, self::CONTENT_XML], true)) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
 			$this->xmlMode = $type === self::CONTENT_XML;
 		} else {
@@ -347,7 +347,7 @@ class Parser
 	/**
 	 * @return static
 	 */
-	public function setContext($context, $quote = NULL)
+	public function setContext($context, $quote = null)
 	{
 		$this->context = [$context, $quote];
 		return $this;
@@ -387,7 +387,7 @@ class Parser
 	/**
 	 * Parses macro tag to name, arguments a modifiers parts.
 	 * @param  string {name arguments | modifiers}
-	 * @return array|NULL
+	 * @return array|null
 	 * @internal
 	 */
 	public function parseMacroTag($tag)
@@ -402,9 +402,9 @@ class Parser
 			(?P<empty>/?\z)
 		()\z~isx', $tag, $match)) {
 			if (preg_last_error()) {
-				throw new RegexpException(NULL, preg_last_error());
+				throw new RegexpException(null, preg_last_error());
 			}
-			return NULL;
+			return null;
 		}
 		if ($match['name'] === '') {
 			$match['name'] = $match['shortname'] ?: ($match['closing'] ? '' : '=');
@@ -461,9 +461,9 @@ class Parser
 			$this->setSyntax($this->defaultSyntax);
 
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
-			if (strpos($token->value, 'html') !== FALSE) {
+			if (strpos($token->value, 'html') !== false) {
 				$this->setContentType(self::CONTENT_HTML);
-			} elseif (strpos($token->value, 'xml') !== FALSE) {
+			} elseif (strpos($token->value, 'xml') !== false) {
 				$this->setContentType(self::CONTENT_XML);
 			} else {
 				$this->setContentType(self::CONTENT_TEXT);

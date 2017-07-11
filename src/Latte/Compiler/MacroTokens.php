@@ -61,12 +61,12 @@ class MacroTokens extends TokenIterator
 	 * Appends simple token or string (will be parsed).
 	 * @return static
 	 */
-	public function append($val, $position = NULL)
+	public function append($val, $position = null)
 	{
-		if ($val != NULL) { // intentionally @
+		if ($val != null) { // intentionally @
 			array_splice(
 				$this->tokens,
-				$position === NULL ? count($this->tokens) : $position,
+				$position === null ? count($this->tokens) : $position,
 				0,
 				is_array($val) ? [$val] : $this->parse($val)
 			);
@@ -81,7 +81,7 @@ class MacroTokens extends TokenIterator
 	 */
 	public function prepend($val)
 	{
-		if ($val != NULL) { // intentionally @
+		if ($val != null) { // intentionally @
 			array_splice($this->tokens, 0, 0, is_array($val) ? [$val] : $this->parse($val));
 		}
 		return $this;
@@ -95,7 +95,7 @@ class MacroTokens extends TokenIterator
 	public function fetchWord()
 	{
 		$words = $this->fetchWords();
-		return $words ? implode(':', $words) : FALSE;
+		return $words ? implode(':', $words) : false;
 	}
 
 

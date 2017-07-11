@@ -36,13 +36,13 @@ class Template
 	/** @var array [name => method]  @internal */
 	protected $blocks = [];
 
-	/** @var string|NULL|FALSE  @internal */
+	/** @var string|null|false  @internal */
 	protected $parentName;
 
-	/** @var Template|NULL  @internal */
+	/** @var Template|null  @internal */
 	private $referringTemplate;
 
-	/** @var string|NULL  @internal */
+	/** @var string|null  @internal */
 	private $referenceType;
 
 	/** @var \stdClass global accumulators for intermediate results */
@@ -120,16 +120,16 @@ class Template
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public function getParentName()
 	{
-		return $this->parentName ?: NULL;
+		return $this->parentName ?: null;
 	}
 
 
 	/**
-	 * @return Template|NULL
+	 * @return Template|null
 	 */
 	public function getReferringTemplate()
 	{
@@ -138,7 +138,7 @@ class Template
 
 
 	/**
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	public function getReferenceType()
 	{
@@ -155,7 +155,7 @@ class Template
 	{
 		$this->prepare();
 
-		if ($this->parentName === NULL && isset($this->global->coreParentFinder)) {
+		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
 			$this->parentName = call_user_func($this->global->coreParentFinder, $this);
 		}
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
@@ -178,7 +178,7 @@ class Template
 
 		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
 			$tmp = $this;
-			while (in_array($this->referenceType, ['extends', NULL], TRUE) && ($tmp = $tmp->referringTemplate));
+			while (in_array($this->referenceType, ['extends', null], true) && ($tmp = $tmp->referringTemplate));
 			if (!$tmp) {
 				$this->renderBlock($this->params['_renderblock'], $this->params);
 				return;
@@ -264,7 +264,7 @@ class Template
 	 * @return void
 	 * @internal
 	 */
-	protected function renderBlock($name, array $params, $mod = NULL)
+	protected function renderBlock($name, array $params, $mod = null)
 	{
 		if (empty($this->blockQueue[$name])) {
 			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
@@ -290,7 +290,7 @@ class Template
 	 */
 	protected function renderBlockParent($name, array $params)
 	{
-		if (empty($this->blockQueue[$name]) || ($block = next($this->blockQueue[$name])) === FALSE) {
+		if (empty($this->blockQueue[$name]) || ($block = next($this->blockQueue[$name])) === false) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
 		}
 		$block($params);
@@ -305,7 +305,7 @@ class Template
 	protected function checkBlockContentType($current, $name)
 	{
 		$expected = &$this->blockTypes[$name];
-		if ($expected === NULL) {
+		if ($expected === null) {
 			$expected = $current;
 		} elseif ($expected !== $current) {
 			trigger_error("Overridden block $name with content type " . strtoupper($current) . ' by incompatible type ' . strtoupper($expected) . '.', E_USER_WARNING);
@@ -322,12 +322,12 @@ class Template
 	{
 		ob_start(function () {});
 		try {
-			$this->global->coreCaptured = TRUE;
+			$this->global->coreCaptured = true;
 			$function();
 		} catch (\Throwable $e) {
 		} catch (\Exception $e) {
 		}
-		$this->global->coreCaptured = FALSE;
+		$this->global->coreCaptured = false;
 		if (isset($e)) {
 			ob_end_clean();
 			throw $e;

@@ -73,7 +73,7 @@ trait Strict
 	 */
 	public function __isset($name)
 	{
-		return FALSE;
+		return false;
 	}
 
 

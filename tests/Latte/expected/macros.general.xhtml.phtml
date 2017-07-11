@@ -84,7 +84,7 @@ class Template%a% extends Latte\Runtime\Template
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(array(TRUE)) as $foo) {
+		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(array(true)) as $foo) {
 			$iterations = 0;
 			foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
 				?>	<?php
@@ -201,18 +201,18 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 
 { }
 
-<?php ob_start(function () {}) ?>TRUE<?php
-		if (TRUE) echo ob_get_clean();
+<?php ob_start(function () {}) ?>true<?php
+		if (true) echo ob_get_clean();
 		else ob_end_clean();
 ?>
 
-<?php ob_start(function () {}) ?>FALSE<?php
-		if (FALSE) echo ob_get_clean();
+<?php ob_start(function () {}) ?>false<?php
+		if (false) echo ob_get_clean();
 		else ob_end_clean();
 ?>
 
-<?php ob_start(function () {}) ?>TRUE<?php ob_start(function () {}) ?>FALSE<?php
-		if (TRUE) {
+<?php ob_start(function () {}) ?>true<?php ob_start(function () {}) ?>false<?php
+		if (true) {
 			ob_end_clean();
 			echo ob_get_clean();
 		}

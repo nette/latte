@@ -31,7 +31,7 @@ class HtmlNode
 	public $macroAttrs = [];
 
 	/** @var bool */
-	public $closing = FALSE;
+	public $closing = false;
 
 	/** @var HtmlNode */
 	public $parentNode;
@@ -49,7 +49,7 @@ class HtmlNode
 	public $innerMarker;
 
 
-	public function __construct($name, self $parentNode = NULL)
+	public function __construct($name, self $parentNode = null)
 	{
 		$this->name = $name;
 		$this->parentNode = $parentNode;

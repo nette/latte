@@ -11,7 +11,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match( // fix #58
 	'x',
-	$latte->renderToString('{contentType application/xml}{if TRUE}x{/if}')
+	$latte->renderToString('{contentType application/xml}{if true}x{/if}')
 );
 
 Assert::match(

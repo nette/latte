@@ -23,7 +23,7 @@ class CompileException extends \Exception
 	public $sourceLine;
 
 
-	public function setSource($code, $line, $name = NULL)
+	public function setSource($code, $line, $name = null)
 	{
 		$this->sourceCode = (string) $code;
 		$this->sourceLine = (int) $line;
@@ -52,7 +52,7 @@ class RegexpException extends \Exception
 	];
 
 
-	public function __construct($message, $code = NULL)
+	public function __construct($message, $code = null)
 	{
 		parent::__construct($message ?: (isset(self::$messages[$code]) ? self::$messages[$code] : 'Unknown error'), $code);
 	}

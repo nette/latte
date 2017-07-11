@@ -35,7 +35,7 @@ test(function () { // append
 	Assert::same('hello world!hello', $tokenizer->reset()->joinAll());
 	Assert::count(5, $tokenizer->tokens);
 
-	$res = $tokenizer->append(NULL);
+	$res = $tokenizer->append(null);
 	Assert::count(5, $tokenizer->tokens);
 
 	$res = $tokenizer->append('');
@@ -44,7 +44,7 @@ test(function () { // append
 	$res = $tokenizer->append([]);
 	Assert::count(5, $tokenizer->tokens);
 
-	$res = $tokenizer->append(FALSE);
+	$res = $tokenizer->append(false);
 	Assert::count(5, $tokenizer->tokens);
 });
 
@@ -52,7 +52,7 @@ test(function () { // append
 test(function () { // append with position
 	$tokenizer = new MacroTokens('world');
 
-	$res = $tokenizer->append('!', NULL);
+	$res = $tokenizer->append('!', null);
 	Assert::same('world!', $tokenizer->joinAll());
 
 	$res = $tokenizer->append('hello', 0);
@@ -78,7 +78,7 @@ test(function () { // prepend
 	Assert::same('worldhello world!', $tokenizer->reset()->joinAll());
 	Assert::count(5, $tokenizer->tokens);
 
-	$res = $tokenizer->prepend(NULL);
+	$res = $tokenizer->prepend(null);
 	Assert::count(5, $tokenizer->tokens);
 
 	$res = $tokenizer->prepend('');
@@ -87,6 +87,6 @@ test(function () { // prepend
 	$res = $tokenizer->prepend([]);
 	Assert::count(5, $tokenizer->tokens);
 
-	$res = $tokenizer->prepend(FALSE);
+	$res = $tokenizer->prepend(false);
 	Assert::count(5, $tokenizer->tokens);
 });

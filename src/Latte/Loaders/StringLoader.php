@@ -17,11 +17,11 @@ class StringLoader implements Latte\ILoader
 {
 	use Latte\Strict;
 
-	/** @var array|NULL [name => content] */
+	/** @var array|null [name => content] */
 	private $templates;
 
 
-	public function __construct(array $templates = NULL)
+	public function __construct(array $templates = null)
 	{
 		$this->templates = $templates;
 	}
@@ -33,7 +33,7 @@ class StringLoader implements Latte\ILoader
 	 */
 	public function getContent($name)
 	{
-		if ($this->templates === NULL) {
+		if ($this->templates === null) {
 			return $name;
 		} elseif (isset($this->templates[$name])) {
 			return $this->templates[$name];
@@ -48,7 +48,7 @@ class StringLoader implements Latte\ILoader
 	 */
 	public function isExpired($name, $time)
 	{
-		return FALSE;
+		return false;
 	}
 
 
@@ -58,7 +58,7 @@ class StringLoader implements Latte\ILoader
 	 */
 	public function getReferredName($name, $referringName)
 	{
-		if ($this->templates === NULL) {
+		if ($this->templates === null) {
 			throw new \LogicException("Missing template '$name'.");
 		}
 		return $name;

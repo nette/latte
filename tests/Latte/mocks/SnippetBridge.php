@@ -3,7 +3,7 @@
 
 class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 {
-	public $snippetMode = TRUE;
+	public $snippetMode = true;
 
 	public $payload = [];
 
@@ -24,13 +24,13 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 
 	public function needsRedraw($name)
 	{
-		return $this->invalid === TRUE || isset($this->invalid[$name]);
+		return $this->invalid === true || isset($this->invalid[$name]);
 	}
 
 
 	public function markRedrawn($name)
 	{
-		if ($this->invalid !== TRUE) {
+		if ($this->invalid !== true) {
 			unset($this->invalid[$name]);
 		}
 	}

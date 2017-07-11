@@ -11,7 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::same('', Filters::escapeCss(NULL));
+Assert::same('', Filters::escapeCss(null));
 Assert::same('', Filters::escapeCss(''));
 Assert::same('1', Filters::escapeCss(1));
 Assert::same('string', Filters::escapeCss('string'));

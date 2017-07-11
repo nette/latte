@@ -22,55 +22,55 @@ class FilterExecutor
 
 	/** @var array [name => [callback, FilterInfo aware] */
 	private $_static = [
-		'breaklines' => ['Latte\Runtime\Filters::breaklines', FALSE],
-		'bytes' => ['Latte\Runtime\Filters::bytes', FALSE],
-		'capitalize' => ['Latte\Runtime\Filters::capitalize', FALSE],
-		'datastream' => ['Latte\Runtime\Filters::dataStream', FALSE],
-		'date' => ['Latte\Runtime\Filters::date', FALSE],
-		'escapecss' => ['Latte\Runtime\Filters::escapeCss', FALSE],
-		'escapehtml' => ['Latte\Runtime\Filters::escapeHtml', FALSE],
-		'escapehtmlcomment' => ['Latte\Runtime\Filters::escapeHtmlComment', FALSE],
-		'escapeical' => ['Latte\Runtime\Filters::escapeICal', FALSE],
-		'escapejs' => ['Latte\Runtime\Filters::escapeJs', FALSE],
-		'escapeurl' => ['rawurlencode', FALSE],
-		'escapexml' => ['Latte\Runtime\Filters::escapeXml', FALSE],
-		'firstupper' => ['Latte\Runtime\Filters::firstUpper', FALSE],
-		'checkurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
-		'implode' => ['implode', FALSE],
-		'indent' => ['Latte\Runtime\Filters::indent', TRUE],
-		'length' => ['Latte\Runtime\Filters::length', FALSE],
-		'lower' => ['Latte\Runtime\Filters::lower', FALSE],
-		'nl2br' => ['Latte\Runtime\Filters::nl2br', FALSE],
-		'number' => ['number_format', FALSE],
-		'padleft' => ['Latte\Runtime\Filters::padLeft', FALSE],
-		'padright' => ['Latte\Runtime\Filters::padRight', FALSE],
-		'repeat' => ['Latte\Runtime\Filters::repeat', TRUE],
-		'replace' => ['Latte\Runtime\Filters::replace', TRUE],
-		'replacere' => ['Latte\Runtime\Filters::replaceRe', FALSE],
-		'safeurl' => ['Latte\Runtime\Filters::safeUrl', FALSE],
-		'strip' => ['Latte\Runtime\Filters::strip', TRUE],
-		'striphtml' => ['Latte\Runtime\Filters::stripHtml', TRUE],
-		'striptags' => ['Latte\Runtime\Filters::stripTags', TRUE],
-		'substr' => ['Latte\Runtime\Filters::substring', FALSE],
-		'trim' => ['Latte\Runtime\Filters::trim', TRUE],
-		'truncate' => ['Latte\Runtime\Filters::truncate', FALSE],
-		'upper' => ['Latte\Runtime\Filters::upper', FALSE],
+		'breaklines' => ['Latte\Runtime\Filters::breaklines', false],
+		'bytes' => ['Latte\Runtime\Filters::bytes', false],
+		'capitalize' => ['Latte\Runtime\Filters::capitalize', false],
+		'datastream' => ['Latte\Runtime\Filters::dataStream', false],
+		'date' => ['Latte\Runtime\Filters::date', false],
+		'escapecss' => ['Latte\Runtime\Filters::escapeCss', false],
+		'escapehtml' => ['Latte\Runtime\Filters::escapeHtml', false],
+		'escapehtmlcomment' => ['Latte\Runtime\Filters::escapeHtmlComment', false],
+		'escapeical' => ['Latte\Runtime\Filters::escapeICal', false],
+		'escapejs' => ['Latte\Runtime\Filters::escapeJs', false],
+		'escapeurl' => ['rawurlencode', false],
+		'escapexml' => ['Latte\Runtime\Filters::escapeXml', false],
+		'firstupper' => ['Latte\Runtime\Filters::firstUpper', false],
+		'checkurl' => ['Latte\Runtime\Filters::safeUrl', false],
+		'implode' => ['implode', false],
+		'indent' => ['Latte\Runtime\Filters::indent', true],
+		'length' => ['Latte\Runtime\Filters::length', false],
+		'lower' => ['Latte\Runtime\Filters::lower', false],
+		'nl2br' => ['Latte\Runtime\Filters::nl2br', false],
+		'number' => ['number_format', false],
+		'padleft' => ['Latte\Runtime\Filters::padLeft', false],
+		'padright' => ['Latte\Runtime\Filters::padRight', false],
+		'repeat' => ['Latte\Runtime\Filters::repeat', true],
+		'replace' => ['Latte\Runtime\Filters::replace', true],
+		'replacere' => ['Latte\Runtime\Filters::replaceRe', false],
+		'safeurl' => ['Latte\Runtime\Filters::safeUrl', false],
+		'strip' => ['Latte\Runtime\Filters::strip', true],
+		'striphtml' => ['Latte\Runtime\Filters::stripHtml', true],
+		'striptags' => ['Latte\Runtime\Filters::stripTags', true],
+		'substr' => ['Latte\Runtime\Filters::substring', false],
+		'trim' => ['Latte\Runtime\Filters::trim', true],
+		'truncate' => ['Latte\Runtime\Filters::truncate', false],
+		'upper' => ['Latte\Runtime\Filters::upper', false],
 	];
 
 
 	/**
 	 * Registers run-time filter.
-	 * @param  string|NULL
+	 * @param  string|null
 	 * @param  callable
 	 * @return static
 	 */
 	public function add($name, $callback)
 	{
-		if ($name == NULL) { // intentionally ==
+		if ($name == null) { // intentionally ==
 			array_unshift($this->_dynamic, $callback);
 		} else {
 			$name = strtolower($name);
-			$this->_static[$name] = [$callback, NULL];
+			$this->_static[$name] = [$callback, null];
 			unset($this->$name);
 		}
 		return $this;
@@ -122,7 +122,7 @@ class FilterExecutor
 			array_unshift($args, $lname);
 			foreach ($this->_dynamic as $filter) {
 				$res = call_user_func_array(Helpers::checkCallback($filter), $args);
-				if ($res !== NULL) {
+				if ($res !== null) {
 					return $res;
 				} elseif (isset($this->_static[$lname])) { // dynamic converted to classic
 					$this->$name = Helpers::checkCallback($this->_static[$lname][0]);

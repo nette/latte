@@ -17,11 +17,11 @@ class FilterInfo
 {
 	use Latte\Strict;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	public $contentType;
 
 
-	public function __construct($contentType = NULL)
+	public function __construct($contentType = null)
 	{
 		$this->contentType = $contentType;
 	}

@@ -35,12 +35,12 @@ class MockMacro implements IMacro
 	{
 		$this->calls[] = [
 			__FUNCTION__,
-			isset($node->htmlNode) ? $node->htmlNode->name : NULL,
+			isset($node->htmlNode) ? $node->htmlNode->name : null,
 			$node->closing,
 			$node->prefix,
 			$node->content,
 		];
-		$node->empty = TRUE;
+		$node->empty = true;
 	}
 
 
@@ -48,7 +48,7 @@ class MockMacro implements IMacro
 	{
 		$this->calls[] = [
 			__FUNCTION__,
-			isset($node->htmlNode) ? $node->htmlNode->name : NULL,
+			isset($node->htmlNode) ? $node->htmlNode->name : null,
 			$node->closing,
 			$node->prefix,
 			$node->content,
@@ -72,13 +72,13 @@ Assert::same([
 	'initialize',
 
 	// {foo}
-	['nodeOpened', NULL, FALSE, NULL, NULL],
+	['nodeOpened', null, false, null, null],
 
 	// <div1>{foo}</div1>
-	['nodeOpened', 'div1', FALSE, NULL, NULL],
+	['nodeOpened', 'div1', false, null, null],
 
 	// <div2 n:foo>Text</div2>
-	['nodeOpened', 'div2', FALSE, 'none', NULL],
+	['nodeOpened', 'div2', false, 'none', null],
 
 	'finalize',
 ], $macro->calls);
