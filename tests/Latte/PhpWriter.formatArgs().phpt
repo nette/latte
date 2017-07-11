@@ -56,9 +56,9 @@ test(function () { // associative arrays
 
 
 test(function () { // short ternary operators
-	Assert::same("(\$first ? 'first' : NULL), \$var ? 'foo' : 'bar', \$var ? 'foo' : NULL", formatArgs('($first ? first), $var ? foo : bar, $var ? foo'));
-	Assert::same("('a' ? 'b' : NULL) ? ('c' ? 'd' : NULL) : NULL", formatArgs('(a ? b) ? (c ? d)'));
-	Assert::same("fce() ? 'a' : NULL, fce() ? 'b' : NULL", formatArgs('fce() ? a, fce() ? b'));
+	Assert::same("(\$first ? 'first' : null), \$var ? 'foo' : 'bar', \$var ? 'foo' : null", formatArgs('($first ? first), $var ? foo : bar, $var ? foo'));
+	Assert::same("('a' ? 'b' : null) ? ('c' ? 'd' : null) : null", formatArgs('(a ? b) ? (c ? d)'));
+	Assert::same("fce() ? 'a' : null, fce() ? 'b' : null", formatArgs('fce() ? a, fce() ? b'));
 	Assert::same("fce() ?? 'a'", formatArgs('fce() ?? a')); // null coalesce is ignored
 });
 
@@ -103,7 +103,7 @@ test(function () { // inline modifiers
 	Assert::same('($this->filters->mod)(@, 1, 2, $var["pocet"])', formatArgs('(@|mod,1,2,$var["pocet"])'));
 	Assert::same('($this->filters->mod)(@, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')', formatArgs('(@|mod, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')'));
 	Assert::same('($this->filters->mod)(@, array(1))', formatArgs('(@|mod: array(1))'));
-	Assert::same('($this->filters->mod)($a ? $b : NULL)', formatArgs('($a ? $b|mod)'));
+	Assert::same('($this->filters->mod)($a ? $b : null)', formatArgs('($a ? $b|mod)'));
 
 	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', \"param2)\")", formatArgs('foo => ($val|mod:param:"param2)")'));
 	Assert::same("'foo' => (\$this->filters->mod2)((\$this->filters->mod)(\$val))", formatArgs('foo => ($val|mod|mod2)'));
@@ -124,8 +124,8 @@ test(function () { // inline modifiers
 
 
 test(function () { // in operator
-	Assert::same("in_array(\$a, ['a', 'b'], TRUE), 1", formatArgs('$a in [a, b], 1'));
-	Assert::same('$a, in_array($b->func(), [1, 2], TRUE)', formatArgs('$a, $b->func() in [1, 2]'));
-	Assert::same('$a, in_array($b[1], [1, 2], TRUE)', formatArgs('$a, $b[1] in [1, 2]'));
-	Assert::same('in_array($b, [1, [2], 3], TRUE)', formatArgs('$b in [1, [2], 3]'));
+	Assert::same("in_array(\$a, ['a', 'b'], true), 1", formatArgs('$a in [a, b], 1'));
+	Assert::same('$a, in_array($b->func(), [1, 2], true)', formatArgs('$a, $b->func() in [1, 2]'));
+	Assert::same('$a, in_array($b[1], [1, 2], true)', formatArgs('$a, $b[1] in [1, 2]'));
+	Assert::same('in_array($b, [1, [2], 3], true)', formatArgs('$b in [1, [2], 3]'));
 });

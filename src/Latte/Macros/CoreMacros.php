@@ -54,7 +54,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('elseifset', '} elseif (isset(%node.args)) {');
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 
-		$me->addMacro('switch', '$this->global->switch[] = (%node.args); if (FALSE) {', '} array_pop($this->global->switch)');
+		$me->addMacro('switch', '$this->global->switch[] = (%node.args); if (false) {', '} array_pop($this->global->switch)');
 		$me->addMacro('case', '} elseif (end($this->global->switch) === (%node.args)) {');
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
@@ -279,7 +279,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
 		}
 		$node->openingCode = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
-			? '<?php ob_start(function ($s, $phase) { static $strip = TRUE; return LR\Filters::spacelessHtml($s, $phase, $strip); }, 4096); ?>'
+			? '<?php ob_start(function ($s, $phase) { static $strip = true; return LR\Filters::spacelessHtml($s, $phase, $strip); }, 4096); ?>'
 			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096); ?>";
 		$node->closingCode = '<?php ob_end_flush(); ?>';
 	}
@@ -443,7 +443,7 @@ class CoreMacros extends MacroSet
 
 			} elseif ($tokens->isCurrent(',') && $tokens->depth === 0) {
 				if ($var === null) {
-					$res->append($node->name === 'default' ? '=>NULL' : '=NULL');
+					$res->append($node->name === 'default' ? '=>null' : '=null');
 				}
 				$res->append($node->name === 'default' ? ',' : ';');
 				$var = true;
@@ -456,7 +456,7 @@ class CoreMacros extends MacroSet
 			}
 		}
 		if ($var === null) {
-			$res->append($node->name === 'default' ? '=>NULL' : '=NULL');
+			$res->append($node->name === 'default' ? '=>null' : '=null');
 		}
 		$out = $writer->quotingPass($res)->joinAll();
 		return $node->name === 'default' ? "extract([$out], EXTR_SKIP)" : "$out;";
@@ -507,7 +507,7 @@ class CoreMacros extends MacroSet
 		$compiler->setContentType($type);
 
 		if (strpos($node->args, '/') && !$node->htmlNode) {
-			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", NULL], TRUE)) header(%var);', "Content-Type: $node->args");
+			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) header(%var);', "Content-Type: $node->args");
 		}
 	}
 }

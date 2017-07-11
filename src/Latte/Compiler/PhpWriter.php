@@ -222,14 +222,14 @@ class PhpWriter
 				array_pop($inTernary);
 
 			} elseif ($tokens->isCurrent(',', ')', ']', '|') && end($inTernary) === $tokens->depth + $tokens->isCurrent(')', ']')) {
-				$res->append(' : NULL');
+				$res->append(' : null');
 				array_pop($inTernary);
 			}
 			$res->append($tokens->currentToken());
 		}
 
 		if ($inTernary) {
-			$res->append(' : NULL');
+			$res->append(' : null');
 		}
 		return $res;
 	}
@@ -303,7 +303,7 @@ class PhpWriter
 					while ($tokens->isNext()) {
 						$arr[] = $tokens->nextToken();
 						if ($tokens->isCurrent(']') && $tokens->depth === $depth) {
-							$new = array_merge($tokens->parse('in_array('), $expr, $tokens->parse(', '), $arr, $tokens->parse(', TRUE)'));
+							$new = array_merge($tokens->parse('in_array('), $expr, $tokens->parse(', '), $arr, $tokens->parse(', true)'));
 							array_splice($tokens->tokens, $start, $tokens->position - $start + 1, $new);
 							$tokens->position = $start + count($new) - 1;
 							continue 2;
