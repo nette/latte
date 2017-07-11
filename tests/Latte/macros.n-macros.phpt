@@ -4,7 +4,6 @@
  * Test: general n:attributes test.
  */
 
-use Latte\Runtime\Html;
 use Tester\Assert;
 
 

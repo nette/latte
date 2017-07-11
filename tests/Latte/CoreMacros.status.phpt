@@ -4,7 +4,6 @@
  * Test: {status}
  */
 
-use Latte\Macros\CoreMacros;
 use Tester\Assert;
 
 

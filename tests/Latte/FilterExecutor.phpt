@@ -20,6 +20,7 @@ class MyFilter
 		return strtolower($s);
 	}
 
+
 	function __invoke($s)
 	{
 		return strtoupper($s);
@@ -116,7 +117,8 @@ test(function () {
 
 	// FilterInfo aware called as FilterInfo aware
 	$filters->add('f3', function (FilterInfo $info, $val) {
-		$type = $info->contentType; $info->contentType = 'new';
+		$type = $info->contentType;
+		$info->contentType = 'new';
 		return $type . ',' . strtolower($val);
 	}, TRUE);
 

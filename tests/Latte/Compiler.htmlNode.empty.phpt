@@ -16,16 +16,26 @@ class MockMacro implements IMacro
 {
 	public $empty;
 
-	function initialize() {}
 
-	function finalize() {}
+	function initialize()
+	{
+	}
+
+
+	function finalize()
+	{
+	}
+
 
 	function nodeOpened(MacroNode $node)
 	{
 		Assert::same($this->empty, $node->htmlNode->empty);
 	}
 
-	function nodeClosed(MacroNode $node) {}
+
+	function nodeClosed(MacroNode $node)
+	{
+	}
 }
 
 

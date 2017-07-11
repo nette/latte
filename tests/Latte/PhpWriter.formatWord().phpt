@@ -4,8 +4,8 @@
  * Test: Latte\PhpWriter::formatWord()
  */
 
-use Latte\PhpWriter;
 use Latte\MacroTokens;
+use Latte\PhpWriter;
 use Tester\Assert;
 
 

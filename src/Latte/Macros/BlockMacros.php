@@ -417,5 +417,4 @@ class BlockMacros extends MacroSet
 		}
 		return $name;
 	}
-
 }

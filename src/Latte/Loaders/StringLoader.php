@@ -73,5 +73,4 @@ class StringLoader implements Latte\ILoader
 	{
 		return $this->getContent($name);
 	}
-
 }

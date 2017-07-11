@@ -245,5 +245,4 @@ class TokenIterator
 			$pos += $prev ? -1 : 1;
 		} while (TRUE);
 	}
-
 }

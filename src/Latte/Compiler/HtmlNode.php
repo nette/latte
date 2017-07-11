@@ -55,5 +55,4 @@ class HtmlNode
 		$this->parentNode = $parentNode;
 		$this->isEmpty = &$this->empty;
 	}
-
 }

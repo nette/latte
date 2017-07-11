@@ -523,5 +523,4 @@ class PhpWriter
 				throw new CompileException("Unknown context $contentType.");
 		}
 	}
-
 }

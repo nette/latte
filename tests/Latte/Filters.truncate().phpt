@@ -56,9 +56,11 @@ class CountableTraversableStringClass implements Countable, IteratorAggregate
 		return 'Hello';
 	}
 
+
 	function count()
 	{
 	}
+
 
 	function getIterator()
 	{

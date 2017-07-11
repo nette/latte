@@ -113,5 +113,4 @@ class MacroNode
 			? Parser::N_PREFIX . ($this->prefix === MacroNode::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
 			: '{' . $this->name . '}';
 	}
-
 }

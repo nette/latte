@@ -188,5 +188,4 @@ class FilterExecutor
 		}
 		return $this->_static[$name];
 	}
-
 }

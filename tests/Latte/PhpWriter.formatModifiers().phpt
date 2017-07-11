@@ -4,15 +4,16 @@
  * Test: Latte\PhpWriter::formatModifiers()
  */
 
-use Latte\PhpWriter;
 use Latte\MacroTokens;
+use Latte\PhpWriter;
 use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
 
 
-function formatModifiers($arg, $modifiers, $isContent = FALSE) {
+function formatModifiers($arg, $modifiers, $isContent = FALSE)
+{
 	$writer = new PhpWriter(new MacroTokens(''), $modifiers, ['html', 'x']);
 	return $writer->formatModifiers($arg, $isContent);
 }

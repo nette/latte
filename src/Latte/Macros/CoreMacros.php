@@ -545,5 +545,4 @@ class CoreMacros extends MacroSet
 			'http_response_code(%0.var);', (int) $node->args
 		);
 	}
-
 }

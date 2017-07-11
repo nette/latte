@@ -4,8 +4,8 @@
  * Test: Latte\Parser errors.
  */
 
-use Tester\Assert;
 use Latte\Parser;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

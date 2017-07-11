@@ -14,7 +14,9 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 if (!function_exists('debugbreak')) {
-	function debugbreak() {}
+	function debugbreak()
+	{
+	}
 }
 
 Assert::match('%A%debugbreak();%A%', $latte->compile('{debugbreak}'));

@@ -4,10 +4,10 @@
  * Test: Latte\Compiler and macro methods calling order.
  */
 
+use Latte\Compiler;
 use Latte\IMacro;
 use Latte\MacroNode;
 use Latte\Parser;
-use Latte\Compiler;
 use Tester\Assert;
 
 
@@ -18,15 +18,18 @@ class MockMacro implements IMacro
 {
 	public $calls = [];
 
+
 	public function initialize()
 	{
 		$this->calls[] = __FUNCTION__;
 	}
 
+
 	public function finalize()
 	{
 		$this->calls[] = __FUNCTION__;
 	}
+
 
 	public function nodeOpened(MacroNode $node)
 	{
@@ -40,6 +43,7 @@ class MockMacro implements IMacro
 		];
 		$node->empty = FALSE;
 	}
+
 
 	public function nodeClosed(MacroNode $node)
 	{

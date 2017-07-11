@@ -96,5 +96,4 @@ class FileLoader implements Latte\ILoader
 		}
 		return implode(DIRECTORY_SEPARATOR, $res);
 	}
-
 }

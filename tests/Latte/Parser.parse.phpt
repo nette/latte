@@ -4,9 +4,8 @@
  * Test: Latte\Parser::parse()
  */
 
-use Tester\Assert;
-use Latte\Parser;
 use Latte\Token;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -19,6 +18,7 @@ function parse($s)
 		return array_filter([$token->type, $token->text, $token->name, $token->value]);
 	}, $parser->parse($s));
 }
+
 
 Assert::same([
 	['text', '<0>'],

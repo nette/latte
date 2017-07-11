@@ -71,5 +71,4 @@ class Helpers
 	{
 		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
-
 }

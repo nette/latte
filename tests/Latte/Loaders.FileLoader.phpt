@@ -4,8 +4,8 @@
  * Test: FileLoader
  */
 
-use Tester\Assert;
 use Latte\Loaders\FileLoader;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

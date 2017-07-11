@@ -4,9 +4,7 @@
  * Test: Latte\Runtime\Filters::padLeft()
  */
 
-use Latte\Engine;
 use Latte\Runtime\Filters;
-use Latte\Runtime\FilterInfo;
 use Tester\Assert;
 
 

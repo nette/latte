@@ -125,5 +125,4 @@ class PhpHelpers
 		}
 		return var_export($value, TRUE);
 	}
-
 }

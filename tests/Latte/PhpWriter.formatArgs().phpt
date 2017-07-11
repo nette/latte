@@ -4,15 +4,16 @@
  * Test: Latte\PhpWriter::formatArgs()
  */
 
-use Latte\PhpWriter;
 use Latte\MacroTokens;
+use Latte\PhpWriter;
 use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
 
 
-function formatArgs($args) {
+function formatArgs($args)
+{
 	$writer = new PhpWriter(new MacroTokens($args));
 	return $writer->formatArgs();
 }

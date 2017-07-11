@@ -20,13 +20,11 @@ interface ISnippetBridge
 	 */
 	function isSnippetMode();
 
-
 	/**
 	 * @param  bool
 	 * @return void
 	 */
 	function setSnippetMode($snippetMode);
-
 
 	/**
 	 * @param  string
@@ -34,20 +32,17 @@ interface ISnippetBridge
 	 */
 	function needsRedraw($name);
 
-
 	/**
 	 * @param  string
 	 * @return void
 	 */
 	function markRedrawn($name);
 
-
 	/**
 	 * @param  string
 	 * @return string
 	 */
 	function getHtmlId($name);
-
 
 	/**
 	 * @param  string
@@ -56,10 +51,8 @@ interface ISnippetBridge
 	 */
 	function addSnippet($name, $content);
 
-
 	/**
 	 * @return void
 	 */
 	function renderChildren();
-
 }

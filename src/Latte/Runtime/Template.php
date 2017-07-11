@@ -389,5 +389,4 @@ class Template
 		trigger_error("Access to parameters via \$template->$name is deprecated.", E_USER_DEPRECATED);
 		unset($this->params[$name]);
 	}
-
 }

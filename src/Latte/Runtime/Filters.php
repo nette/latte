@@ -735,5 +735,4 @@ class Filters
 		}
 		return $s;
 	}
-
 }

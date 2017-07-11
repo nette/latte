@@ -86,5 +86,4 @@ trait Strict
 		$class = get_class($this);
 		throw new LogicException("Attempt to unset undeclared property $class::$$name.");
 	}
-
 }

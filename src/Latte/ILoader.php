@@ -37,5 +37,4 @@ interface ILoader
 	 * @return string
 	 */
 	function getUniqueId($name);
-
 }

@@ -34,5 +34,4 @@ class Html implements IHtmlString
 	{
 		return $this->value;
 	}
-
 }

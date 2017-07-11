@@ -3,7 +3,6 @@
 
 class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 {
-
 	public $snippetMode = TRUE;
 
 	public $payload = [];
@@ -51,7 +50,5 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 
 	public function renderChildren()
 	{
-
 	}
-
 }

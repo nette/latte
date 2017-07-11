@@ -4,8 +4,8 @@
  * Test: StringLoader
  */
 
-use Tester\Assert;
 use Latte\Loaders\StringLoader;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
