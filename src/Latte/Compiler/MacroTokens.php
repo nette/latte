@@ -111,8 +111,7 @@ class MacroTokens extends TokenIterator
 		} while ($this->nextToken(':'));
 
 		if (count($words) === 1 && ($space = $this->nextValue(self::T_WHITESPACE))
-			&& (($dot = $this->nextValue('.')) || $this->isPrev('.')))
-		{
+			&& (($dot = $this->nextValue('.')) || $this->isPrev('.'))) {
 			$words[0] .= $space . $dot . $this->joinUntil(',');
 		}
 		$this->nextToken(',');
@@ -137,5 +136,4 @@ class MacroTokens extends TokenIterator
 			$this->depth--;
 		}
 	}
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 use Latte\IMacro;
@@ -13,19 +12,27 @@ class TestMacro implements IMacro
 {
 	public $nodes;
 
+
 	function initialize()
 	{
 		$this->nodes = [];
 	}
 
-	function finalize() {}
+
+	function finalize()
+	{
+	}
+
 
 	function nodeOpened(MacroNode $node)
 	{
 		$this->nodes[] = $node;
 	}
 
-	function nodeClosed(MacroNode $node) {}
+
+	function nodeClosed(MacroNode $node)
+	{
+	}
 }
 
 

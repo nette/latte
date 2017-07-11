@@ -731,5 +731,4 @@ class Compiler
 			return "{/$node->name}";
 		}
 	}
-
 }

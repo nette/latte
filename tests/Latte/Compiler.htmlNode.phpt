@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
+use Latte\Compiler;
 use Latte\IMacro;
 use Latte\MacroNode;
 use Latte\Parser;
-use Latte\Compiler;
 use Tester\Assert;
 
 
@@ -18,9 +18,15 @@ require __DIR__ . '/../bootstrap.php';
 
 class MockMacro implements IMacro
 {
-	function initialize() {}
+	function initialize()
+	{
+	}
 
-	function finalize() {}
+
+	function finalize()
+	{
+	}
+
 
 	function nodeOpened(MacroNode $node)
 	{
@@ -33,7 +39,10 @@ class MockMacro implements IMacro
 		Assert::same($res[$node->args], $node->htmlNode->attrs);
 	}
 
-	function nodeClosed(MacroNode $node) {}
+
+	function nodeClosed(MacroNode $node)
+	{
+	}
 }
 
 

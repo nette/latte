@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 use Latte\IMacro;
@@ -14,17 +13,27 @@ class TestMacro implements IMacro
 {
 	public $delimiter;
 
+
 	function __construct($delimiter)
 	{
 		$this->delimiter = $delimiter;
 	}
 
-	function initialize() {}
 
-	function finalize() {}
+	function initialize()
+	{
+	}
+
+
+	function finalize()
+	{
+	}
+
 
 	function nodeOpened(MacroNode $node)
-	{}
+	{
+	}
+
 
 	function nodeClosed(MacroNode $node)
 	{

@@ -171,7 +171,6 @@ test(function () {
 	Assert::error(function () use ($latte) {
 		$latte->renderToString('<div>{include script}</div> <script n:inner-block=script>...</script>');
 	}, E_USER_WARNING, 'Including block script with content type HTMLJS into incompatible type HTML.');
-
 });
 
 

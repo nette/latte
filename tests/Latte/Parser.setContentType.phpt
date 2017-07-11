@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-use Tester\Assert;
 use Latte\Engine;
 use Latte\Token;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -22,6 +22,7 @@ function parse($s, $contentType = NULL)
 		return [$token->type, $token->text];
 	}, $parser->parse($s));
 }
+
 
 Assert::same([
 	['htmlTagBegin', '<script'],

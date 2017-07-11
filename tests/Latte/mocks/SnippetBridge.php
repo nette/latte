@@ -1,11 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 
 class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 {
-
 	public $snippetMode = TRUE;
 
 	public $payload = [];
@@ -53,7 +51,5 @@ class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
 
 	public function renderChildren()
 	{
-
 	}
-
 }

@@ -82,5 +82,4 @@ class Tokenizer
 		$text = substr($text, 0, $offset);
 		return [substr_count($text, "\n") + 1, $offset - strrpos("\n" . $text, "\n") + 1];
 	}
-
 }

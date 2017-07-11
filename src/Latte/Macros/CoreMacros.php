@@ -510,5 +510,4 @@ class CoreMacros extends MacroSet
 			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", NULL], TRUE)) header(%var);', "Content-Type: $node->args");
 		}
 	}
-
 }

@@ -53,5 +53,4 @@ class HtmlNode
 		$this->name = $name;
 		$this->parentNode = $parentNode;
 	}
-
 }

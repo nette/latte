@@ -102,5 +102,4 @@ class SnippetDriver
 		$this->bridge->renderChildren();
 		return TRUE;
 	}
-
 }

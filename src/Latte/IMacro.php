@@ -44,5 +44,4 @@ interface IMacro
 	 * @return void
 	 */
 	function nodeClosed(MacroNode $node);
-
 }

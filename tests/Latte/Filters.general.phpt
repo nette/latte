@@ -17,13 +17,14 @@ class MyFilter
 {
 	protected $count = 0;
 
+
 	public function invoke($s)
 	{
 		$this->count++;
 		return strtolower($s) . " ($this->count times)";
 	}
-
 }
+
 
 function types()
 {

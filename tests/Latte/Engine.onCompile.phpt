@@ -16,10 +16,12 @@ class Notes
 {
 	public static $notes = [];
 
+
 	public static function add($message)
 	{
 		self::$notes[] = $message;
 	}
+
 
 	public static function fetch()
 	{
@@ -81,10 +83,12 @@ test(function () {
 	{
 		public $events;
 
+
 		public function __construct($events)
 		{
 			$this->events = $events;
 		}
+
 
 		public function getIterator()
 		{

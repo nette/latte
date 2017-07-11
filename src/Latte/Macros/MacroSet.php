@@ -162,5 +162,4 @@ class MacroSet implements Latte\IMacro
 			trigger_error("Unexpected arguments '$args' in " . $node->getNotation());
 		}
 	}
-
 }

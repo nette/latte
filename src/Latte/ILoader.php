@@ -35,5 +35,4 @@ interface ILoader
 	 * Returns unique identifier for caching.
 	 */
 	function getUniqueId($name): string;
-
 }

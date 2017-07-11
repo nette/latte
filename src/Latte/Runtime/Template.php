@@ -319,5 +319,4 @@ class Template
 			$this->global->coreCaptured = FALSE;
 		}
 	}
-
 }

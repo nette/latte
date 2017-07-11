@@ -36,7 +36,6 @@ class CompileException extends \Exception
 		}
 		return $this;
 	}
-
 }
 
 
@@ -54,11 +53,11 @@ class RegexpException extends \Exception
 		6 => 'Failed due to limited JIT stack space', // PREG_JIT_STACKLIMIT_ERROR
 	];
 
+
 	public function __construct($message, $code = NULL)
 	{
 		parent::__construct($message ?: (self::$messages[$code] ?? 'Unknown error'), $code);
 	}
-
 }
 
 

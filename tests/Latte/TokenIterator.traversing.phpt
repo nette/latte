@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use Latte\Tokenizer;
 use Latte\TokenIterator;
+use Latte\Tokenizer;
 use Tester\Assert;
 
 

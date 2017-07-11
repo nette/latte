@@ -194,5 +194,4 @@ class CachingIterator extends \CachingIterator implements \Countable
 	{
 		return method_exists($this, 'get' . $name) || method_exists($this, 'is' . $name);
 	}
-
 }

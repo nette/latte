@@ -48,5 +48,4 @@ class Token
 
 	/** @var bool  is tag empty {name/}? used for type MACRO_TAG */
 	public $empty;
-
 }

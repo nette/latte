@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use Tester\Assert;
 use Latte\Loaders\StringLoader;
+use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';

@@ -27,5 +27,4 @@ class FilterInfo
 	{
 		$this->contentType = $contentType;
 	}
-
 }

@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use Latte\PhpWriter;
 use Latte\MacroTokens;
+use Latte\PhpWriter;
 use Tester\Assert;
 
 

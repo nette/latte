@@ -59,7 +59,6 @@ class Engine
 	private $strictTypes = FALSE;
 
 
-
 	public function __construct()
 	{
 		$this->filters = new Runtime\FilterExecutor;
@@ -373,5 +372,4 @@ class Engine
 		}
 		return $this->loader;
 	}
-
 }

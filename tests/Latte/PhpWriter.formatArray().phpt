@@ -6,15 +6,16 @@
 
 declare(strict_types=1);
 
-use Latte\PhpWriter;
 use Latte\MacroTokens;
+use Latte\PhpWriter;
 use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
 
 
-function formatArray($args) {
+function formatArray($args)
+{
 	$writer = new PhpWriter(new MacroTokens($args));
 	return $writer->formatArray();
 }
