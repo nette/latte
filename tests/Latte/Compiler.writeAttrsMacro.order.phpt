@@ -13,23 +13,23 @@ class TestMacro implements IMacro
 	private $name;
 
 
-	function __construct($name)
+	public function __construct($name)
 	{
 		$this->name = $name;
 	}
 
 
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		$node->openingCode = "<?php '$this->name open' ?>";
 		$node->closingCode = "<?php '$this->name close' ?>";
@@ -37,7 +37,7 @@ class TestMacro implements IMacro
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 		$node->content = '[' . $node->content . ']';
 	}
@@ -46,23 +46,23 @@ class TestMacro implements IMacro
 
 class SkipMacro implements IMacro
 {
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		return false;
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 	}
 }

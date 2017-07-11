@@ -556,7 +556,7 @@ class Compiler
 	{
 		$node = $this->macroNode;
 
-		if (!$node || ($node->name !== $name && '' !== $name) || $modifiers
+		if (!$node || ($node->name !== $name && $name !== '') || $modifiers
 			|| ($args && $node->args && !Helpers::startsWith("$node->args ", "$args "))
 			|| $nPrefix !== $node->prefix
 		) {

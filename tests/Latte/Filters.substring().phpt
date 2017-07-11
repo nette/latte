@@ -23,18 +23,18 @@ Assert::same('ě', Filters::substring($s, 4, 1));
 
 class CountableTraversableStringClass implements Countable, IteratorAggregate
 {
-	function __toString()
+	public function __toString()
 	{
 		return 'Hello';
 	}
 
 
-	function count()
+	public function count()
 	{
 	}
 
 
-	function getIterator()
+	public function getIterator()
 	{
 	}
 }

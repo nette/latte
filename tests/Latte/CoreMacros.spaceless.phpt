@@ -17,7 +17,7 @@ Assert::match(
 '	<hr>
 <div id="main space" class = 1> <p> Text </p> block </div> <!-- /main -->	<hr>',
 
-	$latte->renderToString(<<<EOD
+	$latte->renderToString(<<<'EOD'
 	<hr>
 	{spaceless}
 	<div id="main   space"
@@ -37,7 +37,7 @@ Assert::match(
 '	<hr>
 <div class = a> <p> Text </p> </div>	<hr>',
 
-	$latte->renderToString(<<<EOD
+	$latte->renderToString(<<<'EOD'
 	<hr>
 	<div n:spaceless   class =  a>
 		<p>
@@ -58,7 +58,7 @@ Assert::match(
 		"{spaceless}<p>\n\n\n</p>"
 		. "<pre>\n\n\n"
 		. str_repeat('x', 5000)
-		. "{if true}{/if}"
+		. '{if true}{/if}'
 		. str_repeat('x', 5000)
 		. "\n\n\n</pre> <p>\n\n\n</p>{/spaceless}"
 	)

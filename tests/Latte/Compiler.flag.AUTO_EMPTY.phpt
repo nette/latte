@@ -12,24 +12,24 @@ class TestMacro implements IMacro
 	public $nodes;
 
 
-	function initialize()
+	public function initialize()
 	{
 		$this->nodes = [];
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		$this->nodes[] = $node;
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 	}
 }

@@ -15,5 +15,5 @@ $compiler = new Latte\Compiler;
 CoreMacros::install($compiler);
 
 // {_...}
-Assert::same('<?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->translate, \'var\')) ?>',  $compiler->expandMacro('_', 'var', '')->openingCode);
-Assert::same('<?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->filter, call_user_func($this->filters->translate, \'var\'))) ?>',  $compiler->expandMacro('_', 'var', '|filter')->openingCode);
+Assert::same('<?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->translate, \'var\')) ?>', $compiler->expandMacro('_', 'var', '')->openingCode);
+Assert::same('<?php echo LR\Filters::escapeHtmlText(call_user_func($this->filters->filter, call_user_func($this->filters->translate, \'var\'))) ?>', $compiler->expandMacro('_', 'var', '|filter')->openingCode);

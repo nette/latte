@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::match(<<<EOD
+Assert::match(<<<'EOD'
 <head>
 	<script src="nette.js"></script>
 	<link rel="alternate">
@@ -21,7 +21,7 @@ Assert::match(<<<EOD
 
 	<link rel="alternate">
 EOD
-, $latte->renderToString(<<<EOD
+, $latte->renderToString(<<<'EOD'
 <head>
 	<script src="nette.js"></script>
 	{include meta}

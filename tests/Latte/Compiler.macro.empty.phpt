@@ -10,17 +10,17 @@ require __DIR__ . '/../bootstrap.php';
 
 class TestMacro implements IMacro
 {
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		// should not be replaced by nodeClosed()
 		$node->openingCode = 'opening';
@@ -30,7 +30,7 @@ class TestMacro implements IMacro
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 		$node->openingCode = 'ERROR';
 		$node->closingCode = 'ERROR';
@@ -47,7 +47,7 @@ $latte->addMacro('one', new TestMacro);
 
 
 Assert::match(
-	"%A%opening<?%A%",
+	'%A%opening<?%A%',
 	$latte->compile('{one}')
 );
 
@@ -57,7 +57,7 @@ Assert::match(
 );
 
 Assert::match(
-	"%A%opening<div attr>@</div><?%A%",
+	'%A%opening<div attr>@</div><?%A%',
 	$latte->compile('<div n:one>@</div>')
 );
 

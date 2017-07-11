@@ -18,11 +18,8 @@ class Template
 {
 	use Latte\Strict;
 
-	/** @var Engine */
-	private $engine;
-
-	/** @var string */
-	private $name;
+	/** @var \stdClass global accumulators for intermediate results */
+	public $global;
 
 	/** @var string  @internal */
 	protected $contentType = Engine::CONTENT_HTML;
@@ -39,20 +36,23 @@ class Template
 	/** @var string|null|false  @internal */
 	protected $parentName;
 
-	/** @var Template|null  @internal */
-	private $referringTemplate;
-
-	/** @var string|null  @internal */
-	private $referenceType;
-
-	/** @var \stdClass global accumulators for intermediate results */
-	public $global;
-
 	/** @var [name => [callbacks]]  @internal */
 	protected $blockQueue = [];
 
 	/** @var [name => type]  @internal */
 	protected $blockTypes = [];
+
+	/** @var Engine */
+	private $engine;
+
+	/** @var string */
+	private $name;
+
+	/** @var Template|null  @internal */
+	private $referringTemplate;
+
+	/** @var string|null  @internal */
+	private $referenceType;
 
 
 	public function __construct(Engine $engine, array $params, FilterExecutor $filters, array $providers, $name)
@@ -211,7 +211,7 @@ class Template
 		$child->referringTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
-		if (in_array($referenceType, ['extends', 'includeblock', 'import'])) {
+		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
 			$this->blockQueue = array_merge_recursive($this->blockQueue, $child->blockQueue);
 			foreach ($child->blockTypes as $nm => $type) {
 				$this->checkBlockContentType($type, $nm);
@@ -324,8 +324,8 @@ class Template
 		try {
 			$this->global->coreCaptured = true;
 			$function();
-		} catch (\Throwable $e) {
 		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 		}
 		$this->global->coreCaptured = false;
 		if (isset($e)) {

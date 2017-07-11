@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 
 class MockTexy
 {
-	function process($text, $singleLine = false)
+	public function process($text, $singleLine = false)
 	{
 		return '<pre>' . $text . '</pre>';
 	}
@@ -45,7 +45,7 @@ $result = $latte->renderToString(<<<'EOD'
 EOD
 , $params);
 
-Assert::match(<<<EOD
+Assert::match(<<<'EOD'
 <pre><i>hello</i>
 ---------
 - escaped: <i>hello</i>

@@ -13,24 +13,24 @@ class TestMacro implements IMacro
 	public $empty = true;
 
 
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		$node->empty = $this->empty;
 		$node->openingCode = "opening($node->startLine)";
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 		$node->closingCode = "closing($node->endLine)";
 	}

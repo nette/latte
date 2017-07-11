@@ -23,11 +23,11 @@ class MacroTokens extends TokenIterator
 		T_KEYWORD = 8,
 		T_CHAR = 9;
 
-	/** @var Tokenizer */
-	private static $tokenizer;
-
 	/** @var int */
 	public $depth = 0;
+
+	/** @var Tokenizer */
+	private static $tokenizer;
 
 
 	/**

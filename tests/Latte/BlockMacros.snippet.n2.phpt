@@ -18,19 +18,19 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 $latte->addProvider('snippetBridge', $bridge);
 
-Assert::match(<<<EOD
+Assert::match(<<<'EOD'
 <p id="abc">hello</p>
 EOD
-, $latte->renderToString(<<<EOD
+, $latte->renderToString(<<<'EOD'
 <p n:inner-snippet="abc">hello</p>
 EOD
 ));
 
 
-Assert::match(<<<EOD
+Assert::match(<<<'EOD'
 <p id="abc">hello</p>
 EOD
-, $latte->renderToString(<<<EOD
+, $latte->renderToString(<<<'EOD'
 <p n:snippet="abc">hello</p>
 EOD
 ));

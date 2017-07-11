@@ -19,7 +19,7 @@ test(function () {
 	Assert::same('', Filters::strip($info, "\r\n "));
 	Assert::same('A B', Filters::strip($info, "A\r\t\n  B"));
 	Assert::same('<p> Hello </p>', Filters::strip($info, "<p> Hello </p>\r\n "));
-	Assert::same("<pre> </pre>", Filters::strip($info, "<pre>  \r\n </pre>\r\n "));
+	Assert::same('<pre> </pre>', Filters::strip($info, "<pre>  \r\n </pre>\r\n "));
 });
 
 

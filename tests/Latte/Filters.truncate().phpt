@@ -51,18 +51,18 @@ Assert::same('Řekněte, jak se (dnes) máte?', Filters::truncate($s, 32)); // l
 
 class CountableTraversableStringClass implements Countable, IteratorAggregate
 {
-	function __toString()
+	public function __toString()
 	{
 		return 'Hello';
 	}
 
 
-	function count()
+	public function count()
 	{
 	}
 
 
-	function getIterator()
+	public function getIterator()
 	{
 	}
 }

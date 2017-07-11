@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 class Test implements Latte\Runtime\IHtmlString
 {
-	function __toString()
+	public function __toString()
 	{
 		return '<br>';
 	}

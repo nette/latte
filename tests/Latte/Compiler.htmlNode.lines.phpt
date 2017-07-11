@@ -16,23 +16,23 @@ require __DIR__ . '/../bootstrap.php';
 
 class MockMacro implements IMacro
 {
-	function initialize()
+	public function initialize()
 	{
 	}
 
 
-	function finalize()
+	public function finalize()
 	{
 	}
 
 
-	function nodeOpened(MacroNode $node)
+	public function nodeOpened(MacroNode $node)
 	{
 		Assert::same(2, $node->htmlNode->startLine);
 	}
 
 
-	function nodeClosed(MacroNode $node)
+	public function nodeClosed(MacroNode $node)
 	{
 		Assert::same(6, $node->htmlNode->endLine);
 	}

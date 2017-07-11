@@ -110,7 +110,7 @@ class MacroNode
 	public function getNotation()
 	{
 		return $this->prefix
-			? Parser::N_PREFIX . ($this->prefix === MacroNode::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
+			? Parser::N_PREFIX . ($this->prefix === self::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
 			: '{' . $this->name . '}';
 	}
 }

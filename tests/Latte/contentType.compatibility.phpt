@@ -148,12 +148,12 @@ test(function () {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
 	Assert::match(
-		"<div><h1>title</h1></div> <h1>title</h1>",
+		'<div><h1>title</h1></div> <h1>title</h1>',
 		$latte->renderToString('<div>{include title}</div> <h1 n:block=title>title</h1>')
 	);
 
 	Assert::match(
-		"<div><style>...</style></div> <style>...</style>",
+		'<div><style>...</style></div> <style>...</style>',
 		$latte->renderToString('<div>{include style}</div> <style n:block=style>...</style>')
 	);
 
@@ -162,7 +162,7 @@ test(function () {
 	}, E_USER_WARNING, 'Including block style with content type HTMLCSS into incompatible type HTML.');
 
 	Assert::match(
-		"<div><script>...</script></div> <script>...</script>",
+		'<div><script>...</script></div> <script>...</script>',
 		$latte->renderToString('<div>{include script}</div> <script n:block=script>...</script>')
 	);
 
@@ -305,7 +305,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1b');
-},E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="&lt;hr&gt; &quot;"</p>', $latte->renderToString('context2'));
@@ -338,7 +338,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1b');
-},E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="&lt;hr&gt; &quot;"</p>', $latte->renderToString('context2'));
@@ -371,7 +371,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1b');
-},E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+}, E_USER_WARNING, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="<hr> &quot;"</p>', $latte->renderToString('context2'));

@@ -13,8 +13,8 @@ require __DIR__ . '/../bootstrap.php';
 
 $input = "Hello\nmy\r\nfriend\n\r";
 
-Filters::$xhtml = TRUE;
+Filters::$xhtml = true;
 Assert::same("Hello<br />\nmy<br />\r\nfriend<br />\n\r", @Filters::nl2br($input)); // @ is deprecated
 
-Filters::$xhtml = FALSE;
+Filters::$xhtml = false;
 Assert::same("Hello<br>\nmy<br>\r\nfriend<br>\n\r", @Filters::nl2br($input)); // @ is deprecated
