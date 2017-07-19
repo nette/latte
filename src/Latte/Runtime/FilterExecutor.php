@@ -56,6 +56,7 @@ class FilterExecutor
 		'trim' => [[Filters::class, 'trim'], true],
 		'truncate' => [[Filters::class, 'truncate'], false],
 		'upper' => [[Filters::class, 'upper'], false],
+		'webalize' => [[\Nette\Utils\Strings::class, 'webalize'], false],
 	];
 
 
