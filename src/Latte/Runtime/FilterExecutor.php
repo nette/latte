@@ -48,6 +48,7 @@ class FilterExecutor
 		'repeat' => [[Filters::class, 'repeat'], true],
 		'replace' => [[Filters::class, 'replace'], true],
 		'replacere' => [[Filters::class, 'replaceRe'], false],
+		'reverse' => [[Filters::class, 'reverse'], false],
 		'strip' => [[Filters::class, 'strip'], true],
 		'striphtml' => [[Filters::class, 'stripHtml'], true],
 		'striptags' => [[Filters::class, 'stripTags'], true],
