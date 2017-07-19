@@ -607,7 +607,7 @@ class Filters
 
 
 	/**
-	 * Returns string length.
+	 * Returns length of string or iterable.
 	 * @param  array|\Countable|\Traversable|string
 	 * @return int
 	 */
@@ -679,6 +679,22 @@ class Filters
 		$length = max(0, $length - self::strLength($s));
 		$padLen = self::strLength($pad);
 		return $s . str_repeat($pad, (int) ($length / $padLen)) . self::substring($pad, 0, $length % $padLen);
+	}
+
+
+	/**
+	 * Reverses string or array.
+	 * @param  string|array|\Traversable
+	 */
+	public static function reverse($val, $preserveKeys = false)
+	{
+		if (is_array($val)) {
+			return array_reverse($val, $preserveKeys);
+		} elseif ($val instanceof \Traversable) {
+			return array_reverse(iterator_to_array($val), $preserveKeys);
+		} else {
+			return iconv('UTF-32LE', 'UTF-8', strrev(iconv('UTF-8', 'UTF-32BE', (string) $val)));
+		}
 	}
 
 
