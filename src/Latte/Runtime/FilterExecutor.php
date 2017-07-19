@@ -56,6 +56,7 @@ class FilterExecutor
 		'trim' => ['Latte\Runtime\Filters::trim', true],
 		'truncate' => ['Latte\Runtime\Filters::truncate', false],
 		'upper' => ['Latte\Runtime\Filters::upper', false],
+		'webalize' => ['Nette\Utils\Strings::webalize', false],
 	];
 
 
