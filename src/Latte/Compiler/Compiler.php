@@ -15,6 +15,36 @@ class Compiler
 {
 	use Strict;
 
+	/** Context-aware escaping content types */
+	const
+		CONTENT_HTML = Engine::CONTENT_HTML,
+		CONTENT_XHTML = Engine::CONTENT_XHTML,
+		CONTENT_XML = Engine::CONTENT_XML,
+		CONTENT_JS = Engine::CONTENT_JS,
+		CONTENT_CSS = Engine::CONTENT_CSS,
+		CONTENT_ICAL = Engine::CONTENT_ICAL,
+		CONTENT_TEXT = Engine::CONTENT_TEXT;
+
+	/** @internal Context-aware escaping HTML contexts */
+	const
+		CONTEXT_HTML_TEXT = null,
+		CONTEXT_HTML_TAG = 'Tag',
+		CONTEXT_HTML_ATTRIBUTE = 'Attr',
+		CONTEXT_HTML_ATTRIBUTE_JS = 'AttrJs',
+		CONTEXT_HTML_ATTRIBUTE_CSS = 'AttrCss',
+		CONTEXT_HTML_ATTRIBUTE_URL = 'AttrUrl',
+		CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL = 'AttrUnquotedUrl',
+		CONTEXT_HTML_COMMENT = 'Comment',
+		CONTEXT_HTML_BOGUS_COMMENT = 'Bogus',
+		CONTEXT_HTML_CSS = 'Css',
+		CONTEXT_HTML_JS = 'Js',
+
+		CONTEXT_XML_TEXT = self::CONTEXT_HTML_TEXT,
+		CONTEXT_XML_TAG = self::CONTEXT_HTML_TAG,
+		CONTEXT_XML_ATTRIBUTE = self::CONTEXT_HTML_ATTRIBUTE,
+		CONTEXT_XML_COMMENT = self::CONTEXT_HTML_COMMENT,
+		CONTEXT_XML_BOGUS_COMMENT = self::CONTEXT_HTML_BOGUS_COMMENT;
+
 	/** @var Token[] */
 	private $tokens;
 
@@ -59,36 +89,6 @@ class Compiler
 
 	/** @var array of [name => serialized value] */
 	private $properties = [];
-
-	/** Context-aware escaping content types */
-	const
-		CONTENT_HTML = Engine::CONTENT_HTML,
-		CONTENT_XHTML = Engine::CONTENT_XHTML,
-		CONTENT_XML = Engine::CONTENT_XML,
-		CONTENT_JS = Engine::CONTENT_JS,
-		CONTENT_CSS = Engine::CONTENT_CSS,
-		CONTENT_ICAL = Engine::CONTENT_ICAL,
-		CONTENT_TEXT = Engine::CONTENT_TEXT;
-
-	/** @internal Context-aware escaping HTML contexts */
-	const
-		CONTEXT_HTML_TEXT = null,
-		CONTEXT_HTML_TAG = 'Tag',
-		CONTEXT_HTML_ATTRIBUTE = 'Attr',
-		CONTEXT_HTML_ATTRIBUTE_JS = 'AttrJs',
-		CONTEXT_HTML_ATTRIBUTE_CSS = 'AttrCss',
-		CONTEXT_HTML_ATTRIBUTE_URL = 'AttrUrl',
-		CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL = 'AttrUnquotedUrl',
-		CONTEXT_HTML_COMMENT = 'Comment',
-		CONTEXT_HTML_BOGUS_COMMENT = 'Bogus',
-		CONTEXT_HTML_CSS = 'Css',
-		CONTEXT_HTML_JS = 'Js',
-
-		CONTEXT_XML_TEXT = self::CONTEXT_HTML_TEXT,
-		CONTEXT_XML_TAG = self::CONTEXT_HTML_TAG,
-		CONTEXT_XML_ATTRIBUTE = self::CONTEXT_HTML_ATTRIBUTE,
-		CONTEXT_XML_COMMENT = self::CONTEXT_HTML_COMMENT,
-		CONTEXT_XML_BOGUS_COMMENT = self::CONTEXT_HTML_BOGUS_COMMENT;
 
 
 	/**

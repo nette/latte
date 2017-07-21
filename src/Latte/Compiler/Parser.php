@@ -28,6 +28,16 @@ class Parser
 		CONTENT_XML = Engine::CONTENT_XML,
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
+	/** @internal states */
+	const
+		CONTEXT_NONE = 'none',
+		CONTEXT_MACRO = 'macro',
+		CONTEXT_HTML_TEXT = 'htmlText',
+		CONTEXT_HTML_TAG = 'htmlTag',
+		CONTEXT_HTML_ATTRIBUTE = 'htmlAttribute',
+		CONTEXT_HTML_COMMENT = 'htmlComment',
+		CONTEXT_HTML_CDATA = 'htmlCData';
+
 	/** @var string default macro tag syntax */
 	public $defaultSyntax = 'latte';
 
@@ -67,16 +77,6 @@ class Parser
 
 	/** @var bool */
 	private $xmlMode;
-
-	/** @internal states */
-	const
-		CONTEXT_NONE = 'none',
-		CONTEXT_MACRO = 'macro',
-		CONTEXT_HTML_TEXT = 'htmlText',
-		CONTEXT_HTML_TAG = 'htmlTag',
-		CONTEXT_HTML_ATTRIBUTE = 'htmlAttribute',
-		CONTEXT_HTML_COMMENT = 'htmlComment',
-		CONTEXT_HTML_CDATA = 'htmlCData';
 
 
 	/**
