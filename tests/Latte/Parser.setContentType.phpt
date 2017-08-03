@@ -98,3 +98,11 @@ Assert::same([
 	['macroTag', '{contentType ical}'],
 	['text', '<script> <div /> </script>'],
 ], parse('{contentType ical}<script> <div /> </script>'));
+
+Assert::same([
+	['htmlTagBegin', '<script'],
+	['htmlTagEnd', ' />'],
+	['text', ' '],
+	['htmlTagBegin', '<div'],
+	['htmlTagEnd', ' />'],
+], parse('<script /> <div />', Engine::CONTENT_HTML));
