@@ -171,8 +171,8 @@ class Engine
 			return;
 		}
 
-		if (!is_dir($this->tempDirectory)) {
-			@mkdir($this->tempDirectory); // @ - directory may already exist
+		if (!is_dir($this->tempDirectory) && !@mkdir($this->tempDirectory) && !is_dir($this->tempDirectory)) { // @ - dir may already exist
+			throw new \RuntimeException("Unable to create directory '$this->tempDirectory'. " . error_get_last()['message']);
 		}
 
 		$handle = fopen("$file.lock", 'c+');
