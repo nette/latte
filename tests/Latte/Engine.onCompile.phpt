@@ -34,11 +34,11 @@ test(function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
-	$latte->onCompile[] = function (\Latte\Engine $engine) {
+	$latte->onCompile[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 1');
 	};
 
-	$latte->onCompile[] = function (\Latte\Engine $engine) {
+	$latte->onCompile[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 2');
 	};
 
@@ -54,11 +54,11 @@ test(function () {
 
 test(function () {
 	$callbacks = [];
-	$callbacks[] = function (\Latte\Engine $engine) {
+	$callbacks[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 3');
 	};
 
-	$callbacks[] = function (\Latte\Engine $engine) {
+	$callbacks[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 4');
 	};
 
@@ -77,7 +77,7 @@ test(function () {
 
 
 test(function () {
-	class Event implements IteratorAggregate
+	class EventObj implements IteratorAggregate
 	{
 		public $events;
 
@@ -95,18 +95,18 @@ test(function () {
 	}
 
 	$callbacks = [];
-	$callbacks[] = function (\Latte\Engine $engine) {
+	$callbacks[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 5');
 	};
 
-	$callbacks[] = function (\Latte\Engine $engine) {
+	$callbacks[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 6');
 	};
 
 
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
-	$latte->onCompile = new Event($callbacks);
+	$latte->onCompile = new EventObj($callbacks);
 
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));
 	Assert::match('%A%$var%A%', $latte->compile('{$var}'));

@@ -17,7 +17,7 @@ Assert::exception(function () {
 
 	$set = new MacroSet($latte->getCompiler());
 	$set->addMacro('exception', function () {
-		throw new \Exception('Macro exception');
+		throw new Exception('Macro exception');
 	});
 
 	$latte->render('{exception}');
