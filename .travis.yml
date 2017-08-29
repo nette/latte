@@ -34,6 +34,7 @@ jobs:
 
 
         -   stage: Code Coverage
+            php: 7.2
             script:
                 - vendor/bin/tester -p phpdbg tests -s -c tests/php-unix.ini --coverage ./coverage.xml --coverage-src ./src
             after_script:
