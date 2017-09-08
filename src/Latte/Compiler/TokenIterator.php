@@ -128,7 +128,7 @@ class TokenIterator
 		}
 		$token = $this->tokens[$this->position];
 		return in_array($token[Tokenizer::VALUE], $args, true)
-			|| in_array($token[Tokenizer::TYPE] ?? null, $args, true);
+			|| in_array($token[Tokenizer::TYPE], $args, true);
 	}
 
 
@@ -204,8 +204,7 @@ class TokenIterator
 			}
 
 			$token = $this->tokens[$pos];
-			$type = $token[Tokenizer::TYPE] ?? null;
-			if (!$wanted || (in_array($token[Tokenizer::VALUE], $wanted, true) || in_array($type, $wanted, true)) ^ $until) {
+			if (!$wanted || (in_array($token[Tokenizer::VALUE], $wanted, true) || in_array($token[Tokenizer::TYPE], $wanted, true)) ^ $until) {
 				while ($advance && !$prev && $pos > $this->position) {
 					$this->next();
 				}
@@ -218,7 +217,7 @@ class TokenIterator
 					$res[] = $token;
 				}
 
-			} elseif ($until || !in_array($type, $this->ignored, true)) {
+			} elseif ($until || !in_array($token[Tokenizer::TYPE], $this->ignored, true)) {
 				return $res;
 			}
 			$pos += $prev ? -1 : 1;
