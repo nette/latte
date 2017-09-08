@@ -105,17 +105,17 @@ test(function () {
 	$traverser->position = 2;
 	Assert::null($traverser->nextToken());
 	Assert::null($traverser->nextToken());
-	Assert::same(3, $traverser->position);
+	Assert::same(2, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::null($traverser->nextToken());
 	Assert::null($traverser->nextToken(T_STRING, T_DNUMBER, T_WHITESPACE));
-	Assert::same(3, $traverser->position);
+	Assert::same(2, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::same([], $traverser->nextAll());
 	Assert::same([], $traverser->nextAll(T_STRING, T_DNUMBER, T_WHITESPACE));
-	Assert::same(3, $traverser->position);
+	Assert::same(2, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::same([], $traverser->nextUntil(T_STRING, T_DNUMBER, T_WHITESPACE));
@@ -143,4 +143,16 @@ test(function () {
 	Assert::same(-1, $traverser->position);
 	Assert::same('say', $traverser->consumeValue(T_STRING));
 	Assert::same(0, $traverser->position);
+
+	$traverser->position = 3;
+	Assert::exception(function () use ($traverser) {
+		$traverser->consumeValue();
+	}, Latte\CompileException::class, 'Unexpected end.');
+	Assert::same(3, $traverser->position);
+
+	$traverser->position = 3;
+	Assert::exception(function () use ($traverser) {
+		$traverser->consumeValue(T_STRING, T_DNUMBER, T_WHITESPACE);
+	}, Latte\CompileException::class, 'Unexpected end.');
+	Assert::same(3, $traverser->position);
 });
