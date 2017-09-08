@@ -133,14 +133,14 @@ test(function () {
 	$traverser->ignored[] = T_WHITESPACE;
 
 	Assert::same(-1, $traverser->position);
-	Assert::same('say', $traverser->expectNextValue());
+	Assert::same('say', $traverser->consumeValue());
 	Assert::same(0, $traverser->position);
 
 	$traverser->position = -1;
 	Assert::exception(function () use ($traverser) {
-		$traverser->expectNextValue(T_DNUMBER);
+		$traverser->consumeValue(T_DNUMBER);
 	}, Latte\CompileException::class, "Unexpected token 'say'.");
 	Assert::same(-1, $traverser->position);
-	Assert::same('say', $traverser->expectNextValue(T_STRING));
+	Assert::same('say', $traverser->consumeValue(T_STRING));
 	Assert::same(0, $traverser->position);
 });

@@ -163,7 +163,7 @@ class TokenIterator
 	 * @param  int|string  (optional) desired token type or value
 	 * @throws CompileException
 	 */
-	public function expectNextValue(...$args): string
+	public function consumeValue(...$args): string
 	{
 		if ($token = $this->scan($args, true, true)) { // onlyFirst, advance
 			return $token[Tokenizer::VALUE];

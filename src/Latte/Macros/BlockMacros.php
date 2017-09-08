@@ -307,9 +307,9 @@ class BlockMacros extends MacroSet
 			$tokens = $node->tokenizer;
 			$args = [];
 			while ($tokens->isNext()) {
-				$args[] = $tokens->expectNextValue($tokens::T_VARIABLE);
+				$args[] = $tokens->consumeValue($tokens::T_VARIABLE);
 				if ($tokens->isNext()) {
-					$tokens->expectNextValue(',');
+					$tokens->consumeValue(',');
 				}
 			}
 			if ($args) {
