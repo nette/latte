@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Loaders;
 
 use Latte;
+use Tracy\Debugger;
 
 
 /**
@@ -46,7 +47,14 @@ class FileLoader implements Latte\ILoader
 				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
 			}
 		}
-		return file_get_contents($file);
+
+		$fileContent = file_get_contents($file);
+		if (Debugger::isEnabled()) {
+			$commentPath = realpath($file);
+			return "\n<!-- Start: " . $commentPath . " -->\n" . $fileContent . "\n<!-- End: " . $commentPath . " -->\n";
+		}
+
+		return $fileContent;
 	}
 
 
