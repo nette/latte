@@ -1,5 +1,5 @@
 [Latte](https://latte.nette.org): amazing template engine for PHP
-================================================================
+=================================================================
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/latte/latte.svg)](https://packagist.org/packages/latte/latte)
 [![Build Status](https://travis-ci.org/nette/latte.svg?branch=master)](https://travis-ci.org/nette/latte)
@@ -8,14 +8,18 @@
 [![License](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://github.com/nette/latte/blob/master/license.md)
 [![Join the chat at https://gitter.im/nette/latte](https://badges.gitter.im/nette/latte.svg)](https://gitter.im/nette/latte)
 
+
+Introduction
+============
+
 Latte is a template engine for PHP which eases your work and
 ensures the output is protected against vulnerabilities, such as XSS.
 
-**Latte is fast:** it compiles templates to plain optimized PHP code.
+- **Latte is fast:** it compiles templates to plain optimized PHP code.
+- **Latte is secure:** it is the first PHP engine introducing content-aware escaping.
+- **Latte speaks your language:** it has intuitive syntax and helps you to build better websites easily.
 
-**Latte is secure:** it is the first PHP engine introducing content-aware escaping.
-
-**Latte speaks your language:** it has intuitive syntax and helps you to build better websites easily.
+Documentation can be found on the [website](https://latte.nette.org).
 
 
 Getting Started
@@ -66,17 +70,17 @@ $latte->render('template.latte', $parameters);
 Installation
 ============
 
-The best way how to install Latte is to [download a latest package](https://github.com/nette/latte/releases) or use a Composer:
+The recommended way to install Latte is via Composer (alternatively you can [download package](https://github.com/nette/latte/releases)):
 
-```bash
+```
 composer require latte/latte
 ```
 
-The Latte requires PHP version 5.4.4 or newer (is compatible with PHP 7.0 and 7.1). The dev-master version requires PHP 7.0.
+Latte requires PHP version 5.4.4 and supports PHP up to 7.2. The dev-master version requires PHP 7.0.
 
 
-Macros
-======
+Usage
+=====
 
 You can find detailed description of all the default macros on the [extra page](https://doc.nette.org/en/default-macros). Furthermore, you can make your own macros.
 

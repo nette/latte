@@ -11,6 +11,7 @@ require __DIR__ . '/../bootstrap.php';
 class TestMacro implements IMacro
 {
 	public $inHead;
+
 	public $compiler;
 
 
