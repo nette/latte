@@ -733,11 +733,10 @@ class Compiler
 	 */
 	public function expandMacro($name, $args, $modifiers = null, $nPrefix = null)
 	{
-		$inScript = in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true);
-
 		if (empty($this->macros[$name])) {
-			$hint = ($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '';
-			throw new CompileException("Unknown macro {{$name}}$hint" . ($inScript ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : ''));
+			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')
+				. (in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true) ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : '');
+			throw new CompileException("Unknown macro {{$name}}$hint");
 		}
 
 		if ($modifiers && preg_match('#\|(no)?safeurl(?!\w)#i', $modifiers, $m)) {
@@ -755,7 +754,7 @@ class Compiler
 
 			if (!Helpers::removeFilter($modifiers, 'noescape')) {
 				$modifiers .= '|escape';
-				if ($inScript && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
+				if ($this->context === self::CONTEXT_HTML_JS && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
 					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
 				}
 			}

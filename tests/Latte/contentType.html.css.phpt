@@ -47,3 +47,13 @@ Assert::match(
 	'<style type="text/html">&lt;&gt;',
 	$latte->renderToString('<style type="text/html">{="<>"}')
 );
+
+Assert::match(
+	'<style type="text/html">&lt;&gt;',
+	$latte->renderToString('<style type="text/html">{="<>"}')
+);
+
+Assert::match(
+	'<style> a { background: url("\"") } </style>',
+	$latte->renderToString('<style> a { background: url("{=\'"\'}") } </style>')
+);
