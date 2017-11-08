@@ -194,7 +194,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	protected function createTemplate($name, array $params, $referenceType): Template
+	protected function createTemplate($name, array $params, $referenceType): self
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
