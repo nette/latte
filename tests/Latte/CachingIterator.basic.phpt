@@ -23,6 +23,7 @@ test(function () { // ==> Two items in array
 	Assert::true($iterator->isFirst());
 	Assert::false($iterator->isLast());
 	Assert::same(1, $iterator->getCounter());
+	Assert::same('1', (string) $iterator);
 
 	$iterator->next();
 	Assert::true($iterator->valid());

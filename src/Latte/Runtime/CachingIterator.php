@@ -112,6 +112,15 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 
 	/**
+	 * Returns the counter as string
+	 */
+	public function __toString(): string
+	{
+		return (string) $this->counter;
+	}
+
+
+	/**
 	 * Returns the count of elements.
 	 */
 	public function count(): int
