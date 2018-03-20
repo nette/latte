@@ -111,7 +111,7 @@ class Compiler
 
 	/**
 	 * Compiles tokens to PHP code.
-	 * @param  Token[]
+	 * @param  Token[]  $tokens
 	 */
 	public function compile(array $tokens, string $className): string
 	{
@@ -559,7 +559,6 @@ class Compiler
 
 	/**
 	 * Generates code for macro <tag n:attr> to the output.
-	 * @param  string HTML tag
 	 * @internal
 	 */
 	public function writeAttrsMacro(string $html): void

@@ -379,7 +379,7 @@ class PhpWriter
 
 	/**
 	 * Formats modifiers calling.
-	 * @param  string|array $var
+	 * @param  string|array  $var
 	 * @throws CompileException
 	 */
 	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens

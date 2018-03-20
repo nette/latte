@@ -34,7 +34,7 @@ class MacroTokens extends TokenIterator
 
 
 	/**
-	 * @param  string|array
+	 * @param  string|array  $input
 	 */
 	public function __construct($input = [])
 	{

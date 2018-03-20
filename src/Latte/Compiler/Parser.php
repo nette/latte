@@ -326,7 +326,7 @@ class Parser
 
 
 	/**
-	 * @param  string  Parser::CONTENT_HTML, CONTENT_XHTML, CONTENT_XML or CONTENT_TEXT
+	 * @param  string  $type  Parser::CONTENT_HTML, CONTENT_XHTML, CONTENT_XML or CONTENT_TEXT
 	 * @return static
 	 */
 	public function setContentType(string $type)
@@ -368,9 +368,7 @@ class Parser
 
 
 	/**
-	 * Changes macro tag delimiters.
-	 * @param  string  left regular expression
-	 * @param  string  right regular expression
+	 * Changes macro tag delimiters (as regular expression).
 	 * @return static
 	 */
 	public function setDelimiters(string $left, string $right)
@@ -382,7 +380,7 @@ class Parser
 
 	/**
 	 * Parses macro tag to name, arguments a modifiers parts.
-	 * @param  string {name arguments | modifiers}
+	 * @param  string  $tag  {name arguments | modifiers}
 	 * @internal
 	 */
 	public function parseMacroTag(string $tag): ?array
