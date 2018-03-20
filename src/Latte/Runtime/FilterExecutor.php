@@ -98,7 +98,7 @@ class FilterExecutor
 			return $this->$lname;
 
 		} elseif (isset($this->_static[$lname])) {
-			list($callback, $aware) = $this->prepareFilter($lname);
+			[$callback, $aware] = $this->prepareFilter($lname);
 			if ($aware) { // FilterInfo aware filter
 				return $this->$lname = function (...$args) use ($callback) {
 					array_unshift($args, $info = new FilterInfo);
@@ -145,7 +145,7 @@ class FilterExecutor
 			throw new \LogicException("Filter |$name is not defined$hint");
 		}
 
-		list($callback, $aware) = $this->prepareFilter($lname);
+		[$callback, $aware] = $this->prepareFilter($lname);
 		if ($aware) { // FilterInfo aware filter
 			array_unshift($args, $info);
 			return $callback(...$args);

@@ -53,9 +53,7 @@ class TokenIterator
 	 */
 	public function currentValue()
 	{
-		return isset($this->tokens[$this->position])
-			? $this->tokens[$this->position][Tokenizer::VALUE]
-			: null;
+		return $this->tokens[$this->position][Tokenizer::VALUE] ?? null;
 	}
 
 

@@ -18,7 +18,8 @@ class Tokenizer
 {
 	use Strict;
 
-	const VALUE = 0,
+	public const
+		VALUE = 0,
 		OFFSET = 1,
 		TYPE = 2;
 
@@ -65,7 +66,7 @@ class Tokenizer
 			$len += strlen($match[self::VALUE]);
 		}
 		if ($len !== strlen($input)) {
-			list($line, $col) = $this->getCoordinates($input, $len);
+			[$line, $col] = $this->getCoordinates($input, $len);
 			$token = str_replace("\n", '\n', substr($input, $len, 10));
 			throw new CompileException("Unexpected '$token' on line $line, column $col.");
 		}

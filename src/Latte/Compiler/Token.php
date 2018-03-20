@@ -17,7 +17,8 @@ class Token
 {
 	use Strict;
 
-	const TEXT = 'text',
+	public const
+		TEXT = 'text',
 		MACRO_TAG = 'macroTag', // latte macro tag
 		HTML_TAG_BEGIN = 'htmlTagBegin', // begin of HTML tag or comment
 		HTML_TAG_END = 'htmlTagEnd', // end of HTML tag or comment

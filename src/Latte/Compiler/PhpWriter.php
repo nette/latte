@@ -61,7 +61,7 @@ class PhpWriter
 
 		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
 		function ($m) use ($word, &$args) {
-			list(, $l, $source, $format, $cond, $r) = $m;
+			[, $l, $source, $format, $cond, $r] = $m;
 
 			switch ($source) {
 				case 'node_':
@@ -443,7 +443,7 @@ class PhpWriter
 	public function escapePass(MacroTokens $tokens): MacroTokens
 	{
 		$tokens = clone $tokens;
-		list($contentType, $context) = $this->context;
+		[$contentType, $context] = $this->context;
 		switch ($contentType) {
 			case Compiler::CONTENT_XHTML:
 			case Compiler::CONTENT_HTML:

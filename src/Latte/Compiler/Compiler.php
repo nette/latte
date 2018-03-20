@@ -18,7 +18,7 @@ class Compiler
 	use Strict;
 
 	/** Context-aware escaping content types */
-	const
+	public const
 		CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
 		CONTENT_XML = Engine::CONTENT_XML,
@@ -28,7 +28,7 @@ class Compiler
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
 	/** @internal Context-aware escaping HTML contexts */
-	const
+	public const
 		CONTEXT_HTML_TEXT = null,
 		CONTEXT_HTML_TAG = 'Tag',
 		CONTEXT_HTML_ATTRIBUTE = 'Attr',

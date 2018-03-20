@@ -15,7 +15,8 @@ namespace Latte;
  */
 class MacroTokens extends TokenIterator
 {
-	const T_WHITESPACE = 1,
+	public const
+		T_WHITESPACE = 1,
 		T_COMMENT = 2,
 		T_SYMBOL = 3,
 		T_NUMBER = 4,

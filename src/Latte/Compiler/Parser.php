@@ -18,20 +18,20 @@ class Parser
 	use Strict;
 
 	/** @internal regular expression for single & double quoted PHP string */
-	const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
+	public const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
 
 	/** @internal special HTML attribute prefix */
-	const N_PREFIX = 'n:';
+	public const N_PREFIX = 'n:';
 
 	/** Context-aware escaping content types */
-	const
+	public const
 		CONTENT_HTML = Engine::CONTENT_HTML,
 		CONTENT_XHTML = Engine::CONTENT_XHTML,
 		CONTENT_XML = Engine::CONTENT_XML,
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
 	/** @internal states */
-	const
+	public const
 		CONTEXT_NONE = 'none',
 		CONTEXT_MACRO = 'macro',
 		CONTEXT_HTML_TEXT = 'htmlText',
@@ -278,7 +278,7 @@ class Parser
 
 		if (!empty($matches['macro'])) {
 			$token = $this->addToken(Token::MACRO_TAG, $this->context[1][1] . $matches[0]);
-			list($token->name, $token->value, $token->modifiers, $token->empty, $token->closing) = $this->parseMacroTag($matches['macro']);
+			[$token->name, $token->value, $token->modifiers, $token->empty, $token->closing] = $this->parseMacroTag($matches['macro']);
 			$this->context = $this->context[1][0];
 
 		} elseif (!empty($matches['comment'])) {

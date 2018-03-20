@@ -17,7 +17,8 @@ class MacroNode
 {
 	use Strict;
 
-	const PREFIX_INNER = 'inner',
+	public const
+		PREFIX_INNER = 'inner',
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = 'none';
 

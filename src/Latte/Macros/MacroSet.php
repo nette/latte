@@ -75,7 +75,7 @@ class MacroSet implements Latte\IMacro
 	 */
 	public function nodeOpened(MacroNode $node)
 	{
-		list($begin, $end, $attr) = $this->macros[$node->name];
+		[$begin, $end, $attr] = $this->macros[$node->name];
 		$node->empty = !$end;
 
 		if ($node->modifiers

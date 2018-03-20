@@ -30,7 +30,7 @@ class PhpHelpers
 
 		foreach ($tokens as $n => $token) {
 			if (is_array($token)) {
-				list($name, $token) = ($tmp = $token);
+				[$name, $token] = ($tmp = $token);
 				if ($name === T_INLINE_HTML) {
 					$res .= $token;
 

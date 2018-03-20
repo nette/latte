@@ -17,10 +17,11 @@ class Engine
 {
 	use Strict;
 
-	const VERSION = '3.0.0-dev';
+	public const VERSION = '3.0.0-dev';
 
 	/** Content types */
-	const CONTENT_HTML = 'html',
+	public const
+		CONTENT_HTML = 'html',
 		CONTENT_XHTML = 'xhtml',
 		CONTENT_XML = 'xml',
 		CONTENT_JS = 'js',

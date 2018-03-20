@@ -20,7 +20,8 @@ class SnippetDriver
 {
 	use Latte\Strict;
 
-	const TYPE_STATIC = 'static',
+	public const
+		TYPE_STATIC = 'static',
 		TYPE_DYNAMIC = 'dynamic',
 		TYPE_AREA = 'area';
 
@@ -68,7 +69,7 @@ class SnippetDriver
 		if (!$this->renderingSnippets) {
 			return;
 		}
-		list($name, $obStarted) = array_pop($this->stack);
+		[$name, $obStarted] = array_pop($this->stack);
 		if ($this->nestingLevel > 0 && --$this->nestingLevel === 0) {
 			$content = ob_get_clean();
 			$this->bridge->addSnippet($name, $content);
