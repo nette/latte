@@ -57,7 +57,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Is the current element the first one?
-	 * @param  int  grid width
+	 * @param  int  $width
 	 */
 	public function isFirst(int $width = null): bool
 	{
@@ -67,7 +67,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Is the current element the last one?
-	 * @param  int  grid width
+	 * @param  int  $width
 	 */
 	public function isLast(int $width = null): bool
 	{

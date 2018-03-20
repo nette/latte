@@ -248,8 +248,6 @@ class Engine
 
 	/**
 	 * Call a run-time filter.
-	 * @param  string  filter name
-	 * @param  array   arguments
 	 * @return mixed
 	 */
 	public function invokeFilter(string $name, array $args)

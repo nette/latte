@@ -28,7 +28,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML.
-	 * @param  mixed  plain text
+	 * @param  mixed  $s  plain text
 	 * @return string HTML
 	 */
 	public static function escapeHtml($s): string
@@ -39,7 +39,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML.
-	 * @param  mixed  plain text or IHtmlString
+	 * @param  mixed  $s  plain text or IHtmlString
 	 * @return string HTML
 	 */
 	public static function escapeHtmlText($s): string
@@ -52,7 +52,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML attribute value.
-	 * @param  string plain text
+	 * @param  mixed  $s  plain text
 	 * @return string HTML
 	 */
 	public static function escapeHtmlAttr($s, bool $double = true): string
@@ -68,7 +68,7 @@ class Filters
 
 	/**
 	 * Escapes HTML for use inside HTML attribute.
-	 * @param  mixed  HTML text
+	 * @param  mixed  $s  HTML text
 	 * @return string HTML
 	 */
 	public static function escapeHtmlAttrConv($s): string
@@ -79,7 +79,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML attribute name.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string HTML
 	 */
 	public static function escapeHtmlAttrUnquoted($s): string
@@ -93,7 +93,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML comments.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string HTML
 	 */
 	public static function escapeHtmlComment($s): string
@@ -112,7 +112,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside XML 1.0 template.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string XML
 	 */
 	public static function escapeXml($s): string
@@ -126,7 +126,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside XML attribute name.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string XML
 	 */
 	public static function escapeXmlAttrUnquoted($s): string
@@ -140,7 +140,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside CSS template.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string CSS
 	 */
 	public static function escapeCss($s): string
@@ -152,7 +152,7 @@ class Filters
 
 	/**
 	 * Escapes variables for use inside <script>.
-	 * @param  mixed  plain text
+	 * @param  mixed  $s  plain text
 	 * @return string JSON
 	 */
 	public static function escapeJs($s): string
@@ -172,7 +172,7 @@ class Filters
 
 	/**
 	 * Escapes string for use inside iCal template.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 */
 	public static function escapeICal($s): string
 	{
@@ -183,7 +183,7 @@ class Filters
 
 	/**
 	 * Escapes CSS/JS for usage in <script> and <style>..
-	 * @param  string CSS/JS
+	 * @param  string  $s  CSS/JS
 	 * @return string HTML RAWTEXT
 	 */
 	public static function escapeHtmlRawText($s): string
@@ -194,8 +194,7 @@ class Filters
 
 	/**
 	 * Converts HTML to plain text.
-	 * @param
-	 * @param  string HTML
+	 * @param  string  $s  HTML
 	 * @return string plain text
 	 */
 	public static function stripHtml(FilterInfo $info, $s): string
@@ -210,8 +209,7 @@ class Filters
 
 	/**
 	 * Removes tags from HTML (but remains HTML entites).
-	 * @param
-	 * @param  string HTML
+	 * @param  string  $s  HTML
 	 * @return string HTML
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
@@ -288,7 +286,7 @@ class Filters
 
 	/**
 	 * Sanitizes string for use inside href attribute.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string plain text
 	 */
 	public static function safeUrl($s): string
@@ -300,8 +298,7 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param
-	 * @param  string text|HTML
+	 * @param  string  $s  text|HTML
 	 * @return string text|HTML
 	 */
 	public static function strip(FilterInfo $info, string $s): string
@@ -314,9 +311,9 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string HTML
-	 * @param  int output buffering phase
-	 * @param  bool stripping mode
+	 * @param  string  $s  HTML
+	 * @param  int  $phase  output buffering phase
+	 * @param  bool  $strip  stripping mode
 	 * @return string HTML
 	 */
 	public static function spacelessHtml(string $s, int $phase = null, bool &$strip = true): string
@@ -344,7 +341,6 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string text
 	 * @return string text
 	 */
 	public static function spacelessText(string $s): string
@@ -378,7 +374,6 @@ class Filters
 
 	/**
 	 * Repeats text.
-	 * @param
 	 * @return string plain text
 	 */
 	public static function repeat(FilterInfo $info, $s, int $count): string
@@ -389,7 +384,7 @@ class Filters
 
 	/**
 	 * Date/time formatting.
-	 * @param  string|int|\DateTimeInterface|\DateInterval
+	 * @param  string|int|\DateTimeInterface|\DateInterval  $time
 	 */
 	public static function date($time, string $format = null): ?string
 	{
@@ -437,7 +432,6 @@ class Filters
 
 	/**
 	 * Performs a search and replace.
-	 * @param
 	 */
 	public static function replace(FilterInfo $info, $subject, string $search, string $replacement = ''): string
 	{
@@ -460,7 +454,6 @@ class Filters
 
 	/**
 	 * The data: URI generator.
-	 * @param  string plain text
 	 * @return string plain text
 	 */
 	public static function dataStream(string $data, string $type = null): string
@@ -473,7 +466,7 @@ class Filters
 
 
 	/**
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 */
 	public static function breaklines($s): Html
 	{
@@ -499,8 +492,6 @@ class Filters
 
 	/**
 	 * Truncates string to maximal length.
-	 * @param  string plain text
-	 * @param  string $append plain text
 	 * @return string plain text
 	 */
 	public static function truncate($s, $maxLen, $append = "\u{2026}"): string
@@ -524,7 +515,7 @@ class Filters
 
 	/**
 	 * Convert to lower case.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string plain text
 	 */
 	public static function lower($s): string
@@ -535,7 +526,7 @@ class Filters
 
 	/**
 	 * Convert to upper case.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string plain text
 	 */
 	public static function upper($s): string
@@ -546,7 +537,7 @@ class Filters
 
 	/**
 	 * Convert first character to upper case.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string plain text
 	 */
 	public static function firstUpper($s): string
@@ -558,7 +549,7 @@ class Filters
 
 	/**
 	 * Capitalize string.
-	 * @param  string plain text
+	 * @param  string  $s  plain text
 	 * @return string plain text
 	 */
 	public static function capitalize($s): string
@@ -569,7 +560,7 @@ class Filters
 
 	/**
 	 * Returns length of string or iterable.
-	 * @param  array|\Countable|\Traversable|string
+	 * @param  array|\Countable|\Traversable|string  $val
 	 */
 	public static function length($val): int
 	{
@@ -591,8 +582,6 @@ class Filters
 
 	/**
 	 * Strips whitespace.
-	 * @param  string
-	 * @param  string
 	 * @return string
 	 */
 	public static function trim(FilterInfo $info, $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
@@ -608,7 +597,6 @@ class Filters
 
 	/**
 	 * Pad a string to a certain length with another string.
-	 * @param  string plain text
 	 */
 	public static function padLeft($s, int $length, string $pad = ' '): string
 	{
@@ -621,7 +609,6 @@ class Filters
 
 	/**
 	 * Pad a string to a certain length with another string.
-	 * @param  string plain text
 	 */
 	public static function padRight($s, int $length, string $pad = ' '): string
 	{
@@ -634,7 +621,7 @@ class Filters
 
 	/**
 	 * Reverses string or array.
-	 * @param  string|array|\Traversable
+	 * @param  string|array|\Traversable  $val
 	 */
 	public static function reverse($val, bool $preserveKeys = false)
 	{

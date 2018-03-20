@@ -204,7 +204,7 @@ class Template
 
 
 	/**
-	 * @param  string|\Closure content-type name or modifier closure
+	 * @param  string|\Closure  $mod  content-type name or modifier closure
 	 * @internal
 	 */
 	protected function renderToContentType($mod): void
@@ -237,7 +237,7 @@ class Template
 
 	/**
 	 * Renders block.
-	 * @param  string|\Closure $mod content-type name or modifier closure
+	 * @param  string|\Closure  $mod  content-type name or modifier closure
 	 * @internal
 	 */
 	protected function renderBlock(string $name, array $params, $mod = null): void
