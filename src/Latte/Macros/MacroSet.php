@@ -76,7 +76,8 @@ class MacroSet implements Latte\IMacro
 		list($begin, $end, $attr) = $this->macros[$node->name];
 		$node->empty = !$end;
 
-		if ($node->modifiers
+		if (
+			$node->modifiers
 			&& (!$begin || (is_string($begin) && strpos($begin, '%modify') === false))
 			&& (!$end || (is_string($end) && strpos($end, '%modify') === false))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%modify') === false))
@@ -84,7 +85,8 @@ class MacroSet implements Latte\IMacro
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 
-		if ($node->args
+		if (
+			$node->args
 			&& (!$begin || (is_string($begin) && strpos($begin, '%node') === false))
 			&& (!$end || (is_string($end) && strpos($end, '%node') === false))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%node') === false))

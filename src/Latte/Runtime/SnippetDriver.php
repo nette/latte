@@ -47,7 +47,8 @@ class SnippetDriver
 			return;
 		}
 		$obStarted = false;
-		if (($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
+		if (
+			($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
 			|| ($type === self::TYPE_DYNAMIC && ($previous = end($this->stack)) && $previous[1] === true)
 		) {
 			ob_start(function () {});
