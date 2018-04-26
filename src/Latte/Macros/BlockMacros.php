@@ -106,7 +106,11 @@ class BlockMacros extends MacroSet
 		$destination = ltrim($destination, '#');
 		$parent = $destination === 'parent';
 		if ($destination === 'parent' || $destination === 'this') {
-			for ($item = $node->parentNode; $item && $item->name !== 'block' && !isset($item->data->name); $item = $item->parentNode);
+			for (
+				$item = $node->parentNode;
+				$item && $item->name !== 'block' && !isset($item->data->name);
+				$item = $item->parentNode
+			);
 			if (!$item) {
 				throw new CompileException("Cannot include $destination block outside of any block.");
 			}
@@ -220,7 +224,11 @@ class BlockMacros extends MacroSet
 
 		} elseif (strpos($name, '$') !== false) { // dynamic block/snippet
 			if ($node->name === 'snippet') {
-				for ($parent = $node->parentNode; $parent && !($parent->name === 'snippet' || $parent->name === 'snippetArea'); $parent = $parent->parentNode);
+				for (
+					$parent = $node->parentNode;
+					$parent && !($parent->name === 'snippet' || $parent->name === 'snippetArea');
+					$parent = $parent->parentNode
+				);
 				if (!$parent) {
 					throw new CompileException('Dynamic snippets are allowed only inside static snippet/snippetArea.');
 				}
@@ -237,7 +245,7 @@ class BlockMacros extends MacroSet
 				if ($tag) {
 					trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
 				}
-				$tag = $tag ? $tag : 'div';
+				$tag = $tag ?: 'div';
 				$node->closingCode .= "\n</$tag>";
 				$this->checkExtraArgs($node);
 				return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
@@ -305,7 +313,7 @@ class BlockMacros extends MacroSet
 			if ($tag) {
 				trigger_error('HTML tag specified in {snippet} is deprecated, use n:snippet.', E_USER_DEPRECATED);
 			}
-			$tag = $tag ? $tag : 'div';
+			$tag = $tag ?: 'div';
 			$this->checkExtraArgs($node);
 			return $writer->write("?>\n<$tag id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</$tag><?php ",
 				(string) substr($name, 1), $name

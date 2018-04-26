@@ -197,8 +197,11 @@ class PhpWriter
 			} elseif ($tokens->isCurrent(')', ']', '}') && $tokens->currentValue() !== array_pop($brackets)) {
 				throw new CompileException('Unexpected ' . $tokens->currentValue());
 
-			} elseif ($tokens->isCurrent('function', 'class', 'interface', 'trait') && $tokens->isNext($tokens::T_SYMBOL, '&')
-				|| $tokens->isCurrent('return', 'yield') && !$brackets
+			} elseif (
+				$tokens->isCurrent('function', 'class', 'interface', 'trait')
+				&& $tokens->isNext($tokens::T_SYMBOL, '&')
+				|| $tokens->isCurrent('return', 'yield')
+				&& !$brackets
 			) {
 				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
 			}

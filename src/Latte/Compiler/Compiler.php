@@ -430,7 +430,8 @@ class Compiler
 		if ($htmlNode->closing) {
 			$this->htmlNode = $this->htmlNode->parentNode;
 
-		} elseif ((($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
+		} elseif (
+			(($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
 			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|json|css#i', $htmlNode->attrs['type']))
 		) {
 			$this->context = $lower === 'script' ? self::CONTEXT_HTML_JS : self::CONTEXT_HTML_CSS;
@@ -471,7 +472,8 @@ class Compiler
 			$this->context = self::CONTEXT_HTML_TAG;
 		}
 
-		if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)
+		if (
+			in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)
 			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], true)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object'))
 		) {
@@ -556,7 +558,10 @@ class Compiler
 	{
 		$node = $this->macroNode;
 
-		if (!$node || ($node->name !== $name && $name !== '') || $modifiers
+		if (
+			!$node
+			|| ($node->name !== $name && $name !== '')
+			|| $modifiers
 			|| ($args && $node->args && !Helpers::startsWith("$node->args ", "$args "))
 			|| $nPrefix !== $node->prefix
 		) {
