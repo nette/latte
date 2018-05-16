@@ -55,7 +55,7 @@ class Compiler
 	private $position;
 
 	/** @var array of [name => IMacro[]] */
-	private $macros;
+	private $macros = [];
 
 	/** @var int[] IMacro flags */
 	private $flags;
@@ -124,7 +124,10 @@ class Compiler
 		$this->methods = ['main' => null, 'prepare' => null];
 
 		$macroHandlers = new \SplObjectStorage;
-		array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
+
+		if ($this->macros) {
+			array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
+		}
 
 		foreach ($macroHandlers as $handler) {
 			$handler->initialize($this);
