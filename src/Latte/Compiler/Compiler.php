@@ -643,8 +643,11 @@ class Compiler
 		}
 
 		if ($attrs) {
-			throw new CompileException('Unknown attribute ' . Parser::N_PREFIX
-				. implode(' and ' . Parser::N_PREFIX, array_keys($attrs)));
+			throw new CompileException(
+				'Unknown attribute ' . Parser::N_PREFIX
+				. implode(' and ' . Parser::N_PREFIX, array_keys($attrs))
+				. (($t = Helpers::getSuggestion(array_keys($this->macros), key($attrs))) ? ', did you mean ' . Parser::N_PREFIX . $t . '?' : '')
+			);
 		}
 
 		if (!$this->htmlNode->closing) {
