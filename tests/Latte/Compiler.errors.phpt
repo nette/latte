@@ -40,6 +40,11 @@ Assert::exception(function () use ($latte) {
 
 
 Assert::exception(function () use ($latte) {
+	$latte->compile('<p n:forech>');
+}, 'Latte\CompileException', 'Unknown attribute n:forech, did you mean n:foreach?');
+
+
+Assert::exception(function () use ($latte) {
 	$latte->compile('{time() /}');
 }, 'Latte\CompileException', 'Unexpected /} in tag {time() /}');
 
