@@ -129,7 +129,7 @@ class Parser
 	private function contextHtmlText()
 	{
 		$matches = $this->match('~
-			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>[a-z][a-z0-9:]*)|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
+			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>[a-z][a-z0-9:_.-]*)|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
 			<(?P<htmlcomment>!(?:--(?!>))?|\?(?!=|php))|     ##  begin of <!, <!--, <!DOCTYPE, <?, but not <?php and <?=
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');

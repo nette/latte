@@ -25,6 +25,11 @@ Assert::same([
 ], parse('<0>'));
 
 Assert::same([
+	['htmlTagBegin', '<x:-._', 'x:-._'],
+	['htmlTagEnd', '>'],
+], parse('<x:-._>'));
+
+Assert::same([
 	['htmlTagBegin', '<?'],
 	['text', 'xml encoding="'],
 	['macroTag', '{$enc}', '=', '$enc'],
