@@ -184,7 +184,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	protected function createTemplate(string $name, array $params, string $referenceType): self
+	public function createTemplate(string $name, array $params, string $referenceType): self
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$child = $this->engine->createTemplate($name, $params);
@@ -207,7 +207,7 @@ class Template
 	 * @param  string|\Closure  $mod  content-type name or modifier closure
 	 * @internal
 	 */
-	protected function renderToContentType($mod): void
+	public function renderToContentType($mod): void
 	{
 		if ($mod instanceof \Closure) {
 			echo $mod($this->capture([$this, 'render']), $this->contentType);
@@ -240,7 +240,7 @@ class Template
 	 * @param  string|\Closure  $mod  content-type name or modifier closure
 	 * @internal
 	 */
-	protected function renderBlock(string $name, array $params, $mod = null): void
+	public function renderBlock(string $name, array $params, $mod = null): void
 	{
 		if (empty($this->blockQueue[$name])) {
 			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
@@ -263,7 +263,7 @@ class Template
 	 * Renders parent block.
 	 * @internal
 	 */
-	protected function renderBlockParent(string $name, array $params): void
+	public function renderBlockParent(string $name, array $params): void
 	{
 		if (empty($this->blockQueue[$name]) || ($block = next($this->blockQueue[$name])) === false) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
