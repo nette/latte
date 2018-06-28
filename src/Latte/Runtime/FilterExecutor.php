@@ -29,6 +29,7 @@ class FilterExecutor
 		'capitalize' => [[Filters::class, 'capitalize'], false],
 		'datastream' => [[Filters::class, 'dataStream'], false],
 		'date' => [[Filters::class, 'date'], false],
+		'decodeentities' => [[Filters::class, 'decodeEntities'], true],
 		'escapecss' => [[Filters::class, 'escapeCss'], false],
 		'escapehtml' => [[Filters::class, 'escapeHtml'], false],
 		'escapehtmlcomment' => [[Filters::class, 'escapeHtmlComment'], false],

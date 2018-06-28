@@ -222,6 +222,20 @@ class Filters
 
 
 	/**
+	 * Allows rendering HTML entities.
+	 * @param  string  $s  HTML
+	 * @return string HTML
+	 */
+	public static function decodeEntities(FilterInfo $info, $s): string
+	{
+		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
+			trigger_error('Filter |decodeEntities used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
+		}
+		return html_entity_decode((string) $s);
+	}
+
+
+	/**
 	 * Converts ... to ...
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, $s): string
