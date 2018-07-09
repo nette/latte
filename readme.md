@@ -21,7 +21,7 @@ ensures the output is protected against vulnerabilities, such as XSS.
 
 Documentation can be found on the [website](https://latte.nette.org).
 
-If you like Latte, **[please make a donation now](https://nette.org/donate)**. Thank you!
+If you like Latte, **[please make a donation now](https://nette.org/make-donation?to=latte)**. Thank you!
 
 
 Getting Started
