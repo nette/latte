@@ -13,8 +13,10 @@ use Latte;
 use Latte\CompileException;
 use Latte\Engine;
 use Latte\Helpers;
+use Latte\ImplementationException;
 use Latte\MacroNode;
 use Latte\PhpWriter;
+use Latte\Runtime\Template;
 
 
 /**
@@ -46,6 +48,15 @@ class CoreMacros extends MacroSet
 	public static function install(Latte\Compiler $compiler): void
 	{
 		$me = new static($compiler);
+
+		if (
+			$compiler->getTemplateCLass() !== Template::class &&
+			!in_array(Template::class, class_parents($compiler->getTemplateCLass()), true)
+		) {
+			throw new ImplementationException(
+				'CoreMacros need ' . $compiler->getTemplateCLass() . ' to inherit from ' . Template::class
+			);
+		}
 
 		$me->addMacro('if', [$me, 'macroIf'], [$me, 'macroEndIf']);
 		$me->addMacro('elseif', '} elseif (%node.args) {');

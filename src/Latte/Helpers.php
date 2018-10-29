@@ -35,6 +35,17 @@ class Helpers
 	}
 
 
+	public static function composeUseNamespaces(array $namespaces): string
+	{
+		$useLines = [];
+		foreach ($namespaces as $namespace => $alias) {
+			$useLines[] .= "use $namespace as $alias;";
+		}
+
+		return implode("\n", $useLines);
+	}
+
+
 	/**
 	 * Finds the best suggestion.
 	 */

@@ -29,6 +29,7 @@ spl_autoload_register(function ($className) {
 		Latte\Runtime\Html::class => 'Runtime/Html.php',
 		Latte\Runtime\IHtmlString::class => 'Runtime/IHtmlString.php',
 		Latte\Runtime\ISnippetBridge::class => 'Runtime/ISnippetBridge.php',
+		Latte\Runtime\ITemplate::class => 'Runtime/ITemplate.php',
 		Latte\Runtime\SnippetDriver::class => 'Runtime/SnippetDriver.php',
 		Latte\Runtime\Template::class => 'Runtime/Template.php',
 		Latte\RuntimeException::class => 'exceptions.php',

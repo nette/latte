@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Latte;
 
 
+use Latte\Runtime\ITemplate;
+
 /**
  * Latte compiler.
  */
@@ -74,6 +76,9 @@ class Compiler
 	/** @var string */
 	private $contentType = self::CONTENT_HTML;
 
+	/** @var string */
+	private $templateCLass = Runtime\Template::class;
+
 	/** @var string|null */
 	private $context;
 
@@ -106,6 +111,27 @@ class Compiler
 		}
 		$this->macros[$name][] = $macro;
 		return $this;
+	}
+
+
+	public function getTemplateCLass(): string
+	{
+		return $this->templateCLass;
+	}
+
+
+	/**
+	 * @throws ImplementationException
+	 */
+	public function setTemplateClass(string $templateCLass): void
+	{
+		if (!in_array(ITemplate::class, class_implements($templateCLass), true)) {
+			throw new ImplementationException(
+				"Class '$templateCLass' must implement '" . ITemplate::class . "' interface"
+			);
+		}
+
+		$this->templateCLass = $templateCLass;
 	}
 
 
@@ -180,9 +206,11 @@ class Compiler
 			$members[] = "\n\tfunction $name($method[arguments])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
+		$useNamespaces = constant("{$this->templateCLass}::USE_NAMESPACES");
+
 		return "<?php\n"
-			. "use Latte\\Runtime as LR;\n\n"
-			. "class $className extends Latte\\Runtime\\Template\n{\n"
+			. ($useNamespaces ? Helpers::composeUseNamespaces($useNamespaces) . "\n" : '')
+			. "\nclass $className extends {$this->templateCLass}\n{\n"
 			. implode("\n\n", $members)
 			. "\n\n}\n";
 	}

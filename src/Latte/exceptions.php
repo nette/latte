@@ -62,6 +62,14 @@ class RegexpException extends \Exception
 
 
 /**
+ * The exception that indicates passing class, which doesn't implement proper interface.
+ */
+class ImplementationException extends \Exception
+{
+}
+
+
+/**
  * The exception that indicates error during rendering template.
  */
 class RuntimeException extends \Exception

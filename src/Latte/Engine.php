@@ -89,7 +89,7 @@ class Engine
 	/**
 	 * Creates template object.
 	 */
-	public function createTemplate(string $name, array $params = []): Runtime\Template
+	public function createTemplate(string $name, array $params = []): Runtime\ITemplate
 	{
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, false)) {

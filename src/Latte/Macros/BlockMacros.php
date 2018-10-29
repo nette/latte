@@ -12,9 +12,11 @@ namespace Latte\Macros;
 use Latte;
 use Latte\CompileException;
 use Latte\Helpers;
+use Latte\ImplementationException;
 use Latte\MacroNode;
 use Latte\PhpWriter;
 use Latte\Runtime\SnippetDriver;
+use Latte\Runtime\Template;
 
 
 /**
@@ -38,6 +40,16 @@ class BlockMacros extends MacroSet
 	public static function install(Latte\Compiler $compiler): void
 	{
 		$me = new static($compiler);
+
+		if (
+			$compiler->getTemplateCLass() !== Template::class &&
+			!in_array(Template::class, class_parents($compiler->getTemplateCLass()), true)
+		) {
+			throw new ImplementationException(
+				'BlockMacros need ' . $compiler->getTemplateCLass() . ' to inherit from ' . Template::class
+			);
+		}
+
 		$me->addMacro('include', [$me, 'macroInclude']);
 		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']); // deprecated
 		$me->addMacro('import', [$me, 'macroImport'], null, null, self::ALLOWED_IN_HEAD);

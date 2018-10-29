@@ -16,9 +16,14 @@ use Latte\Engine;
 /**
  * Template.
  */
-class Template
+class Template implements ITemplate
 {
 	use Latte\Strict;
+
+	/** @var [className => alias] namespaces required for the correct functioning of child classes */
+	public const USE_NAMESPACES = [
+		'Latte\Runtime' => 'LR',
+	];
 
 	/** @var \stdClass global accumulators for intermediate results */
 	public $global;
