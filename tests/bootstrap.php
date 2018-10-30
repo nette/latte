@@ -17,9 +17,20 @@ date_default_timezone_set('Europe/Prague');
 
 
 // create temporary directory
-define('TEMP_DIR', __DIR__ . '/tmp/' . lcg_value());
-@mkdir(dirname(TEMP_DIR));
-@mkdir(TEMP_DIR);
+(function () {
+	define('TEMP_DIR', __DIR__ . '/tmp/' . getmypid());
+
+	// garbage collector
+	$GLOBALS['\\lock'] = $lock = fopen(__DIR__ . '/lock', 'w');
+	if (rand(0, 100)) {
+		flock($lock, LOCK_SH);
+		@mkdir(dirname(TEMP_DIR));
+	} elseif (flock($lock, LOCK_EX)) {
+		Tester\Helpers::purge(dirname(TEMP_DIR));
+	}
+
+	@mkdir(TEMP_DIR);
+})();
 
 
 // output buffer level check
