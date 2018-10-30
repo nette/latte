@@ -109,6 +109,7 @@ class CoreMacros extends MacroSet
 			$code .= 'if (isset($this->params[' . var_export($var, true)
 			. "])) trigger_error('Variable $" . addcslashes($var, "'") . ' overwritten in foreach on line ' . implode(', ', $lines) . "'); ";
 		}
+		$code = $code ? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}' : '';
 		return [$code];
 	}
 

@@ -106,7 +106,9 @@ var html = <?php echo LR\Filters::escapeHtmlComment($el) /* line 28 */ ?>;
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 50');
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
+			if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 50');
+		}
 
 	}
 
