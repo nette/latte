@@ -127,7 +127,7 @@ class Engine
 		}
 
 		if (!preg_match('#\n|\?#', $name)) {
-			$code = "<?php\n// source: $name\n?>" . $code;
+			$code = "<?php\n// source: {$name}\n?>" . $code;
 		}
 		if ($this->strictTypes) {
 			$code = "<?php\ndeclare(strict_types=1);\n?>" . $code;
@@ -160,51 +160,51 @@ class Engine
 			$code = $this->compile($name);
 			if (@eval('?>' . $code) === false) { // @ is escalated to exception
 				throw (new CompileException('Error in template: ' . error_get_last()['message']))
-					->setSource($code, error_get_last()['line'], "$name (compiled)");
+					->setSource($code, error_get_last()['line'], "{$name} (compiled)");
 			}
 			return;
 		}
 
 		$file = $this->getCacheFile($name);
 
-		if (!$this->isExpired($file, $name) && (@include $file) !== false) { // @ - file may not exist
+		if ($file && !$this->isExpired($file, $name) && (include $file) !== false) {
 			return;
 		}
 
-		if (!is_dir($this->tempDirectory) && !@mkdir($this->tempDirectory) && !is_dir($this->tempDirectory)) { // @ - dir may already exist
-			throw new \RuntimeException("Unable to create directory '$this->tempDirectory'. " . error_get_last()['message']);
+		if (!is_dir($this->tempDirectory) && !mkdir($this->tempDirectory)) {
+			throw new \RuntimeException("Unable to create directory '{$this->tempDirectory}'. " . error_get_last()['message']);
 		}
 
 		$handle = @fopen("$file.lock", 'c+'); // @ is escalated to exception
 		if (!$handle) {
-			throw new \RuntimeException("Unable to create file '$file.lock'. " . error_get_last()['message']);
+			throw new \RuntimeException("Unable to create file '{$file}.lock'. " . error_get_last()['message']);
 		} elseif (!@flock($handle, LOCK_EX)) { // @ is escalated to exception
-			throw new \RuntimeException("Unable to acquire exclusive lock on '$file.lock'. " . error_get_last()['message']);
+			throw new \RuntimeException("Unable to acquire exclusive lock on '{$file}.lock'. " . error_get_last()['message']);
 		}
 
 		if (!is_file($file) || $this->isExpired($file, $name)) {
 			$code = $this->compile($name);
-			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
-				@unlink("$file.tmp"); // @ - file may not exist
-				throw new \RuntimeException("Unable to create '$file'.");
+			if (file_put_contents("{$file}.tmp", $code) !== strlen($code) || !rename("{$file}.tmp", $file)) {
+				@unlink("{$file}.tmp"); // @ - file may not exist
+				throw new \RuntimeException("Unable to create '{$file}'.");
 			} elseif (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, true); // @ can be restricted
 			}
 		}
 
 		if ((include $file) === false) {
-			throw new \RuntimeException("Unable to load '$file'.");
+			throw new \RuntimeException("Unable to load '{$file}'.");
 		}
 
 		flock($handle, LOCK_UN);
 		fclose($handle);
-		@unlink("$file.lock"); // @ file may become locked on Windows
+		@unlink("{$file}.lock"); // @ file may become locked on Windows
 	}
 
 
 	private function isExpired(string $file, string $name): bool
 	{
-		return $this->autoRefresh && $this->getLoader()->isExpired($name, (int) @filemtime($file)); // @ - file may not exist
+		return $this->autoRefresh && $this->getLoader()->isExpired($name, file_exists($file) ? (int)filemtime($file) : 0);
 	}
 
 
@@ -214,7 +214,8 @@ class Engine
 		$base = preg_match('#([/\\\\][\w@.-]{3,35}){1,3}\z#', $name, $m)
 			? preg_replace('#[^\w@.-]+#', '-', substr($m[0], 1)) . '--'
 			: '';
-		return "$this->tempDirectory/$base$hash.php";
+		$file = "{$this->tempDirectory}/{$base}{$hash}.php";
+		return file_exists($file) ? $file : false;
 	}
 
 
