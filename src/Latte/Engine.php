@@ -215,7 +215,7 @@ class Engine
 			? preg_replace('#[^\w@.-]+#', '-', substr($m[0], 1)) . '--'
 			: '';
 		$file = "{$this->tempDirectory}/{$base}{$hash}.php";
-		return file_exists($file) ? $file : false;
+		return file_exists($file) ? $file : '';
 	}
 
 
