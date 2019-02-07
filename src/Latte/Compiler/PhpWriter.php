@@ -57,7 +57,13 @@ class PhpWriter
 		}, $mask);
 
 		$pos = $this->tokens->position;
-		$word = strpos($mask, '%node_word') === false ? null : $this->tokens->fetchWord();
+		$word = null;
+		if (strpos($mask, '%node_word') !== false) {
+			$word = $this->tokens->fetchWord();
+			if ($word === null) {
+				throw new CompileException('Invalid content of macro');
+			}
+		}
 
 		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
 		function ($m) use ($word, &$args) {
