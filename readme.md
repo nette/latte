@@ -205,7 +205,7 @@ Parameters are put after the filter name separated by colon or comma:
 See the summary of [standard filters](https://doc.nette.org/en/default-filters) and how to make user-defined filters.
 
 
-In templates we can use functions which change or format the data to a form we want. They are called *filters*. See the [summary of the default filters|default filters].
+In templates we can use functions which change or format the data to a form we want. They are called *filters*. See the summary of the default filters.
 
 
 Filter can be registered by any callback or lambda function:
