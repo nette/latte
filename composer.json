@@ -29,7 +29,7 @@
 		"nette/utils": "to use filter |webalize"
 	},
 	"conflict": {
-		"nette/application": "<2.4.1"
+		"nette/application": "<3.0"
 	},
 	"autoload": {
 		"classmap": ["src/"]
