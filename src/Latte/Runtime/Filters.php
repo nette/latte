@@ -432,8 +432,10 @@ class Filters
 
 	/**
 	 * Performs a search and replace.
+	 * @param string|array $search
+	 * @param string|array $replacement
 	 */
-	public static function replace(FilterInfo $info, $subject, string $search, string $replacement = ''): string
+	public static function replace(FilterInfo $info, $subject, $search, $replacement = ''): string
 	{
 		return str_replace($search, $replacement, (string) $subject);
 	}
