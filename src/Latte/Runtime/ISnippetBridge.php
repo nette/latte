@@ -18,15 +18,15 @@ interface ISnippetBridge
 {
 	function isSnippetMode(): bool;
 
-	function setSnippetMode(bool $snippetMode);
+	function setSnippetMode($snippetMode);
 
-	function needsRedraw(string $name): bool;
+	function needsRedraw($name): bool;
 
-	function markRedrawn(string $name): void;
+	function markRedrawn($name): void;
 
-	function getHtmlId(string $name): string;
+	function getHtmlId($name): string;
 
-	function addSnippet(string $name, string $content): void;
+	function addSnippet($name, $content): void;
 
 	function renderChildren(): void;
 }
