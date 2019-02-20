@@ -16,19 +16,19 @@ namespace Latte\Runtime;
  */
 interface SnippetBridge
 {
-	function isSnippetMode();
+	function isSnippetMode(): bool;
 
-	function setSnippetMode($snippetMode);
+	function setSnippetMode(bool $snippetMode);
 
-	function needsRedraw($name);
+	function needsRedraw(string $name): bool;
 
-	function markRedrawn($name);
+	function markRedrawn(string $name): void;
 
-	function getHtmlId($name);
+	function getHtmlId(string $name): string;
 
-	function addSnippet($name, $content);
+	function addSnippet(string $name, string $content): void;
 
-	function renderChildren();
+	function renderChildren(): void;
 }
 
 
