@@ -19,20 +19,20 @@ interface ILoader
 	/**
 	 * Returns template source code.
 	 */
-	function getContent(string $name): string;
+	function getContent($name);
 
 	/**
 	 * Checks whether template is expired.
 	 */
-	function isExpired(string $name, int $time): bool;
+	function isExpired($name, $time);
 
 	/**
 	 * Returns referred template name.
 	 */
-	function getReferredName(string $name, string $referringName): string;
+	function getReferredName($name, $referringName);
 
 	/**
 	 * Returns unique identifier for caching.
 	 */
-	function getUniqueId(string $name): string;
+	function getUniqueId($name);
 }
