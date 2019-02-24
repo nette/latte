@@ -50,7 +50,7 @@ class Engine
 	/** @var string */
 	private $contentType = self::CONTENT_HTML;
 
-	/** @var string */
+	/** @var string|null */
 	private $tempDirectory;
 
 	/** @var bool */
@@ -301,7 +301,7 @@ class Engine
 	 * Sets path to temporary directory.
 	 * @return static
 	 */
-	public function setTempDirectory(string $path)
+	public function setTempDirectory(?string $path)
 	{
 		$this->tempDirectory = $path;
 		return $this;
