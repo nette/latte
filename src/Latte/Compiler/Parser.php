@@ -266,7 +266,7 @@ class Parser
 	private function contextMacro(): void
 	{
 		$matches = $this->match('~
-			(?P<comment>\\*.*?\\*' . $this->delimiters[1] . '\n{0,2})|
+			(?P<comment>\*.*?\*' . $this->delimiters[1] . '\n{0,2})|
 			(?P<macro>(?>
 				' . self::RE_STRING . '|
 				\{(?>' . self::RE_STRING . '|[^\'"{}])*+\}|
@@ -392,8 +392,8 @@ class Parser
 				(?P<shortname>[=\~#%^&_]?)      ## expression, =expression, ...
 			)(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
 			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
-			(?P<empty>/?\z)
-		()\z~isx', $tag, $match)) {
+			(?P<empty>/?$)
+		()$~Disx', $tag, $match)) {
 			if (preg_last_error()) {
 				throw new RegexpException(null, preg_last_error());
 			}

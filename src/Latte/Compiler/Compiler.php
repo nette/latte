@@ -687,14 +687,14 @@ class Compiler
 
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
-				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||\z)#i', $modifiers)) {
+				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
 					$modifiers .= '|checkurl';
 				}
 			}
 
 			if (!Helpers::removeFilter($modifiers, 'noescape')) {
 				$modifiers .= '|escape';
-				if ($this->context === self::CONTEXT_HTML_JS && $name === '=' && preg_match('#["\'] *\z#', $this->tokens[$this->position - 1]->text)) {
+				if ($this->context === self::CONTEXT_HTML_JS && $name === '=' && preg_match('#["\'] *$#D', $this->tokens[$this->position - 1]->text)) {
 					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
 				}
 			}

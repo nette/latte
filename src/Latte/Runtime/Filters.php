@@ -188,7 +188,7 @@ class Filters
 	 */
 	public static function escapeHtmlRawText($s): string
 	{
-		return preg_replace('#</(script|style)#i', '<\\/$1', (string) $s);
+		return preg_replace('#</(script|style)#i', '<\/$1', (string) $s);
 	}
 
 
@@ -292,7 +292,7 @@ class Filters
 	public static function safeUrl($s): string
 	{
 		$s = (string) $s;
-		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)\z~i', $s) ? $s : '';
+		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
 	}
 
 
@@ -357,7 +357,7 @@ class Filters
 		if ($level < 1) {
 			// do nothing
 		} elseif (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)) {
-			$s = preg_replace_callback('#<(textarea|pre).*?</\\1#si', function ($m) {
+			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', function ($m) {
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
 			}, $s);
 			if (preg_last_error()) {
@@ -589,7 +589,7 @@ class Filters
 	public static function trim(FilterInfo $info, $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
-		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+\z#u', '', (string) $s);
+		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '', (string) $s);
 		if (preg_last_error()) {
 			throw new Latte\RegexpException(null, preg_last_error());
 		}

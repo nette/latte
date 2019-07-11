@@ -55,7 +55,7 @@ class Helpers
 
 	public static function removeFilter(string &$modifier, string $filter): bool
 	{
-		$modifier = preg_replace('#\|(' . $filter . ')\s?(?=\||\z)#i', '', $modifier, -1, $found);
+		$modifier = preg_replace('#\|(' . $filter . ')\s?(?=\||$)#Di', '', $modifier, -1, $found);
 		return (bool) $found;
 	}
 
