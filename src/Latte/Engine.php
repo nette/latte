@@ -17,7 +17,7 @@ class Engine
 {
 	use Strict;
 
-	public const VERSION = '2.5.2';
+	public const VERSION = '3.0-dev';
 
 	/** Content types */
 	public const
