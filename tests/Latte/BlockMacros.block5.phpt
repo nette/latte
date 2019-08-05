@@ -26,3 +26,7 @@ Assert::match(
 	'<br class="123">',
 	$latte->renderToString('{block test}<br n:class="$var">{/block}', ['var' => 123])
 );
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('{define _foobar}Hello{/define}');
+}, Latte\CompileException::class, "Block name '_foobar' must not start with an underscore.");

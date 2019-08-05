@@ -268,6 +268,9 @@ class BlockMacros extends MacroSet
 				return "\$this->checkBlockContentType($blockType, $fname);"
 					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
 			}
+
+		} elseif ($name[0] === '_') {
+			throw new CompileException("Block name '$name' must not start with an underscore.");
 		}
 
 		// static snippet/snippetArea
