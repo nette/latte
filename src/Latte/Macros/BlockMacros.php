@@ -356,7 +356,11 @@ class BlockMacros extends MacroSet
 			}
 			if (empty($node->data->leave)) {
 				if (preg_match('#\$|n:#', $node->content)) {
-					$node->content = '<?php extract($_args);' . ($node->data->args ?? '') . ' ?>' . $node->content;
+                    $node->content =
+                        '<?php 
+				            if (isset($_args["_args"])) $_args["_args"] = array_merge($_args["_args"],$_args); 
+				            extract($_args);' . ($node->data->args ?? '') .
+                        ' ?>' . $node->content;
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
