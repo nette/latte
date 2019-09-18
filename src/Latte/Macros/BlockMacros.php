@@ -318,13 +318,14 @@ class BlockMacros extends MacroSet
 			$tokens = $node->tokenizer;
 			$args = [];
 			while ($tokens->isNext()) {
-				$arg = $tokens->consumeValue($tokens::T_VARIABLE);
-				$args[] = $arg . ' = $_args[' . count($args) . '] ?? ' . $arg . ' ?? null;';
+				$args[] = $tokens->consumeValue($tokens::T_VARIABLE);
 				if ($tokens->isNext()) {
 					$tokens->consumeValue(',');
 				}
 			}
-			$node->data->args = implode('', $args);
+			if ($args) {
+				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
+			}
 			return $extendsCheck;
 
 		} else { // block, snippetArea
@@ -356,7 +357,8 @@ class BlockMacros extends MacroSet
 			}
 			if (empty($node->data->leave)) {
 				if (preg_match('#\$|n:#', $node->content)) {
-					$node->content = '<?php extract($_args);' . ($node->data->args ?? '') . ' ?>' . $node->content;
+					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : 'extract($_args);') . ' ?>'
+						. $node->content;
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
