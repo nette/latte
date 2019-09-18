@@ -23,14 +23,24 @@ $template = <<<'EOD'
 	This is definition #{$var}
 {/define}
 
-{include #test, var => 20}
+a) {include #test, var => 20}
 
 {define testargs $var1, $var2}
 	Variables {$var1}, {$var2}, {$hello}
 {/define}
 
-{include testargs, 1}
+b) {include testargs, 1}
 
+{define outer}
+	{include testargs, hello}
+{/define}
+
+g) {include outer}
+
+{var $var1 = outer}
+h) {include testargs}
+
+i) {include testargs null}
 EOD;
 
 Assert::matchFile(
