@@ -20,7 +20,7 @@ Assert::exception(function () {
 
 Assert::exception(function () {
 	$latte = new Latte\Engine;
-	$latte->setTempDirectory(TEMP_DIR);
+	$latte->setTempDirectory(getTempDir());
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->render('{php * * }');
 }, ParseError::class, "syntax error, unexpected '*'");

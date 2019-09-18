@@ -15,7 +15,7 @@ test(function () {
 	$template = __DIR__ . '/templates/general.latte';
 
 	$latte = new Latte\Engine;
-	$latte->setTempDirectory(TEMP_DIR);
+	$latte->setTempDirectory(getTempDir());
 
 	$cachedFile = $latte->getCacheFile($template);
 	Assert::false(file_exists($cachedFile));

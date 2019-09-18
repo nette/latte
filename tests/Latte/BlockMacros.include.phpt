@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(TEMP_DIR);
+$latte->setTempDirectory(getTempDir());
 
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.include.phtml',
