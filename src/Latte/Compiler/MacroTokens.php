@@ -29,7 +29,7 @@ class MacroTokens extends TokenIterator
 	/** @var int */
 	public $depth = 0;
 
-	/** @var Tokenizer */
+	/** @var Tokenizer|null */
 	private static $tokenizer;
 
 

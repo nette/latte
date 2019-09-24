@@ -46,7 +46,7 @@ class MacroNode
 	/** @var MacroTokens */
 	public $tokenizer;
 
-	/** @var MacroNode */
+	/** @var MacroNode|null */
 	public $parentNode;
 
 	/** @var string */
@@ -67,7 +67,7 @@ class MacroNode
 	/** @var \stdClass  user data */
 	public $data;
 
-	/** @var HtmlNode  closest HTML node */
+	/** @var HtmlNode|null  closest HTML node */
 	public $htmlNode;
 
 	/** @var array [contentType, context] */

@@ -62,10 +62,10 @@ class Compiler
 	/** @var int[] IMacro flags */
 	private $flags;
 
-	/** @var HtmlNode */
+	/** @var HtmlNode|null */
 	private $htmlNode;
 
-	/** @var MacroNode */
+	/** @var MacroNode|null */
 	private $macroNode;
 
 	/** @var string[] */
@@ -173,6 +173,7 @@ class Compiler
 			$this->addProperty('contentType', $this->contentType);
 		}
 
+		$members = [];
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value) . ';';
 		}

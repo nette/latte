@@ -65,10 +65,10 @@ class Parser
 	/** @var array */
 	private $context = [self::CONTEXT_HTML_TEXT, null];
 
-	/** @var string */
+	/** @var string|null */
 	private $lastHtmlTag;
 
-	/** @var string used by filter() */
+	/** @var string|null used by filter() */
 	private $syntaxEndTag;
 
 	/** @var int */

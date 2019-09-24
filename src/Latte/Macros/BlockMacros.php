@@ -28,7 +28,7 @@ class BlockMacros extends MacroSet
 	/** @var array */
 	private $blockTypes = [];
 
-	/** @var bool */
+	/** @var string|bool|null */
 	private $extends;
 
 	/** @var string[] */

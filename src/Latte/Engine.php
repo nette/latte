@@ -32,13 +32,13 @@ class Engine
 	/** @var callable[] */
 	public $onCompile = [];
 
-	/** @var Parser */
+	/** @var Parser|null */
 	private $parser;
 
-	/** @var Compiler */
+	/** @var Compiler|null */
 	private $compiler;
 
-	/** @var ILoader */
+	/** @var ILoader|null */
 	private $loader;
 
 	/** @var Runtime\FilterExecutor */

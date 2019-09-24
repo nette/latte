@@ -38,10 +38,10 @@ class Template
 	/** @var string|null|false  @internal */
 	protected $parentName;
 
-	/** @var [name => [callbacks]]  @internal */
+	/** @var array of [name => [callbacks]]  @internal */
 	protected $blockQueue = [];
 
-	/** @var [name => type]  @internal */
+	/** @var array of [name => type]  @internal */
 	protected $blockTypes = [];
 
 	/** @var Engine */
