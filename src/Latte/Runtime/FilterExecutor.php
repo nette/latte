@@ -178,7 +178,8 @@ class FilterExecutor
 				? new \ReflectionMethod($callback[0], $callback[1])
 				: new \ReflectionFunction($callback);
 			$this->_static[$name][1] = ($tmp = $ref->getParameters())
-				&& (string) $tmp[0]->getType() === FilterInfo::class;
+				&& $tmp[0]->getType() !== null
+				&& $tmp[0]->getType()->getName() === FilterInfo::class;
 		}
 		return $this->_static[$name];
 	}
