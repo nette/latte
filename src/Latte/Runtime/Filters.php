@@ -385,6 +385,16 @@ class Filters
 
 
 	/**
+	 * Join array of text or HTML elements with a string.
+	 * @return string text|HTML
+	 */
+	public static function implode(array $arr, $glue = '')
+	{
+		return implode($glue, $arr);
+	}
+
+
+	/**
 	 * Repeats text.
 	 * @param
 	 * @param  string

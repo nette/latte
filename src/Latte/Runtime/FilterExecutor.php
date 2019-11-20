@@ -36,7 +36,7 @@ class FilterExecutor
 		'escapexml' => ['Latte\Runtime\Filters::escapeXml', false],
 		'firstupper' => ['Latte\Runtime\Filters::firstUpper', false],
 		'checkurl' => ['Latte\Runtime\Filters::safeUrl', false],
-		'implode' => ['implode', false],
+		'implode' => ['Latte\Runtime\Filters::implode', false],
 		'indent' => ['Latte\Runtime\Filters::indent', true],
 		'length' => ['Latte\Runtime\Filters::length', false],
 		'lower' => ['Latte\Runtime\Filters::lower', false],
