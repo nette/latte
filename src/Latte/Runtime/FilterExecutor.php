@@ -38,7 +38,7 @@ class FilterExecutor
 		'escapexml' => [[Filters::class, 'escapeXml'], false],
 		'firstupper' => [[Filters::class, 'firstUpper'], false],
 		'checkurl' => [[Filters::class, 'safeUrl'], false],
-		'implode' => ['implode', false],
+		'implode' => [[Filters::class, 'implode'], false],
 		'indent' => [[Filters::class, 'indent'], true],
 		'length' => [[Filters::class, 'length'], false],
 		'lower' => [[Filters::class, 'lower'], false],
