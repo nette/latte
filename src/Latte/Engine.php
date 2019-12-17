@@ -126,11 +126,11 @@ class Engine
 			throw $e->setSource($source, $line, $name);
 		}
 
-		if (!preg_match('#\n|\?#', $name)) {
-			$code = "<?php\n// source: $name\n?>" . $code;
-		}
 		if ($this->strictTypes) {
 			$code = "<?php\ndeclare(strict_types=1);\n?>" . $code;
+		}
+		if (!preg_match('#\n|\?#', $name)) {
+			$code = "<?php\n// source: $name\n?>" . $code;
 		}
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
