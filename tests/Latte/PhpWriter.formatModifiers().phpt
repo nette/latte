@@ -65,3 +65,18 @@ test(function () { // FilterInfo aware modifiers
 test(function () { // depth
 	Assert::same('($this->filters->mod)(@, (1?2:3))', formatModifiers('@', 'mod:(1?2:3)'));
 });
+
+
+test(function () { // optionalChainingPass
+	Assert::same('($this->filters->mod)(@, ($a ?? null))', formatModifiers('@', 'mod:$a?'));
+	Assert::same('($this->filters->mod)(@, (($a ?? null)))', formatModifiers('@', 'mod:($a?)'));
+	Assert::same('($this->filters->mod)(@, (($_tmp = $var ?? null) === null ? null : (($_tmp = $_tmp->prop ?? null) === null ? null : (($_tmp = $_tmp->elem[1] ?? null) === null ? null : (($_tmp = $_tmp->call(2) ?? null) === null ? null : ($_tmp->item ?? null))))))', formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item?'));
+});
+
+
+test(function () { // optionalChainingPass + ternary
+	Assert::same('($this->filters->mod)(@, $a ?, $b)', formatModifiers('@', 'mod:$a?:$b'));
+	Assert::same('($this->filters->mod)(@, $a ? , $b)', formatModifiers('@', 'mod:$a ? : $b'));
+	Assert::same('($this->filters->mod)(@, $a ?? $b)', formatModifiers('@', 'mod:$a ?? $b'));
+	Assert::same('($this->filters->mod)(@, (($_tmp = $a ?? null) === null ? null : ($_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] , $b)', formatModifiers('@', 'mod:$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
+});

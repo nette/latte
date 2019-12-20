@@ -79,9 +79,9 @@ test(function () { // special
 	Assert::same("'symbol' => Namespace \\ Class :: method ()", formatArgs('symbol => Namespace \ Class :: method ()'));
 	Assert::same("'symbol' => \$this->var, ", formatArgs('symbol => $this->var, '));
 	Assert::same("'symbol' => \$this->VAR, ", formatArgs('symbol => $this->VAR, '));
-	Assert::same("'symbol' => \$this -> var, ", formatArgs('symbol => $this -> var, '));
-	Assert::same("'symbol' => \$this -> VAR, ", formatArgs('symbol => $this -> VAR, '));
-	Assert::same("'symbol' => \$this -> var", formatArgs('symbol => $this -> var'));
+	Assert::same("'symbol' => \$this->var, ", formatArgs('symbol => $this -> var, '));
+	Assert::same("'symbol' => \$this->VAR, ", formatArgs('symbol => $this -> VAR, '));
+	Assert::same("'symbol' => \$this->var", formatArgs('symbol => $this -> var'));
 	Assert::same("'symbol1' => 'value'", formatArgs('symbol1 => /*value,* /symbol2=>*/value/**/'));
 	Assert::same('(array)', formatArgs('(array)'));
 	Assert::same('func()[1]', formatArgs('func()[1]'));
@@ -129,4 +129,22 @@ test(function () { // in operator
 	Assert::same('$a, in_array($b->func(), [1, 2], true)', formatArgs('$a, $b->func() in [1, 2]'));
 	Assert::same('$a, in_array($b[1], [1, 2], true)', formatArgs('$a, $b[1] in [1, 2]'));
 	Assert::same('in_array($b, [1, [2], 3], true)', formatArgs('$b in [1, [2], 3]'));
+});
+
+
+test(function () { // optionalChainingPass
+	Assert::same('$a', formatArgs('$a'));
+	Assert::same('($a ?? null)', formatArgs('$a?'));
+	Assert::same('(($a ?? null))', formatArgs('($a?)'));
+	Assert::same('$var->prop->elem[1]->call(2)->item', formatArgs('$var->prop->elem[1]->call(2)->item'));
+	Assert::same('(($_tmp = $var ?? null) === null ? null : (($_tmp = $_tmp->prop ?? null) === null ? null : (($_tmp = $_tmp->elem[1] ?? null) === null ? null : (($_tmp = $_tmp->call(2) ?? null) === null ? null : ($_tmp->item ?? null)))))', formatArgs('$var?->prop?->elem[1]?->call(2)?->item?'));
+});
+
+
+test(function () { // optionalChainingPass + ternary
+	Assert::same('$a ?:$b', formatArgs('$a?:$b'));
+	Assert::same('$a ? : $b', formatArgs('$a ? : $b'));
+	Assert::same('$a ?? $b', formatArgs('$a ?? $b'));
+	Assert::same('$a ? [1, 2, ([3 ? 2 : 1])]: $b', formatArgs('$a ? [1, 2, ([3 ? 2 : 1])]: $b'));
+	Assert::same('(($_tmp = $a ?? null) === null ? null : ($_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b', formatArgs('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
 });

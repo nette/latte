@@ -159,6 +159,7 @@ class PhpWriter
 		$tokens = $tokens === null ? $this->tokens : $tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
+		$tokens = $this->optionalChainingPass($tokens);
 		$tokens = $this->shortTernaryPass($tokens);
 		$tokens = $this->inlineModifierPass($tokens);
 		$tokens = $this->inOperatorPass($tokens);
@@ -239,6 +240,74 @@ class PhpWriter
 		if ($inTernary) {
 			$res->append(' : null');
 		}
+		return $res;
+	}
+
+
+	/**
+	 * Optional Chaining $var?->prop?->elem[1]?->call()?->item
+	 */
+	public function optionalChainingPass(MacroTokens $tokens): MacroTokens
+	{
+		$startDepth = $tokens->depth;
+		$res = new MacroTokens;
+
+		while ($tokens->depth >= $startDepth && $tokens->nextToken()) {
+			if (!$tokens->isCurrent($tokens::T_VARIABLE)) {
+				$res->append($tokens->currentToken());
+				continue;
+			}
+
+			$addBraces = '';
+			$expr = new MacroTokens([$tokens->currentToken()]);
+			$rescue = null;
+
+			do {
+				if ($tokens->nextToken('?')) {
+					if ($tokens->isNext() && (!$tokens->isNext($tokens::T_CHAR) || $tokens->isNext('(', '[', '{', ':', '!', '@'))) {  // is it ternary operator?
+						$expr->append($addBraces . ' ?');
+						break;
+					}
+
+					$rescue = [$res->tokens, $expr->tokens, $tokens->position, $addBraces];
+
+					if (!$tokens->isNext('->')) {
+						$expr->prepend('(');
+						$expr->append(' ?? null)' . $addBraces);
+						break;
+					}
+
+					$expr->prepend('(($_tmp = ');
+					$expr->append(' ?? null) === null ? null : ');
+					$res->tokens = array_merge($res->tokens, $expr->tokens);
+					$expr = new MacroTokens('$_tmp');
+					$addBraces .= ')';
+
+				} elseif ($tokens->nextToken('->')) {
+					$expr->append($tokens->currentToken());
+					if (!$tokens->nextToken($tokens::T_SYMBOL)) {
+						$expr->append($addBraces);
+						break;
+					}
+					$expr->append($tokens->currentToken());
+
+				} elseif ($tokens->nextToken('[', '(')) {
+					$expr->tokens = array_merge($expr->tokens, [$tokens->currentToken()], $this->optionalChainingPass($tokens)->tokens);
+					if ($rescue && $tokens->isNext(':')) { // it was ternary operator
+						[$res->tokens, $expr->tokens, $tokens->position, $addBraces] = $rescue;
+						$expr->append($addBraces . ' ?');
+						break;
+					}
+
+				} else {
+					$expr->append($addBraces);
+					break;
+				}
+			} while (true);
+
+			$res->tokens = array_merge($res->tokens, $expr->tokens);
+		}
+
 		return $res;
 	}
 
