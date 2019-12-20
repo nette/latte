@@ -60,6 +60,7 @@ test(function () { // short ternary operators
 	Assert::same("('a' ? 'b' : null) ? ('c' ? 'd' : null) : null", formatArgs('(a ? b) ? (c ? d)'));
 	Assert::same("fce() ? 'a' : null, fce() ? 'b' : null", formatArgs('fce() ? a, fce() ? b'));
 	Assert::same("fce() ?? 'a'", formatArgs('fce() ?? a')); // null coalesce is ignored
+	Assert::same("'a'?", formatArgs('a?')); // value must exists
 });
 
 

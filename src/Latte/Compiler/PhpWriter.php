@@ -223,7 +223,7 @@ class PhpWriter
 		$res = new MacroTokens;
 		$inTernary = [];
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('?')) {
+			if ($tokens->isCurrent('?') && $tokens->isNext() && !$tokens->isNext(':', ',', ')', ']', '|')) {
 				$inTernary[] = $tokens->depth;
 
 			} elseif ($tokens->isCurrent(':')) {
