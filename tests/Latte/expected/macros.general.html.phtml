@@ -29,7 +29,7 @@ class Template%a% extends Latte\Runtime\Template
 	<li>Translated string: <?php echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj')) ?></li>
 	<li>Non-escaped and translated: <?php echo ($this->filters->translate)($people[1]) ?></li>
 	<li>Condition: <?php echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line 13 */ ?> <?php echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line 13 */ ?></li>
-	<li>Array: <?php echo LR\Filters::escapeHtmlText(($this->filters->join)($hello ? ['a', 'b', 'c'] : null)) /* line 14 */ ?> <?php
+	<li>Array: <?php echo LR\Filters::escapeHtmlText(($this->filters->join)($hello ? (['a', 'b', 'c']) : null)) /* line 14 */ ?> <?php
 		echo LR\Filters::escapeHtmlText(($this->filters->join)(['a', 'b', $hello ? 'c' : null])) /* line 14 */ ?></li>
 </ul>
 

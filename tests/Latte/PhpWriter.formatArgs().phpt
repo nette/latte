@@ -61,6 +61,7 @@ test(function () { // short ternary operators
 	Assert::same("fce() ? 'a' : null, fce() ? 'b' : null", formatArgs('fce() ? a, fce() ? b'));
 	Assert::same("fce() ?? 'a'", formatArgs('fce() ?? a')); // null coalesce is ignored
 	Assert::same("'a'?", formatArgs('a?')); // value must exists
+	Assert::same('$a ?(1) : null', formatArgs('$a?(1)')); // with braces
 });
 
 
