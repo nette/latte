@@ -61,3 +61,7 @@ test(function () { // FilterInfo aware modifiers
 	Assert::same('$this->filters->filterContent(\'mod\', $_fi, @)', formatModifiers('@', 'mod', true));
 	Assert::same('LR\Filters::convertTo($_fi, \'htmlx\', $this->filters->filterContent(\'mod2\', $_fi, $this->filters->filterContent(\'mod1\', $_fi, @)))', formatModifiers('@', 'mod1|mod2|escape', true));
 });
+
+test(function () { // depth
+	Assert::same('($this->filters->mod)(@, (1?2:3))', formatModifiers('@', 'mod:(1?2:3)'));
+});

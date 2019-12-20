@@ -400,11 +400,11 @@ class PhpWriter
 				$res->append(' ');
 
 			} elseif ($inside) {
-				if ($tokens->isCurrent(':', ',')) {
+				if ($tokens->isCurrent(':', ',') && !$tokens->depth) {
 					$res->append(', ');
 					$tokens->nextAll($tokens::T_WHITESPACE);
 
-				} elseif ($tokens->isCurrent('|')) {
+				} elseif ($tokens->isCurrent('|') && !$tokens->depth) {
 					$res->append(')');
 					$inside = false;
 
