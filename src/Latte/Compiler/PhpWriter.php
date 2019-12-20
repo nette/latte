@@ -301,14 +301,14 @@ class PhpWriter
 
 			do {
 				if ($tokens->nextToken('?')) {
-					if ($tokens->isNext() && (!$tokens->isNext($tokens::T_CHAR) || $tokens->isNext('(', '[', '{', ':', '!', '@', '\\'))) {  // is it ternary operator?
+					if ($tokens->isNext() && (!$tokens->isNext($tokens::T_CHAR) || $tokens->isNext('(', '{', ':', '!', '@', '\\'))) {  // is it ternary operator?
 						$expr->append($addBraces . ' ?');
 						break;
 					}
 
 					$rescue = [$res->tokens, $expr->tokens, $tokens->position, $addBraces];
 
-					if (!$tokens->isNext('->', '::')) {
+					if (!$tokens->isNext('->', '::', '[')) {
 						$expr->prepend('(');
 						$expr->append(' ?? null)' . $addBraces);
 						break;
