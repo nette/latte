@@ -141,6 +141,7 @@ test(function () { // optionalChainingPass
 	Assert::same('$a', formatArgs('$a'));
 	Assert::same('($a ?? null)', formatArgs('$a?'));
 	Assert::same('(($a ?? null))', formatArgs('($a?)'));
+	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp[1])', formatArgs('$foo?[1]'));
 	Assert::same('$var->prop->elem[1]->call(2)->item', formatArgs('$var->prop->elem[1]->call(2)->item'));
 	Assert::same('(($_tmp = $var ?? null) === null ? null : (($_tmp = $_tmp->prop ?? null) === null ? null : (($_tmp = $_tmp->elem[1] ?? null) === null ? null : (($_tmp = $_tmp->call(2) ?? null) === null ? null : ($_tmp->item ?? null)))))', formatArgs('$var?->prop?->elem[1]?->call(2)?->item?'));
 });
