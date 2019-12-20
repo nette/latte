@@ -26,8 +26,15 @@ test('vars', function () {
 
 
 test('indexes', function () {
+	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp[1])', optionalChaining('$foo?[1]'));
 	Assert::same('($foo[1] ?? null)', optionalChaining('$foo[1]?'));
+	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp[1] ?? null))', optionalChaining('$foo?[1]?'));
+	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp[1] ?? null)) + 10', optionalChaining('$foo?[1]? + 10'));
 	Assert::same('(($foo[1] ?? null))', optionalChaining('($foo[1]?)'));
+	Assert::same('((($_tmp = $foo ?? null) === null ? null : $_tmp[1]))', optionalChaining('($foo?[1])'));
+	Assert::same('[(($_tmp = $foo ?? null) === null ? null : ($_tmp[1] ?? null))]', optionalChaining('[$foo?[1]?]'));
+	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp[ ($a ?? null) ] ?? null))', optionalChaining('$foo?[ $a? ]?'));
+	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp[ (($_tmp = $a ?? null) === null ? null : ($_tmp[2] ?? null)) ] ?? null))', optionalChaining('$foo?[ $a?[2]? ]?'));
 });
 
 
@@ -71,17 +78,20 @@ test('mixed', function () {
 	Assert::same('$var->prop->elem[1]->call(2)->item', optionalChaining('$var->prop->elem[1]->call(2)->item'));
 	Assert::same('(($_tmp = $var ?? null) === null ? null : $_tmp->prop->elem[1]->call(2)->item)', optionalChaining('$var?->prop->elem[1]->call(2)->item'));
 	Assert::same('(($_tmp = $var->prop ?? null) === null ? null : $_tmp->elem[1]->call(2)->item)', optionalChaining('$var->prop?->elem[1]->call(2)->item'));
+	Assert::same('(($_tmp = $var->prop->elem ?? null) === null ? null : $_tmp[1]->call(2)->item)', optionalChaining('$var->prop->elem?[1]->call(2)->item'));
 	Assert::same('(($_tmp = $var->prop->elem[1] ?? null) === null ? null : $_tmp->call(2)->item)', optionalChaining('$var->prop->elem[1]?->call(2)->item'));
 	Assert::same('(($_tmp = $var->prop->elem[1]->call(2) ?? null) === null ? null : $_tmp->item)', optionalChaining('$var->prop->elem[1]->call(2)?->item'));
 	Assert::same('($var->prop->elem[1]->call(2)->item ?? null)', optionalChaining('$var->prop->elem[1]->call(2)->item?'));
+	Assert::same(
+		'(($_tmp = $var ?? null) === null ? null : (($_tmp = $_tmp->prop ?? null) === null ? null : (($_tmp = $_tmp->elem ?? null) === null ? null : (($_tmp = $_tmp[1] ?? null) === null ? null : (($_tmp = $_tmp->call(2) ?? null) === null ? null : ($_tmp->item ?? null))))))',
+		optionalChaining('$var?->prop?->elem?[1]?->call(2)?->item?')
+	);
 });
 
 
 test('not allowed', function () {
 	Assert::same('$foo ?(hello)', optionalChaining('$foo?(hello)'));
 	Assert::same('$foo->foo ?(hello)', optionalChaining('$foo->foo?(hello)'));
-
-	Assert::same('$foo ?[1]', optionalChaining('$foo?[1]')); // not allowed due to collision with short ternary
 
 	Assert::same('Class::$prop?', optionalChaining('Class::$prop?'));
 	Assert::same('$$var?', optionalChaining('$$var?'));
