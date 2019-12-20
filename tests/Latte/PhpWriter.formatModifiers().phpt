@@ -70,6 +70,7 @@ test('depth', function () {
 test('optionalChainingPass', function () {
 	Assert::same('($this->filters->mod)(@, ($a ?? null))', formatModifiers('@', 'mod:$a?'));
 	Assert::same('($this->filters->mod)(@, (($a ?? null)))', formatModifiers('@', 'mod:($a?)'));
+	Assert::same('($this->filters->mod)(@, (($_tmp = $foo ?? null) === null ? null : $_tmp[1]))', formatModifiers('@', 'mod:$foo?[1]'));
 	Assert::same('($this->filters->mod)(@, (($_tmp = $var ?? null) === null ? null : (($_tmp = $_tmp->prop ?? null) === null ? null : (($_tmp = $_tmp->elem[1] ?? null) === null ? null : (($_tmp = $_tmp->call(2) ?? null) === null ? null : ($_tmp->item ?? null))))))', formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item?'));
 });
 
