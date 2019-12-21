@@ -259,32 +259,23 @@ class PhpWriter
 	public function shortTernaryPass(MacroTokens $tokens): MacroTokens
 	{
 		$res = new MacroTokens;
-		$inTernary = $tmp = [];
-		$errors = 0;
+		$inTernary = [];
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('?') && $tokens->isNext() && !$tokens->isNext(',', ')', ']', '|')) {
+			if ($tokens->isCurrent('?') && $tokens->isNext() && !$tokens->isNext(',', ')', ']', '|', '[')) {
 				$inTernary[] = $tokens->depth;
-				$tmp[] = $tokens->isNext('[');
 
 			} elseif ($tokens->isCurrent(':')) {
 				array_pop($inTernary);
-				array_pop($tmp);
 
 			} elseif ($tokens->isCurrent(',', ')', ']', '|') && end($inTernary) === $tokens->depth + $tokens->isCurrent(')', ']')) {
 				$res->append(' : null');
 				array_pop($inTernary);
-				$errors += array_pop($tmp);
 			}
 			$res->append($tokens->currentToken());
 		}
 
 		if ($inTernary) {
-			$errors += array_pop($tmp);
 			$res->append(' : null');
-		}
-		if ($errors) {
-			$tokens->reset();
-			trigger_error('Short ternary operator requires parentheses around array in ' . $tokens->joinAll(), E_USER_DEPRECATED);
 		}
 		return $res;
 	}
