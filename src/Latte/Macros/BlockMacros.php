@@ -22,6 +22,9 @@ use Latte\Runtime\SnippetDriver;
  */
 class BlockMacros extends MacroSet
 {
+	/** @var string */
+	public $snippetAttribute = 'id';
+
 	/** @var array */
 	private $namedBlocks = [];
 
@@ -240,12 +243,12 @@ class BlockMacros extends MacroSet
 				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . SnippetDriver::TYPE_DYNAMIC . '");';
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' id=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
+					$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write($enterCode);
 				}
 				$node->closingCode .= "\n</div>";
 				$this->checkExtraArgs($node);
-				return $writer->write("?>\n<div id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
+				return $writer->write("?>\n<div $this->snippetAttribute=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
 
 			} else {
 				$node->data->leave = true;
@@ -275,8 +278,8 @@ class BlockMacros extends MacroSet
 
 		// static snippet/snippetArea
 		if ($node->name === 'snippet' || $node->name === 'snippetArea') {
-			if ($node->prefix && isset($node->htmlNode->attrs['id'])) {
-				throw new CompileException('Cannot combine HTML attribute id with n:snippet.');
+			if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
+				throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
 			}
 			$node->data->name = $name = '_' . $name;
 		}
@@ -306,11 +309,11 @@ class BlockMacros extends MacroSet
 				if (isset($node->htmlNode->macroAttrs['foreach'])) {
 					trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
 				}
-				$node->attrCode = $writer->write('<?php echo \' id="\' . htmlSpecialChars($this->global->snippetDriver->getHtmlId(%var)) . \'"\' ?>', (string) substr($name, 1));
+				$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>", (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
 			$this->checkExtraArgs($node);
-			return $writer->write("?>\n<div id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
+			return $writer->write("?>\n<div $this->snippetAttribute=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
 				(string) substr($name, 1), $name
 			);
 
