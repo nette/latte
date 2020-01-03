@@ -220,6 +220,12 @@ class Compiler
 	}
 
 
+	public function getMacros(): array
+	{
+		return $this->macros;
+	}
+
+
 	public function getFunctions(): array
 	{
 		return $this->functions;
