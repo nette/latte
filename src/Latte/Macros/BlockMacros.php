@@ -229,6 +229,10 @@ class BlockMacros extends MacroSet
 
 		} elseif (strpos($name, '$') !== false) { // dynamic block/snippet
 			if ($node->name === 'snippet') {
+				if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
+					throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
+				}
+
 				for (
 					$parent = $node->parentNode;
 					$parent && !($parent->name === 'snippet' || $parent->name === 'snippetArea');
