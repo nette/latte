@@ -67,6 +67,9 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('class', null, null, [$me, 'macroClass']);
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
+
+		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
 	}
 
 
@@ -511,6 +514,38 @@ class CoreMacros extends MacroSet
 
 		if (strpos($node->args, '/') && !$node->htmlNode) {
 			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) header(%var);', "Content-Type: $node->args");
+		}
+	}
+
+
+	/**
+	 * {varType type $var}
+	 */
+	public function macroVarType(MacroNode $node)
+	{
+		if ($node->modifiers) {
+			$node->setArgs($node->args . $node->modifiers);
+		}
+
+		$type = $node->tokenizer->fetchWord();
+		$variable = $node->tokenizer->fetchWord();
+		if (!$type || !$variable || !Helpers::startsWith($variable, '$')) {
+			throw new CompileException('Unexpected content, expecting {varType type $var}.');
+		}
+	}
+
+
+	/**
+	 * {templateType ClassName}
+	 */
+	public function macroTemplateType(MacroNode $node)
+	{
+		if (!$this->getCompiler()->isInHead()) {
+			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
+		} elseif ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+		} elseif (!($type = $node->tokenizer->fetchWord())) {
+			throw new CompileException('Missing class name in {templateType} macro.');
 		}
 	}
 }
