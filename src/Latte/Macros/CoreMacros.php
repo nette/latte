@@ -15,7 +15,8 @@ use Latte\Engine;
 use Latte\Helpers;
 use Latte\MacroNode;
 use Latte\PhpWriter;
-
+use Nette\InvalidStateException;
+use Nette\Utils\Reflection;
 
 /**
  * Basic macros for Latte.
@@ -36,6 +37,7 @@ use Latte\PhpWriter;
  * - {debugbreak}
  * - {contentType ...} HTTP Content-Type header
  * - {l} {r} to display { }
+ * - {varType type $var} {templateType ClassWithTypes} type hints
  */
 class CoreMacros extends MacroSet
 {
@@ -84,6 +86,9 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('class', null, null, [$me, 'macroClass']);
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
+
+		$me->addMacro('varType', [$me, 'macroVarType']);
+		$me->addMacro('templateType', [$me, 'macroTemplateType']);
 	}
 
 
@@ -511,5 +516,63 @@ class CoreMacros extends MacroSet
 		if (strpos($node->args, '/') && !$node->htmlNode) {
 			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) header(%var);', "Content-Type: $node->args");
 		}
+	}
+
+
+	/**
+	 * {varType type $var}
+	 */
+	public function macroVarType(MacroNode $node, PhpWriter $writer)
+	{
+		$type = $node->args;
+		$var = $node->modifiers;
+
+		if (!$type || !$var) {
+			throw new CompileException('Missing variable type or name in ' . $node->getNotation());
+		}
+
+		return $writer->write(sprintf('/** @var %s %s */', $type, strpos($var, '$') === 0 ? $var : '$' . $var));
+	}
+
+
+	/**
+	 * {templateType ClassWithTypes}
+	 */
+	public function macroTemplateType(MacroNode $node, PhpWriter $writer)
+	{
+		$type = $node->args;
+		if (!class_exists($type) && !interface_exists($type)) {
+			throw new CompileException('Unknown type ' . $type . ' in ' . $node->getNotation() . '. Expected name of class or interface.');
+		}
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+		}
+
+		$ref = new \ReflectionClass($type);
+		$annotations = '';
+
+		foreach ($ref->getProperties(\ReflectionProperty::IS_PUBLIC) as $refProp) {
+			$type = Reflection::getPropertyType($refProp) ?? self::parseAnnotation($refProp, 'var') ?? 'mixed';
+			$annotations .= sprintf('/** @var %s $%s */', $type, $refProp->getName());
+		}
+
+		return $writer->write($annotations);
+	}
+
+
+	/**
+	 * Returns an annotation value.
+	 * @param  \ReflectionFunctionAbstract|\ReflectionProperty|\ReflectionClass  $ref
+	 */
+	private static function parseAnnotation(\Reflector $ref, string $name): ?string
+	{
+		if (!Reflection::areCommentsAvailable()) {
+			throw new InvalidStateException('You have to enable phpDoc comments in opcode cache.');
+		}
+		$re = '#[\s*]@' . preg_quote($name, '#') . '(?=\s|$)(?:[ \t]+([^@\s]\S*))?#';
+		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
+			return $m[1] ?? '';
+		}
+		return null;
 	}
 }
