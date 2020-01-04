@@ -250,7 +250,9 @@ class CoreMacros extends MacroSet
 	public function macroCapture(MacroNode $node, PhpWriter $writer)
 	{
 		$variable = $node->tokenizer->fetchWord();
-		if (!Helpers::startsWith($variable, '$')) {
+		if (!$variable) {
+			throw new CompileException('Missing variable in {capture} macro.');
+		} elseif (!Helpers::startsWith($variable, '$')) {
 			throw new CompileException("Invalid capture block variable '$variable'");
 		}
 		$this->checkExtraArgs($node);

@@ -104,7 +104,7 @@ class BlockMacros extends MacroSet
 	{
 		$node->replaced = false;
 		$destination = $node->tokenizer->fetchWord(); // destination [,] [params]
-		if (!preg_match('~#|[\w-]+$~DA', $destination)) {
+		if (!$destination || !preg_match('~#|[\w-]+$~DA', $destination)) {
 			return false;
 		}
 
