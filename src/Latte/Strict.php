@@ -17,7 +17,6 @@ use LogicException;
  */
 trait Strict
 {
-
 	/**
 	 * Call to undefined method.
 	 * @throws LogicException

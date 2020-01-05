@@ -299,9 +299,7 @@ class Engine
 	}
 
 
-	/**
-	 * @return static
-	 */
+	/** @return static */
 	public function setContentType(string $type)
 	{
 		$this->contentType = $type;
@@ -362,9 +360,7 @@ class Engine
 	}
 
 
-	/**
-	 * @return static
-	 */
+	/** @return static */
 	public function setLoader(ILoader $loader)
 	{
 		$this->loader = $loader;

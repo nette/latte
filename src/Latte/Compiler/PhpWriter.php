@@ -172,9 +172,7 @@ class PhpWriter
 	}
 
 
-	/**
-	 * @throws CompileException
-	 */
+	/** @throws CompileException */
 	public function validateTokens(MacroTokens $tokens): void
 	{
 		$brackets = [];

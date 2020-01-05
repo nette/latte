@@ -203,9 +203,7 @@ class Compiler
 	}
 
 
-	/**
-	 * @return static
-	 */
+	/** @return static */
 	public function setContentType(string $type)
 	{
 		$this->contentType = $type;

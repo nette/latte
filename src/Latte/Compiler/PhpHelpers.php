@@ -16,7 +16,6 @@ namespace Latte;
  */
 class PhpHelpers
 {
-
 	/**
 	 * Optimizes code readability.
 	 */
