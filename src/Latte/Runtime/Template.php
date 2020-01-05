@@ -191,9 +191,6 @@ class Template
 			return;
 		}
 
-		// old accumulators for back compatibility
-		$this->params['_l'] = new \stdClass;
-		$this->params['_g'] = $this->global;
 		if (
 			isset($this->global->snippetDriver)
 			&& $this->global->snippetBridge->isSnippetMode()
