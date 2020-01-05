@@ -15,7 +15,6 @@ namespace Latte;
  */
 interface ILoader
 {
-
 	/**
 	 * Returns template source code.
 	 */

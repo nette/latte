@@ -341,9 +341,7 @@ class Parser
 	}
 
 
-	/**
-	 * @return static
-	 */
+	/** @return static */
 	public function setContext(string $context, $quote = null)
 	{
 		$this->context = [$context, $quote];

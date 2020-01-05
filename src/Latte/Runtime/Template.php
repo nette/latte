@@ -273,9 +273,7 @@ class Template
 	}
 
 
-	/**
-	 * @internal
-	 */
+	/** @internal */
 	protected function checkBlockContentType(string $current, string $name): void
 	{
 		$expected = &$this->blockTypes[$name];

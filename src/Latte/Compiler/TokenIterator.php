@@ -170,9 +170,7 @@ class TokenIterator
 	}
 
 
-	/**
-	 * @return static
-	 */
+	/** @return static */
 	public function reset()
 	{
 		$this->position = -1;
