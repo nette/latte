@@ -186,10 +186,6 @@ class Template
 			}
 		}
 
-		// old accumulators for back compatibility
-		$this->params['_l'] = new \stdClass;
-		$this->params['_g'] = $this->global;
-		$this->params['_b'] = (object) ['blocks' => &$this->blockQueue, 'types' => &$this->blockTypes];
 		if (
 			isset($this->global->snippetDriver)
 			&& $this->global->snippetBridge->isSnippetMode()
