@@ -75,4 +75,6 @@ test(function () { // ternary
 	Assert::same('(($_tmp = $a ?? null) === null ? null : $_tmp->foo) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
 	Assert::same('(($_tmp = $a ?? null) === null ? null : ($_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
 	Assert::same('($a->foo ?? null) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
+
+	Assert::same('$a ? \Foo::BAR : \Foo::BAR', optionalChaining('$a ? \Foo::BAR : \Foo::BAR'));
 });
