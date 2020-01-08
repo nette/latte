@@ -25,6 +25,9 @@ class CoreMacros extends MacroSet
 	/** @var array */
 	private $overwrittenVars;
 
+	/** @var string|null */
+	private $printTemplate;
+
 
 	public static function install(Latte\Compiler $compiler): void
 	{
@@ -70,6 +73,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('templatePrint', [$me, 'macroTemplatePrint'], null, null, self::ALLOWED_IN_HEAD);
 	}
 
 
@@ -89,6 +93,10 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
+		if ($this->printTemplate) {
+			return ["(new Latte\\Runtime\\Blueprint)->printClass(\$this, $this->printTemplate); exit;"];
+		}
+
 		$code = '';
 		foreach ($this->overwrittenVars as $var => $lines) {
 			$s = var_export($var, true);
@@ -547,5 +555,14 @@ class CoreMacros extends MacroSet
 		} elseif (!($type = $node->tokenizer->fetchWord())) {
 			throw new CompileException('Missing class name in {templateType} macro.');
 		}
+	}
+
+
+	/**
+	 * {templatePrint [ClassName]}
+	 */
+	public function macroTemplatePrint(MacroNode $node)
+	{
+		$this->printTemplate = var_export($node->tokenizer->fetchWord() ?: null, true);
 	}
 }
