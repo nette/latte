@@ -70,6 +70,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('templatePrint', [$me, 'macroTemplatePrint'], null, null, self::ALLOWED_IN_HEAD);
 	}
 
 
@@ -544,5 +545,15 @@ class CoreMacros extends MacroSet
 		} elseif (!($type = $node->tokenizer->fetchWord())) {
 			throw new CompileException('Missing class name in {templateType} macro.');
 		}
+	}
+
+
+	/**
+	 * {templatePrint [ClassName]}
+	 */
+	public function macroTemplatePrint(MacroNode $node, PhpWriter $writer)
+	{
+		$class = $node->tokenizer->fetchWord() ?: null;
+		return $writer->write('@ob_end_clean(); header("Content-Type: text/plain"); echo (new Latte\Runtime\TemplatePrinter)->print($this, %var); exit;', $class);
 	}
 }

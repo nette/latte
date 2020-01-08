@@ -23,12 +23,14 @@
 		"nette/tester": "~2.0",
 		"tracy/tracy": "^2.3",
 		"nette/utils": "^3.0",
-		"phpstan/phpstan": "^0.12"
+		"phpstan/phpstan": "^0.12",
+		"nette/php-generator": "^3.3.4"
 	},
 	"suggest": {
 		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
 		"ext-fileinfo": "to use filter |datastream",
-		"nette/utils": "to use filter |webalize"
+		"nette/utils": "to use filter |webalize",
+		"nette/php-generator": "to use tag {templatePrint}"
 	},
 	"conflict": {
 		"nette/application": "<2.4.1"
