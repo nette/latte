@@ -415,6 +415,10 @@ class CoreMacros extends MacroSet
 		$tokens = $writer->preprocess();
 		$res = new Latte\MacroTokens;
 		while ($tokens->nextToken()) {
+			if ($var && $tokens->isCurrent($tokens::T_SYMBOL)) {
+				trigger_error("Inside macro {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
+			}
+
 			if ($var && $tokens->isCurrent($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 				if ($node->name === 'default') {
 					$res->append("'" . ltrim($tokens->currentValue(), '$') . "'");
@@ -424,6 +428,9 @@ class CoreMacros extends MacroSet
 				$var = null;
 
 			} elseif ($tokens->isCurrent('=', '=>') && $tokens->depth === 0) {
+				if ($tokens->isCurrent('=>')) {
+					trigger_error("Inside macro {{$node->name} {$node->args}} should be => replaced with =", E_USER_DEPRECATED);
+				}
 				$res->append($node->name === 'default' ? '=>' : '=');
 				$var = false;
 
