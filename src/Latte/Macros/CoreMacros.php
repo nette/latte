@@ -70,6 +70,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('templatePrint', [$me, 'macroTemplatePrint'], null, null, self::ALLOWED_IN_HEAD);
 	}
 
 
@@ -544,5 +545,39 @@ class CoreMacros extends MacroSet
 		} elseif (!($type = $node->tokenizer->fetchWord())) {
 			throw new CompileException('Missing class name in {templateType} macro.');
 		}
+	}
+
+
+	/**
+	 * {templatePrint [ClassName]}
+	 */
+	public function macroTemplatePrint(MacroNode $node, PhpWriter $writer)
+	{
+		if (!$this->getCompiler()->isInHead()) {
+			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
+		} elseif ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+		}
+		$class = $node->tokenizer->fetchWord() ?: 'Template';
+		return $writer->write(__CLASS__ . '::macroTemplatePrintRuntime($this, %var)', $class);
+	}
+
+
+	/**
+	 * Generates blueprint of template class.
+	 */
+	public static function macroTemplatePrintRuntime(Latte\Runtime\Template $template, string $class): void
+	{
+		ob_end_clean();
+		header('Content-Type: text/plain');
+		$types = array_map([Helpers::class, 'getType'], $template->getParameters());
+		echo
+			"class $class\n"
+			. "{\n" . Helpers::printProperties($types, true) . "\n}\n"
+			. "\n\n"
+			. "/**\n" . Helpers::printProperties($types, false) . "\n */\n"
+			. "class $class\n"
+			. "{\n}\n";
+		exit;
 	}
 }

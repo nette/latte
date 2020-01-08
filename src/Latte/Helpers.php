@@ -67,4 +67,38 @@ class Helpers
 	{
 		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
+
+
+	public static function printProperties(array $types, bool $asProps): string
+	{
+		$keys = array_keys($types);
+		if ($asProps) {
+			$items = PHP_VERSION_ID >= 70400
+				? array_map(function ($key, $type) { return "\tpublic $type $$key;"; }, $keys, $types)
+				: array_map(function ($key, $type) { return "\t/** @var $type */\n\tpublic $$key;\n"; }, $keys, $types);
+		} else {
+			$items = array_map(function ($key, $type) { return " * @property $type $$key"; }, $keys, $types);
+		}
+		return implode("\n", $items);
+	}
+
+
+	public static function getType($value): string
+	{
+		if (is_object($value)) {
+			return '\\' . get_class($value);
+		} elseif (is_int($value)) {
+			return 'int';
+		} elseif (is_float($value)) {
+			return 'float';
+		} elseif (is_string($value)) {
+			return 'string';
+		} elseif (is_bool($value)) {
+			return 'bool';
+		} elseif (is_array($value)) {
+			return 'array';
+		} else {
+			return '';
+		}
+	}
 }
