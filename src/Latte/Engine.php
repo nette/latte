@@ -73,20 +73,22 @@ class Engine
 
 	/**
 	 * Renders template to output.
+	 * @param  object|array  $params
 	 */
-	public function render(string $name, array $params = [], string $block = null): void
+	public function render(string $name, $params = [], string $block = null): void
 	{
-		$this->createTemplate($name, $params + ($block ? ['_renderblock' => $block] : []))
+		$this->createTemplate($name, (array) $params + ($block ? ['_renderblock' => $block] : []))
 			->render();
 	}
 
 
 	/**
 	 * Renders template to string.
+	 * @param  object|array  $params
 	 */
-	public function renderToString(string $name, array $params = [], string $block = null): string
+	public function renderToString(string $name, $params = [], string $block = null): string
 	{
-		$template = $this->createTemplate($name, $params + ($block ? ['_renderblock' => $block] : []));
+		$template = $this->createTemplate($name, (array) $params + ($block ? ['_renderblock' => $block] : []));
 		return $template->capture([$template, 'render']);
 	}
 
