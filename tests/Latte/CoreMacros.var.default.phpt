@@ -27,13 +27,21 @@ test(function () use ($compiler) { // {var ... }
 	Assert::same('<?php $var1 = 123; $var2 = "nette framework"; ?>', $compiler->expandMacro('var', '$var1 = 123, $var2 = "nette framework"', '')->openingCode);
 	Assert::same('<?php $temp->var1 = 123; ?>', $compiler->expandMacro('var', '$temp->var1 = 123', '')->openingCode);
 
+	// types
+	Assert::same('<?php ; ; ?>', $compiler->expandMacro('var', 'int var, string var2', '')->openingCode); // invalid syntax
+	Assert::same('<?php $temp->var1 = 123; ?>', $compiler->expandMacro('var', 'int $temp->var1 = 123', '')->openingCode);
+	Assert::same('<?php  $temp->var1 = 123; ?>', $compiler->expandMacro('var', 'null|int|string[] $temp->var1 = 123', '')->openingCode);
+	Assert::same('<?php  $var1 = 123;  $var2 = "nette framework"; ?>', $compiler->expandMacro('var', 'int|string[] $var1 = 123, ?class $var2 = "nette framework"', '')->openingCode);
+	Assert::same('<?php  $var1 = 123;  $var2 = 456; ?>', $compiler->expandMacro('var', 'A\B $var1 = 123, ?A\B $var2 = 456', '')->openingCode);
+	Assert::same('<?php  $var1 = 123;  $var2 = 456; ?>', $compiler->expandMacro('var', '\A\B $var1 = 123, ?\A\B $var2 = 456', '')->openingCode);
+
+	// errors
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('var', '$var => "123', '');
 	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 9.');
 
-	Assert::exception(function () use ($compiler) {
-		$compiler->expandMacro('var', '$var => 123', '|filter');
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {var}');
+	// preprocess
+	Assert::same("<?php \$temp->var1 = true ? 'a' : null; ?>", $compiler->expandMacro('var', '$temp->var1 = true ? a', '')->openingCode);
 });
 
 
@@ -46,11 +54,24 @@ test(function () use ($compiler) { // {default ...}
 	Assert::same("<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP) ?>", @$compiler->expandMacro('default', 'var1 = 123, $var2 => "nette framework"', '')->openingCode); // @ deprecated syntax
 	Assert::same("<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var1 = 123, $var2 = "nette framework"', '')->openingCode);
 
+	// types
+	Assert::same('<?php extract([, ], EXTR_SKIP) ?>', $compiler->expandMacro('default', 'int var, string var2', '')->openingCode); // invalid syntax
+	Assert::same("<?php extract([ 'var' => 123], EXTR_SKIP) ?>", $compiler->expandMacro('default', 'null|int|string[] $var = 123', '')->openingCode);
+	Assert::same("<?php extract([ 'var1' => 123,  'var2' => \"nette framework\"], EXTR_SKIP) ?>", $compiler->expandMacro('default', 'int|string[] $var1 = 123, ?class $var2 = "nette framework"', '')->openingCode);
+
+	// errors
 	Assert::exception(function () use ($compiler) {
 		$compiler->expandMacro('default', '$temp->var1 = 123', '');
 	}, Latte\CompileException::class, "Unexpected '->' in {default \$temp->var1 = 123}");
 
-	Assert::exception(function () use ($compiler) {
-		$compiler->expandMacro('default', '$var => 123', '|filter');
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {default}');
+	// preprocess
+	Assert::same("<?php extract(['var1' => true ? 'a' : null], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var1 = true ? a', '')->openingCode);
+});
+
+
+test(function () {
+	$latte = new Latte\Engine;
+	$latte->setLoader(new Latte\Loaders\StringLoader);
+	Assert::contains('$var = 1;', $latte->compile('{var ?\Nm\Class $var = 1}'));
+	Assert::contains('$var = 1;', $latte->compile('{var int|null $var = 1}'));
 });
