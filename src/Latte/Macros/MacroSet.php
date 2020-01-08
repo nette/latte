@@ -107,9 +107,12 @@ class MacroSet implements Latte\IMacro
 			}
 			$node->context[1] = Latte\Compiler::CONTEXT_HTML_TEXT;
 
+		} elseif ($node->empty && $node->prefix) {
+			return false;
+
 		} elseif ($begin) {
 			$res = $this->compile($node, $begin);
-			if ($res === false || ($node->empty && $node->prefix)) {
+			if ($res === false) {
 				return false;
 			} elseif (!$node->openingCode && is_string($res) && $res !== '') {
 				$node->openingCode = "<?php $res ?>";
