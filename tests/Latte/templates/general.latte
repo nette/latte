@@ -109,10 +109,10 @@ var prop2 = {$people};
 
 
 {default $varx = 2}{$varx}
-{default varx => 4}{$varx}
+{default $varx = 4}{$varx}
 
-{var varx => 8}{$varx}
-{var $varx => 9}{$varx}
+{var $varx = 8}{$varx}
+{var $varx = 9}{$varx}
 
 {var $now = new DateTime}
 {var $foo = $now->format('u')}
