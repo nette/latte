@@ -412,11 +412,16 @@ class CoreMacros extends MacroSet
 		}
 
 		$var = true;
-		$tokens = $writer->preprocess();
+		$tokens = $node->tokenizer;
 		$res = new Latte\MacroTokens;
 		while ($tokens->nextToken()) {
-			if ($var && $tokens->isCurrent($tokens::T_SYMBOL)) {
+			if ($var && $tokens->isCurrent($tokens::T_SYMBOL) && ($tokens->isNext(',', '=>', '=') || !$tokens->isNext())) {
 				trigger_error("Inside macro {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
+
+			} elseif ($var && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
+				$tokens->nextToken();
+				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', '?', 'null');
+				continue;
 			}
 
 			if ($var && $tokens->isCurrent($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
@@ -451,6 +456,7 @@ class CoreMacros extends MacroSet
 		if ($var === null) {
 			$res->append($node->name === 'default' ? '=>null' : '=null');
 		}
+		$res = $writer->preprocess($res);
 		$out = $writer->quotingPass($res)->joinAll();
 		return $node->name === 'default' ? "extract([$out], EXTR_SKIP)" : "$out;";
 	}
