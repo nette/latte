@@ -39,12 +39,12 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML text.
-	 * @param  mixed  $s  plain text or IHtmlString
+	 * @param  mixed  $s  plain text or HtmlString
 	 * @return string HTML
 	 */
 	public static function escapeHtmlText($s): string
 	{
-		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
+		return $s instanceof HtmlString || $s instanceof \Nette\Utils\HtmlString
 			? $s->__toString(true)
 			: htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	}
@@ -57,7 +57,7 @@ class Filters
 	 */
 	public static function escapeHtmlAttr($s, bool $double = true): string
 	{
-		$double = $double && $s instanceof IHtmlString ? false : $double;
+		$double = $double && $s instanceof HtmlString ? false : $double;
 		$s = (string) $s;
 		if (strpos($s, '`') !== false && strpbrk($s, ' <>"\'') === false) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
@@ -158,7 +158,7 @@ class Filters
 	 */
 	public static function escapeJs($s): string
 	{
-		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlString || $s instanceof \Nette\Utils\HtmlString) {
 			$s = $s->__toString(true);
 		}
 

@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-class Test implements Latte\Runtime\IHtmlString
+class Test implements Latte\Runtime\HtmlString
 {
 	public function __toString(): string
 	{
