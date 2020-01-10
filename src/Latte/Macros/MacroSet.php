@@ -15,9 +15,9 @@ use Latte\MacroNode;
 
 
 /**
- * Base IMacro implementation. Allows add multiple macros.
+ * Base Macro implementation. Allows add multiple macros.
  */
-class MacroSet implements Latte\IMacro
+class MacroSet implements Latte\Macro
 {
 	use Latte\Strict;
 

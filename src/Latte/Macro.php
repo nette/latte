@@ -13,7 +13,7 @@ namespace Latte;
 /**
  * Latte macro.
  */
-interface IMacro
+interface Macro
 {
 	const
 		AUTO_EMPTY = 4,
@@ -45,3 +45,6 @@ interface IMacro
 	 */
 	function nodeClosed(MacroNode $node);
 }
+
+
+interface_exists(IMacro::class);
