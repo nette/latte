@@ -56,13 +56,13 @@ class Compiler
 	/** @var int  position on source template */
 	private $position;
 
-	/** @var array of [name => IMacro[]] */
+	/** @var array of [name => Macro[]] */
 	private $macros = [];
 
 	/** @var string[] of orig name */
 	private $functions = [];
 
-	/** @var int[] IMacro flags */
+	/** @var int[] Macro flags */
 	private $flags;
 
 	/** @var HtmlNode|null */
@@ -97,13 +97,13 @@ class Compiler
 
 
 	/**
-	 * Adds new macro with IMacro flags.
+	 * Adds new macro with Macro flags.
 	 * @return static
 	 */
-	public function addMacro(string $name, IMacro $macro, int $flags = null)
+	public function addMacro(string $name, Macro $macro, int $flags = null)
 	{
 		if (!isset($this->flags[$name])) {
-			$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
+			$this->flags[$name] = $flags ?: Macro::DEFAULT_FLAGS;
 		} elseif ($flags && $this->flags[$name] !== $flags) {
 			throw new \LogicException("Incompatible flags for macro $name.");
 		}
@@ -150,7 +150,7 @@ class Compiler
 
 		foreach ($tokens as $this->position => $token) {
 			if ($this->inHead && !($token->type === $token::COMMENT
-				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & IMacro::ALLOWED_IN_HEAD
+				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & Macro::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
 				$this->inHead = false;
@@ -166,7 +166,7 @@ class Compiler
 		}
 
 		while ($this->macroNode) {
-			if (~$this->flags[$this->macroNode->name] & IMacro::AUTO_CLOSE) {
+			if (~$this->flags[$this->macroNode->name] & Macro::AUTO_CLOSE) {
 				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
 			}
 			$this->closeMacro($this->macroNode->name);
@@ -314,7 +314,7 @@ class Compiler
 		if ($token->closing) {
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
-			if (!$token->empty && ($this->flags[$token->name] ?? null) & IMacro::AUTO_EMPTY) {
+			if (!$token->empty && ($this->flags[$token->name] ?? null) & Macro::AUTO_EMPTY) {
 				$pos = $this->position;
 				while (($t = $this->tokens[++$pos] ?? null)
 					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)

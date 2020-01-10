@@ -10,9 +10,12 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 
-interface IHtmlString
+interface HtmlString
 {
 
 	/** @return string in HTML format */
 	function __toString(): string;
 }
+
+
+interface_exists(IHtmlString::class);

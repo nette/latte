@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-class SnippetBridgeMock implements Latte\Runtime\ISnippetBridge
+class SnippetBridgeMock implements Latte\Runtime\SnippetBridge
 {
 	public $snippetMode = true;
 

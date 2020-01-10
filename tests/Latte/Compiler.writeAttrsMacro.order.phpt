@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Latte\IMacro;
+use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
@@ -10,7 +10,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-class TestMacro implements IMacro
+class TestMacro implements Macro
 {
 	private $name;
 
@@ -46,7 +46,7 @@ class TestMacro implements IMacro
 }
 
 
-class SkipMacro implements IMacro
+class SkipMacro implements Macro
 {
 	public function initialize()
 	{

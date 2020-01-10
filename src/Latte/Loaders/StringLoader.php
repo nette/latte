@@ -15,7 +15,7 @@ use Latte;
 /**
  * Template loader.
  */
-class StringLoader implements Latte\ILoader
+class StringLoader implements Latte\Loader
 {
 	use Latte\Strict;
 

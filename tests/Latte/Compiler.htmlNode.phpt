@@ -7,7 +7,7 @@
 declare(strict_types=1);
 
 use Latte\Compiler;
-use Latte\IMacro;
+use Latte\Macro;
 use Latte\MacroNode;
 use Latte\Parser;
 use Tester\Assert;
@@ -16,7 +16,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-class MockMacro implements IMacro
+class MockMacro implements Macro
 {
 	public function initialize()
 	{
