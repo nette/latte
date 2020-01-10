@@ -316,7 +316,7 @@ class Filters
 	 * @param  bool  $strip  stripping mode
 	 * @return string HTML
 	 */
-	public static function spacelessHtml(string $s, int $phase = null, bool &$strip = true): string
+	public static function spacelessHtml(string $s, ?int $phase = null, bool &$strip = true): string
 	{
 		if ($phase & PHP_OUTPUT_HANDLER_START) {
 			$s = ltrim($s);
@@ -324,18 +324,25 @@ class Filters
 		if ($phase & PHP_OUTPUT_HANDLER_FINAL) {
 			$s = rtrim($s);
 		}
-		return preg_replace_callback(
+		$return = (string) preg_replace_callback( // Other cases
 			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#si',
-			function ($m) use (&$strip) {
+			static function (array $m) use (&$strip): string {
 				if (empty($m[2])) {
-					return $strip ? ' ' : $m[0];
-				} else {
-					$strip = !empty($m[1]);
-					return $m[0];
+					return (string) $strip ? ' ' : $m[0];
 				}
+				$strip = !empty($m[1]);
+				return (string) $m[0];
 			},
 			$s
 		);
+		$return = (string) preg_replace_callback( // <script> for include JS file
+			'/<script\s*([^>]+?)>(?:\s*)<\/script>/',
+			static function (array $m) use (&$strip): string {
+				return $strip ? '<script ' . trim(preg_replace('/\s+/', ' ', $m[1])) . '></script>' : (string) $m[0];
+			},
+			$return
+		);
+		return $return;
 	}
 
 
