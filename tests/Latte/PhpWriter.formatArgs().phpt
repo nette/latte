@@ -63,6 +63,8 @@ test(function () { // short ternary operators
 	Assert::same("'a'?", formatArgs('a?')); // value must exists
 	Assert::same('$a ?(1) : null', formatArgs('$a?(1)')); // with braces
 	Assert::same('$a ? \Foo::BAR : null', formatArgs('$a ? \Foo::BAR'));
+	Assert::same('$c ?: ($a ?: $b)', formatArgs('$c ?: ($a ?: $b)'));
+	Assert::same('$c ? ($a ?: $b) : null', formatArgs('$c ? ($a ?: $b)'));
 });
 
 

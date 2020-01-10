@@ -254,7 +254,7 @@ class PhpWriter
 		$inTernary = $tmp = [];
 		$errors = 0;
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('?') && $tokens->isNext() && !$tokens->isNext(':', ',', ')', ']', '|')) {
+			if ($tokens->isCurrent('?') && $tokens->isNext() && !$tokens->isNext(',', ')', ']', '|')) {
 				$inTernary[] = $tokens->depth;
 				$tmp[] = $tokens->isNext('[');
 
