@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Latte\IMacro;
+use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
 
-class TestMacro implements IMacro
+class TestMacro implements Macro
 {
 	public function initialize()
 	{
@@ -36,7 +36,7 @@ class TestMacro implements IMacro
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->getCompiler()->addMacro('test', new TestMacro, IMacro::AUTO_CLOSE);
+$latte->getCompiler()->addMacro('test', new TestMacro, Macro::AUTO_CLOSE);
 
 Assert::match(
 	'%A%openingclosing%A%',

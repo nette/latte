@@ -39,7 +39,7 @@ class Engine
 	/** @var Compiler|null */
 	private $compiler;
 
-	/** @var ILoader|null */
+	/** @var Loader|null */
 	private $loader;
 
 	/** @var Runtime\FilterExecutor */
@@ -271,7 +271,7 @@ class Engine
 	 * Adds new macro.
 	 * @return static
 	 */
-	public function addMacro(string $name, IMacro $macro)
+	public function addMacro(string $name, Macro $macro)
 	{
 		$this->getCompiler()->addMacro($name, $macro);
 		return $this;
@@ -371,14 +371,14 @@ class Engine
 
 
 	/** @return static */
-	public function setLoader(ILoader $loader)
+	public function setLoader(Loader $loader)
 	{
 		$this->loader = $loader;
 		return $this;
 	}
 
 
-	public function getLoader(): ILoader
+	public function getLoader(): Loader
 	{
 		if (!$this->loader) {
 			$this->loader = new Loaders\FileLoader;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Latte\IMacro;
+use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
 
-class TestMacro implements IMacro
+class TestMacro implements Macro
 {
 	public $inHead;
 
@@ -59,7 +59,7 @@ test(function () {
 
 	$macro = new TestMacro;
 	$macro->compiler = $latte->getCompiler();
-	$latte->getCompiler()->addMacro('test_head', $macro, IMacro::ALLOWED_IN_HEAD);
+	$latte->getCompiler()->addMacro('test_head', $macro, Macro::ALLOWED_IN_HEAD);
 
 	$latte->compile('{test_head}');
 	Assert::true($macro->inHead);

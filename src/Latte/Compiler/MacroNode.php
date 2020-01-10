@@ -22,7 +22,7 @@ class MacroNode
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = 'none';
 
-	/** @var IMacro */
+	/** @var Macro */
 	public $macro;
 
 	/** @var string */
@@ -86,7 +86,7 @@ class MacroNode
 	public $saved;
 
 
-	public function __construct(IMacro $macro, string $name, string $args = null, string $modifiers = null, self $parentNode = null, HtmlNode $htmlNode = null, string $prefix = null)
+	public function __construct(Macro $macro, string $name, string $args = null, string $modifiers = null, self $parentNode = null, HtmlNode $htmlNode = null, string $prefix = null)
 	{
 		$this->macro = $macro;
 		$this->name = (string) $name;
