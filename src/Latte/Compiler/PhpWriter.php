@@ -276,7 +276,7 @@ class PhpWriter
 		}
 		if ($errors) {
 			$tokens->reset();
-			trigger_error('Short ternary operator requires braces around array: ' . $tokens->joinAll(), E_USER_DEPRECATED);
+			trigger_error('Short ternary operator requires parentheses around array in ' . $tokens->joinAll(), E_USER_DEPRECATED);
 		}
 		return $res;
 	}

@@ -65,6 +65,11 @@ test(function () { // short ternary operators
 	Assert::same('$a ? \Foo::BAR : null', formatArgs('$a ? \Foo::BAR'));
 	Assert::same('$c ?: ($a ?: $b)', formatArgs('$c ?: ($a ?: $b)'));
 	Assert::same('$c ? ($a ?: $b) : null', formatArgs('$c ? ($a ?: $b)'));
+	Assert::same('$a ?(1) : null', formatArgs('$a?(1)')); // with braces
+
+	Assert::error(function () {
+		Assert::same('$a ?[1] : null', formatArgs('$a?[1]')); // missing braces
+	}, E_USER_DEPRECATED, 'Short ternary operator requires parentheses around array in $a ?[1]');
 });
 
 
