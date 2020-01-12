@@ -90,6 +90,8 @@ class CoreMacros extends MacroSet
 		$me->addMacro('varPrint', [$me, 'macroVarPrint'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templatePrint', [$me, 'macroTemplatePrint'], null, null, self::ALLOWED_IN_HEAD);
+
+		$me->addMacro('nonce', null, null, 'echo $this->global->coreNonce ? " nonce=\"" . htmlspecialchars($this->global->coreNonce) . "\"" : "";');
 	}
 
 
