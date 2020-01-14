@@ -27,7 +27,7 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside HTML.
+	 * Escapes string for use everywhere inside HTML (except for comments).
 	 * @param  mixed  $s  plain text
 	 * @return string HTML
 	 */
@@ -38,7 +38,7 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside HTML.
+	 * Escapes string for use inside HTML text.
 	 * @param  mixed  $s  plain text or IHtmlString
 	 * @return string HTML
 	 */
@@ -92,7 +92,7 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside HTML comments.
+	 * Escapes string for use inside HTML/XML comments.
 	 * @param  string  $s  plain text
 	 * @return string HTML
 	 */
@@ -111,7 +111,7 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside XML 1.0 template.
+	 * Escapes string for use everywhere inside XML (except for comments).
 	 * @param  string  $s  plain text
 	 * @return string XML
 	 */
