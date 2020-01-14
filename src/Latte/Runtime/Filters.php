@@ -293,7 +293,7 @@ class Filters
 	public static function safeUrl($s): string
 	{
 		$s = (string) $s;
-		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
+		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
 	}
 
 
