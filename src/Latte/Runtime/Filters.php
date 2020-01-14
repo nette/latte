@@ -203,7 +203,7 @@ class Filters
 			trigger_error('Filter |stripHtml used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
-		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES, 'UTF-8');
+		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
 
 
