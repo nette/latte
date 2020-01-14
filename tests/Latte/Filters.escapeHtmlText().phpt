@@ -31,3 +31,7 @@ Assert::same('&amp;quot;', Filters::escapeHtmlText('&quot;'));
 Assert::same('<br>', Filters::escapeHtmlText(new Test));
 Assert::same('<br>', Filters::escapeHtmlText(new Latte\Runtime\Html('<br>')));
 Assert::same('`hello', Filters::escapeHtmlText('`hello'));
+
+// invalid UTF-8
+Assert::same('', Filters::escapeHtmlText("foo \u{D800} bar")); // invalid codepoint high surrogates
+Assert::same('', Filters::escapeHtmlText("foo \xE3\x80\x22 bar")); // stripped UTF

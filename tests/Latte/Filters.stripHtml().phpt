@@ -60,3 +60,10 @@ test(function () {
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
 	Assert::same("<  c '", Filters::stripHtml(clone $info, '&lt; <b> c &apos;'));
 });
+
+
+test(function () { // invalid UTF-8
+	$info = new FilterInfo(Engine::CONTENT_XML);
+	Assert::same("foo \u{D800} bar", Filters::stripHtml(clone $info, "foo \u{D800} bar")); // invalid codepoint high surrogates
+	Assert::same("foo \xE3\x80\x22 bar", Filters::stripHtml(clone $info, "foo \xE3\x80\x22 bar")); // stripped UTF
+});

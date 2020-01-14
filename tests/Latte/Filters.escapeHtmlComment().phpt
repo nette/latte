@@ -25,3 +25,7 @@ Assert::same(' - - ', Filters::escapeHtmlComment('--'));
 Assert::same(' - - - ', Filters::escapeHtmlComment('---'));
 Assert::same(' >', Filters::escapeHtmlComment('>'));
 Assert::same(' !', Filters::escapeHtmlComment('!'));
+
+// invalid UTF-8
+Assert::same("foo \u{D800} bar", Filters::escapeHtmlComment("foo \u{D800} bar")); // invalid codepoint high surrogates
+Assert::same("foo \xE3\x80\x22 bar", Filters::escapeHtmlComment("foo \xE3\x80\x22 bar")); // stripped UTF

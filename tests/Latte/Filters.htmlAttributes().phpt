@@ -37,3 +37,7 @@ Assert::same(' style="float:left" class="three" a=\'&lt;>"\' b="\'" title="0" ch
 	'checked' => true,
 	'selected' => false,
 ]));
+
+// invalid UTF-8
+Assert::same(" a=\"foo \u{D800} bar\"", Filters::htmlAttributes(['a' => "foo \u{D800} bar"])); // invalid codepoint high surrogates
+Assert::same(" a='foo \xE3\x80\x22 bar'", Filters::htmlAttributes(['a' => "foo \xE3\x80\x22 bar"])); // stripped UTF
