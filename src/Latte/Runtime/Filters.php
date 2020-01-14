@@ -166,7 +166,7 @@ class Filters
 			throw new \RuntimeException(json_last_error_msg(), $error);
 		}
 
-		return str_replace(["\u{2028}", "\u{2029}", ']]>', '<!'], ['\u2028', '\u2029', ']]\x3E', '\x3C!'], $json);
+		return str_replace([']]>', '<!'], [']]\x3E', '\x3C!'], $json);
 	}
 
 
