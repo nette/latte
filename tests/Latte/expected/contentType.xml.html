@@ -10,7 +10,7 @@
 	<li>Escaped expression: &lt;b&gt;hello&lt;/b&gt;</li>
 	<li>Non-escaped expression: <b>hello</b></li>
 	<li>Array access: Mary</li>
-	<li>Html: &lt;div title=&#039;1/2&quot;&#039;&gt;&lt;/div&gt;</li>
+	<li>Html: &lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt;</li>
 </ul>
 
 <style type="text/css">
@@ -34,8 +34,8 @@ var html = <div title='1/2"'></div>;
  title=':/item"'
  style =
  "color::/item;'"
- alt='&lt;div title=&#039;1/2&quot;&#039;&gt;&lt;/div&gt;'
- onfocus="alert(&lt;div title=&#039;1/2&quot;&#039;&gt;&lt;/div&gt;)"
+ alt='&lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt;'
+ onfocus="alert(&lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt;)"
 >click on me</p>
 
 
@@ -60,8 +60,8 @@ var html = <div title='1/2"'></div>;
 
 <p val = "a"> </p>
 
-<p val = "some&amp;&lt;&gt;&quot;&#039;/chars" val2="`mxss"> </p>
+<p val = "some&amp;&lt;&gt;&quot;&apos;/chars" val2="`mxss"> </p>
 
-<p onclick = "some&amp;&lt;&gt;&quot;&#039;/chars"> </p>
+<p onclick = "some&amp;&lt;&gt;&quot;&apos;/chars"> </p>
 
-<p val = />some&amp;&lt;&gt;&quot;&#039;/chars</p>
+<p val = />some&amp;&lt;&gt;&quot;&apos;/chars</p>

@@ -18,7 +18,7 @@ Assert::same('""', Filters::escapeXmlAttrUnquoted(''));
 Assert::same('1', Filters::escapeXmlAttrUnquoted(1));
 Assert::same('string', Filters::escapeXmlAttrUnquoted('string'));
 Assert::same('N:string-string', Filters::escapeXmlAttrUnquoted('N:string-string'));
-Assert::same('"&lt; &amp; &#039; &quot; &gt;"', Filters::escapeXmlAttrUnquoted('< & \' " >'));
+Assert::same('"&lt; &amp; &apos; &quot; &gt;"', Filters::escapeXmlAttrUnquoted('< & \' " >'));
 Assert::same('"&lt;br&gt;"', Filters::escapeXmlAttrUnquoted(new Latte\Runtime\Html('<br>')));
 Assert::same('"`hello"', Filters::escapeXmlAttrUnquoted('`hello'));
 Assert::same("\"\x09\x0a\x0d\"", Filters::escapeXmlAttrUnquoted("\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f"));

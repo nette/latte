@@ -26,7 +26,7 @@ Assert::same('', Filters::escapeHtml(''));
 Assert::same('1', Filters::escapeHtml(1));
 Assert::same('string', Filters::escapeHtml('string'));
 Assert::same('&lt;br&gt;', Filters::escapeHtml('<br>'));
-Assert::same('&lt; &amp; &#039; &quot; &gt;', Filters::escapeHtml('< & \' " >'));
+Assert::same('&lt; &amp; &apos; &quot; &gt;', Filters::escapeHtml('< & \' " >'));
 Assert::same('&amp;quot;', Filters::escapeHtml('&quot;'));
 Assert::same('&lt;br&gt;', Filters::escapeHtml(new Test));
 Assert::same('&lt;br&gt;', Filters::escapeHtml(new Latte\Runtime\Html('<br>')));
