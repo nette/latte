@@ -25,5 +25,5 @@ Assert::same("\"\x09\x0a\x0d\"", Filters::escapeXmlAttrUnquoted("\x00\x01\x02\x0
 Assert::same('""', Filters::escapeXmlAttrUnquoted("\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f"));
 
 // invalid UTF-8
-Assert::same('""', Filters::escapeXmlAttrUnquoted("foo \u{D800} bar")); // invalid codepoint high surrogates
-Assert::same('""', Filters::escapeXmlAttrUnquoted("foo \xE3\x80\x22 bar")); // stripped UTF
+Assert::same("\"foo \u{FFFD} bar\"", Filters::escapeXmlAttrUnquoted("foo \u{D800} bar")); // invalid codepoint high surrogates
+Assert::same("\"foo \u{FFFD}&quot; bar\"", Filters::escapeXmlAttrUnquoted("foo \xE3\x80\x22 bar")); // stripped UTF
