@@ -236,7 +236,7 @@ class PhpWriter
 				if ($name !== $orig) {
 					trigger_error("Case mismatch on function name '$name', correct name is '$orig'.", E_USER_WARNING);
 				}
-				$res->append('($this->global->_fn' . strtolower($name) . ')');
+				$res->append('($this->global->_fn->' . $orig . ')');
 			} else {
 				$res->append($tokens->currentToken());
 			}

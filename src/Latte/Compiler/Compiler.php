@@ -113,13 +113,14 @@ class Compiler
 
 
 	/**
-	 * Registers run-time function.
+	 * Registers run-time functions.
+	 * @param  string[]  $names
+	 * @return static
 	 */
-	public function addFunction(string $name): string
+	public function setFunctions(array $names)
 	{
-		$lname = strtolower($name);
-		$this->functions[$lname] = $name;
-		return '_fn' . $lname;
+		$this->functions = array_combine(array_map('strtolower', $names), $names);
+		return $this;
 	}
 
 
