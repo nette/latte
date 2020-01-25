@@ -651,6 +651,32 @@ class Filters
 
 
 	/**
+	 * Chunks items by returning an array of arrays with the given number of items.
+	 * @param  array|\Traversable  $list
+	 */
+	public static function batch($list, int $size, $rest = null): \Generator
+	{
+		$batch = [];
+		foreach ($list as $key => $value) {
+			$batch[$key] = $value;
+			if (count($batch) >= $size) {
+				yield $batch;
+				$batch = [];
+			}
+		}
+
+		if ($batch) {
+			if ($rest !== null) {
+				while (count($batch) < $size) {
+					$batch[] = $rest;
+				}
+			}
+			yield $batch;
+		}
+	}
+
+
+	/**
 	 * Returns element's attributes.
 	 */
 	public static function htmlAttributes($attrs): string

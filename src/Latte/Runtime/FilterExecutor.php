@@ -24,6 +24,7 @@ class FilterExecutor
 
 	/** @var array [name => [callback, FilterInfo aware] */
 	private $_static = [
+		'batch' => [[Filters::class, 'batch'], false],
 		'breaklines' => [[Filters::class, 'breaklines'], false],
 		'bytes' => [[Filters::class, 'bytes'], false],
 		'capitalize' => [[Filters::class, 'capitalize'], false],
