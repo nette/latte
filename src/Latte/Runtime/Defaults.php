@@ -17,6 +17,7 @@ class Defaults
 {
 	/** @var array<string,callable> */
 	private $list = [
+		'batch' => [Filters::class, 'batch'],
 		'breakLines' => [Filters::class, 'breaklines'],
 		'bytes' => [Filters::class, 'bytes'],
 		'capitalize' => [Filters::class, 'capitalize'],
