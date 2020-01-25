@@ -67,4 +67,21 @@ class Helpers
 	{
 		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
+
+
+	/**
+	 * @param  callable  $callable  is escalated to \InvalidArgumentException
+	 */
+	public static function toReflection($callable): \ReflectionFunctionAbstract
+	{
+		if (is_string($callable) && strpos($callable, '::')) {
+			return new \ReflectionMethod($callable);
+		} elseif (is_array($callable)) {
+			return new \ReflectionMethod($callable[0], $callable[1]);
+		} elseif (is_object($callable) && !$callable instanceof \Closure) {
+			return new \ReflectionMethod($callable, '__invoke');
+		} else {
+			return new \ReflectionFunction($callable);
+		}
+	}
 }
