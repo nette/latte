@@ -62,7 +62,12 @@ Assert::same(
 
 
 // case insensitive
+$latte->addFunction('CaSe', 'trim');
+Assert::same(
+	'abc',
+	$latte->renderToString('{CaSe(" abc ")}')
+);
+
 Assert::error(function () use ($latte) {
-	$latte->addFunction('CaSe', 'trim');
 	$latte->compile('{casE(123)}');
 }, E_USER_WARNING, "Case mismatch on function name 'casE', correct name is 'CaSe'.");

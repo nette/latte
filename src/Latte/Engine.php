@@ -44,6 +44,9 @@ class Engine
 	/** @var Runtime\FilterExecutor */
 	private $filters;
 
+	/** @var \stdClass */
+	private $functions;
+
 	/** @var array */
 	private $providers = [];
 
@@ -63,6 +66,7 @@ class Engine
 	public function __construct()
 	{
 		$this->filters = new Runtime\FilterExecutor;
+		$this->functions = new \stdClass;
 	}
 
 
@@ -95,6 +99,7 @@ class Engine
 		if (!class_exists($class, false)) {
 			$this->loadTemplate($name);
 		}
+		$this->providers['fn'] = $this->functions;
 		return new $class($this, $params, $this->filters, $this->providers, $name);
 	}
 
@@ -112,10 +117,13 @@ class Engine
 		$source = $this->getLoader()->getContent($name);
 
 		try {
-			$tokens = $this->getParser()->setContentType($this->contentType)
+			$tokens = $this->getParser()
+				->setContentType($this->contentType)
 				->parse($source);
 
-			$code = $this->getCompiler()->setContentType($this->contentType)
+			$code = $this->getCompiler()
+				->setContentType($this->contentType)
+				->setFunctions(array_keys((array) $this->functions))
 				->compile($tokens, $this->getTemplateClass($name));
 
 		} catch (\Exception $e) {
@@ -273,8 +281,7 @@ class Engine
 	 */
 	public function addFunction(string $name, callable $callback)
 	{
-		$id = $this->getCompiler()->addFunction($name);
-		$this->providers[$id] = $callback;
+		$this->functions->$name = $callback;
 		return $this;
 	}
 
