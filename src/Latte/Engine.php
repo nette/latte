@@ -66,7 +66,8 @@ class Engine
 
 	public function __construct()
 	{
-		$this->filters = new Runtime\FilterExecutor;
+		$defaults = new Runtime\Defaults;
+		$this->filters = new Runtime\FilterExecutor($defaults->getFilters());
 		$this->functions = new \stdClass;
 	}
 
