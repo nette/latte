@@ -23,42 +23,15 @@ class FilterExecutor
 	private $_dynamic = [];
 
 	/** @var array [name => [callback, FilterInfo aware] */
-	private $_static = [
-		'batch' => [[Filters::class, 'batch'], false],
-		'breaklines' => [[Filters::class, 'breaklines'], false],
-		'bytes' => [[Filters::class, 'bytes'], false],
-		'capitalize' => [[Filters::class, 'capitalize'], false],
-		'datastream' => [[Filters::class, 'dataStream'], false],
-		'date' => [[Filters::class, 'date'], false],
-		'escapecss' => [[Filters::class, 'escapeCss'], false],
-		'escapehtml' => [[Filters::class, 'escapeHtml'], false],
-		'escapehtmlcomment' => [[Filters::class, 'escapeHtmlComment'], false],
-		'escapeical' => [[Filters::class, 'escapeICal'], false],
-		'escapejs' => [[Filters::class, 'escapeJs'], false],
-		'escapeurl' => ['rawurlencode', false],
-		'escapexml' => [[Filters::class, 'escapeXml'], false],
-		'firstupper' => [[Filters::class, 'firstUpper'], false],
-		'checkurl' => [[Filters::class, 'safeUrl'], false],
-		'implode' => [[Filters::class, 'implode'], false],
-		'indent' => [[Filters::class, 'indent'], true],
-		'length' => [[Filters::class, 'length'], false],
-		'lower' => [[Filters::class, 'lower'], false],
-		'number' => ['number_format', false],
-		'padleft' => [[Filters::class, 'padLeft'], false],
-		'padright' => [[Filters::class, 'padRight'], false],
-		'repeat' => [[Filters::class, 'repeat'], true],
-		'replace' => [[Filters::class, 'replace'], true],
-		'replacere' => [[Filters::class, 'replaceRe'], false],
-		'reverse' => [[Filters::class, 'reverse'], false],
-		'strip' => [[Filters::class, 'strip'], true],
-		'striphtml' => [[Filters::class, 'stripHtml'], true],
-		'striptags' => [[Filters::class, 'stripTags'], true],
-		'substr' => [[Filters::class, 'substring'], false],
-		'trim' => [[Filters::class, 'trim'], true],
-		'truncate' => [[Filters::class, 'truncate'], false],
-		'upper' => [[Filters::class, 'upper'], false],
-		'webalize' => [[\Nette\Utils\Strings::class, 'webalize'], false],
-	];
+	private $_static = [];
+
+
+	public function __construct(array $list = [])
+	{
+		foreach ($list as $name => $callback) {
+			$this->_static[strtolower($name)] = [$callback, null];
+		}
+	}
 
 
 	/**

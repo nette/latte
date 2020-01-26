@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use Latte\Runtime\Defaults;
 use Latte\Runtime\FilterExecutor;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
@@ -31,10 +32,15 @@ class MyFilter
 
 
 test(function () {
-	$filters = new FilterExecutor;
+	$filters = new FilterExecutor((new Defaults)->getFilters());
 
 	Assert::true(count($filters->getAll()) > 28);
 	Assert::same('upper', $filters->getAll()['upper']);
+});
+
+
+test(function () {
+	$filters = new FilterExecutor;
 
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
