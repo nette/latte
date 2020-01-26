@@ -74,6 +74,11 @@ class Engine
 	{
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new \stdClass;
+
+		$defaults = new Runtime\Defaults;
+		foreach ($defaults->getFilters() as $name => $callback) {
+			$this->filters->add($name, $callback);
+		}
 	}
 
 

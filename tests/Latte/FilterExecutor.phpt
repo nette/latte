@@ -33,9 +33,6 @@ class MyFilter
 test('', function () {
 	$filters = new FilterExecutor;
 
-	Assert::true(count($filters->getAll()) > 28);
-	Assert::same('upper', $filters->getAll()['upper']);
-
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
 	Assert::same('strtoupper', $filters->F1);
