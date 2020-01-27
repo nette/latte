@@ -118,11 +118,11 @@ class FilterExecutor
 		return $this->$lname = function (...$args) use ($lname, $name) { // dynamic filter
 			array_unshift($args, $lname);
 			foreach ($this->_dynamic as $filter) {
-				$res = (Helpers::checkCallback($filter))(...$args);
+				$res = $filter(...$args);
 				if ($res !== null) {
 					return $res;
 				} elseif (isset($this->_static[$lname])) { // dynamic converted to classic
-					$this->$name = Helpers::checkCallback($this->_static[$lname][0]);
+					$this->$name = $this->_static[$lname][0];
 					return ($this->$name)(...func_get_args());
 				}
 			}
@@ -168,7 +168,7 @@ class FilterExecutor
 	private function prepareFilter(string $name): array
 	{
 		if (!isset($this->_static[$name][1])) {
-			$callback = Helpers::checkCallback($this->_static[$name][0]);
+			$callback = $this->_static[$name][0];
 			if (is_string($callback) && strpos($callback, '::')) {
 				$callback = explode('::', $callback);
 			} elseif (is_object($callback)) {
