@@ -162,12 +162,14 @@ class Filters
 			$s = $s->__toString(true);
 		}
 
-		$json = json_encode($s, JSON_UNESCAPED_UNICODE);
-		if ($error = json_last_error()) {
-			throw new \RuntimeException(json_last_error_msg(), $error);
+		try {
+			$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+
+			return str_replace([']]>', '<!'], [']]\x3E', '\x3C!'], $json);
+		} catch (\JsonException $exception) {
+			throw new \RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
 		}
 
-		return str_replace([']]>', '<!'], [']]\x3E', '\x3C!'], $json);
 	}
 
 
