@@ -518,30 +518,28 @@ class PhpWriter
 				} else {
 					$res->append($tokens->currentToken());
 				}
-			} else {
-				if ($tokens->isCurrent($tokens::T_SYMBOL)) {
-					if ($tokens->isCurrent('escape')) {
-						if ($isContent) {
-							$res->prepend('LR\Filters::convertTo($_fi, ' . var_export(implode($this->context), true) . ', ')
-								->append(')');
-						} else {
-							$res = $this->escapePass($res);
-						}
-						$tokens->nextToken('|');
-					} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
-						$res->prepend('LR\Filters::safeUrl(');
-						$inside = true;
+			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
+				if ($tokens->isCurrent('escape')) {
+					if ($isContent) {
+						$res->prepend('LR\Filters::convertTo($_fi, ' . var_export(implode($this->context), true) . ', ')
+							->append(')');
 					} else {
-						$name = strtolower($tokens->currentValue());
-						$res->prepend($isContent
-							? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
-							: '($this->filters->' . $name . ')('
-						);
-						$inside = true;
+						$res = $this->escapePass($res);
 					}
+					$tokens->nextToken('|');
+				} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
+					$res->prepend('LR\Filters::safeUrl(');
+					$inside = true;
 				} else {
-					throw new CompileException("Modifier name must be alphanumeric string, '{$tokens->currentValue()}' given.");
+					$name = strtolower($tokens->currentValue());
+					$res->prepend($isContent
+						? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
+						: '($this->filters->' . $name . ')('
+					);
+					$inside = true;
 				}
+			} else {
+				throw new CompileException("Modifier name must be alphanumeric string, '{$tokens->currentValue()}' given.");
 			}
 		}
 		if ($inside) {
