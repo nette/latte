@@ -44,7 +44,7 @@ class Filters
 	 */
 	public static function escapeHtmlText($s): string
 	{
-		return $s instanceof HtmlString || $s instanceof \Nette\Utils\HtmlString
+		return $s instanceof HtmlString || $s instanceof \Nette\Utils\IHtmlString
 			? $s->__toString(true)
 			: htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	}
@@ -158,7 +158,7 @@ class Filters
 	 */
 	public static function escapeJs($s): string
 	{
-		if ($s instanceof HtmlString || $s instanceof \Nette\Utils\HtmlString) {
+		if ($s instanceof HtmlString || $s instanceof \Nette\Utils\IHtmlString) {
 			$s = $s->__toString(true);
 		}
 
