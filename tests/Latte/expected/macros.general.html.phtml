@@ -24,7 +24,7 @@ class Template%a% extends Latte\Runtime\Template
 	<li>Escaped expression: <?php echo LR\Filters::escapeHtmlText('<' . 'b' . '>hello' . '</b>') /* line 6 */ ?></li>
 	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' /* line 7 */ ?></li>
 	<li>Array access: <?php echo LR\Filters::escapeHtmlText($people[1]) /* line 8 */ ?></li>
-	<li>Html: <?php echo LR\Filters::escapeHtmlText($el) /* line 9 */ ?></li>
+	<li>Html: <?php echo LR\Filters::escapeHtmlText($el) /* line 9 */ ?> <?php echo LR\Filters::escapeHtmlText($el2) /* line 9 */ ?></li>
 	<li>Translated: <?php echo LR\Filters::escapeHtmlText(($this->filters->translate)($people[1])) ?></li>
 	<li>Translated string: <?php echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj')) ?></li>
 	<li>Non-escaped and translated: <?php echo ($this->filters->translate)($people[1]) ?></li>
@@ -130,7 +130,7 @@ var prop = <?php echo LR\Filters::escapeJs($people) /* line 70 */ ?>;
 
 document.getElementById(<?php echo LR\Filters::escapeJs($xss) /* line 72 */ ?>).style.backgroundColor = 'red';
 
-var html = <?php echo LR\Filters::escapeJs($el) /* line 74 */ ?>;
+var html = <?php echo LR\Filters::escapeJs($el) /* line 74 */ ?> || <?php echo LR\Filters::escapeJs($el2) /* line 74 */ ?>;
 -->
 </script>
 
@@ -151,7 +151,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
  "color:<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss($xss)) /* line 92 */ ?>;"
  rel="<?php echo LR\Filters::escapeHtmlAttr($xss) /* line 93 */ ?>"
  onblur="alert(<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 94 */ ?>)"
- alt='<?php echo LR\Filters::escapeHtmlAttr($el) /* line 95 */ ?>'
+ alt='<?php echo LR\Filters::escapeHtmlAttr($el) /* line 95 */ ?> <?php echo LR\Filters::escapeHtmlAttr($el2) /* line 95 */ ?>'
  onfocus="alert(<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($el)) /* line 96 */ ?>)"
 >click on me <?php echo LR\Filters::escapeHtmlText($xss) /* line 97 */ ?></p>
 
