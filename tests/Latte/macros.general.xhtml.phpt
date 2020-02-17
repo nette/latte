@@ -24,6 +24,7 @@ $params['mxss'] = '`mxss';
 $params['people'] = ['John', 'Mary', 'Paul', ']]> <!--'];
 $params['menu'] = ['about', ['product1', 'product2'], 'contact'];
 $params['el'] = new Html("<div title='1/2\"'></div>");
+$params['el2'] = Nette\Utils\Html::el('span', ['title' => '/"'])->setText('foo');
 
 Assert::matchFile(
 	__DIR__ . '/expected/macros.general.xhtml.phtml',
