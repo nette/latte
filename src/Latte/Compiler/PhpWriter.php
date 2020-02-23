@@ -309,7 +309,7 @@ class PhpWriter
 
 					$rescue = [$res->tokens, $expr->tokens, $tokens->position, $addBraces];
 
-					if (!$tokens->isNext('->')) {
+					if (!$tokens->isNext('->', '::')) {
 						$expr->prepend('(');
 						$expr->append(' ?? null)' . $addBraces);
 						break;
@@ -321,9 +321,9 @@ class PhpWriter
 					$expr = new MacroTokens('$_tmp');
 					$addBraces .= ')';
 
-				} elseif ($tokens->nextToken('->')) {
+				} elseif ($tokens->nextToken('->', '::')) {
 					$expr->append($tokens->currentToken());
-					if (!$tokens->nextToken($tokens::T_SYMBOL)) {
+					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 						$expr->append($addBraces);
 						break;
 					}
