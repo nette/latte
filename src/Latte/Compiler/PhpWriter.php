@@ -291,7 +291,7 @@ class PhpWriter
 		$res = new MacroTokens;
 
 		while ($tokens->depth >= $startDepth && $tokens->nextToken()) {
-			if (!$tokens->isCurrent($tokens::T_VARIABLE)) {
+			if (!$tokens->isCurrent($tokens::T_VARIABLE) || $tokens->isPrev('::', '$')) {
 				$res->append($tokens->currentToken());
 				continue;
 			}

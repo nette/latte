@@ -61,6 +61,9 @@ test(function () { // not allowed
 	Assert::same('$foo->foo ?(hello)', optionalChaining('$foo->foo?(hello)'));
 
 	Assert::same('$foo ?[1]', optionalChaining('$foo?[1]')); // not allowed due to collision with short ternary
+
+	Assert::same('Class::$prop?', optionalChaining('Class::$prop?'));
+	Assert::same('$$var?', optionalChaining('$$var?'));
 });
 
 
