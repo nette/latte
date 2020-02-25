@@ -176,29 +176,32 @@ class Engine
 			return;
 		}
 
+		// Solving atomicity to work everywhere is really pain in the ass.
+		// 1) We want to do as little as possible IO calls on production and also directory and file can be not writable
+		// so on Linux we include the file directly without shared lock, therefore, the file must be created atomically by renaming.
+		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
 		$file = $this->getCacheFile($name);
+		$lock = defined('PHP_WINDOWS_VERSION_BUILD')
+			? $this->acquireLock("$file.lock", LOCK_SH)
+			: null;
 
 		if (!$this->isExpired($file, $name) && (@include $file) !== false) { // @ - file may not exist
 			return;
 		}
 
-		if (!is_dir($this->tempDirectory) && !@mkdir($this->tempDirectory) && !is_dir($this->tempDirectory)) { // @ - dir may already exist
-			throw new \RuntimeException("Unable to create directory '$this->tempDirectory'. " . error_get_last()['message']);
+		if ($lock) {
+			flock($lock, LOCK_UN); // release shared lock so we can get exclusive
 		}
+		$lock = $this->acquireLock("$file.lock", LOCK_EX);
 
-		$handle = @fopen("$file.lock", 'c+'); // @ is escalated to exception
-		if (!$handle) {
-			throw new \RuntimeException("Unable to create file '$file.lock'. " . error_get_last()['message']);
-		} elseif (!@flock($handle, LOCK_EX)) { // @ is escalated to exception
-			throw new \RuntimeException("Unable to acquire exclusive lock on '$file.lock'. " . error_get_last()['message']);
-		}
-
+		// while waiting for exclusive lock, someone might have already created the cache
 		if (!is_file($file) || $this->isExpired($file, $name)) {
 			$code = $this->compile($name);
 			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
 				@unlink("$file.tmp"); // @ - file may not exist
 				throw new \RuntimeException("Unable to create '$file'.");
-			} elseif (function_exists('opcache_invalidate')) {
+			}
+			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, true); // @ can be restricted
 			}
 		}
@@ -206,10 +209,23 @@ class Engine
 		if ((include $file) === false) {
 			throw new \RuntimeException("Unable to load '$file'.");
 		}
+	}
 
-		flock($handle, LOCK_UN);
-		fclose($handle);
-		@unlink("$file.lock"); // @ file may become locked on Windows
+
+	private function acquireLock(string $file, int $mode)
+	{
+		$dir = dirname($file);
+		if (!is_dir($dir) && !@mkdir($dir) && !is_dir($dir)) { // @ - dir may already exist
+			throw new \RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
+		}
+
+		$handle = @fopen($file, 'w'); // @ is escalated to exception
+		if (!$handle) {
+			throw new \RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
+		} elseif (!@flock($handle, $mode)) { // @ is escalated to exception
+			throw new \RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
+		}
+		return $handle;
 	}
 
 
