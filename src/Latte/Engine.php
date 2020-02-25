@@ -186,6 +186,15 @@ class Engine
 
 		$file = $this->getCacheFile($name);
 
+		if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+			$lock = @fopen("$file.lock", 'w'); // @ is escalated to exception
+			if (!$lock) {
+				throw new \RuntimeException("Unable to create file '$file.lock'. " . error_get_last()['message']);
+			} elseif (!@flock($lock, LOCK_SH)) { // @ is escalated to exception
+				throw new \RuntimeException("Unable to acquire shared lock on file '$file.lock'. " . error_get_last()['message']);
+			}
+		}
+
 		if (!$this->isExpired($file, $name) && (@include $file) !== false) { // @ - file may not exist
 			return;
 		}
@@ -194,19 +203,21 @@ class Engine
 			throw new \RuntimeException("Unable to create directory '$this->tempDirectory'. " . error_get_last()['message']);
 		}
 
-		$handle = @fopen("$file.lock", 'c+'); // @ is escalated to exception
-		if (!$handle) {
+		$lock = $lock ?: @fopen("$file.lock", 'w'); // @ is escalated to exception
+		if (!$lock) {
 			throw new \RuntimeException("Unable to create file '$file.lock'. " . error_get_last()['message']);
-		} elseif (!@flock($handle, LOCK_EX)) { // @ is escalated to exception
+		} elseif (!@flock($lock, LOCK_EX)) { // @ is escalated to exception
 			throw new \RuntimeException("Unable to acquire exclusive lock on '$file.lock'. " . error_get_last()['message']);
 		}
 
+		// while waiting for exclusive lock, someone might have already created the cache
 		if (!is_file($file) || $this->isExpired($file, $name)) {
 			$code = $this->compile($name);
 			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
 				@unlink("$file.tmp"); // @ - file may not exist
 				throw new \RuntimeException("Unable to create '$file'.");
-			} elseif (function_exists('opcache_invalidate')) {
+			}
+			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, true); // @ can be restricted
 			}
 		}
@@ -214,10 +225,6 @@ class Engine
 		if ((include $file) === false) {
 			throw new \RuntimeException("Unable to load '$file'.");
 		}
-
-		flock($handle, LOCK_UN);
-		fclose($handle);
-		@unlink("$file.lock"); // @ file may become locked on Windows
 	}
 
 
