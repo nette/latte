@@ -185,6 +185,7 @@ class Engine
 		}
 
 		$file = $this->getCacheFile($name);
+		$lock = false;
 
 		if (defined('PHP_WINDOWS_VERSION_BUILD')) {
 			$lock = @fopen("$file.lock", 'w'); // @ is escalated to exception
