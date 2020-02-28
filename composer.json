@@ -26,6 +26,7 @@
 		"phpstan/phpstan": "^0.12"
 	},
 	"suggest": {
+		"ext-iconv": "to use filters |reverse, |substring",
 		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
 		"ext-fileinfo": "to use filter |datastream",
 		"nette/utils": "to use filter |webalize"
