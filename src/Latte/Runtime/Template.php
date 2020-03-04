@@ -170,10 +170,12 @@ class Template
 		$this->params['_l'] = new \stdClass;
 		$this->params['_g'] = $this->global;
 		$this->params['_b'] = (object) ['blocks' => &$this->blockQueue, 'types' => &$this->blockTypes];
-		if (isset($this->global->snippetDriver) && $this->global->snippetBridge->isSnippetMode()) {
-			if ($this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params)) {
-				return;
-			}
+		if (
+			isset($this->global->snippetDriver)
+			&& $this->global->snippetBridge->isSnippetMode()
+			&& $this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params)
+		) {
+			return;
 		}
 
 		$this->main();
