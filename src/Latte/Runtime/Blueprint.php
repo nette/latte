@@ -46,6 +46,28 @@ class Blueprint
 	}
 
 
+	public function printVars(array $vars): void
+	{
+		if (!class_exists(Php\Type::class)) {
+			throw new \LogicException('Nette PhpGenerator is required to print template, install package `nette/php-generator`.');
+		}
+
+		$res = '';
+		foreach ($vars as $name => $value) {
+			if ($name[0] === '_') {
+				continue;
+			}
+			$type = Php\Type::getType($value) ?: 'mixed';
+			$res .= "{varType $type $$name}\n";
+		}
+
+		$end = $this->printCanvas();
+		$this->printHeader('varPrint');
+		$this->printCode($res ?: 'No variables');
+		echo $end;
+	}
+
+
 	public function addProperties(Php\ClassType $class, array $props, bool $native = null): void
 	{
 		$printer = new Php\Printer;

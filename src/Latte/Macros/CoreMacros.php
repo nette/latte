@@ -72,6 +72,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
 
 		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('varPrint', [$me, 'macroVarPrint'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templatePrint', [$me, 'macroTemplatePrint'], null, null, self::ALLOWED_IN_HEAD);
 	}
@@ -540,6 +541,18 @@ class CoreMacros extends MacroSet
 		if (!$type || !$variable || !Helpers::startsWith($variable, '$')) {
 			throw new CompileException('Unexpected content, expecting {varType type $var}.');
 		}
+	}
+
+
+	/**
+	 * {varPrint [all]}
+	 */
+	public function macroVarPrint(MacroNode $node)
+	{
+		$vars = $node->tokenizer->fetchWord() === 'all'
+			? 'get_defined_vars()'
+			: 'array_diff_key(get_defined_vars(), $this->getParameters())';
+		return "(new Latte\\Runtime\\Blueprint)->printVars($vars); exit;";
 	}
 
 
