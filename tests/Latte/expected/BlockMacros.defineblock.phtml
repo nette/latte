@@ -71,7 +71,7 @@ i) <?php
 	function blockTestargs($_args)
 	{
 		extract($this->params);
-		list($var1, $var2) = $_args + [NULL, NULL, ];
+		list($var1, $var2, $var3) = $_args + [NULL, NULL, NULL, ];
 		?>	Variables <?php echo LR\Filters::escapeHtmlText($var1) /* line 11 */ ?>, <?php echo LR\Filters::escapeHtmlText($var2) /* line 11 */ ?>, <?php
 		echo LR\Filters::escapeHtmlText($hello) /* line 11 */ ?>
 

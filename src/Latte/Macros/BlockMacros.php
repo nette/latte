@@ -218,7 +218,8 @@ class BlockMacros extends MacroSet
 			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
 
 		} elseif ($node->name === 'define' && $node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+			$node->setArgs($node->args . $node->modifiers);
+			$node->tokenizer->fetchWord();
 		}
 
 		$node->data->name = $name = ltrim((string) $name, '#');
@@ -325,6 +326,9 @@ class BlockMacros extends MacroSet
 			$tokens = $node->tokenizer;
 			$args = [];
 			while ($tokens->isNext()) {
+				if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
+					$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
+				}
 				$args[] = $tokens->consumeValue($tokens::T_VARIABLE);
 				if ($tokens->isNext()) {
 					$tokens->consumeValue(',');

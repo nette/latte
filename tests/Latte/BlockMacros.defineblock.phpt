@@ -25,7 +25,7 @@ $template = <<<'EOD'
 
 a) {include #test, var => 20}
 
-{define testargs $var1, $var2}
+{define testargs $var1, ?stdClass $var2, \C\B|null $var3}
 	Variables {$var1}, {$var2}, {$hello}
 {/define}
 
