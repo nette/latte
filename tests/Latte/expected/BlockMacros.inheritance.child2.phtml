@@ -16,7 +16,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function main()
+	public function main(): array
 	{
 %A%
 <?php
@@ -31,7 +31,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function prepare()
+	public function prepare(): void
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
@@ -46,7 +46,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockContent($_args)
+	public function blockContent(array $_args): void
 	{
 		extract($_args);
 		?>	<h1><?php
@@ -67,13 +67,13 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockTitle($_args)
+	public function blockTitle(array $_args): void
 	{
 		?>Homepage <?php
 	}
 
 
-	function blockSidebar($_args)
+	public function blockSidebar(array $_args): void
 	{
 
 	}

@@ -12,7 +12,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function main()
+	public function main(): array
 	{
 %A%
 		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div><?php
@@ -20,13 +20,13 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function prepare()
+	public function prepare(): void
 	{
 %A%
 	}
 
 
-	function blockOuter($_args)
+	public function blockOuter(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", "static");

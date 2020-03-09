@@ -80,7 +80,8 @@ class BlockMacros extends MacroSet
 			$compiler->addMethod(
 				$functions[$name] = $this->generateMethodName($name),
 				'?>' . $compiler->expandTokens($code) . '<?php',
-				'$_args'
+				'array $_args',
+				'void'
 			);
 		}
 
@@ -381,7 +382,8 @@ class BlockMacros extends MacroSet
 				$this->getCompiler()->addMethod(
 					$node->data->func,
 					$this->getCompiler()->expandTokens("extract(\$_args);\n?>$node->content<?php"),
-					'$_args'
+					'array $_args',
+					'void'
 				);
 				$node->content = '';
 			}
