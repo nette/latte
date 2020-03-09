@@ -196,7 +196,7 @@ class BlockMacros extends MacroSet
 		} elseif ($this->extends !== null) {
 			throw new CompileException("Multiple $notation declarations are not allowed.");
 		} elseif ($node->args === 'none') {
-			$this->extends = 'FALSE';
+			$this->extends = 'false';
 		} else {
 			$this->extends = $writer->write('%node.word%node.args');
 		}
@@ -250,12 +250,12 @@ class BlockMacros extends MacroSet
 				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . SnippetDriver::TYPE_DYNAMIC . '");';
 
 				if ($node->prefix) {
-					$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
+					$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
 					return $writer->write($enterCode);
 				}
 				$node->closingCode .= "\n</div>";
 				$this->checkExtraArgs($node);
-				return $writer->write("?>\n<div $this->snippetAttribute=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
+				return $writer->write("?>\n<div $this->snippetAttribute=\"<?php echo htmlspecialchars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) ?>\"><?php " . $enterCode);
 
 			} else {
 				$node->data->leave = true;
@@ -316,11 +316,11 @@ class BlockMacros extends MacroSet
 				if (isset($node->htmlNode->macroAttrs['foreach'])) {
 					trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
 				}
-				$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>", (string) substr($name, 1));
+				$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>", (string) substr($name, 1));
 				return $writer->write($include, $name);
 			}
 			$this->checkExtraArgs($node);
-			return $writer->write("?>\n<div $this->snippetAttribute=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
+			return $writer->write("?>\n<div $this->snippetAttribute=\"<?php echo htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
 				(string) substr($name, 1), $name
 			);
 
@@ -337,7 +337,7 @@ class BlockMacros extends MacroSet
 				}
 			}
 			if ($args) {
-				$node->data->args = 'list(' . implode(', ', $args) . ') = $_args + [' . str_repeat('NULL, ', count($args)) . '];';
+				$node->data->args = '[' . implode(', ', $args) . '] = $_args + [' . str_repeat('null, ', count($args)) . '];';
 			}
 			return $extendsCheck;
 
