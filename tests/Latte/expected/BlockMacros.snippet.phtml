@@ -20,7 +20,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function main()
+	public function main(): array
 	{
 %A%
 		?><div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('_', $this->params) ?></div>
@@ -42,7 +42,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function block_%h%($_args)
+	public function block_%h%(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("", "static");
@@ -54,7 +54,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockOuter($_args)
+	public function blockOuter(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", "static");
@@ -67,7 +67,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockInner($_args)
+	public function blockInner(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("inner", "static");
@@ -77,7 +77,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockTitle($_args)
+	public function blockTitle(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("title", "static");
@@ -87,7 +87,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockTitle2($_args)
+	public function blockTitle2(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("title2", "static");

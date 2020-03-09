@@ -18,7 +18,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function main()
+	public function main(): array
 	{
 %A%
 		$this->renderBlock('block1', get_defined_vars());
@@ -30,7 +30,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockBlock1($_args)
+	public function blockBlock1(array $_args): void
 	{
 		extract($_args);
 		?><div<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId('snippet')) . '"' ?>>
@@ -41,7 +41,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockSnippet($_args)
+	public function blockSnippet(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("snippet", "static");
@@ -52,7 +52,7 @@ class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	function blockOuter($_args)
+	public function blockOuter(array $_args): void
 	{
 		extract($_args);
 		$this->global->snippetDriver->enter("outer", "static");
@@ -68,7 +68,7 @@ end
 	}
 
 
-	function blockBlock2($_args)
+	public function blockBlock2(array $_args): void
 	{
 		extract($_args);
 		?><div<?php echo ' id="' . htmlSpecialChars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>

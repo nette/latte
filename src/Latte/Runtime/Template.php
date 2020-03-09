@@ -225,12 +225,16 @@ class Template
 	}
 
 
-	/**
-	 * @return void
-	 * @internal
-	 */
-	public function prepare()
+	/** @internal */
+	public function prepare(): void
 	{
+	}
+
+
+	/** @internal */
+	public function main(): array
+	{
+		return [];
 	}
 
 

@@ -179,10 +179,10 @@ class Compiler
 			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
 
-		$this->addMethod('main', $this->expandTokens("extract(\$this->params);?>\n$output$epilogs<?php return get_defined_vars();"));
+		$this->addMethod('main', $this->expandTokens("extract(\$this->params);?>\n$output$epilogs<?php return get_defined_vars();"), '', 'array');
 
 		if ($prepare) {
-			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php");
+			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php", '', 'void');
 		}
 		if ($this->contentType !== self::CONTENT_HTML) {
 			$this->addProperty('contentType', $this->contentType);
@@ -193,7 +193,10 @@ class Compiler
 			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, true) . ';';
 		}
 		foreach (array_filter($this->methods) as $name => $method) {
-			$members[] = "\n\tfunction $name($method[arguments])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
+			$members[] = "\n\tpublic function $name($method[arguments])"
+				. ($method['returns'] ? ': ' . $method['returns'] : '')
+				. "\n\t{\n"
+				. ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
 		return "<?php\n"
@@ -250,9 +253,9 @@ class Compiler
 	 * Adds custom method to template.
 	 * @internal
 	 */
-	public function addMethod(string $name, string $body, string $arguments = ''): void
+	public function addMethod(string $name, string $body, string $arguments = '', $returns = ''): void
 	{
-		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments];
+		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments, 'returns' => $returns];
 	}
 
 

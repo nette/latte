@@ -12,7 +12,7 @@ class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	function main()
+	public function main(): array
 	{
 		extract($this->params);
 ?>
@@ -253,7 +253,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 	}
 
 
-	function prepare()
+	public function prepare(): void
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
@@ -265,7 +265,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 	}
 
 
-	function blockMenu($_args)
+	public function blockMenu(array $_args): void
 	{
 		extract($_args);
 ?>
