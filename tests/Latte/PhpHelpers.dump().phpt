@@ -17,7 +17,7 @@ Assert::same('0', PhpHelpers::dump(0));
 Assert::same('1', PhpHelpers::dump(1));
 Assert::same('0.0', PhpHelpers::dump(0.0));
 Assert::same('1.0', PhpHelpers::dump(1.0));
-Assert::same('NULL', PhpHelpers::dump(null));
+Assert::same('null', PhpHelpers::dump(null));
 Assert::same('true', PhpHelpers::dump(true));
 Assert::same('false', PhpHelpers::dump(false));
 

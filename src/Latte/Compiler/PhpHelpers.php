@@ -121,7 +121,10 @@ class PhpHelpers
 					: ($s === '' ? '' : ', ') . ($indexed ? '' : self::dump($k) . ' => ') . self::dump($v);
 			}
 			return '[' . $s . ']';
+		} elseif ($value === null) {
+			return 'null';
+		} else {
+			return var_export($value, true);
 		}
-		return var_export($value, true);
 	}
 }
