@@ -21,20 +21,18 @@ class Template
 {
 	use Latte\Strict;
 
+	protected const CONTENT_TYPE = Engine::CONTENT_HTML;
+
+	protected const BLOCKS = [];
+
 	/** @var \stdClass global accumulators for intermediate results */
 	public $global;
-
-	/** @var string  @internal */
-	protected $contentType = Engine::CONTENT_HTML;
 
 	/** @var mixed[]  @internal */
 	protected $params = [];
 
 	/** @var FilterExecutor */
 	protected $filters;
-
-	/** @var array [name => method]  @internal */
-	protected $blocks = [];
 
 	/** @var string|false|null  @internal */
 	protected $parentName;
@@ -79,8 +77,11 @@ class Template
 		$this->name = $name;
 		$this->policy = $policy;
 		$this->global = (object) $providers;
-		foreach ($this->blocks as $nm => $method) {
+
+		foreach (static::BLOCKS as $nm => $info) {
+			[$method, $type] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
 			$this->blockQueue[$nm][] = [$this, $method];
+			$this->blockTypes[$nm] = $type;
 		}
 	}
 
@@ -122,13 +123,13 @@ class Template
 
 	public function getBlockNames(): array
 	{
-		return array_keys($this->blocks);
+		return array_keys($this->blockQueue);
 	}
 
 
 	public function getContentType(): string
 	{
-		return $this->contentType;
+		return static::CONTENT_TYPE;
 	}
 
 
@@ -164,7 +165,7 @@ class Template
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
-		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
+		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', static::CONTENT_TYPE);
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
@@ -234,15 +235,15 @@ class Template
 	public function renderToContentType($mod): void
 	{
 		if ($mod instanceof \Closure) {
-			echo $mod($this->capture([$this, 'render']), $this->contentType);
+			echo $mod($this->capture([$this, 'render']), static::CONTENT_TYPE);
 
-		} elseif ($mod && $mod !== $this->contentType) {
-			if ($filter = Filters::getConvertor($this->contentType, $mod)) {
+		} elseif ($mod && $mod !== static::CONTENT_TYPE) {
+			if ($filter = Filters::getConvertor(static::CONTENT_TYPE, $mod)) {
 				echo $filter($this->capture([$this, 'render']));
 			} else {
 				trigger_error(sprintf(
 					"Including '{$this->name}' with content type %s into incompatible type %s.",
-					strtoupper($this->contentType),
+					strtoupper(static::CONTENT_TYPE),
 					strtoupper($mod)
 				), E_USER_WARNING);
 			}
@@ -402,5 +403,18 @@ class Template
 			throw new Latte\SecurityViolationException("Access to '$prop' property on a $class object is not allowed.");
 		}
 		return $obj;
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function &__get(string $name)
+	{
+		if ($name === 'blocks') { // compatibility with nette/application < 3.0.8
+			$tmp = static::BLOCKS;
+			return $tmp;
+		}
+		throw new \LogicException('Attempt to read undeclared property ' . self::class . '::$' . $name);
 	}
 }

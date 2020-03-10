@@ -95,6 +95,9 @@ class Compiler
 	/** @var array<string, mixed> */
 	private $properties = [];
 
+	/** @var array<string, mixed> */
+	private $constants = [];
+
 	/** @var Policy|null */
 	private $policy;
 
@@ -142,7 +145,7 @@ class Compiler
 		$this->output = &$output;
 		$this->inHead = true;
 		$this->htmlNode = $this->macroNode = $this->context = null;
-		$this->placeholders = $this->properties = [];
+		$this->placeholders = $this->properties = $this->constants = [];
 		$this->methods = ['main' => null, 'prepare' => null];
 
 		$macroHandlers = new \SplObjectStorage;
@@ -193,10 +196,13 @@ class Compiler
 			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php", '', 'void');
 		}
 		if ($this->contentType !== self::CONTENT_HTML) {
-			$this->addProperty('contentType', $this->contentType);
+			$this->addConstant('CONTENT_TYPE', $this->contentType);
 		}
 
 		$members = [];
+		foreach ($this->constants as $name => $value) {
+			$members[] = "\tprotected const $name = " . PhpHelpers::dump($value, true) . ';';
+		}
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, true) . ';';
 		}
@@ -235,6 +241,12 @@ class Compiler
 		$this->contentType = $type;
 		$this->context = null;
 		return $this;
+	}
+
+
+	public function getContentType(): string
+	{
+		return $this->contentType;
 	}
 
 
@@ -319,6 +331,17 @@ class Compiler
 	public function getProperties(): array
 	{
 		return $this->properties;
+	}
+
+
+	/**
+	 * Adds custom constant to template.
+	 * @param  mixed  $value
+	 * @internal
+	 */
+	public function addConstant(string $name, $value): void
+	{
+		$this->constants[$name] = $value;
 	}
 
 
