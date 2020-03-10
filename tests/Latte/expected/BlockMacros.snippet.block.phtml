@@ -44,7 +44,7 @@ class Template%a% extends Latte\Runtime\Template
 	public function blockSnippet(array $_args): void
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("snippet", "static");
+		$this->global->snippetDriver->enter('snippet', 'static');
 ?>		static
 <?php
 		$this->global->snippetDriver->leave();
@@ -55,7 +55,7 @@ class Template%a% extends Latte\Runtime\Template
 	public function blockOuter(array $_args): void
 	{
 		extract($_args);
-		$this->global->snippetDriver->enter("outer", "static");
+		$this->global->snippetDriver->enter('outer', 'static');
 ?>
 begin
 <?php
@@ -73,7 +73,7 @@ end
 		extract($_args);
 		?><div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>
 <?php
-		$this->global->snippetDriver->enter("inner-$id", "dynamic");
+		$this->global->snippetDriver->enter("inner-$id", 'dynamic');
 ?>		dynamic
 <?php
 		$this->global->snippetDriver->leave();

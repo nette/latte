@@ -66,7 +66,7 @@ Assert::match(
 		ob_start();
 		$this->global->ifcontent = ob_get_flush();
 		?></div><?php
-		if (rtrim($this->global->ifcontent) === "") ob_end_clean();
+		if (rtrim($this->global->ifcontent) === \'\') ob_end_clean();
 		else echo ob_get_clean();%A%',
 	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:ifcontent></div>')
 );

@@ -71,6 +71,10 @@ class PhpHelpers
 				} elseif ($name === T_DOC_COMMENT || $name === T_COMMENT) {
 					$php .= preg_replace("#\n[ \t]*+(?!\n)#", "\n" . str_repeat("\t", $level), $token);
 
+				} elseif ($name === T_CONSTANT_ENCAPSED_STRING && preg_match('#"[^$\\\\\']*"$#AD', $token)) {
+					$lastChar = '';
+					$php .= "'" . substr($token, 1, -1) . "'";
+
 				} elseif ($name === T_WHITESPACE) {
 					$prev = $tokens[$n - 1];
 					$lines = substr_count($token, "\n");

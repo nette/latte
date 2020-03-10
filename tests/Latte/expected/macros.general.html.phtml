@@ -256,7 +256,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 	public function prepare(): void
 	{
 		extract($this->params);
-		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
 			foreach (['person' => '47', 'foo' => '46', 'item' => '104'] as $_v => $_l) {
 				if (isset($this->params[$_v])) {
 					trigger_error("Variable \$$_v overwritten in foreach on line $_l");
