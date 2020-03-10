@@ -22,7 +22,7 @@ test(function () {
 
 	Assert::exception(function () use ($loader) {
 		$loader->getReferredName('inner', 'referrer');
-	}, 'LogicException', "Missing template 'inner'.");
+	}, LogicException::class, "Missing template 'inner'.");
 });
 
 test(function () {

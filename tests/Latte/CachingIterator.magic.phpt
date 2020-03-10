@@ -30,19 +30,19 @@ test(function () { // ==> Two items in array
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$iterator->undeclared();
-}, 'LogicException', 'Call to undefined method Latte\Runtime\CachingIterator::undeclared().');
+}, LogicException::class, 'Call to undefined method Latte\Runtime\CachingIterator::undeclared().');
 
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$iterator->rewnd();
-}, 'LogicException', 'Call to undefined method Latte\Runtime\CachingIterator::rewnd(), did you mean rewind()?');
+}, LogicException::class, 'Call to undefined method Latte\Runtime\CachingIterator::rewnd(), did you mean rewind()?');
 
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$iterator->undeclared = 'value';
-}, 'LogicException', 'Attempt to write to undeclared property Latte\Runtime\CachingIterator::$undeclared.');
+}, LogicException::class, 'Attempt to write to undeclared property Latte\Runtime\CachingIterator::$undeclared.');
 
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$val = $iterator->undeclared;
-}, 'LogicException', 'Attempt to read undeclared property Latte\Runtime\CachingIterator::$undeclared.');
+}, LogicException::class, 'Attempt to read undeclared property Latte\Runtime\CachingIterator::$undeclared.');

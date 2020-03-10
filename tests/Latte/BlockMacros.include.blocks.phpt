@@ -40,7 +40,7 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main4');
-}, 'RuntimeException', "Missing template 'block.2'.");
+}, RuntimeException::class, "Missing template 'block.2'.");
 
 Assert::match(
 	' before [block 1] after',
