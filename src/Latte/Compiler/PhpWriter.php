@@ -91,7 +91,7 @@ class PhpWriter
 					$code = $this->formatArray();
 					$code = $cond && $code === '[]' ? '' : $code; break;
 				case 'var':
-					$code = var_export($arg, true); break;
+					$code = PhpHelpers::dump($arg); break;
 				case 'raw':
 					$code = (string) $arg; break;
 			}
@@ -521,7 +521,7 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($_fi, ' . var_export(implode($this->context), true) . ', ')
+						$res->prepend('LR\Filters::convertTo($_fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
 							->append(')');
 					} else {
 						$res = $this->escapePass($res);
@@ -533,7 +533,7 @@ class PhpWriter
 				} else {
 					$name = strtolower($tokens->currentValue());
 					$res->prepend($isContent
-						? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
+						? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $_fi, '
 						: '($this->filters->' . $name . ')('
 					);
 					$inside = true;

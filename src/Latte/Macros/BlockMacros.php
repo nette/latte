@@ -13,6 +13,7 @@ use Latte;
 use Latte\CompileException;
 use Latte\Helpers;
 use Latte\MacroNode;
+use Latte\PhpHelpers;
 use Latte\PhpWriter;
 use Latte\Runtime\SnippetDriver;
 
@@ -131,12 +132,12 @@ class BlockMacros extends MacroSet
 		}
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
-			. (strpos($destination, '$') === false ? var_export($destination, true) : $destination)
+			. (strpos($destination, '$') === false ? PhpHelpers::dump($destination) : $destination)
 			. ', %node.array? + '
 			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
 			. ($node->modifiers
 				? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
-				: ($noEscape || $parent ? '' : ', ' . var_export(implode($node->context), true)))
+				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
 			. ');'
 		);
 	}
@@ -271,7 +272,7 @@ class BlockMacros extends MacroSet
 					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, get_defined_vars()'
 						. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
 				}
-				$blockType = var_export(implode($node->context), true);
+				$blockType = PhpHelpers::dump(implode($node->context));
 				$this->checkExtraArgs($node);
 				return "\$this->checkBlockContentType($blockType, $fname);"
 					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
