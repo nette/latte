@@ -76,7 +76,11 @@ class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			if (isset($this->params['name'])) trigger_error('Variable $name overwritten in foreach on line 8');
+			foreach (['name' => '8'] as $_v => $_l) {
+				if (isset($this->params[$_v])) {
+					trigger_error("Variable \$$_v overwritten in foreach on line $_l");
+				}
+			}
 		}
 
 	}

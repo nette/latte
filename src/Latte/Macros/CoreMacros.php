@@ -101,10 +101,10 @@ class CoreMacros extends MacroSet
 		}
 
 		$code = '';
-		foreach ($this->overwrittenVars as $var => $lines) {
-			$s = PhpHelpers::dump($var);
-			$code .= 'if (isset($this->params[' . PhpHelpers::dump($var)
-			. "])) trigger_error('Variable $" . addcslashes($var, "'") . ' overwritten in foreach on line ' . implode(', ', $lines) . "'); ";
+		if ($this->overwrittenVars) {
+			$vars = array_map(function ($l) { return implode(', ', $l); }, $this->overwrittenVars);
+			$code .= 'foreach (' . Latte\PhpHelpers::dump($vars) . ' as $_v => $_l) { '
+				. 'if (isset($this->params[$_v])) { trigger_error("Variable \$$_v overwritten in foreach on line $_l"); } } ';
 		}
 		$code = $code ? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}' : '';
 		return [$code];
