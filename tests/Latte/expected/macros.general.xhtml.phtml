@@ -259,9 +259,9 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			if (isset($this->params['person'])) trigger_error('Variable $person overwritten in foreach on line 47');
-			if (isset($this->params['foo'])) trigger_error('Variable $foo overwritten in foreach on line 46');
-			if (isset($this->params['item'])) trigger_error('Variable $item overwritten in foreach on line 104');
+			foreach (array_intersect_key(['person' => '47', 'foo' => '46', 'item' => '104'], $this->params) as $_v => $_l) {
+				trigger_error("Variable \$$_v overwritten in foreach on line $_l");
+			}
 		}
 
 	}
