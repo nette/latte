@@ -303,7 +303,7 @@ Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('context1a');
-}, 'LogicException', 'Filter |noescape is not defined.');
+}, LogicException::class, 'Filter |noescape is not defined.');
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1b');
@@ -336,7 +336,7 @@ Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('context1a');
-}, 'LogicException', 'Filter |noescape is not defined.');
+}, LogicException::class, 'Filter |noescape is not defined.');
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1b');
@@ -369,7 +369,7 @@ Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('context1a');
-}, 'LogicException', 'Filter |noescape is not defined.');
+}, LogicException::class, 'Filter |noescape is not defined.');
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('context1b');

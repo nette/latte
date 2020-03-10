@@ -56,7 +56,7 @@ test(function () {
 
 	Assert::exception(function () use ($filters) {
 		($filters->h3)('');
-	}, 'LogicException', "Filter 'h3' is not defined, did you mean 'f3'?");
+	}, LogicException::class, "Filter 'h3' is not defined, did you mean 'f3'?");
 });
 
 
@@ -92,7 +92,7 @@ test(function () {
 
 	Assert::exception(function () use ($filters) {
 		($filters->unknown)('');
-	}, 'LogicException', "Filter 'unknown' is not defined.");
+	}, LogicException::class, "Filter 'unknown' is not defined.");
 });
 
 
