@@ -86,8 +86,8 @@ class BlockMacros extends MacroSet
 		}
 
 		if ($this->namedBlocks) {
-			$compiler->addProperty('blocks', $functions);
-			$compiler->addProperty('blockTypes', $this->blockTypes);
+			$types = array_diff($this->blockTypes, [$compiler->getContentType()]);
+			$compiler->addConstant('BLOCKS', array_merge_recursive($functions, $types));
 		}
 
 		return [

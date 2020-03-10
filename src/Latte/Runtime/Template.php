@@ -21,20 +21,21 @@ class Template
 {
 	use Latte\Strict;
 
+	public const CONTENT_TYPE = Engine::CONTENT_HTML;
+
+	public const BLOCKS = [];
+
 	/** @var \stdClass global accumulators for intermediate results */
 	public $global;
 
-	/** @var string  @internal */
-	protected $contentType = Engine::CONTENT_HTML;
+	/** @deprecated */
+	public $blocks;
 
 	/** @var array  @internal */
 	protected $params = [];
 
 	/** @var FilterExecutor */
 	protected $filters;
-
-	/** @var array [name => method]  @internal */
-	protected $blocks = [];
 
 	/** @var string|null|false  @internal */
 	protected $parentName;
@@ -69,8 +70,11 @@ class Template
 		$this->name = $name;
 		$this->policy = $policy;
 		$this->global = (object) $providers;
-		foreach ($this->blocks as $nm => $method) {
+		$this->blocks = static::BLOCKS;
+		foreach (static::BLOCKS as $nm => $info) {
+			[$method, $type] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
 			$this->blockQueue[$nm][] = [$this, $method];
+			$this->blockTypes[$nm] = $type;
 		}
 	}
 
@@ -111,7 +115,7 @@ class Template
 
 	public function getContentType(): string
 	{
-		return $this->contentType;
+		return static::CONTENT_TYPE;
 	}
 
 
@@ -147,7 +151,7 @@ class Template
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
-		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', $this->contentType);
+		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', static::CONTENT_TYPE);
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
@@ -221,12 +225,12 @@ class Template
 	public function renderToContentType($mod): void
 	{
 		if ($mod instanceof \Closure) {
-			echo $mod($this->capture([$this, 'render']), $this->contentType);
-		} elseif ($mod && $mod !== $this->contentType) {
-			if ($filter = Filters::getConvertor($this->contentType, $mod)) {
+			echo $mod($this->capture([$this, 'render']), static::CONTENT_TYPE);
+		} elseif ($mod && $mod !== static::CONTENT_TYPE) {
+			if ($filter = Filters::getConvertor(static::CONTENT_TYPE, $mod)) {
 				echo $filter($this->capture([$this, 'render']));
 			} else {
-				trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
+				trigger_error("Including '$this->name' with content type " . strtoupper(static::CONTENT_TYPE) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
 			}
 		} else {
 			$this->render();
