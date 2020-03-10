@@ -14,6 +14,7 @@ use Latte\CompileException;
 use Latte\Engine;
 use Latte\Helpers;
 use Latte\MacroNode;
+use Latte\PhpHelpers;
 use Latte\PhpWriter;
 
 
@@ -101,8 +102,8 @@ class CoreMacros extends MacroSet
 
 		$code = '';
 		foreach ($this->overwrittenVars as $var => $lines) {
-			$s = var_export($var, true);
-			$code .= 'if (isset($this->params[' . var_export($var, true)
+			$s = PhpHelpers::dump($var);
+			$code .= 'if (isset($this->params[' . PhpHelpers::dump($var)
 			. "])) trigger_error('Variable $" . addcslashes($var, "'") . ' overwritten in foreach on line ' . implode(', ', $lines) . "'); ";
 		}
 		$code = $code ? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}' : '';
@@ -202,7 +203,7 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->closing) {
 			if (strpos($node->content, '<?php') === false) {
-				$value = var_export($node->content, true);
+				$value = PhpHelpers::dump($node->content);
 				$node->content = '';
 			} else {
 				$node->openingCode = '<?php ob_start(function () {}) ?>' . $node->openingCode;
@@ -235,7 +236,7 @@ class CoreMacros extends MacroSet
 			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
-				: var_export($noEscape ? null : implode($node->context), true)
+				: PhpHelpers::dump($noEscape ? null : implode($node->context))
 		);
 	}
 
@@ -581,6 +582,6 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroTemplatePrint(MacroNode $node)
 	{
-		$this->printTemplate = var_export($node->tokenizer->fetchWord() ?: null, true);
+		$this->printTemplate = PhpHelpers::dump($node->tokenizer->fetchWord() ?: null);
 	}
 }
