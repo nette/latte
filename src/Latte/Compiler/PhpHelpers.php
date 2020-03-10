@@ -110,17 +110,17 @@ class PhpHelpers
 	}
 
 
-	public static function dump($value): string
+	public static function dump($value, $multiline = false): string
 	{
 		if (is_array($value)) {
-			$s = "[\n";
+			$indexed = $value && array_keys($value) === range(0, count($value) - 1);
+			$s = '';
 			foreach ($value as $k => $v) {
-				$v = is_array($v) && (!$v || array_keys($v) === range(0, count($v) - 1))
-					? '[' . implode(', ', array_map(function ($s): string { return var_export($s, true); }, $v)) . ']'
-					: var_export($v, true);
-				$s .= "\t\t" . var_export($k, true) . ' => ' . $v . ",\n";
+				$s .= $multiline
+					? ($s === '' ? "\n" : '') . "\t" . ($indexed ? '' : self::dump($k) . ' => ') . self::dump($v) . ",\n"
+					: ($s === '' ? '' : ', ') . ($indexed ? '' : self::dump($k) . ' => ') . self::dump($v);
 			}
-			return $s . "\t]";
+			return '[' . $s . ']';
 		}
 		return var_export($value, true);
 	}
