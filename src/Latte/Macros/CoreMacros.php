@@ -192,7 +192,7 @@ class CoreMacros extends MacroSet
 	{
 		$node->openingCode = '<?php ob_start(function () {}); ?>';
 		$node->innerContent = '<?php ob_start(); ?>' . $node->innerContent . '<?php $this->global->ifcontent = ob_get_flush(); ?>';
-		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") ob_end_clean(); else echo ob_get_clean(); ?>';
+		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
 	}
 
 
@@ -369,7 +369,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
-		return $writer->write('if ($_tmp = array_filter(%node.array)) echo \' class="\', %escape(implode(" ", array_unique($_tmp))), \'"\'');
+		return $writer->write('echo ($_tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($_tmp))) . \'"\' : "";');
 	}
 
 
@@ -528,7 +528,7 @@ class CoreMacros extends MacroSet
 		$compiler->setContentType($type);
 
 		if (strpos($node->args, '/') && !$node->htmlNode) {
-			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) header(%var);', "Content-Type: $node->args");
+			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) { header(%var); } ', "Content-Type: $node->args");
 		}
 	}
 

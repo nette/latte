@@ -9,7 +9,9 @@ class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
-		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) header('Content-Type: application/xml; charset=utf-8');
+		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) {
+			header('Content-Type: application/xml; charset=utf-8');
+		}
 		?><<?php ?>?xml version="1.0" encoding="utf-8"?>
 <<?php ?>?xml-stylesheet type="text/css" href="<?php echo LR\Filters::escapeXml($id) /* line 3 */ ?>"?>
 

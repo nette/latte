@@ -23,7 +23,9 @@ class Template%a% extends Latte\Runtime\Template
 ?>
 
 <?php
-		if ($this->getParentName()) return get_defined_vars();
+		if ($this->getParentName()) {
+			return get_defined_vars();
+		}
 		$this->renderBlock('title', get_defined_vars());
 ?>
 
