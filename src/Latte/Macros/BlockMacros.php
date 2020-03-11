@@ -26,11 +26,11 @@ class BlockMacros extends MacroSet
 	/** @var string */
 	public $snippetAttribute = 'id';
 
-	/** @var array */
-	private $namedBlocks = [];
+	/** @var \stdClass[] */
+	private $stacks = [];
 
-	/** @var array */
-	private $blockTypes = [];
+	/** @var \stdClass */
+	private $currentStack;
 
 	/** @var string|bool|null */
 	private $extends;
@@ -50,6 +50,7 @@ class BlockMacros extends MacroSet
 		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd'], null, self::AUTO_CLOSE);
 		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('widget', [$me, 'macroWidget'], [$me, 'macroWidgetEnd']);
 		$me->addMacro('snippetArea', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('ifset', [$me, 'macroIfset'], '}');
 		$me->addMacro('elseifset', [$me, 'macroIfset']);
@@ -62,8 +63,8 @@ class BlockMacros extends MacroSet
 	 */
 	public function initialize()
 	{
-		$this->namedBlocks = [];
-		$this->blockTypes = [];
+		$this->stacks = [0 => (object) ['blocks' => [], 'types' => []]];
+		$this->currentStack = &$this->stacks[0];
 		$this->extends = null;
 		$this->imports = [];
 	}
@@ -75,18 +76,23 @@ class BlockMacros extends MacroSet
 	public function finalize()
 	{
 		$compiler = $this->getCompiler();
-		$functions = [];
-		foreach ($this->namedBlocks as $name => $code) {
-			$compiler->addMethod(
-				$functions[$name] = $this->generateMethodName($name),
-				'?>' . $compiler->expandTokens($code) . '<?php',
-				'array $_args',
-				'void'
-			);
+		$functions = $types = [];
+		foreach ($this->stacks as $i => $stack) {
+			foreach ($stack->blocks as $name => $code) {
+				$fullname = $name . ($i ? '__' . $i : '');
+				$compiler->addMethod(
+					$functions[$fullname] = $this->generateMethodName($fullname),
+					'?>' . $compiler->expandTokens($code) . '<?php',
+					'array $_args',
+					'void'
+				);
+				if ($stack->types[$name] !== $compiler->getContentType()) {
+					$types[$fullname] = $stack->types[$name];
+				}
+			}
 		}
 
-		if ($this->namedBlocks) {
-			$types = array_diff($this->blockTypes, [$compiler->getContentType()]);
+		if ($functions) {
 			$compiler->addConstant('BLOCKS', array_merge_recursive($functions, $types));
 		}
 
@@ -135,7 +141,7 @@ class BlockMacros extends MacroSet
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($destination, '$') === false ? PhpHelpers::dump($destination) : $destination)
 			. ', %node.array? + '
-			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
+			. (isset($this->stacks[0]->blocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
 			. ($node->modifiers
 				? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
@@ -291,11 +297,11 @@ class BlockMacros extends MacroSet
 			$node->data->name = $name = '_' . $name;
 		}
 
-		if (isset($this->namedBlocks[$name])) {
+		if (isset($this->currentStack->blocks[$name])) {
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
-		$extendsCheck = $this->namedBlocks ? '' : 'if ($this->getParentName()) { return get_defined_vars();} ';
-		$this->namedBlocks[$name] = true;
+		$extendsCheck = ($this->stacks[0]->blocks || count($this->stacks) > 1) ? '' : 'if ($this->getParentName()) { return get_defined_vars();} ';
+		$this->currentStack->blocks[$name] = true;
 
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
@@ -306,7 +312,7 @@ class BlockMacros extends MacroSet
 		} elseif ($node->modifiers) {
 			$node->modifiers .= '|escape';
 		}
-		$this->blockTypes[$name] = implode($node->context);
+		$this->currentStack->types[$name] = implode($node->context);
 
 		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
 			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
@@ -373,7 +379,7 @@ class BlockMacros extends MacroSet
 					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : 'extract($_args);') . ' ?>'
 						. $node->content;
 				}
-				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
+				$this->currentStack->blocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
 				$node->openingCode = '<?php ?>';
 
@@ -398,6 +404,36 @@ class BlockMacros extends MacroSet
 			$node->modifiers .= '|escape';
 			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
 		}
+	}
+
+
+	/**
+	 * {widget "file"}
+	 */
+	public function macroWidget(MacroNode $node, PhpWriter $writer)
+	{
+		if ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+		}
+
+		$key = count($this->stacks);
+		$this->stacks[] = $this->currentStack = (object) ['blocks' => [], 'types' => [], 'parent' => $this->currentStack];
+
+		return $writer->write(
+			'$this->createTemplate(%node.word, %node.array, "widget", %var)->renderToContentType(%var); if (false) {',
+			$key,
+			implode($node->context)
+		);
+	}
+
+
+	/**
+	 * {/widget}
+	 */
+	public function macroWidgetEnd(MacroNode $node, PhpWriter $writer)
+	{
+		$this->currentStack = $this->currentStack->parent;
+		return $writer->write('}');
 	}
 
 

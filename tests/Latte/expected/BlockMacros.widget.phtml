@@ -1,0 +1,44 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+	public const BLOCKS = [
+		'a__1' => 'blockA__1',
+		'a__2' => 'blockA__2',
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+?>
+
+<?php
+		$this->createTemplate("widget1.latte", [], "widget", 1)->renderToContentType('html');
+		if (false) {
+			$this->renderBlock('a', get_defined_vars());
+		}
+		?>	<?php
+		return get_defined_vars();
+	}
+
+
+	public function blockA__1(array $_args): void
+	{
+		extract($_args);
+		$this->createTemplate("widget2.latte", [], "widget", 2)->renderToContentType('html');
+		if (false) {
+			?>					<?php
+			$this->renderBlock('a', get_defined_vars());
+		}
+
+	}
+
+
+	public function blockA__2(array $_args): void
+	{
+		?>nested widgets A<?php
+	}
+
+}

@@ -37,6 +37,9 @@ class Template
 	/** @var FilterExecutor */
 	protected $filters;
 
+	/** @var array [id => [queue, types]]  @internal */
+	protected $stacks = [];
+
 	/** @var string|null|false  @internal */
 	protected $parentName;
 
@@ -73,9 +76,17 @@ class Template
 		$this->blocks = static::BLOCKS;
 		foreach (static::BLOCKS as $nm => $info) {
 			[$method, $type] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
-			$this->blockQueue[$nm][] = [$this, $method];
+			$pair = explode('__', $nm);
+			$key = $pair[1] ?? 0;
+			if (empty($this->stacks[$key])) {
+				$this->stacks[$key] = (object) ['queue' => [], 'types' => []];
+			}
+			$nm = $pair[0];
+			$this->stacks[$key]->queue[$nm][] = [$this, $method];
+			$this->stacks[$key]->types[$nm] = $type;
 			$this->blockTypes[$nm] = $type;
 		}
+		$this->blockQueue = $this->stacks[0]->queue ?? [];
 	}
 
 
@@ -195,7 +206,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	public function createTemplate(string $name, array $params, string $referenceType): self
+	public function createTemplate(string $name, array $params, string $referenceType, int $stack = 0): self
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		if ($referenceType === 'sandbox') {
@@ -206,13 +217,28 @@ class Template
 		$child->referringTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
-		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
+		if ($referenceType === 'widget') {
+			$tmp = [&$this->blockQueue, &$this->blockTypes];
+			if (isset($this->stacks[$stack])) {
+				$this->blockQueue = &$this->stacks[$stack]->queue;
+				$this->blockTypes = &$this->stacks[$stack]->types;
+			} else {
+				$arr1 = $arr2 = [];
+				$this->blockQueue = &$arr1;
+				$this->blockTypes = &$arr2;
+			}
+		}
+		if (in_array($referenceType, ['extends', 'includeblock', 'import', 'widget'], true)) {
 			$this->blockQueue = array_merge_recursive($this->blockQueue, $child->blockQueue);
 			foreach ($child->blockTypes as $nm => $type) {
 				$this->checkBlockContentType($type, $nm);
 			}
 			$child->blockQueue = &$this->blockQueue;
 			$child->blockTypes = &$this->blockTypes;
+		}
+		if (isset($tmp)) {
+			$this->blockQueue = &$tmp[0];
+			$this->blockTypes = &$tmp[1];
 		}
 		return $child;
 	}
