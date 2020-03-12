@@ -117,3 +117,7 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php include "file" }');
 }, Latte\CompileException::class, "Forbidden keyword 'include' inside macro.");
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=`whoami`}');
+}, [E_USER_DEPRECATED, E_USER_DEPRECATED]);

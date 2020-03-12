@@ -64,3 +64,7 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj::$prop}', ['obj' => new stdClass]);
 }, Latte\SecurityViolation::class, "Access to 'prop' property on a stdClass object is not allowed.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{=`whoami`}');
+}, Latte\CompileException::class, 'Forbidden backtick operator.');

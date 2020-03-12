@@ -197,6 +197,13 @@ class PhpWriter
 
 			} elseif ($tokens->isCurrent(')', ']', '}') && $tokens->currentValue() !== array_pop($brackets)) {
 				throw new CompileException('Unexpected ' . $tokens->currentValue());
+
+			} elseif ($tokens->isCurrent('`')) {
+				if ($this->policy) {
+					throw new CompileException('Forbidden backtick operator.');
+				} else {
+					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
+				}
 			}
 		}
 		if ($brackets) {
