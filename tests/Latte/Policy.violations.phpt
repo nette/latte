@@ -10,7 +10,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=', 'do']));
 $latte->setSandboxMode();
 
 Assert::exception(function () use ($latte) {
@@ -68,3 +68,23 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{=`whoami`}');
 }, Latte\CompileException::class, 'Forbidden backtick operator.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{$this->filters}');
+}, Latte\CompileException::class, 'Forbidden variable $this.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{do echo 123}');
+}, Latte\CompileException::class, "Forbidden keyword 'echo' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{do return 123}');
+}, Latte\CompileException::class, "Forbidden keyword 'return' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{do yield 123}');
+}, Latte\CompileException::class, "Forbidden keyword 'yield' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{do new stdClass}');
+}, Latte\CompileException::class, "Forbidden keyword 'new' inside macro.");

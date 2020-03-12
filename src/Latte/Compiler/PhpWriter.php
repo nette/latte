@@ -204,6 +204,9 @@ class PhpWriter
 				} else {
 					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
 				}
+
+			} elseif ($this->policy && $tokens->isCurrent('$this')) {
+				throw new CompileException('Forbidden variable $this.');
 			}
 		}
 		if ($brackets) {
@@ -222,7 +225,10 @@ class PhpWriter
 				!$tokens->isPrev('::', '->')
 				&& (
 					$tokens->isCurrent('__halt_compiler', 'declare', 'die', 'eval', 'exit', 'include', 'include_once', 'require', 'require_once')
-					|| (!$tokens->depth && $tokens->isCurrent('return', 'yield'))
+					|| ($this->policy && $tokens->isCurrent('break', 'case', 'catch', 'continue', 'do', 'echo', 'else', 'elseif', 'endfor',
+						'endforeach', 'endswitch', 'endwhile', 'finally', 'for', 'foreach', 'if', 'new', 'print', 'switch', 'throw', 'try', 'while'
+					))
+					|| (($this->policy || !$tokens->depth) && $tokens->isCurrent('return', 'yield'))
 					|| (!$tokens->isNext('(') && $tokens->isCurrent('function', 'use'))
 					|| ($tokens->isCurrent('abstract', 'class', 'const', 'enddeclare', 'extends', 'final', 'global', 'goto', 'implements',
 						'insteadof', 'interface', 'namespace', 'private', 'protected', 'public', 'static', 'trait', 'var'
