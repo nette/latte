@@ -200,6 +200,12 @@ class PhpWriter
 				&& !$brackets
 			) {
 				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
+
+			} elseif ($this->policy && $tokens->isCurrent('$this')) {
+				throw new CompileException('Forbidden variable $this.');
+
+			} elseif ($this->policy && $tokens->isCurrent('`')) {
+				throw new CompileException('Forbidden backtick operator.');
 			}
 		}
 		if ($brackets) {
