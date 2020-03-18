@@ -485,6 +485,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
+		if (!$node->args) {
+			throw new CompileException('Missing arguments in ' . $node->getNotation());
+		}
 		return $writer->write($node->name === '='
 			? "echo %modify(%node.args) /* line $node->startLine */"
 			: '%modify(%node.args);'
