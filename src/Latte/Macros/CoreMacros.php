@@ -67,6 +67,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('include', [$me, 'macroInclude']);
 		$me->addMacro('contentType', [$me, 'macroContentType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('php', [$me, 'macroExpr']);
+		$me->addMacro('do', [$me, 'macroExpr']);
 
 		$me->addMacro('class', null, null, [$me, 'macroClass']);
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
@@ -480,6 +481,7 @@ class CoreMacros extends MacroSet
 	/**
 	 * {= ...}
 	 * {php ...}
+	 * {do ...}
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
