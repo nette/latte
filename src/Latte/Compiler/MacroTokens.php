@@ -54,10 +54,10 @@ class MacroTokens extends TokenIterator
 			self::T_STRING => Parser::RE_STRING,
 			self::T_KEYWORD => '(?:true|false|null|TRUE|FALSE|NULL|INF|NAN|and|or|xor|AND|OR|XOR|clone|new|instanceof|return|continue|break)(?!\w)', // keyword
 			self::T_CAST => '\((?:expand|string|array|int|integer|float|bool|boolean|object)\)', // type casting
-			self::T_VARIABLE => '\$\w+',
+			self::T_VARIABLE => '\$(?>\w\pM*)+',
 			self::T_NUMBER => '[+-]?[0-9]+(?:\.[0-9]+)?(?:e[0-9]+)?',
-			self::T_SYMBOL => '\w+(?:-+\w+)*',
-			self::T_CHAR => '::|=>|->|\?->|\?\?->|\+\+|--|<<|>>|<=>|<=|>=|===|!==|==|!=|<>|&&|\|\||\?\?|\?>|\*\*|\.\.\.|[^"\']', // =>, any char except quotes
+			self::T_SYMBOL => '(?>\w\pM*)+(?:-+(?>\w\pM*)+)*',
+			self::T_CHAR => '::|=>|->|\?->|\?\?->|\+\+|--|<<|>>|<=>|<=|>=|===|!==|==|!=|<>|&&|\|\||\?\?|\?>|\*\*|\.\.\.|(?>[^"\']\pM*)', // =>, any char except quotes
 		], 'u');
 		return self::$tokenizer->tokenize($s);
 	}
