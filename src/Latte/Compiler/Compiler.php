@@ -417,7 +417,7 @@ class Compiler
 
 		} elseif (
 			(($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
-			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|json|css#i', $htmlNode->attrs['type']))
+			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|module|json|css#i', $htmlNode->attrs['type']))
 		) {
 			$this->context = $lower === 'script' ? self::CONTEXT_HTML_JS : self::CONTEXT_HTML_CSS;
 		}

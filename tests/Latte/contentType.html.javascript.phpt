@@ -64,6 +64,11 @@ Assert::match(
 );
 
 Assert::match(
+	'<script type="module">"<>"',
+	$latte->renderToString('<script type="module">{="<>"}')
+);
+
+Assert::match(
 	'<script type="application/json">{ foo:"<>" }',
 	$latte->renderToString('<script type="application/json">{ foo:{="<>"} }')
 );
