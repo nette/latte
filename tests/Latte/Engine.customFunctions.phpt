@@ -71,3 +71,13 @@ Assert::same(
 Assert::error(function () use ($latte) {
 	$latte->compile('{casE(123)}');
 }, E_USER_WARNING, "Case mismatch on function name 'casE', correct name is 'CaSe'.");
+
+
+// with inline modifier
+$latte->addFunction('fnc', function ($val) {
+	return strrev($val);
+});
+Assert::same(
+	'CBA',
+	$latte->renderToString('{fnc(abc|upper)}')
+);

@@ -451,7 +451,7 @@ class PhpWriter
 
 	private function inlineModifierInner(MacroTokens $tokens): array
 	{
-		$isFunctionOrArray = $tokens->isPrev($tokens::T_VARIABLE, $tokens::T_SYMBOL) || $tokens->isCurrent('[');
+		$isFunctionOrArray = $tokens->isPrev($tokens::T_VARIABLE, $tokens::T_SYMBOL, ')') || $tokens->isCurrent('[');
 		$result = new MacroTokens;
 		$args = new MacroTokens;
 		$modifiers = new MacroTokens;
