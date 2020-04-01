@@ -231,7 +231,7 @@ class Engine
 
 	public function getTemplateClass(string $name): string
 	{
-		$key = $this->getLoader()->getUniqueId($name) . "\00" . self::VERSION;
+		$key = serialize([$this->getLoader()->getUniqueId($name), self::VERSION, array_keys((array) $this->functions)]);
 		return 'Template' . substr(md5($key), 0, 10);
 	}
 
