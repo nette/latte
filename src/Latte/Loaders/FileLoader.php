@@ -20,7 +20,7 @@ class FileLoader implements Latte\Loader
 	use Latte\Strict;
 
 	/** @var string|null */
-	private $baseDir;
+	protected $baseDir;
 
 
 	public function __construct($baseDir = null)
@@ -78,7 +78,7 @@ class FileLoader implements Latte\Loader
 	}
 
 
-	private static function normalizePath(string $path): string
+	protected static function normalizePath(string $path): string
 	{
 		$res = [];
 		foreach (explode('/', strtr($path, '\\', '/')) as $part) {
