@@ -77,8 +77,8 @@ class Engine
 	 */
 	public function render(string $name, $params = [], string $block = null): void
 	{
-		$this->createTemplate($name, (array) $params + ($block ? ['_renderblock' => $block] : []))
-			->render();
+		$this->createTemplate($name, (array) $params)
+			->render($block);
 	}
 
 
@@ -88,8 +88,8 @@ class Engine
 	 */
 	public function renderToString(string $name, $params = [], string $block = null): string
 	{
-		$template = $this->createTemplate($name, (array) $params + ($block ? ['_renderblock' => $block] : []));
-		return $template->capture([$template, 'render']);
+		$template = $this->createTemplate($name, (array) $params);
+		return $template->capture(function () use ($template, $block) { $template->render($block); });
 	}
 
 

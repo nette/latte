@@ -132,7 +132,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	public function render(): void
+	public function render(string $block = null): void
 	{
 		$this->prepare();
 
@@ -154,14 +154,14 @@ class Template
 			ob_start(function () {});
 			$params = $this->main();
 			ob_end_clean();
-			$this->createTemplate($this->parentName, $params, 'extends')->render();
+			$this->createTemplate($this->parentName, $params, 'extends')->render($block);
 			return;
 
-		} elseif (!empty($this->params['_renderblock'])) { // single block rendering
+		} elseif ($block !== null) { // single block rendering
 			$tmp = $this;
 			while (in_array($this->referenceType, ['extends', null], true) && ($tmp = $tmp->referringTemplate));
 			if (!$tmp) {
-				$this->renderBlock($this->params['_renderblock'], $this->params);
+				$this->renderBlock($block, $this->params);
 				return;
 			}
 		}
