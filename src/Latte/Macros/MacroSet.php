@@ -66,6 +66,7 @@ class MacroSet implements Latte\Macro
 	 */
 	public function finalize()
 	{
+		return null;
 	}
 
 
@@ -121,6 +122,7 @@ class MacroSet implements Latte\Macro
 		} elseif (!$end) {
 			return false;
 		}
+		return null;
 	}
 
 
