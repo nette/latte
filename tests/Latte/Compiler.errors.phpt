@@ -95,9 +95,9 @@ Assert::noError(function () use ($latte) {
 });
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{php yield}');
+	$latte->compile('{php yield $x}');
 }, Latte\CompileException::class, "Forbidden keyword 'yield' inside macro.");
 
 Assert::noError(function () use ($latte) {
-	$latte->compile('{php function () { yield; }}');
+	$latte->compile('{php function () { yield $x; }}');
 });

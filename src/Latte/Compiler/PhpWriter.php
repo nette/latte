@@ -117,11 +117,14 @@ class PhpWriter
 	 */
 	public function formatModifiers(string $var, bool $isContent = false): string
 	{
+		static $uniq;
+		$uniq = $uniq ?? '$' . bin2hex(random_bytes(5));
 		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
 		$tokens = $this->preprocess($tokens);
-		$tokens = $this->modifierPass($tokens, $var, $isContent);
+		$tokens = $this->modifierPass($tokens, $uniq, $isContent);
 		$tokens = $this->quotingPass($tokens);
-		return $tokens->joinAll();
+		$this->validateKeywords($tokens);
+		return str_replace($uniq, $var, $tokens->joinAll());
 	}
 
 
@@ -132,6 +135,7 @@ class PhpWriter
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->quotingPass($tokens);
+		$this->validateKeywords($tokens);
 		return $tokens->joinAll();
 	}
 
@@ -144,6 +148,7 @@ class PhpWriter
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->expandCastPass($tokens);
 		$tokens = $this->quotingPass($tokens);
+		$this->validateKeywords($tokens);
 		return $tokens->joinAll();
 	}
 
@@ -192,18 +197,26 @@ class PhpWriter
 
 			} elseif ($tokens->isCurrent(')', ']', '}') && $tokens->currentValue() !== array_pop($brackets)) {
 				throw new CompileException('Unexpected ' . $tokens->currentValue());
-
-			} elseif (
-				$tokens->isCurrent('function', 'class', 'interface', 'trait')
-				&& $tokens->isNext($tokens::T_SYMBOL, '&')
-				|| $tokens->isCurrent('return', 'yield')
-				&& !$brackets
-			) {
-				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
 			}
 		}
 		if ($brackets) {
 			throw new CompileException('Missing ' . array_pop($brackets));
+		}
+		$tokens->position = $pos;
+	}
+
+
+	/** @throws CompileException */
+	public function validateKeywords(MacroTokens $tokens): void
+	{
+		$pos = $tokens->position;
+		while ($tokens->nextToken()) {
+			if (
+				$tokens->isCurrent('function', 'class', 'interface', 'trait') && $tokens->isNext($tokens::T_SYMBOL, '&')
+				|| $tokens->isCurrent('return', 'yield') && !$tokens->depth
+			) {
+				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
+			}
 		}
 		$tokens->position = $pos;
 	}
