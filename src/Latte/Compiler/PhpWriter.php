@@ -212,8 +212,15 @@ class PhpWriter
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			if (
-				$tokens->isCurrent('function', 'class', 'interface', 'trait') && $tokens->isNext($tokens::T_SYMBOL, '&')
-				|| $tokens->isCurrent('return', 'yield') && !$tokens->depth
+				!$tokens->isPrev('::', '->')
+				&& (
+					$tokens->isCurrent('__halt_compiler', 'declare', 'die', 'eval', 'exit', 'include', 'include_once', 'require', 'require_once')
+					|| (!$tokens->depth && $tokens->isCurrent('return', 'yield'))
+					|| (!$tokens->isNext('(') && $tokens->isCurrent('function', 'use'))
+					|| ($tokens->isCurrent('abstract', 'class', 'const', 'enddeclare', 'extends', 'final', 'global', 'goto', 'implements',
+						'insteadof', 'interface', 'namespace', 'private', 'protected', 'public', 'static', 'trait', 'var'
+					))
+				)
 			) {
 				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
 			}

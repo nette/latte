@@ -82,6 +82,14 @@ Assert::exception(function () use ($latte) {
 	$latte->compile('{php class test }');
 }, Latte\CompileException::class, "Forbidden keyword 'class' inside macro.");
 
+Assert::noError(function () use ($latte) {
+	$latte->compile('{php Foo::class }');
+});
+
+Assert::noError(function () use ($latte) {
+	$latte->compile('{php $obj->interface }');
+});
+
 Assert::exception(function () use ($latte) {
 	$latte->compile('{php interface test }');
 }, Latte\CompileException::class, "Forbidden keyword 'interface' inside macro.");
@@ -101,3 +109,11 @@ Assert::exception(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{php function () { yield $x; }}');
 });
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php die() }');
+}, Latte\CompileException::class, "Forbidden keyword 'die' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{php include "file" }');
+}, Latte\CompileException::class, "Forbidden keyword 'include' inside macro.");
