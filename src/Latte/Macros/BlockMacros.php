@@ -187,7 +187,7 @@ class BlockMacros extends MacroSet
 		$notation = $node->getNotation();
 		if ($node->modifiers) {
 			throw new CompileException("Modifiers are not allowed in $notation");
-		} elseif (!$node->args) {
+		} elseif ($node->args === '') {
 			throw new CompileException("Missing destination in $notation");
 		} elseif ($node->parentNode) {
 			throw new CompileException("$notation must be placed outside any macro.");

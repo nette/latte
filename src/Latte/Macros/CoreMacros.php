@@ -156,7 +156,7 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		} elseif ($node->args) {
+		} elseif ($node->args !== '') {
 			$hint = Helpers::startsWith($node->args, 'if') ? ', did you mean {elseif}?' : '';
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
 		}
@@ -273,7 +273,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroSpaceless(MacroNode $node)
 	{
-		if ($node->modifiers || $node->args) {
+		if ($node->modifiers || $node->args !== '') {
 			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
 		}
 		$node->openingCode = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
@@ -405,7 +405,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
-			return $writer->write($node->args == null ? "$func()" : "if (%node.args) $func();");
+			return $writer->write($node->args === '' ? "$func()" : "if (%node.args) $func();");
 		}
 	}
 

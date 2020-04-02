@@ -89,7 +89,7 @@ class MacroSet implements Latte\Macro
 		}
 
 		if (
-			$node->args
+			$node->args !== ''
 			&& (!$begin || (is_string($begin) && strpos($begin, '%node') === false))
 			&& (!$end || (is_string($end) && strpos($end, '%node') === false))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%node') === false))

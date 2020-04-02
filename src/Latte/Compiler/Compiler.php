@@ -530,7 +530,7 @@ class Compiler
 			!$node
 			|| ($node->name !== $name && $name !== '')
 			|| $modifiers
-			|| ($args && $node->args && !Helpers::startsWith("$node->args ", "$args "))
+			|| ($args !== '' && $node->args !== '' && !Helpers::startsWith("$node->args ", "$args "))
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix
@@ -540,7 +540,7 @@ class Compiler
 		}
 
 		$this->macroNode = $node->parentNode;
-		if (!$node->args) {
+		if ($node->args === '') {
 			$node->setArgs($args);
 		}
 
