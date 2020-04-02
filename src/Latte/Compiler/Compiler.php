@@ -326,7 +326,7 @@ class Compiler
 				if ($node->empty) {
 					throw new CompileException("Unexpected /} in tag {$token->text}");
 				}
-				$this->closeMacro($token->name, null, null, $isRightmost);
+				$this->closeMacro($token->name, '', '', $isRightmost);
 			}
 		}
 	}
@@ -500,7 +500,7 @@ class Compiler
 	 * Generates code for {macro ...} to the output.
 	 * @internal
 	 */
-	public function openMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, string $nPrefix = null): MacroNode
+	public function openMacro(string $name, string $args = '', string $modifiers = '', bool $isRightmost = false, string $nPrefix = null): MacroNode
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -522,7 +522,7 @@ class Compiler
 	 * Generates code for {/macro ...} to the output.
 	 * @internal
 	 */
-	public function closeMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, string $nPrefix = null): MacroNode
+	public function closeMacro(string $name, string $args = '', string $modifiers = '', bool $isRightmost = false, string $nPrefix = null): MacroNode
 	{
 		$node = $this->macroNode;
 
@@ -607,11 +607,11 @@ class Compiler
 			if (isset($attrs[$attrName])) {
 				if ($this->htmlNode->closing) {
 					$left[] = function () use ($name) {
-						$this->closeMacro($name, '', null, false, MacroNode::PREFIX_INNER);
+						$this->closeMacro($name, '', '', false, MacroNode::PREFIX_INNER);
 					};
 				} else {
 					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						if ($this->openMacro($name, $attrs[$attrName], null, false, MacroNode::PREFIX_INNER)->empty) {
+						if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_INNER)->empty) {
 							throw new CompileException("Unable to use empty macro as n:$attrName.");
 						}
 					});
@@ -636,12 +636,12 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
 				$left[] = function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], null, false, MacroNode::PREFIX_TAG)->empty) {
+					if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_TAG)->empty) {
 						throw new CompileException("Unable to use empty macro as n:$attrName.");
 					}
 				};
 				array_unshift($right, function () use ($name) {
-					$this->closeMacro($name, '', null, false, MacroNode::PREFIX_TAG);
+					$this->closeMacro($name, '', '', false, MacroNode::PREFIX_TAG);
 				});
 				unset($attrs[$attrName]);
 			}
@@ -651,11 +651,11 @@ class Compiler
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
 					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', null, false, MacroNode::PREFIX_NONE);
+						$this->closeMacro($name, '', '', false, MacroNode::PREFIX_NONE);
 					};
 				} else {
 					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
-						$node = $this->openMacro($name, $attrs[$name], null, false, MacroNode::PREFIX_NONE);
+						$node = $this->openMacro($name, $attrs[$name], '', false, MacroNode::PREFIX_NONE);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {
@@ -701,7 +701,7 @@ class Compiler
 	 * Expands macro and returns node & code.
 	 * @internal
 	 */
-	public function expandMacro(string $name, string $args, string $modifiers = null, string $nPrefix = null): MacroNode
+	public function expandMacro(string $name, string $args, string $modifiers = '', string $nPrefix = null): MacroNode
 	{
 		if (empty($this->macros[$name])) {
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')

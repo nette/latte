@@ -73,7 +73,7 @@ class MacroNode
 	/** @var array [contentType, context] */
 	public $context;
 
-	/** @var string  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
+	/** @var string|null  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
 	public $prefix;
 
 	/** @var int  position of start tag in source template */
@@ -86,7 +86,7 @@ class MacroNode
 	public $saved;
 
 
-	public function __construct(Macro $macro, string $name, string $args = null, string $modifiers = null, self $parentNode = null, HtmlNode $htmlNode = null, string $prefix = null)
+	public function __construct(Macro $macro, string $name, string $args = '', string $modifiers = '', self $parentNode = null, HtmlNode $htmlNode = null, string $prefix = null)
 	{
 		$this->macro = $macro;
 		$this->name = (string) $name;
@@ -99,10 +99,10 @@ class MacroNode
 	}
 
 
-	public function setArgs(?string $args): void
+	public function setArgs(string $args): void
 	{
-		$this->args = (string) $args;
-		$this->tokenizer = new MacroTokens($this->args);
+		$this->args = $args;
+		$this->tokenizer = new MacroTokens($args);
 	}
 
 
