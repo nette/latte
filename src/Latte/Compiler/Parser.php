@@ -62,6 +62,9 @@ class Parser
 	/** @var int  position on source template */
 	private $offset;
 
+	/** @var int */
+	private $line;
+
 	/** @var array */
 	private $context = [self::CONTEXT_HTML_TEXT, null];
 
@@ -90,11 +93,12 @@ class Parser
 
 		$this->input = $input = str_replace("\r\n", "\n", $input);
 		$this->offset = 0;
+		$this->line = 1;
 		$this->output = [];
 
 		if (!preg_match('##u', $input)) {
 			preg_match('#(?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})*+#A', $input, $m);
-			$this->offset = strlen($m[0]) + 1;
+			$this->line += substr_count($m[0], "\n");
 			throw new \InvalidArgumentException('Template is not valid UTF-8 stream.');
 		}
 
@@ -409,16 +413,15 @@ class Parser
 		$this->output[] = $token = new Token;
 		$token->type = $type;
 		$token->text = $text;
-		$token->line = $this->getLine() - substr_count(ltrim($text), "\n");
+		$token->line = $this->line;
+		$this->line += substr_count($text, "\n");
 		return $token;
 	}
 
 
 	public function getLine(): int
 	{
-		return $this->offset
-			? substr_count(substr($this->input, 0, $this->offset - 1), "\n") + 1
-			: 1;
+		return $this->line;
 	}
 
 
