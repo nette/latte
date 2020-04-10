@@ -43,7 +43,7 @@ class Helpers
 		$best = null;
 		$min = (strlen($value) / 4 + 1) * 10 + .1;
 		foreach (array_unique($items, SORT_REGULAR) as $item) {
-			$item = is_object($item) ? $item->getName() : $item;
+			$item = is_object($item) ? $item->name : $item;
 			if (($len = levenshtein($item, $value, 10, 11, 10)) > 0 && $len < $min) {
 				$min = $len;
 				$best = $item;

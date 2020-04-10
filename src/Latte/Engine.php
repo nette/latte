@@ -401,10 +401,10 @@ class Engine
 		$methods = (new \ReflectionClass($params))->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {
 			if (strpos((string) $method->getDocComment(), '@filter')) {
-				$this->addFilter($method->getName(), [$params, $method->getName()]);
+				$this->addFilter($method->name, [$params, $method->name]);
 			}
 			if (strpos((string) $method->getDocComment(), '@function')) {
-				$this->addFunction($method->getName(), [$params, $method->getName()]);
+				$this->addFunction($method->name, [$params, $method->name]);
 			}
 		}
 
