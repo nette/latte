@@ -29,12 +29,12 @@ namespace Latte {
 
 namespace Latte\Runtime {
 	if (false) {
-		/** @deprecated use Latte\Runtime\HtmlString */
+		/** @deprecated use Latte\Runtime\HtmlStringable */
 		interface IHtmlString
 		{
 		}
 	} elseif (!interface_exists(IHtmlString::class)) {
-		class_alias(HtmlString::class, IHtmlString::class);
+		class_alias(HtmlStringable::class, IHtmlString::class);
 	}
 
 	if (false) {
