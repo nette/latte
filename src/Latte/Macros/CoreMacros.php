@@ -53,6 +53,9 @@ class CoreMacros extends MacroSet
 		$me->addMacro('last', 'if ($iterator->isLast(%node.args)) {', '}');
 		$me->addMacro('sep', 'if (!$iterator->isLast(%node.args)) {', '}');
 
+		$me->addMacro('try', [$me, 'macroTry'], [$me, 'macroEndTry']);
+		$me->addMacro('catch', [$me, 'macroCatch']);
+
 		$me->addMacro('var', [$me, 'macroVar']);
 		$me->addMacro('default', [$me, 'macroVar']);
 		$me->addMacro('dump', [$me, 'macroDump']);
@@ -282,7 +285,7 @@ class CoreMacros extends MacroSet
 	public function macroSpaceless(MacroNode $node)
 	{
 		if ($node->modifiers || $node->args !== '') {
-			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
+			throw new CompileException('Neither arguments nor modifiers are allowed in ' . $node->getNotation());
 		}
 		$node->openingCode = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
 			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096); ?>"
@@ -364,6 +367,50 @@ class CoreMacros extends MacroSet
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
 		}
 		return $writer->write("if (%node.args) $cmd;");
+	}
+
+
+	/**
+	 * {try}
+	 */
+	public function macroTry(MacroNode $node, PhpWriter $writer)
+	{
+		if ($node->modifiers || $node->args !== '') {
+			throw new CompileException('Neither arguments nor modifiers are allowed in ' . $node->getNotation());
+		}
+		return 'ob_start(function () {}); try {';
+	}
+
+
+	/**
+	 * {/try}
+	 */
+	public function macroEndTry(MacroNode $node, PhpWriter $writer)
+	{
+		if ($node->modifiers || $node->args !== '') {
+			throw new CompileException('Neither arguments nor modifiers are allowed in ' . $node->getNotation());
+		}
+		return empty($node->data->catch)
+			? 'echo ob_get_clean(); } catch (\Throwable $__e) { ob_end_clean(); if (isset($this->global->coreExceptionHandler)) { ($this->global->coreExceptionHandler)($__e, $this); } }'
+			: '}';
+	}
+
+
+	/**
+	 * {catch}
+	 */
+	public function macroCatch(MacroNode $node, PhpWriter $writer)
+	{
+		$parentNode = $node->parentNode;
+		if ($node->modifiers || $node->args !== '') {
+			throw new CompileException('Neither arguments nor modifiers are allowed in ' . $node->getNotation());
+		} elseif (!$parentNode || $parentNode->name !== 'try') {
+			throw new CompileException('Macro {catch} must be inside {try} ... {/try}.');
+		} elseif (isset($parentNode->data->catch)) {
+			throw new CompileException('Macro {try} supports only one {catch}.');
+		}
+		$parentNode->data->catch = true;
+		return 'echo ob_get_clean(); } catch (\Throwable $__e) { ob_end_clean(); if (isset($this->global->coreExceptionHandler)) { ($this->global->coreExceptionHandler)($__e, $this); }';
 	}
 
 
