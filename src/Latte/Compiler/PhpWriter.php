@@ -188,15 +188,16 @@ class PhpWriter
 		$brackets = [];
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
+			$tokenValue = $tokens->currentValue();
 			if ($tokens->isCurrent('?>')) {
 				throw new CompileException('Forbidden ?> inside macro');
 
 			} elseif ($tokens->isCurrent('(', '[', '{')) {
 				static $counterpart = ['(' => ')', '[' => ']', '{' => '}'];
-				$brackets[] = $counterpart[$tokens->currentValue()];
+				$brackets[] = $counterpart[$tokenValue];
 
-			} elseif ($tokens->isCurrent(')', ']', '}') && $tokens->currentValue() !== array_pop($brackets)) {
-				throw new CompileException('Unexpected ' . $tokens->currentValue());
+			} elseif ($tokens->isCurrent(')', ']', '}') && $tokenValue !== array_pop($brackets)) {
+				throw new CompileException('Unexpected ' . $tokenValue);
 
 			} elseif ($tokens->isCurrent('`')) {
 				if ($this->policy) {
@@ -205,8 +206,8 @@ class PhpWriter
 					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
 				}
 
-			} elseif ($this->policy && $tokens->isCurrent('$this')) {
-				throw new CompileException('Forbidden variable $this.');
+			} elseif ($this->policy && ($tokens->isCurrent('$this') || substr($tokenValue, 0, 2) === '$_')) {
+				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
 		}
 		if ($brackets) {
