@@ -26,4 +26,4 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{="trim"("hello")}');
-}, Latte\SecurityViolation::class, 'Calling trim() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling trim() is not allowed.');

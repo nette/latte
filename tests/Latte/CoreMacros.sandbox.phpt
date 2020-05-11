@@ -45,4 +45,4 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main4');
-}, Latte\SecurityViolation::class, "Access to 'item' property on a stdClass object is not allowed.");
+}, Latte\SecurityViolationException::class, "Access to 'item' property on a stdClass object is not allowed.");

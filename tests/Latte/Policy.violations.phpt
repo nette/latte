@@ -43,27 +43,27 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{="trim"(123)}');
-}, Latte\SecurityViolation::class, 'Calling trim() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling trim() is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->error(123)}', ['obj' => new stdClass]);
-}, Latte\SecurityViolation::class, 'Calling stdClass::error() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling stdClass::error() is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=[$obj, "error"](123)}', ['obj' => new stdClass]);
-}, Latte\SecurityViolation::class, 'Calling stdClass::error() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling stdClass::error() is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->error}', ['obj' => new stdClass]);
-}, Latte\SecurityViolation::class, "Access to 'error' property on a stdClass object is not allowed.");
+}, Latte\SecurityViolationException::class, "Access to 'error' property on a stdClass object is not allowed.");
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->$prop}', ['obj' => new stdClass, 'prop' => 'error']);
-}, Latte\SecurityViolation::class, "Access to 'error' property on a stdClass object is not allowed.");
+}, Latte\SecurityViolationException::class, "Access to 'error' property on a stdClass object is not allowed.");
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj::$prop}', ['obj' => new stdClass]);
-}, Latte\SecurityViolation::class, "Access to 'prop' property on a stdClass object is not allowed.");
+}, Latte\SecurityViolationException::class, "Access to 'prop' property on a stdClass object is not allowed.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{=`whoami`}');

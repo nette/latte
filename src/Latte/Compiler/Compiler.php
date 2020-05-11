@@ -729,7 +729,7 @@ class Compiler
 			throw new CompileException("Unknown macro {{$name}}$hint");
 
 		} elseif ($this->policy && !$this->policy->isMacroAllowed($name)) {
-			throw new SecurityViolation('Macro ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
+			throw new SecurityViolationException('Macro ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
 		}
 
 		$modifiers = (string) $modifiers;
@@ -741,7 +741,7 @@ class Compiler
 						$modifiers .= '|checkurl';
 					}
 				} elseif ($this->policy && !$this->policy->isFilterAllowed('nocheck')) {
-					throw new SecurityViolation('Filter |nocheck is not allowed.');
+					throw new SecurityViolationException('Filter |nocheck is not allowed.');
 				}
 			}
 
@@ -751,7 +751,7 @@ class Compiler
 					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
 				}
 			} elseif ($this->policy && !$this->policy->isFilterAllowed('noescape')) {
-				throw new SecurityViolation('Filter |noescape is not allowed.');
+				throw new SecurityViolationException('Filter |noescape is not allowed.');
 			}
 		}
 

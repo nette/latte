@@ -512,7 +512,7 @@ class PhpWriter
 					if ($static) { // global function
 						$name = $expr->joinAll();
 						if (!$this->policy->isFunctionAllowed($name)) {
-							throw new SecurityViolation("Function $name() is not allowed.");
+							throw new SecurityViolationException("Function $name() is not allowed.");
 						}
 						$static = false;
 						$expr->append('(');
@@ -693,7 +693,7 @@ class PhpWriter
 				} else {
 					$name = $tokens->currentValue();
 					if ($this->policy && !$this->policy->isFilterAllowed($name)) {
-						throw new SecurityViolation("Filter |$name is not allowed.");
+						throw new SecurityViolationException("Filter |$name is not allowed.");
 					}
 					$name = strtolower($name);
 					$res->prepend($isContent

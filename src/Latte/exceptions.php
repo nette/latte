@@ -64,6 +64,6 @@ class RegexpException extends \Exception
 /**
  * Exception thrown when a not allowed construction is used in a template.
  */
-class SecurityViolation extends \Exception
+class SecurityViolationException extends \Exception
 {
 }

@@ -80,7 +80,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTime]);
-}, Latte\SecurityViolation::class, 'Calling DateTime::format() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling DateTime::format() is not allowed.');
 
 $policy->allowMethods('dAtetime', ['fOrmat']);
 
@@ -90,7 +90,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->getTimestamp()}', ['obj' => new DateTime]);
-}, Latte\SecurityViolation::class, 'Calling DateTime::getTimestamp() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling DateTime::getTimestamp() is not allowed.');
 
 $policy->allowMethods('dAtetime', $policy::ALL);
 
@@ -101,7 +101,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTimeImmutable]);
-}, Latte\SecurityViolation::class, 'Calling DateTimeImmutable::format() is not allowed.');
+}, Latte\SecurityViolationException::class, 'Calling DateTimeImmutable::format() is not allowed.');
 
 $policy->allowMethods('DateTimeInterface', ['fOrmat']);
 
@@ -112,7 +112,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->prop}', ['obj' => (object) ['prop' => 123]]);
-}, Latte\SecurityViolation::class, "Access to 'prop' property on a stdClass object is not allowed.");
+}, Latte\SecurityViolationException::class, "Access to 'prop' property on a stdClass object is not allowed.");
 
 $policy->allowProperties('sTdClass', ['pRop']);
 
@@ -122,7 +122,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->prop2}', ['obj' => (object) []]);
-}, Latte\SecurityViolation::class, "Access to 'prop2' property on a stdClass object is not allowed.");
+}, Latte\SecurityViolationException::class, "Access to 'prop2' property on a stdClass object is not allowed.");
 
 $policy->allowProperties('sTdClass', $policy::ALL);
 

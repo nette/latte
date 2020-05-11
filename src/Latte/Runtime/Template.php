@@ -343,7 +343,7 @@ class Template
 
 		if (!$allowed) {
 			is_callable($callable, false, $text);
-			throw new Latte\SecurityViolation("Calling $text() is not allowed.");
+			throw new Latte\SecurityViolationException("Calling $text() is not allowed.");
 		}
 		return $callable;
 	}
@@ -354,7 +354,7 @@ class Template
 	{
 		$class = is_object($obj) ? get_class($obj) : $obj;
 		if (is_string($class) && !$this->policy->isPropertyAllowed($class, $prop)) {
-			throw new Latte\SecurityViolation("Access to '$prop' property on a $class object is not allowed.");
+			throw new Latte\SecurityViolationException("Access to '$prop' property on a $class object is not allowed.");
 		}
 		return $obj;
 	}
