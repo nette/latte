@@ -234,8 +234,11 @@ class CoreMacros extends MacroSet
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
-			'/* line ' . $node->startLine . ' */
-			$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);',
+			"/* line $node->startLine */\n"
+			. ($node->name === 'sandbox'
+				? 'ob_start(function () {}); try { $this->createTemplate(%node.word, %node.array, %var)->renderToContentType(%raw); echo ob_get_clean(); }
+					catch (\Throwable $__e) { if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); } else { echo ob_get_clean(); throw $__e; } }'
+				: '$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);'),
 			$node->name,
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')

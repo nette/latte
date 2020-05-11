@@ -341,6 +341,14 @@ class Engine
 
 
 	/** @return static */
+	public function setExceptionHandler(callable $callback)
+	{
+		$this->providers['coreExceptionHandler'] = $callback;
+		return $this;
+	}
+
+
+	/** @return static */
 	public function setSandboxMode(bool $on = true)
 	{
 		$this->sandboxed = $on;
