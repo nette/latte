@@ -1,0 +1,26 @@
+<?php
+%A%
+		$__loc[1] = [ob_get_level(), $__it ?? null];
+		ob_start(function () {});
+		try {
+?>
+	a
+<?php
+			throw new LR\RollbackException;
+?>
+	b
+	<?php
+			echo ob_get_clean();
+		}
+		catch (\Throwable $__e) {
+			$iterator = $__it = $__loc[1][1];
+			while (ob_get_level() > $__loc[1][0]) ob_end_clean();
+			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				($this->global->coreExceptionHandler)($__e, $this);
+			}
+?>
+
+	c
+<?php
+		}
+%A%

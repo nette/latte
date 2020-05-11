@@ -56,6 +56,9 @@ class CoreMacros extends MacroSet
 		$me->addMacro('last', 'if ($iterator->isLast(%node.args)) {', '}');
 		$me->addMacro('sep', 'if (!$iterator->isLast(%node.args)) {', '}');
 
+		$me->addMacro('try', [$me, 'macroTry'], '}');
+		$me->addMacro('rollback', [$me, 'macroRollback']);
+
 		$me->addMacro('var', [$me, 'macroVar']);
 		$me->addMacro('default', [$me, 'macroVar']);
 		$me->addMacro('dump', [$me, 'macroDump']);
@@ -173,7 +176,7 @@ class CoreMacros extends MacroSet
 		if ($node->args !== '' && Helpers::startsWith($node->args, 'if')) {
 			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
 		}
-		$node->validate(false, ['if', 'ifset']);
+		$node->validate(false, ['if', 'ifset', 'try']);
 
 		$parent = $node->parentNode;
 		if (isset($parent->data->else)) {
@@ -183,6 +186,11 @@ class CoreMacros extends MacroSet
 		$parent->data->else = true;
 		if ($parent->name === 'if' && $parent->data->capture) {
 			return 'ob_start(function () {})';
+
+		} elseif ($parent->name === 'try') {
+			$node->openingCode = $parent->data->code;
+			$parent->closingCode = '<?php } ?>';
+			return '';
 		}
 		return '} else {';
 	}
@@ -227,6 +235,40 @@ class CoreMacros extends MacroSet
 			. $node->innerContent
 			. "<?php $var = ob_get_flush(); ?>";
 		$node->closingCode = "<?php if (rtrim($var) === '') { ob_end_clean(); } else { echo ob_get_clean(); } ?>";
+	}
+
+
+	/**
+	 * {try}
+	 */
+	public function macroTry(MacroNode $node, PhpWriter $writer): void
+	{
+		$node->validate(false);
+		$id = ++$this->counter;
+		$node->data->code = $writer->write('<?php echo ob_get_clean();
+			} catch (\Throwable $__e) {
+			$iterator = $__it = $__loc[%var][1];
+			while (ob_get_level() > $__loc[%var][0]) ob_end_clean();
+			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				($this->global->coreExceptionHandler)($__e, $this);
+			} ?>', $id, $id);
+		$node->openingCode = $writer->write('<?php $__loc[%var] = [ob_get_level(), $__it ?? null]; ob_start(function () {}); try { ?>', $id);
+		$node->closingCode = $node->data->code . '<?php } ?>';
+	}
+
+
+	/**
+	 * {rollback}
+	 */
+	public function macroRollback(MacroNode $node, PhpWriter $writer): string
+	{
+		$parent = $node->closest(['try']);
+		if (!$parent || isset($parent->data->catch)) {
+			throw new CompileException('Tag {rollback} must be inside {try} ... {/try}.');
+		}
+		$node->validate(false);
+
+		return $writer->write('throw new LR\RollbackException;');
 	}
 
 
