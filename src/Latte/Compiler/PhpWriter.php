@@ -497,11 +497,11 @@ class PhpWriter
 				$expr = new MacroTokens(array_merge([$tokens->currentToken()], $tokens->nextAll($tokens::T_SYMBOL, '\\')));
 				$static = true;
 
+			} elseif ($tokens->isCurrent('$')) { // $$$var or ${...}
+				throw new CompileException('Forbidden variable variables.');
+
 			} elseif ($tokens->isCurrent($tokens::T_VARIABLE, $tokens::T_STRING)) {  // $var or 'func'
 				$expr = new MacroTokens([$tokens->currentToken()]);
-
-			} elseif ($tokens->isCurrent('$')) { // $$$var
-				$expr = new MacroTokens(array_merge([$tokens->currentToken()], $tokens->nextAll($tokens::T_VARIABLE, '$')));
 
 			} else { // not a begin
 				$res->append($tokens->currentToken());

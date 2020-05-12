@@ -74,6 +74,14 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Forbidden variable $this.');
 
 Assert::exception(function () use ($latte) {
+	$latte->compile('{${"this"}}');
+}, Latte\CompileException::class, 'Forbidden variable variables.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{$$x}}');
+}, Latte\CompileException::class, 'Forbidden variable variables.');
+
+Assert::exception(function () use ($latte) {
 	$latte->compile('{$_tmp}');
 }, Latte\CompileException::class, 'Forbidden variable $_tmp.');
 
