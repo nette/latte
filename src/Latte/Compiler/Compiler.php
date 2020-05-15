@@ -105,8 +105,12 @@ class Compiler
 	 */
 	public function addMacro(string $name, Macro $macro, int $flags = null)
 	{
-		if (!isset($this->flags[$name])) {
+		if (!preg_match('#^[a-z_=][\w-]*$#iD', $name)) {
+			throw new \LogicException("Invalid tag name '$name'.");
+
+		} elseif (!isset($this->flags[$name])) {
 			$this->flags[$name] = $flags ?: Macro::DEFAULT_FLAGS;
+
 		} elseif ($flags && $this->flags[$name] !== $flags) {
 			throw new \LogicException("Incompatible flags for tag '$name'.");
 		}

@@ -271,6 +271,9 @@ class Engine
 	 */
 	public function addFilter(?string $name, callable $callback)
 	{
+		if ($name !== null && !preg_match('#^[a-z]\w*$#iD', $name)) {
+			throw new \LogicException("Invalid filter name '$name'.");
+		}
 		$this->filters->add($name, $callback);
 		return $this;
 	}
@@ -314,6 +317,9 @@ class Engine
 	 */
 	public function addFunction(string $name, callable $callback)
 	{
+		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
+			throw new \LogicException("Invalid function name '$name'.");
+		}
 		$this->functions->$name = $callback;
 		return $this;
 	}
@@ -343,6 +349,9 @@ class Engine
 	 */
 	public function addProvider(string $name, $value)
 	{
+		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
+			throw new \LogicException("Invalid provider name '$name'.");
+		}
 		$this->providers[$name] = $value;
 		return $this;
 	}

@@ -29,4 +29,8 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{define _foobar}Hello{/define}');
-}, Latte\CompileException::class, "Block name '_foobar' must not start with an underscore.");
+}, Latte\CompileException::class, "Block name must start with letter a-z, '_foobar' given.");
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('{define 123}Hello{/define}');
+}, Latte\CompileException::class, "Block name must start with letter a-z, '123' given.");

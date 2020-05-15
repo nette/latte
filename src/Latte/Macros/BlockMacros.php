@@ -270,8 +270,8 @@ class BlockMacros extends MacroSet
 					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
 			}
 
-		} elseif ($name[0] === '_') {
-			throw new CompileException("Block name '$name' must not start with an underscore.");
+		} elseif (!preg_match('#^[a-z]#iD', $name)) {
+			throw new CompileException("Block name must start with letter a-z, '$name' given.");
 		}
 
 		// static snippet/snippetArea
