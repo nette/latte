@@ -203,7 +203,7 @@ class BlockMacros extends MacroSet
 	 * {block [name]}
 	 * {define name}
 	 * {snippet [name]}
-	 * {snippetArea [name]}
+	 * {snippetArea name}
 	 */
 	public function macroBlock(MacroNode $node, PhpWriter $writer): string
 	{
@@ -221,7 +221,7 @@ class BlockMacros extends MacroSet
 
 		$node->data->name = $name = ltrim((string) $name, '#');
 		if ($name === '') {
-			if ($node->name === 'define') {
+			if ($node->name === 'define' || $node->name === 'snippetArea') {
 				throw new CompileException('Missing block name.');
 			}
 
