@@ -232,7 +232,7 @@ class BlockMacros extends MacroSet
 
 		$node->data->name = $name = ltrim((string) $name, '#');
 		if ($name == null) {
-			if ($node->name === 'define') {
+			if ($node->name === 'define' || $node->name === 'snippetArea') {
 				throw new CompileException('Missing block name.');
 			}
 
