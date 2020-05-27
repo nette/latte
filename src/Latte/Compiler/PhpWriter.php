@@ -148,6 +148,7 @@ class PhpWriter
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->expandCastPass($tokens);
 		$tokens = $this->quotingPass($tokens);
+		$tokens = $this->argumentsPass($tokens);
 		$this->validateKeywords($tokens);
 		return $tokens->joinAll();
 	}
@@ -422,6 +423,30 @@ class PhpWriter
 				? "'" . $tokens->currentValue() . "'"
 				: $tokens->currentToken()
 			);
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Arguments $var = ---> 'var' =>
+	 */
+	public function argumentsPass(MacroTokens $tokens): MacroTokens
+	{
+		$res = new MacroTokens;
+		while ($tokens->nextToken()) {
+			if (
+				$tokens->isCurrent($tokens::T_VARIABLE)
+				&& $tokens->isNext('=', '=>')
+				//&& $tokens->depth === 1 // ?
+			) {				
+				$res->append(var_export(substr($tokens->currentValue(), 1), true));
+				$res->append('=>');
+				$tokens->nextToken();
+				$tokens->nextToken();
+			} else {
+				$res->append($tokens->currentToken());
+			}
 		}
 		return $res;
 	}
