@@ -291,6 +291,9 @@ class BlockMacros extends MacroSet
 
 		// static snippet/snippetArea
 		if ($node->name === 'snippet' || $node->name === 'snippetArea') {
+			if ($node->modifiers) {
+				trigger_error('Modifiers are deprecated in ' . $node->getNotation(), E_USER_DEPRECATED);
+			}
 			if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
 				throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
 			}

@@ -230,6 +230,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->modifiers && $node->name === 'sandbox') {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+		}
 		$node->replaced = false;
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
@@ -543,6 +546,8 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->args === '') {
 			throw new CompileException('Missing arguments in ' . $node->getNotation());
+		} elseif ($node->name !== '=' && $node->modifiers) {
+			trigger_error('Modifiers are deprecated in ' . $node->getNotation(), E_USER_DEPRECATED);
 		}
 		return $writer->write($node->name === '='
 			? "echo %modify(%node.args) /* line $node->startLine */"
