@@ -14,16 +14,16 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main1' => '{define block}[block {$var}]{/} before {include block, var => 1} after',
-	'main2' => '{define block}[block {$var}]{/} before {include #block, var => 1} after',
-	'main3' => '{define block-2}[block {$var}]{/} before {include block-2, var => 1} after',
-	'main4' => '{define block.2}[block {$var}]{/} before {include block.2, var => 1} after',
-	'main5' => '{define block.2}[block {$var}]{/} before {include #block.2, var => 1} after',
-	'main6' => '{define block.2}[block {$var}]{/} before {include block block.2, var => 1} after',
+	'main1' => '{define block}[block {$var}]{/define} before {include block, var => 1} after',
+	'main2' => '{define block}[block {$var}]{/define} before {include #block, var => 1} after',
+	'main3' => '{define block-2}[block {$var}]{/define} before {include block-2, var => 1} after',
+	'main4' => '{define block.2}[block {$var}]{/define} before {include block.2, var => 1} after',
+	'main5' => '{define block.2}[block {$var}]{/define} before {include #block.2, var => 1} after',
+	'main6' => '{define block.2}[block {$var}]{/define} before {include block block.2, var => 1} after',
 	'main7' => '{define block}[block {$var}]{/define} {var $name = block} before {include block $name, var => 1} after',
 
-	'main8' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|striptags} after',
-	'main9' => '{define block}block {$var}{/} before {include block true ? "block", var => 2} after',
+	'main8' => '{define block}<b>block {$var}</b>{/define} before {include block, var => 1|striptags} after',
+	'main9' => '{define block}block {$var}{/define} before {include block true ? "block", var => 2} after',
 ]));
 
 Assert::match(
