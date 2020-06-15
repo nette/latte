@@ -653,6 +653,10 @@ class Compiler
 			throw new CompileException("Unexpected $name" . ($node ? ', expecting ' . self::printEndTag($node->prefix ? $this->htmlNode : $node) : ''));
 		}
 
+		if ($name === '') {
+			trigger_error("Empty closing tag {/} is deprecated, use {/$node->name} on line " . $this->getLine(), E_USER_DEPRECATED);
+		}
+
 		$this->macroNode = $node->parentNode;
 		if ($node->args === '') {
 			$node->setArgs($args);
