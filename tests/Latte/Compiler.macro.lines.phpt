@@ -80,7 +80,7 @@ Assert::match(
 	$latte->compile('
 		{one}
 
-		{/
+		{/one
 		}')
 );
 
