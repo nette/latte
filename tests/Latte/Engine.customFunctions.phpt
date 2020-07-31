@@ -13,6 +13,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 // global function
 $latte->addFunction('fnc', 'trim');
+Assert::same('aa', $latte->invokeFunction('fnc', ['  aa  ']));
 Assert::same(
 	'abc',
 	$latte->renderToString('{fnc(" abc ")}')
@@ -81,3 +82,9 @@ Assert::same(
 	'CBA',
 	$latte->renderToString('{fnc(abc|upper)}')
 );
+
+
+// invoke function
+Assert::exception(function () use ($latte) {
+	$latte->invokeFunction('unknown', []);
+}, LogicException::class, "Function 'unknown' is not defined.");

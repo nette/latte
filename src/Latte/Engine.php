@@ -313,6 +313,20 @@ class Engine
 
 
 	/**
+	 * Call a run-time function.
+	 * @return mixed
+	 */
+	public function invokeFunction(string $name, array $args)
+	{
+		if (!isset($this->functions->$name)) {
+			$hint = ($t = Helpers::getSuggestion(array_keys((array) $this->functions), $name)) ? ", did you mean '$t'?" : '.';
+			throw new \LogicException("Function '$name' is not defined$hint");
+		}
+		return ($this->functions->$name)(...$args);
+	}
+
+
+	/**
 	 * Adds new provider.
 	 * @return static
 	 */
