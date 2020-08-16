@@ -21,7 +21,7 @@ function formatArray($args)
 }
 
 
-test(function () { // symbols
+test('symbols', function () {
 	Assert::same('[]', formatArray(''));
 	Assert::same('[1]', formatArray('1'));
 	Assert::same("['symbol']", formatArray('symbol'));
@@ -29,6 +29,6 @@ test(function () { // symbols
 });
 
 
-test(function () { // expand
+test('expand', function () {
 	Assert::same('array_merge([\'item\', $list, ], $list, [])', formatArray('item, $list, (expand) $list'));
 });

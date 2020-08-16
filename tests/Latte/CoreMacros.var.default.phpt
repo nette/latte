@@ -16,7 +16,7 @@ require __DIR__ . '/../bootstrap.php';
 $compiler = new Latte\Compiler;
 CoreMacros::install($compiler);
 
-test(function () use ($compiler) { // {var ... }
+test('', function () use ($compiler) { // {var ... }
 	Assert::same('<?php $var=null; $var2=null; ?>', @$compiler->expandMacro('var', 'var, var2', '')->openingCode); // @ deprecated syntax
 	Assert::same('<?php $var=null; $var2=null; ?>', $compiler->expandMacro('var', '$var, $var2', '')->openingCode);
 	Assert::same('<?php $var = \'hello\'; ?>', @$compiler->expandMacro('var', 'var => hello', '')->openingCode); // @ deprecated syntax
@@ -45,7 +45,7 @@ test(function () use ($compiler) { // {var ... }
 });
 
 
-test(function () use ($compiler) { // {default ...}
+test('', function () use ($compiler) { // {default ...}
 	Assert::same("<?php extract(['var'=>null, 'var2'=>null], EXTR_SKIP) ?>", @$compiler->expandMacro('default', 'var, var2', '')->openingCode); // @ deprecated syntax
 	Assert::same("<?php extract(['var'=>null, 'var2'=>null], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var, $var2', '')->openingCode);
 	Assert::same("<?php extract(['var' => 'hello'], EXTR_SKIP) ?>", @$compiler->expandMacro('default', 'var => hello', '')->openingCode); // @ deprecated syntax
@@ -69,7 +69,7 @@ test(function () use ($compiler) { // {default ...}
 });
 
 
-test(function () {
+test('', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	Assert::contains('$var = 1;', $latte->compile('{var ?\Nm\Class $var = 1}'));

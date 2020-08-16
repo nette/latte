@@ -31,15 +31,13 @@ class EnhancedEngine extends Engine
 	}
 }
 
-// With no macros
-test(function () {
+test('With no macros', function () {
 	$latte = new EnhancedEngine();
 	$latte->setLoader(new StringLoader);
 	Assert::equal('foo', $latte->renderToString('foo'));
 });
 
-// With {=} macro
-test(function () {
+test('With {=} macro', function () {
 	$latte = new EnhancedEngine();
 	$latte->setLoader(new StringLoader);
 	$set = new MacroSet($latte->getCompiler());

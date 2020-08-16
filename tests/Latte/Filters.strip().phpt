@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
 	Assert::same('', Filters::strip($info, ''));
 	Assert::same('', Filters::strip($info, "\r\n "));
@@ -25,7 +25,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_HTML);
 	Assert::same('', Filters::strip($info, ''));
 	Assert::same('', Filters::strip($info, "\r\n "));

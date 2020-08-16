@@ -40,7 +40,7 @@ class TestMacro implements Macro
 }
 
 
-test(function () {
+test('', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
@@ -53,7 +53,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 

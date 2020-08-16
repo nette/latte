@@ -32,7 +32,7 @@ class Notes
 }
 
 
-test(function () {
+test('', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
@@ -54,7 +54,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$callbacks = [];
 	$callbacks[] = function (Latte\Engine $engine) {
 		Notes::add('adding macros 3');
@@ -78,7 +78,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	class EventObj implements IteratorAggregate
 	{
 		public $events;

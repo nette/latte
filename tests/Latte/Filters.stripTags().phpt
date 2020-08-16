@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
 	Assert::error(function () use ($info) {
 		Filters::stripTags($info, '');
@@ -27,7 +27,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_HTML);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));
@@ -35,7 +35,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_XHTML);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));
@@ -43,7 +43,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_XML);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));

@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
+test('', function () {
 	$parser = new Parser;
 	$parser->parse("\n{a}");
 	$parser->parse('');

@@ -21,7 +21,7 @@ function formatModifiers($arg, $modifiers, $isContent = false)
 }
 
 
-test(function () { // special
+test('special', function () {
 	Assert::same('@', formatModifiers('@', ''));
 	Assert::same('@', formatModifiers('@', '|'));
 	Assert::exception(function () {
@@ -33,13 +33,13 @@ test(function () { // special
 });
 
 
-test(function () { // common
+test('common', function () {
 	Assert::same('($this->filters->mod)(@)', formatModifiers('@', 'mod'));
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))', formatModifiers('@', 'mod1|mod2|mod3'));
 });
 
 
-test(function () { // arguments
+test('arguments', function () {
 	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', formatModifiers('@', 'mod:arg1:2:$var["pocet"]'));
 	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', formatModifiers('@', 'mod,arg1,2,$var["pocet"]'));
 	Assert::same('($this->filters->mod)(@, " :a:b:c", "", 3, "")', formatModifiers('@', 'mod:" :a:b:c":"":3:""'));
@@ -53,28 +53,28 @@ test(function () { // arguments
 	Assert::same('($this->filters->mod)(@, array(1))', formatModifiers('@', 'mod: array(1)'));
 });
 
-test(function () { // inline modifiers
+test('inline modifiers', function () {
 	Assert::same('($this->filters->mod)(@, ($this->filters->mod2)(2))', formatModifiers('@', 'mod:(2|mod2)'));
 });
 
-test(function () { // FilterInfo aware modifiers
+test('FilterInfo aware modifiers', function () {
 	Assert::same('$this->filters->filterContent(\'mod\', $_fi, @)', formatModifiers('@', 'mod', true));
 	Assert::same('LR\Filters::convertTo($_fi, \'htmlx\', $this->filters->filterContent(\'mod2\', $_fi, $this->filters->filterContent(\'mod1\', $_fi, @)))', formatModifiers('@', 'mod1|mod2|escape', true));
 });
 
-test(function () { // depth
+test('depth', function () {
 	Assert::same('($this->filters->mod)(@, (1?2:3))', formatModifiers('@', 'mod:(1?2:3)'));
 });
 
 
-test(function () { // optionalChainingPass
+test('optionalChainingPass', function () {
 	Assert::same('($this->filters->mod)(@, ($a ?? null))', formatModifiers('@', 'mod:$a?'));
 	Assert::same('($this->filters->mod)(@, (($a ?? null)))', formatModifiers('@', 'mod:($a?)'));
 	Assert::same('($this->filters->mod)(@, (($_tmp = $var ?? null) === null ? null : (($_tmp = $_tmp->prop ?? null) === null ? null : (($_tmp = $_tmp->elem[1] ?? null) === null ? null : (($_tmp = $_tmp->call(2) ?? null) === null ? null : ($_tmp->item ?? null))))))', formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item?'));
 });
 
 
-test(function () { // optionalChainingPass + ternary
+test('optionalChainingPass + ternary', function () {
 	Assert::same('($this->filters->mod)(@, $a ?, $b)', formatModifiers('@', 'mod:$a?:$b'));
 	Assert::same('($this->filters->mod)(@, $a ? , $b)', formatModifiers('@', 'mod:$a ? : $b'));
 	Assert::same('($this->filters->mod)(@, $a ?? $b)', formatModifiers('@', 'mod:$a ?? $b'));

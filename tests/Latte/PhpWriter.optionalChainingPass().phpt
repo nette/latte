@@ -17,7 +17,7 @@ function optionalChaining($code)
 }
 
 
-test(function () { // vars
+test('vars', function () {
 	Assert::same('$a', optionalChaining('$a'));
 	Assert::same('($a ?? null)', optionalChaining('$a?'));
 	Assert::same('(($a ?? null))', optionalChaining('($a?)'));
@@ -25,13 +25,13 @@ test(function () { // vars
 });
 
 
-test(function () { // indexes
+test('indexes', function () {
 	Assert::same('($foo[1] ?? null)', optionalChaining('$foo[1]?'));
 	Assert::same('(($foo[1] ?? null))', optionalChaining('($foo[1]?)'));
 });
 
 
-test(function () { // properties
+test('properties', function () {
 	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp->prop)', optionalChaining('$foo?->prop'));
 	Assert::same('($foo->prop ?? null)', optionalChaining('$foo->prop?'));
 	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->prop ?? null))', optionalChaining('$foo?->prop?'));
@@ -51,7 +51,7 @@ test(function () { // properties
 });
 
 
-test(function () { // calling
+test('calling', function () {
 	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp->call())', optionalChaining('$foo?->call()'));
 	Assert::same('($foo->call() ?? null)', optionalChaining('$foo->call()?'));
 	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->call() ?? null))', optionalChaining('$foo?->call()?'));
@@ -65,7 +65,7 @@ test(function () { // calling
 });
 
 
-test(function () { // mixed
+test('mixed', function () {
 	Assert::same('($foo->prop ?? null) + (($_tmp = $foo ?? null) === null ? null : ($_tmp->prop ?? null))', optionalChaining('$foo->prop? + $foo?->prop?'));
 
 	Assert::same('$var->prop->elem[1]->call(2)->item', optionalChaining('$var->prop->elem[1]->call(2)->item'));
@@ -77,7 +77,7 @@ test(function () { // mixed
 });
 
 
-test(function () { // not allowed
+test('not allowed', function () {
 	Assert::same('$foo ?(hello)', optionalChaining('$foo?(hello)'));
 	Assert::same('$foo->foo ?(hello)', optionalChaining('$foo->foo?(hello)'));
 
@@ -88,7 +88,7 @@ test(function () { // not allowed
 });
 
 
-test(function () { // ternary
+test('ternary', function () {
 	Assert::same('$a ?:$b', optionalChaining('$a?:$b'));
 	Assert::same('$a ? : $b', optionalChaining('$a ? : $b'));
 	Assert::same('$a ?? $b', optionalChaining('$a ?? $b'));

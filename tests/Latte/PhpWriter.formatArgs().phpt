@@ -21,7 +21,7 @@ function formatArgs($args)
 }
 
 
-test(function () { // symbols
+test('symbols', function () {
 	Assert::same('', formatArgs(''));
 	Assert::same('1', formatArgs('1'));
 	Assert::same("'symbol'", formatArgs('symbol'));
@@ -33,7 +33,7 @@ test(function () { // symbols
 });
 
 
-test(function () { // strings
+test('strings', function () {
 	Assert::same('"\"1, 2, symbol1, symbol2"', formatArgs('"\"1, 2, symbol1, symbol2"')); // unable to parse "${'"'}" yet
 	Assert::same("'\\'1, 2, symbol1, symbol2'", formatArgs("'\\'1, 2, symbol1, symbol2'"));
 	Assert::same("('hello')", formatArgs('(hello)'));
@@ -43,19 +43,19 @@ test(function () { // strings
 });
 
 
-test(function () { // key words
+test('key words', function () {
 	Assert::same('TRUE, false, null, 1 or 1 and 2 xor 3, clone $obj, new Class', formatArgs('TRUE, false, null, 1 or 1 and 2 xor 3, clone $obj, new Class'));
 	Assert::same('func (10)', formatArgs('func (10)'));
 });
 
 
-test(function () { // associative arrays
+test('associative arrays', function () {
 	Assert::same("'symbol1' => 'value','symbol2'=>'value'", formatArgs('symbol1 => value,symbol2=>value'));
 	Assert::same("'symbol1' => array ('symbol2' => 'value')", formatArgs('symbol1 => array (symbol2 => value)'));
 });
 
 
-test(function () { // short ternary operators
+test('short ternary operators', function () {
 	Assert::same("(\$first ? 'first' : null), \$var ? 'foo' : 'bar', \$var ? 'foo' : null", formatArgs('($first ? first), $var ? foo : bar, $var ? foo'));
 	Assert::same("('a' ? 'b' : null) ? ('c' ? 'd' : null) : null", formatArgs('(a ? b) ? (c ? d)'));
 	Assert::same("fce() ? 'a' : null, fce() ? 'b' : null", formatArgs('fce() ? a, fce() ? b'));
@@ -73,7 +73,7 @@ test(function () { // short ternary operators
 });
 
 
-test(function () { // special
+test('special', function () {
 	Assert::same('$var', formatArgs('$var'));
 	Assert::same('$var => $var', formatArgs('$var => $var'));
 	Assert::same("'truex' => 0word, 0true, true-true, true-1", formatArgs('truex => 0word, 0true, true-true, true-1'));
@@ -97,7 +97,7 @@ test(function () { // special
 });
 
 
-test(function () { // special UTF-8
+test('special UTF-8', function () {
 	Assert::same("'Iñtërnâtiônàlizætiøn' => 'Iñtërnâtiônàlizætiøn'", formatArgs('Iñtërnâtiônàlizætiøn => Iñtërnâtiônàlizætiøn'));
 	Assert::same('$våŕìăbłë', formatArgs('$våŕìăbłë'));
 	Assert::same("'M_PIÁNO'", formatArgs('M_PIÁNO'));
@@ -105,7 +105,7 @@ test(function () { // special UTF-8
 });
 
 
-test(function () { // inline modifiers
+test('inline modifiers', function () {
 	Assert::same('($this->filters->mod)(@)', formatArgs('(@|mod)'));
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))', formatArgs('(@|mod1|mod2|mod3)'));
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))', formatArgs('((@|mod1)|mod2|mod3)'));
@@ -133,7 +133,7 @@ test(function () { // inline modifiers
 });
 
 
-test(function () { // in operator
+test('in operator', function () {
 	Assert::same("in_array(\$a, ['a', 'b'], true), 1", formatArgs('$a in [a, b], 1'));
 	Assert::same('$a, in_array($b->func(), [1, 2], true)', formatArgs('$a, $b->func() in [1, 2]'));
 	Assert::same('$a, in_array($b[1], [1, 2], true)', formatArgs('$a, $b[1] in [1, 2]'));
@@ -141,7 +141,7 @@ test(function () { // in operator
 });
 
 
-test(function () { // optionalChainingPass
+test('optionalChainingPass', function () {
 	Assert::same('$a', formatArgs('$a'));
 	Assert::same('($a ?? null)', formatArgs('$a?'));
 	Assert::same('(($a ?? null))', formatArgs('($a?)'));
@@ -150,7 +150,7 @@ test(function () { // optionalChainingPass
 });
 
 
-test(function () { // optionalChainingPass + ternary
+test('optionalChainingPass + ternary', function () {
 	Assert::same('$a ?:$b', formatArgs('$a?:$b'));
 	Assert::same('$a ? : $b', formatArgs('$a ? : $b'));
 	Assert::same('$a ?? $b', formatArgs('$a ?? $b'));

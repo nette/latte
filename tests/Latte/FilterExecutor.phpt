@@ -30,7 +30,7 @@ class MyFilter
 }
 
 
-test(function () {
+test('', function () {
 	$filters = new FilterExecutor;
 
 	Assert::true(count($filters->getAll()) > 28);
@@ -60,7 +60,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name, $val) {
 		return implode(',', func_get_args());
@@ -78,7 +78,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name, $val) use ($filters) {
 		if ($name === 'dynamic') {
@@ -96,7 +96,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic
@@ -130,7 +130,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic with Latte\Runtime\Html
