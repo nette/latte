@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
 	Assert::error(function () use ($info) {
 		Filters::stripHtml($info, '');
@@ -23,14 +23,14 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_HTML);
 	Assert::same('', Filters::stripHtml($info, ''));
 	Assert::same(Engine::CONTENT_TEXT, $info->contentType);
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_HTML);
 	Assert::same('', @Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', @Filters::stripHtml(clone $info, 'abc'));
@@ -38,7 +38,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_HTML);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
@@ -46,7 +46,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_XHTML);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
@@ -54,7 +54,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_XML);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
@@ -62,7 +62,7 @@ test(function () {
 });
 
 
-test(function () { // invalid UTF-8
+test('invalid UTF-8', function () {
 	$info = new FilterInfo(Engine::CONTENT_XML);
 	Assert::same("foo \u{D800} bar", Filters::stripHtml(clone $info, "foo \u{D800} bar")); // invalid codepoint high surrogates
 	Assert::same("foo \xE3\x80\x22 bar", Filters::stripHtml(clone $info, "foo \xE3\x80\x22 bar")); // stripped UTF

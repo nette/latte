@@ -15,7 +15,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
 	Assert::same('', Filters::indent($info, ''));
 	Assert::same("\n", Filters::indent($info, "\n"));
@@ -29,7 +29,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_HTML);
 	Assert::same('', Filters::indent($info, ''));
 	Assert::same("\n", Filters::indent($info, "\n"));

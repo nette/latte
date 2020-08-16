@@ -11,7 +11,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-test(function () {
+test('', function () {
 	$template = __DIR__ . '/templates/general.latte';
 
 	$latte = new Latte\Engine;

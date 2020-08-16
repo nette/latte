@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () { // constructor
+test('constructor', function () {
 	$tokenizer = new MacroTokens('hello world');
 	Assert::count(3, $tokenizer->tokens);
 
@@ -25,7 +25,7 @@ test(function () { // constructor
 });
 
 
-test(function () { // append
+test('append', function () {
 	$tokenizer = new MacroTokens('hello ');
 
 	$res = $tokenizer->append('world!');
@@ -51,7 +51,7 @@ test(function () { // append
 });
 
 
-test(function () { // append with position
+test('append with position', function () {
 	$tokenizer = new MacroTokens('world');
 
 	$res = $tokenizer->append('!', null);
@@ -68,7 +68,7 @@ test(function () { // append with position
 });
 
 
-test(function () { // prepend
+test('prepend', function () {
 	$tokenizer = new MacroTokens('world!');
 
 	$res = $tokenizer->prepend('hello ');

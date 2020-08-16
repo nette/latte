@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test(function () {
+test('', function () {
 	$tokenizer = new Tokenizer([
 		T_DNUMBER => '\d+',
 		T_WHITESPACE => '\s+',
@@ -90,7 +90,7 @@ test(function () {
 });
 
 
-test(function () {
+test('', function () {
 	$tokenizer = new Tokenizer([
 		'\d+',
 		'\s+',
