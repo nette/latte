@@ -692,7 +692,7 @@ class PhpWriter
 					$res->prepend('LR\Filters::safeUrl(');
 					$inside = true;
 				} elseif (!strcasecmp($tokens->currentValue(), 'noescape') || !strcasecmp($tokens->currentValue(), 'nocheck')) {
-					throw new SecurityViolationException("Filter |{$tokens->currentValue()} is not allowed.");
+					throw new SecurityViolationException("Filter |{$tokens->currentValue()} is not expected here.");
 				} else {
 					$name = $tokens->currentValue();
 					if ($this->policy && !$this->policy->isFilterAllowed($name)) {
