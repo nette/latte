@@ -74,3 +74,40 @@ test('', function () {
 	Assert::same(0, $iterator->getCounter());
 	Assert::true($iterator->isEmpty());
 });
+
+test('Check if next position is valid', function () {
+	// empty iterator
+	$inner = new class implements Iterator {
+		public function current()
+		{
+			throw new RuntimeException('Invalid state');
+		}
+
+
+		public function next(): void
+		{
+		}
+
+
+		public function key()
+		{
+			throw new RuntimeException('Invalid state');
+		}
+
+
+		public function valid(): bool
+		{
+			return false;
+		}
+
+
+		public function rewind(): void
+		{
+		}
+	};
+
+	$iterator = new CachingIterator($inner);
+	$iterator->rewind();
+	Assert::null($iterator->nextKey);
+	Assert::null($iterator->nextValue);
+});
