@@ -162,12 +162,12 @@ class Filters
 			$s = $s->__toString(true);
 		}
 
-		$json = json_encode($s, JSON_UNESCAPED_UNICODE);
+		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 		if ($error = json_last_error()) {
 			throw new \RuntimeException(json_last_error_msg(), $error);
 		}
 
-		return str_replace([']]>', '<!'], [']]\u003E', '\u003C!'], $json);
+		return str_replace([']]>', '<!', '</'], [']]\u003E', '\u003C!', '<\/'], $json);
 	}
 
 
