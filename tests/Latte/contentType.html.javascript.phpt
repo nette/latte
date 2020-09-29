@@ -21,7 +21,7 @@ Assert::match(
 );
 
 Assert::match(
-	'<script>"<\/" "]]\x3E" "\x3C!"',
+	'<script>"<\/" "]]\u003E" "\u003C!"',
 	$latte->renderToString('<script>{="</"} {="]]>"} {="<!"}')
 );
 

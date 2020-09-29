@@ -167,7 +167,7 @@ class Filters
 			throw new \RuntimeException(json_last_error_msg(), $error);
 		}
 
-		return str_replace([']]>', '<!'], [']]\x3E', '\x3C!'], $json);
+		return str_replace([']]>', '<!'], [']]\u003E', '\u003C!'], $json);
 	}
 
 
