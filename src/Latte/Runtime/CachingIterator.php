@@ -159,22 +159,24 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 
 	/**
-	 * Returns the next key.
+	 * Returns the next key or null if position is not valid.
 	 * @return mixed
 	 */
 	public function getNextKey()
 	{
-		return $this->getInnerIterator()->key();
+		$iterator = $this->getInnerIterator();
+		return $iterator->valid() ? $iterator->key() : null;
 	}
 
 
 	/**
-	 * Returns the next element.
+	 * Returns the next element or null if position is not valid.
 	 * @return mixed
 	 */
 	public function getNextValue()
 	{
-		return $this->getInnerIterator()->current();
+		$iterator = $this->getInnerIterator();
+		return $iterator->valid() ? $iterator->current() : null;
 	}
 
 
