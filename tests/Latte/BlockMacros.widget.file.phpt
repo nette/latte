@@ -86,7 +86,7 @@ testTemplate([
 	'main' => '
 		outer
 		{widget "widget.latte"}
-			{block a}main-A {include parent}{/block}
+			{block a}main-A{/block}
 		{/widget}
 		outer
 	',
@@ -461,28 +461,4 @@ testTemplate([
 		widget2-start
 			nested widgets A		widget2-end
 			widget1-end
-');
-
-
-// extending widget
-testTemplate([
-	'main' => '
-		{widget "widget.latte"}
-			{block a}main-A{/block}
-		{/widget}
-	',
-	'widget.latte' => '
-		{extends widget-ext.latte}
-		widget-start
-			{block a}widget-A{/block}
-		widget-end
-	',
-	'widget-ext.latte' => '
-		widget-ext-start
-			{block a}widget-ext-A{/block}
-		widget-ext-end
-	',
-], '
-		widget-ext-start
-			main A		widget-ext-end
 ');

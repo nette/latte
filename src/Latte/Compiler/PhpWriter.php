@@ -439,7 +439,7 @@ class PhpWriter
 				$tokens->isCurrent($tokens::T_VARIABLE)
 				&& $tokens->isNext('=', '=>')
 				//&& $tokens->depth === 1 // ?
-			) {				
+			) {
 				$res->append(var_export(substr($tokens->currentValue(), 1), true));
 				$res->append('=>');
 				$tokens->nextToken();

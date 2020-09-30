@@ -14,7 +14,6 @@ require __DIR__ . '/../bootstrap.php';
 
 
 test('Two items in array', function () {
-
 	$arr = ['Nette', 'Framework'];
 
 	$iterator = new CachingIterator($arr);

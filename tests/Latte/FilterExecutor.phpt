@@ -39,7 +39,7 @@ test('', function () {
 });
 
 
-test(function () {
+test('', function () {
 	$filters = new FilterExecutor;
 
 	$filters->add('f1', 'strtoupper');

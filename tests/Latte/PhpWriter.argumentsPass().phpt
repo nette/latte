@@ -17,7 +17,7 @@ function argumentsPass($code)
 }
 
 
-test(function () { // vars
+test('', function () { // vars
 	Assert::same('$a', argumentsPass('$a'));
 	Assert::same("'a'=> 1", argumentsPass('$a => 1'));
 });
