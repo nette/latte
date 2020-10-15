@@ -72,7 +72,7 @@ The best way how to install Latte is to [download a latest package](https://gith
 composer require latte/latte
 ```
 
-The Latte requires PHP version 5.4.4 or newer (is compatible with PHP 7.0 and 7.1).
+Latte requires PHP version 5.4.4 and supports PHP up to 8.0.
 
 
 Macros
