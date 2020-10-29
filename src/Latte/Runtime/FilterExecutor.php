@@ -126,7 +126,9 @@ class FilterExecutor
 					return ($this->$name)(...func_get_args());
 				}
 			}
-			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
+			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name))
+				? ", did you mean '$t'?"
+				: '.';
 			throw new \LogicException("Filter '$name' is not defined$hint");
 		};
 	}
@@ -140,7 +142,9 @@ class FilterExecutor
 	{
 		$lname = strtolower($name);
 		if (!isset($this->_static[$lname])) {
-			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name)) ? ", did you mean '$t'?" : '.';
+			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name))
+				? ", did you mean '$t'?"
+				: '.';
 			throw new \LogicException("Filter |$name is not defined$hint");
 		}
 

@@ -35,7 +35,7 @@ class Template
 	/** @var array [name => method]  @internal */
 	protected $blocks = [];
 
-	/** @var string|null|false  @internal */
+	/** @var string|false|null  @internal */
 	protected $parentName;
 
 	/** @var array of [name => [callbacks]]  @internal */
@@ -187,10 +187,15 @@ class Template
 	public function createTemplate(string $name, array $params, string $referenceType): self
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
-		$child = $this->engine->createTemplate($name, $params);
+		if ($referenceType === 'sandbox') {
+			$child = (clone $this->engine)->setSandboxMode()->createTemplate($name, $params);
+		} else {
+			$child = $this->engine->createTemplate($name, $params);
+		}
 		$child->referringTemplate = $this;
 		$child->referenceType = $referenceType;
 		$child->global = $this->global;
+
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
 			$this->blockQueue = array_merge_recursive($this->blockQueue, $child->blockQueue);
 			foreach ($child->blockTypes as $nm => $type) {
@@ -243,7 +248,9 @@ class Template
 	public function renderBlock(string $name, array $params, $mod = null): void
 	{
 		if (empty($this->blockQueue[$name])) {
-			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name)) ? ", did you mean '$t'?" : '.';
+			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name))
+				? ", did you mean '$t'?"
+				: '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 

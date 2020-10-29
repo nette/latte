@@ -130,7 +130,9 @@ class Engine
 			if (!$e instanceof CompileException) {
 				$e = new CompileException("Thrown exception '{$e->getMessage()}'", 0, $e);
 			}
-			$line = isset($tokens) ? $this->getCompiler()->getLine() : $this->getParser()->getLine();
+			$line = isset($tokens)
+				? $this->getCompiler()->getLine()
+				: $this->getParser()->getLine();
 			throw $e->setSource($source, $line, $name);
 		}
 
@@ -179,7 +181,11 @@ class Engine
 			return;
 		}
 
-		if (!is_dir($this->tempDirectory) && !@mkdir($this->tempDirectory) && !is_dir($this->tempDirectory)) { // @ - dir may already exist
+		if (
+			!is_dir($this->tempDirectory)
+			&& !@mkdir($this->tempDirectory)
+			&& !is_dir($this->tempDirectory)
+		) { // @ - dir may already exist
 			throw new \RuntimeException("Unable to create directory '$this->tempDirectory'. " . error_get_last()['message']);
 		}
 

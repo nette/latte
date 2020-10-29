@@ -40,7 +40,7 @@ Assert::match('
 <a href="data:%a%;base64,b2s="></a>
 <a href=""></a>
 ', $latte->renderToString(
-'
+	'
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <a href={$url1|nocheck}></a>
 <a href="http://nette.org?val={$url4}"></a>
@@ -55,7 +55,9 @@ Assert::match('
 <a href={$url4|dataStream}></a>
 <a href={$url4|dataStream|noCheck}></a>
 <a href={$url4|dataStream|checkURL}></a>
-', $params));
+',
+	$params
+));
 
 
 Assert::match('
