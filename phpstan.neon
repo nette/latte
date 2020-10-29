@@ -1,4 +1,9 @@
 parameters:
+	level: 5
+
+	paths:
+		- src
+
 	ignoreErrors:
 		- "#^Unsafe usage of new static\\(\\)\\.$#"
 		- "#^.*\\:\\:__toString\\(\\) invoked with 1 parameter, 0 required\\.$#"
