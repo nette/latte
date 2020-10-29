@@ -38,13 +38,13 @@ class Helpers
 
 	/**
 	 * Finds the best suggestion.
+	 * @param  string[]  $items
 	 */
-	public static function getSuggestion(array $items, $value): ?string
+	public static function getSuggestion(array $items, string $value): ?string
 	{
 		$best = null;
 		$min = (strlen($value) / 4 + 1) * 10 + .1;
-		foreach (array_unique($items, SORT_REGULAR) as $item) {
-			$item = is_object($item) ? $item->name : $item;
+		foreach (array_unique($items) as $item) {
 			if (($len = levenshtein($item, $value, 10, 11, 10)) > 0 && $len < $min) {
 				$min = $len;
 				$best = $item;

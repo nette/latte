@@ -27,6 +27,7 @@ trait Strict
 	{
 		$class = method_exists($this, $name) ? 'parent' : static::class;
 		$items = (new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC);
+		$items = array_map(function ($item) { return $item->getName(); }, $items);
 		$hint = ($t = Helpers::getSuggestion($items, $name))
 			? ", did you mean $t()?"
 			: '.';
@@ -44,6 +45,7 @@ trait Strict
 	{
 		$rc = new \ReflectionClass(static::class);
 		$items = array_intersect($rc->getMethods(\ReflectionMethod::IS_PUBLIC), $rc->getMethods(\ReflectionMethod::IS_STATIC));
+		$items = array_map(function ($item) { return $item->getName(); }, $items);
 		$hint = ($t = Helpers::getSuggestion($items, $name))
 			? ", did you mean $t()?"
 			: '.';
@@ -60,6 +62,7 @@ trait Strict
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+		$items = array_map(function ($item) { return $item->getName(); }, $items);
 		$hint = ($t = Helpers::getSuggestion($items, $name))
 			? ", did you mean $$t?"
 			: '.';
@@ -76,6 +79,7 @@ trait Strict
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+		$items = array_map(function ($item) { return $item->getName(); }, $items);
 		$hint = ($t = Helpers::getSuggestion($items, $name))
 			? ", did you mean $$t?"
 			: '.';
