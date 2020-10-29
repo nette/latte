@@ -153,20 +153,19 @@ class FilterExecutor
 		if ($aware) { // FilterInfo aware filter
 			array_unshift($args, $info);
 			return $callback(...$args);
-
-		} else { // classic filter
-			if ($info->contentType !== Engine::CONTENT_TEXT) {
-				trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
-					. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
-			}
-			$res = ($this->$name)(...$args);
-			if ($res instanceof HtmlStringable) {
-				trigger_error("Filter |$name should be changed to content-aware filter.");
-				$info->contentType = Engine::CONTENT_HTML;
-				$res = $res->__toString();
-			}
-			return $res;
 		}
+		// classic filter
+		if ($info->contentType !== Engine::CONTENT_TEXT) {
+			trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
+				. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
+		}
+		$res = ($this->$name)(...$args);
+		if ($res instanceof HtmlStringable) {
+			trigger_error("Filter |$name should be changed to content-aware filter.");
+			$info->contentType = Engine::CONTENT_HTML;
+			$res = $res->__toString();
+		}
+		return $res;
 	}
 
 

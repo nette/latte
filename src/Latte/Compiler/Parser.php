@@ -166,15 +166,15 @@ class Parser
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
-		if (!empty($matches['tag'])) { // </tag
-			$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
-			$token->name = $this->lastHtmlTag;
-			$token->closing = true;
-			$this->lastHtmlTag = '/' . $this->lastHtmlTag;
-			$this->setContext(self::CONTEXT_HTML_TAG);
-		} else {
+		if (empty($matches['tag'])) {
 			return $this->processMacro($matches);
 		}
+		// </tag
+		$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
+		$token->name = $this->lastHtmlTag;
+		$token->closing = true;
+		$this->lastHtmlTag = '/' . $this->lastHtmlTag;
+		$this->setContext(self::CONTEXT_HTML_TAG);
 	}
 
 
@@ -226,12 +226,12 @@ class Parser
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
-		if (!empty($matches['quote'])) { // (attribute end) '"
-			$this->addToken(Token::HTML_ATTRIBUTE_END, $matches[0]);
-			$this->setContext(self::CONTEXT_HTML_TAG);
-		} else {
+		if (empty($matches['quote'])) {
 			return $this->processMacro($matches);
 		}
+		// (attribute end) '"
+		$this->addToken(Token::HTML_ATTRIBUTE_END, $matches[0]);
+		$this->setContext(self::CONTEXT_HTML_TAG);
 	}
 
 
@@ -245,12 +245,12 @@ class Parser
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
-		if (!empty($matches['htmlcomment'])) { // -->
-			$this->addToken(Token::HTML_TAG_END, $matches[0]);
-			$this->setContext(self::CONTEXT_HTML_TEXT);
-		} else {
+		if (empty($matches['htmlcomment'])) {
 			return $this->processMacro($matches);
 		}
+		// -->
+		$this->addToken(Token::HTML_TAG_END, $matches[0]);
+		$this->setContext(self::CONTEXT_HTML_TEXT);
 	}
 
 
@@ -299,11 +299,11 @@ class Parser
 
 	private function processMacro(array $matches)
 	{
-		if (!empty($matches['macro'])) { // {macro} or {* *}
-			$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
-		} else {
+		if (empty($matches['macro'])) {
 			return false;
 		}
+		// {macro} or {* *}
+		$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
 	}
 
 
@@ -362,11 +362,11 @@ class Parser
 	public function setSyntax(string $type)
 	{
 		$type = $type ?: $this->defaultSyntax;
-		if (isset($this->syntaxes[$type])) {
-			$this->setDelimiters($this->syntaxes[$type][0], $this->syntaxes[$type][1]);
-		} else {
+		if (!isset($this->syntaxes[$type])) {
 			throw new \InvalidArgumentException("Unknown syntax '$type'");
 		}
+
+		$this->setDelimiters($this->syntaxes[$type][0], $this->syntaxes[$type][1]);
 		return $this;
 	}
 

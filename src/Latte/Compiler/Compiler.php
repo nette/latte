@@ -649,20 +649,22 @@ class Compiler
 
 		foreach ($this->macros as $name => $foo) {
 			$attrName = MacroNode::PREFIX_INNER . "-$name";
-			if (isset($attrs[$attrName])) {
-				if ($this->htmlNode->closing) {
-					$left[] = function () use ($name) {
-						$this->closeMacro($name, '', '', false, MacroNode::PREFIX_INNER);
-					};
-				} else {
-					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_INNER)->empty) {
-							throw new CompileException("Unable to use empty macro as n:$attrName.");
-						}
-					});
-				}
-				unset($attrs[$attrName]);
+			if (!isset($attrs[$attrName])) {
+				continue;
 			}
+
+			if ($this->htmlNode->closing) {
+				$left[] = function () use ($name) {
+					$this->closeMacro($name, '', '', false, MacroNode::PREFIX_INNER);
+				};
+			} else {
+				array_unshift($right, function () use ($name, $attrs, $attrName) {
+					if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_INNER)->empty) {
+						throw new CompileException("Unable to use empty macro as n:$attrName.");
+					}
+				});
+			}
+			unset($attrs[$attrName]);
 		}
 
 		$innerMarker = '';
@@ -679,17 +681,19 @@ class Compiler
 
 		foreach (array_reverse($this->macros) as $name => $foo) {
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
-			if (isset($attrs[$attrName])) {
-				$left[] = function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_TAG)->empty) {
-						throw new CompileException("Unable to use empty macro as n:$attrName.");
-					}
-				};
-				array_unshift($right, function () use ($name) {
-					$this->closeMacro($name, '', '', false, MacroNode::PREFIX_TAG);
-				});
-				unset($attrs[$attrName]);
+			if (!isset($attrs[$attrName])) {
+				continue;
 			}
+
+			$left[] = function () use ($name, $attrs, $attrName) {
+				if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_TAG)->empty) {
+					throw new CompileException("Unable to use empty macro as n:$attrName.");
+				}
+			};
+			array_unshift($right, function () use ($name) {
+				$this->closeMacro($name, '', '', false, MacroNode::PREFIX_TAG);
+			});
+			unset($attrs[$attrName]);
 		}
 
 		foreach ($this->macros as $name => $foo) {
