@@ -22,7 +22,7 @@ $res = ob_get_clean();
 
 if (PHP_VERSION_ID >= 70400) {
 	Assert::match(
-'%A%/**
+		'%A%/**
  * @method mixed Abc(stdClass $a, $b = 132)
  */
 class Template
@@ -36,7 +36,7 @@ class Template
 
 } else {
 	Assert::match(
-'%A%/**
+		'%A%/**
  * @method mixed Abc(stdClass $a, $b = 132)
  */
 class Template

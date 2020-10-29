@@ -32,7 +32,7 @@ class CompileException extends \Exception
 		$this->sourceName = $name;
 		if (@is_file($name)) { // @ - may trigger error
 			$this->message = rtrim($this->message, '.')
-				. ' in ' . str_replace(dirname(dirname($name)), '...', $name) . ($line ? ":$line" : '');
+				. ' in ' . str_replace(dirname($name, 2), '...', $name) . ($line ? ":$line" : '');
 		}
 		return $this;
 	}

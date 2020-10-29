@@ -140,7 +140,9 @@ class Engine
 			if (!$e instanceof CompileException) {
 				$e = new CompileException($e instanceof SecurityViolationException ? $e->getMessage() : "Thrown exception '{$e->getMessage()}'", 0, $e);
 			}
-			$line = isset($tokens) ? $this->getCompiler()->getLine() : $this->getParser()->getLine();
+			$line = isset($tokens)
+				? $this->getCompiler()->getLine()
+				: $this->getParser()->getLine();
 			throw $e->setSource($source, $line, $name);
 		}
 
@@ -319,7 +321,9 @@ class Engine
 	public function invokeFunction(string $name, array $args)
 	{
 		if (!isset($this->functions->$name)) {
-			$hint = ($t = Helpers::getSuggestion(array_keys((array) $this->functions), $name)) ? ", did you mean '$t'?" : '.';
+			$hint = ($t = Helpers::getSuggestion(array_keys((array) $this->functions), $name))
+				? ", did you mean '$t'?"
+				: '.';
 			throw new \LogicException("Function '$name' is not defined$hint");
 		}
 		return ($this->functions->$name)(...$args);

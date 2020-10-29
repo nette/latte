@@ -20,7 +20,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 {* comment
 *}
 qwerty
@@ -34,7 +35,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 {* comment
 *}
 
@@ -50,7 +52,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 {* comment
 *}
 
@@ -66,7 +69,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 {* comment
 *}
 
@@ -82,7 +86,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 {* comment
 *}
 {contentType text}
@@ -97,7 +102,8 @@ line 1
 line 2
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 line 1 {* comment *}
 line 2
 EOD
@@ -108,7 +114,8 @@ Assert::match(<<<'EOD'
 word 1  word 2
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 word 1 {* comment *} word 2
 EOD
 ));
@@ -119,7 +126,8 @@ Assert::match(<<<'EOD'
 	<link>
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 	<link>
 	{* comment *}
 	<link>

@@ -107,7 +107,9 @@ class CoreMacros extends MacroSet
 			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $_v => $_l) { '
 				. 'trigger_error("Variable \$$_v overwritten in foreach on line $_l"); } ';
 		}
-		$code = $code ? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}' : '';
+		$code = $code
+			? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}'
+			: '';
 		return [$code];
 	}
 
@@ -142,7 +144,8 @@ class CoreMacros extends MacroSet
 			if ($node->args === '') {
 				throw new CompileException('Missing condition in {if} macro.');
 			}
-			return $writer->write('if (%node.args) '
+			return $writer->write(
+				'if (%node.args) '
 				. (isset($node->data->else) ? '{ ob_end_clean(); echo ob_get_clean(); }' : 'echo ob_get_clean();')
 				. ' else '
 				. (isset($node->data->else) ? '{ $this->global->else = ob_get_clean(); ob_end_clean(); echo $this->global->else; }' : 'ob_end_clean();')
@@ -160,7 +163,9 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		} elseif ($node->args !== '') {
-			$hint = Helpers::startsWith($node->args, 'if') ? ', did you mean {elseif}?' : '';
+			$hint = Helpers::startsWith($node->args, 'if')
+				? ', did you mean {elseif}?'
+				: '';
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
 		}
 		$ifNode = $node->parentNode;
@@ -339,7 +344,10 @@ class CoreMacros extends MacroSet
 				$this->overwrittenVars[$m[$i]][] = $node->startLine;
 			}
 		}
-		if (!$noIterator && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
+		if (
+			!$noIterator
+			&& preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))
+		) {
 			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its); ?>';
@@ -436,7 +444,14 @@ class CoreMacros extends MacroSet
 		$tokens = $node->tokenizer;
 		$res = new Latte\MacroTokens;
 		while ($tokens->nextToken()) {
-			if ($var && $tokens->isCurrent($tokens::T_SYMBOL) && ($tokens->isNext(',', '=>', '=') || !$tokens->isNext())) {
+			if (
+				$var
+				&& $tokens->isCurrent($tokens::T_SYMBOL)
+				&& (
+					$tokens->isNext(',', '=>', '=')
+					|| !$tokens->isNext()
+				)
+			) {
 				trigger_error("Inside macro {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
 
 			} elseif ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
@@ -481,7 +496,9 @@ class CoreMacros extends MacroSet
 		}
 		$res = $writer->preprocess($res);
 		$out = $writer->quotingPass($res)->joinAll();
-		return $node->name === 'default' ? "extract([$out], EXTR_SKIP)" : "$out;";
+		return $node->name === 'default'
+			? "extract([$out], EXTR_SKIP)"
+			: "$out;";
 	}
 
 
@@ -495,7 +512,8 @@ class CoreMacros extends MacroSet
 		if ($node->args === '') {
 			throw new CompileException('Missing arguments in ' . $node->getNotation());
 		}
-		return $writer->write($node->name === '='
+		return $writer->write(
+			$node->name === '='
 			? "echo %modify(%node.args) /* line $node->startLine */"
 			: '%modify(%node.args);'
 		);
