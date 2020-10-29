@@ -69,39 +69,42 @@ class PhpWriter
 			}
 		}
 
-		$code = preg_replace_callback('#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
-		function ($m) use ($word, &$args) {
-			[, $l, $source, $format, $cond, $r] = $m;
+		$code = preg_replace_callback(
+			'#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
+			function ($m) use ($word, &$args) {
+				[, $l, $source, $format, $cond, $r] = $m;
 
-			switch ($source) {
-				case 'node_':
-					$arg = $word; break;
-				case '':
-					$arg = current($args); next($args); break;
-				default:
-					$arg = $args[(int) $source]; break;
-			}
+				switch ($source) {
+					case 'node_':
+						$arg = $word; break;
+					case '':
+						$arg = current($args); next($args); break;
+					default:
+						$arg = $args[(int) $source]; break;
+				}
 
-			switch ($format) {
-				case 'word':
-					$code = $this->formatWord($arg); break;
-				case 'args':
-					$code = $this->formatArgs(); break;
-				case 'array':
-					$code = $this->formatArray();
-					$code = $cond && $code === '[]' ? '' : $code; break;
-				case 'var':
-					$code = var_export($arg, true); break;
-				case 'raw':
-					$code = (string) $arg; break;
-			}
+				switch ($format) {
+					case 'word':
+						$code = $this->formatWord($arg); break;
+					case 'args':
+						$code = $this->formatArgs(); break;
+					case 'array':
+						$code = $this->formatArray();
+						$code = $cond && $code === '[]' ? '' : $code; break;
+					case 'var':
+						$code = var_export($arg, true); break;
+					case 'raw':
+						$code = (string) $arg; break;
+				}
 
-			if ($cond && $code === '') {
-				return $r ? $l : $r;
-			} else {
-				return $l . $code . $r;
-			}
-		}, $mask);
+				if ($cond && $code === '') {
+					return $r ? $l : $r;
+				} else {
+					return $l . $code . $r;
+				}
+			},
+			$mask
+		);
 
 		$this->tokens->position = $pos;
 		return $code;
@@ -160,7 +163,7 @@ class PhpWriter
 	 */
 	public function preprocess(MacroTokens $tokens = null): MacroTokens
 	{
-		$tokens = $tokens === null ? $this->tokens : $tokens;
+		$tokens = $tokens ?? $this->tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
 		$tokens = $this->replaceFunctionsPass($tokens);
@@ -262,7 +265,10 @@ class PhpWriter
 				array_pop($inTernary);
 				array_pop($tmp);
 
-			} elseif ($tokens->isCurrent(',', ')', ']', '|') && end($inTernary) === $tokens->depth + $tokens->isCurrent(')', ']')) {
+			} elseif (
+				$tokens->isCurrent(',', ')', ']', '|')
+				&& end($inTernary) === $tokens->depth + $tokens->isCurrent(')', ']')
+			) {
 				$res->append(' : null');
 				array_pop($inTernary);
 				$errors += array_pop($tmp);
@@ -302,7 +308,13 @@ class PhpWriter
 
 			do {
 				if ($tokens->nextToken('?')) {
-					if ($tokens->isNext() && (!$tokens->isNext($tokens::T_CHAR) || $tokens->isNext('(', '[', '{', ':', '!', '@', '\\'))) {  // is it ternary operator?
+					if (
+						$tokens->isNext()
+						&& (
+							!$tokens->isNext($tokens::T_CHAR)
+							|| $tokens->isNext('(', '[', '{', ':', '!', '@', '\\')
+						)
+					) {  // is it ternary operator?
 						$expr->append($addBraces . ' ?');
 						break;
 					}
@@ -385,12 +397,13 @@ class PhpWriter
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
-			$res->append($tokens->isCurrent($tokens::T_SYMBOL)
+			$res->append(
+				$tokens->isCurrent($tokens::T_SYMBOL)
 				&& (!$tokens->isPrev() || $tokens->isPrev(',', '(', '[', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '=', 'and', 'or', 'xor', '??'))
 				&& (!$tokens->isNext() || $tokens->isNext(',', ';', ')', ']', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', 'and', 'or', 'xor', '??'))
 				&& !preg_match('#^[A-Z_][A-Z0-9_]{2,}$#', $tokens->currentValue())
-				? "'" . $tokens->currentValue() . "'"
-				: $tokens->currentToken()
+					? "'" . $tokens->currentValue() . "'"
+					: $tokens->currentToken()
 			);
 		}
 		return $res;
@@ -532,9 +545,10 @@ class PhpWriter
 					$inside = true;
 				} else {
 					$name = strtolower($tokens->currentValue());
-					$res->prepend($isContent
-						? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
-						: '($this->filters->' . $name . ')('
+					$res->prepend(
+						$isContent
+							? '$this->filters->filterContent(' . var_export($name, true) . ', $_fi, '
+							: '($this->filters->' . $name . ')('
 					);
 					$inside = true;
 				}

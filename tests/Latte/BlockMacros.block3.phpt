@@ -23,7 +23,8 @@ Assert::match(<<<'EOD'
 
 	<link rel="alternate">
 EOD
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 <head>
 	<script src="nette.js"></script>
 	{include meta}

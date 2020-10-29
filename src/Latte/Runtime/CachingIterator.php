@@ -57,7 +57,6 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Is the current element the first one?
-	 * @param  int  $width
 	 */
 	public function isFirst(int $width = null): bool
 	{
@@ -67,7 +66,6 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Is the current element the last one?
-	 * @param  int  $width
 	 */
 	public function isLast(int $width = null): bool
 	{
@@ -190,7 +188,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 			$ret = $this->$m();
 			return $ret;
 		}
-		throw new \LogicException('Attempt to read undeclared property ' . get_class($this) . "::\$$name.");
+		throw new \LogicException('Attempt to read undeclared property ' . static::class . "::\$$name.");
 	}
 
 

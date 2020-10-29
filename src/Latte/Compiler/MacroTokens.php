@@ -69,7 +69,7 @@ class MacroTokens extends TokenIterator
 		if ($val != null) { // intentionally @
 			array_splice(
 				$this->tokens,
-				$position === null ? count($this->tokens) : $position,
+				$position ?? count($this->tokens),
 				0,
 				is_array($val) ? [$val] : $this->parse($val)
 			);

@@ -86,11 +86,18 @@ class MacroNode
 	public $saved;
 
 
-	public function __construct(Macro $macro, string $name, string $args = null, string $modifiers = null, self $parentNode = null, HtmlNode $htmlNode = null, string $prefix = null)
-	{
+	public function __construct(
+		Macro $macro,
+		string $name,
+		string $args = null,
+		string $modifiers = null,
+		self $parentNode = null,
+		HtmlNode $htmlNode = null,
+		string $prefix = null
+	) {
 		$this->macro = $macro;
-		$this->name = (string) $name;
-		$this->modifiers = (string) $modifiers;
+		$this->name = $name;
+		$this->modifiers = $modifiers;
 		$this->parentNode = $parentNode;
 		$this->htmlNode = $htmlNode;
 		$this->prefix = $prefix;

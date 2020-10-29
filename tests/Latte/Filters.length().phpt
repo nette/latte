@@ -26,7 +26,7 @@ class CountableClass implements Countable
 	}
 }
 
-Assert::same(4, Filters::length(new CountableClass()));
+Assert::same(4, Filters::length(new CountableClass));
 
 
 class TraversableClass implements IteratorAggregate
@@ -37,4 +37,4 @@ class TraversableClass implements IteratorAggregate
 	}
 }
 
-Assert::same(3, Filters::length(new TraversableClass()));
+Assert::same(3, Filters::length(new TraversableClass));

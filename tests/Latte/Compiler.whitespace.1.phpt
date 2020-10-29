@@ -20,7 +20,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 {contentType text}
 qwerty
 
@@ -33,7 +34,8 @@ Assert::match(<<<'EOD'
 asdfgh
 EOD
 
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 
 {contentType text}
 asdfgh
