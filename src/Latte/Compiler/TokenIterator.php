@@ -194,8 +194,14 @@ class TokenIterator
 	 * @param  array  $wanted  of desired token types or values
 	 * @return mixed
 	 */
-	protected function scan(array $wanted, bool $onlyFirst, bool $advance, bool $strings = false, bool $until = false, bool $prev = false)
-	{
+	protected function scan(
+		array $wanted,
+		bool $onlyFirst,
+		bool $advance,
+		bool $strings = false,
+		bool $until = false,
+		bool $prev = false
+	) {
 		$res = $onlyFirst ? null : ($strings ? '' : []);
 		$pos = $this->position + ($prev ? -1 : 1);
 		do {
@@ -204,7 +210,13 @@ class TokenIterator
 			}
 
 			$token = $this->tokens[$pos];
-			if (!$wanted || (in_array($token[Tokenizer::VALUE], $wanted, true) || in_array($token[Tokenizer::TYPE], $wanted, true)) ^ $until) {
+			if (
+				!$wanted
+				|| (
+					in_array($token[Tokenizer::VALUE], $wanted, true)
+					|| in_array($token[Tokenizer::TYPE], $wanted, true)
+				) ^ $until
+			) {
 				while ($advance && !$prev && $pos > $this->position) {
 					$this->next();
 				}

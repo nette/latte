@@ -283,7 +283,9 @@ class Filters
 				'xhtmlComment' => 'escapeHtmlComment',
 			],
 		];
-		return isset($table[$source][$dest]) ? [self::class, $table[$source][$dest]] : null;
+		return isset($table[$source][$dest])
+			? [self::class, $table[$source][$dest]]
+			: null;
 	}
 
 
@@ -437,7 +439,7 @@ class Filters
 			if (abs($bytes) < 1024 || $unit === end($units)) {
 				break;
 			}
-			$bytes = $bytes / 1024;
+			$bytes /= 1024;
 		}
 		return round($bytes, $precision) . ' ' . $unit;
 	}
@@ -513,7 +515,7 @@ class Filters
 	{
 		$s = (string) $s;
 		if (self::strLength($s) > $maxLen) {
-			$maxLen = $maxLen - self::strLength($append);
+			$maxLen -= self::strLength($append);
 			if ($maxLen < 1) {
 				return $append;
 
@@ -591,13 +593,14 @@ class Filters
 
 	private static function strLength(string $s): int
 	{
-		return function_exists('mb_strlen') ? mb_strlen($s, 'UTF-8') : strlen(utf8_decode($s));
+		return function_exists('mb_strlen')
+			? mb_strlen($s, 'UTF-8')
+			: strlen(utf8_decode($s));
 	}
 
 
 	/**
 	 * Strips whitespace.
-	 * @return string
 	 */
 	public static function trim(FilterInfo $info, $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
@@ -677,7 +680,9 @@ class Filters
 				foreach ($value as $k => $v) {
 					if ($v != null) { // intentionally ==, skip nulls & empty string
 						//  composite 'style' vs. 'others'
-						$tmp[] = $v === true ? $k : (is_string($k) ? $k . ':' . $v : $v);
+						$tmp[] = $v === true
+							? $k
+							: (is_string($k) ? $k . ':' . $v : $v);
 					}
 				}
 				if ($tmp === null) {

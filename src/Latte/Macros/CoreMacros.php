@@ -109,7 +109,9 @@ class CoreMacros extends MacroSet
 			$code .= 'if (isset($this->params[' . var_export($var, true)
 			. "])) trigger_error('Variable $" . addcslashes($var, "'") . ' overwritten in foreach on line ' . implode(', ', $lines) . "'); ";
 		}
-		$code = $code ? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}' : '';
+		$code = $code
+			? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}'
+			: '';
 		return [$code];
 	}
 
@@ -144,7 +146,8 @@ class CoreMacros extends MacroSet
 			if ($node->args === '') {
 				throw new CompileException('Missing condition in {if} macro.');
 			}
-			return $writer->write('if (%node.args) '
+			return $writer->write(
+				'if (%node.args) '
 				. (isset($node->data->else) ? '{ ob_end_clean(); echo ob_get_clean(); }' : 'echo ob_get_clean();')
 				. ' else '
 				. (isset($node->data->else) ? '{ $this->global->else = ob_get_clean(); ob_end_clean(); echo $this->global->else; }' : 'ob_end_clean();')
@@ -162,7 +165,9 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		} elseif ($node->args) {
-			$hint = Helpers::startsWith($node->args, 'if') ? ', did you mean {elseif}?' : '';
+			$hint = Helpers::startsWith($node->args, 'if')
+				? ', did you mean {elseif}?'
+				: '';
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
 		}
 		$ifNode = $node->parentNode;
@@ -334,7 +339,10 @@ class CoreMacros extends MacroSet
 				$this->overwrittenVars[$m[$i]][] = $node->startLine;
 			}
 		}
-		if (!$noIterator && preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))) {
+		if (
+			!$noIterator
+			&& preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))
+		) {
 			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its); ?>';
@@ -460,7 +468,9 @@ class CoreMacros extends MacroSet
 			$res->append($node->name === 'default' ? '=>null' : '=null');
 		}
 		$out = $writer->quotingPass($res)->joinAll();
-		return $node->name === 'default' ? "extract([$out], EXTR_SKIP)" : "$out;";
+		return $node->name === 'default'
+			? "extract([$out], EXTR_SKIP)"
+			: "$out;";
 	}
 
 
@@ -470,9 +480,10 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write($node->name === '='
-			? "echo %modify(%node.args) /* line $node->startLine */"
-			: '%modify(%node.args);'
+		return $writer->write(
+			$node->name === '='
+				? "echo %modify(%node.args) /* line $node->startLine */"
+				: '%modify(%node.args);'
 		);
 	}
 

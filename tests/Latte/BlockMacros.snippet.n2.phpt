@@ -23,7 +23,8 @@ $latte->addProvider('snippetBridge', $bridge);
 Assert::match(<<<'EOD'
 <p id="abc">hello</p>
 EOD
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 <p n:inner-snippet="abc">hello</p>
 EOD
 ));
@@ -32,7 +33,8 @@ EOD
 Assert::match(<<<'EOD'
 <p id="abc">hello</p>
 EOD
-, $latte->renderToString(<<<'EOD'
+, $latte->renderToString(
+	<<<'EOD'
 <p n:snippet="abc">hello</p>
 EOD
 ));

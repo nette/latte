@@ -134,7 +134,9 @@ class Parser
 
 		if (!empty($matches['htmlcomment'])) { // <! <?
 			$this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
-			$end = $matches['htmlcomment'] === '!--' ? '--' : ($matches['htmlcomment'] === '?' && $this->xmlMode ? '\?' : '');
+			$end = $matches['htmlcomment'] === '!--'
+				? '--'
+				: ($matches['htmlcomment'] === '?' && $this->xmlMode ? '\?' : '');
 			$this->setContext(self::CONTEXT_HTML_COMMENT, $end);
 
 		} elseif (!empty($matches['tag'])) { // <tag or </tag
@@ -446,7 +448,11 @@ class Parser
 		} elseif ($token->type === Token::HTML_TAG_BEGIN && $this->lastHtmlTag === $this->syntaxEndTag) {
 			$this->syntaxEndLevel++;
 
-		} elseif ($token->type === Token::HTML_TAG_END && $this->lastHtmlTag === ('/' . $this->syntaxEndTag) && --$this->syntaxEndLevel === 0) {
+		} elseif (
+			$token->type === Token::HTML_TAG_END
+			&& $this->lastHtmlTag === ('/' . $this->syntaxEndTag)
+			&& --$this->syntaxEndLevel === 0
+		) {
 			$this->setSyntax($this->defaultSyntax);
 
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {

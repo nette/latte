@@ -24,7 +24,7 @@ class EnhancedEngine extends Engine
 	public function getCompiler(): Compiler
 	{
 		if (!$this->compiler) {
-			$this->compiler = new Compiler();
+			$this->compiler = new Compiler;
 		}
 
 		return $this->compiler;
@@ -33,14 +33,14 @@ class EnhancedEngine extends Engine
 
 // With no macros
 test(function () {
-	$latte = new EnhancedEngine();
+	$latte = new EnhancedEngine;
 	$latte->setLoader(new StringLoader);
 	Assert::equal('foo', $latte->renderToString('foo'));
 });
 
 // With {=} macro
 test(function () {
-	$latte = new EnhancedEngine();
+	$latte = new EnhancedEngine;
 	$latte->setLoader(new StringLoader);
 	$set = new MacroSet($latte->getCompiler());
 	$set->addMacro('=', function (MacroNode $node, PhpWriter $writer) {

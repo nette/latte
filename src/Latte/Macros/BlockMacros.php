@@ -212,7 +212,9 @@ class BlockMacros extends MacroSet
 		$name = $node->tokenizer->fetchWord();
 
 		if ($node->name === 'block' && $name === null) { // anonymous block
-			return $node->modifiers === '' ? '' : 'ob_start(function () {})';
+			return $node->modifiers === ''
+				? ''
+				: 'ob_start(function () {})';
 
 		} elseif ($node->name === 'define' && $node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
@@ -284,7 +286,9 @@ class BlockMacros extends MacroSet
 		if (isset($this->namedBlocks[$name])) {
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
-		$extendsCheck = $this->namedBlocks ? '' : 'if ($this->getParentName()) return get_defined_vars();';
+		$extendsCheck = $this->namedBlocks
+			? ''
+			: 'if ($this->getParentName()) return get_defined_vars();';
 		$this->namedBlocks[$name] = true;
 
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
@@ -310,8 +314,10 @@ class BlockMacros extends MacroSet
 				return $writer->write($include, $name);
 			}
 			$this->checkExtraArgs($node);
-			return $writer->write("?>\n<div id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
-				(string) substr($name, 1), $name
+			return $writer->write(
+				"?>\n<div id=\"<?php echo htmlSpecialChars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
+				(string) substr($name, 1),
+				$name
 			);
 
 		} elseif ($node->name === 'define') {
@@ -348,8 +354,13 @@ class BlockMacros extends MacroSet
 				$node->content = $node->innerContent;
 			}
 
-			if (($node->name === 'snippet' || $node->name === 'snippetArea') && strpos($node->data->name, '$') === false) {
-				$type = $node->name === 'snippet' ? SnippetDriver::TYPE_STATIC : SnippetDriver::TYPE_AREA;
+			if (
+				($node->name === 'snippet' || $node->name === 'snippetArea')
+				&& strpos($node->data->name, '$') === false
+			) {
+				$type = $node->name === 'snippet'
+					? SnippetDriver::TYPE_STATIC
+					: SnippetDriver::TYPE_AREA;
 				$node->content = '<?php $this->global->snippetDriver->enter('
 					. $writer->formatWord(substr($node->data->name, 1))
 					. ', "' . $type . '"); ?>'

@@ -17,16 +17,17 @@ use LogicException;
  */
 trait Strict
 {
-
 	/**
 	 * Call to undefined method.
 	 * @throws LogicException
 	 */
 	public function __call(string $name, array $args)
 	{
-		$class = method_exists($this, $name) ? 'parent' : get_class($this);
+		$class = method_exists($this, $name) ? 'parent' : static::class;
 		$items = (new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC);
-		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $t()?" : '.';
+		$hint = ($t = Helpers::getSuggestion($items, $name))
+			? ", did you mean $t()?"
+			: '.';
 		throw new LogicException("Call to undefined method $class::$name()$hint");
 	}
 
@@ -37,9 +38,11 @@ trait Strict
 	 */
 	public static function __callStatic(string $name, array $args)
 	{
-		$rc = new \ReflectionClass(get_called_class());
+		$rc = new \ReflectionClass(static::class);
 		$items = array_intersect($rc->getMethods(\ReflectionMethod::IS_PUBLIC), $rc->getMethods(\ReflectionMethod::IS_STATIC));
-		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $t()?" : '.';
+		$hint = ($t = Helpers::getSuggestion($items, $name))
+			? ", did you mean $t()?"
+			: '.';
 		throw new LogicException("Call to undefined static method {$rc->getName()}::$name()$hint");
 	}
 
@@ -52,7 +55,9 @@ trait Strict
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
-		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $$t?" : '.';
+		$hint = ($t = Helpers::getSuggestion($items, $name))
+			? ", did you mean $$t?"
+			: '.';
 		throw new LogicException("Attempt to read undeclared property {$rc->getName()}::$$name$hint");
 	}
 
@@ -65,7 +70,9 @@ trait Strict
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
-		$hint = ($t = Helpers::getSuggestion($items, $name)) ? ", did you mean $$t?" : '.';
+		$hint = ($t = Helpers::getSuggestion($items, $name))
+			? ", did you mean $$t?"
+			: '.';
 		throw new LogicException("Attempt to write to undeclared property {$rc->getName()}::$$name$hint");
 	}
 
@@ -82,7 +89,7 @@ trait Strict
 	 */
 	public function __unset(string $name)
 	{
-		$class = get_class($this);
+		$class = static::class;
 		throw new LogicException("Attempt to unset undeclared property $class::$$name.");
 	}
 }

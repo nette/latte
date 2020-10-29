@@ -12,7 +12,6 @@ namespace Latte\Runtime;
 
 interface IHtmlString
 {
-
 	/**
 	 * @return string in HTML format
 	 */

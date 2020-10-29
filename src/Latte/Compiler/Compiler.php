@@ -134,7 +134,8 @@ class Compiler
 		}
 
 		foreach ($tokens as $this->position => $token) {
-			if ($this->inHead && !($token->type === $token::COMMENT
+			if ($this->inHead && !(
+				$token->type === $token::COMMENT
 				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & IMacro::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
@@ -211,7 +212,9 @@ class Compiler
 	 */
 	public function getLine(): ?int
 	{
-		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position]->line : null;
+		return isset($this->tokens[$this->position])
+			? $this->tokens[$this->position]->line
+			: null;
 	}
 
 
@@ -270,7 +273,11 @@ class Compiler
 
 	private function processText(Token $token): void
 	{
-		if ($this->lastAttrValue === '' && $this->context && Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
+		if (
+			$this->lastAttrValue === ''
+			&& $this->context
+			&& Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)
+		) {
 			$this->lastAttrValue = $token->text;
 		}
 		$this->output .= $this->escape($token->text);
@@ -279,7 +286,11 @@ class Compiler
 
 	private function processMacroTag(Token $token): void
 	{
-		if ($this->context === self::CONTEXT_HTML_TAG || $this->context && Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)) {
+		if (
+			$this->context === self::CONTEXT_HTML_TAG
+			|| $this->context
+			&& Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)
+		) {
 			$this->lastAttrValue = true;
 		}
 
@@ -394,7 +405,9 @@ class Compiler
 			(($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
 			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|json|css#i', $htmlNode->attrs['type']))
 		) {
-			$this->context = $lower === 'script' ? self::CONTEXT_HTML_JS : self::CONTEXT_HTML_CSS;
+			$this->context = $lower === 'script'
+				? self::CONTEXT_HTML_JS
+				: self::CONTEXT_HTML_CSS;
 		}
 	}
 
@@ -437,7 +450,9 @@ class Compiler
 			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], true)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object'))
 		) {
-			$this->context = $this->context === self::CONTEXT_HTML_TAG ? self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL : self::CONTEXT_HTML_ATTRIBUTE_URL;
+			$this->context = $this->context === self::CONTEXT_HTML_TAG
+				? self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL
+				: self::CONTEXT_HTML_ATTRIBUTE_URL;
 		}
 	}
 
@@ -475,8 +490,13 @@ class Compiler
 	 * Generates code for {macro ...} to the output.
 	 * @internal
 	 */
-	public function openMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, string $nPrefix = null): MacroNode
-	{
+	public function openMacro(
+		string $name,
+		string $args = null,
+		string $modifiers = null,
+		bool $isRightmost = false,
+		string $nPrefix = null
+	): MacroNode {
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
 			$this->writeCode((string) $node->openingCode, $node->replaced, $isRightmost);
@@ -497,8 +517,13 @@ class Compiler
 	 * Generates code for {/macro ...} to the output.
 	 * @internal
 	 */
-	public function closeMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, string $nPrefix = null): MacroNode
-	{
+	public function closeMacro(
+		string $name,
+		string $args = null,
+		string $modifiers = null,
+		bool $isRightmost = false,
+		string $nPrefix = null
+	): MacroNode {
 		$node = $this->macroNode;
 
 		if (
@@ -688,14 +713,21 @@ class Compiler
 
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
-				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
+				if (
+					!Helpers::removeFilter($modifiers, 'nocheck')
+					&& !preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)
+				) {
 					$modifiers .= '|checkurl';
 				}
 			}
 
 			if (!Helpers::removeFilter($modifiers, 'noescape')) {
 				$modifiers .= '|escape';
-				if ($this->context === self::CONTEXT_HTML_JS && $name === '=' && preg_match('#["\'] *$#D', $this->tokens[$this->position - 1]->text)) {
+				if (
+					$this->context === self::CONTEXT_HTML_JS
+					&& $name === '='
+					&& preg_match('#["\'] *$#D', $this->tokens[$this->position - 1]->text)
+				) {
 					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
 				}
 			}
@@ -729,11 +761,8 @@ class Compiler
 
 	private static function printEndTag($node): string
 	{
-		if ($node instanceof HtmlNode) {
-			return  "</{$node->name}> for " . Parser::N_PREFIX
-				. implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs));
-		} else {
-			return "{/$node->name}";
-		}
+		return $node instanceof HtmlNode
+			? "</{$node->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs))
+			: "{/$node->name}";
 	}
 }
