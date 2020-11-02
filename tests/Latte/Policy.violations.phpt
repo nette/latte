@@ -58,11 +58,19 @@ Assert::exception(function () use ($latte) {
 }, Latte\SecurityViolationException::class, 'Calling Test::error() is not allowed.');
 
 Assert::exception(function () use ($latte) {
+	$latte->renderToString('{=$obj?->error(123)}', ['obj' => new Test]);
+}, Latte\SecurityViolationException::class, 'Calling Test::error() is not allowed.');
+
+Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=[$obj, "error"](123)}', ['obj' => new Test]);
 }, Latte\SecurityViolationException::class, 'Calling Test::error() is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{=$obj->error}', ['obj' => new Test]);
+}, Latte\SecurityViolationException::class, "Access to 'error' property on a Test object is not allowed.");
+
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('{=$obj?->error}', ['obj' => new Test]);
 }, Latte\SecurityViolationException::class, "Access to 'error' property on a Test object is not allowed.");
 
 Assert::exception(function () use ($latte) {

@@ -233,7 +233,7 @@ class PhpWriter
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			if (
-				!$tokens->isPrev('::', '->')
+				!$tokens->isPrev('::', '->', '?->')
 				&& (
 					$tokens->isCurrent('__halt_compiler', 'declare', 'die', 'eval', 'exit', 'include', 'include_once', 'require', 'require_once')
 					|| ($this->policy && $tokens->isCurrent(
@@ -282,7 +282,7 @@ class PhpWriter
 				$tokens->isCurrent($tokens::T_SYMBOL)
 				&& ($orig = $this->functions[strtolower($name)] ?? null)
 				&& $tokens->isNext('(')
-				&& !$tokens->isPrev('::', '->', '\\')
+				&& !$tokens->isPrev('::', '->', '?->', '\\')
 			) {
 				if ($name !== $orig) {
 					trigger_error("Case mismatch on function name '$name', correct name is '$orig'.", E_USER_WARNING);
@@ -357,7 +357,7 @@ class PhpWriter
 						break;
 					}
 
-					if (!$tokens->isNext('->', '::')) {
+					if (!$tokens->isNext('::')) {
 						$expr->prepend('(');
 						$expr->append(' ?? null)' . $addBraces);
 						break;
@@ -368,6 +368,18 @@ class PhpWriter
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
 					$expr = new MacroTokens('$__tmp');
 					$addBraces .= ')';
+
+				} elseif ($tokens->nextToken('?->')) {
+					$expr->prepend('(($__tmp = ');
+					$expr->append(' ?? null) === null ? null : ');
+					$res->tokens = array_merge($res->tokens, $expr->tokens);
+					$addBraces .= ')';
+					$expr = new MacroTokens('$__tmp->');
+					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
+						$expr->append($addBraces);
+						break;
+					}
+					$expr->append($tokens->currentToken());
 
 				} elseif ($tokens->nextToken('->', '::')) {
 					$expr->append($tokens->currentToken());
@@ -453,7 +465,7 @@ class PhpWriter
 				$expr = $arr = [];
 
 				$expr[] = $tokens->currentToken();
-				while ($tokens->isNext($tokens::T_VARIABLE, $tokens::T_SYMBOL, $tokens::T_NUMBER, $tokens::T_STRING, '[', ']', '(', ')', '->')
+				while ($tokens->isNext($tokens::T_VARIABLE, $tokens::T_SYMBOL, $tokens::T_NUMBER, $tokens::T_STRING, '[', ']', '(', ')', '->', '?->')
 					&& !$tokens->isNext('in')) {
 					$expr[] = $tokens->nextToken();
 				}
@@ -531,7 +543,7 @@ class PhpWriter
 					}
 					$expr->tokens = array_merge($expr->tokens, $this->sandboxPass($tokens)->tokens);
 
-				} elseif ($tokens->nextToken('->', '::')) { // property, method or constant
+				} elseif ($tokens->nextToken('->', '?->', '::')) { // property, method or constant
 					$op = $tokens->currentValue();
 					if ($op === '::' && $tokens->nextToken($tokens::T_SYMBOL)) { // is constant?
 						if ($tokens->isNext('(')) { // go back, it was not
