@@ -23,7 +23,7 @@
 
 <ul>
 	<li>{(int)$hello*0 |types:0,0.0,"0"}</li>
-	<li>{(int)$hello*1 |types:1:"1"}</li>
+	<li>{(int)$hello*1 |types:1,"1"}</li>
 	<li>{$hello |types:true,null,false}</li>
 	<li>{$hello |types:TRUE,NULL,FALSE}</li>
 	<li>{$hello |types:'',"","$hello"}</li>
@@ -73,5 +73,5 @@ Nested blocks: {block|striphtml|truncate:20} Outer   {block|striphtml|upper} Inn
 
 <ul>
 	<li>padLeft: {$hello |padleft:20}</li>
-	<li>padRight: {$hello |padright:20:'*'}</li>
+	<li>padRight: {$hello |padright:20,'*'}</li>
 </ul>
