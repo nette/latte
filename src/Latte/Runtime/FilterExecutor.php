@@ -67,7 +67,7 @@ class FilterExecutor
 	 */
 	public function add(?string $name, callable $callback)
 	{
-		if ($name == null) { // intentionally ==
+		if ($name === null) {
 			array_unshift($this->_dynamic, $callback);
 		} else {
 			$name = strtolower($name);

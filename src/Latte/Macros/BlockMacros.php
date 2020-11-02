@@ -227,7 +227,7 @@ class BlockMacros extends MacroSet
 		}
 
 		$node->data->name = $name = ltrim((string) $name, '#');
-		if ($name == null) {
+		if ($name === '') {
 			if ($node->name === 'define') {
 				throw new CompileException('Missing block name.');
 			}

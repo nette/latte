@@ -57,7 +57,7 @@ class Tokenizer
 			for ($i = 1; $i <= $count; $i++) {
 				if (!isset($match[$i])) {
 					break;
-				} elseif ($match[$i] != null) {
+				} elseif ($match[$i] !== '') {
 					$type = $this->types[$i - 1];
 					break;
 				}
