@@ -760,9 +760,8 @@ class PhpWriter
 					&& $tokens->isPrev(',', ':')
 					&& $tokens->isNext(':')
 				) {
-					$hint = (clone $tokens)->reset()->joinAll();
-					trigger_error("Colon as argument separator is deprecated, use comma in '$hint'.", E_USER_DEPRECATED);
 					$res->append($tokens->currentToken());
+					$res->append($tokens->nextToken(':'));
 
 				} else {
 					$res->append($tokens->currentToken());
