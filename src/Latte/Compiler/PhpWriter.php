@@ -153,6 +153,7 @@ class PhpWriter
 	public function formatArray(MacroTokens $tokens = null): string
 	{
 		$tokens = $this->preprocess($tokens);
+		$tokens = $this->namedArgumentsPass($tokens);
 		$tokens = $this->expandCastPass($tokens);
 		$tokens = $this->quotingPass($tokens);
 		$this->validateKeywords($tokens);
@@ -471,6 +472,29 @@ class PhpWriter
 					? "'" . $tokens->currentValue() . "'"
 					: $tokens->currentToken()
 			);
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Converts named arguments name: value to 'name' => value
+	 */
+	public function namedArgumentsPass(MacroTokens $tokens): MacroTokens
+	{
+		$res = new MacroTokens;
+		while ($tokens->nextToken()) {
+			if (
+				$tokens->depth === 0
+				&& $tokens->isCurrent($tokens::T_SYMBOL)
+				&& (!$tokens->isPrev() || $tokens->isPrev(','))
+				&& $tokens->isNext(':')
+			) {
+				$res->append("'" . $tokens->currentValue() . "' =>");
+				$tokens->nextToken(':');
+			} else {
+				$res->append($tokens->currentToken());
+			}
 		}
 		return $res;
 	}
