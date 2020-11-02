@@ -801,6 +801,10 @@ class PhpWriter
 					$res->append($tokens->currentToken());
 
 				} else {
+					if ($tokens->isNext(':') && !$tokens->depth) {
+						$hint = (clone $tokens)->reset()->joinAll();
+						trigger_error("Colon as argument separator is deprecated, use comma in '$hint'.", E_USER_DEPRECATED);
+					}
 					$res->append($tokens->currentToken());
 				}
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
