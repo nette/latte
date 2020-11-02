@@ -40,12 +40,11 @@ test('common', function () {
 
 
 test('arguments', function () {
-	Assert::same('($this->filters->mod)(@, $obj->a, 2)', formatModifiers('@', 'mod:$obj->a:2'));
 	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', formatModifiers('@', 'mod,arg1,2,$var["pocet"]'));
-	Assert::same('($this->filters->mod)(@, " :a:b:c", "", 3, "")', @formatModifiers('@', 'mod:" :a:b:c":"":3:""')); // deprecated :
-	Assert::same('($this->filters->mod)(@, "\":a:b:c")', formatModifiers('@', 'mod:"\\":a:b:c"'));
-	Assert::same("(\$this->filters->mod)(@, '\\':a:b:c')", formatModifiers('@', "mod:'\\':a:b:c'"));
-	Assert::same('($this->filters->mod)(@ , \'param\' , \'param\')', formatModifiers('@', 'mod : param , param'));
+	Assert::same('($this->filters->mod)(@, " ,a,b,c", "", 3, "")', @formatModifiers('@', 'mod:" ,a,b,c","",3,""'));
+	Assert::same('($this->filters->mod)(@, "\",a,b,c")', formatModifiers('@', 'mod:"\\",a,b,c"'));
+	Assert::same("(\$this->filters->mod)(@, '\\',a,b,c')", formatModifiers('@', "mod:'\\',a,b,c'"));
+	Assert::same('($this->filters->mod)(@ , \'param\' , \'param\')', @formatModifiers('@', 'mod , param , param'));
 	Assert::same('($this->filters->mod)(@, $var, 0, -0.0, "str", \'str\')', formatModifiers('@', 'mod, $var, 0, -0.0, "str", \'str\''));
 	Assert::same('($this->filters->mod)(@, true, false, null)', formatModifiers('@', 'mod: true, false, null'));
 	Assert::same('($this->filters->mod)(@, TRUE, FALSE, NULL)', formatModifiers('@', 'mod: TRUE, FALSE, NULL'));
