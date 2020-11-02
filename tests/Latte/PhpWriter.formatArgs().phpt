@@ -111,10 +111,10 @@ test('inline modifiers', function () {
 	Assert::same('($this->filters->mod)(@, array(1))', formatArgs('(@|mod: array(1))'));
 	Assert::same('($this->filters->mod)($a ? $b : null)', formatArgs('($a ? $b|mod)'));
 
-	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', \"param2)\")", formatArgs('foo => ($val|mod:param:"param2)")'));
+	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', \"param2)\")", formatArgs('foo => ($val|mod:param,"param2)")'));
 	Assert::same("'foo' => (\$this->filters->mod2)((\$this->filters->mod)(\$val))", formatArgs('foo => ($val|mod|mod2)'));
-	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1))", formatArgs('foo => ($val|mod:param:(1|mod2))'));
-	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1, round((\$this->filters->foo)(2))))", formatArgs('foo => ($val|mod:param:(1|mod2:round((2|foo))))'));
+	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1))", @formatArgs('foo => ($val|mod:param:(1|mod2))')); // deprecated :
+	Assert::same("'foo' => (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1, round((\$this->filters->foo)(2))))", @formatArgs('foo => ($val|mod:param:(1|mod2:round((2|foo))))')); // deprecated :
 	Assert::same("'foo' => foo(\$val)", formatArgs('foo => foo($val)'));
 	Assert::same("'foo' => foo((\$this->filters->bar)(\$val))", formatArgs('foo => foo($val|bar)'));
 	Assert::same('foo(($this->filters->bar)($val),($this->filters->lorem)( $val))', formatArgs('foo($val|bar, $val|lorem)'));
