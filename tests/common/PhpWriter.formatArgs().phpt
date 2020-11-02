@@ -104,7 +104,6 @@ test('inline modifiers', function () {
 	Assert::same('($this->filters->mod)(@)', formatArgs('(@|mod)'));
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))', formatArgs('(@|mod1|mod2|mod3)'));
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(@)))', formatArgs('((@|mod1)|mod2|mod3)'));
-	Assert::same('($this->filters->mod)(@, 1, 2, $var["pocet"])', formatArgs('(@|mod:1:2:$var["pocet"])'));
 	Assert::same('($this->filters->mod)(@, 1, 2, $var["pocet"])', formatArgs('(@|mod,1,2,$var["pocet"])'));
 	Assert::same('($this->filters->mod)(@, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')', formatArgs('(@|mod, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')'));
 	Assert::same('($this->filters->mod)(@, array(1))', formatArgs('(@|mod: array(1))'));

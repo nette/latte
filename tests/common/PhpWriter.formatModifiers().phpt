@@ -40,7 +40,6 @@ test('common', function () {
 
 
 test('arguments', function () {
-	Assert::same('($this->filters->mod)(@, $obj->a, 2)', formatModifiers('@', 'mod:$obj->a:2'));
 	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', @formatModifiers('@', 'mod:arg1:2:$var["pocet"]')); // deprecated :
 	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', formatModifiers('@', 'mod,arg1,2,$var["pocet"]'));
 	Assert::same('($this->filters->mod)(@, " :a:b:c", "", 3, "")', @formatModifiers('@', 'mod:" :a:b:c":"":3:""')); // deprecated :
