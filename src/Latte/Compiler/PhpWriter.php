@@ -794,36 +794,23 @@ class PhpWriter
 	 */
 	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens
 	{
-		$inside = false;
+		$inside = 0;
 		$res = new MacroTokens($var);
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent($tokens::T_WHITESPACE)) {
 				$res->append(' ');
 
 			} elseif ($inside) {
-				if ($tokens->isCurrent(':', ',') && !$tokens->depth) {
+				if ($inside === 1 && $tokens->isCurrent(':')) {
 					$res->append(', ');
 					$tokens->nextAll($tokens::T_WHITESPACE);
+					$inside = 2;
 
 				} elseif ($tokens->isCurrent('|') && !$tokens->depth) {
 					$res->append(')');
-					$inside = false;
-
-				} elseif (
-					!$tokens->depth
-					&& $tokens->isCurrent($tokens::T_SYMBOL)
-					&& $tokens->isPrev(',', ':')
-					&& $tokens->isNext(':')
-				) {
-					$hint = (clone $tokens)->reset()->joinAll();
-					trigger_error("Colon as argument separator is deprecated, replace ':' with ',' in '$hint'", E_USER_DEPRECATED);
-					$res->append($tokens->currentToken());
+					$inside = 0;
 
 				} else {
-					if ($tokens->isNext(':') && !$tokens->depth) {
-						$hint = (clone $tokens)->reset()->joinAll();
-						trigger_error("Colon as argument separator is deprecated, replace ':' with ',' in '$hint'", E_USER_DEPRECATED);
-					}
 					$res->append($tokens->currentToken());
 				}
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
@@ -841,7 +828,7 @@ class PhpWriter
 						trigger_error("Case mismatch on filter name |{$tokens->currentValue()}, correct name is |checkUrl.", E_USER_WARNING);
 					}
 					$res->prepend('LR\Filters::safeUrl(');
-					$inside = true;
+					$inside = 1;
 				} elseif (
 					!strcasecmp($tokens->currentValue(), 'noescape')
 					|| !strcasecmp($tokens->currentValue(), 'nocheck')
@@ -866,7 +853,7 @@ class PhpWriter
 							? '$this->filters->filterContent(' . PhpHelpers::dump($lower) . ', $ʟ_fi, '
 							: '($this->filters->' . $lower . ')('
 					);
-					$inside = true;
+					$inside = 1;
 				}
 			} else {
 				throw new CompileException("Filter name must be alphanumeric string, '{$tokens->currentValue()}' given.");

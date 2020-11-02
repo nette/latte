@@ -40,12 +40,11 @@ test('common', function () {
 
 
 test('arguments', function () {
-	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', @formatModifiers('@', 'mod:arg1:2:$var["pocet"]')); // deprecated :
-	Assert::same('($this->filters->mod)(@, \'arg1\', 2, $var["pocet"])', formatModifiers('@', 'mod,arg1,2,$var["pocet"]'));
-	Assert::same('($this->filters->mod)(@, " :a:b:c", "", 3, "")', @formatModifiers('@', 'mod:" :a:b:c":"":3:""')); // deprecated :
-	Assert::same('($this->filters->mod)(@, "\":a:b:c")', formatModifiers('@', 'mod:"\\":a:b:c"'));
-	Assert::same("(\$this->filters->mod)(@, '\\':a:b:c')", formatModifiers('@', "mod:'\\':a:b:c'"));
-	Assert::same('($this->filters->mod)(@ , \'param\' , \'param\')', @formatModifiers('@', 'mod : param : param')); // deprecated :
+	Assert::same('($this->filters->mod)(@,\'arg1\',2,$var["pocet"])', formatModifiers('@', 'mod,arg1,2,$var["pocet"]'));
+	Assert::same('($this->filters->mod)(@, " ,a,b,c", "", 3, "")', @formatModifiers('@', 'mod:" ,a,b,c", "", 3, ""'));
+	Assert::same('($this->filters->mod)(@, "\",a,b,c")', formatModifiers('@', 'mod:"\\",a,b,c"'));
+	Assert::same("(\$this->filters->mod)(@, '\\',a,b,c')", formatModifiers('@', "mod:'\\',a,b,c'"));
+	Assert::same('($this->filters->mod)(@ , \'param\' , \'param\')', @formatModifiers('@', 'mod , param , param'));
 	Assert::same('($this->filters->mod)(@, $var, 0, -0.0, "str", \'str\')', formatModifiers('@', 'mod, $var, 0, -0.0, "str", \'str\''));
 	Assert::same('($this->filters->mod)(@, true, false, null)', formatModifiers('@', 'mod: true, false, null'));
 	Assert::same('($this->filters->mod)(@, TRUE, FALSE, NULL)', formatModifiers('@', 'mod: TRUE, FALSE, NULL'));
@@ -78,4 +77,10 @@ test('optionalChainingPass', function () {
 		'($this->filters->mod)(@, (($ʟ_tmp = $var ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1] ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2) ?? null) === null ? null : $ʟ_tmp->item)))))',
 		formatModifiers('@', 'mod:$var??->prop??->elem[1]??->call(2)??->item')
 	);
+});
+
+
+test('named arguments', function () {
+	Assert::same('($this->filters->mod)(@, a: 1)', formatModifiers('@', 'mod:a: 1'));
+	Assert::same('($this->filters->mod)(@, a: 1, b: 2)', formatModifiers('@', 'mod:a: 1, b: 2'));
 });
