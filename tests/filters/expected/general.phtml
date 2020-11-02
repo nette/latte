@@ -76,19 +76,19 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)((int)$hello*0, 0, 0.0, "0")) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)((int)$hello*0, 0,0.0,"0")) /* line %d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)((int)$hello*1, 1, "1")) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)((int)$hello*1, 1,"1")) /* line %d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true,null,false)) /* line %d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, TRUE, NULL, FALSE)) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, TRUE,NULL,FALSE)) /* line %d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, '', "", "$hello")) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, '',"","$hello")) /* line %d% */;
 		echo '</li>
 </ul>
 
@@ -183,7 +183,7 @@ Nested blocks: ';
 		echo LR\Filters::escapeHtmlText(($this->filters->padleft)($hello, 20)) /* line %d% */;
 		echo '</li>
 	<li>padRight: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->padright)($hello, 20, '*')) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->padright)($hello, 20,'*')) /* line %d% */;
 		echo '</li>
 </ul>
 ';

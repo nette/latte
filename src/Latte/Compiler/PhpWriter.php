@@ -775,36 +775,23 @@ class PhpWriter
 	 */
 	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens
 	{
-		$inside = false;
+		$inside = 0;
 		$res = new MacroTokens($var);
 		while ($tokens->nextToken()) {
 			if ($tokens->isCurrent($tokens::T_WHITESPACE)) {
 				$res->append(' ');
 
 			} elseif ($inside) {
-				if ($tokens->isCurrent(':', ',') && !$tokens->depth) {
+				if ($inside === 1 && $tokens->isCurrent(':')) {
 					$res->append(', ');
 					$tokens->nextAll($tokens::T_WHITESPACE);
+					$inside = 2;
 
 				} elseif ($tokens->isCurrent('|') && !$tokens->depth) {
 					$res->append(')');
-					$inside = false;
-
-				} elseif (
-					!$tokens->depth
-					&& $tokens->isCurrent($tokens::T_SYMBOL)
-					&& $tokens->isPrev(',', ':')
-					&& $tokens->isNext(':')
-				) {
-					$hint = (clone $tokens)->reset()->joinAll();
-					trigger_error("Colon as argument separator is deprecated, use comma in '$hint'.", E_USER_DEPRECATED);
-					$res->append($tokens->currentToken());
+					$inside = 0;
 
 				} else {
-					if ($tokens->isNext(':') && !$tokens->depth) {
-						$hint = (clone $tokens)->reset()->joinAll();
-						trigger_error("Colon as argument separator is deprecated, use comma in '$hint'.", E_USER_DEPRECATED);
-					}
 					$res->append($tokens->currentToken());
 				}
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
@@ -819,7 +806,7 @@ class PhpWriter
 					$tokens->nextToken('|');
 				} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
 					$res->prepend('LR\Filters::safeUrl(');
-					$inside = true;
+					$inside = 1;
 				} elseif (
 					!strcasecmp($tokens->currentValue(), 'noescape')
 					|| !strcasecmp($tokens->currentValue(), 'nocheck')
@@ -837,7 +824,7 @@ class PhpWriter
 							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
 							: '($this->filters->' . $name . ')('
 					);
-					$inside = true;
+					$inside = 1;
 				}
 			} else {
 				throw new CompileException("Filter name must be alphanumeric string, '{$tokens->currentValue()}' given.");
