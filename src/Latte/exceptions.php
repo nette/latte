@@ -21,11 +21,11 @@ class CompileException extends \Exception
 	/** @var string */
 	public $sourceName;
 
-	/** @var int */
+	/** @var ?int */
 	public $sourceLine;
 
 
-	public function setSource(string $code, int $line, string $name = null)
+	public function setSource(string $code, ?int $line, string $name = null)
 	{
 		$this->sourceCode = $code;
 		$this->sourceLine = $line;
