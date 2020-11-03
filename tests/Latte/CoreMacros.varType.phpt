@@ -42,3 +42,7 @@ Assert::noError(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{varType int|null $var}');
 });
+
+Assert::noError(function () use ($latte) {
+	$latte->compile('{varType array{0: int, 1: int} $var}');
+});

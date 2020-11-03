@@ -566,9 +566,9 @@ class CoreMacros extends MacroSet
 			$node->setArgs($node->args . $node->modifiers);
 		}
 
-		$type = $node->tokenizer->fetchWord();
-		$variable = $node->tokenizer->fetchWord();
-		if (!$type || !$variable || !Helpers::startsWith($variable, '$')) {
+		$type = trim($node->tokenizer->joinUntil($node->tokenizer::T_VARIABLE));
+		$variable = $node->tokenizer->nextToken($node->tokenizer::T_VARIABLE);
+		if (!$type || !$variable) {
 			throw new CompileException('Unexpected content, expecting {varType type $var}.');
 		}
 	}
