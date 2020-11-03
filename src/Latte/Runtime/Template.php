@@ -115,6 +115,12 @@ class Template
 	}
 
 
+	public function getBlockNames(): array
+	{
+		return array_keys($this->blocks);
+	}
+
+
 	public function getContentType(): string
 	{
 		return $this->contentType;
@@ -264,7 +270,7 @@ class Template
 	public function renderBlock(string $name, array $params, $mod = null): void
 	{
 		if (empty($this->blockQueue[$name])) {
-			$hint = isset($this->blockQueue) && ($t = Latte\Helpers::getSuggestion(array_keys($this->blockQueue), $name))
+			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames(), $name))
 				? ", did you mean '$t'?"
 				: '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");

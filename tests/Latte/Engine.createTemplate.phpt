@@ -14,9 +14,11 @@ $template = $latte->createTemplate(__DIR__ . '/templates/general.latte');
 Assert::type(Latte\Runtime\Template::class, $template);
 Assert::null($template->getReferringTemplate());
 Assert::null($template->getReferenceType());
+Assert::same(['menu'], $template->getBlockNames());
 
 
 $template = $latte->createTemplate(__DIR__ . '/templates/general.latte');
 Assert::type(Latte\Runtime\Template::class, $template);
 Assert::null($template->getReferringTemplate());
 Assert::null($template->getReferenceType());
+Assert::same(['menu'], $template->getBlockNames());
