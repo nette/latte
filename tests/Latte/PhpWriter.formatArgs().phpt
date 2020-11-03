@@ -167,3 +167,9 @@ test('optionalChainingPass + ternary', function () {
 		@formatArgs('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b') // deprecated
 	);
 });
+
+
+test('named arguments', function () {
+	Assert::same('func(a: 1, b: 2)', formatArgs('func(a: 1, b: 2)'));
+	Assert::same("func(a: 1, ('a' ?'b': 2))", formatArgs('func(a: 1, (a ?b: 2))')); // ternary
+});
