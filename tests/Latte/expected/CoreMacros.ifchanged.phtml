@@ -1,0 +1,124 @@
+<?php
+%A%
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			if (($__loc[1] ?? null) !== ($__tmp = [$i])) {
+				$__loc[1] = $__tmp;
+				?> <?php echo LR\Filters::escapeHtmlText($i) /* line 2 */ ?> <?php
+			}
+			?> <?php
+			if (($__loc[2] ?? null) !== ($__tmp = ['a', 'b'])) {
+				$__loc[2] = $__tmp;
+				?> const <?php
+			}
+			?> <?php
+			$iterations++;
+		}
+?>
+
+
+--
+
+<?php
+		$iterations = 0;
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			if (($__loc[3] ?? null) !== ($__tmp = [$i])) {
+				$__loc[3] = $__tmp;
+				?> <?php echo LR\Filters::escapeHtmlText($i) /* line 6 */ ?> <?php
+			}
+			else {
+				?> else <?php
+			}
+			?> <?php
+			$iterations++;
+		}
+?>
+
+
+--
+
+<?php
+		$iterations = 0;
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			ob_start(function () {});
+			try {
+				?> -<?php echo LR\Filters::escapeHtmlText($i) /* line 10 */ ?>- <?php
+			}
+			finally {
+				$__tmp = ob_get_clean();
+			}
+			if (($__loc[4] ?? null) !== $__tmp) {
+				echo $__loc[4] = $__tmp;
+			}
+			?> <?php
+			$iterations++;
+		}
+?>
+
+
+--
+
+<?php
+		$iterations = 0;
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			ob_start(function () {});
+			try {
+				?> -<?php echo LR\Filters::escapeHtmlText($i) /* line 14 */ ?>- <?php
+			}
+			finally {
+				$__tmp = ob_get_clean();
+			}
+			if (($__loc[5] ?? null) !== $__tmp) {
+				echo $__loc[5] = $__tmp;
+			}
+			else {
+				?> else <?php
+			}
+			?> <?php
+			$iterations++;
+		}
+?>
+
+
+--
+
+<?php
+		$iterations = 0;
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			ob_start(function () {});
+			try {
+				?><span><?php echo LR\Filters::escapeHtmlText($i) /* line 18 */ ?></span><?php
+			}
+			finally {
+				$__tmp = ob_get_clean();
+			}
+			if (($__loc[6] ?? null) !== $__tmp) {
+				echo $__loc[6] = $__tmp;
+			}
+			$iterations++;
+		}
+?>
+
+--
+
+<?php
+		$iterations = 0;
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			ob_start(function () {});
+			try {
+				?><span class="<?php echo LR\Filters::escapeHtmlAttr($i) /* line 22 */ ?>"></span><?php
+			}
+			finally {
+				$__tmp = ob_get_clean();
+			}
+			if (($__loc[7] ?? null) !== $__tmp) {
+				echo $__loc[7] = $__tmp;
+			}
+			$iterations++;
+		}
+%A%

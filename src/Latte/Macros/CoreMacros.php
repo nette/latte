@@ -43,6 +43,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('ifset', 'if (isset(%node.args)) {', '}');
 		$me->addMacro('elseifset', [$me, 'macroElseIf']);
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
+		$me->addMacro('ifchanged', [$me, 'macroIfChanged'], '}');
 
 		$me->addMacro('switch', '$__switch = (%node.args); if (false) {', '}');
 		$me->addMacro('case', [$me, 'macroCase']);
@@ -177,7 +178,7 @@ class CoreMacros extends MacroSet
 		if ($node->args !== '' && Helpers::startsWith($node->args, 'if')) {
 			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
 		}
-		$node->validate(false, ['if', 'ifset', 'foreach', 'try']);
+		$node->validate(false, ['if', 'ifset', 'foreach', 'ifchanged', 'try']);
 
 		$parent = $node->parentNode;
 		if (isset($parent->data->else)) {
@@ -190,6 +191,11 @@ class CoreMacros extends MacroSet
 
 		} elseif ($parent->name === 'foreach') {
 			return '$iterations++; } if ($iterator->isEmpty()) {';
+
+		} elseif ($parent->name === 'ifchanged' && $parent->data->capture) {
+			$res = '?>' . $parent->closingCode . '<?php else {';
+			$parent->closingCode = '<?php } ?>';
+			return $res;
 
 		} elseif ($parent->name === 'try') {
 			$node->openingCode = $parent->data->code;
@@ -239,6 +245,28 @@ class CoreMacros extends MacroSet
 			. $node->innerContent
 			. "<?php $var = ob_get_flush(); ?>";
 		$node->closingCode = "<?php if (rtrim($var) === '') { ob_end_clean(); } else { echo ob_get_clean(); } ?>";
+	}
+
+
+	/**
+	 * {ifchanged [...]}
+	 */
+	public function macroIfChanged(MacroNode $node, PhpWriter $writer): void
+	{
+		$node->validate(null);
+		$id = $node->data->id = ++$this->counter;
+		if ($node->data->capture = ($node->args === '')) {
+			$node->openingCode = '<?php ob_start(function () {}); try { ?>';
+			$node->closingCode =
+				'<?php } finally { $__tmp = ob_get_clean(); } '
+				. "if ((\$__loc[$id] ?? null) !== \$__tmp) { echo \$__loc[$id] = \$__tmp; } ?>";
+		} else {
+			$node->openingCode = $writer->write(
+				'<?php if (($__loc[%var] ?? null) !== ($__tmp = [%node.args])) { $__loc[%var] = $__tmp; ?>',
+				$id,
+				$id
+			);
+		}
 	}
 
 
