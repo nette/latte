@@ -1,0 +1,24 @@
+<?php
+%A%
+		$iterations = 0;
+		foreach (['a', 'b'] as $item) {
+?>
+	item
+<?php
+			$iterations++;
+		}
+?>
+
+---
+
+<?php
+		$iterations = 0;
+		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(['a', 'b']) as $item) {
+			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 9 */ ?>
+
+<?php
+			$iterations++;
+		}
+		array_pop($this->global->its);
+		$iterator = end($this->global->its);
+%A%

@@ -1,0 +1,51 @@
+<?php
+%A%
+		$this->global->switch[] = (0);
+		if (false) {
+		}
+		elseif (end($this->global->switch) === ('')) {
+?>string
+<?php
+		}
+		elseif (end($this->global->switch) === (0.0)) {
+?>flot
+<?php
+		}
+		else {
+?>def
+<?php
+		}
+		array_pop($this->global->switch) ?>
+
+---
+
+<?php
+		$this->global->switch[] = ('a');
+		if (false) {
+		}
+		elseif (end($this->global->switch) === ('a')) {
+?>a
+<?php
+		}
+		array_pop($this->global->switch) ?>
+
+---
+
+<?php
+		$this->global->switch[] = ('a');
+		if (false) {
+		}
+		else {
+?>def
+<?php
+		}
+		array_pop($this->global->switch) ?>
+
+---
+
+<?php
+		$this->global->switch[] = ('a');
+		if (false) {
+		}
+		array_pop($this->global->switch);
+%A%

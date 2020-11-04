@@ -1,0 +1,26 @@
+<?php
+%A%
+		$iterations = 0;
+		foreach ($iterator = $this->global->its[] = new LR\CachingIterator([0, 1, 2, 3]) as $item) {
+			if ($item % 2) continue;
+			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 4 */ ?>. item
+<?php
+			$iterations++;
+		}
+		array_pop($this->global->its);
+		$iterator = end($this->global->its);
+?>
+
+---
+
+<?php
+		$iterations = 0;
+		foreach ($iterator = $this->global->its[] = new LR\CachingIterator([0, 1, 2, 3]) as $item) {
+			if ($item % 2) break;
+			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 11 */ ?>. item
+<?php
+			$iterations++;
+		}
+		array_pop($this->global->its);
+		$iterator = end($this->global->its);
+%A%

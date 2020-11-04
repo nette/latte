@@ -38,3 +38,12 @@ Assert::same(
 	'<?php } elseif (isset($this->blockQueue["block1"], $this->blockQueue["block2"], $var3, item(\'abc\'))) { ?>',
 	$compiler->expandMacro('elseifset', '#block1, block2, $var3, item(abc)')->openingCode
 );
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+Assert::match(
+	' test',
+	$latte->renderToString('{block test}{/block} {ifset test}test{/ifset} {ifset xxx}xxx{/ifset}')
+);

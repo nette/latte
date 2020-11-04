@@ -1,0 +1,77 @@
+<?php
+%A%
+		if (true) {
+?>
+	a
+<?php
+		}
+		elseif ($b) {
+?>
+	b
+<?php
+		}
+		elseif (isset($c)) {
+?>
+	c
+<?php
+		}
+		else {
+?>
+	d
+<?php
+		}
+?>
+
+--
+
+<?php ob_start(function () {}) ?>
+	a
+<?php
+		if (true) echo ob_get_clean();
+		else ob_end_clean();
+?>
+
+
+--
+
+<?php ob_start(function () {}) ?>
+	a
+<?php ob_start(function () {}) ?>
+	d
+<?php
+		if (true) {
+			ob_end_clean();
+			echo ob_get_clean();
+		}
+		else {
+			$this->global->else = ob_get_clean();
+			ob_end_clean();
+			echo $this->global->else;
+		}
+?>
+
+
+--
+
+<?php
+		if (isset($a)) {
+?>
+	a
+<?php
+		}
+		elseif ($b) {
+?>
+	b
+<?php
+		}
+		elseif (isset($c)) {
+?>
+	c
+<?php
+		}
+		else {
+?>
+	d
+<?php
+		}
+%A%

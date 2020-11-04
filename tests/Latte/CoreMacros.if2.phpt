@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: {while}
+ * Test: {if}
  */
 
 declare(strict_types=1);
@@ -17,25 +17,45 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-{while $i++ < 10}
-	{$i}
-{/while}
+{if true}
+	a
+	{elseif $b}
+	b
+	{elseifset $c}
+	c
+	{else}
+	d
+{/if}
 
+--
 
-{while}
-	{$i}
-{/while $i++ < 10}
+{if}
+	a
+{/if true}
 
+--
 
-{while $i++ < 10}
-	{breakIf true}
-	{continueIf true}
-	{$i}
-{/while}
+{if}
+	a
+	{else}
+	d
+{/if true}
+
+--
+
+{ifset $a}
+	a
+	{elseif $b}
+	b
+	{elseifset $c}
+	c
+	{else}
+	d
+{/ifset}
 
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/CoreMacros.while.phtml',
+	__DIR__ . '/expected/CoreMacros.if2.phtml',
 	$latte->compile($template)
 );

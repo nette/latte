@@ -15,4 +15,15 @@
 <?php
 		}
 		while ($i++ < 10);
+?>
+
+
+<?php
+		while ($i++ < 10) {
+			if (true) break;
+			if (true) continue;
+			?>	<?php echo LR\Filters::escapeHtmlText($i) /* line 15 */ ?>
+
+<?php
+		}
 %A%
