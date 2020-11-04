@@ -697,6 +697,18 @@ class Filters
 
 
 	/**
+	 * Sorts an array.
+	 * @param  mixed[]  $array
+	 * @return mixed[]
+	 */
+	public static function sort(array $array): array
+	{
+		sort($array);
+		return $array;
+	}
+
+
+	/**
 	 * Returns value clamped to the inclusive range of min and max.
 	 * @param  int|float  $value
 	 * @param  int|float  $min

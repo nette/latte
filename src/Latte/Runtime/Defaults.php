@@ -46,6 +46,7 @@ class Defaults
 			'replace' => [Filters::class, 'replace'],
 			'replaceRe' => [Filters::class, 'replaceRe'],
 			'reverse' => [Filters::class, 'reverse'],
+			'sort' => [Filters::class, 'sort'],
 			'strip' => [Filters::class, 'strip'],
 			'stripHtml' => [Filters::class, 'stripHtml'],
 			'stripTags' => [Filters::class, 'stripTags'],
