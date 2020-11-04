@@ -1,0 +1,35 @@
+<?php
+%A%
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?> <?php
+			if (($this->global->ifchanged[1] ?? null) !== ($_tmp = [$i])) {
+				$this->global->ifchanged[1] = $_tmp;
+				?> <?php echo LR\Filters::escapeHtmlText($i) /* line 2 */ ?> <?php
+			}
+			?> <?php
+			$iterations++;
+		}
+?>
+
+
+--
+
+<?php
+		$iterations = 0;
+		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+			?>	<?php
+			if (($this->global->ifchanged[2] ?? null) !== ($_tmp = [$i])) {
+				$this->global->ifchanged[2] = $_tmp;
+				?> <?php echo LR\Filters::escapeHtmlText($i) /* line 7 */ ?> <?php
+			}
+			else {
+				?> same <?php
+			}
+?>
+
+	<?php
+			if (($this->global->ifchanged[3] ?? null) !== ($_tmp = ['a', 'b'])) {
+				$this->global->ifchanged[3] = $_tmp;
+				?> const <?php
+			}
+%A%

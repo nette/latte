@@ -57,6 +57,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('first', 'if ($iterator->isFirst(%node.args)) {', '}');
 		$me->addMacro('last', 'if ($iterator->isLast(%node.args)) {', '}');
 		$me->addMacro('sep', 'if (!$iterator->isLast(%node.args)) {', '}');
+		$me->addMacro('cycle', '$_tmp = %node.array; echo %escape($_tmp[$iterator->getCounter0() % count($_tmp)]);');
 
 		$me->addMacro('try', [$me, 'macroTry'], '}');
 		$me->addMacro('rollback', [$me, 'macroRollback']);
