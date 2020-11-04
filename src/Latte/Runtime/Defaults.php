@@ -23,6 +23,7 @@ class Defaults
 			'breakLines' => [Filters::class, 'breaklines'],
 			'bytes' => [Filters::class, 'bytes'],
 			'capitalize' => [Filters::class, 'capitalize'],
+			'clamp' => [Filters::class, 'clamp'],
 			'dataStream' => [Filters::class, 'dataStream'],
 			'date' => [Filters::class, 'date'],
 			'escapeCss' => [Filters::class, 'escapeCss'],
@@ -60,6 +61,8 @@ class Defaults
 	/** @return array<string, callable> */
 	public function getFunctions(): array
 	{
-		return [];
+		return [
+			'clamp' => [Filters::class, 'clamp'],
+		];
 	}
 }

@@ -697,6 +697,22 @@ class Filters
 
 
 	/**
+	 * Returns value clamped to the inclusive range of min and max.
+	 * @param  int|float  $value
+	 * @param  int|float  $min
+	 * @param  int|float  $max
+	 * @return int|float
+	 */
+	public static function clamp($value, $min, $max)
+	{
+		if ($min > $max) {
+			throw new \InvalidArgumentException("Minimum ($min) is not less than maximum ($max).");
+		}
+		return min(max($value, $min), $max);
+	}
+
+
+	/**
 	 * Returns element's attributes.
 	 */
 	public static function htmlAttributes($attrs): string
