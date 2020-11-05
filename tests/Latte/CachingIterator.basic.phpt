@@ -22,6 +22,7 @@ test('Two items in array', function () {
 	Assert::true($iterator->isFirst());
 	Assert::false($iterator->isLast());
 	Assert::same(1, $iterator->getCounter());
+	Assert::same(0, $iterator->getCounter0());
 	Assert::same('1', (string) $iterator);
 
 	$iterator->next();
@@ -29,6 +30,7 @@ test('Two items in array', function () {
 	Assert::false($iterator->isFirst());
 	Assert::true($iterator->isLast());
 	Assert::same(2, $iterator->getCounter());
+	Assert::same(1, $iterator->getCounter0());
 
 	$iterator->next();
 	Assert::false($iterator->valid());
@@ -37,6 +39,7 @@ test('Two items in array', function () {
 	Assert::true($iterator->isFirst());
 	Assert::false($iterator->isLast());
 	Assert::same(1, $iterator->getCounter());
+	Assert::same(0, $iterator->getCounter0());
 	Assert::false($iterator->isEmpty());
 });
 
@@ -50,6 +53,7 @@ test('', function () {
 	Assert::true($iterator->isFirst());
 	Assert::true($iterator->isLast());
 	Assert::same(1, $iterator->getCounter());
+	Assert::same(0, $iterator->getCounter0());
 
 	$iterator->next();
 	Assert::false($iterator->valid());
@@ -58,6 +62,7 @@ test('', function () {
 	Assert::true($iterator->isFirst());
 	Assert::true($iterator->isLast());
 	Assert::same(1, $iterator->getCounter());
+	Assert::same(0, $iterator->getCounter0());
 	Assert::false($iterator->isEmpty());
 });
 
@@ -71,6 +76,7 @@ test('', function () {
 	Assert::false($iterator->isFirst());
 	Assert::true($iterator->isLast());
 	Assert::same(0, $iterator->getCounter());
+	Assert::same(0, $iterator->getCounter0());
 	Assert::true($iterator->isEmpty());
 });
 

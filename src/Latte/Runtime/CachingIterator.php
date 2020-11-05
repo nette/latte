@@ -21,6 +21,7 @@ use Latte;
  * @property-read bool $odd
  * @property-read bool $even
  * @property-read int $counter
+ * @property-read int $counter0
  * @property-read mixed $nextKey
  * @property-read mixed $nextValue
  * @property-read ?self $parent
@@ -109,11 +110,20 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 
 	/**
-	 * Returns the counter.
+	 * Returns the 1-indexed counter.
 	 */
 	public function getCounter(): int
 	{
 		return $this->counter;
+	}
+
+
+	/**
+	 * Returns the 0-indexed counter.
+	 */
+	public function getCounter0(): int
+	{
+		return max(0, $this->counter - 1);
 	}
 
 
