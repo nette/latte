@@ -79,6 +79,9 @@ class Engine
 		foreach ($defaults->getFilters() as $name => $callback) {
 			$this->filters->add($name, $callback);
 		}
+		foreach ($defaults->getFunctions() as $name => $callback) {
+			$this->functions->$name = $callback;
+		}
 	}
 
 

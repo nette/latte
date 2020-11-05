@@ -55,4 +55,11 @@ class Defaults
 			'webalize' => [\Nette\Utils\Strings::class, 'webalize'],
 		];
 	}
+
+
+	/** @return array<string, callable> */
+	public function getFunctions(): array
+	{
+		return [];
+	}
 }

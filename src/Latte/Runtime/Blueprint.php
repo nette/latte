@@ -32,7 +32,8 @@ class Blueprint
 		$class = $namespace->addClass(Php\Helpers::extractShortName($name));
 
 		$this->addProperties($class, $template->getParameters(), true);
-		$this->addFunctions($class, (array) $template->global->fn);
+		$functions = array_diff_key((array) $template->global->fn, (new Defaults)->getFunctions());
+		$this->addFunctions($class, $functions);
 
 		$end = $this->printCanvas();
 		$this->printHeader('Native types');
