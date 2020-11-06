@@ -119,4 +119,20 @@ class MacroNode
 			? Parser::N_PREFIX . ($this->prefix === self::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
 			: '{' . $this->name . '}';
 	}
+
+
+	/**
+	 * @param  string[]  $names
+	 */
+	public function closest(array $names, callable $condition = null): ?self
+	{
+		$node = $this->parentNode;
+		while ($node && (
+			!in_array($node->name, $names, true)
+			|| ($condition && !$condition($node))
+		)) {
+			$node = $node->parentNode;
+		}
+		return $node;
+	}
 }

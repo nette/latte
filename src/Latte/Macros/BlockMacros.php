@@ -114,11 +114,7 @@ class BlockMacros extends MacroSet
 		$name = ltrim($name, '#');
 		$parent = $name === 'parent';
 		if ($name === 'parent' || $name === 'this') {
-			for (
-				$item = $node->parentNode;
-				$item && $item->name !== 'block' && !isset($item->data->name);
-				$item = $item->parentNode
-			);
+			$item = $node->closest(['block', 'define'], function ($node) { return isset($node->data->name); });
 			if (!$item) {
 				throw new CompileException("Cannot include $name block outside of any block.");
 			}
@@ -242,11 +238,7 @@ class BlockMacros extends MacroSet
 					throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
 				}
 
-				for (
-					$parent = $node->parentNode;
-					$parent && !($parent->name === 'snippet' || $parent->name === 'snippetArea');
-					$parent = $parent->parentNode
-				);
+				$parent = $node->closest(['snippet', 'snippetArea']);
 				if (!$parent) {
 					throw new CompileException('Dynamic snippets are allowed only inside static snippet/snippetArea.');
 				}
