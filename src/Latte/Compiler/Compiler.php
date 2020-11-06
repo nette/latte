@@ -108,7 +108,7 @@ class Compiler
 		if (!isset($this->flags[$name])) {
 			$this->flags[$name] = $flags ?: Macro::DEFAULT_FLAGS;
 		} elseif ($flags && $this->flags[$name] !== $flags) {
-			throw new \LogicException("Incompatible flags for macro $name.");
+			throw new \LogicException("Incompatible flags for tag '$name'.");
 		}
 		$this->macros[$name][] = $macro;
 		return $this;
@@ -474,7 +474,7 @@ class Compiler
 				throw new CompileException("Found multiple attributes {$token->name}.");
 
 			} elseif ($this->macroNode && $this->macroNode->htmlNode === $this->htmlNode) {
-				throw new CompileException("n:attributes must not appear inside macro; found $token->name inside {{$this->macroNode->name}}.");
+				throw new CompileException("n:attribute must not appear inside tags; found {$token->name} inside {{$this->macroNode->name}}.");
 			}
 			$this->htmlNode->macroAttrs[$name] = $token->value;
 			return;
@@ -669,7 +669,7 @@ class Compiler
 			} else {
 				array_unshift($right, function () use ($name, $attrs, $attrName) {
 					if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_INNER)->empty) {
-						throw new CompileException("Unable to use empty macro as n:$attrName.");
+						throw new CompileException("Unexpected prefix in n:$attrName.");
 					}
 				});
 			}
@@ -696,7 +696,7 @@ class Compiler
 
 			$left[] = function () use ($name, $attrs, $attrName) {
 				if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_TAG)->empty) {
-					throw new CompileException("Unable to use empty macro as n:$attrName.");
+					throw new CompileException("Unexpected prefix in n:$attrName.");
 				}
 			};
 			array_unshift($right, function () use ($name) {
@@ -764,10 +764,10 @@ class Compiler
 		if (empty($this->macros[$name])) {
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')
 				. (in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true) ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : '');
-			throw new CompileException("Unknown macro {{$name}}$hint");
+			throw new CompileException("Unknown tag {{$name}}$hint");
 
 		} elseif ($this->policy && !$this->policy->isMacroAllowed($name)) {
-			throw new SecurityViolationException('Macro ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
+			throw new SecurityViolationException('Tag ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
 		}
 
 		$modifiers = (string) $modifiers;
@@ -818,7 +818,7 @@ class Compiler
 
 		throw new CompileException('Unknown ' . ($nPrefix
 			? 'attribute ' . Parser::N_PREFIX . ($nPrefix === MacroNode::PREFIX_NONE ? '' : "$nPrefix-") . $name
-			: 'macro {' . $name . ($args ? " $args" : '') . '}'
+			: 'tag {' . $name . ($args ? " $args" : '') . '}'
 		));
 	}
 

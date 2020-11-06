@@ -127,7 +127,7 @@ class BlockMacros extends MacroSet
 
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
+			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
@@ -151,7 +151,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer): string
 	{
-		//trigger_error('Macro {includeblock} is deprecated, use similar macro {import}.', E_USER_DEPRECATED);
+		//trigger_error('Tag {includeblock} is deprecated, use similar tag {import}.', E_USER_DEPRECATED);
 		$node->replaced = false;
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
@@ -196,7 +196,7 @@ class BlockMacros extends MacroSet
 		} elseif ($node->args === '') {
 			throw new CompileException("Missing destination in $notation");
 		} elseif ($node->parentNode) {
-			throw new CompileException("$notation must be placed outside any macro.");
+			throw new CompileException("$notation must not be inside other tags.");
 		} elseif ($this->extends !== null) {
 			throw new CompileException("Multiple $notation declarations are not allowed.");
 		} elseif ($node->args === 'none') {
@@ -306,7 +306,7 @@ class BlockMacros extends MacroSet
 		$this->namedBlocks[$name] = true;
 
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Macro ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
+			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
 		}
 		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
 			$node->context[1] = '';

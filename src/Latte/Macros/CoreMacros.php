@@ -141,7 +141,7 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->data->capture) {
 			if ($node->args === '') {
-				throw new CompileException('Missing condition in {if} macro.');
+				throw new CompileException('Missing condition in {if}.');
 			}
 			return $writer->write(
 				'if (%node.args) '
@@ -267,7 +267,7 @@ class CoreMacros extends MacroSet
 	{
 		$variable = $node->tokenizer->fetchWord();
 		if (!$variable) {
-			throw new CompileException('Missing variable in {capture} macro.');
+			throw new CompileException('Missing variable in {capture}.');
 		} elseif (!Helpers::startsWith($variable, '$')) {
 			throw new CompileException("Invalid capture block variable '$variable'");
 		}
@@ -331,7 +331,7 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->data->do) {
 			if ($node->args === '') {
-				throw new CompileException('Missing condition in {while} macro.');
+				throw new CompileException('Missing condition in {while}.');
 			}
 			return $writer->write('} while (%node.args);');
 		}
@@ -466,7 +466,7 @@ class CoreMacros extends MacroSet
 					|| !$tokens->isNext()
 				)
 			) {
-				trigger_error("Inside macro {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
+				trigger_error("Inside tag {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
 
 			} elseif ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextToken();
@@ -485,7 +485,7 @@ class CoreMacros extends MacroSet
 
 			} elseif ($tokens->isCurrent('=', '=>') && $tokens->depth === 0) {
 				if ($tokens->isCurrent('=>')) {
-					trigger_error("Inside macro {{$node->name} {$node->args}} should be => replaced with =", E_USER_DEPRECATED);
+					trigger_error("Inside tag {{$node->name} {$node->args}} should be => replaced with =", E_USER_DEPRECATED);
 				}
 				$res->append($node->name === 'default' ? '=>' : '=');
 				$var = false;
@@ -614,7 +614,7 @@ class CoreMacros extends MacroSet
 		} elseif ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		} elseif (!($type = $node->tokenizer->fetchWord())) {
-			throw new CompileException('Missing class name in {templateType} macro.');
+			throw new CompileException('Missing class name in {templateType}.');
 		}
 	}
 

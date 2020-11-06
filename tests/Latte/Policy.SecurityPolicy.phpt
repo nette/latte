@@ -16,7 +16,7 @@ $latte->setSandboxMode();
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{$abc}');
-}, Latte\CompileException::class, 'Macro {=} is not allowed.');
+}, Latte\CompileException::class, 'Tag {=} is not allowed.');
 
 $policy->allowMacros(['=']);
 
@@ -26,7 +26,7 @@ Assert::noError(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{var $abc}');
-}, Latte\CompileException::class, 'Macro {var} is not allowed.');
+}, Latte\CompileException::class, 'Tag {var} is not allowed.');
 
 $policy->allowMacros($policy::ALL);
 

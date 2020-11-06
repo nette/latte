@@ -31,4 +31,4 @@ Assert::contains('<div a="<<?php ?>?">', $latte->compile('<div a="<?">'));
 
 Assert::exception(function () use ($latte) {
 	echo $latte->compile('{var ?> }');
-}, Latte\CompileException::class, 'Forbidden ?> inside macro');
+}, Latte\CompileException::class, 'Forbidden ?> inside tag');

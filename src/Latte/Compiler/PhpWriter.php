@@ -73,7 +73,7 @@ class PhpWriter
 		if (strpos($mask, '%node_word') !== false) {
 			$word = $this->tokens->fetchWord();
 			if ($word === null) {
-				throw new CompileException('Invalid content of macro');
+				throw new CompileException('Invalid content of tag');
 			}
 		}
 
@@ -198,7 +198,7 @@ class PhpWriter
 		while ($tokens->nextToken()) {
 			$tokenValue = $tokens->currentValue();
 			if ($tokens->isCurrent('?>')) {
-				throw new CompileException('Forbidden ?> inside macro');
+				throw new CompileException('Forbidden ?> inside tag');
 
 			} elseif ($tokens->isCurrent('(', '[', '{')) {
 				static $counterpart = ['(' => ')', '[' => ']', '{' => '}'];
@@ -249,7 +249,7 @@ class PhpWriter
 					))
 				)
 			) {
-				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
+				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside tag.");
 			}
 		}
 		$tokens->position = $pos;

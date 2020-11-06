@@ -23,11 +23,11 @@ $latte->setSandboxMode();
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{var $abc}');
-}, Latte\CompileException::class, 'Macro {var} is not allowed.');
+}, Latte\CompileException::class, 'Tag {var} is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<span n:class=""></span>');
-}, Latte\CompileException::class, 'Macro n:class is not allowed.');
+}, Latte\CompileException::class, 'Tag n:class is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{$abc|upper}');
@@ -123,16 +123,16 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{do echo 123}');
-}, Latte\CompileException::class, "Forbidden keyword 'echo' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'echo' inside tag.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{do return 123}');
-}, Latte\CompileException::class, "Forbidden keyword 'return' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'return' inside tag.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{do yield 123}');
-}, Latte\CompileException::class, "Forbidden keyword 'yield' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'yield' inside tag.");
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{do new stdClass}');
-}, Latte\CompileException::class, "Forbidden keyword 'new' inside macro.");
+}, Latte\CompileException::class, "Forbidden keyword 'new' inside tag.");

@@ -37,26 +37,26 @@ Assert::same(2, $parser->getLine());
 Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("{var \n'abc}");
-}, Latte\CompileException::class, 'Malformed macro');
+}, Latte\CompileException::class, 'Malformed tag contents.');
 Assert::same(1, $parser->getLine());
 
 
 Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("\n{* \n'abc}");
-}, Latte\CompileException::class, 'Malformed macro');
+}, Latte\CompileException::class, 'Malformed tag contents.');
 Assert::same(2, $parser->getLine());
 
 
 Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse('{');
-}, Latte\CompileException::class, 'Malformed macro');
+}, Latte\CompileException::class, 'Malformed tag.');
 Assert::same(1, $parser->getLine());
 
 
 Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
 	$parser->parse("\n{");
-}, Latte\CompileException::class, 'Malformed macro');
+}, Latte\CompileException::class, 'Malformed tag.');
 Assert::same(2, $parser->getLine());

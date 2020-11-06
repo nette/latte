@@ -115,7 +115,7 @@ class Parser
 			}
 		}
 		if ($this->context[0] === self::CONTEXT_MACRO) {
-			throw new CompileException('Malformed macro');
+			throw new CompileException('Malformed tag.');
 		}
 
 		if ($this->offset < strlen($input)) {
@@ -302,7 +302,7 @@ class Parser
 			return true;
 
 		} else {
-			throw new CompileException('Malformed macro');
+			throw new CompileException('Malformed tag contents.');
 		}
 	}
 

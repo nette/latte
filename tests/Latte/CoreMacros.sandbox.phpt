@@ -41,7 +41,7 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main3');
-}, Latte\CompileException::class, 'Macro {var} is not allowed.');
+}, Latte\CompileException::class, 'Tag {var} is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main4');

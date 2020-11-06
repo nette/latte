@@ -22,7 +22,7 @@ $latte->setSandboxMode();
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{var $abc}');
-}, Latte\CompileException::class, 'Macro {var} is not allowed.');
+}, Latte\CompileException::class, 'Tag {var} is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{="trim"("hello")}');

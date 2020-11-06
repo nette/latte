@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{templateType}');
-}, Latte\CompileException::class, 'Missing class name in {templateType} macro.');
+}, Latte\CompileException::class, 'Missing class name in {templateType}.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{if true}{templateType stdClass}{/if}');
