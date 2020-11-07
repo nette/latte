@@ -1,0 +1,17 @@
+<?php
+%A%
+		$iterations = 0;
+		foreach ($iterator = $__it = new LR\CachingIterator(['a'], $__it ?? null) as $item) {
+?>
+	item
+<?php
+			$iterations++;
+		}
+		if ($iterator->isEmpty()) {
+?>
+	empty
+<?php
+			$iterations++;
+		}
+		$iterator = $__it = $__it->getParent();
+%A%
