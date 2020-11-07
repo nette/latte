@@ -3,11 +3,11 @@
 		$__switch = (0);
 		if (false) {
 		}
-		elseif ($__switch === ('')) {
+		elseif (in_array($__switch, [''], true)) {
 ?>string
 <?php
 		}
-		elseif ($__switch === (0.0)) {
+		elseif (in_array($__switch, [0.0], true)) {
 ?>flot
 <?php
 		}
@@ -23,7 +23,7 @@
 		$__switch = ('a');
 		if (false) {
 		}
-		elseif ($__switch === ('a')) {
+		elseif (in_array($__switch, [1, 2, 'a'], true)) {
 ?>a
 <?php
 		}

@@ -47,7 +47,7 @@ $template = <<<'EOD'
 ---
 
 {switch a}
-{case a}a
+{case 1, 2, a}a
 {/switch}
 
 ---

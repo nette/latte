@@ -480,7 +480,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->parentNode->data->default)) {
 			throw new CompileException('Tag {default} must follow after {case} clause.');
 		}
-		return $writer->write('} elseif ($__switch === (%node.args)) {');
+		return $writer->write('} elseif (in_array($__switch, %node.array, true)) {');
 	}
 
 
