@@ -105,6 +105,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
+		$node->validate(true, [], true);
 		$node->replaced = false;
 		$name = $node->tokenizer->fetchWord();
 		if (!$name || !preg_match('~#|[\w-]+$~DA', $name)) {
@@ -149,9 +150,7 @@ class BlockMacros extends MacroSet
 	{
 		//trigger_error('Tag {includeblock} is deprecated, use similar tag {import}.', E_USER_DEPRECATED);
 		$node->replaced = false;
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(true);
 		return $writer->write(
 			'ob_start(function () {});
 			$this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var);
@@ -166,9 +165,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroImport(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(true);
 		$file = $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
 		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $file);
@@ -186,15 +183,11 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroExtends(MacroNode $node, PhpWriter $writer): void
 	{
-		$notation = $node->getNotation();
-		if ($node->modifiers) {
-			throw new CompileException("Modifiers are not allowed in $notation");
-		} elseif ($node->args === '') {
-			throw new CompileException("Missing destination in $notation");
-		} elseif ($node->parentNode) {
-			throw new CompileException("$notation must not be inside other tags.");
+		$node->validate(true);
+		if ($node->parentNode) {
+			throw new CompileException($node->getNotation() . ' must not be inside other tags.');
 		} elseif ($this->extends !== null) {
-			throw new CompileException("Multiple $notation declarations are not allowed.");
+			throw new CompileException('Multiple ' . $node->getNotation() . ' declarations are not allowed.');
 		} elseif ($node->args === 'none') {
 			$this->extends = 'false';
 		} else {
@@ -416,9 +409,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(true);
 		if (!preg_match('~#|[\w-]+$~DA', $node->args)) {
 			return false;
 		}

@@ -27,10 +27,14 @@ Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var', '|filter');
 }, Latte\CompileException::class, 'Modifiers are not allowed in {ifset}');
 
-Assert::exception(function () use ($compiler) {
-	$compiler->expandMacro('else', 'if args');
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{if 1}{else if a}{/if}');
 }, Latte\CompileException::class, 'Arguments are not allowed in {else}, did you mean {elseif}?');
 
-Assert::exception(function () use ($compiler) {
-	$compiler->expandMacro('else', 'args');
+Assert::exception(function () use ($latte) {
+	$latte->compile('{if 1}{else a}{/if}');
 }, Latte\CompileException::class, 'Arguments are not allowed in {else}');

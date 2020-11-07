@@ -121,9 +121,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroIf(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(null);
 		if ($node->data->capture = ($node->args === '')) {
 			return 'ob_start(function () {})';
 		}
@@ -140,9 +138,7 @@ class CoreMacros extends MacroSet
 	public function macroEndIf(MacroNode $node, PhpWriter $writer): string
 	{
 		if ($node->data->capture) {
-			if ($node->args === '') {
-				throw new CompileException('Missing condition in {if}.');
-			}
+			$node->validate('condition');
 			return $writer->write(
 				'if (%node.args) '
 				. (isset($node->data->else) ? '{ ob_end_clean(); echo ob_get_clean(); }' : 'echo ob_get_clean();')
@@ -159,14 +155,11 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroElse(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		} elseif ($node->args !== '') {
-			$hint = Helpers::startsWith($node->args, 'if')
-				? ', did you mean {elseif}?'
-				: '';
-			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
+		if ($node->args !== '' && Helpers::startsWith($node->args, 'if')) {
+			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
 		}
+		$node->validate(false);
+
 		$ifNode = $node->parentNode;
 		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
 			if (isset($ifNode->data->else)) {
@@ -299,9 +292,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroSpaceless(MacroNode $node): void
 	{
-		if ($node->modifiers || $node->args !== '') {
-			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(false);
 		$node->openingCode = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
 			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096); ?>"
 			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096); ?>";
@@ -314,9 +305,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroWhile(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(null);
 		if ($node->data->do = ($node->args === '')) {
 			return 'do {';
 		}
@@ -330,9 +319,7 @@ class CoreMacros extends MacroSet
 	public function macroEndWhile(MacroNode $node, PhpWriter $writer): string
 	{
 		if ($node->data->do) {
-			if ($node->args === '') {
-				throw new CompileException('Missing condition in {while}.');
-			}
+			$node->validate(true);
 			return $writer->write('} while (%node.args);');
 		}
 		return '}';
@@ -377,9 +364,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate('condition');
 		$cmd = str_replace('If', '', $node->name);
 		if ($node->parentNode && $node->parentNode->prefix === $node::PREFIX_NONE) {
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
@@ -414,9 +399,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroDump(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(null);
 		$args = $writer->formatArgs();
 		return $writer->write(
 			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()') . ', %var);',
@@ -430,9 +413,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroDebugbreak(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		}
+		$node->validate(null);
 		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
 			return $writer->write($node->args === '' ? "$func()" : "if (%node.args) $func();");
 		}
@@ -523,9 +504,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->args === '') {
-			throw new CompileException('Missing arguments in ' . $node->getNotation());
-		}
+		$node->validate(true, [], true);
 		return $writer->write(
 			$node->name === '='
 			? "echo %modify(%node.args) /* line {$node->startLine} */"
@@ -539,6 +518,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroContentType(MacroNode $node, PhpWriter $writer): string
 	{
+		$node->validate(true);
 		if (
 			!$this->getCompiler()->isInHead()
 			&& !($node->htmlNode && strtolower($node->htmlNode->name) === 'script' && strpos($node->args, 'html') !== false)
@@ -546,9 +526,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
 		}
 		$compiler = $this->getCompiler();
-		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		} elseif (strpos($node->args, 'xhtml') !== false) {
+		if (strpos($node->args, 'xhtml') !== false) {
 			$type = $compiler::CONTENT_XHTML;
 		} elseif (strpos($node->args, 'html') !== false) {
 			$type = $compiler::CONTENT_HTML;
@@ -611,11 +589,8 @@ class CoreMacros extends MacroSet
 	{
 		if (!$this->getCompiler()->isInHead()) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
-		} elseif ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		} elseif (!($type = $node->tokenizer->fetchWord())) {
-			throw new CompileException('Missing class name in {templateType}.');
 		}
+		$node->validate('class name');
 	}
 
 

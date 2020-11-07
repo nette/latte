@@ -135,4 +135,27 @@ class MacroNode
 		}
 		return $node;
 	}
+
+
+	/**
+	 * @param  string|bool|null  $arguments
+	 * @param  string[]  $parents
+	 * @throws CompileException
+	 */
+	public function validate($arguments, array $parents = [], bool $modifiers = false): void
+	{
+		if ($parents && (!$this->parentNode || !in_array($this->parentNode->name, $parents, true))) {
+			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.');
+
+		} elseif ($this->modifiers !== '' && !$modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $this->getNotation());
+
+		} elseif ($arguments && $this->args === '') {
+			$label = is_string($arguments) ? $arguments : 'arguments';
+			throw new CompileException('Missing ' . $label . ' in ' . $this->getNotation());
+
+		} elseif ($arguments === false && $this->args !== '') {
+			throw new CompileException('Arguments are not allowed in ' . $this->getNotation());
+		}
+	}
 }
