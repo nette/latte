@@ -336,7 +336,6 @@ class PhpWriter
 
 			$addBraces = '';
 			$expr = new MacroTokens([$tokens->currentToken()]);
-			$rescue = null;
 
 			do {
 				if ($tokens->nextToken('?')) {
@@ -350,8 +349,6 @@ class PhpWriter
 						$expr->append($addBraces . ' ?');
 						break;
 					}
-
-					$rescue = [$res->tokens, $expr->tokens, $tokens->position, $addBraces];
 
 					if (!$tokens->isNext('->', '::')) {
 						$expr->prepend('(');
@@ -375,11 +372,6 @@ class PhpWriter
 
 				} elseif ($tokens->nextToken('[', '(')) {
 					$expr->tokens = array_merge($expr->tokens, [$tokens->currentToken()], $this->optionalChainingPass($tokens)->tokens);
-					if ($rescue && $tokens->isNext(':')) { // it was ternary operator
-						[$res->tokens, $expr->tokens, $tokens->position, $addBraces] = $rescue;
-						$expr->append($addBraces . ' ?');
-						break;
-					}
 
 				} else {
 					$expr->append($addBraces);
