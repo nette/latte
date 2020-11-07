@@ -30,9 +30,9 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockBlock1(array $_args): void
+	public function blockBlock1(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 		?><div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')) . '"' ?>>
 <?php $this->renderBlock('_snippet', $this->params) ?>
 </div>
@@ -41,9 +41,9 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockSnippet(array $_args): void
+	public function blockSnippet(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 		$this->global->snippetDriver->enter("snippet", "static");
 ?>		static
 <?php
@@ -52,9 +52,9 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockOuter(array $_args): void
+	public function blockOuter(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 		$this->global->snippetDriver->enter("outer", "static");
 ?>
 begin
@@ -68,9 +68,9 @@ end
 	}
 
 
-	public function blockBlock2(array $_args): void
+	public function blockBlock2(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 		?><div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>
 <?php
 		$this->global->snippetDriver->enter("inner-$id", "dynamic");

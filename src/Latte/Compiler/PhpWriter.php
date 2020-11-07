@@ -356,10 +356,10 @@ class PhpWriter
 						break;
 					}
 
-					$expr->prepend('(($_tmp = ');
+					$expr->prepend('(($__tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
-					$expr = new MacroTokens('$_tmp');
+					$expr = new MacroTokens('$__tmp');
 					$addBraces .= ')';
 
 				} elseif ($tokens->nextToken('->', '::')) {
@@ -681,7 +681,7 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($_fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
+						$res->prepend('LR\Filters::convertTo($__fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
 							->append(')');
 					} else {
 						$res = $this->escapePass($res);
@@ -703,7 +703,7 @@ class PhpWriter
 					$name = strtolower($name);
 					$res->prepend(
 						$isContent
-							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $_fi, '
+							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $__fi, '
 							: '($this->filters->' . $name . ')('
 					);
 					$inside = true;

@@ -61,19 +61,19 @@ i) <?php
 	}
 
 
-	public function blockTest(array $_args): void
+	public function blockTest(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 		?>	This is definition #<?php echo LR\Filters::escapeHtmlText($var) /* line 5 */ ?>
 
 <?php
 	}
 
 
-	public function blockTestargs(array $_args): void
+	public function blockTestargs(array $__args): void
 	{
 		extract($this->params);
-		[$var1, $var2, $var3] = $_args + [null, null, null, ];
+		[$var1, $var2, $var3] = $__args + [null, null, null, ];
 		?>	Variables <?php echo LR\Filters::escapeHtmlText($var1) /* line 11 */ ?>, <?php echo LR\Filters::escapeHtmlText($var2) /* line 11 */ ?>, <?php
 		echo LR\Filters::escapeHtmlText($hello) /* line 11 */ ?>
 
@@ -81,9 +81,9 @@ i) <?php
 	}
 
 
-	public function blockOuter(array $_args): void
+	public function blockOuter(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 		$this->renderBlock('testargs', ['hello'] + get_defined_vars(), 'html');
 
 	}

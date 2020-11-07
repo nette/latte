@@ -32,47 +32,47 @@ test('indexes', function () {
 
 
 test('properties', function () {
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp->prop)', optionalChaining('$foo?->prop'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : $__tmp->prop)', optionalChaining('$foo?->prop'));
 	Assert::same('($foo->prop ?? null)', optionalChaining('$foo->prop?'));
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->prop ?? null))', optionalChaining('$foo?->prop?'));
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->prop ?? null)) + 10', optionalChaining('$foo?->prop? + 10'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : ($__tmp->prop ?? null))', optionalChaining('$foo?->prop?'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : ($__tmp->prop ?? null)) + 10', optionalChaining('$foo?->prop? + 10'));
 	Assert::same('($foo->prop ?? null) + 10', optionalChaining('$foo->prop? + 10'));
 	Assert::same('(($foo->prop ?? null))', optionalChaining('($foo->prop?)'));
-	Assert::same('((($_tmp = $foo ?? null) === null ? null : $_tmp->prop))', optionalChaining('($foo?->prop)'));
-	Assert::same('[(($_tmp = $foo ?? null) === null ? null : ($_tmp->prop ?? null))]', optionalChaining('[$foo?->prop?]'));
+	Assert::same('((($__tmp = $foo ?? null) === null ? null : $__tmp->prop))', optionalChaining('($foo?->prop)'));
+	Assert::same('[(($__tmp = $foo ?? null) === null ? null : ($__tmp->prop ?? null))]', optionalChaining('[$foo?->prop?]'));
 
 	// variable
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp->$prop)', optionalChaining('$foo?->$prop'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : $__tmp->$prop)', optionalChaining('$foo?->$prop'));
 	Assert::same('($foo->$prop ?? null)', optionalChaining('$foo->$prop?'));
 
 	// static
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp::$prop)', optionalChaining('$foo?::$prop'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : $__tmp::$prop)', optionalChaining('$foo?::$prop'));
 	Assert::same('($foo::$prop ?? null)', optionalChaining('$foo::$prop?'));
 });
 
 
 test('calling', function () {
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : $_tmp->call())', optionalChaining('$foo?->call()'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : $__tmp->call())', optionalChaining('$foo?->call()'));
 	Assert::same('($foo->call() ?? null)', optionalChaining('$foo->call()?'));
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->call() ?? null))', optionalChaining('$foo?->call()?'));
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->call() ?? null)) + 10', optionalChaining('$foo?->call()? + 10'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : ($__tmp->call() ?? null))', optionalChaining('$foo?->call()?'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : ($__tmp->call() ?? null)) + 10', optionalChaining('$foo?->call()? + 10'));
 	Assert::same('($foo->call() ?? null) + 10', optionalChaining('$foo->call()? + 10'));
 	Assert::same('(($foo->call() ?? null))', optionalChaining('($foo->call()?)'));
-	Assert::same('((($_tmp = $foo ?? null) === null ? null : $_tmp->call()))', optionalChaining('($foo?->call())'));
-	Assert::same('((($_tmp = $foo ?? null) === null ? null : ($_tmp->call() ?? null)))', optionalChaining('($foo?->call()?)'));
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->call( ($a ?? null) ) ?? null))', optionalChaining('$foo?->call( $a? )?'));
-	Assert::same('(($_tmp = $foo ?? null) === null ? null : ($_tmp->call( (($_tmp = $a ?? null) === null ? null : $_tmp->call()) ) ?? null))', optionalChaining('$foo?->call( $a?->call() )?'));
+	Assert::same('((($__tmp = $foo ?? null) === null ? null : $__tmp->call()))', optionalChaining('($foo?->call())'));
+	Assert::same('((($__tmp = $foo ?? null) === null ? null : ($__tmp->call() ?? null)))', optionalChaining('($foo?->call()?)'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : ($__tmp->call( ($a ?? null) ) ?? null))', optionalChaining('$foo?->call( $a? )?'));
+	Assert::same('(($__tmp = $foo ?? null) === null ? null : ($__tmp->call( (($__tmp = $a ?? null) === null ? null : $__tmp->call()) ) ?? null))', optionalChaining('$foo?->call( $a?->call() )?'));
 });
 
 
 test('mixed', function () {
-	Assert::same('($foo->prop ?? null) + (($_tmp = $foo ?? null) === null ? null : ($_tmp->prop ?? null))', optionalChaining('$foo->prop? + $foo?->prop?'));
+	Assert::same('($foo->prop ?? null) + (($__tmp = $foo ?? null) === null ? null : ($__tmp->prop ?? null))', optionalChaining('$foo->prop? + $foo?->prop?'));
 
 	Assert::same('$var->prop->elem[1]->call(2)->item', optionalChaining('$var->prop->elem[1]->call(2)->item'));
-	Assert::same('(($_tmp = $var ?? null) === null ? null : $_tmp->prop->elem[1]->call(2)->item)', optionalChaining('$var?->prop->elem[1]->call(2)->item'));
-	Assert::same('(($_tmp = $var->prop ?? null) === null ? null : $_tmp->elem[1]->call(2)->item)', optionalChaining('$var->prop?->elem[1]->call(2)->item'));
-	Assert::same('(($_tmp = $var->prop->elem[1] ?? null) === null ? null : $_tmp->call(2)->item)', optionalChaining('$var->prop->elem[1]?->call(2)->item'));
-	Assert::same('(($_tmp = $var->prop->elem[1]->call(2) ?? null) === null ? null : $_tmp->item)', optionalChaining('$var->prop->elem[1]->call(2)?->item'));
+	Assert::same('(($__tmp = $var ?? null) === null ? null : $__tmp->prop->elem[1]->call(2)->item)', optionalChaining('$var?->prop->elem[1]->call(2)->item'));
+	Assert::same('(($__tmp = $var->prop ?? null) === null ? null : $__tmp->elem[1]->call(2)->item)', optionalChaining('$var->prop?->elem[1]->call(2)->item'));
+	Assert::same('(($__tmp = $var->prop->elem[1] ?? null) === null ? null : $__tmp->call(2)->item)', optionalChaining('$var->prop->elem[1]?->call(2)->item'));
+	Assert::same('(($__tmp = $var->prop->elem[1]->call(2) ?? null) === null ? null : $__tmp->item)', optionalChaining('$var->prop->elem[1]->call(2)?->item'));
 	Assert::same('($var->prop->elem[1]->call(2)->item ?? null)', optionalChaining('$var->prop->elem[1]->call(2)->item?'));
 });
 
@@ -96,8 +96,8 @@ test('ternary', function () {
 
 	Assert::same('$a ? [1, 2, ([3 ? 2 : 1])]: $b', optionalChaining('$a ? [1, 2, ([3 ? 2 : 1])]: $b'));
 	Assert::same('$a->foo ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
-	Assert::same('(($_tmp = $a ?? null) === null ? null : $_tmp->foo) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
-	Assert::same('(($_tmp = $a ?? null) === null ? null : ($_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
+	Assert::same('(($__tmp = $a ?? null) === null ? null : $__tmp->foo) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
+	Assert::same('(($__tmp = $a ?? null) === null ? null : ($__tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
 	Assert::same('($a->foo ?? null) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a->foo? ? [1, 2, ([3 ? 2 : 1])] : $b'));
 
 	Assert::same('$a ? \Foo::BAR : \Foo::BAR', optionalChaining('$a ? \Foo::BAR : \Foo::BAR'));

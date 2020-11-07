@@ -80,7 +80,7 @@ class BlockMacros extends MacroSet
 			$compiler->addMethod(
 				$functions[$name] = $this->generateMethodName($name),
 				'?>' . $compiler->expandTokens($code) . '<?php',
-				'array $_args',
+				'array $__args',
 				'void'
 			);
 		}
@@ -137,7 +137,7 @@ class BlockMacros extends MacroSet
 			. ', %node.array? + '
 			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
 			. ($node->modifiers
-				? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
+				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
 			. ');'
 		);
@@ -273,7 +273,7 @@ class BlockMacros extends MacroSet
 						$node->modifiers .= '|escape';
 					}
 					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, get_defined_vars()'
-						. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
+						. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
 				}
 				$blockType = PhpHelpers::dump(implode($node->context));
 				$this->checkExtraArgs($node);
@@ -313,7 +313,7 @@ class BlockMacros extends MacroSet
 		$this->blockTypes[$name] = implode($node->context);
 
 		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
-			. ($node->modifiers ? ', function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
+			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
 
 		if ($node->name === 'snippet') {
 			if ($node->prefix) {
@@ -343,7 +343,7 @@ class BlockMacros extends MacroSet
 				}
 			}
 			if ($args) {
-				$node->data->args = '[' . implode(', ', $args) . '] = $_args + [' . str_repeat('null, ', count($args)) . '];';
+				$node->data->args = '[' . implode(', ', $args) . '] = $__args + [' . str_repeat('null, ', count($args)) . '];';
 			}
 			return $extendsCheck;
 
@@ -381,7 +381,7 @@ class BlockMacros extends MacroSet
 			}
 			if (empty($node->data->leave)) {
 				if (preg_match('#\$|n:#', $node->content)) {
-					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : 'extract($_args);') . ' ?>'
+					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : 'extract($__args);') . ' ?>'
 						. $node->content;
 				}
 				$this->namedBlocks[$node->data->name] = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
@@ -392,8 +392,8 @@ class BlockMacros extends MacroSet
 				$node->content = rtrim($node->content, " \t");
 				$this->getCompiler()->addMethod(
 					$node->data->func,
-					$this->getCompiler()->expandTokens("extract(\$_args);\n?>$node->content<?php"),
-					'array $_args',
+					$this->getCompiler()->expandTokens("extract(\$__args);\n?>$node->content<?php"),
+					'array $__args',
 					'void'
 				);
 				$node->content = '';
@@ -407,7 +407,7 @@ class BlockMacros extends MacroSet
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
 			$node->modifiers .= '|escape';
-			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
+			return $writer->write('$__fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
 		}
 	}
 

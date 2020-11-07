@@ -17,20 +17,20 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 
 <p<?php
-		$_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-		echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);
+		$__tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
+		echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);
 ?>> </p>
 
 <p<?php
-		$_tmp = [['title' => 'hello']];
-		echo LR\Filters::htmlAttributes(isset($_tmp[0]) && is_array($_tmp[0]) ? $_tmp[0] : $_tmp);
+		$__tmp = [['title' => 'hello']];
+		echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);
 ?>> </p>
 
 <?php
 		$iterations = 0;
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator([1,2,3]) as $foo) {
 			?>	<b<?php
-			echo ($_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))) . '"' : "";
+			echo ($__tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 ?>>item</b>
 <?php
 			$iterations++;
@@ -43,7 +43,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($iterator = $this->global->its[] = new LR\CachingIterator([1, 2, 3]) as $foo) {
 			?><p<?php
-			echo ($_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))) . '"' : "";
+			echo ($__tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 			?>><?php echo LR\Filters::escapeHtmlText($foo) /* line 10 */ ?></p>
 <?php
 			$iterations++;
@@ -53,14 +53,14 @@ final class Template%a% extends Latte\Runtime\Template
 ?>
 
 <p<?php
-		echo ($_tmp = array_filter(['foo', (false ? 'first' : null), 'odd', (true ? 'foo' : 'bar')])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))) . '"' : "";
+		echo ($__tmp = array_filter(['foo', (false ? 'first' : null), 'odd', (true ? 'foo' : 'bar')])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 ?>>n:class</p>
 
 <p<?php
-		echo ($_tmp = array_filter([false ? 'first' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))) . '"' : "";
+		echo ($__tmp = array_filter([false ? 'first' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 ?>>n:class empty</p>
 <p<?php
-		echo ($_tmp = array_filter([true ? 'bem--modifier' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))) . '"' : "";
+		echo ($__tmp = array_filter([true ? 'bem--modifier' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 ?>>n:class with BEM</p>
 
 
@@ -256,7 +256,7 @@ final class Template%a% extends Latte\Runtime\Template
 <?php
 		if ($this->global->ifs[] = (true)) {
 			?><b<?php
-			echo ($_tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))) . '"' : "";
+			echo ($__tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 			?>><?php
 		}
 		?>bold<?php
@@ -384,9 +384,9 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockBl(array $_args): void
+	public function blockBl(array $__args): void
 	{
-		extract($_args);
+		extract($__args);
 ?><ul title="block + if + foreach">
 <?php
 		$iterations = 0;

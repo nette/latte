@@ -109,8 +109,8 @@ var html = <?php echo LR\Filters::escapeHtmlComment($el) /* line 28 */ ?>;
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			foreach (array_intersect_key(['person' => '50'], $this->params) as $_v => $_l) {
-				trigger_error("Variable \$$_v overwritten in foreach on line $_l");
+			foreach (array_intersect_key(['person' => '50'], $this->params) as $__v => $__l) {
+				trigger_error("Variable \$$__v overwritten in foreach on line $__l");
 			}
 		}
 
