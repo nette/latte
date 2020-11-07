@@ -44,6 +44,9 @@ class HtmlNode
 	/** @var int  position of end tag in source template */
 	public $endLine;
 
+	/** @var \stdClass  user data */
+	public $data;
+
 	/** @var string @internal */
 	public $innerMarker;
 
@@ -52,5 +55,6 @@ class HtmlNode
 	{
 		$this->name = $name;
 		$this->parentNode = $parentNode;
+		$this->data = new \stdClass;
 	}
 }

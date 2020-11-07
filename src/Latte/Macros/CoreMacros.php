@@ -29,6 +29,9 @@ class CoreMacros extends MacroSet
 	/** @var string|null */
 	private $printTemplate;
 
+	/** @var int */
+	private $counter = 0;
+
 
 	public static function install(Latte\Compiler $compiler): void
 	{
@@ -41,7 +44,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('elseifset', [$me, 'macroElseIf']);
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 
-		$me->addMacro('switch', '$this->global->switch[] = (%node.args); if (false) {', '} array_pop($this->global->switch)');
+		$me->addMacro('switch', '$__switch = (%node.args); if (false) {', '}');
 		$me->addMacro('case', [$me, 'macroCase']);
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
@@ -88,6 +91,7 @@ class CoreMacros extends MacroSet
 	public function initialize()
 	{
 		$this->overwrittenVars = [];
+		$this->counter = 0;
 	}
 
 
@@ -126,7 +130,13 @@ class CoreMacros extends MacroSet
 			return 'ob_start(function () {})';
 		}
 		if ($node->prefix === $node::PREFIX_TAG) {
-			return $writer->write($node->htmlNode->closing ? 'if (array_pop($this->global->ifs)) {' : 'if ($this->global->ifs[] = (%node.args)) {');
+			$node->htmlNode->data->id = $node->htmlNode->data->id ?? ++$this->counter;
+			return $writer->write(
+				$node->htmlNode->closing
+					? 'if ($__loc[%var]) {'
+					: 'if ($__loc[%var] = (%node.args)) {',
+				$node->htmlNode->data->id
+			);
 		}
 		return $writer->write('if (%node.args) {');
 	}
@@ -137,16 +147,21 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndIf(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->data->capture) {
-			$node->validate('condition');
-			return $writer->write(
-				'if (%node.args) '
-				. (isset($node->data->else) ? '{ ob_end_clean(); echo ob_get_clean(); }' : 'echo ob_get_clean();')
-				. ' else '
-				. (isset($node->data->else) ? '{ $this->global->else = ob_get_clean(); ob_end_clean(); echo $this->global->else; }' : 'ob_end_clean();')
-			);
+		if (!$node->data->capture) {
+			return '}';
 		}
-		return '}';
+
+		$node->validate('condition');
+		return $writer->write(
+			'if (%node.args) '
+			. (isset($node->data->else)
+				? '{ ob_end_clean(); echo ob_get_clean(); }'
+				: 'echo ob_get_clean();')
+			. ' else '
+			. (isset($node->data->else)
+				? '{ $__tmp = ob_get_clean(); ob_end_clean(); echo $__tmp; }'
+				: 'ob_end_clean();')
+		);
 	}
 
 
@@ -207,8 +222,11 @@ class CoreMacros extends MacroSet
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->openingCode = '<?php ob_start(function () {}); ?>';
-		$node->innerContent = '<?php ob_start(); ?>' . $node->innerContent . '<?php $this->global->ifcontent = ob_get_flush(); ?>';
-		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
+		$var = '$__loc[' . ++$this->counter . ']';
+		$node->innerContent = '<?php ob_start(); ?>'
+			. $node->innerContent
+			. "<?php $var = ob_get_flush(); ?>";
+		$node->closingCode = "<?php if (rtrim($var) === '') { ob_end_clean(); } else { echo ob_get_clean(); } ?>";
 	}
 
 
@@ -462,7 +480,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->parentNode->data->default)) {
 			throw new CompileException('Tag {default} must follow after {case} clause.');
 		}
-		return $writer->write('} elseif (end($this->global->switch) === (%node.args)) {');
+		return $writer->write('} elseif ($__switch === (%node.args)) {');
 	}
 
 

@@ -44,9 +44,9 @@
 			echo ob_get_clean();
 		}
 		else {
-			$this->global->else = ob_get_clean();
+			$__tmp = ob_get_clean();
 			ob_end_clean();
-			echo $this->global->else;
+			echo $__tmp;
 		}
 ?>
 

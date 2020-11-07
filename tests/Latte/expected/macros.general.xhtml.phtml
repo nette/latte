@@ -219,23 +219,23 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 			echo ob_get_clean();
 		}
 		else {
-			$this->global->else = ob_get_clean();
+			$__tmp = ob_get_clean();
 			ob_end_clean();
-			echo $this->global->else;
+			echo $__tmp;
 		}
 ?>
 
 
 
 <?php
-		$this->global->switch[] = (2);
+		$__switch = (2);
 		if (false) {
 		}
-		elseif (end($this->global->switch) === ('x')) {
+		elseif ($__switch === ('x')) {
 ?>x
 <?php
 		}
-		elseif (end($this->global->switch) === (2)) {
+		elseif ($__switch === (2)) {
 ?>y
 <?php
 		}
@@ -243,7 +243,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 ?>z
 <?php
 		}
-		array_pop($this->global->switch) ?>
+?>
 
 <?php echo ($this->filters->breaklines)("\n") /* line 145 */ ?>
 

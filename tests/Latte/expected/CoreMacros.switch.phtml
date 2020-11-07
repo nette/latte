@@ -1,13 +1,13 @@
 <?php
 %A%
-		$this->global->switch[] = (0);
+		$__switch = (0);
 		if (false) {
 		}
-		elseif (end($this->global->switch) === ('')) {
+		elseif ($__switch === ('')) {
 ?>string
 <?php
 		}
-		elseif (end($this->global->switch) === (0.0)) {
+		elseif ($__switch === (0.0)) {
 ?>flot
 <?php
 		}
@@ -15,37 +15,36 @@
 ?>def
 <?php
 		}
-		array_pop($this->global->switch) ?>
+?>
 
 ---
 
 <?php
-		$this->global->switch[] = ('a');
+		$__switch = ('a');
 		if (false) {
 		}
-		elseif (end($this->global->switch) === ('a')) {
+		elseif ($__switch === ('a')) {
 ?>a
 <?php
 		}
-		array_pop($this->global->switch) ?>
+?>
 
 ---
 
 <?php
-		$this->global->switch[] = ('a');
+		$__switch = ('a');
 		if (false) {
 		}
 		else {
 ?>def
 <?php
 		}
-		array_pop($this->global->switch) ?>
+?>
 
 ---
 
 <?php
-		$this->global->switch[] = ('a');
+		$__switch = ('a');
 		if (false) {
 		}
-		array_pop($this->global->switch);
 %A%

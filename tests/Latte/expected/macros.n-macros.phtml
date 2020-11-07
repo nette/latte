@@ -115,14 +115,14 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul title="tag if">
 <?php
-		if ($this->global->ifs[] = (true)) {
+		if ($__loc[1] = (true)) {
 ?>	<li>
 <?php
 		}
 		?>		<?php echo LR\Filters::escapeHtmlText($person) /* line 44 */ ?>
 
 <?php
-		if (array_pop($this->global->ifs)) {
+		if ($__loc[1]) {
 ?>	</li>
 <?php
 		}
@@ -235,32 +235,32 @@ final class Template%a% extends Latte\Runtime\Template
 ?></ul>
 
 <?php
-		if ($this->global->ifs[] = (true)) {
+		if ($__loc[2] = (true)) {
 			?><b><?php
 		}
 		?>bold<?php
-		if (array_pop($this->global->ifs)) {
+		if ($__loc[2]) {
 			?></b><?php
 		}
 		?> <?php
-		if ($this->global->ifs[] = (false)) {
+		if ($__loc[3] = (false)) {
 			?><b><?php
 		}
 		?>normal<?php
-		if (array_pop($this->global->ifs)) {
+		if ($__loc[3]) {
 ?></b>
 <?php
 		}
 ?>
 
 <?php
-		if ($this->global->ifs[] = (true)) {
+		if ($__loc[4] = (true)) {
 			?><b<?php
 			echo ($__tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 			?>><?php
 		}
 		?>bold<?php
-		if (array_pop($this->global->ifs)) {
+		if ($__loc[4]) {
 ?></b>
 <?php
 		}
@@ -272,11 +272,11 @@ final class Template%a% extends Latte\Runtime\Template
 ?><meta>
 <?php
 		}
-		if ($this->global->ifs[] = (true)) {
+		if ($__loc[5] = (true)) {
 ?><meta>
 <?php
 		}
-		if (array_pop($this->global->ifs)) {
+		if ($__loc[5]) {
 		}
 ?>
 <meta>
@@ -291,7 +291,7 @@ final class Template%a% extends Latte\Runtime\Template
 			if (1) {
 				$iterations = 0;
 				foreach ([1] as $foo) {
-					if ($this->global->ifs[] = (0)) {
+					if ($__loc[6] = (0)) {
 						?><span><?php
 					}
 					$iterations++;
@@ -305,7 +305,7 @@ final class Template%a% extends Latte\Runtime\Template
 				}
 				$iterations = 0;
 				foreach ([1] as $foo) {
-					if (array_pop($this->global->ifs)) {
+					if ($__loc[6]) {
 ?></span>
 <?php
 					}
