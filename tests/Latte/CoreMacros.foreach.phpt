@@ -17,7 +17,7 @@ $compiler = new Latte\Compiler;
 CoreMacros::install($compiler);
 
 $prefix = '<?php $iterations = 0; '
-	. 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator(';
+	. 'foreach ($iterator = $__it = new LR\CachingIterator(';
 
 
 function expandMacro($compiler, $args, $modifiers = '')
@@ -30,22 +30,22 @@ function expandMacro($compiler, $args, $modifiers = '')
 }
 
 
-Assert::same($prefix . '$array) as $value) { ?>', expandMacro($compiler, '$array as $value')->openingCode);
+Assert::same($prefix . '$array, $__it ?? null) as $value) { ?>', expandMacro($compiler, '$array as $value')->openingCode);
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator($array) as $key => $value) { ?>',
+	. 'foreach ($iterator = $__it = new LR\CachingIterator($array, $__it ?? null) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value')->openingCode
 );
 
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator($array) as $key => $value) { ?>',
+	. 'foreach ($iterator = $__it = new LR\CachingIterator($array, $__it ?? null) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value', '|nocheck')->openingCode
 );
 
-Assert::same($prefix . '$obj->data("A as B")) as $value) { ?>', expandMacro($compiler, '$obj->data("A as B") as $value')->openingCode);
-Assert::same($prefix . '$obj->data(\'A as B\')) as $value) { ?>', expandMacro($compiler, '$obj->data(\'A as B\') as $value')->openingCode);
-Assert::same($prefix . '$obj->data("X as Y, Z as W")) as $value) { ?>', expandMacro($compiler, '$obj->data("X as Y, Z as W") as $value')->openingCode);
+Assert::same($prefix . '$obj->data("A as B"), $__it ?? null) as $value) { ?>', expandMacro($compiler, '$obj->data("A as B") as $value')->openingCode);
+Assert::same($prefix . '$obj->data(\'A as B\'), $__it ?? null) as $value) { ?>', expandMacro($compiler, '$obj->data(\'A as B\') as $value')->openingCode);
+Assert::same($prefix . '$obj->data("X as Y, Z as W"), $__it ?? null) as $value) { ?>', expandMacro($compiler, '$obj->data("X as Y, Z as W") as $value')->openingCode);
 
 Assert::same(
 	'<?php $iterations = 0; '

@@ -26,7 +26,7 @@ $template = <<<'EOD'
 {foreach [a, b] as $item}
 	{$iterator->counter}
 {/foreach}
-{!$iterator ? 'empty'}
+{$iterator === null ? 'is null'}
 
 EOD;
 
@@ -44,7 +44,7 @@ Assert::match(
 
 	1
 	2
-empty
+is null
 ',
 	$latte->renderToString($template)
 );

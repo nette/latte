@@ -13,12 +13,11 @@
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(['a', 'b']) as $item) {
+		foreach ($iterator = $__it = new LR\CachingIterator(['a', 'b'], $__it ?? null) as $item) {
 			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 9 */ ?>
 
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 %A%

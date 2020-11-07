@@ -23,6 +23,7 @@ use Latte;
  * @property-read int $counter
  * @property-read mixed $nextKey
  * @property-read mixed $nextValue
+ * @property-read ?self $parent
  * @internal
  */
 class CachingIterator extends \CachingIterator implements \Countable
@@ -32,11 +33,14 @@ class CachingIterator extends \CachingIterator implements \Countable
 	/** @var int */
 	private $counter = 0;
 
+	/** @var self|null */
+	private $parent;
+
 
 	/**
 	 * @param  array|\Traversable|\stdClass|mixed  $iterator
 	 */
-	public function __construct($iterator)
+	public function __construct($iterator, self $parent = null)
 	{
 		if (is_array($iterator) || $iterator instanceof \stdClass) {
 			$iterator = new \ArrayIterator($iterator);
@@ -55,6 +59,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 		}
 
 		parent::__construct($iterator, 0);
+		$this->parent = $parent;
 	}
 
 
@@ -177,6 +182,15 @@ class CachingIterator extends \CachingIterator implements \Countable
 	{
 		$iterator = $this->getInnerIterator();
 		return $iterator->valid() ? $iterator->current() : null;
+	}
+
+
+	/**
+	 * Returns the iterator surrounding the current one.
+	 */
+	public function getParent(): ?self
+	{
+		return $this->parent;
 	}
 
 

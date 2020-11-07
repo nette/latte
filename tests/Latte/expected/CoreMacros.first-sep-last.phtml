@@ -11,7 +11,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
+		foreach ($iterator = $__it = new LR\CachingIterator($people, $__it ?? null) as $person) {
 			?>	<?php
 			if ($iterator->isFirst()) {
 				?>(<?php
@@ -30,14 +30,13 @@ final class Template%a% extends Latte\Runtime\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 ?>
 
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
+		foreach ($iterator = $__it = new LR\CachingIterator($people, $__it ?? null) as $person) {
 			?>	<?php
 			if ($iterator->isFirst(2)) {
 				?>(<?php
@@ -56,14 +55,13 @@ final class Template%a% extends Latte\Runtime\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 ?>
 
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
+		foreach ($iterator = $__it = new LR\CachingIterator($people, $__it ?? null) as $person) {
 			?>	<?php
 			if ($iterator->isFirst(1)) {
 				?>(<?php
@@ -82,14 +80,13 @@ final class Template%a% extends Latte\Runtime\Template
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 ?>
 
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
+		foreach ($iterator = $__it = new LR\CachingIterator($people, $__it ?? null) as $person) {
 			if ($iterator->isFirst(0)) {
 				?>	<span>(</span><?php
 			}
@@ -105,8 +102,7 @@ final class Template%a% extends Latte\Runtime\Template
 			}
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 %A%
 	}
 

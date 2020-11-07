@@ -82,9 +82,9 @@ final class Template%a% extends Latte\Runtime\Template
 
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator(array(true)) as $foo) {
+		foreach ($iterator = $__it = new LR\CachingIterator(array(true), $__it ?? null) as $foo) {
 			$iterations = 0;
-			foreach ($iterator = $this->global->its[] = new LR\CachingIterator($people) as $person) {
+			foreach ($iterator = $__it = new LR\CachingIterator($people, $__it ?? null) as $person) {
 				?>	<?php
 				if ($iterator->isFirst()) {
 					?><ul><?php
@@ -102,12 +102,10 @@ final class Template%a% extends Latte\Runtime\Template
 <?php
 				$iterations++;
 			}
-			array_pop($this->global->its);
-			$iterator = end($this->global->its);
+			$iterator = $__it = $__it->getParent();
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 ?>
 
 
@@ -274,7 +272,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <ul>
 <?php
 		$iterations = 0;
-		foreach ($iterator = $this->global->its[] = new LR\CachingIterator($menu) as $item) {
+		foreach ($iterator = $__it = new LR\CachingIterator($menu, $__it ?? null) as $item) {
 			?>	<li><?php echo LR\Filters::escapeHtmlText($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {
 				?> <?php
@@ -288,8 +286,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 <?php
 			$iterations++;
 		}
-		array_pop($this->global->its);
-		$iterator = end($this->global->its);
+		$iterator = $__it = $__it->getParent();
 ?>
 </ul>
 <?php

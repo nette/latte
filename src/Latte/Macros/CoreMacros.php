@@ -396,9 +396,9 @@ class CoreMacros extends MacroSet
 			!$noIterator
 			&& preg_match('#\$iterator\W|\Wget_defined_vars\W#', $this->getCompiler()->expandTokens($node->content))
 		) {
-			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
-				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
-			$node->closingCode = '<?php $iterations++; } array_pop($this->global->its); $iterator = end($this->global->its); ?>';
+			$node->openingCode .= 'foreach ($iterator = $__it = new LR\CachingIterator('
+				. preg_replace('#(.*)\s+as\s+#i', '$1, $__it ?? null) as ', $args, 1) . ') { ?>';
+			$node->closingCode = '<?php $iterations++; } $iterator = $__it = $__it->getParent(); ?>';
 		} else {
 			$node->openingCode .= 'foreach (' . $args . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } ?>';
