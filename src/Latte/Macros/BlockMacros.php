@@ -276,6 +276,7 @@ class BlockMacros extends MacroSet
 
 		// static snippet/snippetArea
 		if ($node->name === 'snippet' || $node->name === 'snippetArea') {
+			$node->validate(null);
 			if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
 				throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
 			}

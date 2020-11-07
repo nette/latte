@@ -267,6 +267,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroSandbox(MacroNode $node, PhpWriter $writer): string
 	{
+		$node->validate(null);
 		$node->replaced = false;
 		return $writer->write(
 			'/* line ' . $node->startLine . ' */
@@ -364,6 +365,7 @@ class CoreMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.');
 		}
+		$node->validate(true);
 		$node->openingCode = '<?php $iterations = 0; ';
 		$args = $writer->formatArgs();
 		if (!$noCheck) {
@@ -392,9 +394,9 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer): string
 	{
-		$node->validate('condition');
+		$node->validate('condition', ['for', 'foreach', 'while']);
 		$cmd = str_replace('If', '', $node->name);
-		if ($node->parentNode && $node->parentNode->prefix === $node::PREFIX_NONE) {
+		if ($node->parentNode->prefix === $node::PREFIX_NONE) {
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
 		}
 		return $writer->write("if (%node.args) $cmd;");
@@ -409,6 +411,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
+		$node->validate(true);
 		return $writer->write('echo ($__tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($__tmp))) . \'"\' : "";');
 	}
 
@@ -418,6 +421,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer): string
 	{
+		$node->validate(true);
 		return $writer->write('$__tmp = %node.array; echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);');
 	}
 
@@ -479,7 +483,9 @@ class CoreMacros extends MacroSet
 
 		} elseif ($node->modifiers) {
 			$node->setArgs($node->args . $node->modifiers);
+			$node->modifiers = '';
 		}
+		$node->validate(true);
 
 		$var = true;
 		$hasType = false;
@@ -551,7 +557,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer): string
 	{
-		$node->validate(true, [], true);
+		$node->validate(true, [], $node->name === '=');
 		return $writer->write(
 			$node->name === '='
 			? "echo %modify(%node.args) /* line {$node->startLine} */"
@@ -607,7 +613,9 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->modifiers) {
 			$node->setArgs($node->args . $node->modifiers);
+			$node->modifiers = '';
 		}
+		$node->validate(true);
 
 		$type = trim($node->tokenizer->joinUntil($node->tokenizer::T_VARIABLE));
 		$variable = $node->tokenizer->nextToken($node->tokenizer::T_VARIABLE);

@@ -15,6 +15,15 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
+Assert::exception(function () use ($latte) {
+	$latte->compile('{breakIf}');
+}, Latte\CompileException::class, 'Tag {breakIf} is unexpected here.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{for}{breakIf}{/for}');
+}, Latte\CompileException::class, 'Missing condition in {breakIf}');
+
+
 $template = <<<'EOD'
 
 {foreach [0, 1, 2, 3] as $item}

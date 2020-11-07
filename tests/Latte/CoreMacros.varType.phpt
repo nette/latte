@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{varType}');
-}, Latte\CompileException::class, 'Unexpected content%a%');
+}, Latte\CompileException::class, 'Missing arguments in {varType}');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{varType type}');

@@ -56,3 +56,11 @@ Assert::same(
 Assert::exception(function () use ($compiler) {
 	expandMacro($compiler, '$array as $value', '|filter');
 }, Latte\CompileException::class, 'Only modifiers |noiterator and |nocheck are allowed here.');
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{foreach}{/foreach}');
+}, Latte\CompileException::class, 'Missing arguments in {foreach}');
