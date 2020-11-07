@@ -374,6 +374,12 @@ class PhpWriter
 					$addBraces .= ')';
 
 				} elseif ($tokens->nextToken('?->')) {
+					if (PHP_VERSION_ID >= 80000) {
+						$expr->append($tokens->currentToken());
+						$expr->append($tokens->nextToken());
+						continue;
+					}
+
 					$expr->prepend('(($__tmp = ');
 					$expr->append(') === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
