@@ -193,8 +193,7 @@ Assert::matchFile(
 $template = <<<'EOD'
 optional chaining
 
-{=$obj?->bar?}
-{=$obj?::$static?}
+{=$obj?->bar}
 -
 EOD;
 

@@ -343,6 +343,7 @@ class PhpWriter
 
 			$addBraces = '';
 			$expr = new MacroTokens([$tokens->currentToken()]);
+			$var = $tokens->currentValue();
 
 			do {
 				if ($tokens->nextToken('?')) {
@@ -360,9 +361,11 @@ class PhpWriter
 					if (!$tokens->isNext('::')) {
 						$expr->prepend('(');
 						$expr->append(' ?? null)' . $addBraces);
+						trigger_error("Syntax '$var?' is deprecated, use '$var ?? null' instead.", E_USER_DEPRECATED);
 						break;
 					}
 
+					trigger_error("Syntax '$var?::' is deprecated.", E_USER_DEPRECATED);
 					$expr->prepend('(($__tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
