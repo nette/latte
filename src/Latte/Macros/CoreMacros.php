@@ -346,7 +346,7 @@ class CoreMacros extends MacroSet
 		}
 		if (
 			!$noIterator
-			&& preg_match('#\W(\$iterator|include|require|get_defined_vars)\W#', $this->getCompiler()->expandTokens($node->content))
+			&& preg_match('#\$iterator\W|\Wget_defined_vars\W#', $this->getCompiler()->expandTokens($node->content))
 		) {
 			$node->openingCode .= 'foreach ($iterator = $this->global->its[] = new LR\CachingIterator('
 				. preg_replace('#(.*)\s+as\s+#i', '$1) as ', $args, 1) . ') { ?>';
