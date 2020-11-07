@@ -71,7 +71,7 @@ test('optionalChainingPass', function () {
 	Assert::same('($this->filters->mod)(@, ($a ?? null))', @formatModifiers('@', 'mod:$a?')); // deprecated
 	Assert::same('($this->filters->mod)(@, (($a ?? null)))', @formatModifiers('@', 'mod:($a?)')); // deprecated
 	Assert::same(
-		'($this->filters->mod)(@, (($__tmp = $var ?? null) === null ? null : (($__tmp = $__tmp->prop ?? null) === null ? null : (($__tmp = $__tmp->elem[1] ?? null) === null ? null : (($__tmp = $__tmp->call(2) ?? null) === null ? null : $__tmp->item)))))',
+		'($this->filters->mod)(@, (($__tmp = $var) === null ? null : (($__tmp = $__tmp->prop) === null ? null : (($__tmp = $__tmp->elem[1]) === null ? null : (($__tmp = $__tmp->call(2)) === null ? null : $__tmp->item)))))',
 		formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item')
 	);
 	Assert::same(
@@ -86,7 +86,7 @@ test('optionalChainingPass + ternary', function () {
 	Assert::same('($this->filters->mod)(@, $a ? , $b)', formatModifiers('@', 'mod:$a ? : $b'));
 	Assert::same('($this->filters->mod)(@, $a ?? $b)', formatModifiers('@', 'mod:$a ?? $b'));
 	Assert::same(
-		'($this->filters->mod)(@, (($__tmp = $a ?? null) === null ? null : ($__tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] , $b)',
+		'($this->filters->mod)(@, (($__tmp = $a) === null ? null : ($__tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] , $b)',
 		@formatModifiers('@', 'mod:$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b') // deprecated
 	);
 });

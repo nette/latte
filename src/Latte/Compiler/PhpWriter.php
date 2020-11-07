@@ -375,7 +375,7 @@ class PhpWriter
 
 				} elseif ($tokens->nextToken('?->')) {
 					$expr->prepend('(($__tmp = ');
-					$expr->append(' ?? null) === null ? null : ');
+					$expr->append(') === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
 					$addBraces .= ')';
 					$expr = new MacroTokens('$__tmp->');
