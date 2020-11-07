@@ -42,7 +42,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 
 		$me->addMacro('switch', '$this->global->switch[] = (%node.args); if (false) {', '} array_pop($this->global->switch)');
-		$me->addMacro('case', '} elseif (end($this->global->switch) === (%node.args)) {');
+		$me->addMacro('case', [$me, 'macroCase']);
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
 		$me->addMacro('for', 'for (%node.args) {', '}');
@@ -432,16 +432,35 @@ class CoreMacros extends MacroSet
 
 
 	/**
+	 * {case ...}
+	 */
+	public function macroCase(MacroNode $node, PhpWriter $writer): string
+	{
+		$node->validate(true, ['switch']);
+		if (isset($node->parentNode->data->default)) {
+			throw new CompileException('Tag {default} must follow after {case} clause.');
+		}
+		return $writer->write('} elseif (end($this->global->switch) === (%node.args)) {');
+	}
+
+
+	/**
 	 * {var ...}
 	 * {default ...}
+	 * {default} in {switch}
 	 */
 	public function macroVar(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->modifiers) {
-			$node->setArgs($node->args . $node->modifiers);
-		}
-		if ($node->args === '' && $node->parentNode && $node->parentNode->name === 'switch') {
+		if ($node->parentNode && $node->parentNode->name === 'switch') {
+			$node->validate(false, ['switch']);
+			if (isset($node->parentNode->data->default)) {
+				throw new CompileException('Tag {switch} may only contain one {default} clause.');
+			}
+			$node->parentNode->data->default = true;
 			return '} else {';
+
+		} elseif ($node->modifiers) {
+			$node->setArgs($node->args . $node->modifiers);
 		}
 
 		$var = true;
