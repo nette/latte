@@ -233,7 +233,7 @@ class PhpWriter
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			if (
-				!$tokens->isPrev('::', '->', '?->')
+				!$tokens->isPrev('::', '->', '?->', '??->')
 				&& (
 					$tokens->isCurrent('__halt_compiler', 'declare', 'die', 'eval', 'exit', 'include', 'include_once', 'require', 'require_once')
 					|| ($this->policy && $tokens->isCurrent(
@@ -282,7 +282,7 @@ class PhpWriter
 				$tokens->isCurrent($tokens::T_SYMBOL)
 				&& ($orig = $this->functions[strtolower($name)] ?? null)
 				&& $tokens->isNext('(')
-				&& !$tokens->isPrev('::', '->', '?->', '\\')
+				&& !$tokens->isPrev('::', '->', '?->', '??->', '\\')
 			) {
 				if ($name !== $orig) {
 					trigger_error("Case mismatch on function name '$name', correct name is '$orig'.", E_USER_WARNING);
@@ -328,7 +328,8 @@ class PhpWriter
 
 
 	/**
-	 * Optional Chaining $var?->prop?->elem[1]?->call()?->item
+	 * Nullsafe operator $var?->prop?->elem[1]?->call()?->item
+	 * Null-coalescing-safe operator $var??->prop??->elem[1]??->call()??->item
 	 */
 	public function optionalChainingPass(MacroTokens $tokens): MacroTokens
 	{
@@ -373,6 +374,18 @@ class PhpWriter
 					$addBraces .= ')';
 
 				} elseif ($tokens->nextToken('?->')) {
+					$expr->prepend('(($__tmp = ');
+					$expr->append(' ?? null) === null ? null : ');
+					$res->tokens = array_merge($res->tokens, $expr->tokens);
+					$addBraces .= ')';
+					$expr = new MacroTokens('$__tmp->');
+					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
+						$expr->append($addBraces);
+						break;
+					}
+					$expr->append($tokens->currentToken());
+
+				} elseif ($tokens->nextToken('??->')) {
 					$expr->prepend('(($__tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);

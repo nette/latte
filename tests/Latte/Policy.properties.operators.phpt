@@ -40,6 +40,7 @@ $template = <<<'EOD'
 {=$obj?->bar}
 {=$obj?->$prop}
 {=$obj?::$static}
+{=$obj??->bar}
 EOD;
 
 @$latte->compile($template);
@@ -64,6 +65,7 @@ Assert::equal(
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
 			['MyClass', 'static'],
+			['MyClass', 'bar'],
 		],
 	],
 	$policy->log

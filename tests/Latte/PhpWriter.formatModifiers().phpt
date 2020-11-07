@@ -74,6 +74,10 @@ test('optionalChainingPass', function () {
 		'($this->filters->mod)(@, (($__tmp = $var ?? null) === null ? null : (($__tmp = $__tmp->prop ?? null) === null ? null : (($__tmp = $__tmp->elem[1] ?? null) === null ? null : (($__tmp = $__tmp->call(2) ?? null) === null ? null : $__tmp->item)))))',
 		formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item')
 	);
+	Assert::same(
+		'($this->filters->mod)(@, (($__tmp = $var ?? null) === null ? null : (($__tmp = $__tmp->prop ?? null) === null ? null : (($__tmp = $__tmp->elem[1] ?? null) === null ? null : (($__tmp = $__tmp->call(2) ?? null) === null ? null : $__tmp->item)))))',
+		formatModifiers('@', 'mod:$var??->prop??->elem[1]??->call(2)??->item')
+	);
 });
 
 

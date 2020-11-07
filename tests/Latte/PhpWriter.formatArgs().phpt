@@ -146,6 +146,10 @@ test('optionalChainingPass', function () {
 		'(($__tmp = $var ?? null) === null ? null : (($__tmp = $__tmp->prop ?? null) === null ? null : (($__tmp = $__tmp->elem[1] ?? null) === null ? null : (($__tmp = $__tmp->call(2) ?? null) === null ? null : $__tmp->item))))',
 		formatArgs('$var?->prop?->elem[1]?->call(2)?->item')
 	);
+	Assert::same(
+		'(($__tmp = $var ?? null) === null ? null : (($__tmp = $__tmp->prop ?? null) === null ? null : (($__tmp = $__tmp->elem[1] ?? null) === null ? null : (($__tmp = $__tmp->call(2) ?? null) === null ? null : $__tmp->item))))',
+		formatArgs('$var??->prop??->elem[1]??->call(2)??->item')
+	);
 });
 
 

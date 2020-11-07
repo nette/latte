@@ -89,6 +89,7 @@ Assert::noError(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{php $obj->interface }');
 	$latte->compile('{php $obj?->interface }');
+	$latte->compile('{php $obj??->interface }');
 });
 
 Assert::exception(function () use ($latte) {
