@@ -121,3 +121,7 @@ Assert::exception(function () use ($latte) {
 Assert::error(function () use ($latte) {
 	$latte->compile('{=`whoami`}');
 }, [E_USER_DEPRECATED, E_USER_DEPRECATED]);
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{$__tmp}');
+}, Latte\CompileException::class, 'Forbidden variable $__tmp.');

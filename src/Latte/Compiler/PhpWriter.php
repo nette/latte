@@ -213,7 +213,10 @@ class PhpWriter
 					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
 				}
 
-			} elseif ($this->policy && ($tokens->isCurrent('$this') || substr($tokenValue, 0, 2) === '$_')) {
+			} elseif (
+				substr($tokenValue, 0, 3) === '$__'
+				|| ($this->policy && ($tokens->isCurrent('$this') || substr($tokenValue, 0, 2) === '$_'))
+			) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
 		}
