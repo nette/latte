@@ -40,9 +40,13 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		$this->global->snippetDriver->enter("outer", "static");
+		try {
 ?>	<p>Outer</p>
 <?php
-		$this->global->snippetDriver->leave();
+		}
+		finally {
+			$this->global->snippetDriver->leave();
+		}
 
 	}
 
@@ -51,9 +55,13 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		$this->global->snippetDriver->enter("inner", "static");
+		try {
 ?>	<p>Inner</p>
 <?php
-		$this->global->snippetDriver->leave();
+		}
+		finally {
+			$this->global->snippetDriver->leave();
+		}
 
 	}
 
@@ -62,7 +70,11 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		$this->global->snippetDriver->enter("gallery", "static");
-		$this->global->snippetDriver->leave();
+		try {
+		}
+		finally {
+			$this->global->snippetDriver->leave();
+		}
 
 	}
 

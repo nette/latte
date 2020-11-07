@@ -45,9 +45,13 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		$this->global->snippetDriver->enter("snippet", "static");
+		try {
 ?>		static
 <?php
-		$this->global->snippetDriver->leave();
+		}
+		finally {
+			$this->global->snippetDriver->leave();
+		}
 
 	}
 
@@ -56,14 +60,18 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		$this->global->snippetDriver->enter("outer", "static");
+		try {
 ?>
 begin
 <?php
-		$this->renderBlock('block2', get_defined_vars());
+			$this->renderBlock('block2', get_defined_vars());
 ?>
 end
 <?php
-		$this->global->snippetDriver->leave();
+		}
+		finally {
+			$this->global->snippetDriver->leave();
+		}
 
 	}
 
@@ -74,9 +82,13 @@ end
 		?><div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>
 <?php
 		$this->global->snippetDriver->enter("inner-$id", "dynamic");
+		try {
 ?>		dynamic
 <?php
-		$this->global->snippetDriver->leave();
+		}
+		finally {
+			$this->global->snippetDriver->leave();
+		}
 ?></div>
 <?php
 

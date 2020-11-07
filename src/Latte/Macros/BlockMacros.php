@@ -237,8 +237,8 @@ class BlockMacros extends MacroSet
 				}
 				$parent->data->dynamic = true;
 				$node->data->leave = true;
-				$node->closingCode = '<?php $this->global->snippetDriver->leave(); ?>';
-				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . SnippetDriver::TYPE_DYNAMIC . '");';
+				$node->closingCode = '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
+				$enterCode = '$this->global->snippetDriver->enter(' . $writer->formatWord($name) . ', "' . SnippetDriver::TYPE_DYNAMIC . '"); try {';
 
 				if ($node->prefix) {
 					$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId({$writer->formatWord($name)})) . '\"' ?>");
@@ -366,8 +366,8 @@ class BlockMacros extends MacroSet
 					: SnippetDriver::TYPE_AREA;
 				$node->content = '<?php $this->global->snippetDriver->enter('
 					. $writer->formatWord(substr($node->data->name, 1))
-					. ', "' . $type . '"); ?>'
-					. preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content) . '<?php $this->global->snippetDriver->leave(); ?>';
+					. ', "' . $type . '"); try { ?>'
+					. preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content) . '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
 			}
 			if (empty($node->data->leave)) {
 				if (preg_match('#\$|n:#', $node->content)) {
