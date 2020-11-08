@@ -34,12 +34,33 @@
 ?>
 </ul>
 
+<ul title="foreach skip">
+<?php
+		$iterations = 0;
+		foreach ($iterator = $__it = new LR\CachingIterator([0, 1, 2, 3], $__it ?? null) as $i) {
+			?>	<li><?php
+			echo LR\Filters::escapeHtmlText($i) /* line 11 */;
+			if (true) {
+				echo "</li>\n";
+				{
+					$iterator->skipRound();
+					continue;
+				};
+			}
+?></li>
+<?php
+			$iterations++;
+		}
+		$iterator = $__it = $__it->getParent();
+?>
+</ul>
+
 
 <ul title="inner foreach break">
 	<li><?php
 		$iterations = 0;
 		foreach ([0, 1, 2, 3] as $i) {
-			echo LR\Filters::escapeHtmlText($i) /* line 12 */;
+			echo LR\Filters::escapeHtmlText($i) /* line 16 */;
 			if (true) break;
 			$iterations++;
 		}
@@ -50,10 +71,25 @@
 	<li><?php
 		$iterations = 0;
 		foreach ([0, 1, 2, 3] as $i) {
-			echo LR\Filters::escapeHtmlText($i) /* line 16 */;
+			echo LR\Filters::escapeHtmlText($i) /* line 20 */;
 			if (true) continue;
 			$iterations++;
 		}
+?></li>
+</ul>
+
+<ul title="inner foreach skip">
+	<li><?php
+		$iterations = 0;
+		foreach ($iterator = $__it = new LR\CachingIterator([0, 1, 2, 3], $__it ?? null) as $i) {
+			echo LR\Filters::escapeHtmlText($i) /* line 24 */;
+			if (true) {
+				$iterator->skipRound();
+				continue;
+			};
+			$iterations++;
+		}
+		$iterator = $__it = $__it->getParent();
 ?></li>
 </ul>
 %A%

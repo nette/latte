@@ -15,8 +15,24 @@
 <?php
 		$iterations = 0;
 		foreach ($iterator = $__it = new LR\CachingIterator([0, 1, 2, 3], $__it ?? null) as $item) {
-			if ($item % 2) break;
+			if ($item % 2) {
+				$iterator->skipRound();
+				continue;
+			};
 			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 11 */ ?>. item
+<?php
+			$iterations++;
+		}
+		$iterator = $__it = $__it->getParent();
+?>
+
+---
+
+<?php
+		$iterations = 0;
+		foreach ($iterator = $__it = new LR\CachingIterator([0, 1, 2, 3], $__it ?? null) as $item) {
+			if ($item % 2) break;
+			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 18 */ ?>. item
 <?php
 			$iterations++;
 		}

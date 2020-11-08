@@ -58,6 +58,21 @@ Assert::match(
 
 Assert::match(
 	'
+	Empty
+',
+	$latte->renderToString('
+{foreach [1] as $item}
+	{skipIf true}
+	Items
+{else}
+	Empty
+{/foreach}
+')
+);
+
+
+Assert::match(
+	'
 		Empty Inner
 ',
 	$latte->renderToString('

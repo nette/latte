@@ -128,6 +128,15 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 
 	/**
+	 * Decrements counter.
+	 */
+	public function skipRound(): void
+	{
+		$this->counter = max($this->counter - 1, 0);
+	}
+
+
+	/**
 	 * Returns the counter as string
 	 */
 	public function __toString(): string

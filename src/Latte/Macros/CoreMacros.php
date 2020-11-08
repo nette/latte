@@ -52,6 +52,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('while', [$me, 'macroWhile'], [$me, 'macroEndWhile']);
 		$me->addMacro('continueIf', [$me, 'macroBreakContinueIf']);
 		$me->addMacro('breakIf', [$me, 'macroBreakContinueIf']);
+		$me->addMacro('skipIf', [$me, 'macroBreakContinueIf']);
 		$me->addMacro('first', 'if ($iterator->isFirst(%node.args)) {', '}');
 		$me->addMacro('last', 'if ($iterator->isLast(%node.args)) {', '}');
 		$me->addMacro('sep', 'if (!$iterator->isLast(%node.args)) {', '}');
@@ -454,11 +455,17 @@ class CoreMacros extends MacroSet
 	/**
 	 * {breakIf ...}
 	 * {continueIf ...}
+	 * {skipIf ...}
 	 */
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer): string
 	{
-		$node->validate('condition', ['for', 'foreach', 'while']);
-		$cmd = str_replace('If', '', $node->name);
+		if ($node->name === 'skipIf') {
+			$node->validate('condition', ['foreach']);
+			$cmd = '{ $iterator->skipRound(); continue; }';
+		} else {
+			$node->validate('condition', ['for', 'foreach', 'while']);
+			$cmd = str_replace('If', '', $node->name);
+		}
 		if ($node->parentNode->prefix === $node::PREFIX_NONE) {
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
 		}
