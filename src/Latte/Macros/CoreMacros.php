@@ -35,10 +35,10 @@ class CoreMacros extends MacroSet
 		$me = new static($compiler);
 
 		$me->addMacro('if', [$me, 'macroIf'], [$me, 'macroEndIf']);
-		$me->addMacro('elseif', '} elseif (%node.args) {');
 		$me->addMacro('else', [$me, 'macroElse']);
+		$me->addMacro('elseif', [$me, 'macroElseIf']);
 		$me->addMacro('ifset', 'if (isset(%node.args)) {', '}');
-		$me->addMacro('elseifset', '} elseif (isset(%node.args)) {');
+		$me->addMacro('elseifset', [$me, 'macroElseIf']);
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 
 		$me->addMacro('switch', '$this->global->switch[] = (%node.args); if (false) {', '} array_pop($this->global->switch)');
@@ -170,6 +170,23 @@ class CoreMacros extends MacroSet
 			return 'ob_start(function () {})';
 		}
 		return '} else {';
+	}
+
+
+	/**
+	 * {elseif}
+	 * {elseifset}
+	 */
+	public function macroElseIf(MacroNode $node, PhpWriter $writer): string
+	{
+		$node->validate(true, ['if', 'ifset']);
+		if (isset($node->parentNode->data->else) || !empty($node->parentNode->data->capture)) {
+			throw new CompileException('Tag ' . $node->getNotation() . ' is unexpected here.');
+		}
+
+		return $writer->write($node->name === 'elseif'
+			? '} elseif (%node.args) {'
+			: '} elseif (isset(%node.args)) {');
 	}
 
 

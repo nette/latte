@@ -46,3 +46,15 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{if 1}{else}{else}{/if}');
 }, Latte\CompileException::class, 'Tag {if} may only contain one {else} clause.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{elseif a}');
+}, Latte\CompileException::class, 'Tag {elseif} is unexpected here.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{if 1}{else}{elseif a}{/if}');
+}, Latte\CompileException::class, 'Tag {elseif} is unexpected here.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{if}{elseif a}{/if 1}');
+}, Latte\CompileException::class, 'Tag {elseif} is unexpected here.');
