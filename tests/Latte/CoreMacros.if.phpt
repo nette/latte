@@ -38,3 +38,11 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{if 1}{else a}{/if}');
 }, Latte\CompileException::class, 'Arguments are not allowed in {else}');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{else}');
+}, Latte\CompileException::class, 'Tag {else} is unexpected here.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{if 1}{else}{else}{/if}');
+}, Latte\CompileException::class, 'Tag {if} may only contain one {else} clause.');

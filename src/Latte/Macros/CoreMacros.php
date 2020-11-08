@@ -158,14 +158,15 @@ class CoreMacros extends MacroSet
 		if ($node->args !== '' && Helpers::startsWith($node->args, 'if')) {
 			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
 		}
-		$node->validate(false);
+		$node->validate(false, ['if', 'ifset']);
 
-		$ifNode = $node->parentNode;
-		if ($ifNode && $ifNode->name === 'if' && $ifNode->data->capture) {
-			if (isset($ifNode->data->else)) {
-				throw new CompileException('Macro {if} supports only one {else}.');
-			}
-			$ifNode->data->else = true;
+		$parent = $node->parentNode;
+		if (isset($parent->data->else)) {
+			throw new CompileException('Tag ' . $parent->getNotation() . ' may only contain one {else} clause.');
+		}
+
+		$parent->data->else = true;
+		if ($parent->name === 'if' && $parent->data->capture) {
 			return 'ob_start(function () {})';
 		}
 		return '} else {';
