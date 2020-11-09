@@ -52,6 +52,7 @@ class BlockMacros extends MacroSet
 		$me->addMacro('snippet', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('block', [$me, 'macroBlock'], [$me, 'macroBlockEnd'], null, self::AUTO_CLOSE);
 		$me->addMacro('define', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
+		$me->addMacro('embed', [$me, 'macroEmbed'], [$me, 'macroEmbedEnd']);
 		$me->addMacro('snippetArea', [$me, 'macroBlock'], [$me, 'macroBlockEnd']);
 		$me->addMacro('ifset', [$me, 'macroIfset'], '}');
 		$me->addMacro('elseifset', [$me, 'macroIfset']);
@@ -428,6 +429,41 @@ class BlockMacros extends MacroSet
 			return $writer->write('$__fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
 		}
 		return '';
+	}
+
+
+	/**
+	 * {embed "file"}
+	 */
+	public function macroEmbed(MacroNode $node, PhpWriter $writer)
+	{
+		$node->validate(true);
+		$node->replaced = true;
+		$node->data->prevIndex = $this->index;
+		$this->index = count($this->blocks);
+		$this->blocks[$this->index] = [];
+
+		return $writer->write(
+			'$this->initBlockLayer(%var);
+			$this->setBlockLayer(%var);
+			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var); }
+			finally { $this->setBlockLayer(%var); }
+			if (false) {',
+			$this->index,
+			$this->index,
+			implode($node->context),
+			$node->data->prevIndex
+		);
+	}
+
+
+	/**
+	 * {/embed}
+	 */
+	public function macroEmbedEnd(MacroNode $node, PhpWriter $writer)
+	{
+		$this->index = $node->data->prevIndex;
+		return '}';
 	}
 
 

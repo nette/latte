@@ -48,7 +48,7 @@ class SecurityPolicy implements Latte\Policy
 		$policy = new self;
 
 		// does not include: contentType, debugbreak, dump, extends, import, include, includeblock, layout,
-		// php (but 'do' is allowed), sandbox, snippet, snippetArea, templatePrint, varPrint
+		// php (but 'do' is allowed), sandbox, snippet, snippetArea, templatePrint, varPrint, embed
 		$policy->allowMacros([
 			'_', '=', 'attr', 'block', 'breakIf', 'capture', 'case', 'class', 'continueIf', 'default',
 			'define', 'do', 'else', 'elseif', 'elseifset', 'first', 'for', 'foreach', 'if', 'ifcontent',

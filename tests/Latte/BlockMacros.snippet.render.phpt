@@ -179,6 +179,16 @@ $dataSets = [
 		'<div id="foo">hello world</div>',
 		['foo'],
 	],
+	//embed
+	[
+		[
+			'main' => '{embed "embed"}{snippet foo}hello{/snippet}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
+			'embed' => '{block embed}{/block}',
+		],
+		['foo' => 'hello'],
+		'<div id="bar">world</div>',
+		['foo'],
+	],
 ];
 
 foreach ($dataSets as $data) {

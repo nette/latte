@@ -222,7 +222,7 @@ class Template
 		$referred->referenceType = $referenceType;
 		$referred->global = $this->global;
 
-		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
+		if (in_array($referenceType, ['extends', 'includeblock', 'import', 'embed'], true)) {
 			foreach ($referred->blocks[self::LAYER_TOP] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
