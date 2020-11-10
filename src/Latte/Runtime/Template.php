@@ -21,6 +21,9 @@ class Template
 {
 	use Latte\Strict;
 
+	public const
+		LAYER_TOP = 0;
+
 	protected const CONTENT_TYPE = Engine::CONTENT_HTML;
 
 	protected const BLOCKS = [];
@@ -37,8 +40,11 @@ class Template
 	/** @var string|false|null  @internal */
 	protected $parentName;
 
-	/** @var Block[] */
-	private $blocks = [];
+	/** @var Block[][] */
+	private $blocks;
+
+	/** @var int  current layer */
+	private $index = self::LAYER_TOP;
 
 	/** @var Engine */
 	private $engine;
@@ -74,13 +80,7 @@ class Template
 		$this->name = $name;
 		$this->policy = $policy;
 		$this->global = (object) $providers;
-
-		foreach (static::BLOCKS as $nm => $info) {
-			[$method, $type] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
-			$this->blocks[$nm] = $block = new Block;
-			$block->functions[] = [$this, $method];
-			$block->contentType = $type;
-		}
+		$this->initBlockLayer(self::LAYER_TOP);
 	}
 
 
@@ -119,9 +119,13 @@ class Template
 	}
 
 
-	public function getBlockNames(): array
+	/**
+	 * @param  int|string  $layer
+	 * @return string[]
+	 */
+	public function getBlockNames($layer = self::LAYER_TOP): array
 	{
-		return array_keys($this->blocks);
+		return array_keys($this->blocks[$layer] ?? []);
 	}
 
 
@@ -189,7 +193,7 @@ class Template
 		if (
 			isset($this->global->snippetDriver)
 			&& $this->global->snippetBridge->isSnippetMode()
-			&& $this->global->snippetDriver->renderSnippets($this->blocks, $this->params)
+			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LAYER_TOP], $this->params)
 		) {
 			return;
 		}
@@ -215,10 +219,10 @@ class Template
 		$referred->global = $this->global;
 
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
-			foreach ($referred->blocks as $nm => $block) {
+			foreach ($referred->blocks[self::LAYER_TOP] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
-			$referred->blocks = &$this->blocks;
+			$referred->blocks[self::LAYER_TOP] = &$this->blocks[$this->index];
 		}
 		return $referred;
 	}
@@ -272,15 +276,17 @@ class Template
 	 * Renders block.
 	 * @param  mixed[]  $params
 	 * @param  string|\Closure  $mod  content-type name or modifier closure
+	 * @param  int|string  $layer
 	 * @internal
 	 */
-	public function renderBlock(string $name, array $params, $mod = null): void
+	public function renderBlock(string $name, array $params, $mod = null, $layer = null): void
 	{
-		$block = $this->blocks[$name] ?? null;
+		$block = $this->blocks[$layer ?? $this->index][$name] ?? null;
 		if (!$block) {
-			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames(), $name))
+			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames($layer), $name))
 				? ", did you mean '$t'?"
 				: '.';
+			$name = $layer ? "$layer:$name" : $name;
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
@@ -310,7 +316,7 @@ class Template
 	 */
 	public function renderBlockParent(string $name, array $params): void
 	{
-		$block = $this->blocks[$name] ?? null;
+		$block = $this->blocks[$this->index][$name] ?? null;
 		if (!$block || ($function = next($block->functions)) === false) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
 		}
@@ -326,7 +332,7 @@ class Template
 	 */
 	protected function addBlock(string $name, string $contentType, array $functions): void
 	{
-		$block = &$this->blocks[$name];
+		$block = &$this->blocks[$this->index][$name];
 		$block = $block ?? new Block;
 		if ($block->contentType === null) {
 			$block->contentType = $contentType;
@@ -363,9 +369,30 @@ class Template
 	}
 
 
+	/**
+	 * @param  int|string  $id
+	 */
+	protected function initBlockLayer($id): void
+	{
+		$blocks = &$this->blocks[$id];
+		$blocks = [];
+		foreach (static::BLOCKS[$id] ?? [] as $nm => $info) {
+			$blocks[$nm] = $block = new Block;
+			[$method, $block->contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
+			$block->functions[] = [$this, $method];
+		}
+	}
+
+
+	protected function setBlockLayer(int $id): void
+	{
+		$this->index = $id;
+	}
+
+
 	public function hasBlock(string $name): bool
 	{
-		return isset($this->blocks[$name]);
+		return isset($this->blocks[$this->index][$name]);
 	}
 
 
@@ -426,7 +453,7 @@ class Template
 	public function &__get(string $name)
 	{
 		if ($name === 'blocks') { // compatibility with nette/application < 3.0.8
-			$tmp = static::BLOCKS;
+			$tmp = static::BLOCKS[self::LAYER_TOP] ?? [];
 			return $tmp;
 		}
 		throw new \LogicException('Attempt to read undeclared property ' . self::class . '::$' . $name);

@@ -17,6 +17,7 @@ use Latte\PhpHelpers;
 use Latte\PhpWriter;
 use Latte\Runtime\Block;
 use Latte\Runtime\SnippetDriver;
+use Latte\Runtime\Template;
 
 
 /**
@@ -27,8 +28,11 @@ class BlockMacros extends MacroSet
 	/** @var string */
 	public $snippetAttribute = 'id';
 
-	/** @var Block[] */
+	/** @var Block[][] */
 	private $blocks;
+
+	/** @var int  current layer */
+	private $index;
 
 	/** @var string|bool|null */
 	private $extends;
@@ -60,7 +64,8 @@ class BlockMacros extends MacroSet
 	 */
 	public function initialize()
 	{
-		$this->blocks = [];
+		$this->blocks = [[]];
+		$this->index = Template::LAYER_TOP;
 		$this->extends = null;
 		$this->imports = [];
 	}
@@ -72,20 +77,23 @@ class BlockMacros extends MacroSet
 	public function finalize()
 	{
 		$compiler = $this->getCompiler();
-		$functions = $types = [];
-		foreach ($this->blocks as $name => $block) {
-			$compiler->addMethod(
-				$functions[$name] = $this->generateMethodName($name),
-				'?>' . $compiler->expandTokens($block->code) . '<?php',
-				'array $__args',
-				'void'
-			);
-			$types[$name] = $block->contentType;
+		$meta = [];
+		foreach ($this->blocks as $layer => $blocks) {
+			foreach ($blocks as $name => $block) {
+				$compiler->addMethod(
+					$method = $this->generateMethodName($name),
+					'?>' . $compiler->expandTokens($block->code) . '<?php',
+					'array $__args',
+					'void'
+				);
+				$meta[$layer][$name] = $block->contentType === $compiler->getContentType()
+					? $method
+					: [$method, $block->contentType];
+			}
 		}
 
-		if ($this->blocks) {
-			$types = array_diff($types, [$compiler->getContentType()]);
-			$compiler->addConstant('BLOCKS', array_merge_recursive($functions, $types));
+		if ($meta) {
+			$compiler->addConstant('BLOCKS', $meta);
 		}
 
 		return [
@@ -131,7 +139,7 @@ class BlockMacros extends MacroSet
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($name, '$') === false ? PhpHelpers::dump($name) : $writer->formatWord($name))
 			. ', %node.array? + '
-			. (isset($this->blocks[$name]) ? 'get_defined_vars()' : '$this->params')
+			. (isset($this->blocks[$this->index][$name]) ? 'get_defined_vars()' : '$this->params')
 			. ($node->modifiers
 				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
@@ -280,13 +288,13 @@ class BlockMacros extends MacroSet
 			$node->data->name = $name = '_' . $name;
 		}
 
-		if (isset($this->blocks[$name])) {
+		if (isset($this->blocks[$this->index][$name])) {
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
-		$extendsCheck = $this->blocks || $node->parentNode
+		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode
 			? ''
 			: 'if ($this->getParentName()) { return get_defined_vars();} ';
-		$this->blocks[$name] = new Block;
+		$block = $this->blocks[$this->index][$name] = new Block;
 
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
@@ -297,7 +305,7 @@ class BlockMacros extends MacroSet
 		} elseif ($node->modifiers) {
 			$node->modifiers .= '|escape';
 		}
-		$this->blocks[$name]->contentType = implode($node->context);
+		$block->contentType = implode($node->context);
 
 		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
 			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
@@ -371,7 +379,7 @@ class BlockMacros extends MacroSet
 					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : 'extract($__args);') . ' ?>'
 						. $node->content;
 				}
-				$this->blocks[$node->data->name]->code = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
+				$this->blocks[$this->index][$node->data->name]->code = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
 				$node->openingCode = '<?php ?>';
 
@@ -424,12 +432,13 @@ class BlockMacros extends MacroSet
 
 	private function generateMethodName(string $blockName): string
 	{
-		$clean = trim(preg_replace('#\W+#', '_', $blockName), '_');
-		$name = 'block' . ucfirst($clean);
-		$methods = array_keys($this->getCompiler()->getMethods());
-		if (!$clean || in_array(strtolower($name), array_map('strtolower', $methods), true)) {
-			$name .= '_' . substr(md5($blockName), 0, 5);
+		$name = 'block' . ucfirst(trim(preg_replace('#\W+#', '_', $blockName), '_'));
+		$lower = strtolower($name);
+		$methods = array_change_key_case($this->getCompiler()->getMethods()) + ['block' => 1];
+		$counter = null;
+		while (isset($methods[$lower . $counter])) {
+			$counter++;
 		}
-		return $name;
+		return $name . $counter;
 	}
 }
