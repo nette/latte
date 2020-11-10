@@ -86,6 +86,10 @@ class SnippetDriver
 	}
 
 
+	/**
+	 * @param  Block[]  $blocks
+	 * @param  mixed[]  $params
+	 */
 	public function renderSnippets(array $blocks, array $params): bool
 	{
 		if ($this->renderingSnippets || !$this->bridge->isSnippetMode()) {
@@ -93,11 +97,11 @@ class SnippetDriver
 		}
 		$this->renderingSnippets = true;
 		$this->bridge->setSnippetMode(false);
-		foreach ($blocks as $name => $function) {
+		foreach ($blocks as $name => $block) {
 			if ($name[0] !== '_' || !$this->bridge->needsRedraw(substr($name, 1))) {
 				continue;
 			}
-			$function = reset($function);
+			$function = reset($block->functions);
 			$function($params);
 		}
 		$this->bridge->setSnippetMode(true);

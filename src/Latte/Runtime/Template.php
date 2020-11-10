@@ -37,11 +37,8 @@ class Template
 	/** @var string|false|null  @internal */
 	protected $parentName;
 
-	/** @var array of [name => [callbacks]]  @internal */
-	protected $blockQueue = [];
-
-	/** @var array of [name => type]  @internal */
-	protected $blockTypes = [];
+	/** @var Block[] */
+	private $blocks = [];
 
 	/** @var Engine */
 	private $engine;
@@ -80,8 +77,9 @@ class Template
 
 		foreach (static::BLOCKS as $nm => $info) {
 			[$method, $type] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
-			$this->blockQueue[$nm][] = [$this, $method];
-			$this->blockTypes[$nm] = $type;
+			$this->blocks[$nm] = $block = new Block;
+			$block->functions[] = [$this, $method];
+			$block->contentType = $type;
 		}
 	}
 
@@ -123,7 +121,7 @@ class Template
 
 	public function getBlockNames(): array
 	{
-		return array_keys($this->blockQueue);
+		return array_keys($this->blocks);
 	}
 
 
@@ -191,7 +189,7 @@ class Template
 		if (
 			isset($this->global->snippetDriver)
 			&& $this->global->snippetBridge->isSnippetMode()
-			&& $this->global->snippetDriver->renderSnippets($this->blockQueue, $this->params)
+			&& $this->global->snippetDriver->renderSnippets($this->blocks, $this->params)
 		) {
 			return;
 		}
@@ -217,11 +215,10 @@ class Template
 		$referred->global = $this->global;
 
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
-			foreach ($referred->blockTypes as $nm => $type) {
-				$this->addBlock($nm, $type, $referred->blockQueue[$nm]);
+			foreach ($referred->blocks as $nm => $block) {
+				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
-			$referred->blockQueue = &$this->blockQueue;
-			$referred->blockTypes = &$this->blockTypes;
+			$referred->blocks = &$this->blocks;
 		}
 		return $referred;
 	}
@@ -279,26 +276,30 @@ class Template
 	 */
 	public function renderBlock(string $name, array $params, $mod = null): void
 	{
-		if (empty($this->blockQueue[$name])) {
+		$block = $this->blocks[$name] ?? null;
+		if (!$block) {
 			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames(), $name))
 				? ", did you mean '$t'?"
 				: '.';
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
-		$block = reset($this->blockQueue[$name]);
-		if ($mod && $mod !== ($blockType = $this->blockTypes[$name])) {
-			if ($filter = (is_string($mod) ? Filters::getConvertor($blockType, $mod) : $mod)) {
-				echo $filter($this->capture(function () use ($block, $params): void { $block($params); }), $blockType);
+		$function = reset($block->functions);
+		if ($mod && $mod !== $block->contentType) {
+			if ($filter = (is_string($mod) ? Filters::getConvertor($block->contentType, $mod) : $mod)) {
+				echo $filter(
+					$this->capture(function () use ($function, $params): void { $function($params); }),
+					$block->contentType
+				);
 				return;
 			}
 			trigger_error(sprintf(
 				"Including block $name with content type %s into incompatible type %s.",
-				strtoupper($blockType),
+				strtoupper($block->contentType),
 				strtoupper($mod)
 			), E_USER_WARNING);
 		}
-		$block($params);
+		$function($params);
 	}
 
 
@@ -309,30 +310,36 @@ class Template
 	 */
 	public function renderBlockParent(string $name, array $params): void
 	{
-		if (empty($this->blockQueue[$name]) || ($block = next($this->blockQueue[$name])) === false) {
+		$block = $this->blocks[$name] ?? null;
+		if (!$block || ($function = next($block->functions)) === false) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
 		}
-		$block($params);
-		prev($this->blockQueue[$name]);
+		$function($params);
+		prev($block->functions);
 	}
 
 
-	/** @internal */
+	/**
+	 * Creates block if doesn't exist and checks if content type is the same.
+	 * @param  callable[]  $functions
+	 * @internal
+	 */
 	protected function addBlock(string $name, string $contentType, array $functions): void
 	{
-		$expected = &$this->blockTypes[$name];
-		if ($expected === null) {
-			$expected = $contentType;
+		$block = &$this->blocks[$name];
+		$block = $block ?? new Block;
+		if ($block->contentType === null) {
+			$block->contentType = $contentType;
 
-		} elseif ($expected !== $contentType) {
+		} elseif ($block->contentType !== $contentType) {
 			trigger_error(sprintf(
 				"Overridden block $name with content type %s by incompatible type %s.",
 				strtoupper($contentType),
-				strtoupper($expected)
+				strtoupper($block->contentType)
 			), E_USER_WARNING);
 		}
 
-		$this->blockQueue[$name] = array_merge($this->blockQueue[$name] ?? [], $functions);
+		$block->functions = array_merge($block->functions, $functions);
 	}
 
 
@@ -358,7 +365,7 @@ class Template
 
 	public function hasBlock(string $name): bool
 	{
-		return isset($this->blockQueue[$name]);
+		return isset($this->blocks[$name]);
 	}
 
 
