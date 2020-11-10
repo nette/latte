@@ -462,7 +462,7 @@ class Compiler
 		if (Helpers::startsWith($token->name, Parser::N_PREFIX)) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
 			if (isset($this->htmlNode->macroAttrs[$name])) {
-				throw new CompileException("Found multiple attributes $token->name.");
+				throw new CompileException("Found multiple attributes {$token->name}.");
 
 			} elseif ($this->macroNode && $this->macroNode->htmlNode === $this->htmlNode) {
 				throw new CompileException("n:attributes must not appear inside macro; found $token->name inside {{$this->macroNode->name}}.");
@@ -575,7 +575,7 @@ class Compiler
 			!$node
 			|| ($node->name !== $name && $name !== '')
 			|| $modifiers
-			|| ($args !== '' && $node->args !== '' && !Helpers::startsWith("$node->args ", "$args "))
+			|| ($args !== '' && $node->args !== '' && !Helpers::startsWith($node->args . ' ', $args . ' '))
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix
@@ -818,6 +818,6 @@ class Compiler
 	{
 		return $node instanceof HtmlNode
 			? "</{$node->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs))
-			: "{/$node->name}";
+			: "{/{$node->name}}";
 	}
 }

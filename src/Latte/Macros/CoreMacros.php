@@ -98,7 +98,7 @@ class CoreMacros extends MacroSet
 	public function finalize()
 	{
 		if ($this->printTemplate) {
-			return ["(new Latte\\Runtime\\Blueprint)->printClass(\$this, $this->printTemplate); exit;"];
+			return ["(new Latte\\Runtime\\Blueprint)->printClass(\$this, {$this->printTemplate}); exit;"];
 		}
 
 		$code = '';
@@ -186,7 +186,7 @@ class CoreMacros extends MacroSet
 	public function macroIfContent(MacroNode $node, PhpWriter $writer)
 	{
 		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
-			throw new CompileException('Unknown ' . $node->getNotation() . ", use n:{$node->name} attribute.");
+			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 		}
 	}
 
@@ -216,7 +216,11 @@ class CoreMacros extends MacroSet
 				$value = 'ob_get_clean()';
 			}
 
-			return $writer->write('$__fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $__fi, %raw))', $node->context[0], $value);
+			return $writer->write(
+				'$__fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $__fi, %raw))',
+				$node->context[0],
+				$value
+			);
 
 		} elseif ($node->empty = ($node->args !== '')) {
 			return $writer->write('echo %modify(($this->filters->translate)(%node.args))');
@@ -239,10 +243,14 @@ class CoreMacros extends MacroSet
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
-			"/* line $node->startLine */\n"
+			"/* line {$node->startLine} */\n"
 			. ($node->name === 'sandbox'
-				? 'ob_start(function () {}); try { $this->createTemplate(%node.word, %node.array, %var)->renderToContentType(%raw); echo ob_get_clean(); }
-					catch (\Throwable $__e) { if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); } else { echo ob_get_clean(); throw $__e; } }'
+				? 'ob_start(function () {});
+					try { $this->createTemplate(%node.word, %node.array, %var)->renderToContentType(%raw); echo ob_get_clean(); }
+					catch (\Throwable $__e) {
+						if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); }
+						else { echo ob_get_clean(); throw $__e; }
+					}'
 				: '$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);'),
 			$node->name,
 			$node->modifiers
@@ -277,7 +285,12 @@ class CoreMacros extends MacroSet
 		$body = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
-		return $writer->write("\$__fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body);", $node->context[0], $node->data->variable);
+		return $writer->write(
+			'$__fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
+			$node->context[0],
+			$node->data->variable,
+			$body
+		);
 	}
 
 
@@ -514,7 +527,7 @@ class CoreMacros extends MacroSet
 		}
 		return $writer->write(
 			$node->name === '='
-			? "echo %modify(%node.args) /* line $node->startLine */"
+			? "echo %modify(%node.args) /* line {$node->startLine} */"
 			: '%modify(%node.args);'
 		);
 	}
@@ -552,7 +565,10 @@ class CoreMacros extends MacroSet
 		$compiler->setContentType($type);
 
 		if (strpos($node->args, '/') && !$node->htmlNode) {
-			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) { header(%var); } ', "Content-Type: $node->args");
+			return $writer->write(
+				'if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) { header(%var); } ',
+				'Content-Type: ' . $node->args
+			);
 		}
 	}
 

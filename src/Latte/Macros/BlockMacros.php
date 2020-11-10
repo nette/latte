@@ -100,28 +100,28 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {include block}
+	 * {include block [,] [params]}
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
 		$node->replaced = false;
-		$destination = $node->tokenizer->fetchWord(); // destination [,] [params]
-		if (!$destination || !preg_match('~#|[\w-]+$~DA', $destination)) {
-			return false;
+		$name = $node->tokenizer->fetchWord();
+		if (!$name || !preg_match('~#|[\w-]+$~DA', $name)) {
+			return false; // {include file}
 		}
 
-		$destination = ltrim($destination, '#');
-		$parent = $destination === 'parent';
-		if ($destination === 'parent' || $destination === 'this') {
+		$name = ltrim($name, '#');
+		$parent = $name === 'parent';
+		if ($name === 'parent' || $name === 'this') {
 			for (
 				$item = $node->parentNode;
 				$item && $item->name !== 'block' && !isset($item->data->name);
 				$item = $item->parentNode
 			);
 			if (!$item) {
-				throw new CompileException("Cannot include $destination block outside of any block.");
+				throw new CompileException("Cannot include $name block outside of any block.");
 			}
-			$destination = $item->data->name;
+			$name = $item->data->name;
 		}
 
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
@@ -133,9 +133,9 @@ class BlockMacros extends MacroSet
 		}
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
-			. (strpos($destination, '$') === false ? PhpHelpers::dump($destination) : $destination)
+			. (strpos($name, '$') === false ? PhpHelpers::dump($name) : $name)
 			. ', %node.array? + '
-			. (isset($this->namedBlocks[$destination]) || $parent ? 'get_defined_vars()' : '$this->params')
+			. (isset($this->namedBlocks[$name]) || $parent ? 'get_defined_vars()' : '$this->params')
 			. ($node->modifiers
 				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
@@ -156,7 +156,9 @@ class BlockMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		return $writer->write(
-			'ob_start(function () {}); $this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var); echo rtrim(ob_get_clean());',
+			'ob_start(function () {});
+			$this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var);
+			echo rtrim(ob_get_clean());',
 			implode($node->context)
 		);
 	}
@@ -170,9 +172,9 @@ class BlockMacros extends MacroSet
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
-		$destination = $node->tokenizer->fetchWord();
+		$file = $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
-		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $destination);
+		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $file);
 		if ($this->getCompiler()->isInHead()) {
 			$this->imports[] = $code;
 		} else {
@@ -201,16 +203,16 @@ class BlockMacros extends MacroSet
 			$this->extends = $writer->write('%node.word%node.args');
 		}
 		if (!$this->getCompiler()->isInHead()) {
-			trigger_error("$notation must be placed in template head.", E_USER_WARNING);
+			trigger_error($node->getNotation() . ' must be placed in template head.', E_USER_WARNING);
 		}
 	}
 
 
 	/**
 	 * {block [name]}
+	 * {define name}
 	 * {snippet [name]}
 	 * {snippetArea [name]}
-	 * {define name}
 	 */
 	public function macroBlock(MacroNode $node, PhpWriter $writer)
 	{

@@ -54,10 +54,10 @@ class Template
 	/** @var Policy|null */
 	private $policy;
 
-	/** @var Template|null  @internal */
+	/** @var Template|null */
 	private $referringTemplate;
 
-	/** @var string|null  @internal */
+	/** @var string|null */
 	private $referenceType;
 
 
@@ -206,23 +206,23 @@ class Template
 	public function createTemplate(string $name, array $params, string $referenceType): self
 	{
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
-		$child = $referenceType === 'sandbox'
+		$referred = $referenceType === 'sandbox'
 			? (clone $this->engine)->setSandboxMode()->createTemplate($name, $params)
 			: $this->engine->createTemplate($name, $params);
 
-		$child->referringTemplate = $this;
-		$child->referenceType = $referenceType;
-		$child->global = $this->global;
+		$referred->referringTemplate = $this;
+		$referred->referenceType = $referenceType;
+		$referred->global = $this->global;
 
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
-			$this->blockQueue = array_merge_recursive($this->blockQueue, $child->blockQueue);
-			foreach ($child->blockTypes as $nm => $type) {
+			$this->blockQueue = array_merge_recursive($this->blockQueue, $referred->blockQueue);
+			foreach ($referred->blockTypes as $nm => $type) {
 				$this->checkBlockContentType($type, $nm);
 			}
-			$child->blockQueue = &$this->blockQueue;
-			$child->blockTypes = &$this->blockTypes;
+			$referred->blockQueue = &$this->blockQueue;
+			$referred->blockTypes = &$this->blockTypes;
 		}
-		return $child;
+		return $referred;
 	}
 
 
@@ -234,11 +234,16 @@ class Template
 	{
 		if ($mod instanceof \Closure) {
 			echo $mod($this->capture([$this, 'render']), $this->contentType);
+
 		} elseif ($mod && $mod !== $this->contentType) {
 			if ($filter = Filters::getConvertor($this->contentType, $mod)) {
 				echo $filter($this->capture([$this, 'render']));
 			} else {
-				trigger_error("Including '$this->name' with content type " . strtoupper($this->contentType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
+				trigger_error(sprintf(
+					"Including '{$this->name}' with content type %s into incompatible type %s.",
+					strtoupper($this->contentType),
+					strtoupper($mod)
+				), E_USER_WARNING);
 			}
 		} else {
 			$this->render();
@@ -282,7 +287,11 @@ class Template
 				echo $filter($this->capture(function () use ($block, $params): void { $block($params); }), $blockType);
 				return;
 			}
-			trigger_error("Including block $name with content type " . strtoupper($blockType) . ' into incompatible type ' . strtoupper($mod) . '.', E_USER_WARNING);
+			trigger_error(sprintf(
+				"Including block $name with content type %s into incompatible type %s.",
+				strtoupper($blockType),
+				strtoupper($mod)
+			), E_USER_WARNING);
 		}
 		$block($params);
 	}
@@ -308,8 +317,13 @@ class Template
 		$expected = &$this->blockTypes[$name];
 		if ($expected === null) {
 			$expected = $current;
+
 		} elseif ($expected !== $current) {
-			trigger_error("Overridden block $name with content type " . strtoupper($current) . ' by incompatible type ' . strtoupper($expected) . '.', E_USER_WARNING);
+			trigger_error(sprintf(
+				"Overridden block $name with content type %s by incompatible type %s.",
+				strtoupper($current),
+				strtoupper($expected)
+			), E_USER_WARNING);
 		}
 	}
 
