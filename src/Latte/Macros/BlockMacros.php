@@ -266,8 +266,7 @@ class BlockMacros extends MacroSet
 				}
 				$blockType = PhpHelpers::dump(implode($node->context));
 				$this->checkExtraArgs($node);
-				return "\$this->checkBlockContentType($blockType, $fname);"
-					. "\$this->blockQueue[$fname][] = [\$this, '{$node->data->func}'];";
+				return "\$this->addBlock($fname, $blockType, [[\$this, '{$node->data->func}']]);";
 			}
 
 		} elseif (!preg_match('#^[a-z]#iD', $name)) {

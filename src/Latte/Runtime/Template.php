@@ -217,9 +217,8 @@ class Template
 		$referred->global = $this->global;
 
 		if (in_array($referenceType, ['extends', 'includeblock', 'import'], true)) {
-			$this->blockQueue = array_merge_recursive($this->blockQueue, $referred->blockQueue);
 			foreach ($referred->blockTypes as $nm => $type) {
-				$this->checkBlockContentType($type, $nm);
+				$this->addBlock($nm, $type, $referred->blockQueue[$nm]);
 			}
 			$referred->blockQueue = &$this->blockQueue;
 			$referred->blockTypes = &$this->blockTypes;
@@ -319,19 +318,21 @@ class Template
 
 
 	/** @internal */
-	protected function checkBlockContentType(string $current, string $name): void
+	protected function addBlock(string $name, string $contentType, array $functions): void
 	{
 		$expected = &$this->blockTypes[$name];
 		if ($expected === null) {
-			$expected = $current;
+			$expected = $contentType;
 
-		} elseif ($expected !== $current) {
+		} elseif ($expected !== $contentType) {
 			trigger_error(sprintf(
 				"Overridden block $name with content type %s by incompatible type %s.",
-				strtoupper($current),
+				strtoupper($contentType),
 				strtoupper($expected)
 			), E_USER_WARNING);
 		}
+
+		$this->blockQueue[$name] = array_merge($this->blockQueue[$name] ?? [], $functions);
 	}
 
 
