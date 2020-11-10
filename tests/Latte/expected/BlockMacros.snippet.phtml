@@ -4,17 +4,17 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 	protected const BLOCKS = [
-		['_' => 'block1', '_outer' => 'blockOuter', '_inner' => 'blockInner', '_title' => 'blockTitle', '_title2' => 'blockTitle2'],
+		'snippet' => ['' => 'block1', 'outer' => 'blockOuter', 'inner' => 'blockInner', 'title' => 'blockTitle', 'title2' => 'blockTitle2'],
 	];
 
 
 	public function main(): array
 	{
 %A%
-		?><div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('_', $this->params) ?></div>
+		?><div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('', $this->params, null, 'snippet') ?></div>
 
 
-<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div>
+<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('outer', $this->params, null, 'snippet') ?></div>
 
 
 	@<?php
@@ -24,8 +24,8 @@ final class Template%a% extends Latte\Runtime\Template
 ?>
 
 
-	<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php $this->renderBlock('_title', $this->params) ?></div>
-	<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php $this->renderBlock('_title2', $this->params) ?></div><?php
+	<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php $this->renderBlock('title', $this->params, null, 'snippet') ?></div>
+	<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php $this->renderBlock('title2', $this->params, null, 'snippet') ?></div><?php
 		return get_defined_vars();
 	}
 
@@ -53,7 +53,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 ?>
 	Outer
-		<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('_inner', $this->params) ?></div>	/Outer
+		<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('inner', $this->params, null, 'snippet') ?></div>	/Outer
 <?php
 		}
 		finally {

@@ -22,7 +22,8 @@ class Template
 	use Latte\Strict;
 
 	public const
-		LAYER_TOP = 0;
+		LAYER_TOP = 0,
+		LAYER_SNIPPET = 'snippet';
 
 	protected const CONTENT_TYPE = Engine::CONTENT_HTML;
 
@@ -81,6 +82,7 @@ class Template
 		$this->policy = $policy;
 		$this->global = (object) $providers;
 		$this->initBlockLayer(self::LAYER_TOP);
+		$this->initBlockLayer(self::LAYER_SNIPPET);
 	}
 
 
@@ -193,7 +195,7 @@ class Template
 		if (
 			isset($this->global->snippetDriver)
 			&& $this->global->snippetBridge->isSnippetMode()
-			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LAYER_TOP], $this->params)
+			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LAYER_SNIPPET], $this->params)
 		) {
 			return;
 		}
@@ -223,6 +225,9 @@ class Template
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
 			$referred->blocks[self::LAYER_TOP] = &$this->blocks[$this->index];
+
+			$this->blocks[self::LAYER_SNIPPET] += $referred->blocks[self::LAYER_SNIPPET];
+			$referred->blocks[self::LAYER_SNIPPET] = &$this->blocks[self::LAYER_SNIPPET];
 		}
 		return $referred;
 	}

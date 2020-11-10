@@ -226,6 +226,7 @@ class BlockMacros extends MacroSet
 		}
 
 		$node->data->name = $name = ltrim((string) $name, '#');
+		$layer = null;
 		if ($name === '') {
 			if ($node->name === 'define' || $node->name === 'snippetArea') {
 				throw new CompileException('Missing block name.');
@@ -285,16 +286,16 @@ class BlockMacros extends MacroSet
 			if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
 				throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
 			}
-			$node->data->name = $name = '_' . $name;
+			$layer = Template::LAYER_SNIPPET;
 		}
 
-		if (isset($this->blocks[$this->index][$name])) {
+		if (isset($this->blocks[$layer ?? $this->index][$name])) {
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
 		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode
 			? ''
 			: 'if ($this->getParentName()) { return get_defined_vars();} ';
-		$block = $this->blocks[$this->index][$name] = new Block;
+		$block = $node->data->block = $this->blocks[$layer ?? $this->index][$name] = new Block;
 
 		if (Helpers::removeFilter($node->modifiers, 'escape')) {
 			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
@@ -308,20 +309,22 @@ class BlockMacros extends MacroSet
 		$block->contentType = implode($node->context);
 
 		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
-			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . ')';
+			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : ($layer ? ', null' : ''))
+			. ($layer ? ', ' . PhpHelpers::dump($layer) : '')
+			. ')';
 
 		if ($node->name === 'snippet') {
 			if ($node->prefix) {
 				if (isset($node->htmlNode->macroAttrs['foreach'])) {
 					trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
 				}
-				$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>", (string) substr($name, 1));
+				$node->attrCode = $writer->write("<?php echo ' $this->snippetAttribute=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>", $name);
 				return $writer->write($include, $name);
 			}
 			$this->checkExtraArgs($node);
 			return $writer->write(
 				"?>\n<div $this->snippetAttribute=\"<?php echo htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\"><?php $include ?>\n</div><?php ",
-				(string) substr($name, 1),
+				$name,
 				$name
 			);
 
@@ -370,7 +373,7 @@ class BlockMacros extends MacroSet
 					? SnippetDriver::TYPE_STATIC
 					: SnippetDriver::TYPE_AREA;
 				$node->content = '<?php $this->global->snippetDriver->enter('
-					. $writer->formatWord(substr($node->data->name, 1))
+					. $writer->formatWord($node->data->name)
 					. ', "' . $type . '"); try { ?>'
 					. preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content) . '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
 			}
@@ -379,7 +382,7 @@ class BlockMacros extends MacroSet
 					$node->content = '<?php ' . (isset($node->data->args) ? 'extract($this->params); ' . $node->data->args : 'extract($__args);') . ' ?>'
 						. $node->content;
 				}
-				$this->blocks[$this->index][$node->data->name]->code = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
+				$node->data->block->code = $tmp = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 				$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($tmp));
 				$node->openingCode = '<?php ?>';
 

@@ -98,7 +98,7 @@ class SnippetDriver
 		$this->renderingSnippets = true;
 		$this->bridge->setSnippetMode(false);
 		foreach ($blocks as $name => $block) {
-			if ($name[0] !== '_' || !$this->bridge->needsRedraw(substr($name, 1))) {
+			if (!$this->bridge->needsRedraw($name)) {
 				continue;
 			}
 			$function = reset($block->functions);

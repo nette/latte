@@ -4,7 +4,7 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 	protected const BLOCKS = [
-		['_outer' => 'blockOuter', '_inner' => 'blockInner', '_gallery' => 'blockGallery'],
+		'snippet' => ['outer' => 'blockOuter', 'inner' => 'blockInner', 'gallery' => 'blockGallery'],
 	];
 
 
@@ -12,16 +12,16 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		?>	<div class="test"<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')) . '"' ?>>
-<?php $this->renderBlock('_outer', $this->params) ?>
+<?php $this->renderBlock('outer', $this->params, null, 'snippet') ?>
 	</div>
 
 	<div class="test"<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('inner')) . '"' ?>>
 <?php
-		$this->renderBlock('_inner', $this->params);
+		$this->renderBlock('inner', $this->params, null, 'snippet');
 ?>	</div>
 
 	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') /* line 9 */ ?>"<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('gallery')) . '"' ?>><?php
-		$this->renderBlock('_gallery', $this->params) ?>
+		$this->renderBlock('gallery', $this->params, null, 'snippet') ?>
 </div>
 <?php
 %A%
