@@ -116,6 +116,10 @@ class FilterExecutor
 		}
 
 		[$callback, $aware] = $this->prepareFilter($lname);
+
+		if ($info->contentType === Engine::CONTENT_HTML && $args[0] instanceof HtmlStringable) {
+			$args[0] = $args[0]->__toString();
+		}
 		if ($aware) { // FilterInfo aware filter
 			array_unshift($args, $info);
 			return $callback(...$args);

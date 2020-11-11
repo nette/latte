@@ -40,3 +40,8 @@ Assert::noError(function () use ($latte) { // uses keyword new
 	$latte->setSandboxMode();
 	$latte->renderToString('{capture $var}<html>{/capture}');
 });
+
+Assert::match( // bug #215
+	'',
+	$latte->renderToString('{capture $var|strip} <html> {/capture}')
+);
