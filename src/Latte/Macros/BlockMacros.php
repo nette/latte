@@ -298,7 +298,7 @@ class BlockMacros extends MacroSet
 		if (isset($this->namedBlocks[$name])) {
 			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
 		}
-		$extendsCheck = $this->namedBlocks
+		$extendsCheck = $this->namedBlocks || $node->parentNode
 			? ''
 			: 'if ($this->getParentName()) { return get_defined_vars();} ';
 		$this->namedBlocks[$name] = true;
