@@ -26,6 +26,7 @@ class PhpHelpers
 		$tokens = new \ArrayIterator(token_get_all($source));
 		$level = $openLevel = 0;
 		$lineLength = 100;
+		$specialBrace = false;
 
 		foreach ($tokens as $n => $token) {
 			if (is_array($token)) {
@@ -39,7 +40,7 @@ class PhpHelpers
 				} elseif ($name === T_CLOSE_TAG) {
 					$next = $tokens[$n + 1] ?? null;
 					if (is_array($next) && $next[0] === T_OPEN_TAG) { // remove ?)<?php
-						if (!strspn($lastChar, ';{}:/')) {
+						if (!strspn($lastChar, ';{:/' . ($specialBrace ? '' : '}'))) {
 							$php = rtrim($php) . ($lastChar = ';') . "\n" . str_repeat("\t", $level);
 						} elseif (substr($next[1], -1) === "\n") {
 							$php .= "\n" . str_repeat("\t", $level);
@@ -81,6 +82,10 @@ class PhpHelpers
 					}
 					$php .= $token;
 
+				} elseif ($name === T_OBJECT_OPERATOR) {
+					$lastChar = '->';
+					$php .= $token;
+
 				} else {
 					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true)) {
 						$level++;
@@ -91,11 +96,18 @@ class PhpHelpers
 			} else {
 				if ($token === '{' || $token === '[') {
 					$level++;
+					if ($lastChar === '->' || $lastChar === '$') {
+						$specialBrace = true;
+					}
 				} elseif ($token === '}' || $token === ']') {
 					$level--;
 					$php .= "\x08";
-				} elseif ($token === ';' && !(($tokens[$n + 1][0] ?? null) === T_WHITESPACE)) {
-					$token .= "\n" . str_repeat("\t", $level); // indent last line
+
+				} elseif ($token === ';') {
+					$specialBrace = false;
+					if (($tokens[$n + 1][0] ?? null) !== T_WHITESPACE) {
+						$token .= "\n" . str_repeat("\t", $level); // indent last line
+					}
 				}
 				$lastChar = $token;
 				$php .= $token;
