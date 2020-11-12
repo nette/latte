@@ -18,8 +18,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main2' => 'before {include inc.latte var => 1|striptags} after',
 	'main3' => 'before {include inc.latte var => 1|striptags|noescape} after',
 	'main4' => 'before {include inc.latte var: named} after',
+	'main5' => 'before {include file inc2 var => 1} after',
 
 	'inc.latte' => '<b>included {$var}</b>',
+	'inc2' => '<b>included {$var}</b>',
 ]));
 
 Assert::match(
@@ -40,4 +42,9 @@ Assert::match(
 Assert::match(
 	'before <b>included named</b> after',
 	$latte->renderToString('main4')
+);
+
+Assert::match(
+	'before <b>included 1</b> after',
+	$latte->renderToString('main5')
 );

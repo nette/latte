@@ -107,19 +107,22 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {include block [,] [params]}
+	 * {include [block] name [,] [params]}
 	 * @return string|false
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
 		$node->validate(true, [], true);
 		$node->replaced = false;
-		$name = $node->tokenizer->fetchWord();
-		if (!$name || !preg_match('~#|[\w-]+$~DA', $name)) {
-			return false; // {include file}
+
+		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
+		if ($mod !== 'block') {
+			if ($mod === 'file' || !$name || !preg_match('~#|[\w-]+$~DA', $name)) {
+				return false; // {include file}
+			}
+			$name = ltrim($name, '#');
 		}
 
-		$name = ltrim($name, '#');
 		$parent = $name === 'parent';
 		if ($name === 'parent' || $name === 'this') {
 			$item = $node->closest(['block', 'define'], function ($node) { return isset($node->data->name); });

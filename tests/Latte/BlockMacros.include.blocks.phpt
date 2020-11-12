@@ -19,8 +19,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main3' => '{define block-2}[block {$var}]{/} before {include block-2, var => 1} after',
 	'main4' => '{define block.2}[block {$var}]{/} before {include block.2, var => 1} after',
 	'main5' => '{define block.2}[block {$var}]{/} before {include #block.2, var => 1} after',
+	'main6' => '{define block.2}[block {$var}]{/} before {include block block.2, var => 1} after',
+	'main7' => '{define block}[block {$var}]{/define} {var $name = block} before {include block $name, var => 1} after',
 
-	'main6' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|striptags} after',
+	'main8' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|striptags} after',
 ]));
 
 Assert::match(
@@ -48,6 +50,16 @@ Assert::match(
 );
 
 Assert::match(
-	' before block 1 after',
+	' before [block 1] after',
 	$latte->renderToString('main6')
+);
+
+Assert::match(
+	'  before [block 1] after',
+	$latte->renderToString('main7')
+);
+
+Assert::match(
+	' before block 1 after',
+	$latte->renderToString('main8')
 );
