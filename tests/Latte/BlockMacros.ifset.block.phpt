@@ -20,6 +20,12 @@ BlockMacros::install($compiler);
 Assert::same('<?php if ($this->hasBlock("block")) { ?>', $compiler->expandMacro('ifset', '#block')->openingCode);
 Assert::same('<?php if ($this->hasBlock("block")) { ?>', $compiler->expandMacro('ifset', 'block')->openingCode);
 Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('ifset', '#$foo')->openingCode);
+Assert::same('<?php if ($this->hasBlock("foo")) { ?>', $compiler->expandMacro('ifset', 'block foo')->openingCode);
+Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('ifset', 'block $foo')->openingCode);
+Assert::same(
+	'<?php if ($this->hasBlock("foo") && $this->hasBlock("block") && isset($item)) { ?>',
+	$compiler->expandMacro('ifset', 'block foo, block, $item')->openingCode
+);
 Assert::same(
 	'<?php if ($this->hasBlock("block") && isset($item->var["#test"])) { ?>',
 	$compiler->expandMacro('ifset', '#block, $item->var["#test"]')->openingCode
