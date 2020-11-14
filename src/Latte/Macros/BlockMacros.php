@@ -131,9 +131,9 @@ class BlockMacros extends MacroSet
 		}
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
-			. (strpos($name, '$') === false ? PhpHelpers::dump($name) : $name)
+			. (strpos($name, '$') === false ? PhpHelpers::dump($name) : $writer->formatWord($name))
 			. ', %node.array? + '
-			. (isset($this->namedBlocks[$name]) || $parent ? 'get_defined_vars()' : '$this->params')
+			. (isset($this->namedBlocks[$name]) ? 'get_defined_vars()' : '$this->params')
 			. ($node->modifiers
 				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))

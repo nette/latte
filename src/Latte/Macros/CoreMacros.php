@@ -66,7 +66,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
 		$me->addMacro('spaceless', [$me, 'macroSpaceless'], [$me, 'macroSpaceless']);
 		$me->addMacro('include', [$me, 'macroInclude']);
-		$me->addMacro('sandbox', [$me, 'macroInclude']);
+		$me->addMacro('sandbox', [$me, 'macroSandbox']);
 		$me->addMacro('contentType', [$me, 'macroContentType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('php', [$me, 'macroExpr']);
 		$me->addMacro('do', [$me, 'macroExpr']);
@@ -223,7 +223,6 @@ class CoreMacros extends MacroSet
 
 	/**
 	 * {include "file" [,] [params]}
-	 * {sandbox "file" [,] [params]}
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer): string
 	{
@@ -236,19 +235,30 @@ class CoreMacros extends MacroSet
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
-			"/* line {$node->startLine} */\n"
-			. ($node->name === 'sandbox'
-				? 'ob_start(function () {});
-					try { $this->createTemplate(%node.word, %node.array, %var)->renderToContentType(%raw); echo ob_get_clean(); }
-					catch (\Throwable $__e) {
-						if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); }
-						else { echo ob_get_clean(); throw $__e; }
-					}'
-				: '$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);'),
-			$node->name,
+			'/* line ' . $node->startLine . ' */
+			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 				: PhpHelpers::dump($noEscape ? null : implode($node->context))
+		);
+	}
+
+
+	/**
+	 * {sandbox "file" [,] [params]}
+	 */
+	public function macroSandbox(MacroNode $node, PhpWriter $writer): string
+	{
+		$node->replaced = false;
+		return $writer->write(
+			'/* line ' . $node->startLine . ' */
+			ob_start(function () {});
+			try { $this->createTemplate(%node.word, %node.array, "sandbox")->renderToContentType(%var); echo ob_get_clean(); }
+			catch (\Throwable $__e) {
+				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); }
+				else { echo ob_get_clean(); throw $__e; }
+			}',
+			implode($node->context)
 		);
 	}
 
