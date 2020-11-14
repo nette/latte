@@ -239,14 +239,14 @@ class Template
 	 * @param  string|\Closure  $mod  content-type name or modifier closure
 	 * @internal
 	 */
-	public function renderToContentType($mod): void
+	public function renderToContentType($mod, string $block = null): void
 	{
 		if ($mod instanceof \Closure) {
-			echo $mod($this->capture([$this, 'render']), static::CONTENT_TYPE);
+			echo $mod($this->capture(function () use ($block) { $this->render($block); }), static::CONTENT_TYPE);
 
 		} elseif ($mod && $mod !== static::CONTENT_TYPE) {
 			if ($filter = Filters::getConvertor(static::CONTENT_TYPE, $mod)) {
-				echo $filter($this->capture([$this, 'render']));
+				echo $filter($this->capture(function () use ($block) { $this->render($block); }));
 			} else {
 				trigger_error(sprintf(
 					"Including '{$this->name}' with content type %s into incompatible type %s.",
@@ -255,7 +255,7 @@ class Template
 				), E_USER_WARNING);
 			}
 		} else {
-			$this->render();
+			$this->render($block);
 		}
 	}
 

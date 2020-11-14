@@ -123,6 +123,25 @@ class BlockMacros extends MacroSet
 			$name = ltrim($name, '#');
 		}
 
+		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
+		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
+			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
+		}
+		if ($node->modifiers && !$noEscape) {
+			$node->modifiers .= '|escape';
+		}
+
+		if ($node->tokenizer->nextToken('from')) {
+			$node->tokenizer->nextToken($node->tokenizer::T_WHITESPACE);
+			return $writer->write(
+				'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw, %word);',
+				$node->modifiers
+					? $writer->write('function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }')
+					: PhpHelpers::dump($noEscape ? null : implode($node->context)),
+				$name
+			);
+		}
+
 		$parent = $name === 'parent';
 		if ($name === 'parent' || $name === 'this') {
 			$item = $node->closest(['block', 'define'], function ($node) { return isset($node->data->name); });
@@ -132,13 +151,6 @@ class BlockMacros extends MacroSet
 			$name = $item->data->name;
 		}
 
-		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
-		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
-		}
-		if ($node->modifiers && !$noEscape) {
-			$node->modifiers .= '|escape';
-		}
 
 		$phpName = strpos($name, '$') === false
 			? PhpHelpers::dump($name)
