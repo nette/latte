@@ -416,11 +416,11 @@ class BlockMacros extends MacroSet
 		$list = [];
 		while (($name = $node->tokenizer->fetchWord()) !== null) {
 			$list[] = preg_match('~#|[\w-]+$~DA', $name)
-				? '$this->blockQueue["' . ltrim($name, '#') . '"]'
-				: $writer->formatArgs(new Latte\MacroTokens($name));
+				? '$this->hasBlock(' . $writer->formatWord(ltrim($name, '#')) . ')'
+				: 'isset(' . $writer->formatArgs(new Latte\MacroTokens($name)) . ')';
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')
-			. 'if (isset(' . implode(', ', $list) . ')) {';
+			. 'if (' . implode(' && ', $list) . ') {';
 	}
 
 

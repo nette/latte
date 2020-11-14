@@ -356,6 +356,12 @@ class Template
 	}
 
 
+	public function hasBlock(string $name): bool
+	{
+		return isset($this->blockQueue[$name]);
+	}
+
+
 	/********************* policy ****************d*g**/
 
 
