@@ -175,12 +175,8 @@ class Template
 			return;
 
 		} elseif ($block !== null) { // single block rendering
-			$tmp = $this;
-			while (in_array($this->referenceType, ['extends', null], true) && ($tmp = $tmp->referringTemplate));
-			if (!$tmp) {
-				$this->renderBlock($block, $this->params);
-				return;
-			}
+			$this->renderBlock($block, $this->params);
+			return;
 		}
 
 		// old accumulators for back compatibility
