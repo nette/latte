@@ -33,6 +33,9 @@ class CachingIterator extends \CachingIterator implements \Countable
 	private $counter = 0;
 
 
+	/**
+	 * @param  array|\Traversable|\stdClass|mixed  $iterator
+	 */
 	public function __construct($iterator)
 	{
 		if (is_array($iterator) || $iterator instanceof \stdClass) {
@@ -180,9 +183,10 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Returns property value.
+	 * @return mixed
 	 * @throws \LogicException if the property is not defined.
 	 */
-	public function &__get($name)
+	public function &__get(string $name)
 	{
 		if (method_exists($this, $m = 'get' . $name) || method_exists($this, $m = 'is' . $name)) {
 			$ret = $this->$m();
@@ -195,7 +199,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	/**
 	 * Is property defined?
 	 */
-	public function __isset($name): bool
+	public function __isset(string $name): bool
 	{
 		return method_exists($this, 'get' . $name) || method_exists($this, 'is' . $name);
 	}

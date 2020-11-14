@@ -19,10 +19,10 @@ use Latte\Helpers;
  */
 class FilterExecutor
 {
-	/** @var array */
+	/** @var callable[] */
 	private $_dynamic = [];
 
-	/** @var array [name => [callback, FilterInfo aware] */
+	/** @var array<string, array{callable, ?bool}>  [name => [callback, FilterInfo aware] */
 	private $_static = [
 		'batch' => [[Filters::class, 'batch'], false],
 		'breaklines' => [[Filters::class, 'breaklines'], false],
@@ -91,7 +91,7 @@ class FilterExecutor
 	/**
 	 * Returns filter for classic calling.
 	 */
-	public function __get($name): callable
+	public function __get(string $name): callable
 	{
 		$lname = strtolower($name);
 		if (isset($this->$lname)) { // case mismatch
@@ -137,6 +137,7 @@ class FilterExecutor
 
 	/**
 	 * Calls filter with FilterInfo.
+	 * @param  mixed  ...$args
 	 * @return mixed
 	 */
 	public function filterContent(string $name, FilterInfo $info, ...$args)
@@ -169,6 +170,9 @@ class FilterExecutor
 	}
 
 
+	/**
+	 * @return array{callable, bool}
+	 */
 	private function prepareFilter(string $name): array
 	{
 		if (isset($this->_static[$name][1])) {

@@ -19,6 +19,8 @@ trait Strict
 {
 	/**
 	 * Call to undefined method.
+	 * @param  mixed[]  $args
+	 * @return mixed
 	 * @throws LogicException
 	 */
 	public function __call(string $name, array $args)
@@ -34,6 +36,8 @@ trait Strict
 
 	/**
 	 * Call to undefined static method.
+	 * @param  mixed[]  $args
+	 * @return mixed
 	 * @throws LogicException
 	 */
 	public static function __callStatic(string $name, array $args)
@@ -49,6 +53,7 @@ trait Strict
 
 	/**
 	 * Access to undeclared property.
+	 * @return mixed
 	 * @throws LogicException
 	 */
 	public function &__get(string $name)
@@ -64,9 +69,10 @@ trait Strict
 
 	/**
 	 * Access to undeclared property.
+	 * @param  mixed  $value
 	 * @throws LogicException
 	 */
-	public function __set(string $name, $value)
+	public function __set(string $name, $value): void
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
@@ -87,7 +93,7 @@ trait Strict
 	 * Access to undeclared property.
 	 * @throws LogicException
 	 */
-	public function __unset(string $name)
+	public function __unset(string $name): void
 	{
 		$class = static::class;
 		throw new LogicException("Attempt to unset undeclared property $class::$$name.");

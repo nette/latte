@@ -29,7 +29,7 @@ interface Macro
 
 	/**
 	 * Finishes template parsing.
-	 * @return array|null [prolog, epilog]
+	 * @return array{string, string}|array{string}|null  (prolog, epilog)
 	 */
 	function finalize();
 

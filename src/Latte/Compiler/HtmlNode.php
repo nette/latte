@@ -23,10 +23,10 @@ class HtmlNode
 	/** @var bool */
 	public $empty;
 
-	/** @var array */
+	/** @var string[] */
 	public $attrs = [];
 
-	/** @var array */
+	/** @var string[] */
 	public $macroAttrs = [];
 
 	/** @var bool */

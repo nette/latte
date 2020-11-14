@@ -48,7 +48,7 @@ class Engine
 	/** @var \stdClass */
 	private $functions;
 
-	/** @var array */
+	/** @var mixed[] */
 	private $providers = [];
 
 	/** @var string */
@@ -79,7 +79,7 @@ class Engine
 
 	/**
 	 * Renders template to output.
-	 * @param  object|array  $params
+	 * @param  object|mixed[]  $params
 	 */
 	public function render(string $name, $params = [], string $block = null): void
 	{
@@ -90,7 +90,7 @@ class Engine
 
 	/**
 	 * Renders template to string.
-	 * @param  object|array  $params
+	 * @param  object|mixed[]  $params
 	 */
 	public function renderToString(string $name, $params = [], string $block = null): string
 	{
@@ -101,6 +101,7 @@ class Engine
 
 	/**
 	 * Creates template object.
+	 * @param  mixed[]  $params
 	 */
 	public function createTemplate(string $name, array $params = []): Runtime\Template
 	{
@@ -221,6 +222,9 @@ class Engine
 	}
 
 
+	/**
+	 * @return resource
+	 */
 	private function acquireLock(string $file, int $mode)
 	{
 		$dir = dirname($file);
@@ -284,6 +288,7 @@ class Engine
 
 	/**
 	 * Call a run-time filter.
+	 * @param  mixed[]  $args
 	 * @return mixed
 	 */
 	public function invokeFilter(string $name, array $args)
@@ -316,6 +321,7 @@ class Engine
 
 	/**
 	 * Call a run-time function.
+	 * @param  mixed[]  $args
 	 * @return mixed
 	 */
 	public function invokeFunction(string $name, array $args)
@@ -332,6 +338,7 @@ class Engine
 
 	/**
 	 * Adds new provider.
+	 * @param  mixed  $value
 	 * @return static
 	 */
 	public function addProvider(string $name, $value)
@@ -343,6 +350,7 @@ class Engine
 
 	/**
 	 * Returns all providers.
+	 * @return mixed[]
 	 */
 	public function getProviders(): array
 	{
@@ -453,7 +461,8 @@ class Engine
 
 
 	/**
-	 * @param  object|array  $params
+	 * @param  object|mixed[]  $params
+	 * @return mixed[]
 	 */
 	private function processParams($params): array
 	{

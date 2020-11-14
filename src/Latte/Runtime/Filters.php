@@ -395,6 +395,7 @@ class Filters
 
 	/**
 	 * Join array of text or HTML elements with a string.
+	 * @param  string[]  $arr
 	 * @return string text|HTML
 	 */
 	public static function implode(array $arr, string $glue = ''): string
@@ -463,8 +464,8 @@ class Filters
 
 	/**
 	 * Performs a search and replace.
-	 * @param string|array $search
-	 * @param string|array $replacement
+	 * @param  string|string[]  $search
+	 * @param  string|string[]  $replacement
 	 */
 	public static function replace(FilterInfo $info, $subject, $search, $replacement = ''): string
 	{

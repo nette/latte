@@ -34,7 +34,7 @@ class MacroTokens extends TokenIterator
 
 
 	/**
-	 * @param  string|array  $input
+	 * @param  string|list<array{string, int, int}>  $input
 	 */
 	public function __construct($input = [])
 	{
@@ -43,6 +43,9 @@ class MacroTokens extends TokenIterator
 	}
 
 
+	/**
+	 * @return list<array{string, int, int}>
+	 */
 	public function parse(string $s): array
 	{
 		self::$tokenizer = self::$tokenizer ?: new Tokenizer([
@@ -62,6 +65,7 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Appends simple token or string (will be parsed).
+	 * @param  string|array{string, int, int}  $val
 	 * @return static
 	 */
 	public function append($val, int $position = null)
@@ -80,6 +84,7 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Prepends simple token or string (will be parsed).
+	 * @param  string|array{string, int, int}  $val
 	 * @return static
 	 */
 	public function prepend($val)
@@ -103,6 +108,7 @@ class MacroTokens extends TokenIterator
 
 	/**
 	 * Reads single tokens delimited by colon from string.
+	 * @return string[]
 	 */
 	public function fetchWords(): array
 	{
@@ -120,6 +126,7 @@ class MacroTokens extends TokenIterator
 	}
 
 
+	/** @return static */
 	public function reset()
 	{
 		$this->depth = 0;

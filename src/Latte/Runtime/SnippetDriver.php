@@ -25,7 +25,7 @@ class SnippetDriver
 		TYPE_DYNAMIC = 'dynamic',
 		TYPE_AREA = 'area';
 
-	/** @var array */
+	/** @var array<array{string, bool}> */
 	private $stack = [];
 
 	/** @var int */

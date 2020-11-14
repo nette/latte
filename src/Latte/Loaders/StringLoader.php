@@ -19,10 +19,13 @@ class StringLoader implements Latte\Loader
 {
 	use Latte\Strict;
 
-	/** @var array|null [name => content] */
+	/** @var string[]|null  [name => content] */
 	private $templates;
 
 
+	/**
+	 * @param  string[]  $templates
+	 */
 	public function __construct(array $templates = null)
 	{
 		$this->templates = $templates;

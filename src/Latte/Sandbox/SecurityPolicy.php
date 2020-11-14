@@ -36,10 +36,10 @@ class SecurityPolicy implements Latte\Policy
 	/** @var string[][] */
 	private $properties = [];
 
-	/** @var array */
+	/** @var array<string, array<string, bool>> */
 	private $methodCache = [];
 
-	/** @var array */
+	/** @var array<string, array<string, bool>> */
 	private $propertyCache = [];
 
 
@@ -70,6 +70,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
+	/**
+	 * @param  string[]  $macros
+	 */
 	public function allowMacros(array $macros): self
 	{
 		$this->macros += array_flip(array_map('strtolower', $macros));
@@ -77,6 +80,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
+	/**
+	 * @param  string[]  $filters
+	 */
 	public function allowFilters(array $filters): self
 	{
 		$this->filters += array_flip(array_map('strtolower', $filters));
@@ -84,6 +90,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
+	/**
+	 * @param  string[]  $functions
+	 */
 	public function allowFunctions(array $functions): self
 	{
 		$this->functions += array_flip(array_map('strtolower', $functions));
@@ -91,6 +100,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
+	/**
+	 * @param  string[]  $methods
+	 */
 	public function allowMethods(string $class, array $methods): self
 	{
 		$this->methodCache = [];
@@ -99,6 +111,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
+	/**
+	 * @param  string[]  $properties
+	 */
 	public function allowProperties(string $class, array $properties): self
 	{
 		$this->propertyCache = [];
@@ -128,6 +143,7 @@ class SecurityPolicy implements Latte\Policy
 	public function isMethodAllowed(string $class, string $method): bool
 	{
 		$method = strtolower($method);
+		/** @var bool|null $res */
 		$res = &$this->methodCache[$class][$method];
 		if (isset($res)) {
 			return $res;
@@ -144,6 +160,7 @@ class SecurityPolicy implements Latte\Policy
 	public function isPropertyAllowed(string $class, string $property): bool
 	{
 		$property = strtolower($property);
+		/** @var bool|null $res */
 		$res = &$this->propertyCache[$class][$property];
 		if (isset($res)) {
 			return $res;

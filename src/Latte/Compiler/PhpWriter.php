@@ -23,13 +23,13 @@ class PhpWriter
 	/** @var string */
 	private $modifiers;
 
-	/** @var array|null */
+	/** @var array{string, mixed}|null */
 	private $context;
 
 	/** @var Policy|null */
 	private $policy;
 
-	/** @var array */
+	/** @var string[] */
 	private $functions = [];
 
 
@@ -43,6 +43,9 @@ class PhpWriter
 	}
 
 
+	/**
+	 * @param  array{string, mixed}|null  $context
+	 */
 	public function __construct(MacroTokens $tokens, string $modifiers = null, array $context = null)
 	{
 		$this->tokens = $tokens;
@@ -53,6 +56,7 @@ class PhpWriter
 
 	/**
 	 * Expands %node.word, %node.array, %node.args, %escape(), %modify(), %var, %raw, %word in code.
+	 * @param  mixed  ...$args
 	 */
 	public function write(string $mask, ...$args): string
 	{
@@ -609,6 +613,9 @@ class PhpWriter
 	}
 
 
+	/**
+	 * @return list<array{string, int, int}>
+	 */
 	private function inlineModifierInner(MacroTokens $tokens): array
 	{
 		$isFunctionOrArray = $tokens->isPrev($tokens::T_VARIABLE, $tokens::T_SYMBOL, ')') || $tokens->isCurrent('[');
@@ -655,7 +662,7 @@ class PhpWriter
 
 	/**
 	 * Formats modifiers calling.
-	 * @param  string|array  $var
+	 * @param  string|list<array{string, int, int}>  $var
 	 * @throws CompileException
 	 */
 	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens

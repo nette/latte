@@ -70,7 +70,7 @@ class MacroNode
 	/** @var HtmlNode|null  closest HTML node */
 	public $htmlNode;
 
-	/** @var array [contentType, context] */
+	/** @var array{string, mixed} [contentType, context] */
 	public $context;
 
 	/** @var string|null  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
@@ -82,7 +82,7 @@ class MacroNode
 	/** @var int  position of end tag in source template */
 	public $endLine;
 
-	/** @internal */
+	/** @var array{string, bool}|null */
 	public $saved;
 
 

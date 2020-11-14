@@ -101,6 +101,7 @@ class BlockMacros extends MacroSet
 
 	/**
 	 * {include block [,] [params]}
+	 * @return string|false
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
@@ -148,7 +149,7 @@ class BlockMacros extends MacroSet
 	 * {includeblock "file"}
 	 * @deprecated
 	 */
-	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer)
+	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer): string
 	{
 		//trigger_error('Macro {includeblock} is deprecated, use similar macro {import}.', E_USER_DEPRECATED);
 		$node->replaced = false;
@@ -167,7 +168,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {import "file"}
 	 */
-	public function macroImport(MacroNode $node, PhpWriter $writer)
+	public function macroImport(MacroNode $node, PhpWriter $writer): string
 	{
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
@@ -177,6 +178,7 @@ class BlockMacros extends MacroSet
 		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $file);
 		if ($this->getCompiler()->isInHead()) {
 			$this->imports[] = $code;
+			return '';
 		} else {
 			return $code;
 		}
@@ -186,7 +188,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {extends none | $var | "file"}
 	 */
-	public function macroExtends(MacroNode $node, PhpWriter $writer)
+	public function macroExtends(MacroNode $node, PhpWriter $writer): void
 	{
 		$notation = $node->getNotation();
 		if ($node->modifiers) {
@@ -214,7 +216,7 @@ class BlockMacros extends MacroSet
 	 * {snippet [name]}
 	 * {snippetArea [name]}
 	 */
-	public function macroBlock(MacroNode $node, PhpWriter $writer)
+	public function macroBlock(MacroNode $node, PhpWriter $writer): string
 	{
 		$name = $node->tokenizer->fetchWord();
 
@@ -362,7 +364,7 @@ class BlockMacros extends MacroSet
 	 * {/snippetArea}
 	 * {/define}
 	 */
-	public function macroBlockEnd(MacroNode $node, PhpWriter $writer)
+	public function macroBlockEnd(MacroNode $node, PhpWriter $writer): string
 	{
 		if (isset($node->data->name)) { // block, snippet, define
 			if ($asInner = $node->name === 'snippet' && $node->prefix === MacroNode::PREFIX_NONE) {
@@ -411,12 +413,14 @@ class BlockMacros extends MacroSet
 			$node->modifiers .= '|escape';
 			return $writer->write('$__fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
 		}
+		return '';
 	}
 
 
 	/**
 	 * {ifset block}
 	 * {elseifset block}
+	 * @return string|false
 	 */
 	public function macroIfset(MacroNode $node, PhpWriter $writer)
 	{

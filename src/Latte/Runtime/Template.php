@@ -27,7 +27,7 @@ class Template
 	/** @var string  @internal */
 	protected $contentType = Engine::CONTENT_HTML;
 
-	/** @var array  @internal */
+	/** @var mixed[]  @internal */
 	protected $params = [];
 
 	/** @var FilterExecutor */
@@ -61,6 +61,10 @@ class Template
 	private $referenceType;
 
 
+	/**
+	 * @param  mixed[]  $params
+	 * @param  mixed[]  $providers
+	 */
 	public function __construct(
 		Engine $engine,
 		array $params,
@@ -95,6 +99,7 @@ class Template
 
 	/**
 	 * Returns array of all parameters.
+	 * @return mixed[]
 	 */
 	public function getParameters(): array
 	{
@@ -197,6 +202,7 @@ class Template
 
 	/**
 	 * Renders template.
+	 * @param  mixed[]  $params
 	 * @internal
 	 */
 	public function createTemplate(string $name, array $params, string $referenceType): self
@@ -253,7 +259,10 @@ class Template
 	}
 
 
-	/** @internal */
+	/**
+	 * @internal
+	 * @return mixed[]
+	 */
 	public function main(): array
 	{
 		return [];
@@ -265,6 +274,7 @@ class Template
 
 	/**
 	 * Renders block.
+	 * @param  mixed[]  $params
 	 * @param  string|\Closure  $mod  content-type name or modifier closure
 	 * @internal
 	 */
@@ -295,6 +305,7 @@ class Template
 
 	/**
 	 * Renders parent block.
+	 * @param  mixed[]  $params
 	 * @internal
 	 */
 	public function renderBlockParent(string $name, array $params): void
@@ -347,7 +358,11 @@ class Template
 	/********************* policy ****************d*g**/
 
 
-	/** @internal */
+	/**
+	 * @param  mixed  $callable
+	 * @return mixed
+	 * @internal
+	 */
 	protected function call($callable)
 	{
 		if (!is_callable($callable)) {
@@ -375,7 +390,12 @@ class Template
 	}
 
 
-	/** @internal */
+	/**
+	 * @param  mixed  $obj
+	 * @param  mixed  $prop
+	 * @return mixed
+	 * @internal
+	 */
 	protected function prop($obj, $prop)
 	{
 		$class = is_object($obj) ? get_class($obj) : $obj;

@@ -56,7 +56,7 @@ class Compiler
 	/** @var int  position on source template */
 	private $position;
 
-	/** @var array of [name => Macro[]] */
+	/** @var array<string, Macro[]> */
 	private $macros = [];
 
 	/** @var string[] of orig name */
@@ -89,10 +89,10 @@ class Compiler
 	/** @var bool */
 	private $inHead;
 
-	/** @var array of [name => [body, arguments]] */
+	/** @var array<string, ?array{body: string, arguments: string, returns: string}> */
 	private $methods = [];
 
-	/** @var array of [name => serialized value] */
+	/** @var array<string, mixed> */
 	private $properties = [];
 
 	/** @var Policy|null */
@@ -240,12 +240,18 @@ class Compiler
 	}
 
 
+	/**
+	 * @return Macro[][]
+	 */
 	public function getMacros(): array
 	{
 		return $this->macros;
 	}
 
 
+	/**
+	 * @return string[]
+	 */
 	public function getFunctions(): array
 	{
 		return $this->functions;
@@ -273,7 +279,7 @@ class Compiler
 	 * Adds custom method to template.
 	 * @internal
 	 */
-	public function addMethod(string $name, string $body, string $arguments = '', $returns = ''): void
+	public function addMethod(string $name, string $body, string $arguments = '', string $returns = ''): void
 	{
 		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments, 'returns' => $returns];
 	}
@@ -281,6 +287,7 @@ class Compiler
 
 	/**
 	 * Returns custom methods.
+	 * @return array<string, ?array{body: string, arguments: string, returns: string}>
 	 * @internal
 	 */
 	public function getMethods(): array
@@ -291,6 +298,7 @@ class Compiler
 
 	/**
 	 * Adds custom property to template.
+	 * @param  mixed  $value
 	 * @internal
 	 */
 	public function addProperty(string $name, $value): void
@@ -301,6 +309,7 @@ class Compiler
 
 	/**
 	 * Returns custom properites.
+	 * @return array<string, mixed>
 	 * @internal
 	 */
 	public function getProperties(): array
@@ -814,6 +823,9 @@ class Compiler
 	}
 
 
+	/**
+	 * @param  HtmlNode|MacroNode  $node
+	 */
 	private static function printEndTag($node): string
 	{
 		return $node instanceof HtmlNode
