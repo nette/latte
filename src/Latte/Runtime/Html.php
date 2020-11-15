@@ -23,6 +23,9 @@ class Html implements HtmlStringable
 	private $value;
 
 
+	/**
+	 * @param scalar  $value
+	 */
 	public function __construct($value)
 	{
 		$this->value = (string) $value;
