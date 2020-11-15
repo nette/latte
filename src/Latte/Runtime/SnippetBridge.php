@@ -18,6 +18,7 @@ interface SnippetBridge
 {
 	function isSnippetMode(): bool;
 
+	/** @return void */
 	function setSnippetMode(bool $snippetMode);
 
 	function needsRedraw(string $name): bool;
