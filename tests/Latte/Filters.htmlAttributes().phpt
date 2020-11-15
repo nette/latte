@@ -13,8 +13,6 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::same('', Filters::htmlAttributes(null));
-
 Assert::same(' style="float:left" class="three" a=\'<>"\' b="\'" title="0" checked', Filters::htmlAttributes([
 	'style' => 'float:left',
 	'class' => 'three',
