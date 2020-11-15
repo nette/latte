@@ -126,6 +126,27 @@ class MacroTokens extends TokenIterator
 	}
 
 
+	/**
+	 * @param  string|string[]  $modifiers
+	 * @return ?array{string, ?string}
+	 */
+	public function fetchWordWithModifier($modifiers): ?array
+	{
+		$modifiers = (array) $modifiers;
+		$pos = $this->position;
+		if (
+			($mod = $this->nextValue(...$modifiers))
+			&& $this->nextToken($this::T_WHITESPACE)
+			&& ($name = $this->fetchWord())
+		) {
+			return [$name, $mod];
+		}
+		$this->position = $pos;
+		$name = $this->fetchWord();
+		return $name === null ? null : [$name, null];
+	}
+
+
 	/** @return static */
 	public function reset()
 	{
