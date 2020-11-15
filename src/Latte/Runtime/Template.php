@@ -23,7 +23,8 @@ class Template
 
 	public const
 		LAYER_TOP = 0,
-		LAYER_SNIPPET = 'snippet';
+		LAYER_SNIPPET = 'snippet',
+		LAYER_LOCAL = 'local';
 
 	protected const CONTENT_TYPE = Engine::CONTENT_HTML;
 
@@ -82,6 +83,7 @@ class Template
 		$this->policy = $policy;
 		$this->global = (object) $providers;
 		$this->initBlockLayer(self::LAYER_TOP);
+		$this->initBlockLayer(self::LAYER_LOCAL);
 		$this->initBlockLayer(self::LAYER_SNIPPET);
 	}
 
@@ -286,12 +288,15 @@ class Template
 	 */
 	public function renderBlock(string $name, array $params, $mod = null, $layer = null): void
 	{
-		$block = $this->blocks[$layer ?? $this->index][$name] ?? null;
+		$block = $layer
+			? ($this->blocks[$layer][$name] ?? null)
+			: ($this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[$this->index][$name] ?? null);
+
 		if (!$block) {
 			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames($layer), $name))
 				? ", did you mean '$t'?"
 				: '.';
-			$name = $layer ? "$layer:$name" : $name;
+			$name = $layer ? "$layer $name" : $name;
 			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
@@ -321,7 +326,7 @@ class Template
 	 */
 	public function renderBlockParent(string $name, array $params): void
 	{
-		$block = $this->blocks[$this->index][$name] ?? null;
+		$block = $this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[$this->index][$name] ?? null;
 		if (!$block || ($function = next($block->functions)) === false) {
 			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
 		}
@@ -333,11 +338,12 @@ class Template
 	/**
 	 * Creates block if doesn't exist and checks if content type is the same.
 	 * @param  callable[]  $functions
+	 * @param  int|string  $layer
 	 * @internal
 	 */
-	protected function addBlock(string $name, string $contentType, array $functions): void
+	protected function addBlock(string $name, string $contentType, array $functions, $layer = null): void
 	{
-		$block = &$this->blocks[$this->index][$name];
+		$block = &$this->blocks[$layer ?? $this->index][$name];
 		$block = $block ?? new Block;
 		if ($block->contentType === null) {
 			$block->contentType = $contentType;
@@ -397,7 +403,7 @@ class Template
 
 	public function hasBlock(string $name): bool
 	{
-		return isset($this->blocks[$this->index][$name]);
+		return isset($this->blocks[self::LAYER_LOCAL][$name]) || isset($this->blocks[$this->index][$name]);
 	}
 
 

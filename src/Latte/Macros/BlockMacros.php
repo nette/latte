@@ -135,11 +135,14 @@ class BlockMacros extends MacroSet
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
 		}
+
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
 			. (strpos($name, '$') === false ? PhpHelpers::dump($name) : $writer->formatWord($name))
 			. ', %node.array? + '
-			. (isset($this->blocks[$this->index][$name]) ? 'get_defined_vars()' : '$this->params')
+			. (isset($this->blocks[$this->index][$name]) || isset($this->blocks[Template::LAYER_LOCAL][$name])
+				? 'get_defined_vars()'
+				: '$this->params')
 			. ($node->modifiers
 				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
@@ -206,14 +209,25 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {block [name]}
-	 * {define name}
+	 * {block [local] [name]}
+	 * {define [local] name}
 	 * {snippet [name]}
 	 * {snippetArea name}
 	 */
 	public function macroBlock(MacroNode $node, PhpWriter $writer): string
 	{
+		$layer = null;
+		if (($node->name === 'block' || $node->name === 'define')
+			&& $node->tokenizer->nextToken('local')
+		) {
+			$node->tokenizer->nextToken($node->tokenizer::T_WHITESPACE);
+			$layer = Template::LAYER_LOCAL;
+		}
 		$name = $node->tokenizer->fetchWord();
+		if ($layer && $name === null) {
+			$name = 'local';
+			$layer = null;
+		}
 
 		if ($node->name === 'block' && $name === null) { // anonymous block
 			return $node->modifiers === ''
@@ -226,7 +240,7 @@ class BlockMacros extends MacroSet
 		}
 
 		$node->data->name = $name = ltrim((string) $name, '#');
-		$layer = null;
+
 		if ($name === '') {
 			if ($node->name === 'define' || $node->name === 'snippetArea') {
 				throw new CompileException('Missing block name.');
@@ -269,11 +283,12 @@ class BlockMacros extends MacroSet
 						$node->modifiers .= '|escape';
 					}
 					$node->closingCode = $writer->write('<?php $this->renderBlock(%raw, get_defined_vars()'
-						. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '') . '); ?>', $fname);
+						. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '')
+						 . '); ?>', $fname);
 				}
 				$blockType = PhpHelpers::dump(implode($node->context));
 				$this->checkExtraArgs($node);
-				return "\$this->addBlock($fname, $blockType, [[\$this, '{$node->data->func}']]);";
+				return "\$this->addBlock($fname, $blockType, [[\$this, '{$node->data->func}']]" . ($layer ? ', ' . PhpHelpers::dump($layer) : '') . ');';
 			}
 
 		} elseif (!preg_match('#^[a-z]#iD', $name)) {
@@ -287,11 +302,16 @@ class BlockMacros extends MacroSet
 				throw new CompileException("Cannot combine HTML attribute $this->snippetAttribute with n:snippet.");
 			}
 			$layer = Template::LAYER_SNIPPET;
+			if (isset($this->blocks[$layer][$name])) {
+				throw new CompileException("Cannot redeclare {$node->name} '$name'");
+			}
+
+		} else {
+			if (isset($this->blocks[Template::LAYER_LOCAL][$name]) || isset($this->blocks[$this->index][$name])) {
+				throw new CompileException("Cannot redeclare {$node->name} '$name'");
+			}
 		}
 
-		if (isset($this->blocks[$layer ?? $this->index][$name])) {
-			throw new CompileException("Cannot redeclare static {$node->name} '$name'");
-		}
 		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode
 			? ''
 			: 'if ($this->getParentName()) { return get_defined_vars();} ';
@@ -309,8 +329,8 @@ class BlockMacros extends MacroSet
 		$block->contentType = implode($node->context);
 
 		$include = '$this->renderBlock(%var, ' . (($node->name === 'snippet' || $node->name === 'snippetArea') ? '$this->params' : 'get_defined_vars()')
-			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : ($layer ? ', null' : ''))
-			. ($layer ? ', ' . PhpHelpers::dump($layer) : '')
+			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : ($layer === Template::LAYER_SNIPPET ? ', null' : ''))
+			. ($layer === Template::LAYER_SNIPPET ? ', ' . PhpHelpers::dump($layer) : '')
 			. ')';
 
 		if ($node->name === 'snippet') {
