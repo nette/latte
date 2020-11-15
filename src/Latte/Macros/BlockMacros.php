@@ -137,13 +137,15 @@ class BlockMacros extends MacroSet
 			$node->modifiers .= '|escape';
 		}
 
+		$phpName = strpos($name, '$') === false
+			? PhpHelpers::dump($name)
+			: $writer->formatWord($name);
+
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
-			. (strpos($name, '$') === false ? PhpHelpers::dump($name) : $writer->formatWord($name))
+			. $phpName
 			. ', %node.array? + '
-			. (isset($this->blocks[$this->index][$name]) || isset($this->blocks[Template::LAYER_LOCAL][$name])
-				? 'get_defined_vars()'
-				: '$this->params')
+			. '($this->hasBlock(' . $phpName . ', true) ? get_defined_vars() : $this->params)'
 			. ($node->modifiers
 				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))

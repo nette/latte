@@ -272,7 +272,7 @@ var prop2 = <?php echo LR\Filters::escapeJs($people) /* line 82 */ ?>;
 			?>	<li><?php echo LR\Filters::escapeHtmlText($counter++) /* line 105 */ ?> <?php
 			if (is_array($item)) {
 				?> <?php
-				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'html');
+				$this->renderBlock('menu', ['menu' => $item] + ($this->hasBlock('menu', true) ? get_defined_vars() : $this->params), 'html');
 				?> <?php
 			}
 			else {

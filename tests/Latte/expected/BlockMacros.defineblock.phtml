@@ -24,31 +24,31 @@ final class Template%a% extends Latte\Runtime\Template
 ?>
 
 a) <?php
-		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html');
+		$this->renderBlock('test', ['var' => 20] + ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
 ?>
 
 
 
 b) <?php
-		$this->renderBlock('testargs', [1] + get_defined_vars(), 'html');
+		$this->renderBlock('testargs', [1] + ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
 ?>
 
 
 
 g) <?php
-		$this->renderBlock('outer', get_defined_vars(), 'html');
+		$this->renderBlock('outer', ($this->hasBlock('outer', true) ? get_defined_vars() : $this->params), 'html');
 ?>
 
 
 <?php
 		$var1 = 'outer';
 		?>h) <?php
-		$this->renderBlock('testargs', get_defined_vars(), 'html');
+		$this->renderBlock('testargs', ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
 ?>
 
 
 i) <?php
-		$this->renderBlock('testargs', [null] + get_defined_vars(), 'html');
+		$this->renderBlock('testargs', [null] + ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
 		return get_defined_vars();
 	}
 
@@ -76,7 +76,7 @@ i) <?php
 	public function blockOuter(array $__args): void
 	{
 		extract($__args);
-		$this->renderBlock('testargs', ['hello'] + get_defined_vars(), 'html');
+		$this->renderBlock('testargs', ['hello'] + ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
 
 	}
 

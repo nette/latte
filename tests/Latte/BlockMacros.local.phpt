@@ -56,6 +56,16 @@ Assert::same(
 Assert::same(
 	'5',
 	trim($latte->renderToString('
+		{var $i = 5}
+		{include abc}
+		{define local abc}{$i}{/define}
+	'))
+);
+
+
+Assert::same(
+	'5',
+	trim($latte->renderToString('
 		{define local abc}{$i}{/define}
 		{var $i = 5}
 		{include abc}
