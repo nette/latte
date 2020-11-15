@@ -49,7 +49,7 @@ $latte->addMacro('one', new TestMacro);
 
 
 Assert::match(
-	'%A%opening[]closing<?%A%',
+	'%A%opening[]closing%A%',
 	$latte->compile('{one/}')
 );
 

@@ -15,19 +15,19 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::contains('a <<?php ?>? b', $latte->compile('a <{syntax off}? b'));
+Assert::contains('a <? b', $latte->compile('a <{syntax off}? b'));
 
-Assert::contains('<<?php ?>?php ?>', $latte->compile('<?php ?>'));
+Assert::contains('<?php ?>', $latte->compile('<?php ?>'));
 
-Assert::contains('<<?php ?>? ?>', $latte->compile('<? ?>'));
+Assert::contains('<? ?>', $latte->compile('<? ?>'));
 
-Assert::contains('<<?php ?>?= $a ?>', $latte->compile('<?= $a ?>'));
+Assert::contains('<?= $a ?>', $latte->compile('<?= $a ?>'));
 
-Assert::contains('<!-- <<?php ?>? -->', $latte->compile('<!-- <? -->'));
+Assert::contains('<!-- <? -->', $latte->compile('<!-- <? -->'));
 
-Assert::contains('<div <<?php ?>? >', $latte->compile('<div <? >'));
+Assert::contains('<div <? >', $latte->compile('<div <? >'));
 
-Assert::contains('<div a="<<?php ?>?">', $latte->compile('<div a="<?">'));
+Assert::contains('<div a="<?">', $latte->compile('<div a="<?">'));
 
 Assert::exception(function () use ($latte) {
 	echo $latte->compile('{var ?> }');

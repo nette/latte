@@ -13,10 +13,13 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		$this->renderBlock('block1', get_defined_vars());
-?>
+		echo '
 
-
-<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('outer', $this->params, null, 'snippet') ?></div><?php
+<div id="';
+		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
+		echo '">';
+		$this->renderBlock('outer', $this->params, null, 'snippet');
+		echo '</div>';
 %A%
 	}
 
@@ -24,10 +27,13 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockBlock1(array $__args): void
 	{
 		extract($__args);
-		?><div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')) . '"' ?>>
-<?php $this->renderBlock('snippet', $this->params, null, 'snippet') ?>
-</div>
-<?php
+		echo '<div';
+		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')) . '"';
+		echo '>
+';
+		$this->renderBlock('snippet', $this->params, null, 'snippet');
+		echo '</div>
+';
 
 	}
 
@@ -35,18 +41,20 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockBlock2(array $__args): void
 	{
 		extract($__args);
-		?><div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>
-<?php
+		echo '<div';
+		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"';
+		echo '>
+';
 		$this->global->snippetDriver->enter("inner-$id", 'dynamic');
 		try {
-?>		dynamic
-<?php
+			echo '		dynamic
+';
 		}
 		finally {
 			$this->global->snippetDriver->leave();
 		}
-?></div>
-<?php
+		echo '</div>
+';
 
 	}
 
@@ -56,8 +64,8 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($__args);
 		$this->global->snippetDriver->enter("snippet", 'static');
 		try {
-?>		static
-<?php
+			echo '		static
+';
 		}
 		finally {
 			$this->global->snippetDriver->leave();
@@ -71,13 +79,11 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($__args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {
-?>
-begin
-<?php
+			echo 'begin
+';
 			$this->renderBlock('block2', get_defined_vars());
-?>
-end
-<?php
+			echo 'end
+';
 		}
 		finally {
 			$this->global->snippetDriver->leave();

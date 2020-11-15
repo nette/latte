@@ -11,9 +11,17 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 %A%
-		?><div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer1')) ?>"><?php $this->renderBlock('outer1', $this->params, null, 'snippet') ?></div>
+		echo '<div id="';
+		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer1'));
+		echo '">';
+		$this->renderBlock('outer1', $this->params, null, 'snippet');
+		echo '</div>
 
-<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer2')) ?>"><?php $this->renderBlock('outer2', $this->params, null, 'snippet') ?></div><?php
+<div id="';
+		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer2'));
+		echo '">';
+		$this->renderBlock('outer2', $this->params, null, 'snippet');
+		echo '</div>';
 %A%
 	}
 
@@ -31,19 +39,21 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			$iterations = 0;
 			foreach (array(1,2,3) as $id) {
-				?>		<div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>
-<?php
+				echo '		<div';
+				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"';
+				echo '>
+';
 				$this->global->snippetDriver->enter("inner-$id", 'dynamic');
 				try {
-					?>				#<?php echo LR\Filters::escapeHtmlText($id) /* line 4 */ ?>
-
-<?php
+					echo '				#';
+					echo LR\Filters::escapeHtmlText($id) /* line 4 */;
+					echo "\n";
 				}
 				finally {
 					$this->global->snippetDriver->leave();
 				}
-?>		</div>
-<?php
+				echo '		</div>
+';
 				$iterations++;
 			}
 		}
@@ -61,19 +71,21 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			$iterations = 0;
 			foreach (array(1,2,3) as $id) {
-				?>		<div<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"' ?>>
-<?php
+				echo '		<div';
+				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"';
+				echo '>
+';
 				$this->global->snippetDriver->enter("inner-$id", 'dynamic');
 				try {
-					?>				#<?php echo LR\Filters::escapeHtmlText($id) /* line 13 */ ?>
-
-<?php
+					echo '				#';
+					echo LR\Filters::escapeHtmlText($id) /* line 13 */;
+					echo "\n";
 				}
 				finally {
 					$this->global->snippetDriver->leave();
 				}
-?>		</div>
-<?php
+				echo '		</div>
+';
 				$iterations++;
 			}
 		}

@@ -3,21 +3,20 @@
 		for ($i = 0;
 		$i < 10;
 		$++) {
-			?>	<?php echo LR\Filters::escapeHtmlText($i) /* line 3 */ ?>
-
-<?php
+			echo '	';
+			echo LR\Filters::escapeHtmlText($i) /* line 3 */;
+			echo "\n";
 		}
-?>
+		echo '
 
-
-<?php
+';
 		for ($i = 0;
 		$i < 10;
 		$++) {
 			if (true) break;
 			if (true) continue;
-			?>	<?php echo LR\Filters::escapeHtmlText($i) /* line 10 */ ?>
-
-<?php
+			echo '	';
+			echo LR\Filters::escapeHtmlText($i) /* line 10 */;
+			echo "\n";
 		}
 %A%

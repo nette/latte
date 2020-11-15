@@ -161,6 +161,7 @@ class Engine
 		if (!preg_match('#\n|\?#', $name)) {
 			$code = "<?php\n// source: $name\n?>" . $code;
 		}
+		$code = PhpHelpers::inlineHtmlToEcho($code);
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
 	}

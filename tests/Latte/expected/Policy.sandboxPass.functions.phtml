@@ -1,20 +1,28 @@
 <?php
 %A%
-functions
+		echo 'functions
 
-<?php echo LR\Filters::escapeHtmlText(func()) /* line 3 */ ?>
-<?php echo LR\Filters::escapeHtmlText($this->call('func')()) /* line 4 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(('fu' . 'nc'))()) /* line 5 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText(\func()) /* line 6 */ ?>
-<?php echo LR\Filters::escapeHtmlText(ns\func()) /* line 7 */ ?>
-<?php echo LR\Filters::escapeHtmlText($this->prop(func(), 'prop')->prop) /* line 8 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(func())()) /* line 9 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(func( $this->prop($a, 'prop')->prop ))( func() )) /* line 10 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(func()['x'])()) /* line 11 */ ?>
-
--%A%
+';
+		echo LR\Filters::escapeHtmlText(func()) /* line 3 */;
+		echo '
+';
+		echo LR\Filters::escapeHtmlText($this->call('func')()) /* line 4 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(('fu' . 'nc'))()) /* line 5 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText(\func()) /* line 6 */;
+		echo '
+';
+		echo LR\Filters::escapeHtmlText(ns\func()) /* line 7 */;
+		echo '
+';
+		echo LR\Filters::escapeHtmlText($this->prop(func(), 'prop')->prop) /* line 8 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(func())()) /* line 9 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(func( $this->prop($a, 'prop')->prop ))( func() )) /* line 10 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(func()['x'])()) /* line 11 */;
+		echo '
+-';
+%A%

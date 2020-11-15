@@ -3,13 +3,11 @@
 		$__loc[1] = [ob_get_level(), $__it ?? null];
 		ob_start(function () {});
 		try {
-?>
-	a
-<?php
+			echo '	a
+';
 			throw new LR\RollbackException;
-?>
-	b
-	<?php
+			echo '	b
+	';
 			echo ob_get_clean();
 		}
 		catch (\Throwable $__e) {
@@ -18,9 +16,8 @@
 			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($__e, $this);
 			}
-?>
-
+			echo '
 	c
-<?php
+';
 		}
 %A%

@@ -1,13 +1,15 @@
 <?php
 %A%
-callbacks
+		echo 'callbacks
 
-<?php echo LR\Filters::escapeHtmlText($this->call($var)()) /* line 3 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(($var))()) /* line 4 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(['a', 'b'])()) /* line 5 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(['trim'][0])()) /* line 6 */ ?>
-
--%A%
+';
+		echo LR\Filters::escapeHtmlText($this->call($var)()) /* line 3 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(($var))()) /* line 4 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(['a', 'b'])()) /* line 5 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(['trim'][0])()) /* line 6 */;
+		echo '
+-';
+%A%

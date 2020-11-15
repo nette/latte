@@ -14,18 +14,13 @@ final class Template%a% extends Latte\Runtime\Template
 		ob_start(function () {});
 		$this->createTemplate("inc", get_defined_vars(), "includeblock")->renderToContentType('html');
 		echo rtrim(ob_get_clean());
-?>
-
-<?php
+		echo "\n";
 		if ($this->getParentName()) {
 			return get_defined_vars();
 		}
 		$this->renderBlock('title', get_defined_vars());
-?>
-
-<?php
+		echo "\n";
 		$this->renderBlock('content', get_defined_vars());
-		?>	<?php
 %A%
 	}
 
@@ -47,7 +42,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockTitle(array $__args): void
 	{
 		extract($__args);
-		?>Homepage | <?php
+		echo 'Homepage | ';
 		$this->renderBlockParent('title', ($this->hasBlock('title', true) ? get_defined_vars() : $this->params));
 		$this->renderBlockParent('title', ($this->hasBlock('title', true) ? get_defined_vars() : $this->params));
 
@@ -57,20 +52,20 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockContent(array $__args): void
 	{
 		extract($__args);
-?>
-	<ul>
-<?php
+		echo '	<ul>
+';
 		$iterations = 0;
 		foreach ($people as $person) {
-			?>		<li><?php echo LR\Filters::escapeHtmlText($person) /* line 12 */ ?></li>
-<?php
+			echo '		<li>';
+			echo LR\Filters::escapeHtmlText($person) /* line 12 */;
+			echo '</li>
+';
 			$iterations++;
 		}
-?>
-	</ul>
-	Parent: <?php echo LR\Filters::escapeHtmlText(gettype($this->getReferringTemplate())) /* line 15 */ ?>
-
-<?php
+		echo '	</ul>
+	Parent: ';
+		echo LR\Filters::escapeHtmlText(gettype($this->getReferringTemplate())) /* line 15 */;
+		echo "\n";
 	}
 
 }

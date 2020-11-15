@@ -107,7 +107,7 @@ Assert::matchFile(
 
 // consts
 $template = <<<'EOD'
-static props
+consts
 
 {=\Name\MyClass::CONST}
 {=$obj::CONST}

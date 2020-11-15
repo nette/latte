@@ -65,14 +65,14 @@ Assert::match(
 	<<<'XX'
 %A%
 		ob_start(function () {});
-		?><div class="bar" <?php
+		echo '<div class="bar" ';
 		if (isset($id)) {
-			?>id="content"<?php
+			echo 'id="content"';
 		}
-		?>><?php
+		echo '>';
 		ob_start();
 		$__loc[1] = ob_get_flush();
-		?></div><?php
+		echo '</div>';
 		if (rtrim($__loc[1]) === '') {
 			ob_end_clean();
 		}

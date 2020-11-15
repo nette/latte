@@ -11,43 +11,34 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
-?>
-
-<?php
+		echo "\n";
 		$var = 10;
-?>
-
-<?php
+		echo "\n";
 		if ($this->getParentName()) {
 			return get_defined_vars();
 		}
-?>
-
-a) <?php
+		echo '
+a) ';
 		$this->renderBlock('test', ['var' => 20] + ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
-?>
+		echo '
 
 
-
-b) <?php
+b) ';
 		$this->renderBlock('testargs', [1] + ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
-?>
+		echo '
 
 
-
-g) <?php
+g) ';
 		$this->renderBlock('outer', ($this->hasBlock('outer', true) ? get_defined_vars() : $this->params), 'html');
-?>
+		echo '
 
-
-<?php
+';
 		$var1 = 'outer';
-		?>h) <?php
+		echo 'h) ';
 		$this->renderBlock('testargs', ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
-?>
+		echo '
 
-
-i) <?php
+i) ';
 		$this->renderBlock('testargs', [null] + ($this->hasBlock('testargs', true) ? get_defined_vars() : $this->params), 'html');
 		return get_defined_vars();
 	}
@@ -56,9 +47,9 @@ i) <?php
 	public function blockTest(array $__args): void
 	{
 		extract($__args);
-		?>	This is definition #<?php echo LR\Filters::escapeHtmlText($var) /* line 5 */ ?>
-
-<?php
+		echo '	This is definition #';
+		echo LR\Filters::escapeHtmlText($var) /* line 5 */;
+		echo "\n";
 	}
 
 
@@ -66,10 +57,13 @@ i) <?php
 	{
 		extract($this->params);
 		[$var1, $var2, $var3] = $__args + [null, null, null, ];
-		?>	Variables <?php echo LR\Filters::escapeHtmlText($var1) /* line 11 */ ?>, <?php echo LR\Filters::escapeHtmlText($var2) /* line 11 */ ?>, <?php
-		echo LR\Filters::escapeHtmlText($hello) /* line 11 */ ?>
-
-<?php
+		echo '	Variables ';
+		echo LR\Filters::escapeHtmlText($var1) /* line 11 */;
+		echo ', ';
+		echo LR\Filters::escapeHtmlText($var2) /* line 11 */;
+		echo ', ';
+		echo LR\Filters::escapeHtmlText($hello) /* line 11 */;
+		echo "\n";
 	}
 
 

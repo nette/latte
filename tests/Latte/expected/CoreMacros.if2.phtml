@@ -1,44 +1,41 @@
 <?php
 %A%
 		if (true) {
-?>
-	a
-<?php
+			echo '	a
+';
 		}
 		elseif ($b) {
-?>
-	b
-<?php
+			echo '	b
+';
 		}
 		elseif (isset($c)) {
-?>
-	c
-<?php
+			echo '	c
+';
 		}
 		else {
-?>
-	d
-<?php
+			echo '	d
+';
 		}
-?>
-
+		echo '
 --
 
-<?php ob_start(function () {}) ?>
-	a
-<?php
+';
+		ob_start(function () {});
+		echo '	a
+';
 		if (true) echo ob_get_clean();
 		else ob_end_clean();
-?>
-
+		echo '
 
 --
 
-<?php ob_start(function () {}) ?>
-	a
-<?php ob_start(function () {}) ?>
-	d
-<?php
+';
+		ob_start(function () {});
+		echo '	a
+';
+		ob_start(function () {});
+		echo '	d
+';
 		if (true) {
 			ob_end_clean();
 			echo ob_get_clean();
@@ -48,30 +45,25 @@
 			ob_end_clean();
 			echo $__tmp;
 		}
-?>
-
+		echo '
 
 --
 
-<?php
+';
 		if (isset($a)) {
-?>
-	a
-<?php
+			echo '	a
+';
 		}
 		elseif ($b) {
-?>
-	b
-<?php
+			echo '	b
+';
 		}
 		elseif (isset($c)) {
-?>
-	c
-<?php
+			echo '	c
+';
 		}
 		else {
-?>
-	d
-<?php
+			echo '	d
+';
 		}
 %A%

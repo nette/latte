@@ -1,50 +1,54 @@
 <?php
 %A%
 		foreach ([1, 1, 2, 3, 3, 3] as $i) {
-			?> <?php
+			echo ' ';
 			if (($__loc[1] ?? null) !== ($__tmp = [$i])) {
 				$__loc[1] = $__tmp;
-				?> <?php echo LR\Filters::escapeHtmlText($i) /* line 2 */ ?> <?php
+				echo ' ';
+				echo LR\Filters::escapeHtmlText($i) /* line 2 */;
+				echo ' ';
 			}
-			?> <?php
+			echo ' ';
 			if (($__loc[2] ?? null) !== ($__tmp = ['a', 'b'])) {
 				$__loc[2] = $__tmp;
-				?> const <?php
+				echo ' const ';
 			}
-			?> <?php
+			echo ' ';
 			$iterations++;
 		}
-?>
-
+		echo '
 
 --
 
-<?php
+';
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) {
-			?> <?php
+			echo ' ';
 			if (($__loc[3] ?? null) !== ($__tmp = [$i])) {
 				$__loc[3] = $__tmp;
-				?> <?php echo LR\Filters::escapeHtmlText($i) /* line 6 */ ?> <?php
+				echo ' ';
+				echo LR\Filters::escapeHtmlText($i) /* line 6 */;
+				echo ' ';
 			}
 			else {
-				?> else <?php
+				echo ' else ';
 			}
-			?> <?php
+			echo ' ';
 			$iterations++;
 		}
-?>
-
+		echo '
 
 --
 
-<?php
+';
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) {
-			?> <?php
+			echo ' ';
 			ob_start(function () {});
 			try {
-				?> -<?php echo LR\Filters::escapeHtmlText($i) /* line 10 */ ?>- <?php
+				echo ' -';
+				echo LR\Filters::escapeHtmlText($i) /* line 10 */;
+				echo '- ';
 			}
 			finally {
 				$__tmp = ob_get_clean();
@@ -52,21 +56,22 @@
 			if (($__loc[4] ?? null) !== $__tmp) {
 				echo $__loc[4] = $__tmp;
 			}
-			?> <?php
+			echo ' ';
 			$iterations++;
 		}
-?>
-
+		echo '
 
 --
 
-<?php
+';
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) {
-			?> <?php
+			echo ' ';
 			ob_start(function () {});
 			try {
-				?> -<?php echo LR\Filters::escapeHtmlText($i) /* line 14 */ ?>- <?php
+				echo ' -';
+				echo LR\Filters::escapeHtmlText($i) /* line 14 */;
+				echo '- ';
 			}
 			finally {
 				$__tmp = ob_get_clean();
@@ -75,23 +80,24 @@
 				echo $__loc[5] = $__tmp;
 			}
 			else {
-				?> else <?php
+				echo ' else ';
 			}
-			?> <?php
+			echo ' ';
 			$iterations++;
 		}
-?>
-
+		echo '
 
 --
 
-<?php
+';
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) {
-			?> <?php
+			echo ' ';
 			ob_start(function () {});
 			try {
-				?><span><?php echo LR\Filters::escapeHtmlText($i) /* line 18 */ ?></span><?php
+				echo '<span>';
+				echo LR\Filters::escapeHtmlText($i) /* line 18 */;
+				echo '</span>';
 			}
 			finally {
 				$__tmp = ob_get_clean();
@@ -101,17 +107,18 @@
 			}
 			$iterations++;
 		}
-?>
-
+		echo '
 --
 
-<?php
+';
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) {
-			?> <?php
+			echo ' ';
 			ob_start(function () {});
 			try {
-				?><span class="<?php echo LR\Filters::escapeHtmlAttr($i) /* line 22 */ ?>"></span><?php
+				echo '<span class="';
+				echo LR\Filters::escapeHtmlAttr($i) /* line 22 */;
+				echo '"></span>';
 			}
 			finally {
 				$__tmp = ob_get_clean();

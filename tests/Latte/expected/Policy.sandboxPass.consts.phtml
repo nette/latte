@@ -1,17 +1,19 @@
 <?php
 %A%
-static props
+		echo 'consts
 
-<?php echo LR\Filters::escapeHtmlText(\Name\MyClass::CONST) /* line 3 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($obj::CONST) /* line 4 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($obj::CONST) /* line 5 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(($obj::CONST))()) /* line 6 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call($obj::CONST[0])()) /* line 7 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call(CONST[0])()) /* line 8 */ ?>
-
--%A%
+';
+		echo LR\Filters::escapeHtmlText(\Name\MyClass::CONST) /* line 3 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($obj::CONST) /* line 4 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($obj::CONST) /* line 5 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(($obj::CONST))()) /* line 6 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call($obj::CONST[0])()) /* line 7 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call(CONST[0])()) /* line 8 */;
+		echo '
+-';
+%A%

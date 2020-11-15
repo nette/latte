@@ -12,29 +12,44 @@ final class Template%a% extends Latte\Runtime\Template
 		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) {
 			header('Content-Type: application/xml; charset=utf-8');
 		}
-		?><<?php ?>?xml version="1.0" encoding="utf-8"?>
-<<?php ?>?xml-stylesheet type="text/css" href="<?php echo LR\Filters::escapeXml($id) /* line 3 */ ?>"?>
+		echo '<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="';
+		echo LR\Filters::escapeXml($id) /* line 3 */;
+		echo '"?>
 
-<script><?php
+<script>';
 		if (1) {
-			?><meta /><?php
+			echo '<meta />';
 		}
-?>
-</script>
+		echo '</script>
 
 
 <ul>
-	<li>Escaped: <?php echo LR\Filters::escapeXml($hello) /* line 9 */ ?></li>
-	<li>Non-escaped: <?php echo $hello /* line 10 */ ?></li>
-	<li>Escaped expression: <?php echo LR\Filters::escapeXml('<' . 'b' . '>hello' . '</b>') /* line 11 */ ?></li>
-	<li>Non-escaped expression: <?php echo '<' . 'b' . '>hello' . '</b>' /* line 12 */ ?></li>
-	<li>Array access: <?php echo LR\Filters::escapeXml($people[1]) /* line 13 */ ?></li>
-	<li>Html: <?php echo LR\Filters::escapeXml($el) /* line 14 */ ?></li>
+	<li>Escaped: ';
+		echo LR\Filters::escapeXml($hello) /* line 9 */;
+		echo '</li>
+	<li>Non-escaped: ';
+		echo $hello /* line 10 */;
+		echo '</li>
+	<li>Escaped expression: ';
+		echo LR\Filters::escapeXml('<' . 'b' . '>hello' . '</b>') /* line 11 */;
+		echo '</li>
+	<li>Non-escaped expression: ';
+		echo '<' . 'b' . '>hello' . '</b>' /* line 12 */;
+		echo '</li>
+	<li>Array access: ';
+		echo LR\Filters::escapeXml($people[1]) /* line 13 */;
+		echo '</li>
+	<li>Html: ';
+		echo LR\Filters::escapeXml($el) /* line 14 */;
+		echo '</li>
 </ul>
 
 <style type="text/css">
 <!--
-#<?php echo LR\Filters::escapeHtmlComment($id) /* line 19 */ ?> {
+#';
+		echo LR\Filters::escapeHtmlComment($id) /* line 19 */;
+		echo ' {
 	background: blue;
 }
 -->
@@ -43,64 +58,86 @@ final class Template%a% extends Latte\Runtime\Template
 
 <script>
 <!--
-var html = <?php echo LR\Filters::escapeHtmlComment($el) /* line 28 */ ?>;
+var html = ';
+		echo LR\Filters::escapeHtmlComment($el) /* line 28 */;
+		echo ';
 -->
 </script>
 
 
 <p onclick =
-'alert(<?php echo LR\Filters::escapeXml($id) /* line 34 */ ?>);alert("hello");'
- title='<?php echo LR\Filters::escapeXml($id) /* line 35 */ ?>"'
+\'alert(';
+		echo LR\Filters::escapeXml($id) /* line 34 */;
+		echo ');alert("hello");\'
+ title=\'';
+		echo LR\Filters::escapeXml($id) /* line 35 */;
+		echo '"\'
  style =
- "color:<?php echo LR\Filters::escapeXml($id) /* line 37 */ ?>;'"
- alt='<?php echo LR\Filters::escapeXml($el) /* line 38 */ ?>'
- onfocus="alert(<?php echo LR\Filters::escapeXml($el) /* line 39 */ ?>)"
+ "color:';
+		echo LR\Filters::escapeXml($id) /* line 37 */;
+		echo ';\'"
+ alt=\'';
+		echo LR\Filters::escapeXml($el) /* line 38 */;
+		echo '\'
+ onfocus="alert(';
+		echo LR\Filters::escapeXml($el) /* line 39 */;
+		echo ')"
 >click on me</p>
 
 
-<!-- <?php echo LR\Filters::escapeHtmlComment($comment) /* line 43 */ ?> -->
+<!-- ';
+		echo LR\Filters::escapeHtmlComment($comment) /* line 43 */;
+		echo ' -->
 
 
 </ul>
 
 
 <ul>
-<?php
+';
 		$iterations = 0;
 		foreach ($people as $person) {
-			?>	<li><?php echo LR\Filters::escapeXml($person) /* line 50 */ ?></li>
-<?php
+			echo '	<li>';
+			echo LR\Filters::escapeXml($person) /* line 50 */;
+			echo '</li>
+';
 			$iterations++;
 		}
-?>
-</ul>
+		echo '</ul>
 
-<?php
+';
 		if (true) {
-?><p>
+			echo '<p>
 	<div><p>true</div>
 </p>
-<?php
+';
 		}
-?>
-
+		echo '
 <input/> <input />
 
-<p val = <?php
+<p val = ';
 		if (true) {
-			?>"a"<?php
+			echo '"a"';
 		}
 		else {
-			?>"b"<?php
+			echo '"b"';
 		}
-?>> </p>
+		echo '> </p>
 
-<p val = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 61 */ ?> val2=<?php echo LR\Filters::escapeXmlAttrUnquoted($mxss) /* line 61 */ ?>> </p>
+<p val = ';
+		echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 61 */;
+		echo ' val2=';
+		echo LR\Filters::escapeXmlAttrUnquoted($mxss) /* line 61 */;
+		echo '> </p>
 
-<p onclick = <?php echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 63 */ ?>> </p>
+<p onclick = ';
+		echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line 63 */;
+		echo '> </p>
 
-<p val = /><?php echo LR\Filters::escapeXml($xss) /* line 65 */ ?></p>
-<?php
+<p val = />';
+		echo LR\Filters::escapeXml($xss) /* line 65 */;
+		echo '</p>
+';
 		return get_defined_vars();
 	}
 

@@ -1,11 +1,13 @@
 <?php
 %A%
-vars
+		echo 'vars
 
-<?php echo LR\Filters::escapeHtmlText($var['x']) /* line 3 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->prop($var[ '' . change( 10 + inner() ) ], 'prop')->prop) /* line 4 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->call([$var[ 0 + 1], 'method'])()) /* line 5 */ ?>
-
--%A%
+';
+		echo LR\Filters::escapeHtmlText($var['x']) /* line 3 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->prop($var[ '' . change( 10 + inner() ) ], 'prop')->prop) /* line 4 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->call([$var[ 0 + 1], 'method'])()) /* line 5 */;
+		echo '
+-';
+%A%

@@ -2,22 +2,21 @@
 %A%
 		$iterations = 0;
 		foreach (['a', 'b'] as $item) {
-?>
-	item
-<?php
+			echo '	item
+';
 			$iterations++;
 		}
-?>
-
+		echo '
 ---
 
-<?php
+';
 		$iterations = 0;
 		foreach ($iterator = $__it = new LR\CachingIterator(['a', 'b'], $__it ?? null) as $item) {
-			?>	<?php echo LR\Filters::escapeHtmlText($iterator->counter) /* line 9 */ ?>
-
-<?php
+			echo '	';
+			echo LR\Filters::escapeHtmlText($iterator->counter) /* line 9 */;
+			echo "\n";
 			$iterations++;
 		}
 		$iterator = $__it = $__it->getParent();
+		echo LR\Filters::escapeHtmlText($iterator === null ? 'is null' : null) /* line 11 */;
 %A%

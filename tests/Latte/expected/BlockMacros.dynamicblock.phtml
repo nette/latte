@@ -12,56 +12,40 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		$var = 10;
-?>
-
-<?php
+		echo "\n";
 		if ($this->getParentName()) {
 			return get_defined_vars();
 		}
 		$this->renderBlock('static', get_defined_vars());
-?>
+		echo '
 
-
-<?php
+';
 		$iterations = 0;
 		foreach ($iterator = $__it = new LR\CachingIterator(['dynamic', 'static'], $__it ?? null) as $name) {
 			$this->addBlock($name, 'html', [[$this, 'blockName']], null);
 			$this->renderBlock($name, get_defined_vars());
-?>
-
-<?php
+			echo "\n";
 			$iterations++;
 		}
 		$iterator = $__it = $__it->getParent();
-?>
-
-<?php
+		echo "\n";
 		$this->renderBlock('dynamic', ['var' => 20] + ($this->hasBlock('dynamic', true) ? get_defined_vars() : $this->params), 'html');
-?>
-
-<?php
+		echo "\n";
 		$this->renderBlock('static', ['var' => 30] + ($this->hasBlock('static', true) ? get_defined_vars() : $this->params), 'html');
-?>
-
-<?php
+		echo "\n";
 		$this->renderBlock($name . '', ['var' => 40] + ($this->hasBlock($name . '', true) ? get_defined_vars() : $this->params), 'html');
-?>
-
-<?php
+		echo "\n";
 		$this->addBlock("word$name", 'html', [[$this, 'blockWord_name']], null);
 		$this->renderBlock("word$name", get_defined_vars());
-?>
+		echo '
 
-
-<?php
+';
 		$this->addBlock("strip$name", 'html', [[$this, 'blockStrip_name']], null);
 		$this->renderBlock("strip$name", get_defined_vars(), function ($s, $type) {
 			$__fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('striptags', $__fi, $s));
 		});
-?>
-
-<?php
+		echo "\n";
 		return get_defined_vars();
 	}
 
@@ -81,9 +65,9 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockName(array $__args): void
 	{
 		extract($__args);
-		?>		Dynamic block #<?php echo LR\Filters::escapeHtmlText($var) /* line 10 */ ?>
-
-<?php
+		echo '		Dynamic block #';
+		echo LR\Filters::escapeHtmlText($var) /* line 10 */;
+		echo "\n";
 	}
 
 
@@ -91,7 +75,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		if (false) {
-			?><div></div><?php
+			echo '<div></div>';
 		}
 
 	}
@@ -100,16 +84,16 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockStrip_name(array $__args): void
 	{
 		extract($__args);
-		?><span>hello</span><?php
+		echo '<span>hello</span>';
 	}
 
 
 	public function blockStatic(array $__args): void
 	{
 		extract($__args);
-		?>	Static block #<?php echo LR\Filters::escapeHtmlText($var) /* line 4 */ ?>
-
-<?php
+		echo '	Static block #';
+		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
+		echo "\n";
 	}
 
 }

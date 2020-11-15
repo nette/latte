@@ -1,13 +1,15 @@
 <?php
 %A%
-static props
+		echo 'static props
 
-<?php echo LR\Filters::escapeHtmlText($this->prop(\Name\MyClass::class, 'prop')::$prop) /* line 3 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->prop($this->prop(\Name\MyClass::class, 'prop')::$prop, 'x')->x) /* line 4 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->prop(\Name\MyClass::class, 'prop')::$prop[1]) /* line 5 */ ?>
-
-<?php echo LR\Filters::escapeHtmlText($this->prop($this->prop(\Name\MyClass::class, 'prop')::$prop[1], 'x')->x) /* line 6 */ ?>
-
--%A%
+';
+		echo LR\Filters::escapeHtmlText($this->prop(\Name\MyClass::class, 'prop')::$prop) /* line 3 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop(\Name\MyClass::class, 'prop')::$prop, 'x')->x) /* line 4 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->prop(\Name\MyClass::class, 'prop')::$prop[1]) /* line 5 */;
+		echo "\n";
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop(\Name\MyClass::class, 'prop')::$prop[1], 'x')->x) /* line 6 */;
+		echo '
+-';
+%A%

@@ -12,9 +12,8 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
-?>
-
-		<?php
+		echo '
+		';
 		$this->initBlockLayer(1);
 		$this->setBlockLayer(1);
 		try {
@@ -24,15 +23,12 @@ final class Template%a% extends Latte\Runtime\Template
 			$this->setBlockLayer(0);
 		}
 		if (false) {
-?>
-
-<?php
+			echo "\n";
 			$this->renderBlock('a', get_defined_vars());
-			?>		<?php
+			echo '		';
 		}
-?>
-
-	<?php
+		echo '
+	';
 		return get_defined_vars();
 	}
 
@@ -40,7 +36,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockA(array $__args): void
 	{
 		extract($__args);
-		?>				<?php
+		echo '				';
 		$this->initBlockLayer(2);
 		$this->setBlockLayer(2);
 		try {
@@ -50,21 +46,18 @@ final class Template%a% extends Latte\Runtime\Template
 			$this->setBlockLayer(1);
 		}
 		if (false) {
-?>
-
-					<?php
+			echo '
+					';
 			$this->renderBlock('a', get_defined_vars());
-			?>				<?php
+			echo '				';
 		}
-?>
-
-<?php
+		echo "\n";
 	}
 
 
 	public function blockA1(array $__args): void
 	{
-		?>nested embeds A<?php
+		echo 'nested embeds A';
 	}
 
 }

@@ -49,7 +49,7 @@ $latte->addMacro('one', new TestMacro);
 
 
 Assert::match(
-	'%A%opening<?%A%',
+	'%A%opening%A%',
 	$latte->compile('{one}')
 );
 
@@ -59,7 +59,7 @@ Assert::match(
 );
 
 Assert::match(
-	'%A%opening<div attr>@</div><?%A%',
+	'%A%opening<div attr>@</div>%A%',
 	$latte->compile('<div n:one>@</div>')
 );
 
