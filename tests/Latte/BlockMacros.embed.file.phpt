@@ -19,6 +19,18 @@ function testTemplate(string $title, array $templates, string $exp = '')
 }
 
 
+testTemplate('keyword file', [
+	'main' => '{embed file embed}{/embed}',
+	'embed' => 'embed',
+], 'embed');
+
+
+testTemplate('expression', [
+	'main' => '{embed true ? embed : none}{/embed}',
+	'embed' => 'embed',
+], 'embed');
+
+
 testTemplate('no blocks', [
 	'main' => '
 		outer
