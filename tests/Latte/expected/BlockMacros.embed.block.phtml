@@ -1,0 +1,85 @@
+<?php
+%A%
+final class Template%a% extends Latte\Runtime\Template
+{
+	protected const BLOCKS = [
+		['embed1' => 'blockEmbed1', 'a' => 'blockA'],
+		['a' => 'blockA1'],
+		['a' => 'blockA2'],
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+		echo "\n";
+		$this->initBlockLayer(1, true);
+		$this->setBlockLayer(1);
+		if (false) {
+			$this->renderBlock('a', get_defined_vars());
+			echo "\n";
+		}
+		try {
+			$this->renderBlock('embed1', [], 'html');
+		}
+		finally {
+			$this->setBlockLayer(0);
+		}
+		echo '
+
+	';
+		return get_defined_vars();
+	}
+
+
+	/** {define embed1} on line %d% */
+	public function blockEmbed1(array $ʟ_args): void
+	{
+		extract($this->params);
+		extract($ʟ_args);
+		echo '		embed1-start
+			';
+		$this->renderBlock('a', get_defined_vars());
+		echo '
+		embed1-end
+';
+	}
+
+
+	/** {block a} on line %d% */
+	public function blockA(array $ʟ_args): void
+	{
+		echo 'embed1-A';
+	}
+
+
+	/** {block a} on line %d% */
+	public function blockA1(array $ʟ_args): void
+	{
+		extract($this->params);
+		extract($ʟ_args);
+
+		$this->initBlockLayer(2, true);
+		$this->setBlockLayer(2);
+		if (false) {
+			echo '					';
+			$this->renderBlock('a', get_defined_vars());
+			echo "\n";
+		}
+		try {
+			$this->renderBlock('embed1', [], 'html');
+		}
+		finally {
+			$this->setBlockLayer(1);
+		}
+		echo "\n";
+	}
+
+
+	/** {block a} on line %d% */
+	public function blockA2(array $ʟ_args): void
+	{
+		echo 'nested embeds A';
+	}
+
+}
