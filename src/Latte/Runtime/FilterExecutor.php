@@ -139,23 +139,12 @@ class FilterExecutor
 	 */
 	private function prepareFilter(string $name): array
 	{
-		if (isset($this->_static[$name][1])) {
-			return $this->_static[$name];
+		if (!isset($this->_static[$name][1])) {
+			$params = Helpers::toReflection($this->_static[$name][0])->getParameters();
+			$this->_static[$name][1] = $params
+				&& $params[0]->getType() instanceof \ReflectionNamedType
+				&& $params[0]->getType()->getName() === FilterInfo::class;
 		}
-
-		$callback = $this->_static[$name][0];
-		if (is_string($callback) && strpos($callback, '::')) {
-			$callback = explode('::', $callback);
-		} elseif (is_object($callback)) {
-			$callback = [$callback, '__invoke'];
-		}
-
-		$ref = is_array($callback)
-			? new \ReflectionMethod($callback[0], $callback[1])
-			: new \ReflectionFunction($callback);
-		$this->_static[$name][1] = ($tmp = $ref->getParameters())
-			&& $tmp[0]->getType() instanceof \ReflectionNamedType
-			&& $tmp[0]->getType()->getName() === FilterInfo::class;
 
 		return $this->_static[$name];
 	}
