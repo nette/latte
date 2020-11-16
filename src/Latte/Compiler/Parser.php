@@ -411,7 +411,7 @@ class Parser
 		if (!preg_match('~^
 			(?P<closing>/?)
 			(
-				(?P<name>\?|[a-z]\w*+(?:[.:]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
+				(?P<name>\?|[a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))|   ## ?, name, /name, but not function( or class:: or namespace\
 				(?P<shortname>=|_(?!_)|)      ## expression, =expression, ...
 			)(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
 			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
