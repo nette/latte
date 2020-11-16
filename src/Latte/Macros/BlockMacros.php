@@ -436,12 +436,6 @@ class BlockMacros extends MacroSet
 
 	private function beginDynamicSnippet(MacroNode $node, PhpWriter $writer): string
 	{
-		$parent = $node->closest(['snippet', 'snippetArea']);
-		if (!$parent) {
-			throw new CompileException('Dynamic snippets are allowed only inside static snippet/snippetArea.');
-		}
-
-		$parent->data->dynamic = true;
 		$data = $node->data;
 		$node->closingCode = '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
 
