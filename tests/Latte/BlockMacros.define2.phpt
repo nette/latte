@@ -15,16 +15,16 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-// code optimization in BlockMacros vs. variables in placeholders
-Assert::match(
-	'<br class="123">',
-	$latte->renderToString('{block test}<br n:class="$var">{/block}', ['var' => 123])
-);
+Assert::match('', $latte->renderToString('{define foobar}Hello{/define}'));
+
+Assert::match('', $latte->renderToString('{define foo-bar}Hello{/define}'));
+
+Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', ['foo' => 'bar']));
 
 Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block _foobar}Hello{/block}');
+	$latte->renderToString('{define _foobar}Hello{/define}');
 }, Latte\CompileException::class, "Block name must start with letter a-z, '_foobar' given.");
 
 Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block 123}Hello{/block}');
+	$latte->renderToString('{define 123}Hello{/define}');
 }, Latte\CompileException::class, "Block name must start with letter a-z, '123' given.");

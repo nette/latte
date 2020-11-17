@@ -16,7 +16,7 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 
-
+// order of block & include
 Assert::match(
 	'
 

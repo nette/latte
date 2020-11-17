@@ -233,6 +233,30 @@ main-A		embed end
 ');
 
 
+testTemplate('local outer block include from main', [
+	'main' => '
+		outer
+		{embed "embed.latte"}
+			{block a}*{include outer}*{/block}
+		{/embed}
+
+		{block local outer}outer-D{/block}
+	',
+	'embed.latte' => '
+		embed start
+			{block a}embed A{/block}
+		embed end
+	',
+], 'outer
+
+		embed start
+			*outer-D*		embed end
+
+
+		outer-D
+');
+
+
 Assert::exception(function () {
 	testTemplate('outer block include from main', [
 		'main' => '

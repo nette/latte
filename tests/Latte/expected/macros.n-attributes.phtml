@@ -299,12 +299,46 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		echo '
 
+';
+		if ($__loc[7] = (true)) {
+			echo '<div>
+';
+		}
+		$__loc[8] = [ob_get_level(), $__it ?? null];
+		ob_start(function () {});
+		try {
+			if ($__loc[9] = (false)) {
+				echo '	<span>
+';
+			}
+			throw new LR\RollbackException;
+			if ($__loc[9]) {
+				echo '	</span>
+';
+			}
+			echo '	';
+			echo ob_get_clean();
+		}
+		catch (\Throwable $__e) {
+			$iterator = $__it = $__loc[8][1];
+			while (ob_get_level() > $__loc[8][0]) ob_end_clean();
+			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				($this->global->coreExceptionHandler)($__e, $this);
+			}
+		}
+		echo "\n";
+		if ($__loc[7]) {
+			echo '</div>
+';
+		}
+		echo '
+
 <ul title="foreach break">
 ';
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line 100 */;
+			echo LR\Filters::escapeHtmlText($person) /* line 109 */;
 			if (true) {
 				echo "</li>\n";
 				break;
@@ -320,7 +354,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line 104 */;
+			echo LR\Filters::escapeHtmlText($person) /* line 113 */;
 			if (true) {
 				echo "</li>\n";
 				continue;
@@ -336,7 +370,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<li>';
 		$iterations = 0;
 		foreach ($people as $person) {
-			echo LR\Filters::escapeHtmlText($person) /* line 109 */;
+			echo LR\Filters::escapeHtmlText($person) /* line 118 */;
 			if (true) break;
 			$iterations++;
 		}
@@ -347,7 +381,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<li>';
 		$iterations = 0;
 		foreach ($people as $person) {
-			echo LR\Filters::escapeHtmlText($person) /* line 113 */;
+			echo LR\Filters::escapeHtmlText($person) /* line 122 */;
 			if (true) continue;
 			$iterations++;
 		}

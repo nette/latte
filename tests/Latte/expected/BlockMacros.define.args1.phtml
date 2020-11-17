@@ -1,0 +1,60 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+	protected const BLOCKS = [
+		['test' => 'blockTest', 'outer' => 'blockOuter'],
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+		if ($this->getParentName()) {
+			return get_defined_vars();
+		}
+		echo '
+a) ';
+		$this->renderBlock('test', [1] + ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
+		echo '
+
+
+b) ';
+		$this->renderBlock('outer', ($this->hasBlock('outer', true) ? get_defined_vars() : $this->params), 'html');
+		echo '
+
+';
+		$var1 = 'outer';
+		echo 'c) ';
+		$this->renderBlock('test', ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
+		echo '
+
+d) ';
+		$this->renderBlock('test', [null] + ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
+		return get_defined_vars();
+	}
+
+
+	public function blockTest(array $__args): void
+	{
+		extract($this->params);
+		[$var1, $var2, $var3] = $__args + [null, null, null, ];
+		echo '	Variables ';
+		echo LR\Filters::escapeHtmlText($var1) /* line 2 */;
+		echo ', ';
+		echo LR\Filters::escapeHtmlText($var2) /* line 2 */;
+		echo ', ';
+		echo LR\Filters::escapeHtmlText($hello) /* line 2 */;
+		echo "\n";
+	}
+
+
+	public function blockOuter(array $__args): void
+	{
+		extract($__args);
+		$this->renderBlock('test', ['hello'] + ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
+
+	}
+
+}

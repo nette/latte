@@ -20,6 +20,7 @@ Assert::match(<<<'EOD'
 		side	</div> <!-- /main -->
 
 side
+	truetrue
 	<div id="main">
 		side	</div> <!-- /main -->
 EOD
@@ -32,6 +33,9 @@ EOD
 	{/block}
 
 	{include sidebar}
+
+	{block true}true{/block}
+	{include true}
 
 {include main}
 EOD

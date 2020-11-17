@@ -1,0 +1,41 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+	protected const BLOCKS = [
+		['test' => 'blockTest', 'true' => 'blockTrue'],
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+		$var = 10;
+		echo "\n";
+		if ($this->getParentName()) {
+			return get_defined_vars();
+		}
+		echo "\n";
+		$this->renderBlock('test', ['var' => 20] + ($this->hasBlock('test', true) ? get_defined_vars() : $this->params), 'html');
+		echo "\n";
+		$this->renderBlock('true', ($this->hasBlock('true', true) ? get_defined_vars() : $this->params), 'html');
+		return get_defined_vars();
+	}
+
+
+	public function blockTest(array $__args): void
+	{
+		extract($__args);
+		echo '	This is definition #';
+		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
+		echo "\n";
+	}
+
+
+	public function blockTrue(array $__args): void
+	{
+		echo 'true';
+	}
+
+}
