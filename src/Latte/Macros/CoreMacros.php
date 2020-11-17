@@ -573,7 +573,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroVar(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->parentNode && $node->parentNode->name === 'switch') {
+		if ($node->name === 'default' && $node->parentNode && $node->parentNode->name === 'switch') {
 			$node->validate(false, ['switch']);
 			if (isset($node->parentNode->data->default)) {
 				throw new CompileException('Tag {switch} may only contain one {default} clause.');
