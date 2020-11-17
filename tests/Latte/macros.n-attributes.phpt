@@ -17,13 +17,13 @@ $latte = new Latte\Engine;
 $params['people'] = ['John', 'Mary', 'Paul'];
 
 Assert::matchFile(
-	__DIR__ . '/expected/macros.n-macros.phtml',
-	$latte->compile(__DIR__ . '/templates/macros.n-macros.latte')
+	__DIR__ . '/expected/macros.n-attributes.phtml',
+	$latte->compile(__DIR__ . '/templates/n-attributes.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/macros.n-macros.html',
+	__DIR__ . '/expected/macros.n-attributes.html',
 	$latte->renderToString(
-		__DIR__ . '/templates/macros.n-macros.latte',
+		__DIR__ . '/templates/n-attributes.latte',
 		$params
 	)
 );

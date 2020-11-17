@@ -1,0 +1,67 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+	public $blocks = [
+		'test' => 'blockTest',
+		'outer' => 'blockOuter',
+	];
+
+	public $blockTypes = [
+		'test' => 'html',
+		'outer' => 'html',
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+		if ($this->getParentName()) {
+			return get_defined_vars();
+		}
+?>
+
+a) <?php
+		$this->renderBlock('test', [1] + get_defined_vars(), 'html');
+?>
+
+
+
+b) <?php
+		$this->renderBlock('outer', get_defined_vars(), 'html');
+?>
+
+
+<?php
+		$var1 = 'outer';
+		?>c) <?php
+		$this->renderBlock('test', get_defined_vars(), 'html');
+?>
+
+
+d) <?php
+		$this->renderBlock('test', [null] + get_defined_vars(), 'html');
+		return get_defined_vars();
+	}
+
+
+	public function blockTest(array $__args): void
+	{
+		extract($this->params);
+		[$var1, $var2, $var3] = $__args + [null, null, null, ];
+		?>	Variables <?php echo LR\Filters::escapeHtmlText($var1) /* line 2 */ ?>, <?php echo LR\Filters::escapeHtmlText($var2) /* line 2 */ ?>, <?php
+		echo LR\Filters::escapeHtmlText($hello) /* line 2 */ ?>
+
+<?php
+	}
+
+
+	public function blockOuter(array $__args): void
+	{
+		extract($__args);
+		$this->renderBlock('test', ['hello'] + get_defined_vars(), 'html');
+
+	}
+
+}
