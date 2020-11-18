@@ -175,7 +175,7 @@ class Template
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
-				$this->createTemplate($this->parentName, [], 'import')->render();
+				throw new \RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
 			}
 			return;
 
