@@ -23,6 +23,10 @@ Assert::exception(function () use ($latte) {
 	$latte->compile('{for}{breakIf}{/for}');
 }, Latte\CompileException::class, 'Missing condition in {breakIf}');
 
+Assert::noError(function () use ($latte) {
+	$latte->compile('{for}{if true}{breakIf true}{/if}{/for}');
+});
+
 
 $template = <<<'EOD'
 

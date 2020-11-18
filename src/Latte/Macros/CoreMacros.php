@@ -490,12 +490,17 @@ class CoreMacros extends MacroSet
 	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer): string
 	{
 		if ($node->name === 'skipIf') {
-			$node->validate('condition', ['foreach']);
+			$ancestors = ['foreach'];
 			$cmd = '{ $iterator->skipRound(); continue; }';
 		} else {
-			$node->validate('condition', ['for', 'foreach', 'while']);
+			$ancestors = ['for', 'foreach', 'while'];
 			$cmd = str_replace('If', '', $node->name);
 		}
+		if (!$node->closest($ancestors)) {
+			throw new CompileException('Tag ' . $node->getNotation() . ' is unexpected here.');
+		}
+		$node->validate('condition');
+
 		if ($node->parentNode->prefix === $node::PREFIX_NONE) {
 			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
 		}
