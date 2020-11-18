@@ -18,7 +18,7 @@ class Defaults
 	/** @return array<string, callable> */
 	public function getFilters(): array
 	{
-		return [
+		$list = [
 			'batch' => [Filters::class, 'batch'],
 			'breakLines' => [Filters::class, 'breaklines'],
 			'bytes' => [Filters::class, 'bytes'],
@@ -54,8 +54,13 @@ class Defaults
 			'trim' => [Filters::class, 'trim'],
 			'truncate' => [Filters::class, 'truncate'],
 			'upper' => [Filters::class, 'upper'],
-			'webalize' => [\Nette\Utils\Strings::class, 'webalize'],
 		];
+		if (class_exists(\Nette\Utils\Strings::class)) {
+			$list += [
+				'webalize' => [\Nette\Utils\Strings::class, 'webalize'],
+			];
+		}
+		return $list;
 	}
 
 
