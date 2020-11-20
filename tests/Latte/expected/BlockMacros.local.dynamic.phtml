@@ -22,26 +22,26 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		$iterations = 0;
 		foreach ($iterator = $__it = new LR\CachingIterator(['dynamic', 'static'], $__it ?? null) as $name) {
-			$this->addBlock($name, 'html', [[$this, 'blockName']], 'local');
-			$this->renderBlock($name, get_defined_vars());
+			$this->addBlock($__nm = $name, 'html', [[$this, 'blockName']], 'local');
+			$this->renderBlock($__nm, get_defined_vars());
 			echo "\n";
 			$iterations++;
 		}
 		$iterator = $__it = $__it->getParent();
 		echo "\n";
-		$this->renderBlock('dynamic', ['var' => 20] + ($this->hasBlock('dynamic', true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'dynamic', ['var' => 20] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
 		echo "\n";
-		$this->renderBlock('static', ['var' => 30] + ($this->hasBlock('static', true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'static', ['var' => 30] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
 		echo "\n";
-		$this->renderBlock(($name . ''), ['var' => 40] + ($this->hasBlock(($name . ''), true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = ($name . ''), ['var' => 40] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
 		echo "\n";
-		$this->addBlock("word$name", 'html', [[$this, 'blockWord_name']], 'local');
-		$this->renderBlock("word$name", get_defined_vars());
+		$this->addBlock($__nm = "word$name", 'html', [[$this, 'blockWord_name']], 'local');
+		$this->renderBlock($__nm, get_defined_vars());
 		echo '
 
 ';
-		$this->addBlock("strip$name", 'html', [[$this, 'blockStrip_name']], 'local');
-		$this->renderBlock("strip$name", get_defined_vars(), function ($s, $type) {
+		$this->addBlock($__nm = "strip$name", 'html', [[$this, 'blockStrip_name']], 'local');
+		$this->renderBlock($__nm, get_defined_vars(), function ($s, $type) {
 			$__fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('striptags', $__fi, $s));
 		});

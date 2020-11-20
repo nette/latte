@@ -22,6 +22,7 @@ Assert::same('<?php if ($this->hasBlock("block")) { ?>', $compiler->expandMacro(
 Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('ifset', '#$foo')->openingCode);
 Assert::same('<?php if ($this->hasBlock("foo")) { ?>', $compiler->expandMacro('ifset', 'block foo')->openingCode);
 Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('ifset', 'block $foo')->openingCode);
+Assert::same('<?php if ($this->hasBlock(("f" . "oo"))) { ?>', $compiler->expandMacro('ifset', 'block "f" . "oo"')->openingCode);
 Assert::same(
 	'<?php if ($this->hasBlock("foo") && $this->hasBlock("block") && isset($item)) { ?>',
 	$compiler->expandMacro('ifset', 'block foo, block, $item')->openingCode

@@ -157,10 +157,9 @@ class BlockMacros extends MacroSet
 			: PhpHelpers::dump($name);
 
 		return $writer->write(
-			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
-			. $phpName
-			. ', %node.array? + '
-			. '($this->hasBlock(' . $phpName . ', true) ? get_defined_vars() : $this->params)'
+			'$this->renderBlock' . ($parent ? 'Parent' : '')
+			. '($__nm = ' . $phpName . ', %node.array? + '
+			. '($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params)'
 			. ($node->modifiers
 				? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
@@ -267,7 +266,7 @@ class BlockMacros extends MacroSet
 		);
 
 		if ($this->isDynamic($data->name)) {
-			$node->closingCode = $writer->write('<?php $this->renderBlock(%word, %raw); ?>', $data->name, $renderArgs);
+			$node->closingCode = $writer->write('<?php $this->renderBlock($__nm, %raw); ?>', $renderArgs);
 			return $this->beginDynamicBlockOrDefine($node, $writer, $layer);
 		}
 
@@ -362,7 +361,7 @@ class BlockMacros extends MacroSet
 		};
 
 		return $writer->write(
-			'$this->addBlock(%word, %var, [[$this, %var]], %var);',
+			'$this->addBlock($__nm = %word, %var, [[$this, %var]], %var);',
 			$data->name,
 			implode($node->context),
 			$func,
@@ -449,18 +448,17 @@ class BlockMacros extends MacroSet
 				};
 			}
 			$node->attrCode = $writer->write(
-				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%word)) . '\"' ?>",
+				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(\$__nm = %word)) . '\"' ?>",
 				$data->name
 			);
-			return $writer->write('$this->global->snippetDriver->enter(%word, %var); try {', $data->name, SnippetDriver::TYPE_DYNAMIC);
+			return $writer->write('$this->global->snippetDriver->enter($__nm, %var); try {', SnippetDriver::TYPE_DYNAMIC);
 		}
 
 		$node->closingCode .= "\n</div>";
 		return $writer->write(
 			"?>\n<div {$this->snippetAttribute}=\""
-			. '<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId(%word)) ?>"'
-			. '><?php $this->global->snippetDriver->enter(%word, %var); try {',
-			$data->name,
+			. '<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId($__nm = %word)) ?>"'
+			. '><?php $this->global->snippetDriver->enter($__nm, %var); try {',
 			$data->name,
 			SnippetDriver::TYPE_DYNAMIC
 		);
@@ -481,7 +479,7 @@ class BlockMacros extends MacroSet
 
 		$data->after = function () use ($node, $writer, $data, $block) {
 			$node->content = $writer->write(
-				'<?php $this->global->snippetDriver->enter(%word, %var);
+				'<?php $this->global->snippetDriver->enter(%var, %var);
 				try { ?>%raw<?php } finally { $this->global->snippetDriver->leave(); } ?>',
 				$data->name,
 				SnippetDriver::TYPE_AREA,
@@ -610,6 +608,6 @@ class BlockMacros extends MacroSet
 
 	private function isDynamic(string $name): bool
 	{
-		return strpos($name, '$') !== false;
+		return strpos($name, '$') !== false || strpos($name, ' ') !== false;
 	}
 }

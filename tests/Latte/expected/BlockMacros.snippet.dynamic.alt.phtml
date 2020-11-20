@@ -40,10 +40,10 @@ final class Template%a% extends Latte\Runtime\Template
 			$iterations = 0;
 			foreach (array(1,2,3) as $id) {
 				echo '		<div';
-				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"';
+				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($__nm = "inner-$id")) . '"';
 				echo '>
 ';
-				$this->global->snippetDriver->enter("inner-$id", 'dynamic');
+				$this->global->snippetDriver->enter($__nm, 'dynamic');
 				try {
 					echo '				#';
 					echo LR\Filters::escapeHtmlText($id) /* line 4 */;
@@ -72,10 +72,10 @@ final class Template%a% extends Latte\Runtime\Template
 			$iterations = 0;
 			foreach (array(1,2,3) as $id) {
 				echo '		<div';
-				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId("inner-$id")) . '"';
+				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($__nm = "inner-$id")) . '"';
 				echo '>
 ';
-				$this->global->snippetDriver->enter("inner-$id", 'dynamic');
+				$this->global->snippetDriver->enter($__nm, 'dynamic');
 				try {
 					echo '				#';
 					echo LR\Filters::escapeHtmlText($id) /* line 13 */;

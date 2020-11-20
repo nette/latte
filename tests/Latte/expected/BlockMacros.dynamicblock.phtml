@@ -22,30 +22,34 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		$iterations = 0;
 		foreach ($iterator = $__it = new LR\CachingIterator(['dynamic', 'static'], $__it ?? null) as $name) {
-			$this->addBlock($name, 'html', [[$this, 'blockName']], null);
-			$this->renderBlock($name, get_defined_vars());
+			$this->addBlock($__nm = $name, 'html', [[$this, 'blockName']], null);
+			$this->renderBlock($__nm, get_defined_vars());
 			echo "\n";
 			$iterations++;
 		}
 		$iterator = $__it = $__it->getParent();
 		echo "\n";
-		$this->renderBlock('dynamic', ['var' => 20] + ($this->hasBlock('dynamic', true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'dynamic', ['var' => 20] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
 		echo "\n";
-		$this->renderBlock('static', ['var' => 30] + ($this->hasBlock('static', true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'static', ['var' => 30] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
 		echo "\n";
-		$this->renderBlock(($name . ''), ['var' => 40] + ($this->hasBlock(($name . ''), true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = ($name . ''), ['var' => 40] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
 		echo "\n";
-		$this->addBlock("word$name", 'html', [[$this, 'blockWord_name']], null);
-		$this->renderBlock("word$name", get_defined_vars());
+		$this->addBlock($__nm = "word$name", 'html', [[$this, 'blockWord_name']], null);
+		$this->renderBlock($__nm, get_defined_vars());
 		echo '
 
 ';
-		$this->addBlock("strip$name", 'html', [[$this, 'blockStrip_name']], null);
-		$this->renderBlock("strip$name", get_defined_vars(), function ($s, $type) {
+		$this->addBlock($__nm = "strip$name", 'html', [[$this, 'blockStrip_name']], null);
+		$this->renderBlock($__nm, get_defined_vars(), function ($s, $type) {
 			$__fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('striptags', $__fi, $s));
 		});
-		echo "\n";
+		echo '
+
+';
+		$this->addBlock($__nm = (rand() < 5 ? 'a' : 'b'), 'html', [[$this, 'blockRand_5_a_b']], null);
+		$this->renderBlock($__nm, get_defined_vars());
 		return get_defined_vars();
 	}
 
@@ -85,6 +89,13 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($__args);
 		echo '<span>hello</span>';
+	}
+
+
+	public function blockRand_5_a_b(array $__args): void
+	{
+		extract($__args);
+		echo ' expression';
 	}
 
 

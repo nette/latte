@@ -341,7 +341,7 @@ var prop2 = ';
 			echo ' ';
 			if (is_array($item)) {
 				echo ' ';
-				$this->renderBlock('menu', ['menu' => $item] + ($this->hasBlock('menu', true) ? get_defined_vars() : $this->params), 'xhtml');
+				$this->renderBlock($__nm = 'menu', ['menu' => $item] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'xhtml');
 				echo ' ';
 			}
 			else {

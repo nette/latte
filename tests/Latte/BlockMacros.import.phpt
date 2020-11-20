@@ -18,6 +18,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 		{import "inc"}
 		{include test}
 	',
+	'main-dynamic' => '
+		{import "i" . "nc"}
+		{include test}
+	',
 	'inc' => '
 		outer text
 		{define test}
@@ -33,4 +37,9 @@ Assert::matchFile(
 Assert::match(
 	'Test block',
 	trim($latte->renderToString('main'))
+);
+
+Assert::match(
+	'Test block',
+	trim($latte->renderToString('main-dynamic'))
 );

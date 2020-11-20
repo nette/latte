@@ -23,6 +23,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main7' => '{define block}[block {$var}]{/define} {var $name = block} before {include block $name, var => 1} after',
 
 	'main8' => '{define block}<b>block {$var}</b>{/} before {include block, var => 1|striptags} after',
+	'main9' => '{define block}block {$var}{/} before {include block true ? "block", var => 2} after',
 ]));
 
 Assert::match(
@@ -62,4 +63,9 @@ Assert::match(
 Assert::match(
 	' before block 1 after',
 	$latte->renderToString('main8')
+);
+
+Assert::match(
+	' before block 2 after',
+	$latte->renderToString('main9')
 );
