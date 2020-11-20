@@ -21,11 +21,11 @@ Assert::same('<?php if (isset($item->var["test"])) { ?>', $compiler->expandMacro
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('if', '$var', '|filter');
-}, Latte\CompileException::class, 'Modifiers are not allowed in {if}');
+}, Latte\CompileException::class, 'Filters are not allowed in {if}');
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var', '|filter');
-}, Latte\CompileException::class, 'Modifiers are not allowed in {ifset}');
+}, Latte\CompileException::class, 'Filters are not allowed in {ifset}');
 
 
 $latte = new Latte\Engine;

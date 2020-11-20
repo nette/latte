@@ -18,7 +18,7 @@ CoreMacros::install($compiler);
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('try', '', '|filter');
-}, Latte\CompileException::class, 'Modifiers are not allowed in {try}');
+}, Latte\CompileException::class, 'Filters are not allowed in {try}');
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('try', '$var', '');

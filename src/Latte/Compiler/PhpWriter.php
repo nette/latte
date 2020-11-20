@@ -788,7 +788,7 @@ class PhpWriter
 					$inside = true;
 				}
 			} else {
-				throw new CompileException("Modifier name must be alphanumeric string, '{$tokens->currentValue()}' given.");
+				throw new CompileException("Filter name must be alphanumeric string, '{$tokens->currentValue()}' given.");
 			}
 		}
 		if ($inside) {

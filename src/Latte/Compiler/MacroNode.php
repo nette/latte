@@ -148,7 +148,7 @@ class MacroNode
 			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.');
 
 		} elseif ($this->modifiers !== '' && !$modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $this->getNotation());
+			throw new CompileException('Filters are not allowed in ' . $this->getNotation());
 
 		} elseif ($arguments && $this->args === '') {
 			$label = is_string($arguments) ? $arguments : 'arguments';

@@ -89,7 +89,7 @@ class MacroSet implements Latte\Macro
 			&& (!$end || (is_string($end) && strpos($end, '%modify') === false))
 			&& (!$attr || (is_string($attr) && strpos($attr, '%modify') === false))
 		) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+			throw new CompileException('Filters are not allowed in ' . $node->getNotation());
 		}
 
 		if (

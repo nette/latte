@@ -169,17 +169,17 @@ test('', function () use ($set) {
 	Assert::exception(function () use ($set) {
 		$set->addMacro('modifyError1', '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError1', '', '|filter'));
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {modifyError1}');
+	}, Latte\CompileException::class, 'Filters are not allowed in {modifyError1}');
 
 	Assert::exception(function () use ($set) {
 		$set->addMacro('modifyError2', null, '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError2', '', '|filter'));
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {modifyError2}');
+	}, Latte\CompileException::class, 'Filters are not allowed in {modifyError2}');
 
 	Assert::exception(function () use ($set) {
 		$set->addMacro('modifyError3', null, null, '-');
 		$set->nodeOpened(new MacroNode($set, 'modifyError3', '', '|filter'));
-	}, Latte\CompileException::class, 'Modifiers are not allowed in {modifyError3}');
+	}, Latte\CompileException::class, 'Filters are not allowed in {modifyError3}');
 });
 
 
