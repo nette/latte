@@ -67,3 +67,8 @@ class RegexpException extends \Exception
 class SecurityViolationException extends \Exception
 {
 }
+
+
+class RuntimeException extends \RuntimeException
+{
+}

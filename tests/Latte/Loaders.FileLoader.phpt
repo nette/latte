@@ -29,7 +29,7 @@ Assert::same('/a/c', strtr($loader->getReferredName('../c', '/a/b/c'), '\\', '/'
 Assert::exception(function () {
 	$loader = new FileLoader;
 	$loader->getContent('unknown');
-}, RuntimeException::class, "Missing template file 'unknown'.");
+}, Latte\RuntimeException::class, "Missing template file 'unknown'.");
 
 
 $loader = new FileLoader(dirname(__DIR__));
@@ -37,7 +37,7 @@ Assert::same(file_get_contents(__FILE__), $loader->getContent('Latte/' . basenam
 
 Assert::exception(function () use ($loader) {
 	$loader->getContent('Latte/.././../file');
-}, RuntimeException::class, "Template '%a%Latte/.././../file' is not within the allowed path '%a%'.");
+}, Latte\RuntimeException::class, "Template '%a%Latte/.././../file' is not within the allowed path '%a%'.");
 
 Assert::false($loader->isExpired('Latte/' . basename(__FILE__), filemtime(__FILE__) + 1));
 Assert::true($loader->isExpired('Latte/' . basename(__FILE__), filemtime(__FILE__) - 1));

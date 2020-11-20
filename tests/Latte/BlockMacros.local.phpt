@@ -80,7 +80,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{block local abc}{include parent}{/block}');
-}, RuntimeException::class, "Cannot include undefined parent block 'abc'.");
+}, Latte\RuntimeException::class, "Cannot include undefined parent block 'abc'.");
 
 
 Assert::exception(function () use ($latte) {
@@ -98,7 +98,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main');
-}, RuntimeException::class, "Cannot include undefined block 'a'.");
+}, Latte\RuntimeException::class, "Cannot include undefined block 'a'.");
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
@@ -111,7 +111,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main');
-}, RuntimeException::class, "Cannot include undefined parent block 'a'.");
+}, Latte\RuntimeException::class, "Cannot include undefined parent block 'a'.");
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
@@ -124,4 +124,4 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('main');
-}, RuntimeException::class, "Cannot include undefined block 'a'.");
+}, Latte\RuntimeException::class, "Cannot include undefined block 'a'.");

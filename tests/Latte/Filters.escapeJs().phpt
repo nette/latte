@@ -33,8 +33,8 @@ Assert::same('"<br>"', Filters::escapeJs(new Latte\Runtime\Html('<br>')));
 // invalid UTF-8
 Assert::exception(function () {
 	Filters::escapeJs("foo \u{D800} bar"); // invalid codepoint high surrogates
-}, RuntimeException::class, 'Malformed UTF-8 characters, possibly incorrectly encoded');
+}, Latte\RuntimeException::class, 'Malformed UTF-8 characters, possibly incorrectly encoded');
 
 Assert::exception(function () {
 	Filters::escapeJs("foo \xE3\x80\x22 bar"); // stripped UTF
-}, RuntimeException::class, 'Malformed UTF-8 characters, possibly incorrectly encoded');
+}, Latte\RuntimeException::class, 'Malformed UTF-8 characters, possibly incorrectly encoded');

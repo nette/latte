@@ -273,7 +273,7 @@ Assert::exception(function () {
 			embed end
 		',
 	]);
-}, RuntimeException::class, "Cannot include undefined block 'outer'.");
+}, Latte\RuntimeException::class, "Cannot include undefined block 'outer'.");
 
 
 Assert::exception(function () {
@@ -289,7 +289,7 @@ Assert::exception(function () {
 			embed end
 		',
 	]);
-}, RuntimeException::class, "Cannot include undefined block 'a'.");
+}, Latte\RuntimeException::class, "Cannot include undefined block 'a'.");
 
 
 testTemplate('embeds block include', [

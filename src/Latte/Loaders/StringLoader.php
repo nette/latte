@@ -42,7 +42,7 @@ class StringLoader implements Latte\Loader
 		} elseif (isset($this->templates[$name])) {
 			return $this->templates[$name];
 		} else {
-			throw new \RuntimeException("Missing template '$name'.");
+			throw new Latte\RuntimeException("Missing template '$name'.");
 		}
 	}
 

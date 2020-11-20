@@ -175,7 +175,7 @@ class Template
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
-				throw new \RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
+				throw new Latte\RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
 			}
 			return;
 
@@ -297,7 +297,7 @@ class Template
 				? ", did you mean '$t'?"
 				: '.';
 			$name = $layer ? "$layer $name" : $name;
-			throw new \RuntimeException("Cannot include undefined block '$name'$hint");
+			throw new Latte\RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
 		$function = reset($block->functions);
@@ -328,7 +328,7 @@ class Template
 	{
 		$block = $this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[$this->index][$name] ?? null;
 		if (!$block || ($function = next($block->functions)) === false) {
-			throw new \RuntimeException("Cannot include undefined parent block '$name'.");
+			throw new Latte\RuntimeException("Cannot include undefined parent block '$name'.");
 		}
 		$function($params);
 		prev($block->functions);

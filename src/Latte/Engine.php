@@ -218,7 +218,7 @@ class Engine
 			$code = $this->compile($name);
 			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
 				@unlink("$file.tmp"); // @ - file may not exist
-				throw new \RuntimeException("Unable to create '$file'.");
+				throw new RuntimeException("Unable to create '$file'.");
 			}
 			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, true); // @ can be restricted
@@ -226,7 +226,7 @@ class Engine
 		}
 
 		if ((include $file) === false) {
-			throw new \RuntimeException("Unable to load '$file'.");
+			throw new RuntimeException("Unable to load '$file'.");
 		}
 	}
 
@@ -238,14 +238,14 @@ class Engine
 	{
 		$dir = dirname($file);
 		if (!is_dir($dir) && !@mkdir($dir) && !is_dir($dir)) { // @ - dir may already exist
-			throw new \RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
+			throw new RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
 		}
 
 		$handle = @fopen($file, 'w'); // @ is escalated to exception
 		if (!$handle) {
-			throw new \RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
+			throw new RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
 		} elseif (!@flock($handle, $mode)) { // @ is escalated to exception
-			throw new \RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
+			throw new RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
 		}
 		return $handle;
 	}
