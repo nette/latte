@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => file_get_contents(__DIR__ . '/templates/BlockMacros.parent.latte'),
 
 	'main' => '
-{extends $ext}
+{extends true ? $ext : "undefined"}
 
 {block content}
 	Content
