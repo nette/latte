@@ -152,9 +152,9 @@ class BlockMacros extends MacroSet
 		}
 
 
-		$phpName = strpos($name, '$') === false
-			? PhpHelpers::dump($name)
-			: $writer->formatWord($name);
+		$phpName = $this->isDynamic($name)
+			? $writer->formatWord($name)
+			: PhpHelpers::dump($name);
 
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '') . '('
@@ -266,7 +266,7 @@ class BlockMacros extends MacroSet
 			. ($node->modifiers ? ', function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '')
 		);
 
-		if (strpos($data->name, '$') !== false) { // dynamic block
+		if ($this->isDynamic($data->name)) {
 			$node->closingCode = $writer->write('<?php $this->renderBlock(%word, %raw); ?>', $data->name, $renderArgs);
 			return $this->beginDynamicBlockOrDefine($node, $writer, $layer);
 		}
@@ -307,7 +307,7 @@ class BlockMacros extends MacroSet
 		$data = $node->data;
 		$data->name = ltrim((string) $name, '#');
 
-		if (strpos($data->name, '$') !== false) { // dynamic
+		if ($this->isDynamic($data->name)) {
 			$node->closingCode = '<?php ?>';
 			return $this->beginDynamicBlockOrDefine($node, $writer, $layer);
 		}
@@ -384,7 +384,7 @@ class BlockMacros extends MacroSet
 		if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
 			throw new CompileException("Cannot combine HTML attribute {$this->snippetAttribute} with n:snippet.");
 
-		} elseif (strpos($data->name, '$') !== false) { // dynamic snippet
+		} elseif ($this->isDynamic($data->name)) {
 			return $this->beginDynamicSnippet($node, $writer);
 
 		} elseif ($data->name !== '' && !preg_match('#^[a-z]#iD', $data->name)) {
@@ -605,5 +605,11 @@ class BlockMacros extends MacroSet
 			$counter++;
 		}
 		return $name . $counter;
+	}
+
+
+	private function isDynamic(string $name): bool
+	{
+		return strpos($name, '$') !== false;
 	}
 }
