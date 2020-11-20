@@ -16,16 +16,16 @@ final class Template%a% extends Latte\Runtime\Template
 		';
 		$this->initBlockLayer(1);
 		$this->setBlockLayer(1);
+		if (false) {
+			echo "\n";
+			$this->renderBlock('a', get_defined_vars());
+			echo '		';
+		}
 		try {
 			$this->createTemplate("embed1.latte", [], "embed")->renderToContentType('html');
 		}
 		finally {
 			$this->setBlockLayer(0);
-		}
-		if (false) {
-			echo "\n";
-			$this->renderBlock('a', get_defined_vars());
-			echo '		';
 		}
 		echo '
 	';
@@ -39,17 +39,17 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '				';
 		$this->initBlockLayer(2);
 		$this->setBlockLayer(2);
-		try {
-			$this->createTemplate("embed2.latte", [], "embed")->renderToContentType('html');
-		}
-		finally {
-			$this->setBlockLayer(1);
-		}
 		if (false) {
 			echo '
 					';
 			$this->renderBlock('a', get_defined_vars());
 			echo '				';
+		}
+		try {
+			$this->createTemplate("embed2.latte", [], "embed")->renderToContentType('html');
+		}
+		finally {
+			$this->setBlockLayer(1);
 		}
 		echo "\n";
 	}

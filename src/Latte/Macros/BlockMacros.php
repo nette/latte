@@ -199,6 +199,8 @@ class BlockMacros extends MacroSet
 		if ($this->getCompiler()->isInHead()) {
 			$this->imports[] = $code;
 			return '';
+		} elseif ($node->parentNode && $node->parentNode->name === 'embed') {
+			return "} $code if (false) {";
 		} else {
 			return $code;
 		}
@@ -548,13 +550,9 @@ class BlockMacros extends MacroSet
 		return $writer->write(
 			'$this->initBlockLayer(%var);
 			$this->setBlockLayer(%var);
-			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var); }
-			finally { $this->setBlockLayer(%var); }
 			if (false) {',
 			$this->index,
-			$this->index,
-			implode($node->context),
-			$node->data->prevIndex
+			$this->index
 		);
 	}
 
@@ -565,7 +563,13 @@ class BlockMacros extends MacroSet
 	public function macroEmbedEnd(MacroNode $node, PhpWriter $writer): string
 	{
 		$this->index = $node->data->prevIndex;
-		return '}';
+		return $writer->write(
+			'}
+			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var); }
+			finally { $this->setBlockLayer(%var); }',
+			implode($node->context),
+			$this->index
+		);
 	}
 
 

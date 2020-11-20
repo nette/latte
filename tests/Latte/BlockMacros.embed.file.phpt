@@ -233,6 +233,30 @@ main-A		embed end
 ');
 
 
+testTemplate('import in embed', [
+	'main' => '
+		outer
+		{embed "embed.latte"}
+			{import import.latte}
+		{/embed}
+		outer
+	',
+	'embed.latte' => '
+		embed start
+			{include a}
+		embed end
+	',
+	'import.latte' => '{block a}main-A{/block}',
+], '
+		outer
+
+		embed start
+main-A		embed end
+
+		outer
+');
+
+
 testTemplate('local outer block include from main', [
 	'main' => '
 		outer
