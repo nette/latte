@@ -97,18 +97,30 @@ class MacroTokens extends TokenIterator
 
 
 	/**
-	 * Reads single token (optionally delimited by comma) from string.
+	 * Reads single expression optionally delimited by comma.
 	 */
 	public function fetchWord(): ?string
 	{
-		$words = $this->fetchWords();
-		return $words ? implode(':', $words) : null;
+		if ($this->isNext('(')) {
+			$expr = $this->nextValue('(') . $this->joinUntilSameDepth(')') . $this->nextValue(')');
+		} else {
+			$expr = $this->joinUntilSameDepth(self::T_WHITESPACE, ',');
+			if ($this->isNext(...[
+				'%', '&', '*', '.', '<', '=', '>', '?', '^', '|', ':',
+				'::', '=>', '->', '?->', '??->', '<<', '>>', '<=>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '??', '**',
+				'instanceof',
+			])) {
+				$expr .= $this->joinUntilSameDepth(',');
+			}
+		}
+		$this->nextToken(',');
+		$this->nextAll(self::T_WHITESPACE, self::T_COMMENT);
+		return $expr === '' ? null : $expr;
 	}
 
 
 	/**
-	 * Reads single tokens delimited by colon from string.
-	 * @return string[]
+	 * @deprecated
 	 */
 	public function fetchWords(): array
 	{
@@ -123,6 +135,23 @@ class MacroTokens extends TokenIterator
 		$this->nextToken(',');
 		$this->nextAll(self::T_WHITESPACE, self::T_COMMENT);
 		return $words === [''] ? [] : $words;
+	}
+
+
+	/**
+	 * @param  int|string  ...$args  token type or value to stop before (required)
+	 */
+	public function joinUntilSameDepth(...$args): string
+	{
+		$depth = $this->depth;
+		$res = '';
+		do {
+			$res .= $this->joinUntil(...$args);
+			if ($this->depth === $depth) {
+				return $res;
+			}
+			$res .= $this->nextValue();
+		} while (true);
 	}
 
 

@@ -13,22 +13,28 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
-	$tokenizer = new MacroTokens('');
-	Assert::null($tokenizer->fetchWord());
-	Assert::same('', $tokenizer->joinAll());
-});
+function testWord($expr, $word, $rest = '')
+{
+	$tokenizer = new MacroTokens($expr);
+	Assert::same($word, $tokenizer->fetchWord());
+	Assert::same($rest, $tokenizer->joinAll());
+}
 
 
-test('', function () {
-	$tokenizer = new MacroTokens('$1d-,a');
-	Assert::same('$1d-', $tokenizer->fetchWord());
-	Assert::same('a', $tokenizer->joinAll());
-});
-
-
-test('', function () {
-	$tokenizer = new MacroTokens('"item\'1""item2"');
-	Assert::same('"item\'1""item2"', $tokenizer->fetchWord());
-	Assert::same('', $tokenizer->joinAll());
-});
+testWord('', null);
+testWord('$1d-,a', '$1d-', 'a');
+testWord('"item\'1""item2"', '"item\'1""item2"');
+testWord('(symbol)', '(symbol)');
+testWord('($expr)', '($expr)');
+testWord('($expr ? (1+2) : [3,4]),x', '($expr ? (1+2) : [3,4])', 'x');
+testWord('($expr ? (1+2) : [3,4]) x', '($expr ? (1+2) : [3,4])', 'x');
+testWord('$expr instanceof stdClass ? : [3,4],x', '$expr instanceof stdClass ? : [3,4]', 'x');
+testWord('foo ::bar', 'foo ::bar');
+testWord('func (1, 2)', 'func', '(1, 2)');
+testWord('func(1, 2)', 'func(1, 2)');
+testWord('$exp and 10', '$exp', 'and 10');
+testWord('$exp--', '$exp--');
+testWord('$exp --$a', '$exp', '--$a');
+testWord('word - 1', 'word', '- 1');
+testWord('word -1', 'word', '-1');
+testWord('word -$num', 'word', '-$num');
