@@ -174,7 +174,7 @@ class Filters
 			$s = $s->__toString(true);
 		}
 
-		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | (PHP_VERSION_ID >= 70200 ? JSON_INVALID_UTF8_SUBSTITUTE : 0));
 		if ($error = json_last_error()) {
 			throw new Latte\RuntimeException(json_last_error_msg(), $error);
 		}
