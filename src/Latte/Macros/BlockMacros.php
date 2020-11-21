@@ -334,15 +334,21 @@ class BlockMacros extends MacroSet
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
 			$arg = $tokens->consumeValue($tokens::T_VARIABLE);
-			$args[] = $writer->write(
-				'%raw = $__args[%var] ?? $__args[%var] ?? null;',
-				$arg,
-				count($args),
-				substr($arg, 1)
-			);
-			if ($tokens->isNext()) {
+			$value = null;
+			if ($tokens->nextToken('=')) {
+				while (($v = $tokens->nextValue()) !== null && ($v !== ',' || $tokens->depth !== 0)) {
+					$value .= $v;
+				}
+			} elseif ($tokens->isNext()) {
 				$tokens->consumeValue(',');
 			}
+			$args[] = $writer->write(
+				'%raw = $__args[%var] ?? $__args[%var] ?? %raw;',
+				$arg,
+				count($args),
+				substr($arg, 1),
+				$value ?? 'null'
+			);
 		}
 
 		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode;
