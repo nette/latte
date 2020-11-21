@@ -44,6 +44,7 @@ Assert::matchFile(
 );
 
 
+//typehints
 $template = <<<'XX'
 {define test $var1, ?stdClass $var2, \C\B|null $var3}
 {/define}
@@ -54,4 +55,81 @@ XX;
 Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.define.typehints.phtml',
 	$latte->compile($template)
+);
+
+
+// named arguments
+$template = <<<'XX'
+named arguments
+
+{define test $var1, $var2, $var3}
+	Variables {$var1}, {$var2}, {$var3}
+{/define}
+
+a) {include test, 1, var1 => 2}
+
+b) {include test, var2 => 1}
+
+c) {include test, hello => 1}
+
+d) {include test, var2 => 1, 2} // invalid
+XX;
+
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args2.phtml',
+	$latte->compile($template)
+);
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args2.html',
+	$latte->renderToString($template, ['var3' => 'outer'])
+);
+
+
+// named arguments (order dependent)
+$template = <<<'XX'
+named arguments order
+
+a) {include test, 1, var1 => 2}
+
+b) {include test, var2 => 1}
+
+c) {include test, hello => 1}
+
+{define test $var1, $var2, $var3}
+	Variables {$var1}, {$var2}, {$var3}
+{/define}
+XX;
+
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args3.phtml',
+	$latte->compile($template)
+);
+
+
+// named arguments (file dependent)
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'main' => '
+named arguments import
+
+{import import.latte}
+
+a) {include test, 1, var1 => 2}
+
+b) {include test, var2 => 1}
+
+c) {include test, hello => 1}',
+
+	'import.latte' => '
+{define test $var1, $var2, $var3}
+	Variables {$var1}, {$var2}, {$var3}
+{/define}',
+]));
+
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args4.phtml',
+	$latte->compile('main')
+);
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args4.html',
+	$latte->renderToString('main', ['var3' => 'outer'])
 );

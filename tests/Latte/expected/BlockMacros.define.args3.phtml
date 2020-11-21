@@ -1,0 +1,51 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+	protected const BLOCKS = [
+		['test' => 'blockTest'],
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+		echo 'named arguments order
+
+a) ';
+		$this->renderBlock($__nm = 'test', [1, 'var1' => 2] + [], 'html');
+		echo '
+
+b) ';
+		$this->renderBlock($__nm = 'test', ['var2' => 1] + [], 'html');
+		echo '
+
+c) ';
+		$this->renderBlock($__nm = 'test', ['hello' => 1] + [], 'html');
+		echo '
+
+';
+		if ($this->getParentName()) {
+			return get_defined_vars();
+		}
+		return get_defined_vars();
+	}
+
+
+	public function blockTest(array $__args): void
+	{
+		extract($this->params);
+		$var1 = $__args[0] ?? $__args['var1'] ?? null;
+		$var2 = $__args[1] ?? $__args['var2'] ?? null;
+		$var3 = $__args[2] ?? $__args['var3'] ?? null;
+		echo '	Variables ';
+		echo LR\Filters::escapeHtmlText($var1) /* line 10 */;
+		echo ', ';
+		echo LR\Filters::escapeHtmlText($var2) /* line 10 */;
+		echo ', ';
+		echo LR\Filters::escapeHtmlText($var3) /* line 10 */;
+		echo "\n";
+	}
+
+}

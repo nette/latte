@@ -41,6 +41,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockTitle(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo 'Homepage | ';
 		$this->renderBlockParent($__nm = 'title', get_defined_vars());
@@ -51,6 +52,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockContent(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '	<ul>
 ';

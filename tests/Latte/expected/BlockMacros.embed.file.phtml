@@ -35,6 +35,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockA(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '				';
 		$this->initBlockLayer(2);

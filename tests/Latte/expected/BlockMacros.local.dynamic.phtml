@@ -29,11 +29,11 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		$iterator = $__it = $__it->getParent();
 		echo "\n";
-		$this->renderBlock($__nm = 'dynamic', ['var' => 20] + $this->params, 'html');
+		$this->renderBlock($__nm = 'dynamic', ['var' => 20] + [], 'html');
 		echo "\n";
 		$this->renderBlock($__nm = 'static', ['var' => 30] + get_defined_vars(), 'html');
 		echo "\n";
-		$this->renderBlock($__nm = ($name . ''), ['var' => 40] + $this->params, 'html');
+		$this->renderBlock($__nm = ($name . ''), ['var' => 40] + [], 'html');
 		echo "\n";
 		$this->addBlock($__nm = "word$name", 'html', [[$this, 'blockWord_name']], 'local');
 		$this->renderBlock($__nm, get_defined_vars());
@@ -90,6 +90,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockStatic(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '	Static block #';
 		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
