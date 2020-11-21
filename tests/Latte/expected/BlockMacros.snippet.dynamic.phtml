@@ -14,7 +14,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
 		echo '">';
-		$this->renderBlock('outer', $this->params, null, 'snippet');
+		$this->renderBlock('outer', [], null, 'snippet');
 		echo '</div>';
 %A%
 	}
@@ -28,6 +28,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockOuter(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {

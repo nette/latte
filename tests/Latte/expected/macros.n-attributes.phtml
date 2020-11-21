@@ -400,6 +400,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockBl(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '<ul title="block + if + foreach">
 ';

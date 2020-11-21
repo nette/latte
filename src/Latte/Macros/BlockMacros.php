@@ -84,9 +84,9 @@ class BlockMacros extends MacroSet
 		$compiler = $this->getCompiler();
 		foreach ($this->placeholders as $key => [$index, $blockName]) {
 			$block = $this->blocks[$index][$blockName] ?? $this->blocks[Template::LAYER_LOCAL][$blockName] ?? null;
-			$compiler->placeholders[$key] = $block
+			$compiler->placeholders[$key] = $block && !$block->hasParameters
 				? 'get_defined_vars()'
-				: '$this->params';
+				: '[]';
 		}
 
 		$meta = [];
@@ -328,12 +328,18 @@ class BlockMacros extends MacroSet
 		}
 
 		$tokens = $node->tokenizer;
-		$args = [];
+		$params = [];
 		while ($tokens->isNext()) {
 			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
-			$args[] = $tokens->consumeValue($tokens::T_VARIABLE);
+			$param = $tokens->consumeValue($tokens::T_VARIABLE);
+			$params[] = $writer->write(
+				'%raw = $__args[%var] ?? $__args[%var] ?? null;',
+				$param,
+				count($params),
+				substr($param, 1)
+			);
 			if ($tokens->isNext()) {
 				$tokens->consumeValue(',');
 			}
@@ -341,12 +347,11 @@ class BlockMacros extends MacroSet
 
 		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode;
 		$block = $this->addBlock($node, $layer);
+		$block->hasParameters = (bool) $params;
 
-		$data->after = function () use ($node, $block, $args) {
-			$args = $args
-				? ('[' . implode(', ', $args) . '] = $__args + [' . str_repeat('null, ', count($args)) . '];')
-				: null;
-			$this->extractMethod($node, $block, $args);
+		$data->after = function () use ($node, $block, $params) {
+			$params = $params ? implode('', $params) : null;
+			$this->extractMethod($node, $block, $params);
 		};
 
 		return $extendsCheck
@@ -433,12 +438,12 @@ class BlockMacros extends MacroSet
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>",
 				$data->name
 			);
-			return $writer->write('$this->renderBlock(%var, $this->params, null, %var)', $data->name, Template::LAYER_SNIPPET);
+			return $writer->write('$this->renderBlock(%var, [], null, %var)', $data->name, Template::LAYER_SNIPPET);
 		}
 
 		return $writer->write(
 			"?>\n<div {$this->snippetAttribute}=\"<?php echo htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\">"
-			. '<?php $this->renderBlock(%var, $this->params, null, %var) ?>'
+			. '<?php $this->renderBlock(%var, [], null, %var) ?>'
 			. "\n</div><?php ",
 			$data->name,
 			$data->name,
@@ -499,7 +504,7 @@ class BlockMacros extends MacroSet
 			);
 			$this->extractMethod($node, $block);
 		};
-		return $writer->write('$this->renderBlock(%var, $this->params, null, %var)', $data->name, Template::LAYER_SNIPPET);
+		return $writer->write('$this->renderBlock(%var, [], null, %var)', $data->name, Template::LAYER_SNIPPET);
 	}
 
 
@@ -533,12 +538,10 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function extractMethod(MacroNode $node, Block $block, string $args = null): void
+	private function extractMethod(MacroNode $node, Block $block, string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
-			$node->content = '<?php '
-				. ($args === null ? 'extract($__args);' : 'extract($this->params); ' . $args)
-				. ' ?>' . $node->content;
+			$node->content = '<?php extract($this->params);' . ($params ?? 'extract($__args);') . '?>' . $node->content;
 		}
 		$block->code = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 		$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($block->code));

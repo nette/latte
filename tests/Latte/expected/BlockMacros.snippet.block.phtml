@@ -18,7 +18,7 @@ final class Template%a% extends Latte\Runtime\Template
 <div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
 		echo '">';
-		$this->renderBlock('outer', $this->params, null, 'snippet');
+		$this->renderBlock('outer', [], null, 'snippet');
 		echo '</div>';
 %A%
 	}
@@ -26,12 +26,13 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockBlock1(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '<div';
 		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')) . '"';
 		echo '>
 ';
-		$this->renderBlock('snippet', $this->params, null, 'snippet');
+		$this->renderBlock('snippet', [], null, 'snippet');
 		echo '</div>
 ';
 
@@ -40,6 +41,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockBlock2(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '<div';
 		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($__nm = "inner-$id")) . '"';
@@ -61,6 +63,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockSnippet(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("snippet", 'static');
 		try {
@@ -76,6 +79,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockOuter(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {

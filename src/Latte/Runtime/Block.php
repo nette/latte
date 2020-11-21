@@ -21,4 +21,7 @@ final class Block
 
 	/** @var callable[]  used by Template */
 	public $functions = [];
+
+	/** @var bool  used by BlockMacros */
+	public $hasParameters = false;
 }

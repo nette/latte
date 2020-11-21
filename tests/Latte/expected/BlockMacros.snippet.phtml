@@ -14,14 +14,14 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId(''));
 		echo '">';
-		$this->renderBlock('', $this->params, null, 'snippet');
+		$this->renderBlock('', [], null, 'snippet');
 		echo '</div>
 
 
 <div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
 		echo '">';
-		$this->renderBlock('outer', $this->params, null, 'snippet');
+		$this->renderBlock('outer', [], null, 'snippet');
 		echo '</div>
 
 
@@ -34,12 +34,12 @@ final class Template%a% extends Latte\Runtime\Template
 	<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title'));
 		echo '">';
-		$this->renderBlock('title', $this->params, null, 'snippet');
+		$this->renderBlock('title', [], null, 'snippet');
 		echo '</div>
 	<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title2'));
 		echo '">';
-		$this->renderBlock('title2', $this->params, null, 'snippet');
+		$this->renderBlock('title2', [], null, 'snippet');
 		echo '</div>';
 		return get_defined_vars();
 	}
@@ -47,6 +47,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function block1(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("", 'static');
 		try {
@@ -61,6 +62,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockOuter(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {
@@ -68,7 +70,7 @@ final class Template%a% extends Latte\Runtime\Template
 		<div id="';
 			echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner'));
 			echo '">';
-			$this->renderBlock('inner', $this->params, null, 'snippet');
+			$this->renderBlock('inner', [], null, 'snippet');
 			echo '</div>	/Outer
 ';
 		}
@@ -81,6 +83,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockInner(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("inner", 'static');
 		try {
@@ -95,6 +98,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockTitle(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("title", 'static');
 		try {
@@ -109,6 +113,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockTitle2(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		$this->global->snippetDriver->enter("title2", 'static');
 		try {

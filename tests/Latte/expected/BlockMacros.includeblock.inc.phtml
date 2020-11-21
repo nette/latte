@@ -22,6 +22,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 	public function blockTest(array $__args): void
 	{
+		extract($this->params);
 		extract($__args);
 		echo '	Parent: ';
 		echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line 3 */;
