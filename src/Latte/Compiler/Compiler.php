@@ -47,6 +47,9 @@ class Compiler
 		CONTEXT_XML_COMMENT = self::CONTEXT_HTML_COMMENT,
 		CONTEXT_XML_BOGUS_COMMENT = self::CONTEXT_HTML_BOGUS_COMMENT;
 
+	/** @var string[] @internal */
+	public $placeholders = [];
+
 	/** @var Token[] */
 	private $tokens;
 
@@ -70,9 +73,6 @@ class Compiler
 
 	/** @var MacroNode|null */
 	private $macroNode;
-
-	/** @var string[] */
-	private $placeholders = [];
 
 	/** @var string */
 	private $contentType = self::CONTENT_HTML;
