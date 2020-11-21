@@ -16,22 +16,22 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		echo '
 a) ';
-		$this->renderBlock($__nm = 'test', [1] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'test', [1] + get_defined_vars(), 'html');
 		echo '
 
 
 b) ';
-		$this->renderBlock($__nm = 'outer', ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'outer', get_defined_vars(), 'html');
 		echo '
 
 ';
 		$var1 = 'outer';
 		echo 'c) ';
-		$this->renderBlock($__nm = 'test', ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'test', get_defined_vars(), 'html');
 		echo '
 
 d) ';
-		$this->renderBlock($__nm = 'test', [null] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'test', [null] + get_defined_vars(), 'html');
 		return get_defined_vars();
 	}
 
@@ -53,7 +53,7 @@ d) ';
 	public function blockOuter(array $__args): void
 	{
 		extract($__args);
-		$this->renderBlock($__nm = 'test', ['hello'] + ($this->hasBlock($__nm, true) ? get_defined_vars() : $this->params), 'html');
+		$this->renderBlock($__nm = 'test', ['hello'] + get_defined_vars(), 'html');
 
 	}
 

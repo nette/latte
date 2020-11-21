@@ -401,10 +401,9 @@ class Template
 	}
 
 
-	public function hasBlock(string $name, bool $definedInTemplate = false): bool
+	public function hasBlock(string $name): bool
 	{
-		$src = $definedInTemplate ? static::BLOCKS : $this->blocks;
-		return isset($src[$this->index][$name]) || isset($src[self::LAYER_LOCAL][$name]);
+		return isset($this->blocks[self::LAYER_LOCAL][$name]) || isset($this->blocks[$this->index][$name]);
 	}
 
 
