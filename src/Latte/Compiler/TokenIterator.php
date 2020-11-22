@@ -18,7 +18,7 @@ class TokenIterator
 {
 	use Strict;
 
-	/** @var list<array{string, int, int}> */
+	/** @var array<array{string, int, int}> */
 	public $tokens;
 
 	/** @var int */
@@ -80,7 +80,7 @@ class TokenIterator
 	/**
 	 * Returns all next tokens.
 	 * @param  int|string  ...$args  desired token type or value
-	 * @return list<array{string, int, int}>
+	 * @return array<array{string, int, int}>
 	 */
 	public function nextAll(...$args): array
 	{
@@ -91,7 +91,7 @@ class TokenIterator
 	/**
 	 * Returns all next tokens until it sees a given token type or value.
 	 * @param  int|string  ...$args  token type or value to stop before (required)
-	 * @return list<array{string, int, int}>
+	 * @return array<array{string, int, int}>
 	 */
 	public function nextUntil(...$args): array
 	{
