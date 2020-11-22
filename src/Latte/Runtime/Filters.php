@@ -47,7 +47,7 @@ class Filters
 	 */
 	public static function escapeHtmlText($s): string
 	{
-		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
 			return $s->__toString(true);
 		}
 
@@ -170,7 +170,7 @@ class Filters
 	 */
 	public static function escapeJs($s): string
 	{
-		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
 			$s = $s->__toString(true);
 		}
 

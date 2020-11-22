@@ -45,6 +45,3 @@ interface Macro
 	 */
 	function nodeClosed(MacroNode $node);
 }
-
-
-interface_exists(IMacro::class);
