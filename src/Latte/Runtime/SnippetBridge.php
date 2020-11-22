@@ -30,6 +30,3 @@ interface SnippetBridge
 
 	function renderChildren(): void;
 }
-
-
-interface_exists(ISnippetBridge::class);
