@@ -185,7 +185,7 @@ class CoreMacros extends MacroSet
 		}
 		$node->validate(false, ['if', 'ifset', 'foreach', 'ifchanged', 'try', 'first', 'last', 'sep']);
 
-		$parent = $node->parentNode;
+		$parent = $node->getParentMacroNode();
 		if (isset($parent->data->else)) {
 			throw new CompileException('Tag ' . $parent->getNotation() . ' may only contain one {else} clause.');
 		}
@@ -218,7 +218,7 @@ class CoreMacros extends MacroSet
 	public function macroElseIf(MacroNode $node, PhpWriter $writer): string
 	{
 		$node->validate(true, ['if', 'ifset']);
-		if (isset($node->parentNode->data->else) || !empty($node->parentNode->data->capture)) {
+		if (isset($node->getParentMacroNode()->data->else) || !empty($node->getParentMacroNode()->data->capture)) {
 			throw new CompileException('Tag ' . $node->getNotation() . ' is unexpected here.');
 		}
 
@@ -512,8 +512,8 @@ class CoreMacros extends MacroSet
 		}
 		$node->validate('condition');
 
-		if ($node->parentNode->prefix === $node::PREFIX_NONE) {
-			return $writer->write("if (%node.args) { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
+		if ($node->getParentMacroNode()->prefix === $node::PREFIX_NONE) {
+			return $writer->write("if (%node.args) { echo \"</{$node->getParentMacroNode()->htmlNode->name}>\\n\"; $cmd; }");
 		}
 		return $writer->write("if (%node.args) $cmd;");
 	}
@@ -616,7 +616,7 @@ class CoreMacros extends MacroSet
 	public function macroCase(MacroNode $node, PhpWriter $writer): string
 	{
 		$node->validate(true, ['switch']);
-		if (isset($node->parentNode->data->default)) {
+		if (isset($node->getParentMacroNode()->data->default)) {
 			throw new CompileException('Tag {default} must follow after {case} clause.');
 		}
 		return $writer->write('} elseif (in_array($ʟ_switch, %node.array, true)) {');
@@ -630,12 +630,16 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroVar(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->name === 'default' && $node->parentNode && $node->parentNode->name === 'switch') {
+		if (
+			$node->name === 'default'
+			&& $node->getParentMacroNode()
+			&& $node->getParentMacroNode()->name === 'switch'
+		) {
 			$node->validate(false, ['switch']);
-			if (isset($node->parentNode->data->default)) {
+			if (isset($node->getParentMacroNode()->data->default)) {
 				throw new CompileException('Tag {switch} may only contain one {default} clause.');
 			}
-			$node->parentNode->data->default = true;
+			$node->getParentMacroNode()->data->default = true;
 			return '} else {';
 
 		} elseif ($node->modifiers) {

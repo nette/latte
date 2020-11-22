@@ -16,7 +16,7 @@ use Latte\Strict;
 /**
  * Macro element node.
  */
-class MacroNode
+class MacroNode implements Node
 {
 	use Strict;
 
@@ -37,6 +37,9 @@ class MacroNode
 	/** @var string  raw arguments */
 	public $args;
 
+	/** @var Node[] */
+	public $children = [];
+
 	/** @var string  raw modifier */
 	public $modifiers;
 
@@ -49,7 +52,7 @@ class MacroNode
 	/** @var MacroTokens */
 	public $tokenizer;
 
-	/** @var MacroNode|null */
+	/** @var Node|null */
 	public $parentNode;
 
 	/** @var string */
@@ -94,7 +97,7 @@ class MacroNode
 		string $name,
 		string $args = '',
 		string $modifiers = '',
-		self $parentNode = null,
+		Node $parentNode = null,
 		HtmlNode $htmlNode = null,
 		string $prefix = null
 	) {
@@ -106,6 +109,14 @@ class MacroNode
 		$this->prefix = $prefix;
 		$this->data = new \stdClass;
 		$this->setArgs($args);
+	}
+
+
+	public function getParentMacroNode(): ?self
+	{
+		return $this->parentNode instanceof self
+			? $this->parentNode
+			: null;
 	}
 
 
@@ -129,12 +140,12 @@ class MacroNode
 	 */
 	public function closest(array $names, callable $condition = null): ?self
 	{
-		$node = $this->parentNode;
+		$node = $this->getParentMacroNode();
 		while ($node && (
 			!in_array($node->name, $names, true)
 			|| ($condition && !$condition($node))
 		)) {
-			$node = $node->parentNode;
+			$node = $node->getParentMacroNode();
 		}
 		return $node;
 	}
@@ -147,7 +158,7 @@ class MacroNode
 	 */
 	public function validate($arguments, array $parents = [], bool $modifiers = false): void
 	{
-		if ($parents && (!$this->parentNode || !in_array($this->parentNode->name, $parents, true))) {
+		if ($parents && (!$this->getParentMacroNode() || !in_array($this->parentNode->name, $parents, true))) {
 			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.');
 
 		} elseif ($this->modifiers !== '' && !$modifiers) {
