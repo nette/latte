@@ -10,6 +10,11 @@ declare(strict_types=1);
 namespace Latte;
 
 
+use Latte\Compiler\Compiler;
+use Latte\Compiler\Macro;
+use Latte\Compiler\Parser;
+use Latte\Compiler\PhpHelpers;
+
 /**
  * Templating engine Latte.
  */
