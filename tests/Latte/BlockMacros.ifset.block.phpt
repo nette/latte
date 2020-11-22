@@ -13,7 +13,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler;
+$compiler = new \Latte\Compiler\Compiler;
 BlockMacros::install($compiler);
 
 // {ifset ... }

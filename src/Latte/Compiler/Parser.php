@@ -7,7 +7,13 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte\CompileException;
+use Latte\Engine;
+use Latte\Helpers;
+use Latte\RegexpException;
+use Latte\Strict;
 
 
 /**

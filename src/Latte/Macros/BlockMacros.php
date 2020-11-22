@@ -11,10 +11,10 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\MacroNode;
+use Latte\Compiler\PhpHelpers;
+use Latte\Compiler\PhpWriter;
 use Latte\Helpers;
-use Latte\MacroNode;
-use Latte\PhpHelpers;
-use Latte\PhpWriter;
 use Latte\Runtime\Block;
 use Latte\Runtime\SnippetDriver;
 use Latte\Runtime\Template;
@@ -41,7 +41,7 @@ class BlockMacros extends MacroSet
 	private $imports;
 
 
-	public static function install(Latte\Compiler $compiler): void
+	public static function install(Latte\Compiler\Compiler $compiler): void
 	{
 		$me = new static($compiler);
 		$me->addMacro('include', [$me, 'macroInclude']);
@@ -255,7 +255,7 @@ class BlockMacros extends MacroSet
 			return 'ob_start(function () {});';
 		}
 
-		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
+		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
 			$node->context[1] = '';
 			$node->modifiers .= '|escape';
 		} elseif ($node->modifiers) {
@@ -619,7 +619,7 @@ class BlockMacros extends MacroSet
 		while ([$name, $block] = $node->tokenizer->fetchWordWithModifier('block')) {
 			$list[] = $block || preg_match('~#|[\w-]+$~DA', $name)
 				? '$this->hasBlock(' . $writer->formatWord(ltrim($name, '#')) . ')'
-				: 'isset(' . $writer->formatArgs(new Latte\MacroTokens($name)) . ')';
+				: 'isset(' . $writer->formatArgs(new Latte\Compiler\MacroTokens($name)) . ')';
 		}
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (' . implode(' && ', $list) . ') {';
