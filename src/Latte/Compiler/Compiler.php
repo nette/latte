@@ -81,7 +81,7 @@ class Compiler
 	/** @var HtmlNode|null */
 	private $htmlNode;
 
-	/** @var MacroNode|null */
+	/** @var Node|null */
 	private $macroNode;
 
 	/** @var string */
@@ -173,7 +173,8 @@ class Compiler
 		$output = '';
 		$this->output = &$output;
 		$this->inHead = true;
-		$this->htmlNode = $this->macroNode = $this->context = $this->paramsExtraction = null;
+		$this->macroNode = new RootNode;
+		$this->htmlNode = $this->context = $this->paramsExtraction = null;
 		$this->placeholders = $this->properties = $this->constants = [];
 		$this->methods = ['main' => null, 'prepare' => null];
 
@@ -205,8 +206,8 @@ class Compiler
 			$this->htmlNode = $this->htmlNode->parentNode;
 		}
 
-		while ($this->macroNode) {
-			if ($this->macroNode->parentNode) {
+		while (!$this->macroNode instanceof RootNode) {
+			if ($this->macroNode->parentNode instanceof MacroNode) {
 				throw new CompileException('Missing {/' . $this->macroNode->name . '}');
 			}
 			if (~$this->flags[$this->macroNode->name] & Macro::AUTO_CLOSE) {
@@ -280,7 +281,7 @@ class Compiler
 	}
 
 
-	public function getMacroNode(): ?MacroNode
+	public function getMacroNode(): Node
 	{
 		return $this->macroNode;
 	}
@@ -540,7 +541,7 @@ class Compiler
 			if (isset($this->htmlNode->macroAttrs[$name])) {
 				throw new CompileException("Found multiple attributes {$token->name}.");
 
-			} elseif ($this->macroNode && $this->macroNode->htmlNode === $this->htmlNode) {
+			} elseif ($this->macroNode instanceof MacroNode && $this->macroNode->htmlNode === $this->htmlNode) {
 				throw new CompileException("n:attribute must not appear inside tags; found {$token->name} inside {{$this->macroNode->name}}.");
 			}
 			$this->htmlNode->macroAttrs[$name] = $token->value;
@@ -648,7 +649,7 @@ class Compiler
 		$node = $this->macroNode;
 
 		if (
-			!$node
+			!($node instanceof MacroNode)
 			|| ($node->name !== $name && $name !== '')
 			|| $modifiers
 			|| ($args !== '' && $node->args !== '' && !Helpers::startsWith($node->args . ' ', $args . ' '))
@@ -657,7 +658,7 @@ class Compiler
 			$name = $nPrefix
 				? "</{$this->htmlNode->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($this->htmlNode->macroAttrs))
 				: '{/' . $name . ($args ? ' ' . $args : '') . $modifiers . '}';
-			throw new CompileException("Unexpected $name" . ($node ? ', expecting ' . self::printEndTag($node->prefix ? $this->htmlNode : $node) : ''));
+			throw new CompileException("Unexpected $name" . ($node instanceof MacroNode ? ', expecting ' . self::printEndTag($node->prefix ? $this->htmlNode : $node) : ''));
 		}
 
 		if ($name === '') {
