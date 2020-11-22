@@ -43,7 +43,7 @@ class Tokenizer
 
 	/**
 	 * Tokenizes string.
-	 * @return list<array{string, int, int}>
+	 * @return array<array{string, int, int}>
 	 */
 	public function tokenize(string $input): array
 	{
