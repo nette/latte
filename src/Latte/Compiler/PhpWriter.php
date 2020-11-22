@@ -7,7 +7,12 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte;
+use Latte\CompileException;
+use Latte\Policy;
+use Latte\SecurityViolationException;
 
 
 /**
@@ -15,7 +20,7 @@ namespace Latte;
  */
 class PhpWriter
 {
-	use Strict;
+	use Latte\Strict;
 
 	/** @var MacroTokens */
 	private $tokens;
@@ -219,7 +224,7 @@ class PhpWriter
 				}
 
 			} elseif (
-				Helpers::startsWith($tokenValue, '$ʟ_')
+				Latte\Helpers::startsWith($tokenValue, '$ʟ_')
 				|| ($this->policy && $tokens->isCurrent('$this'))
 			) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");

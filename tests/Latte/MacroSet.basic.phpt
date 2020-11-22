@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Latte\MacroNode;
+use Latte\Compiler\MacroNode;
 use Latte\Macros\MacroSet;
 use Tester\Assert;
 

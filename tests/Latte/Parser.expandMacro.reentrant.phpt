@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler;
+$compiler = new \Latte\Compiler\Compiler;
 $set = new Latte\Macros\MacroSet($compiler);
 $set->addMacro('test', 'echo %node.word', 'echo %node.word');
 

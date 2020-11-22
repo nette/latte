@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use Latte\Macro;
-use Latte\MacroNode;
+use Latte\Compiler\Macro;
+use Latte\Compiler\MacroNode;
 use Tester\Assert;
 
 
