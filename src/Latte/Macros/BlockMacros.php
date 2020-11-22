@@ -203,7 +203,7 @@ class BlockMacros extends MacroSet
 		if ($this->getCompiler()->isInHead()) {
 			$this->imports[] = $code;
 			return '';
-		} elseif ($node->parentNode && $node->parentNode->name === 'embed') {
+		} elseif ($node->getParentMacroNode() && $node->parentNode->name === 'embed') {
 			return "} $code if (false) {";
 		} else {
 			return $code;
@@ -217,7 +217,7 @@ class BlockMacros extends MacroSet
 	public function macroExtends(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->validate(true);
-		if ($node->parentNode) {
+		if ($node->getParentMacroNode()) {
 			throw new CompileException($node->getNotation() . ' must not be inside other tags.');
 		} elseif ($this->extends !== null) {
 			throw new CompileException('Multiple ' . $node->getNotation() . ' declarations are not allowed.');
@@ -276,7 +276,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Block name must start with letter a-z, '$data->name' given.");
 		}
 
-		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode;
+		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->getParentMacroNode();
 		$block = $this->addBlock($node, $layer);
 
 		$data->after = function () use ($node, $block) {
@@ -339,7 +339,7 @@ class BlockMacros extends MacroSet
 			}
 		}
 
-		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode;
+		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->getParentMacroNode();
 		$block = $this->addBlock($node, $layer);
 		$block->hasParameters = (bool) $params;
 
