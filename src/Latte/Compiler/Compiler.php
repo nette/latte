@@ -7,7 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte\CompileException;
+use Latte\Engine;
+use Latte\Helpers;
+use Latte\Policy;
+use Latte\SecurityViolationException;
+use Latte\Strict;
 
 
 /**

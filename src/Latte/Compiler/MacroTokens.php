@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
 
 
 /**
