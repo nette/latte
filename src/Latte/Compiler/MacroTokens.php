@@ -34,7 +34,7 @@ class MacroTokens extends TokenIterator
 
 
 	/**
-	 * @param  string|list<array{string, int, int}>  $input
+	 * @param  string|array<array{string, int, int}>  $input
 	 */
 	public function __construct($input = [])
 	{
@@ -44,7 +44,7 @@ class MacroTokens extends TokenIterator
 
 
 	/**
-	 * @return list<array{string, int, int}>
+	 * @return array<array{string, int, int}>
 	 */
 	public function parse(string $s): array
 	{

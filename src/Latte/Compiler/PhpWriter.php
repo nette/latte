@@ -614,7 +614,7 @@ class PhpWriter
 
 
 	/**
-	 * @return list<array{string, int, int}>
+	 * @return array<array{string, int, int}>
 	 */
 	private function inlineModifierInner(MacroTokens $tokens): array
 	{
@@ -662,7 +662,7 @@ class PhpWriter
 
 	/**
 	 * Formats modifiers calling.
-	 * @param  string|list<array{string, int, int}>  $var
+	 * @param  string|array<array{string, int, int}>  $var
 	 * @throws CompileException
 	 */
 	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens
