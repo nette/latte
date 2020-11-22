@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler;
-use Latte\Macro;
-use Latte\MacroNode;
-use Latte\Parser;
+use Latte\Compiler\Compiler;
+use Latte\Compiler\Macro;
+use Latte\Compiler\MacroNode;
+use Latte\Compiler\Parser;
 use Tester\Assert;
 
 
