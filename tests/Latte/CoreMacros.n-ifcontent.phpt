@@ -71,9 +71,9 @@ Assert::match(
 		}
 		echo '>';
 		ob_start();
-		$__loc[1] = ob_get_flush();
+		$__ifc = ob_get_flush();
 		echo '</div>';
-		if (rtrim($__loc[1]) === '') {
+		if (rtrim($__ifc) === "") {
 			ob_end_clean();
 		}
 		else {

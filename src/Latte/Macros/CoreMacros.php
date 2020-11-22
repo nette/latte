@@ -30,7 +30,7 @@ class CoreMacros extends MacroSet
 	private $printTemplate;
 
 	/** @var int */
-	private $counter = 0;
+	private $idCounter = 0;
 
 
 	public static function install(Latte\Compiler $compiler): void
@@ -96,7 +96,7 @@ class CoreMacros extends MacroSet
 	public function initialize()
 	{
 		$this->overwrittenVars = [];
-		$this->counter = 0;
+		$this->idCounter = 0;
 	}
 
 
@@ -135,11 +135,12 @@ class CoreMacros extends MacroSet
 			return 'ob_start(function () {})';
 		}
 		if ($node->prefix === $node::PREFIX_TAG) {
-			$node->htmlNode->data->id = $node->htmlNode->data->id ?? ++$this->counter;
+			for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
+			$node->htmlNode->data->id = $node->htmlNode->data->id ?? $id;
 			return $writer->write(
 				$node->htmlNode->closing
-					? 'if ($__loc[%var]) {'
-					: 'if ($__loc[%var] = (%node.args)) {',
+					? 'if ($__if[%var]) {'
+					: 'if ($__if[%var] = (%node.args)) {',
 				$node->htmlNode->data->id
 			);
 		}
@@ -240,11 +241,10 @@ class CoreMacros extends MacroSet
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->openingCode = '<?php ob_start(function () {}); ?>';
-		$var = '$__loc[' . ++$this->counter . ']';
 		$node->innerContent = '<?php ob_start(); ?>'
 			. $node->innerContent
-			. "<?php $var = ob_get_flush(); ?>";
-		$node->closingCode = "<?php if (rtrim($var) === '') { ob_end_clean(); } else { echo ob_get_clean(); } ?>";
+			. '<?php $__ifc = ob_get_flush(); ?>';
+		$node->closingCode = '<?php if (rtrim($__ifc) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
 	}
 
 
@@ -254,7 +254,7 @@ class CoreMacros extends MacroSet
 	public function macroIfChanged(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->validate(null);
-		$id = $node->data->id = ++$this->counter;
+		$id = $node->data->id = ++$this->idCounter;
 		if ($node->data->capture = ($node->args === '')) {
 			$node->openingCode = '<?php ob_start(function () {}); try { ?>';
 			$node->closingCode =
@@ -276,15 +276,15 @@ class CoreMacros extends MacroSet
 	public function macroTry(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->validate(false);
-		$id = ++$this->counter;
+		for ($id = 0, $tmp = $node; $tmp = $tmp->closest(['try']); $id++);
 		$node->data->code = $writer->write('<?php echo ob_get_clean();
 			} catch (\Throwable $__e) {
-			$iterator = $__it = $__loc[%var][1];
-			while (ob_get_level() > $__loc[%var][0]) ob_end_clean();
+			$iterator = $__it = $__try[%var][1];
+			while (ob_get_level() > $__try[%var][0]) ob_end_clean();
 			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($__e, $this);
 			} ?>', $id, $id);
-		$node->openingCode = $writer->write('<?php $__loc[%var] = [ob_get_level(), $__it ?? null]; ob_start(function () {}); try { ?>', $id);
+		$node->openingCode = $writer->write('<?php $__try[%var] = [ob_get_level(), $__it ?? null]; ob_start(function () {}); try { ?>', $id);
 		$node->closingCode = $node->data->code . '<?php } ?>';
 	}
 

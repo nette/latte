@@ -108,14 +108,14 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul title="tag if">
 ';
-		if ($__loc[1] = (true)) {
+		if ($__if[1] = (true)) {
 			echo '	<li>
 ';
 		}
 		echo '		';
 		echo LR\Filters::escapeHtmlText($person) /* line 44 */;
 		echo "\n";
-		if ($__loc[1]) {
+		if ($__if[1]) {
 			echo '	</li>
 ';
 		}
@@ -222,30 +222,30 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '</ul>
 
 ';
-		if ($__loc[2] = (true)) {
+		if ($__if[0] = (true)) {
 			echo '<b>';
 		}
 		echo 'bold';
-		if ($__loc[2]) {
+		if ($__if[0]) {
 			echo '</b>';
 		}
 		echo ' ';
-		if ($__loc[3] = (false)) {
+		if ($__if[0] = (false)) {
 			echo '<b>';
 		}
 		echo 'normal';
-		if ($__loc[3]) {
+		if ($__if[0]) {
 			echo '</b>
 ';
 		}
 		echo "\n";
-		if ($__loc[4] = (true)) {
+		if ($__if[0] = (true)) {
 			echo '<b';
 			echo ($__tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
 			echo '>';
 		}
 		echo 'bold';
-		if ($__loc[4]) {
+		if ($__if[0]) {
 			echo '</b>
 ';
 		}
@@ -256,11 +256,11 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '<meta>
 ';
 		}
-		if ($__loc[5] = (true)) {
+		if ($__if[0] = (true)) {
 			echo '<meta>
 ';
 		}
-		if ($__loc[5]) {
+		if ($__if[0]) {
 		}
 		echo '<meta>
 ';
@@ -274,7 +274,7 @@ final class Template%a% extends Latte\Runtime\Template
 			if (1) {
 				$iterations = 0;
 				foreach ([1] as $foo) {
-					if ($__loc[6] = (0)) {
+					if ($__if[0] = (0)) {
 						echo '<span>';
 					}
 					$iterations++;
@@ -288,7 +288,7 @@ final class Template%a% extends Latte\Runtime\Template
 				}
 				$iterations = 0;
 				foreach ([1] as $foo) {
-					if ($__loc[6]) {
+					if ($__if[0]) {
 						echo '</span>
 ';
 					}
@@ -300,19 +300,19 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		if ($__loc[7] = (true)) {
+		if ($__if[0] = (true)) {
 			echo '<div>
 ';
 		}
-		$__loc[8] = [ob_get_level(), $__it ?? null];
+		$__try[0] = [ob_get_level(), $__it ?? null];
 		ob_start(function () {});
 		try {
-			if ($__loc[9] = (false)) {
+			if ($__if[1] = (false)) {
 				echo '	<span>
 ';
 			}
 			throw new LR\RollbackException;
-			if ($__loc[9]) {
+			if ($__if[1]) {
 				echo '	</span>
 ';
 			}
@@ -320,14 +320,14 @@ final class Template%a% extends Latte\Runtime\Template
 			echo ob_get_clean();
 		}
 		catch (\Throwable $__e) {
-			$iterator = $__it = $__loc[8][1];
-			while (ob_get_level() > $__loc[8][0]) ob_end_clean();
+			$iterator = $__it = $__try[0][1];
+			while (ob_get_level() > $__try[0][0]) ob_end_clean();
 			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($__e, $this);
 			}
 		}
 		echo "\n";
-		if ($__loc[7]) {
+		if ($__if[0]) {
 			echo '</div>
 ';
 		}
