@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler;
+use Latte\Compiler\Compiler;
+use Latte\Compiler\MacroNode;
+use Latte\Compiler\PhpWriter;
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
-use Latte\MacroNode;
 use Latte\Macros\MacroSet;
-use Latte\PhpWriter;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
