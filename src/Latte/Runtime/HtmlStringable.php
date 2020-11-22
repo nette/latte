@@ -15,6 +15,3 @@ interface HtmlStringable
 	/** @return string in HTML format */
 	function __toString(): string;
 }
-
-
-interface_exists(IHtmlString::class);

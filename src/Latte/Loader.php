@@ -45,6 +45,3 @@ interface Loader
 	 */
 	function getUniqueId($name);
 }
-
-
-interface_exists(ILoader::class);
