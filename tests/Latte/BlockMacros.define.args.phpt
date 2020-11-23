@@ -133,3 +133,27 @@ Assert::matchFile(
 	__DIR__ . '/expected/BlockMacros.define.args4.html',
 	$latte->renderToString('main', ['var3' => 'outer'])
 );
+
+
+// default values
+$latte->setLoader(new Latte\Loaders\StringLoader);
+$template = <<<'XX'
+default values
+
+{define test $var1 = 0, $var2 = [1, 2, 3], $var3 = 10}
+	Variables {$var1}, {$var2|implode}, {$var3}
+{/define}
+
+a) {include test, 1}
+
+b) {include test, var1 => 1}
+XX;
+
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args5.phtml',
+	$latte->compile($template)
+);
+Assert::matchFile(
+	__DIR__ . '/expected/BlockMacros.define.args5.html',
+	$latte->renderToString($template)
+);
