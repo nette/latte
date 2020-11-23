@@ -180,7 +180,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 	'context1' => '<p>{include ical.latte}</p>',
 	'context2' => '{extends ical.latte}',
-	'context3' => 'x{includeblock ical.latte}',
+	'context3' => 'x{include ical.latte with blocks}',
 	'context4' => '{contentType calendar} {include ical.latte}',
 	'context5' => '<p>{include ical.latte|noescape}</p>',
 	'context6' => '{contentType javascript} {include ical.latte}',

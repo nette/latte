@@ -1,0 +1,34 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+	protected const BLOCKS = [
+		['test' => 'blockTest'],
+	];
+
+
+	public function main(): array
+	{
+		extract($this->params);
+		echo "\n";
+		if ($this->getParentName()) {
+			return get_defined_vars();
+		}
+		echo '	';
+		return get_defined_vars();
+	}
+
+
+	public function blockTest(array $__args): void
+	{
+		extract($this->params);
+		extract($__args);
+		echo '	Parent: ';
+		echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line 3 */;
+		echo '/';
+		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line 3 */;
+		echo "\n";
+	}
+
+}

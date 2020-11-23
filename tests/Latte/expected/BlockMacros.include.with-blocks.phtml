@@ -1,0 +1,17 @@
+<?php
+%A%
+
+final class Template%a% extends Latte\Runtime\Template
+{
+
+	public function main(): array
+	{
+%A%
+		/* line 2 */
+		$this->createTemplate(((true ? "inc" : "")), $this->params, 'includeblock')->renderToContentType('html');
+		echo "\n";
+		$this->renderBlock($__nm = 'test', [], 'html');
+%A%
+	}
+
+}
