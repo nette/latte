@@ -402,6 +402,9 @@ class BlockMacros extends MacroSet
 		if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
 			throw new CompileException("Cannot combine HTML attribute {$this->snippetAttribute} with n:snippet.");
 
+		} elseif ($node->prefix && isset($node->htmlNode->macroAttrs['ifcontent'])) {
+			throw new CompileException('Cannot combine n:ifcontent with n:snippet.');
+
 		} elseif ($this->isDynamic($data->name)) {
 			return $this->beginDynamicSnippet($node, $writer);
 
