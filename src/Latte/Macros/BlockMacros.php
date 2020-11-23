@@ -485,11 +485,11 @@ class BlockMacros extends MacroSet
 
 
 	/**
-	 * {snippetArea name}
+	 * {snippetArea [name]}
 	 */
 	public function macroSnippetArea(MacroNode $node, PhpWriter $writer): string
 	{
-		$node->validate(true);
+		$node->validate(null);
 		$data = $node->data;
 		$data->name = (string) $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
