@@ -77,6 +77,7 @@ Assert::match(
 	<<<'XX'
 
 		test
+
 test
 XX
 ,

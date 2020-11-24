@@ -11,11 +11,11 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-function testTemplate(string $title, array $templates, string $res = '')
+function testTemplate(string $title, array $templates, string $exp = '')
 {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader($templates));
-	Assert::match(trim($res), trim($latte->renderToString('main')));
+	Assert::match($exp, $latte->renderToString('main'));
 }
 
 
@@ -52,7 +52,8 @@ testTemplate('no overwritten blocks', [
 		outer
 
 		embed start
-			embed A		embed end
+			embed A
+		embed end
 
 		outer
 ');
@@ -95,7 +96,8 @@ testTemplate('one overwritten block', [
 		outer
 
 		embed start
-			main-A embed A		embed end
+			main-A embed A
+		embed end
 
 		outer
 ');
@@ -121,7 +123,8 @@ testTemplate('overwritten block + variables', [
 		outer
 
 		embed start W
-			main-A W		embed end
+			main-A W
+		embed end
 
 		outer
 ');
@@ -147,7 +150,8 @@ testTemplate('overwritten block + passed variables', [
 		outer
 
 		embed start P
-			main-A P		embed end
+			main-A P
+		embed end
 
 		outer
 ');
@@ -171,9 +175,12 @@ testTemplate('only outer blocks', [
 ], '
 		outer-A
 
+
 		embed start
 			embed C
-			embed A		embed end
+
+			embed A
+		embed end
 
 
 		outer-D
@@ -201,9 +208,12 @@ testTemplate('overwritten & outer blocks', [
 ], '
 		outer-A
 
+
 		embed start
 			embed C
-			main-A		embed end
+
+			main-A
+		embed end
 
 
 		outer-D
@@ -271,10 +281,12 @@ testTemplate('local outer block include from main', [
 			{block a}embed A{/block}
 		embed end
 	',
-], 'outer
+], '
+		outer
 
 		embed start
-			*outer-D*		embed end
+			*outer-D*
+		embed end
 
 
 		outer-D
@@ -334,7 +346,9 @@ testTemplate('embeds block include', [
 		outer
 
 		embed start
-			embed A			*embed A*		embed end
+			embed A
+			*embed A*
+		embed end
 
 		outer
 ');
@@ -358,12 +372,15 @@ testTemplate('embed in series I.', [
 		embed2-end
 	',
 ], '
+
 		embed1-start
 
 		embed2-start
-			embed2-A		embed2-end
+			embed2-A
+		embed2-end
 
-			main-A		embed1-end
+			main-A
+		embed1-end
 ');
 
 
@@ -386,10 +403,12 @@ testTemplate('embed in series II.', [
 		embed2-end
 	',
 ], '
+
 		embed1-start
 
 		embed2-start
-			embed1-A		embed2-end
+			embed1-A
+		embed2-end
 
 		embed1-end
 ');
@@ -415,8 +434,10 @@ testTemplate('embed in series III.', [
 		embed2-end
 	',
 ], '
+
 		embed1-start
-main-A		embed1-end
+main-A
+		embed1-end
 ');
 
 
@@ -442,8 +463,10 @@ testTemplate('embed in series IV.', [
 		embed2-end
 	',
 ], '
+
 		embed1-start
-main-A		embed1-end
+main-A
+		embed1-end
 ');
 
 
@@ -466,8 +489,10 @@ testTemplate('embeds nested in extra space', [
 		embed2-end
 	',
 ], '
+
 		embed1-start
-			embed1-A		embed1-end
+			embed1-A
+		embed1-end
 ');
 
 
@@ -492,10 +517,13 @@ testTemplate('nested embeds', [
 		embed2-end
 	',
 ], '
+
 		embed1-start
 
 		embed2-start
-			nested embeds A		embed2-end
+			nested embeds A
+		embed2-end
+
 
 		embed1-end
 ');
@@ -546,6 +574,7 @@ testTemplate('nested embeds', [
 		{block a}embed2-A{/block}
 	',
 ], '
+
 		outer top:
 		outer block
 
@@ -564,9 +593,11 @@ testTemplate('nested embeds', [
 						embed2 block
 
 
+
 				embed1 bottom:
 
 				embed1 block
+
 
 
 
@@ -593,8 +624,10 @@ testTemplate('extending embed', [
 		embed-ext-end
 	',
 ], '
+
 		embed-ext-start
-			main-A		embed-ext-end
+			main-A
+		embed-ext-end
 ');
 
 

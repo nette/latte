@@ -18,11 +18,13 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '</div>
 
 
+
 <div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
 		echo '">';
 		$this->renderBlock('outer', [], null, 'snippet');
 		echo '</div>
+
 
 
 	@';
@@ -36,6 +38,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '">';
 		$this->renderBlock('title', [], null, 'snippet');
 		echo '</div>
+
 	<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title2'));
 		echo '">';
@@ -71,7 +74,8 @@ final class Template%a% extends Latte\Runtime\Template
 			echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner'));
 			echo '">';
 			$this->renderBlock('inner', [], null, 'snippet');
-			echo '</div>	/Outer
+			echo '</div>
+	/Outer
 ';
 		}
 		finally {

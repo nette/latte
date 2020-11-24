@@ -649,12 +649,12 @@ class Compiler
 		$this->output = &$node->saved[0];
 		$this->writeCode((string) $node->openingCode, $node->replaced, $node->saved[1]);
 		$this->output .= $node->content;
-		$this->writeCode((string) $node->closingCode, $node->replaced, $isRightmost);
+		$this->writeCode((string) $node->closingCode, $node->replaced, $isRightmost, true);
 		return $node;
 	}
 
 
-	private function writeCode(string $code, ?bool $isReplaced, ?bool $isRightmost): void
+	private function writeCode(string $code, ?bool $isReplaced, ?bool $isRightmost, bool $isClosing = false): void
 	{
 		if ($isRightmost) {
 			$leftOfs = ($tmp = strrpos($this->output, "\n")) === false ? 0 : $tmp + 1;
@@ -664,7 +664,7 @@ class Compiler
 			}
 			if ($isLeftmost && !$isReplaced) {
 				$this->output = substr($this->output, 0, $leftOfs); // alone macro without output -> remove indentation
-				if (substr($code, -2) !== '?>') {
+				if (!$isClosing && substr($code, -2) !== '?>') {
 					$code .= '<?php ?>'; // consume new line
 				}
 			} elseif (substr($code, -2) === '?>') {

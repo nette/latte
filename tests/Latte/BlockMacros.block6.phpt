@@ -21,8 +21,9 @@ Assert::match(
 	'
 
 
-	X
-',
+
+
+	X',
 	$latte->renderToString(
 		'
 {define a}
