@@ -26,7 +26,9 @@ final class Template%a% extends Latte\Runtime\Template
 		?><div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('')) ?>"><?php $this->renderBlock('_', $this->params) ?></div>
 
 
+
 <div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div>
+
 
 
 	@<?php
@@ -37,6 +39,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 	<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title')) ?>"><?php $this->renderBlock('_title', $this->params) ?></div>
+
 	<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title2')) ?>"><?php $this->renderBlock('_title2', $this->params) ?></div><?php
 		return get_defined_vars();
 	}
@@ -60,7 +63,8 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->global->snippetDriver->enter("outer", "static");
 ?>
 	Outer
-		<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('_inner', $this->params) ?></div>	/Outer
+		<div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner')) ?>"><?php $this->renderBlock('_inner', $this->params) ?></div>
+	/Outer
 <?php
 		$this->global->snippetDriver->leave();
 

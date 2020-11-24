@@ -21,8 +21,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 %A%
-		$this->renderBlock('block1', get_defined_vars());
-?>
+		$this->renderBlock('block1', get_defined_vars()) ?>
 
 
 <div id="<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')) ?>"><?php $this->renderBlock('_outer', $this->params) ?></div><?php
@@ -58,9 +57,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->global->snippetDriver->enter("outer", "static");
 ?>
 begin
-<?php
-		$this->renderBlock('block2', get_defined_vars());
-?>
+<?php $this->renderBlock('block2', get_defined_vars()) ?>
 end
 <?php
 		$this->global->snippetDriver->leave();

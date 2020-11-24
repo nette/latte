@@ -24,9 +24,8 @@ final class Template%a% extends Latte\Runtime\Template
 	</div>
 
 	<div class="test"<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('inner')) . '"' ?>>
-<?php
-		$this->renderBlock('_inner', $this->params);
-?>	</div>
+<?php $this->renderBlock('_inner', $this->params) ?>
+	</div>
 
 	<div class="<?php echo LR\Filters::escapeHtmlAttr('class') /* line 9 */ ?>"<?php echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('gallery')) . '"' ?>><?php
 		$this->renderBlock('_gallery', $this->params) ?>

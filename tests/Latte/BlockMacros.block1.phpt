@@ -17,12 +17,16 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(<<<'EOD'
 	<div id="main">
-		side	</div> <!-- /main -->
+		side
+	</div> <!-- /main -->
+
 
 side
-	truetrue
+	true
+true
 	<div id="main">
-		side	</div> <!-- /main -->
+		side
+	</div> <!-- /main -->
 EOD
 , $latte->renderToString(
 	<<<'EOD'

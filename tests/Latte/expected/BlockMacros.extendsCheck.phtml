@@ -10,8 +10,9 @@ final class Template%a% extends Latte\Runtime\Template
 ?>
 
 
-<?php ob_start(function () {}) ?>    <?php
-		$this->renderBlock('bar', get_defined_vars());
+<?php ob_start(function () {}) ?>    <?php $this->renderBlock('bar', get_defined_vars()) ?>
+
+<?php
 		$__fi = new LR\FilterInfo('html');
 		$foo = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
 ?>

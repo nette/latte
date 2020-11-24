@@ -27,15 +27,14 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$__fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, $s)));
-		});
-?></title>
+		}) ?>
+</title>
 </head>
 
 <body>
 	<div id="sidebar">
-<?php
-		$this->renderBlock('sidebar', get_defined_vars());
-?>
+<?php $this->renderBlock('sidebar', get_defined_vars()) ?>
+
 	</div>
 
 	<div id="content">

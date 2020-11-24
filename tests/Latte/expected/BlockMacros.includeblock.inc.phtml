@@ -21,7 +21,9 @@ final class Template%a% extends Latte\Runtime\Template
 		if ($this->getParentName()) {
 			return get_defined_vars();
 		}
-		?>	<?php
+?>
+
+	<?php
 		return get_defined_vars();
 	}
 
