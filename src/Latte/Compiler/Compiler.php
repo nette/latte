@@ -50,6 +50,9 @@ class Compiler
 	/** @var string[] @internal */
 	public $placeholders = [];
 
+	/** @var string|null */
+	public $paramsExtraction;
+
 	/** @var Token[] */
 	private $tokens;
 
@@ -144,7 +147,7 @@ class Compiler
 		$output = '';
 		$this->output = &$output;
 		$this->inHead = true;
-		$this->htmlNode = $this->macroNode = $this->context = null;
+		$this->htmlNode = $this->macroNode = $this->context = $this->paramsExtraction = null;
 		$this->placeholders = $this->properties = $this->constants = [];
 		$this->methods = ['main' => null, 'prepare' => null];
 
@@ -193,10 +196,11 @@ class Compiler
 			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
 
-		$this->addMethod('main', $this->expandTokens("extract(\$this->params);?>\n$output$epilogs<?php return get_defined_vars();"), '', 'array');
+		$extractParams = $this->paramsExtraction ?? 'extract($this->params);';
+		$this->addMethod('main', $this->expandTokens($extractParams . "?>\n$output$epilogs<?php return get_defined_vars();"), '', 'array');
 
 		if ($prepare) {
-			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php", '', 'void');
+			$this->addMethod('prepare', $extractParams . "?>$prepare<?php", '', 'void');
 		}
 		if ($this->contentType !== self::CONTENT_HTML) {
 			$this->addConstant('CONTENT_TYPE', $this->contentType);

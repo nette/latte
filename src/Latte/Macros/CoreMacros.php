@@ -82,6 +82,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('class', null, null, [$me, 'macroClass']);
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
 
+		$me->addMacro('parameters', [$me, 'macroParameters'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('varPrint', [$me, 'macroVarPrint'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
@@ -716,6 +717,45 @@ class CoreMacros extends MacroSet
 			);
 		}
 		return '';
+	}
+
+
+	/**
+	 * {parameters type $var, ...}
+	 */
+	public function macroParameters(MacroNode $node, PhpWriter $writer): void
+	{
+		if (!$this->getCompiler()->isInHead()) {
+			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
+		}
+		if ($node->modifiers) {
+			$node->setArgs($node->args . $node->modifiers);
+			$node->modifiers = '';
+		}
+		$node->validate(true);
+
+		$tokens = $node->tokenizer;
+		$params = [];
+		while ($tokens->isNext()) {
+			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
+				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
+			}
+			$param = $tokens->consumeValue($tokens::T_VARIABLE);
+			$default = $tokens->nextToken('=')
+				? $tokens->joinUntilSameDepth(',')
+				: 'null';
+			$params[] = $writer->write(
+				'%raw = $this->params[%var] ?? $this->params[%var] ?? %raw;',
+				$param,
+				count($params),
+				substr($param, 1),
+				$default
+			);
+			if ($tokens->isNext()) {
+				$tokens->consumeValue(',');
+			}
+		}
+		$this->getCompiler()->paramsExtraction = implode('', $params);
 	}
 
 
