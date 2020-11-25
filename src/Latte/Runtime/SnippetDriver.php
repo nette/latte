@@ -47,6 +47,10 @@ class SnippetDriver
 	public function enter(string $name, string $type): void
 	{
 		if (!$this->renderingSnippets) {
+			if ($type === self::TYPE_DYNAMIC && $this->nestingLevel === 0) {
+				trigger_error('Dynamic snippets are allowed only inside static snippet/snippetArea.', E_USER_WARNING);
+			}
+			$this->nestingLevel++;
 			return;
 		}
 		$obStarted = false;
@@ -68,6 +72,7 @@ class SnippetDriver
 	public function leave(): void
 	{
 		if (!$this->renderingSnippets) {
+			$this->nestingLevel--;
 			return;
 		}
 		[$name, $obStarted] = array_pop($this->stack);
