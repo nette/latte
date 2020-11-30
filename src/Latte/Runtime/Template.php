@@ -181,9 +181,9 @@ class Template
 
 		} elseif ($this->parentName) { // extends
 			ob_start(function () {});
-			$params = $this->main();
+			$this->params = $this->main();
 			ob_end_clean();
-			$this->createTemplate($this->parentName, $params, 'extends')->render($block);
+			$this->createTemplate($this->parentName, $this->params, 'extends')->render($block);
 			return;
 
 		} elseif ($block !== null) { // single block rendering
