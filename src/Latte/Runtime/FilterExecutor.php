@@ -186,7 +186,8 @@ class FilterExecutor
 				? new \ReflectionMethod($callback[0], $callback[1])
 				: new \ReflectionFunction($callback);
 			$this->_static[$name][1] = ($tmp = $ref->getParameters())
-				&& $tmp[0]->getClass() && $tmp[0]->getClass()->getName() === 'Latte\Runtime\FilterInfo';
+				&& @$tmp[0]->getClass() // deprecated since PHP 8
+				&& @$tmp[0]->getClass()->getName() === 'Latte\Runtime\FilterInfo';
 		}
 		return $this->_static[$name];
 	}

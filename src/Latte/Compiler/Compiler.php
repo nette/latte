@@ -126,7 +126,7 @@ class Compiler
 		$macroHandlers = new \SplObjectStorage;
 
 		if ($this->macros) {
-			array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', $this->macros));
+			array_map([$macroHandlers, 'attach'], call_user_func_array('array_merge', array_values($this->macros)));
 		}
 
 		foreach ($macroHandlers as $handler) {
