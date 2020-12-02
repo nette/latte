@@ -236,27 +236,17 @@ class Template
 
 
 	/**
-	 * @param  string|\Closure  $mod  content-type name or modifier closure
+	 * @param  string|\Closure|null  $mod  content-type name or modifier closure
 	 * @internal
 	 */
 	public function renderToContentType($mod, string $block = null): void
 	{
-		if ($mod instanceof \Closure) {
-			echo $mod($this->capture(function () use ($block) { $this->render($block); }), static::CONTENT_TYPE);
-
-		} elseif ($mod && $mod !== static::CONTENT_TYPE) {
-			if ($filter = Filters::getConvertor(static::CONTENT_TYPE, $mod)) {
-				echo $filter($this->capture(function () use ($block) { $this->render($block); }));
-			} else {
-				trigger_error(sprintf(
-					"Including '{$this->name}' with content type %s into incompatible type %s.",
-					strtoupper(static::CONTENT_TYPE),
-					strtoupper($mod)
-				), E_USER_WARNING);
-			}
-		} else {
-			$this->render($block);
-		}
+		$this->filter(
+			function () use ($block) { $this->render($block); },
+			$mod,
+			static::CONTENT_TYPE,
+			"'$this->name'"
+		);
 	}
 
 
@@ -282,7 +272,7 @@ class Template
 	/**
 	 * Renders block.
 	 * @param  mixed[]  $params
-	 * @param  string|\Closure  $mod  content-type name or modifier closure
+	 * @param  string|\Closure|null  $mod  content-type name or modifier closure
 	 * @param  int|string  $layer
 	 * @internal
 	 */
@@ -300,22 +290,12 @@ class Template
 			throw new Latte\RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
-		$function = reset($block->functions);
-		if ($mod && $mod !== $block->contentType) {
-			if ($filter = (is_string($mod) ? Filters::getConvertor($block->contentType, $mod) : $mod)) {
-				echo $filter(
-					$this->capture(function () use ($function, $params): void { $function($params); }),
-					$block->contentType
-				);
-				return;
-			}
-			trigger_error(sprintf(
-				"Including block $name with content type %s into incompatible type %s.",
-				strtoupper($block->contentType),
-				strtoupper($mod)
-			), E_USER_WARNING);
-		}
-		$function($params);
+		$this->filter(
+			function () use ($block, $params): void { reset($block->functions)($params); },
+			$mod,
+			$block->contentType,
+			"block $name"
+		);
 	}
 
 
@@ -357,6 +337,30 @@ class Template
 		}
 
 		$block->functions = array_merge($block->functions, $functions);
+	}
+
+
+	/**
+	 * @param  string|\Closure|null  $mod  content-type name or modifier closure
+	 */
+	private function filter(callable $function, $mod, string $contentType, string $name): void
+	{
+		if ($mod === null || $mod === $contentType) {
+			$function();
+
+		} elseif ($mod instanceof \Closure) {
+			echo $mod($this->capture($function), $contentType);
+
+		} elseif ($filter = Filters::getConvertor($contentType, $mod)) {
+			echo $filter($this->capture($function));
+
+		} else {
+			trigger_error(sprintf(
+				"Including $name with content type %s into incompatible type %s.",
+				strtoupper($contentType),
+				strtoupper($mod)
+			), E_USER_WARNING);
+		}
 	}
 
 
