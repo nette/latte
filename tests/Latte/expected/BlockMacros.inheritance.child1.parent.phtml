@@ -25,8 +25,8 @@ final class Template%a% extends Latte\Runtime\Template
 			return get_defined_vars();
 		}
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
-			$__fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, $s)));
+			$ʟ_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
 		}) ?>
 </title>
 </head>
@@ -44,8 +44,8 @@ final class Template%a% extends Latte\Runtime\Template
 
 <?php
 		$this->renderBlock('content', $this->params, function ($s, $type) {
-			$__fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, $s)));
+			$ʟ_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
 		});
 ?>
 	</div>
@@ -59,13 +59,13 @@ Parent: <?php echo LR\Filters::escapeHtmlText(basename($this->getReferringTempla
 	}
 
 
-	public function blockTitle(array $__args): void
+	public function blockTitle(array $ʟ_args): void
 	{
 		?>My website<?php
 	}
 
 
-	public function blockSidebar(array $__args): void
+	public function blockSidebar(array $ʟ_args): void
 	{
 ?>		<ul>
 			<li><a href="/">Homepage</a></li>

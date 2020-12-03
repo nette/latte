@@ -48,10 +48,10 @@ d) <?php
 	}
 
 
-	public function blockTest(array $__args): void
+	public function blockTest(array $ʟ_args): void
 	{
 		extract($this->params);
-		[$var1, $var2, $var3] = $__args + [null, null, null, ];
+		[$var1, $var2, $var3] = $ʟ_args + [null, null, null, ];
 		?>	Variables <?php echo LR\Filters::escapeHtmlText($var1) /* line 2 */ ?>, <?php echo LR\Filters::escapeHtmlText($var2) /* line 2 */ ?>, <?php
 		echo LR\Filters::escapeHtmlText($hello) /* line 2 */ ?>
 
@@ -59,9 +59,9 @@ d) <?php
 	}
 
 
-	public function blockOuter(array $__args): void
+	public function blockOuter(array $ʟ_args): void
 	{
-		extract($__args);
+		extract($ʟ_args);
 		$this->renderBlock('test', ['hello'] + get_defined_vars(), 'html');
 
 	}

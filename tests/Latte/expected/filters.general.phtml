@@ -18,14 +18,14 @@ final class Template%a% extends Latte\Runtime\Template
 	<li>Translated HTML: <?php
 		ob_start(function () {});
 		echo LR\Filters::escapeHtmlText($hello) /* line 9 */;
-		$__fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent("translate", $__fi, ob_get_clean())) ?></li>
+		$ʟ_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, ob_get_clean())) ?></li>
 	<li>Translated HTML: <?php
-		$__fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent("translate", $__fi, 'ahoj')) ?></li>
+		$ʟ_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, 'ahoj')) ?></li>
 	<li>Translated HTML: <?php
-		$__fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent("translate", $__fi, 'ahoj')) ?></li>
+		$ʟ_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, 'ahoj')) ?></li>
 	<li>Translated HTML: <?php echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj|ahojahojahojahoj')) ?></li>
 	<li>spaces: <?php echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello" )) /* line 13 */ ?></li>
 	<li>dynamic: <?php echo LR\Filters::escapeHtmlText(($this->filters->dynamic)($hello)) /* line 14 */ ?> <?php
@@ -60,8 +60,8 @@ A   A
 alert();
 </script>
 <?php
-		$__fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('strip', $__fi, ob_get_clean()));
+		$ʟ_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('strip', $ʟ_fi, ob_get_clean()));
 ?>
 
 
@@ -72,7 +72,7 @@ alert();
 	<li>lower: <?php echo LR\Filters::escapeHtmlText(($this->filters->lower)($hello)) /* line 50 */ ?></li>
 </ul>
 <?php
-		$__fi = new LR\FilterInfo('html');
+		$ʟ_fi = new LR\FilterInfo('html');
 		$capture = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
 ?>
 
@@ -85,8 +85,8 @@ Captured: <?php echo LR\Filters::escapeHtmlText($capture) /* line 55 */ ?>
 <?php ob_start(function () {}) ?>
 Hello
 <?php
-		$__fi = new LR\FilterInfo('html');
-		$capture = $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()));
+		$ʟ_fi = new LR\FilterInfo('html');
+		$capture = $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()));
 ?>
 
 <p>
@@ -98,11 +98,11 @@ Captured with modifier: <?php echo LR\Filters::escapeHtmlText($capture) /* line 
 
 <p>
 Nested blocks: <?php ob_start(function () {}) ?> Outer   <?php ob_start(function () {}) ?> Inner Block <?php
-		$__fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, ob_get_clean())));
+		$ʟ_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean())));
 		?>  Block <?php
-		$__fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('truncate', $__fi, $this->filters->filterContent('striphtml', $__fi, ob_get_clean()), 20));
+		$ʟ_fi = new LR\FilterInfo('html');
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('truncate', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean()), 20));
 ?>
 
 </p>

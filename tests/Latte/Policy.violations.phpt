@@ -102,10 +102,6 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Forbidden variable variables.');
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{$_tmp}');
-}, Latte\CompileException::class, 'Forbidden variable $_tmp.');
-
-Assert::exception(function () use ($latte) {
 	$latte->compile('{do echo 123}');
 }, Latte\CompileException::class, "Forbidden keyword 'echo' inside macro.");
 

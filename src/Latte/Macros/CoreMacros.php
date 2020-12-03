@@ -103,8 +103,8 @@ class CoreMacros extends MacroSet
 		$code = '';
 		if ($this->overwrittenVars) {
 			$vars = array_map(function ($l) { return implode(', ', $l); }, $this->overwrittenVars);
-			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $__v => $__l) { '
-				. 'trigger_error("Variable \$$__v overwritten in foreach on line $__l"); } ';
+			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $ʟ_v => $ʟ_l) { '
+				. 'trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l"); } ';
 		}
 		$code = $code
 			? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}'
@@ -216,7 +216,7 @@ class CoreMacros extends MacroSet
 			}
 
 			return $writer->write(
-				'$__fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $__fi, %raw))',
+				'$ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw))',
 				$node->context[0],
 				$value
 			);
@@ -247,14 +247,14 @@ class CoreMacros extends MacroSet
 			. ($node->name === 'sandbox'
 				? 'ob_start(function () {});
 					try { $this->createTemplate(%node.word, %node.array, %var)->renderToContentType(%raw); echo ob_get_clean(); }
-					catch (\Throwable $__e) {
-						if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); }
-						else { echo ob_get_clean(); throw $__e; }
+					catch (\Throwable $ʟ_e) {
+						if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($ʟ_e, $this); }
+						else { echo ob_get_clean(); throw $ʟ_e; }
 					}'
 				: '$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);'),
 			$node->name,
 			$node->modifiers
-				? $writer->write('function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }')
+				? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 				: PhpHelpers::dump($noEscape ? null : implode($node->context))
 		);
 	}
@@ -286,7 +286,7 @@ class CoreMacros extends MacroSet
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write(
-			'$__fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
+			'$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
 			$node->context[0],
 			$node->data->variable,
 			$body
@@ -396,7 +396,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
-		return $writer->write('echo ($__tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($__tmp))) . \'"\' : "";');
+		return $writer->write('echo ($ʟ_tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($ʟ_tmp))) . \'"\' : "";');
 	}
 
 
@@ -405,7 +405,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroAttr(MacroNode $node, PhpWriter $writer): string
 	{
-		return $writer->write('$__tmp = %node.array; echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);');
+		return $writer->write('$ʟ_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp);');
 	}
 
 

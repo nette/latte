@@ -213,7 +213,7 @@ class PhpWriter
 					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
 				}
 
-			} elseif ($this->policy && ($tokens->isCurrent('$this') || substr($tokenValue, 0, 2) === '$_')) {
+			} elseif ($this->policy && $tokens->isCurrent('$this')) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
 		}
@@ -360,10 +360,10 @@ class PhpWriter
 						break;
 					}
 
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
-					$expr = new MacroTokens('$__tmp');
+					$expr = new MacroTokens('$ʟ_tmp');
 					$addBraces .= ')';
 
 				} elseif ($tokens->nextToken('->', '::')) {
@@ -688,7 +688,7 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($__fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
+						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
 							->append(')');
 					} else {
 						$res = $this->escapePass($res);
@@ -710,7 +710,7 @@ class PhpWriter
 					$name = strtolower($name);
 					$res->prepend(
 						$isContent
-							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $__fi, '
+							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
 							: '($this->filters->' . $name . ')('
 					);
 					$inside = true;
