@@ -39,11 +39,10 @@ $template = <<<'EOD'
 
 {=$obj?->bar}
 {=$obj?->$prop}
-{=$obj?::$static}
 {=$obj??->bar}
 EOD;
 
-@$latte->compile($template);
+$latte->compile($template);
 Assert::equal(
 	[
 		'macros' => Expect::type('array'),
@@ -52,7 +51,7 @@ Assert::equal(
 );
 
 
-@$latte->renderToString($template);
+$latte->renderToString($template);
 Assert::equal(
 	[
 		'macros' => Expect::type('array'),
@@ -64,7 +63,6 @@ Assert::equal(
 			['MyClass', 'static'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
-			['MyClass', 'static'],
 			['MyClass', 'bar'],
 		],
 	],
