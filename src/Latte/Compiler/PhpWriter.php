@@ -375,36 +375,9 @@ class PhpWriter
 
 			$addBraces = '';
 			$expr = new MacroTokens([$tokens->currentToken()]);
-			$var = $tokens->currentValue();
 
 			do {
-				if ($tokens->nextToken('?')) {
-					if ( // is it ternary operator?
-						$tokens->isNext(...$tokens::SIGNIFICANT)
-						&& (
-							!$tokens->isNext($tokens::T_CHAR)
-							|| $tokens->isNext('(', '[', '{', ':', '!', '@', '\\')
-						)
-					) {
-						$expr->append($addBraces . ' ?');
-						break;
-					}
-
-					if (!$tokens->isNext('::')) {
-						$expr->prepend('(');
-						$expr->append(' ?? null)' . $addBraces);
-						trigger_error("Syntax '$var?' is deprecated, use '$var ?? null' instead.", E_USER_DEPRECATED);
-						break;
-					}
-
-					trigger_error("Syntax '$var?::' is deprecated.", E_USER_DEPRECATED);
-					$expr->prepend('(($ʟ_tmp = ');
-					$expr->append(' ?? null) === null ? null : ');
-					$res->tokens = array_merge($res->tokens, $expr->tokens);
-					$expr = new MacroTokens('$ʟ_tmp');
-					$addBraces .= ')';
-
-				} elseif ($tokens->nextToken('?->')) {
+				if ($tokens->nextToken('?->')) {
 					if (PHP_VERSION_ID >= 80000) {
 						$expr->append($tokens->currentToken());
 						$expr->append($tokens->nextToken());

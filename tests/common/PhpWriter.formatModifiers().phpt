@@ -69,8 +69,6 @@ test('depth', function () {
 
 
 test('optionalChainingPass', function () {
-	Assert::same('($this->filters->mod)(@, ($a ?? null))', @formatModifiers('@', 'mod:$a?')); // deprecated
-	Assert::same('($this->filters->mod)(@, (($a ?? null)))', @formatModifiers('@', 'mod:($a?)')); // deprecated
 	Assert::same(
 		PHP_VERSION_ID >= 80000
 			? '($this->filters->mod)(@, $var?->prop?->elem[1]?->call(2)?->item)'
@@ -80,18 +78,5 @@ test('optionalChainingPass', function () {
 	Assert::same(
 		'($this->filters->mod)(@, (($ʟ_tmp = $var ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1] ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2) ?? null) === null ? null : $ʟ_tmp->item)))))',
 		formatModifiers('@', 'mod:$var??->prop??->elem[1]??->call(2)??->item')
-	);
-});
-
-
-test('optionalChainingPass + ternary', function () {
-	Assert::same('($this->filters->mod)(@, $a ?, $b)', formatModifiers('@', 'mod:$a?:$b'));
-	Assert::same('($this->filters->mod)(@, $a ? , $b)', formatModifiers('@', 'mod:$a ? : $b'));
-	Assert::same('($this->filters->mod)(@, $a ?? $b)', formatModifiers('@', 'mod:$a ?? $b'));
-	Assert::same(
-		PHP_VERSION_ID >= 80000
-			? '($this->filters->mod)(@, ($a?->foo ?? null) ? [1, 2, ([3 ? 2 : 1])] , $b)'
-			: '($this->filters->mod)(@, (($ʟ_tmp = $a) === null ? null : ($ʟ_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] , $b)',
-		@formatModifiers('@', 'mod:$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b') // deprecated
 	);
 });

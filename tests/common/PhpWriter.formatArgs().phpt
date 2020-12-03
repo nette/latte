@@ -61,11 +61,11 @@ test('short ternary operators', function () {
 	Assert::same("fce() ? 'a' : null, fce() ? 'b' : null", formatArgs('fce() ? a, fce() ? b'));
 	Assert::same("fce() ?? 'a'", formatArgs('fce() ?? a')); // null coalesce is ignored
 	Assert::same("'a'?", formatArgs('a?')); // value must exists
-	Assert::same('$a ?(1) : null', formatArgs('$a?(1)')); // with braces
+	Assert::same('$a?(1) : null', formatArgs('$a?(1)')); // with braces
 	Assert::same('$a ? \Foo::BAR : null', formatArgs('$a ? \Foo::BAR'));
 	Assert::same('$c ?: ($a ?: $b)', formatArgs('$c ?: ($a ?: $b)'));
 	Assert::same('$c ? ($a ?: $b) : null', formatArgs('$c ? ($a ?: $b)'));
-	Assert::same('$a ?(1) : null', formatArgs('$a?(1)')); // with braces
+	Assert::same('$a?(1) : null', formatArgs('$a?(1)')); // with braces
 });
 
 
@@ -84,9 +84,6 @@ test('special', function () {
 	Assert::same("'symbol' => Namespace \\ Class :: method ()", formatArgs('symbol => Namespace \ Class :: method ()'));
 	Assert::same("'symbol' => \$this->var, ", formatArgs('symbol => $this->var, '));
 	Assert::same("'symbol' => \$this->VAR, ", formatArgs('symbol => $this->VAR, '));
-	Assert::same("'symbol' => \$this->var, ", formatArgs('symbol => $this -> var, '));
-	Assert::same("'symbol' => \$this->VAR, ", formatArgs('symbol => $this -> VAR, '));
-	Assert::same("'symbol' => \$this->var", formatArgs('symbol => $this -> var'));
 	Assert::same("'symbol1' =>  'value' ", formatArgs('symbol1 => /*value,* /symbol2=>*/value/**/'));
 	Assert::same('(array)', formatArgs('(array)'));
 	Assert::same('func()[1]', formatArgs('func()[1]'));
@@ -140,9 +137,6 @@ test('in operator', function () {
 
 
 test('optionalChainingPass', function () {
-	Assert::same('$a', formatArgs('$a'));
-	Assert::same('($a ?? null)', @formatArgs('$a?')); // deprecated
-	Assert::same('(($a ?? null))', @formatArgs('($a?)')); // deprecated
 	Assert::same('$var->prop->elem[1]->call(2)->item', formatArgs('$var->prop->elem[1]->call(2)->item'));
 	Assert::same(
 		PHP_VERSION_ID >= 80000
@@ -153,20 +147,6 @@ test('optionalChainingPass', function () {
 	Assert::same(
 		'(($ʟ_tmp = $var ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1] ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2) ?? null) === null ? null : $ʟ_tmp->item))))',
 		formatArgs('$var??->prop??->elem[1]??->call(2)??->item')
-	);
-});
-
-
-test('optionalChainingPass + ternary', function () {
-	Assert::same('$a ?:$b', formatArgs('$a?:$b'));
-	Assert::same('$a ? : $b', formatArgs('$a ? : $b'));
-	Assert::same('$a ?? $b', formatArgs('$a ?? $b'));
-	Assert::same('$a ? [1, 2, ([3 ? 2 : 1])]: $b', formatArgs('$a ? [1, 2, ([3 ? 2 : 1])]: $b'));
-	Assert::same(
-		PHP_VERSION_ID >= 80000
-			? '($a?->foo ?? null) ? [1, 2, ([3 ? 2 : 1])] : $b'
-			: '(($ʟ_tmp = $a) === null ? null : ($ʟ_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b',
-		@formatArgs('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b') // deprecated
 	);
 });
 
