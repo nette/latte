@@ -125,5 +125,5 @@ Assert::error(function () use ($latte) {
 }, [E_USER_DEPRECATED, E_USER_DEPRECATED]);
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{$__tmp}');
-}, Latte\CompileException::class, 'Forbidden variable $__tmp.');
+	$latte->compile('{$ʟ_tmp}');
+}, Latte\CompileException::class, 'Forbidden variable $ʟ_tmp.');

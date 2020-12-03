@@ -34,47 +34,47 @@ test('indexes', function () { // deprecated
 
 
 test('properties', function () {
-	Assert::same('(($__tmp = $foo) === null ? null : $__tmp->prop)', optionalChaining('$foo?->prop'));
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : $ʟ_tmp->prop)', optionalChaining('$foo?->prop'));
 	Assert::same('($foo->prop ?? null)', @optionalChaining('$foo->prop?')); // deprecated
-	Assert::same('(($__tmp = $foo) === null ? null : ($__tmp->prop ?? null))', @optionalChaining('$foo?->prop?')); // deprecated
-	Assert::same('(($__tmp = $foo) === null ? null : ($__tmp->prop ?? null)) + 10', @optionalChaining('$foo?->prop? + 10')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->prop ?? null))', @optionalChaining('$foo?->prop?')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->prop ?? null)) + 10', @optionalChaining('$foo?->prop? + 10')); // deprecated
 	Assert::same('($foo->prop ?? null) + 10', @optionalChaining('$foo->prop? + 10')); // deprecated
 	Assert::same('(($foo->prop ?? null))', @optionalChaining('($foo->prop?)')); // deprecated
-	Assert::same('((($__tmp = $foo) === null ? null : $__tmp->prop))', optionalChaining('($foo?->prop)'));
-	Assert::same('[(($__tmp = $foo) === null ? null : ($__tmp->prop ?? null))]', @optionalChaining('[$foo?->prop?]')); // deprecated
+	Assert::same('((($ʟ_tmp = $foo) === null ? null : $ʟ_tmp->prop))', optionalChaining('($foo?->prop)'));
+	Assert::same('[(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->prop ?? null))]', @optionalChaining('[$foo?->prop?]')); // deprecated
 
 	// variable
-	Assert::same('(($__tmp = $foo) === null ? null : $__tmp->$prop)', optionalChaining('$foo?->$prop'));
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : $ʟ_tmp->$prop)', optionalChaining('$foo?->$prop'));
 	Assert::same('($foo->$prop ?? null)', @optionalChaining('$foo->$prop?')); // deprecated
 
 	// static
-	Assert::same('(($__tmp = $foo ?? null) === null ? null : $__tmp::$prop)', @optionalChaining('$foo?::$prop')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo ?? null) === null ? null : $ʟ_tmp::$prop)', @optionalChaining('$foo?::$prop')); // deprecated
 	Assert::same('($foo::$prop ?? null)', @optionalChaining('$foo::$prop?')); // deprecated
 });
 
 
 test('calling', function () {
-	Assert::same('(($__tmp = $foo) === null ? null : $__tmp->call())', optionalChaining('$foo?->call()'));
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : $ʟ_tmp->call())', optionalChaining('$foo?->call()'));
 	Assert::same('($foo->call() ?? null)', @optionalChaining('$foo->call()?')); // deprecated
-	Assert::same('(($__tmp = $foo) === null ? null : ($__tmp->call() ?? null))', @optionalChaining('$foo?->call()?')); // deprecated
-	Assert::same('(($__tmp = $foo) === null ? null : ($__tmp->call() ?? null)) + 10', @optionalChaining('$foo?->call()? + 10')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->call() ?? null))', @optionalChaining('$foo?->call()?')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->call() ?? null)) + 10', @optionalChaining('$foo?->call()? + 10')); // deprecated
 	Assert::same('($foo->call() ?? null) + 10', @optionalChaining('$foo->call()? + 10')); // deprecated
 	Assert::same('(($foo->call() ?? null))', @optionalChaining('($foo->call()?)')); // deprecated
-	Assert::same('((($__tmp = $foo) === null ? null : $__tmp->call()))', optionalChaining('($foo?->call())'));
-	Assert::same('((($__tmp = $foo) === null ? null : ($__tmp->call() ?? null)))', @optionalChaining('($foo?->call()?)')); // deprecated
-	Assert::same('(($__tmp = $foo) === null ? null : ($__tmp->call( ($a ?? null) ) ?? null))', @optionalChaining('$foo?->call( $a? )?')); // deprecated
-	Assert::same('(($__tmp = $foo) === null ? null : ($__tmp->call( (($__tmp = $a) === null ? null : $__tmp->call()) ) ?? null))', @optionalChaining('$foo?->call( $a?->call() )?')); // deprecated
+	Assert::same('((($ʟ_tmp = $foo) === null ? null : $ʟ_tmp->call()))', optionalChaining('($foo?->call())'));
+	Assert::same('((($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->call() ?? null)))', @optionalChaining('($foo?->call()?)')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->call( ($a ?? null) ) ?? null))', @optionalChaining('$foo?->call( $a? )?')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->call( (($ʟ_tmp = $a) === null ? null : $ʟ_tmp->call()) ) ?? null))', @optionalChaining('$foo?->call( $a?->call() )?')); // deprecated
 });
 
 
 test('mixed', function () {
-	Assert::same('($foo->prop ?? null) + (($__tmp = $foo) === null ? null : ($__tmp->prop ?? null))', @optionalChaining('$foo->prop? + $foo?->prop?')); // deprecated
+	Assert::same('($foo->prop ?? null) + (($ʟ_tmp = $foo) === null ? null : ($ʟ_tmp->prop ?? null))', @optionalChaining('$foo->prop? + $foo?->prop?')); // deprecated
 
 	Assert::same('$var->prop->elem[1]->call(2)->item', optionalChaining('$var->prop->elem[1]->call(2)->item'));
-	Assert::same('(($__tmp = $var) === null ? null : $__tmp->prop->elem[1]->call(2)->item)', optionalChaining('$var?->prop->elem[1]->call(2)->item'));
-	Assert::same('(($__tmp = $var->prop) === null ? null : $__tmp->elem[1]->call(2)->item)', optionalChaining('$var->prop?->elem[1]->call(2)->item'));
-	Assert::same('(($__tmp = $var->prop->elem[1]) === null ? null : $__tmp->call(2)->item)', optionalChaining('$var->prop->elem[1]?->call(2)->item'));
-	Assert::same('(($__tmp = $var->prop->elem[1]->call(2)) === null ? null : $__tmp->item)', optionalChaining('$var->prop->elem[1]->call(2)?->item'));
+	Assert::same('(($ʟ_tmp = $var) === null ? null : $ʟ_tmp->prop->elem[1]->call(2)->item)', optionalChaining('$var?->prop->elem[1]->call(2)->item'));
+	Assert::same('(($ʟ_tmp = $var->prop) === null ? null : $ʟ_tmp->elem[1]->call(2)->item)', optionalChaining('$var->prop?->elem[1]->call(2)->item'));
+	Assert::same('(($ʟ_tmp = $var->prop->elem[1]) === null ? null : $ʟ_tmp->call(2)->item)', optionalChaining('$var->prop->elem[1]?->call(2)->item'));
+	Assert::same('(($ʟ_tmp = $var->prop->elem[1]->call(2)) === null ? null : $ʟ_tmp->item)', optionalChaining('$var->prop->elem[1]->call(2)?->item'));
 	Assert::same('($var->prop->elem[1]->call(2)->item ?? null)', @optionalChaining('$var->prop->elem[1]->call(2)->item?')); // deprecated
 });
 
@@ -98,8 +98,8 @@ test('ternary', function () {
 
 	Assert::same('$a ? [1, 2, ([3 ? 2 : 1])]: $b', optionalChaining('$a ? [1, 2, ([3 ? 2 : 1])]: $b'));
 	Assert::same('$a->foo ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
-	Assert::same('(($__tmp = $a) === null ? null : $__tmp->foo) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
-	Assert::same('(($__tmp = $a) === null ? null : ($__tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b', @optionalChaining('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b')); // deprecated
+	Assert::same('(($ʟ_tmp = $a) === null ? null : $ʟ_tmp->foo) ? [1, 2, ([3 ? 2 : 1])] : $b', optionalChaining('$a?->foo ? [1, 2, ([3 ? 2 : 1])] : $b'));
+	Assert::same('(($ʟ_tmp = $a) === null ? null : ($ʟ_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b', @optionalChaining('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b')); // deprecated
 	Assert::same('($a->foo ?? null) ? [1, 2, ([3 ? 2 : 1])] : $b', @optionalChaining('$a->foo? ? [1, 2, ([3 ? 2 : 1])] : $b')); // deprecated
 
 	Assert::same('$a ? \Foo::BAR : \Foo::BAR', optionalChaining('$a ? \Foo::BAR : \Foo::BAR'));

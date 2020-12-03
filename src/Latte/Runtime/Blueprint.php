@@ -58,7 +58,7 @@ class Blueprint
 
 		$res = '';
 		foreach ($vars as $name => $value) {
-			if (Latte\Helpers::startsWith($name, '__')) {
+			if (Latte\Helpers::startsWith($name, 'ʟ_')) {
 				continue;
 			}
 			$type = Php\Type::getType($value) ?: 'mixed';

@@ -14,15 +14,15 @@ final class Template%a% extends Latte\Runtime\Template
 		echo 'named arguments order
 
 a) ';
-		$this->renderBlock($__nm = 'test', [1, 'var1' => 2] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [1, 'var1' => 2] + [], 'html');
 		echo '
 
 b) ';
-		$this->renderBlock($__nm = 'test', ['var2' => 1] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', ['var2' => 1] + [], 'html');
 		echo '
 
 c) ';
-		$this->renderBlock($__nm = 'test', ['hello' => 1] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', ['hello' => 1] + [], 'html');
 		echo '
 
 ';
@@ -33,12 +33,12 @@ c) ';
 	}
 
 
-	public function blockTest(array $__args): void
+	public function blockTest(array $ʟ_args): void
 	{
 		extract($this->params);
-		$var1 = $__args[0] ?? $__args['var1'] ?? null;
-		$var2 = $__args[1] ?? $__args['var2'] ?? null;
-		$var3 = $__args[2] ?? $__args['var3'] ?? null;
+		$var1 = $ʟ_args[0] ?? $ʟ_args['var1'] ?? null;
+		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ?? null;
+		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ?? null;
 		echo '	Variables ';
 		echo LR\Filters::escapeHtmlText($var1) /* line 10 */;
 		echo ', ';

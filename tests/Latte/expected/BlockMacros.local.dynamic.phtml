@@ -22,29 +22,29 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator(['dynamic', 'static'], $__it ?? null) as $name) {
-			$this->addBlock($__nm = $name, 'html', [[$this, 'blockName']], 'local');
-			$this->renderBlock($__nm, get_defined_vars());
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) {
+			$this->addBlock($ʟ_nm = $name, 'html', [[$this, 'blockName']], 'local');
+			$this->renderBlock($ʟ_nm, get_defined_vars());
 			echo "\n";
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo "\n";
-		$this->renderBlock($__nm = 'dynamic', ['var' => 20] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'dynamic', ['var' => 20] + [], 'html');
 		echo "\n";
-		$this->renderBlock($__nm = 'static', ['var' => 30] + get_defined_vars(), 'html');
+		$this->renderBlock($ʟ_nm = 'static', ['var' => 30] + get_defined_vars(), 'html');
 		echo "\n";
-		$this->renderBlock($__nm = ($name . ''), ['var' => 40] + [], 'html');
+		$this->renderBlock($ʟ_nm = ($name . ''), ['var' => 40] + [], 'html');
 		echo "\n";
-		$this->addBlock($__nm = "word$name", 'html', [[$this, 'blockWord_name']], 'local');
-		$this->renderBlock($__nm, get_defined_vars());
+		$this->addBlock($ʟ_nm = "word$name", 'html', [[$this, 'blockWord_name']], 'local');
+		$this->renderBlock($ʟ_nm, get_defined_vars());
 		echo '
 
 ';
-		$this->addBlock($__nm = "strip$name", 'html', [[$this, 'blockStrip_name']], 'local');
-		$this->renderBlock($__nm, get_defined_vars(), function ($s, $type) {
-			$__fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('striptags', $__fi, $s));
+		$this->addBlock($ʟ_nm = "strip$name", 'html', [[$this, 'blockStrip_name']], 'local');
+		$this->renderBlock($ʟ_nm, get_defined_vars(), function ($s, $type) {
+			$ʟ_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('striptags', $ʟ_fi, $s));
 		});
 		echo "\n";
 		return get_defined_vars();
@@ -55,26 +55,26 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			foreach (array_intersect_key(['name' => '8'], $this->params) as $__v => $__l) {
-				trigger_error("Variable \$$__v overwritten in foreach on line $__l");
+			foreach (array_intersect_key(['name' => '8'], $this->params) as $ʟ_v => $ʟ_l) {
+				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
 
 	}
 
 
-	public function blockName(array $__args): void
+	public function blockName(array $ʟ_args): void
 	{
-		extract($__args);
+		extract($ʟ_args);
 		echo '		Dynamic block #';
 		echo LR\Filters::escapeHtmlText($var) /* line 10 */;
 		echo "\n";
 	}
 
 
-	public function blockWord_name(array $__args): void
+	public function blockWord_name(array $ʟ_args): void
 	{
-		extract($__args);
+		extract($ʟ_args);
 		if (false) {
 			echo '<div></div>';
 		}
@@ -82,17 +82,17 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockStrip_name(array $__args): void
+	public function blockStrip_name(array $ʟ_args): void
 	{
-		extract($__args);
+		extract($ʟ_args);
 		echo '<span>hello</span>';
 	}
 
 
-	public function blockStatic(array $__args): void
+	public function blockStatic(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		echo '	Static block #';
 		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
 		echo "\n";

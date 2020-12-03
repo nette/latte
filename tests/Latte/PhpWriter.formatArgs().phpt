@@ -145,11 +145,11 @@ test('optionalChainingPass', function () {
 	Assert::same(
 		PHP_VERSION_ID >= 80000
 			? '$var?->prop?->elem[1]?->call(2)?->item'
-			: '(($__tmp = $var) === null ? null : (($__tmp = $__tmp->prop) === null ? null : (($__tmp = $__tmp->elem[1]) === null ? null : (($__tmp = $__tmp->call(2)) === null ? null : $__tmp->item))))',
+			: '(($ʟ_tmp = $var) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1]) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2)) === null ? null : $ʟ_tmp->item))))',
 		formatArgs('$var?->prop?->elem[1]?->call(2)?->item')
 	);
 	Assert::same(
-		'(($__tmp = $var ?? null) === null ? null : (($__tmp = $__tmp->prop ?? null) === null ? null : (($__tmp = $__tmp->elem[1] ?? null) === null ? null : (($__tmp = $__tmp->call(2) ?? null) === null ? null : $__tmp->item))))',
+		'(($ʟ_tmp = $var ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1] ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2) ?? null) === null ? null : $ʟ_tmp->item))))',
 		formatArgs('$var??->prop??->elem[1]??->call(2)??->item')
 	);
 });
@@ -163,7 +163,7 @@ test('optionalChainingPass + ternary', function () {
 	Assert::same(
 		PHP_VERSION_ID >= 80000
 			? '($a?->foo ?? null) ? [1, 2, ([3 ? 2 : 1])] : $b'
-			: '(($__tmp = $a) === null ? null : ($__tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b',
+			: '(($ʟ_tmp = $a) === null ? null : ($ʟ_tmp->foo ?? null)) ? [1, 2, ([3 ? 2 : 1])] : $b',
 		@formatArgs('$a?->foo? ? [1, 2, ([3 ? 2 : 1])] : $b') // deprecated
 	);
 });

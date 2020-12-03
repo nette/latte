@@ -13,47 +13,47 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo '
 <p';
-		$__tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-		echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);
+		$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
+		echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp);
 		echo '> </p>
 
 <p';
-		$__tmp = [['title' => 'hello']];
-		echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);
+		$ʟ_tmp = [['title' => 'hello']];
+		echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp);
 		echo '> </p>
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator([1,2,3], $__it ?? null) as $foo) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([1,2,3], $ʟ_it ?? null) as $foo) {
 			echo '	<b';
-			echo ($__tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
+			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 			echo '>item</b>
 ';
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo "\n";
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator([1, 2, 3], $__it ?? null) as $foo) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([1, 2, 3], $ʟ_it ?? null) as $foo) {
 			echo '<p';
-			echo ($__tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
+			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 			echo '>';
 			echo LR\Filters::escapeHtmlText($foo) /* line 10 */;
 			echo '</p>
 ';
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo '
 <p';
-		echo ($__tmp = array_filter(['foo', (false ? 'first' : null), 'odd', (true ? 'foo' : 'bar')])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
+		echo ($ʟ_tmp = array_filter(['foo', (false ? 'first' : null), 'odd', (true ? 'foo' : 'bar')])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 		echo '>n:class</p>
 
 <p';
-		echo ($__tmp = array_filter([false ? 'first' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
+		echo ($ʟ_tmp = array_filter([false ? 'first' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 		echo '>n:class empty</p>
 <p';
-		echo ($__tmp = array_filter([true ? 'bem--modifier' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
+		echo ($ʟ_tmp = array_filter([true ? 'bem--modifier' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 		echo '>n:class with BEM</p>
 
 
@@ -108,14 +108,14 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul title="tag if">
 ';
-		if ($__if[1] = (true)) {
+		if ($ʟ_if[1] = (true)) {
 			echo '	<li>
 ';
 		}
 		echo '		';
 		echo LR\Filters::escapeHtmlText($person) /* line 44 */;
 		echo "\n";
-		if ($__if[1]) {
+		if ($ʟ_if[1]) {
 			echo '	</li>
 ';
 		}
@@ -222,30 +222,30 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '</ul>
 
 ';
-		if ($__if[0] = (true)) {
+		if ($ʟ_if[0] = (true)) {
 			echo '<b>';
 		}
 		echo 'bold';
-		if ($__if[0]) {
+		if ($ʟ_if[0]) {
 			echo '</b>';
 		}
 		echo ' ';
-		if ($__if[0] = (false)) {
+		if ($ʟ_if[0] = (false)) {
 			echo '<b>';
 		}
 		echo 'normal';
-		if ($__if[0]) {
+		if ($ʟ_if[0]) {
 			echo '</b>
 ';
 		}
 		echo "\n";
-		if ($__if[0] = (true)) {
+		if ($ʟ_if[0] = (true)) {
 			echo '<b';
-			echo ($__tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($__tmp))) . '"' : "";
+			echo ($ʟ_tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 			echo '>';
 		}
 		echo 'bold';
-		if ($__if[0]) {
+		if ($ʟ_if[0]) {
 			echo '</b>
 ';
 		}
@@ -256,11 +256,11 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '<meta>
 ';
 		}
-		if ($__if[0] = (true)) {
+		if ($ʟ_if[0] = (true)) {
 			echo '<meta>
 ';
 		}
-		if ($__if[0]) {
+		if ($ʟ_if[0]) {
 		}
 		echo '<meta>
 ';
@@ -274,7 +274,7 @@ final class Template%a% extends Latte\Runtime\Template
 			if (1) {
 				$iterations = 0;
 				foreach ([1] as $foo) {
-					if ($__if[0] = (0)) {
+					if ($ʟ_if[0] = (0)) {
 						echo '<span>';
 					}
 					$iterations++;
@@ -288,7 +288,7 @@ final class Template%a% extends Latte\Runtime\Template
 				}
 				$iterations = 0;
 				foreach ([1] as $foo) {
-					if ($__if[0]) {
+					if ($ʟ_if[0]) {
 						echo '</span>
 ';
 					}
@@ -300,34 +300,34 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		if ($__if[0] = (true)) {
+		if ($ʟ_if[0] = (true)) {
 			echo '<div>
 ';
 		}
-		$__try[0] = [ob_get_level(), $__it ?? null];
+		$ʟ_try[0] = [ob_get_level(), $ʟ_it ?? null];
 		ob_start(function () {});
 		try {
-			if ($__if[1] = (false)) {
+			if ($ʟ_if[1] = (false)) {
 				echo '	<span>
 ';
 			}
 			throw new LR\RollbackException;
-			if ($__if[1]) {
+			if ($ʟ_if[1]) {
 				echo '	</span>
 ';
 			}
 			echo '	';
 			echo ob_get_clean();
 		}
-		catch (\Throwable $__e) {
-			$iterator = $__it = $__try[0][1];
-			while (ob_get_level() > $__try[0][0]) ob_end_clean();
-			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
-				($this->global->coreExceptionHandler)($__e, $this);
+		catch (\Throwable $ʟ_e) {
+			$iterator = $ʟ_it = $ʟ_try[0][1];
+			while (ob_get_level() > $ʟ_try[0][0]) ob_end_clean();
+			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			}
 		}
 		echo "\n";
-		if ($__if[0]) {
+		if ($ʟ_if[0]) {
 			echo '</div>
 ';
 		}
@@ -398,10 +398,10 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockBl(array $__args): void
+	public function blockBl(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		echo '<ul title="block + if + foreach">
 ';
 		$iterations = 0;

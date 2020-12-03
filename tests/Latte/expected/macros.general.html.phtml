@@ -115,9 +115,9 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator(array(true), $__it ?? null) as $foo) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator(array(true), $ʟ_it ?? null) as $foo) {
 			$iterations = 0;
-			foreach ($iterator = $__it = new LR\CachingIterator($people, $__it ?? null) as $person) {
+			foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
 				echo '	';
 				if ($iterator->isFirst()) {
 					echo '<ul>';
@@ -137,10 +137,10 @@ final class Template%a% extends Latte\Runtime\Template
 				echo "\n";
 				$iterations++;
 			}
-			$iterator = $__it = $__it->getParent();
+			$iterator = $ʟ_it = $ʟ_it->getParent();
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo '
 
 
@@ -280,22 +280,22 @@ var prop2 = ';
 			echo ob_get_clean();
 		}
 		else {
-			$__tmp = ob_get_clean();
+			$ʟ_tmp = ob_get_clean();
 			ob_end_clean();
-			echo $__tmp;
+			echo $ʟ_tmp;
 		}
 		echo '
 
 
 ';
-		$__switch = (2);
+		$ʟ_switch = (2);
 		if (false) {
 		}
-		elseif (in_array($__switch, ['x'], true)) {
+		elseif (in_array($ʟ_switch, ['x'], true)) {
 			echo 'x
 ';
 		}
-		elseif (in_array($__switch, [2], true)) {
+		elseif (in_array($ʟ_switch, [2], true)) {
 			echo 'y
 ';
 		}
@@ -320,28 +320,28 @@ var prop2 = ';
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			foreach (array_intersect_key(['person' => '47', 'foo' => '46', 'item' => '104'], $this->params) as $__v => $__l) {
-				trigger_error("Variable \$$__v overwritten in foreach on line $__l");
+			foreach (array_intersect_key(['person' => '47', 'foo' => '46', 'item' => '104'], $this->params) as $ʟ_v => $ʟ_l) {
+				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
 
 	}
 
 
-	public function blockMenu(array $__args): void
+	public function blockMenu(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		echo '<ul>
 ';
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator($menu, $__it ?? null) as $item) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($menu, $ʟ_it ?? null) as $item) {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($counter++) /* line 105 */;
 			echo ' ';
 			if (is_array($item)) {
 				echo ' ';
-				$this->renderBlock($__nm = 'menu', ['menu' => $item] + get_defined_vars(), 'html');
+				$this->renderBlock($ʟ_nm = 'menu', ['menu' => $item] + get_defined_vars(), 'html');
 				echo ' ';
 			}
 			else {
@@ -351,7 +351,7 @@ var prop2 = ';
 ';
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo '</ul>
 ';
 	}

@@ -1,6 +1,6 @@
 <?php
 %A%
-		$__try[0] = [ob_get_level(), $__it ?? null];
+		$ʟ_try[0] = [ob_get_level(), $ʟ_it ?? null];
 		ob_start(function () {});
 		try {
 			echo '	a
@@ -10,11 +10,11 @@
 	';
 			echo ob_get_clean();
 		}
-		catch (\Throwable $__e) {
-			$iterator = $__it = $__try[0][1];
-			while (ob_get_level() > $__try[0][0]) ob_end_clean();
-			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
-				($this->global->coreExceptionHandler)($__e, $this);
+		catch (\Throwable $ʟ_e) {
+			$iterator = $ʟ_it = $ʟ_try[0][1];
+			while (ob_get_level() > $ʟ_try[0][0]) ob_end_clean();
+			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			}
 			echo '
 	c

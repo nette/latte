@@ -20,21 +20,21 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 a) ';
-		$this->renderBlock($__nm = 'test', [1] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [1] + [], 'html');
 		echo '
 
 b) ';
-		$this->renderBlock($__nm = 'test', ['var1' => 1] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', ['var1' => 1] + [], 'html');
 		return get_defined_vars();
 	}
 
 
-	public function blockTest(array $__args): void
+	public function blockTest(array $ʟ_args): void
 	{
 		extract($this->params);
-		$var1 = $__args[0] ?? $__args['var1'] ??  0;
-		$var2 = $__args[1] ?? $__args['var2'] ??  [1, 2, 3];
-		$var3 = $__args[2] ?? $__args['var3'] ??  10;
+		$var1 = $ʟ_args[0] ?? $ʟ_args['var1'] ??  0;
+		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ??  [1, 2, 3];
+		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ??  10;
 		echo '	Variables ';
 		echo LR\Filters::escapeHtmlText($var1) /* line 4 */;
 		echo ', ';

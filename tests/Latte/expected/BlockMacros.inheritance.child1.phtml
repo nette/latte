@@ -29,8 +29,8 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			foreach (array_intersect_key(['person' => '11'], $this->params) as $__v => $__l) {
-				trigger_error("Variable \$$__v overwritten in foreach on line $__l");
+			foreach (array_intersect_key(['person' => '11'], $this->params) as $ʟ_v => $ʟ_l) {
+				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
 		$this->parentName = "parent";
@@ -39,21 +39,21 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockTitle(array $__args): void
+	public function blockTitle(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		echo 'Homepage | ';
-		$this->renderBlockParent($__nm = 'title', get_defined_vars());
-		$this->renderBlockParent($__nm = 'title', get_defined_vars());
+		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars());
+		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars());
 
 	}
 
 
-	public function blockContent(array $__args): void
+	public function blockContent(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		echo '	<ul>
 ';
 		$iterations = 0;

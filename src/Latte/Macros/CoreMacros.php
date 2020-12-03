@@ -45,7 +45,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('ifcontent', [$me, 'macroIfContent'], [$me, 'macroEndIfContent']);
 		$me->addMacro('ifchanged', [$me, 'macroIfChanged'], '}');
 
-		$me->addMacro('switch', '$__switch = (%node.args); if (false) {', '}');
+		$me->addMacro('switch', '$ʟ_switch = (%node.args); if (false) {', '}');
 		$me->addMacro('case', [$me, 'macroCase']);
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
@@ -112,8 +112,8 @@ class CoreMacros extends MacroSet
 		$code = '';
 		if ($this->overwrittenVars) {
 			$vars = array_map(function ($l) { return implode(', ', $l); }, $this->overwrittenVars);
-			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $__v => $__l) { '
-				. 'trigger_error("Variable \$$__v overwritten in foreach on line $__l"); } ';
+			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $ʟ_v => $ʟ_l) { '
+				. 'trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l"); } ';
 		}
 		$code = $code
 			? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}'
@@ -139,8 +139,8 @@ class CoreMacros extends MacroSet
 			$node->htmlNode->data->id = $node->htmlNode->data->id ?? $id;
 			return $writer->write(
 				$node->htmlNode->closing
-					? 'if ($__if[%var]) {'
-					: 'if ($__if[%var] = (%node.args)) {',
+					? 'if ($ʟ_if[%var]) {'
+					: 'if ($ʟ_if[%var] = (%node.args)) {',
 				$node->htmlNode->data->id
 			);
 		}
@@ -165,7 +165,7 @@ class CoreMacros extends MacroSet
 				: 'echo ob_get_clean();')
 			. ' else '
 			. (isset($node->data->else)
-				? '{ $__tmp = ob_get_clean(); ob_end_clean(); echo $__tmp; }'
+				? '{ $ʟ_tmp = ob_get_clean(); ob_end_clean(); echo $ʟ_tmp; }'
 				: 'ob_end_clean();')
 		);
 	}
@@ -243,8 +243,8 @@ class CoreMacros extends MacroSet
 		$node->openingCode = '<?php ob_start(function () {}); ?>';
 		$node->innerContent = '<?php ob_start(); ?>'
 			. $node->innerContent
-			. '<?php $__ifc = ob_get_flush(); ?>';
-		$node->closingCode = '<?php if (rtrim($__ifc) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
+			. '<?php $ʟ_ifc = ob_get_flush(); ?>';
+		$node->closingCode = '<?php if (rtrim($ʟ_ifc) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
 	}
 
 
@@ -258,11 +258,11 @@ class CoreMacros extends MacroSet
 		if ($node->data->capture = ($node->args === '')) {
 			$node->openingCode = '<?php ob_start(function () {}); try { ?>';
 			$node->closingCode =
-				'<?php } finally { $__tmp = ob_get_clean(); } '
-				. "if ((\$__loc[$id] ?? null) !== \$__tmp) { echo \$__loc[$id] = \$__tmp; } ?>";
+				'<?php } finally { $ʟ_tmp = ob_get_clean(); } '
+				. "if ((\$ʟ_loc[$id] ?? null) !== \$ʟ_tmp) { echo \$ʟ_loc[$id] = \$ʟ_tmp; } ?>";
 		} else {
 			$node->openingCode = $writer->write(
-				'<?php if (($__loc[%var] ?? null) !== ($__tmp = [%node.args])) { $__loc[%var] = $__tmp; ?>',
+				'<?php if (($ʟ_loc[%var] ?? null) !== ($ʟ_tmp = [%node.args])) { $ʟ_loc[%var] = $ʟ_tmp; ?>',
 				$id,
 				$id
 			);
@@ -278,13 +278,13 @@ class CoreMacros extends MacroSet
 		$node->validate(false);
 		for ($id = 0, $tmp = $node; $tmp = $tmp->closest(['try']); $id++);
 		$node->data->code = $writer->write('<?php echo ob_get_clean();
-			} catch (\Throwable $__e) {
-			$iterator = $__it = $__try[%var][1];
-			while (ob_get_level() > $__try[%var][0]) ob_end_clean();
-			if (!($__e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
-				($this->global->coreExceptionHandler)($__e, $this);
+			} catch (\Throwable $ʟ_e) {
+			$iterator = $ʟ_it = $ʟ_try[%var][1];
+			while (ob_get_level() > $ʟ_try[%var][0]) ob_end_clean();
+			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			} ?>', $id, $id);
-		$node->openingCode = $writer->write('<?php $__try[%var] = [ob_get_level(), $__it ?? null]; ob_start(function () {}); try { ?>', $id);
+		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [ob_get_level(), $ʟ_it ?? null]; ob_start(function () {}); try { ?>', $id);
 		$node->closingCode = $node->data->code . '<?php } ?>';
 	}
 
@@ -319,7 +319,7 @@ class CoreMacros extends MacroSet
 			}
 
 			return $writer->write(
-				'$__fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $__fi, %raw))',
+				'$ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw))',
 				$node->context[0],
 				$value
 			);
@@ -358,7 +358,7 @@ class CoreMacros extends MacroSet
 			$file,
 			$mode,
 			$node->modifiers
-				? $writer->write('function ($s, $type) { $__fi = new LR\FilterInfo($type); return %modifyContent($s); }')
+				? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 				: PhpHelpers::dump($noEscape ? null : implode($node->context))
 		);
 	}
@@ -375,9 +375,9 @@ class CoreMacros extends MacroSet
 			'/* line ' . $node->startLine . ' */
 			ob_start(function () {});
 			try { $this->createTemplate(%node.word, %node.array, "sandbox")->renderToContentType(%var); echo ob_get_clean(); }
-			catch (\Throwable $__e) {
-				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); }
-				else { echo ob_get_clean(); throw $__e; }
+			catch (\Throwable $ʟ_e) {
+				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($ʟ_e, $this); }
+				else { echo ob_get_clean(); throw $ʟ_e; }
 			}',
 			implode($node->context)
 		);
@@ -410,7 +410,7 @@ class CoreMacros extends MacroSet
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write(
-			'$__fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
+			'$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
 			$node->context[0],
 			$node->data->variable,
 			$body
@@ -480,9 +480,9 @@ class CoreMacros extends MacroSet
 			!$noIterator
 			&& preg_match('#\$iterator\W|\Wget_defined_vars\W#', $this->getCompiler()->expandTokens($node->content))
 		) {
-			$node->openingCode .= 'foreach ($iterator = $__it = new LR\CachingIterator('
-				. preg_replace('#(.*)\s+as\s+#i', '$1, $__it ?? null) as ', $args, 1) . ') { ?>';
-			$node->closingCode = '<?php $iterations++; } $iterator = $__it = $__it->getParent(); ?>';
+			$node->openingCode .= 'foreach ($iterator = $ʟ_it = new LR\CachingIterator('
+				. preg_replace('#(.*)\s+as\s+#i', '$1, $ʟ_it ?? null) as ', $args, 1) . ') { ?>';
+			$node->closingCode = '<?php $iterations++; } $iterator = $ʟ_it = $ʟ_it->getParent(); ?>';
 		} else {
 			$node->openingCode .= 'foreach (' . $args . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } ?>';
@@ -525,7 +525,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
 		$node->validate(true);
-		return $writer->write('echo ($__tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($__tmp))) . \'"\' : "";');
+		return $writer->write('echo ($ʟ_tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($ʟ_tmp))) . \'"\' : "";');
 	}
 
 
@@ -535,7 +535,7 @@ class CoreMacros extends MacroSet
 	public function macroAttr(MacroNode $node, PhpWriter $writer): string
 	{
 		$node->validate(true);
-		return $writer->write('$__tmp = %node.array; echo LR\Filters::htmlAttributes(isset($__tmp[0]) && is_array($__tmp[0]) ? $__tmp[0] : $__tmp);');
+		return $writer->write('$ʟ_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp);');
 	}
 
 
@@ -575,7 +575,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->parentNode->data->default)) {
 			throw new CompileException('Tag {default} must follow after {case} clause.');
 		}
-		return $writer->write('} elseif (in_array($__switch, %node.array, true)) {');
+		return $writer->write('} elseif (in_array($ʟ_switch, %node.array, true)) {');
 	}
 
 

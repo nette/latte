@@ -19,8 +19,8 @@ final class Template%a% extends Latte\Runtime\Template
 			return get_defined_vars();
 		}
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
-			$__fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, $s)));
+			$ʟ_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
 		});
 		echo '</title>
 </head>
@@ -34,11 +34,11 @@ final class Template%a% extends Latte\Runtime\Template
 
 	<div id="content">
 ';
-		$this->renderBlock($__nm = 'content', [], 'html');
+		$this->renderBlock($ʟ_nm = 'content', [], 'html');
 		echo "\n";
-		$this->renderBlock($__nm = 'content', [], function ($s, $type) {
-			$__fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($__fi, 'html', $this->filters->filterContent('upper', $__fi, $this->filters->filterContent('striphtml', $__fi, $s)));
+		$this->renderBlock($ʟ_nm = 'content', [], function ($s, $type) {
+			$ʟ_fi = new LR\FilterInfo($type);
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
 		});
 		echo '	</div>
 </body>
@@ -52,13 +52,13 @@ Parent: ';
 	}
 
 
-	public function blockTitle(array $__args): void
+	public function blockTitle(array $ʟ_args): void
 	{
 		echo 'My website';
 	}
 
 
-	public function blockSidebar(array $__args): void
+	public function blockSidebar(array $ʟ_args): void
 	{
 		echo '		<ul>
 			<li><a href="/">Homepage</a></li>

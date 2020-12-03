@@ -37,10 +37,10 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockOuter(array $__args): void
+	public function blockOuter(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {
 			echo '	<p>Outer</p>
@@ -53,10 +53,10 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockInner(array $__args): void
+	public function blockInner(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		$this->global->snippetDriver->enter("inner", 'static');
 		try {
 			echo '	<p>Inner</p>
@@ -69,10 +69,10 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	public function blockGallery(array $__args): void
+	public function blockGallery(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
+		extract($ʟ_args);
 		$this->global->snippetDriver->enter("gallery", 'static');
 		try {
 		}

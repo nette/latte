@@ -17,33 +17,33 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 a) ';
-		$this->renderBlock($__nm = 'test', [1] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [1] + [], 'html');
 		echo '
 
 
 
 b) ';
-		$this->renderBlock($__nm = 'outer', get_defined_vars(), 'html');
+		$this->renderBlock($ʟ_nm = 'outer', get_defined_vars(), 'html');
 		echo '
 
 ';
 		$var1 = 'outer';
 		echo 'c) ';
-		$this->renderBlock($__nm = 'test', [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [], 'html');
 		echo '
 
 d) ';
-		$this->renderBlock($__nm = 'test', [null] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [null] + [], 'html');
 		return get_defined_vars();
 	}
 
 
-	public function blockTest(array $__args): void
+	public function blockTest(array $ʟ_args): void
 	{
 		extract($this->params);
-		$var1 = $__args[0] ?? $__args['var1'] ?? null;
-		$var2 = $__args[1] ?? $__args['var2'] ?? null;
-		$var3 = $__args[2] ?? $__args['var3'] ?? null;
+		$var1 = $ʟ_args[0] ?? $ʟ_args['var1'] ?? null;
+		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ?? null;
+		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ?? null;
 		echo '	Variables ';
 		echo LR\Filters::escapeHtmlText($var1) /* line 2 */;
 		echo ', ';
@@ -54,11 +54,11 @@ d) ';
 	}
 
 
-	public function blockOuter(array $__args): void
+	public function blockOuter(array $ʟ_args): void
 	{
 		extract($this->params);
-		extract($__args);
-		$this->renderBlock($__nm = 'test', ['hello'] + [], 'html');
+		extract($ʟ_args);
+		$this->renderBlock($ʟ_nm = 'test', ['hello'] + [], 'html');
 
 	}
 

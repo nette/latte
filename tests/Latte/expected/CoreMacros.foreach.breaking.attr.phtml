@@ -36,7 +36,7 @@
 <ul title="foreach skip">
 ';
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator([0, 1, 2, 3], $__it ?? null) as $i) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($i) /* line 11 */;
 			if (true) {
@@ -50,7 +50,7 @@
 ';
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo '</ul>
 
 
@@ -79,7 +79,7 @@
 <ul title="inner foreach skip">
 	<li>';
 		$iterations = 0;
-		foreach ($iterator = $__it = new LR\CachingIterator([0, 1, 2, 3], $__it ?? null) as $i) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) {
 			echo LR\Filters::escapeHtmlText($i) /* line 24 */;
 			if (true) {
 				$iterator->skipRound();
@@ -87,7 +87,7 @@
 			};
 			$iterations++;
 		}
-		$iterator = $__it = $__it->getParent();
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo '</li>
 </ul>
 ';

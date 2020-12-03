@@ -48,7 +48,7 @@ test('properties', function () {
 	Assert::same('($foo->$prop ?? null)', @optionalChaining('$foo->$prop?')); // deprecated
 
 	// static
-	Assert::same('(($__tmp = $foo ?? null) === null ? null : $__tmp::$prop)', @optionalChaining('$foo?::$prop')); // deprecated
+	Assert::same('(($ʟ_tmp = $foo ?? null) === null ? null : $ʟ_tmp::$prop)', @optionalChaining('$foo?::$prop')); // deprecated
 	Assert::same('($foo::$prop ?? null)', @optionalChaining('$foo::$prop?')); // deprecated
 });
 

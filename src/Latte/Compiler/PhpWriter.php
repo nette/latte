@@ -219,8 +219,8 @@ class PhpWriter
 				}
 
 			} elseif (
-				substr($tokenValue, 0, 3) === '$__'
-				|| ($this->policy && ($tokens->isCurrent('$this') || substr($tokenValue, 0, 2) === '$_'))
+				Helpers::startsWith($tokenValue, '$ʟ_')
+				|| ($this->policy && $tokens->isCurrent('$this'))
 			) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
@@ -372,10 +372,10 @@ class PhpWriter
 					}
 
 					trigger_error("Syntax '$var?::' is deprecated.", E_USER_DEPRECATED);
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
-					$expr = new MacroTokens('$__tmp');
+					$expr = new MacroTokens('$ʟ_tmp');
 					$addBraces .= ')';
 
 				} elseif ($tokens->nextToken('?->')) {
@@ -385,11 +385,11 @@ class PhpWriter
 						continue;
 					}
 
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(') === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
 					$addBraces .= ')';
-					$expr = new MacroTokens('$__tmp->');
+					$expr = new MacroTokens('$ʟ_tmp->');
 					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 						$expr->append($addBraces);
 						break;
@@ -397,11 +397,11 @@ class PhpWriter
 					$expr->append($tokens->currentToken());
 
 				} elseif ($tokens->nextToken('??->')) {
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
 					$addBraces .= ')';
-					$expr = new MacroTokens('$__tmp->');
+					$expr = new MacroTokens('$ʟ_tmp->');
 					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 						$expr->append($addBraces);
 						break;
@@ -764,7 +764,7 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($__fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
+						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
 							->append(')');
 					} else {
 						$res = $this->escapePass($res);
@@ -786,7 +786,7 @@ class PhpWriter
 					$name = strtolower($name);
 					$res->prepend(
 						$isContent
-							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $__fi, '
+							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
 							: '($this->filters->' . $name . ')('
 					);
 					$inside = true;
