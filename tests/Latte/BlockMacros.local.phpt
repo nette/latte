@@ -57,7 +57,7 @@ Assert::same(
 	'5',
 	trim($latte->renderToString('
 		{var $i = 5}
-		{include abc}
+		{include abc (expand) get_defined_vars()}
 		{define local abc}{$i}{/define}
 	'))
 );
@@ -68,7 +68,7 @@ Assert::same(
 	trim($latte->renderToString('
 		{define local abc}{$i}{/define}
 		{var $i = 5}
-		{include abc}
+		{include abc (expand) get_defined_vars()}
 	'))
 );
 
