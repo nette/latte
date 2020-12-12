@@ -471,7 +471,7 @@ class PhpWriter
 				$tokens->isCurrent($tokens::T_SYMBOL)
 				&& (!$tokens->isPrev() || $tokens->isPrev(',', '(', '[', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '=', 'and', 'or', 'xor', '??'))
 				&& (!$tokens->isNext() || $tokens->isNext(',', ';', ')', ']', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', 'and', 'or', 'xor', '??'))
-				&& !($tokens->isPrev('(', ',') && $tokens->isNext(':'))
+				&& !((!$tokens->isPrev() || $tokens->isPrev('(', ',')) && $tokens->isNext(':'))
 				&& !preg_match('#^[A-Z_][A-Z0-9_]{2,}$#', $tokens->currentValue())
 					? "'" . $tokens->currentValue() . "'"
 					: $tokens->currentToken()

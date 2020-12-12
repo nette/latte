@@ -172,4 +172,5 @@ test('optionalChainingPass + ternary', function () {
 test('named arguments', function () {
 	Assert::same('func(a: 1, b: 2)', formatArgs('func(a: 1, b: 2)'));
 	Assert::same("func(a: 1, ('a' ?'b': 2))", formatArgs('func(a: 1, (a ?b: 2))')); // ternary
+	Assert::same("a: 1, 'a' ? 'b': 2", formatArgs('a: 1, a ? b: 2'));
 });
