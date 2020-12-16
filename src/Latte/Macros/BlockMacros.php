@@ -334,7 +334,9 @@ class BlockMacros extends MacroSet
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
 			$param = $tokens->consumeValue($tokens::T_VARIABLE);
-			$default = $tokens->nextToken('=') ? $tokens->joinUntilSameDepth(',') : 'null';
+			$default = $tokens->nextToken('=')
+				? $tokens->joinUntilSameDepth(',')
+				: 'null';
 			$params[] = $writer->write(
 				'%raw = $__args[%var] ?? $__args[%var] ?? %raw;',
 				$param,

@@ -10,7 +10,7 @@ use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
-require __DIR__ . '/mocks/SnippetBridge.php';
+require __DIR__ . '/mocks/SnippetBridgeMock.php';
 
 $bridge = new SnippetBridgeMock;
 $bridge->snippetMode = false;
