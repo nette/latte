@@ -126,6 +126,12 @@ class BlockMacros extends MacroSet
 		$node->validate(true, [], true);
 		$node->replaced = false;
 
+		$tmp = $node->tokenizer->joinUntil('=');
+		if ($node->tokenizer->isNext('=')) {
+			trigger_error('The assignment in the {' . $node->name . ' ' . $tmp . '= ...} looks like an error.', E_USER_NOTICE);
+		}
+		$node->tokenizer->reset();
+
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
 		if ($mod !== 'block') {
 			if ($mod === 'file' || !$name || !preg_match('~#|[\w-]+$~DA', $name)) {
