@@ -180,7 +180,7 @@ class CoreMacros extends MacroSet
 		if ($node->args !== '' && Helpers::startsWith($node->args, 'if')) {
 			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
 		}
-		$node->validate(false, ['if', 'ifset', 'foreach', 'ifchanged', 'try']);
+		$node->validate(false, ['if', 'ifset', 'foreach', 'ifchanged', 'try', 'first', 'last', 'sep']);
 
 		$parent = $node->parentNode;
 		if (isset($parent->data->else)) {
