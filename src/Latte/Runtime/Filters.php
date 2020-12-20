@@ -778,4 +778,23 @@ class Filters
 		}
 		return $s;
 	}
+
+
+	public static function checkTagSwitch(string $orig, $new): void
+	{
+		if (
+			!is_string($new)
+			|| !preg_match('~' . Latte\Parser::RE_TAG_NAME . '$~DA', $new)
+		) {
+			throw new Latte\RuntimeException('Invalid tag name ' . var_export($new, true));
+		}
+
+		$new = strtolower($new);
+		if (
+			$new === 'style' || $new === 'script'
+			|| isset(Latte\Helpers::$emptyElements[strtolower($orig)]) !== isset(Latte\Helpers::$emptyElements[$new])
+		) {
+			throw new Latte\RuntimeException("Forbidden tag <$orig> change to <$new>.");
+		}
+	}
 }

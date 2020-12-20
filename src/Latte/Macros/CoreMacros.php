@@ -81,6 +81,7 @@ class CoreMacros extends MacroSet
 
 		$me->addMacro('class', null, null, [$me, 'macroClass']);
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
+		$me->addMacro('tag', [$me, 'macroTag'], [$me, 'macroTagEnd']);
 
 		$me->addMacro('parameters', [$me, 'macroParameters'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
@@ -537,6 +538,47 @@ class CoreMacros extends MacroSet
 	{
 		$node->validate(true);
 		return $writer->write('$ʟ_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp);');
+	}
+
+
+	/**
+	 * n:tag="..."
+	 */
+	public function macroTag(MacroNode $node, PhpWriter $writer): void
+	{
+		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
+			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
+
+		} elseif (preg_match('(style$|script$)iA', $node->htmlNode->name)) {
+			throw new CompileException("Attribute {$node->getNotation()} is not allowed in <script> or <style>");
+		}
+		$node->validate(true);
+	}
+
+
+	/**
+	 * n:tag="..."
+	 */
+	public function macroTagEnd(MacroNode $node, PhpWriter $writer): void
+	{
+		for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
+		$node->htmlNode->data->id = $node->htmlNode->data->id ?? $id;
+
+		$node->openingCode = $writer->write('<?php
+			$ʟ_tag[%0_var] = (%node.args) ?? %1_var;
+			Latte\Runtime\Filters::checkTagSwitch(%1_var, $ʟ_tag[%0_var]);
+		?>', $node->htmlNode->data->id, $node->htmlNode->name);
+
+		$node->content = preg_replace(
+			'~^(\s*<)' . Latte\Parser::RE_TAG_NAME . '~',
+			"\$1<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n",
+			$node->content
+		);
+		$node->content = preg_replace(
+			'~</' . Latte\Parser::RE_TAG_NAME . '(\s*>\s*)$~',
+			"</<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n\$1",
+			$node->content
+		);
 	}
 
 
