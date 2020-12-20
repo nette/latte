@@ -23,6 +23,11 @@ $template = <<<'EOD'
 
 
 {foreach $people as $person}
+	{first}({else}[{/first} {$person}{sep}, {else};{/sep} {last}){else}]{/last}
+{/foreach}
+
+
+{foreach $people as $person}
 	{first 2}({/first} {$person}{sep 2}, {/sep} {last 2}){/last}
 {/foreach}
 
