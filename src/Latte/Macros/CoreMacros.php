@@ -264,8 +264,7 @@ class CoreMacros extends MacroSet
 				. "if ((\$ʟ_loc[$id] ?? null) !== \$ʟ_tmp) { echo \$ʟ_loc[$id] = \$ʟ_tmp; } ?>";
 		} else {
 			$node->openingCode = $writer->write(
-				'<?php if (($ʟ_loc[%var] ?? null) !== ($ʟ_tmp = [%node.args])) { $ʟ_loc[%var] = $ʟ_tmp; ?>',
-				$id,
+				'<?php if (($ʟ_loc[%0_var] ?? null) !== ($ʟ_tmp = [%node.args])) { $ʟ_loc[%0_var] = $ʟ_tmp; ?>',
 				$id
 			);
 		}
@@ -281,11 +280,11 @@ class CoreMacros extends MacroSet
 		for ($id = 0, $tmp = $node; $tmp = $tmp->closest(['try']); $id++);
 		$node->data->code = $writer->write('<?php echo ob_get_clean();
 			} catch (\Throwable $ʟ_e) {
-			$iterator = $ʟ_it = $ʟ_try[%var][1];
-			while (ob_get_level() > $ʟ_try[%var][0]) ob_end_clean();
+			$iterator = $ʟ_it = $ʟ_try[%0_var][1];
+			while (ob_get_level() > $ʟ_try[%0_var][0]) ob_end_clean();
 			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($ʟ_e, $this);
-			} ?>', $id, $id);
+			} ?>', $id);
 		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [ob_get_level(), $ʟ_it ?? null]; ob_start(function () {}); try { ?>', $id);
 		$node->closingCode = $node->data->code . '<?php } ?>';
 	}
