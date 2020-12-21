@@ -455,10 +455,9 @@ class BlockMacros extends MacroSet
 		}
 
 		return $writer->write(
-			"?>\n<div {$this->snippetAttribute}=\"<?php echo htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) ?>\">"
-			. '<?php $this->renderBlock(%var, [], null, %var) ?>'
+			"?>\n<div {$this->snippetAttribute}=\"<?php echo htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%0_var)) ?>\">"
+			. '<?php $this->renderBlock(%0_var, [], null, %1_var) ?>'
 			. "\n</div><?php ",
-			$data->name,
 			$data->name,
 			Template::LAYER_SNIPPET
 		);
@@ -577,10 +576,9 @@ class BlockMacros extends MacroSet
 		$this->blocks[$this->index] = [];
 
 		return $writer->write(
-			'$this->initBlockLayer(%var);
-			$this->setBlockLayer(%var);
+			'$this->initBlockLayer(%0_var);
+			$this->setBlockLayer(%0_var);
 			if (false) {',
-			$this->index,
 			$this->index
 		);
 	}

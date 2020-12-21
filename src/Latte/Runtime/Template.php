@@ -389,12 +389,10 @@ class Template
 	 */
 	protected function initBlockLayer($id): void
 	{
-		$blocks = &$this->blocks[$id];
-		$blocks = [];
+		$this->blocks[$id] = [];
 		foreach (static::BLOCKS[$id] ?? [] as $nm => $info) {
-			$blocks[$nm] = $block = new Block;
-			[$method, $block->contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
-			$block->functions[] = [$this, $method];
+			[$method, $contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
+			$this->addBlock($nm, $contentType, [[$this, $method]], $id);
 		}
 	}
 
