@@ -20,6 +20,9 @@ class Parser
 	/** @internal regular expression for single & double quoted PHP string */
 	public const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
 
+	/** @internal HTML tag name for Latte needs (actually is [a-zA-Z][^\s/>]*) */
+	public const RE_TAG_NAME = '[a-zA-Z][a-zA-Z0-9:_.-]*';
+
 	/** @internal special HTML attribute prefix */
 	public const N_PREFIX = 'n:';
 
@@ -131,7 +134,7 @@ class Parser
 	private function contextHtmlText(): bool
 	{
 		$matches = $this->match('~
-			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>[a-z][a-z0-9:_.-]*)|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
+			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>' . self::RE_TAG_NAME . ')|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
 			<(?P<htmlcomment>!(?:--(?!>))?|\?)|     ##  begin of <!, <!--, <!DOCTYPE, <?
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
@@ -164,7 +167,7 @@ class Parser
 	private function contextHtmlCData(): bool
 	{
 		$matches = $this->match('~
-			</(?P<tag>' . $this->lastHtmlTag . ')(?![a-z0-9:])| ##  end HTML tag </tag
+			</(?P<tag>' . $this->lastHtmlTag . ')(?=[\s/>])| ##  end HTML tag </tag
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
