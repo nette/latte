@@ -393,7 +393,7 @@ class BlockMacros extends MacroSet
 	{
 		$node->validate(null);
 		$data = $node->data;
-		$data->name = (string) $node->tokenizer->fetchWord();
+		$data->name = preg_replace('#^[\'"]([^\']+)[\'"]$#', '$1', (string) $node->tokenizer->fetchWord());
 		$this->checkExtraArgs($node);
 
 		if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
