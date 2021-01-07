@@ -34,6 +34,28 @@ class TemplateParams
 	{
 		return "#$a#";
 	}
+
+
+	#[Latte\Attributes\TemplateFunction]
+	public function myFunc8($a)
+	{
+		return "*$a*";
+	}
+
+
+	#[Latte\Attributes\TemplateFilter]
+	/** @filter */
+	public function myFilter8($a)
+	{
+		return "%$a%";
+	}
+
+
+	#[Latte\Attributes\TemplateFilter, Latte\Attributes\TemplateFunction]
+	public function both8($a)
+	{
+		return "#$a#";
+	}
 }
 
 
@@ -46,10 +68,9 @@ Assert::same(
 	$latte->renderToString('{myFunc($a)|myFilter} {both(123|both)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
 );
 
-
-ob_start();
-$latte->render('{myFunc($a)|myFilter} {both(123|both)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams);
-Assert::same(
-	'%*123*% ##123## ',
-	ob_get_clean()
-);
+if (PHP_VERSION_ID >= 80000) {
+	Assert::same(
+		'%*123*% ##123## ',
+		$latte->renderToString('{myFunc8($a)|myFilter8} {both8(123|both8)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
+	);
+}
