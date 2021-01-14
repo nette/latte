@@ -196,6 +196,7 @@ class PhpWriter
 		$tokens = $this->sandboxPass($tokens);
 		$tokens = $this->replaceFunctionsPass($tokens);
 		$tokens = $this->inlineModifierPass($tokens);
+		$tokens = $this->modernArraySyntax($tokens);
 		return $tokens;
 	}
 
@@ -494,6 +495,35 @@ class PhpWriter
 				$tokens->depth === 0
 				&& $tokens->isCurrent($tokens::T_SYMBOL)
 				&& (!$tokens->isPrev() || $tokens->isPrev(','))
+				&& $tokens->isNext(':')
+			) {
+				$res->append("'" . $tokens->currentValue() . "' =>");
+				$tokens->nextToken(':');
+			} else {
+				$res->append($tokens->currentToken());
+			}
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Converts [name: value] to ['name' => value]
+	 */
+	public function modernArraySyntax(MacroTokens $tokens): MacroTokens
+	{
+		$res = new MacroTokens;
+		$brackets = [];
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent('[', '(', '{')) {
+				$brackets[] = $tokens->currentValue();
+			} elseif ($tokens->isCurrent(']', ')', '}')) {
+				array_pop($brackets);
+			}
+
+			if (end($brackets) === '['
+				&& $tokens->isCurrent($tokens::T_SYMBOL)
+				&& ($tokens->isPrev('[', ','))
 				&& $tokens->isNext(':')
 			) {
 				$res->append("'" . $tokens->currentValue() . "' =>");
