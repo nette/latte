@@ -174,3 +174,8 @@ test('named arguments', function () {
 	Assert::same("func(a: 1, ('a' ?'b': 2))", formatArgs('func(a: 1, (a ?b: 2))')); // ternary
 	Assert::same("a: 1, 'a' ? 'b': 2", formatArgs('a: 1, a ? b: 2'));
 });
+
+
+test('short array syntax', function () {
+	Assert::same("['a' => 1, 'a' ? 'b': 2]", formatArgs('[a: 1, a ? b: 2]'));
+});
