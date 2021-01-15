@@ -26,7 +26,7 @@ Assert::match(
 		'
 {define a}
 	{var $x = "X"}
-	{include #b}
+	{include #b (expand) get_defined_vars()}
 {/define}
 
 {define b}
