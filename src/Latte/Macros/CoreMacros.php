@@ -354,8 +354,7 @@ class CoreMacros extends MacroSet
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
-			'%node.line
-			$this->createTemplate(%word, %node.array? + $this->params, %var)->renderToContentType(%raw);',
+			'$this->createTemplate(%word, %node.array? + $this->params, %var)->renderToContentType(%raw) %node.line;',
 			$file,
 			$mode,
 			$node->modifiers
@@ -373,9 +372,8 @@ class CoreMacros extends MacroSet
 		$node->validate(null);
 		$node->replaced = false;
 		return $writer->write(
-			'%node.line
-			ob_start(function () {});
-			try { $this->createTemplate(%node.word, %node.array, "sandbox")->renderToContentType(%var); echo ob_get_clean(); }
+			'ob_start(function () {});
+			try { $this->createTemplate(%node.word, %node.array, "sandbox")->renderToContentType(%var) %node.line; echo ob_get_clean(); }
 			catch (\Throwable $ʟ_e) {
 				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($ʟ_e, $this); }
 				else { echo ob_get_clean(); throw $ʟ_e; }
