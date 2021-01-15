@@ -1,0 +1,83 @@
+<?php
+%A%
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) {
+			echo '	pre ';
+			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+			echo "\n";
+			do {
+				if (!$iterator->hasNext() || !($item % 2)) {
+					break;
+				}
+				$iterator->next();
+				[, $item] = [$iterator->key(), $iterator->current()];
+				echo '		inner ';
+				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+				echo "\n";
+			}
+			while (true);
+			echo '	post ';
+			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+			echo "\n";
+			$iterations++;
+		}
+		$iterator = $ʟ_it = $ʟ_it->getParent();
+		echo '
+---
+
+';
+		$iterations = 0;
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) {
+			echo '	pre ';
+			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+			echo "\n";
+			do {
+				echo '		inner ';
+				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+				echo "\n";
+
+				if (!$iterator->hasNext() || !($item % 2)) {
+					break;
+				}
+				$iterator->next();
+				[, $item] = [$iterator->key(), $iterator->current()];
+			}
+			while (true);
+			echo '	post ';
+			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+			echo "\n";
+			$iterations++;
+		}
+		$iterator = $ʟ_it = $ʟ_it->getParent();
+		echo '
+---
+
+';
+		$iterations = 0;
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator(['a' => [0], 'b' => [1], 'c' => [2]], $ʟ_it ?? null) as $key => [$i]) {
+			echo '	pre ';
+			echo LR\Filters::escapeHtmlText($key) /* line %d% */;
+			echo ' ';
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
+			echo "\n";
+			do {
+				echo '		inner ';
+				echo LR\Filters::escapeHtmlText($key) /* line %d% */;
+				echo ' ';
+				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
+				echo "\n";
+
+				if (!$iterator->hasNext() || !(true)) {
+					break;
+				}
+				$iterator->next();
+				[$key ,  [$i]] = [$iterator->key(), $iterator->current()];
+			}
+			while (true);
+			echo '	post ';
+			echo LR\Filters::escapeHtmlText($key) /* line %d% */;
+			echo ' ';
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
+			echo "\n";
+			$iterations++;
+		}
+%A%

@@ -49,6 +49,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('case', [$me, 'macroCase']);
 
 		$me->addMacro('foreach', '', [$me, 'macroEndForeach']);
+		$me->addMacro('iterateWhile', [$me, 'macroIterateWhile'], [$me, 'macroEndIterateWhile']);
 		$me->addMacro('for', 'for (%node.args) {', '}');
 		$me->addMacro('while', [$me, 'macroWhile'], [$me, 'macroEndWhile']);
 		$me->addMacro('continueIf', [$me, 'macroBreakContinueIf']);
@@ -482,6 +483,43 @@ class CoreMacros extends MacroSet
 		} else {
 			$node->openingCode .= 'foreach (' . $args . ') { ?>';
 			$node->closingCode = '<?php $iterations++; } ?>';
+		}
+	}
+
+
+	/**
+	 * {iterateWhile ...}
+	 */
+	public function macroIterateWhile(MacroNode $node, PhpWriter $writer): void
+	{
+		if (!$node->closest(['foreach'])) {
+			throw new CompileException('Tag ' . $node->getNotation() . ' must be inside {foreach} ... {/foreach}.');
+		}
+		$node->data->begin = $node->args !== '';
+	}
+
+
+	/**
+	 * {/iterateWhile ...}
+	 */
+	public function macroEndIterateWhile(MacroNode $node, PhpWriter $writer): void
+	{
+		$node->validate(true);
+		$foreach = $node->closest(['foreach']);
+		$vars = preg_replace('#^.+\s+as\s+(?:(.+)=>)?(.+)$#i', '$1, $2', $foreach->args);
+		$stmt = '
+		 	if (!$iterator->hasNext()' . ($node->args ? $writer->write(' || !(%node.args)') : '') . ') {
+		 		break;
+		 	}
+		 	$iterator->next();
+		 	[' . $vars . '] = [$iterator->key(), $iterator->current()];
+		';
+		if ($node->data->begin) {
+			$node->openingCode = "<?php do { $stmt ?>";
+			$node->closingCode = '<?php } while (true); ?>';
+		} else {
+			$node->openingCode = '<?php do { ?>';
+			$node->closingCode = "<?php $stmt } while (true); ?>";
 		}
 	}
 
