@@ -96,7 +96,8 @@ class BlockMacros extends MacroSet
 					$method = $this->generateMethodName($name),
 					'?>' . $compiler->expandTokens($block->code) . '<?php',
 					'array $ʟ_args',
-					'void'
+					'void',
+					$block->comment
 				);
 				$meta[$layer][$name] = $block->contentType === $compiler->getContentType()
 					? $method
@@ -382,7 +383,8 @@ class BlockMacros extends MacroSet
 				$func,
 				$this->getCompiler()->expandTokens("extract(\$ʟ_args);\n?>{$node->content}<?php"),
 				'array $ʟ_args',
-				'void'
+				'void',
+				"{{$node->name} {$node->args}} on line {$node->startLine}"
 			);
 			$node->content = '';
 		};
@@ -549,6 +551,7 @@ class BlockMacros extends MacroSet
 
 		$block = $this->blocks[$layer ?? $this->index][$data->name] = new Block;
 		$block->contentType = implode($node->context);
+		$block->comment = "{{$node->name} {$node->args}} on line {$node->startLine}";
 		return $block;
 	}
 
