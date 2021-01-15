@@ -32,6 +32,9 @@ class PhpWriter
 	/** @var string[] */
 	private $functions = [];
 
+	/** @var int|null */
+	private $line;
+
 
 	public static function using(MacroNode $node, Compiler $compiler = null): self
 	{
@@ -39,6 +42,7 @@ class PhpWriter
 		$me->modifiers = &$node->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
 		$me->policy = $compiler ? $compiler->getPolicy() : null;
+		$me->line = $node->startLine;
 		return $me;
 	}
 
@@ -55,7 +59,7 @@ class PhpWriter
 
 
 	/**
-	 * Expands %node.word, %node.array, %node.args, %escape(), %modify(), %var, %raw, %word in code.
+	 * Expands %node.word, %node.array, %node.args, %node.line, %escape(), %modify(), %var, %raw, %word in code.
 	 * @param  mixed  ...$args
 	 */
 	public function write(string $mask, ...$args): string
@@ -78,7 +82,7 @@ class PhpWriter
 		}
 
 		$code = preg_replace_callback(
-			'#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
+			'#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
 			function ($m) use ($word, &$args) {
 				[, $l, $source, $format, $cond, $r] = $m;
 
@@ -103,6 +107,8 @@ class PhpWriter
 						$code = PhpHelpers::dump($arg); break;
 					case 'raw':
 						$code = (string) $arg; break;
+					case 'line':
+						$code = $this->line ? "/* line $this->line */" : ''; break;
 				}
 
 				if ($cond && $code === '') {
