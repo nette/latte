@@ -3,13 +3,13 @@
 		echo 'static methods
 
 ';
-		echo LR\Filters::escapeHtmlText($this->call([MyClass::class, 'method'])()) /* line 3 */;
+		echo LR\Filters::escapeHtmlText($this->call([MyClass::class, 'method'])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, 'method'])()) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, 'method'])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, (string) ('method')])()) /* line 5 */;
+		echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, (string) ('method')])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, $method])()) /* line 6 */;
+		echo LR\Filters::escapeHtmlText($this->call([\Name\MyClass::class, $method])()) /* line %d% */;
 		echo '
 -';
 %A%

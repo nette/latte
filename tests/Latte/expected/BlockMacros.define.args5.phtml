@@ -35,11 +35,11 @@ b) ';
 		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ??  [1, 2, 3];
 		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ??  10;
 		echo '	Variables ';
-		echo LR\Filters::escapeHtmlText($var1) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($var1) /* line %d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText(($this->filters->implode)($var2)) /* line 4 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->implode)($var2)) /* line %d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($var3) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($var3) /* line %d% */;
 		echo "\n";
 	}
 

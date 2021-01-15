@@ -26,7 +26,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '	</div>
 
 	<div class="';
-		echo LR\Filters::escapeHtmlAttr('class') /* line 9 */;
+		echo LR\Filters::escapeHtmlAttr('class') /* line %d% */;
 		echo '"';
 		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('gallery')) . '"';
 		echo '>';

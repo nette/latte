@@ -4,7 +4,7 @@
 		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) {
 			if ($item % 2) continue;
 			echo '	';
-			echo LR\Filters::escapeHtmlText($iterator->counter) /* line 4 */;
+			echo LR\Filters::escapeHtmlText($iterator->counter) /* line %d% */;
 			echo '. item
 ';
 			$iterations++;
@@ -21,7 +21,7 @@
 				continue;
 			};
 			echo '	';
-			echo LR\Filters::escapeHtmlText($iterator->counter) /* line 11 */;
+			echo LR\Filters::escapeHtmlText($iterator->counter) /* line %d% */;
 			echo '. item
 ';
 			$iterations++;
@@ -35,7 +35,7 @@
 		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) {
 			if ($item % 2) break;
 			echo '	';
-			echo LR\Filters::escapeHtmlText($iterator->counter) /* line 18 */;
+			echo LR\Filters::escapeHtmlText($iterator->counter) /* line %d% */;
 			echo '. item
 ';
 			$iterations++;

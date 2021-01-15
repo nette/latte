@@ -49,7 +49,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '		<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line 9 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			echo '</li>
 ';
 			$iterations++;
