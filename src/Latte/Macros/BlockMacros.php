@@ -40,9 +40,6 @@ class BlockMacros extends MacroSet
 	/** @var string[] */
 	private $imports;
 
-	/** @var array[] */
-	private $placeholders;
-
 
 	public static function install(Latte\Compiler $compiler): void
 	{
@@ -72,7 +69,6 @@ class BlockMacros extends MacroSet
 		$this->index = Template::LAYER_TOP;
 		$this->extends = null;
 		$this->imports = [];
-		$this->placeholders = [];
 	}
 
 
@@ -82,13 +78,6 @@ class BlockMacros extends MacroSet
 	public function finalize()
 	{
 		$compiler = $this->getCompiler();
-		foreach ($this->placeholders as $key => [$index, $blockName]) {
-			$block = $this->blocks[$index][$blockName] ?? $this->blocks[Template::LAYER_LOCAL][$blockName] ?? null;
-			$compiler->placeholders[$key] = $block && !$block->hasParameters
-				? 'get_defined_vars()'
-				: '[]';
-		}
-
 		$meta = [];
 		foreach ($this->blocks as $layer => $blocks) {
 			foreach ($blocks as $name => $block) {
@@ -157,7 +146,7 @@ class BlockMacros extends MacroSet
 			);
 		}
 
-		$parent = $name === 'parent';
+		$orig = $name;
 		if ($name === 'parent' || $name === 'this') {
 			$item = $node->closest(['block', 'define'], function ($node) { return isset($node->data->name); });
 			if (!$item) {
@@ -167,18 +156,18 @@ class BlockMacros extends MacroSet
 		}
 
 		$key = uniqid() . '$iterator'; // to fool CoreMacros::macroEndForeach
-		$this->placeholders[$key] = [$this->index, $name];
 		$phpName = $this->isDynamic($name)
 			? $writer->formatWord($name)
 			: PhpHelpers::dump($name);
 
 		return $writer->write(
-			'$this->renderBlock' . ($parent ? 'Parent' : '')
+			'$this->renderBlock' . ($orig === 'parent' ? 'Parent' : '')
 			. '($ʟ_nm = ' . $phpName . ', '
-			. '%node.array? + ' . $key
+			. '%node.array? + '
+			. ($orig === 'parent' || $orig === 'this' ? 'get_defined_vars()' : '[]')
 			. ($node->modifiers
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
-				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
+				: ($noEscape || $orig === 'parent' ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
 			. ') %node.line;'
 		);
 	}
