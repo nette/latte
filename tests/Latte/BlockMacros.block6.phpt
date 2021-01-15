@@ -21,8 +21,6 @@ Assert::match(
 	'
 
 
-
-
 	X',
 	$latte->renderToString(
 		'

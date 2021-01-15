@@ -527,11 +527,14 @@ class BlockMacros extends MacroSet
 	 * {/snippet}
 	 * {/snippetArea}
 	 */
-	public function macroBlockEnd(MacroNode $node, PhpWriter $writer): void
+	public function macroBlockEnd(MacroNode $node, PhpWriter $writer): string
 	{
 		if (isset($node->data->after)) {
 			($node->data->after)();
 		}
+		return $node->name === 'define'
+			? ' ' // consume next new line
+			: '';
 	}
 
 

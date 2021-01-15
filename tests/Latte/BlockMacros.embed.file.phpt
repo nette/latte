@@ -574,8 +574,7 @@ testTemplate('nested embeds', [
 		{block a}embed2-A{/block}
 	',
 ], '
-
-		outer top:
+				outer top:
 		outer block
 
 
