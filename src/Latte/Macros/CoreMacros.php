@@ -354,7 +354,7 @@ class CoreMacros extends MacroSet
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
-			'/* line ' . $node->startLine . ' */
+			'%node.line
 			$this->createTemplate(%word, %node.array? + $this->params, %var)->renderToContentType(%raw);',
 			$file,
 			$mode,
@@ -373,7 +373,7 @@ class CoreMacros extends MacroSet
 		$node->validate(null);
 		$node->replaced = false;
 		return $writer->write(
-			'/* line ' . $node->startLine . ' */
+			'%node.line
 			ob_start(function () {});
 			try { $this->createTemplate(%node.word, %node.array, "sandbox")->renderToContentType(%var); echo ob_get_clean(); }
 			catch (\Throwable $ʟ_e) {
@@ -715,7 +715,7 @@ class CoreMacros extends MacroSet
 		$node->validate(true, [], $node->name === '=');
 		return $writer->write(
 			$node->name === '='
-			? "echo %modify(%node.args) /* line {$node->startLine} */"
+			? 'echo %modify(%node.args) %node.line'
 			: '%modify(%node.args);'
 		);
 	}
