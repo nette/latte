@@ -63,6 +63,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
+	/** {block local $name} on line %d% */
 	public function blockName(array $ʟ_args): void
 	{
 		extract($ʟ_args);
@@ -72,6 +73,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
+	/** {block local word$name} on line %d% */
 	public function blockWord_name(array $ʟ_args): void
 	{
 		extract($ʟ_args);
@@ -82,6 +84,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
+	/** {block local "strip$name"} on line %d% */
 	public function blockStrip_name(array $ʟ_args): void
 	{
 		extract($ʟ_args);
@@ -89,6 +92,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
+	/** {block local static} on line %d% */
 	public function blockStatic(array $ʟ_args): void
 	{
 		extract($this->params);

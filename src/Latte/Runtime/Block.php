@@ -24,4 +24,7 @@ final class Block
 
 	/** @var bool  used by BlockMacros */
 	public $hasParameters = false;
+
+	/** @var ?string  used by BlockMacros */
+	public $comment;
 }

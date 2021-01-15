@@ -36,6 +36,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
+	/** {block content} on line %d% */
 	public function blockContent(array $ʟ_args): void
 	{
 		extract($this->params);
@@ -59,12 +60,14 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
+	/** {block title} on line %d% */
 	public function blockTitle(array $ʟ_args): void
 	{
 		echo 'Homepage ';
 	}
 
 
+	/** {block sidebar} on line %d% */
 	public function blockSidebar(array $ʟ_args): void
 	{
 

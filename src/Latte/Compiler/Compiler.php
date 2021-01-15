@@ -92,7 +92,7 @@ class Compiler
 	/** @var bool */
 	private $inHead;
 
-	/** @var array<string, ?array{body: string, arguments: string, returns: string}> */
+	/** @var array<string, ?array{body: string, arguments: string, returns: string, comment: ?string}> */
 	private $methods = [];
 
 	/** @var array<string, mixed> */
@@ -214,7 +214,8 @@ class Compiler
 			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, true) . ';';
 		}
 		foreach (array_filter($this->methods) as $name => $method) {
-			$members[] = "\n\tpublic function $name($method[arguments])"
+			$members[] = ($method['comment'] === null ? '' : "\n\t/** " . str_replace('*/', '* /', $method['comment']) . " */")
+				. "\n\tpublic function $name($method[arguments])"
 				. ($method['returns'] ? ': ' . $method['returns'] : '')
 				. "\n\t{\n"
 				. ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
@@ -302,15 +303,21 @@ class Compiler
 	 * Adds custom method to template.
 	 * @internal
 	 */
-	public function addMethod(string $name, string $body, string $arguments = '', string $returns = ''): void
-	{
-		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments, 'returns' => $returns];
+	public function addMethod(
+		string $name,
+		string $body,
+		string $arguments = '',
+		string $returns = '',
+		string $comment = null
+	): void {
+		$body = trim($body);
+		$this->methods[$name] = compact('body', 'arguments', 'returns', 'comment');
 	}
 
 
 	/**
 	 * Returns custom methods.
-	 * @return array<string, ?array{body: string, arguments: string, returns: string}>
+	 * @return array<string, ?array{body: string, arguments: string, returns: string, comment: ?string}>
 	 * @internal
 	 */
 	public function getMethods(): array
