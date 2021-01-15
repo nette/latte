@@ -66,6 +66,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('default', [$me, 'macroVar']);
 		$me->addMacro('dump', [$me, 'macroDump']);
 		$me->addMacro('debugbreak', [$me, 'macroDebugbreak']);
+		$me->addMacro('trace', 'LR\Tracer::throw() %node.line;');
 		$me->addMacro('l', '?>{<?php');
 		$me->addMacro('r', '?>}<?php');
 
