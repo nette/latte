@@ -13,10 +13,10 @@
 		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new LR\CachingIterator(['a', 'b'], $ʟ_it ?? null) as $item) {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($iterator->counter) /* line 9 */;
+			echo LR\Filters::escapeHtmlText($iterator->counter) /* line %d% */;
 			echo "\n";
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
-		echo LR\Filters::escapeHtmlText($iterator === null ? 'is null' : null) /* line 11 */;
+		echo LR\Filters::escapeHtmlText($iterator === null ? 'is null' : null) /* line %d% */;
 %A%

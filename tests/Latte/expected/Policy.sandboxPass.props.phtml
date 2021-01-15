@@ -3,39 +3,39 @@
 		echo 'props
 
 ';
-		echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop) /* line 3 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, 'prop')->prop) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, $prop)->$prop) /* line 5 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, $prop)->$prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, (string) "prop")->{"prop"}) /* line 6 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop, (string) "prop")->{"prop"}) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop[$x]) /* line 7 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop[$x]) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop[($x)]) /* line 8 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, 'prop')->prop[($x)]) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop[$x], 'prop')->prop) /* line 9 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop[$x], 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop['x'], $prop)->$prop) /* line 10 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop['x'], $prop)->$prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop['x'], (string) "prop")->{"prop"}) /* line 11 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop['x'], (string) "prop")->{"prop"}) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop['x']['y'], 'prop')->prop) /* line 12 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, 'prop')->prop['x']['y'], 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([$this->prop($obj, 'prop')->prop['x'], 'method'])()) /* line 13 */;
+		echo LR\Filters::escapeHtmlText($this->call([$this->prop($obj, 'prop')->prop['x'], 'method'])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($obj, (string) "prop")->{"prop"}) /* line 14 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, (string) "prop")->{"prop"}) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, (string) "prop")->{"prop"}, 'prop')->prop) /* line 15 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, (string) "prop")->{"prop"}, 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($obj, $prop)->$prop) /* line 16 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, $prop)->$prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($obj, $$prop)->$$prop) /* line 17 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, $$prop)->$$prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, $$prop)->$$prop, $prop)->$prop) /* line 18 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->prop($obj, $$prop)->$$prop, $prop)->$prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($obj, $prop)->$prop[$x]) /* line 19 */;
+		echo LR\Filters::escapeHtmlText($this->prop($obj, $prop)->$prop[$x]) /* line %d% */;
 		echo '
 -';
 %A%

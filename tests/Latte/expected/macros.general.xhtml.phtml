@@ -17,24 +17,24 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul>
 	<li>Escaped: ';
-		echo LR\Filters::escapeHtmlText($hello) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
 		echo '</li>
 	<li>Non-escaped: ';
-		echo $hello /* line 5 */;
+		echo $hello /* line %d% */;
 		echo '</li>
 	<li>Escaped expression: ';
-		echo LR\Filters::escapeHtmlText('<' . 'b' . '>hello' . '</b>') /* line 6 */;
+		echo LR\Filters::escapeHtmlText('<' . 'b' . '>hello' . '</b>') /* line %d% */;
 		echo '</li>
 	<li>Non-escaped expression: ';
-		echo '<' . 'b' . '>hello' . '</b>' /* line 7 */;
+		echo '<' . 'b' . '>hello' . '</b>' /* line %d% */;
 		echo '</li>
 	<li>Array access: ';
-		echo LR\Filters::escapeHtmlText($people[1]) /* line 8 */;
+		echo LR\Filters::escapeHtmlText($people[1]) /* line %d% */;
 		echo '</li>
 	<li>Html: ';
-		echo LR\Filters::escapeHtmlText($el) /* line 9 */;
+		echo LR\Filters::escapeHtmlText($el) /* line %d% */;
 		echo ' ';
-		echo LR\Filters::escapeHtmlText($el2) /* line 9 */;
+		echo LR\Filters::escapeHtmlText($el2) /* line %d% */;
 		echo '</li>
 	<li>Translated: ';
 		echo LR\Filters::escapeHtmlText(($this->filters->translate)($people[1]));
@@ -46,14 +46,14 @@ final class Template%a% extends Latte\Runtime\Template
 		echo ($this->filters->translate)($people[1]);
 		echo '</li>
 	<li>Condition: ';
-		echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line 13 */;
+		echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line %d% */;
 		echo ' ';
-		echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line 13 */;
+		echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line %d% */;
 		echo '</li>
 	<li>Array: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->join)($hello ? (['a', 'b', 'c']) : null)) /* line 14 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->join)($hello ? (['a', 'b', 'c']) : null)) /* line %d% */;
 		echo ' ';
-		echo LR\Filters::escapeHtmlText(($this->filters->join)(['a', 'b', $hello ? 'c' : null])) /* line 14 */;
+		echo LR\Filters::escapeHtmlText(($this->filters->join)(['a', 'b', $hello ? 'c' : null])) /* line %d% */;
 		echo '</li>
 </ul>
 
@@ -75,38 +75,38 @@ final class Template%a% extends Latte\Runtime\Template
 <p val0 val1 = tmp val2=tmp val3="x"></p> </p>
 
 <p val = ';
-		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 27 */;
+		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
 		echo ' val2=';
-		echo LR\Filters::escapeHtmlAttrUnquoted($mxss) /* line 27 */;
+		echo LR\Filters::escapeHtmlAttrUnquoted($mxss) /* line %d% */;
 		echo '> </p>
 
 <p onclick = ';
-		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 29 */;
+		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
 		echo '> </p>
 
 <p ONCLICK ="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 31 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo '" ';
-		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line 31 */;
+		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
 		echo '> </p>
 
 <p val = />';
-		echo LR\Filters::escapeHtmlText($xss) /* line 33 */;
+		echo LR\Filters::escapeHtmlText($xss) /* line %d% */;
 		echo '</p>
 
 ';
-		echo LR\Filters::escapeHtmlText((string) (bool) (float) (int) (array) 10) /* line 35 */;
+		echo LR\Filters::escapeHtmlText((string) (bool) (float) (int) (array) 10) /* line %d% */;
 		echo '
 
 ';
 		if ($hello) {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($hello) /* line 38 */;
+			echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
 			echo "\n";
 		}
 		elseif ($any) {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($any) /* line 40 */;
+			echo LR\Filters::escapeHtmlText($any) /* line %d% */;
 			echo "\n";
 		}
 		else {
@@ -126,11 +126,11 @@ final class Template%a% extends Latte\Runtime\Template
 				}
 				echo '
 	<li id="item-';
-				echo LR\Filters::escapeHtmlAttr($iterator->getCounter()) /* line 49 */;
+				echo LR\Filters::escapeHtmlAttr($iterator->getCounter()) /* line %d% */;
 				echo '" class="';
-				echo LR\Filters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') /* line 49 */;
+				echo LR\Filters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') /* line %d% */;
 				echo '">';
-				echo LR\Filters::escapeHtmlText($person) /* line 49 */;
+				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 				echo '</li>
 	';
 				if ($iterator->isLast()) {
@@ -149,7 +149,7 @@ final class Template%a% extends Latte\Runtime\Template
 <STYLE type="text/css">
 <!--
 #';
-		echo LR\Filters::escapeCss($xss) /* line 58 */;
+		echo LR\Filters::escapeCss($xss) /* line %d% */;
 		echo ' {
 	background: blue;
 }
@@ -163,17 +163,17 @@ final class Template%a% extends Latte\Runtime\Template
 alert(\'</div>\');
 
 var prop = ';
-		echo LR\Filters::escapeJs($people) /* line 70 */;
+		echo LR\Filters::escapeJs($people) /* line %d% */;
 		echo ';
 
 document.getElementById(';
-		echo LR\Filters::escapeJs($xss) /* line 72 */;
+		echo LR\Filters::escapeJs($xss) /* line %d% */;
 		echo ').style.backgroundColor = \'red\';
 
 var html = ';
-		echo LR\Filters::escapeJs($el) /* line 74 */;
+		echo LR\Filters::escapeJs($el) /* line %d% */;
 		echo ' || ';
-		echo LR\Filters::escapeJs($el2) /* line 74 */;
+		echo LR\Filters::escapeJs($el2) /* line %d% */;
 		echo ';
 -->
 </script>
@@ -183,7 +183,7 @@ var html = ';
 /* <![CDATA[ */
 
 var prop2 = ';
-		echo LR\Filters::escapeJs($people) /* line 82 */;
+		echo LR\Filters::escapeJs($people) /* line %d% */;
 		echo ';
 
 /* ]]> */
@@ -192,31 +192,31 @@ var prop2 = ';
 
 <p onclick =
 \'alert(';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 89 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo ');alert("hello");\'
  title=\'';
-		echo LR\Filters::escapeHtmlAttr($xss) /* line 90 */;
+		echo LR\Filters::escapeHtmlAttr($xss) /* line %d% */;
 		echo '\'
  STYLE =
  "color:';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss($xss)) /* line 92 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss($xss)) /* line %d% */;
 		echo ';"
  rel="';
-		echo LR\Filters::escapeHtmlAttr($xss) /* line 93 */;
+		echo LR\Filters::escapeHtmlAttr($xss) /* line %d% */;
 		echo '"
  onblur="alert(';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line 94 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo ')"
  alt=\'';
-		echo LR\Filters::escapeHtmlAttr($el) /* line 95 */;
+		echo LR\Filters::escapeHtmlAttr($el) /* line %d% */;
 		echo ' ';
-		echo LR\Filters::escapeHtmlAttr($el2) /* line 95 */;
+		echo LR\Filters::escapeHtmlAttr($el2) /* line %d% */;
 		echo '\'
  onfocus="alert(';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($el)) /* line 96 */;
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($el)) /* line %d% */;
 		echo ')"
 >click on me ';
-		echo LR\Filters::escapeHtmlText($xss) /* line 97 */;
+		echo LR\Filters::escapeHtmlText($xss) /* line %d% */;
 		echo '</p>
 
 
@@ -232,18 +232,18 @@ var prop2 = ';
 
 ';
 		extract(['varx' => 2], EXTR_SKIP);
-		echo LR\Filters::escapeHtmlText($varx) /* line 111 */;
+		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo "\n";
 		extract(['varx' => 4], EXTR_SKIP);
-		echo LR\Filters::escapeHtmlText($varx) /* line 112 */;
+		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo '
 
 ';
 		$varx = 8;
-		echo LR\Filters::escapeHtmlText($varx) /* line 114 */;
+		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo "\n";
 		$varx = 9;
-		echo LR\Filters::escapeHtmlText($varx) /* line 115 */;
+		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo '
 
 ';
@@ -306,7 +306,7 @@ var prop2 = ';
 ';
 		}
 		echo "\n";
-		echo ($this->filters->breaklines)("\n") /* line 145 */;
+		echo ($this->filters->breaklines)("\n") /* line %d% */;
 		echo '
 
 
@@ -339,7 +339,7 @@ var prop2 = ';
 		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new LR\CachingIterator($menu, $ʟ_it ?? null) as $item) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($counter++) /* line 105 */;
+			echo LR\Filters::escapeHtmlText($counter++) /* line %d% */;
 			echo ' ';
 			if (is_array($item)) {
 				echo ' ';
@@ -347,7 +347,7 @@ var prop2 = ';
 				echo ' ';
 			}
 			else {
-				echo LR\Filters::escapeHtmlText($item) /* line 105 */;
+				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			}
 			echo '</li>
 ';

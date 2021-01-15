@@ -3,17 +3,17 @@
 		echo 'consts
 
 ';
-		echo LR\Filters::escapeHtmlText(\Name\MyClass::CONST) /* line 3 */;
+		echo LR\Filters::escapeHtmlText(\Name\MyClass::CONST) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($obj::CONST) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($obj::CONST) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($obj::CONST) /* line 5 */;
+		echo LR\Filters::escapeHtmlText($obj::CONST) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call(($obj::CONST))()) /* line 6 */;
+		echo LR\Filters::escapeHtmlText($this->call(($obj::CONST))()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call($obj::CONST[0])()) /* line 7 */;
+		echo LR\Filters::escapeHtmlText($this->call($obj::CONST[0])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call(CONST[0])()) /* line 8 */;
+		echo LR\Filters::escapeHtmlText($this->call(CONST[0])()) /* line %d% */;
 		echo '
 -';
 %A%

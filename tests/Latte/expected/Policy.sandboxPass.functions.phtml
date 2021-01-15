@@ -3,26 +3,26 @@
 		echo 'functions
 
 ';
-		echo LR\Filters::escapeHtmlText(func()) /* line 3 */;
+		echo LR\Filters::escapeHtmlText(func()) /* line %d% */;
 		echo '
 ';
-		echo LR\Filters::escapeHtmlText($this->call('func')()) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($this->call('func')()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call(('fu' . 'nc'))()) /* line 5 */;
+		echo LR\Filters::escapeHtmlText($this->call(('fu' . 'nc'))()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText(\func()) /* line 6 */;
+		echo LR\Filters::escapeHtmlText(\func()) /* line %d% */;
 		echo '
 ';
-		echo LR\Filters::escapeHtmlText(ns\func()) /* line 7 */;
+		echo LR\Filters::escapeHtmlText(ns\func()) /* line %d% */;
 		echo '
 ';
-		echo LR\Filters::escapeHtmlText($this->prop(func(), 'prop')->prop) /* line 8 */;
+		echo LR\Filters::escapeHtmlText($this->prop(func(), 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call(func())()) /* line 9 */;
+		echo LR\Filters::escapeHtmlText($this->call(func())()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call(func( $this->prop($a, 'prop')->prop ))( func() )) /* line 10 */;
+		echo LR\Filters::escapeHtmlText($this->call(func( $this->prop($a, 'prop')->prop ))( func() )) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call(func()['x'])()) /* line 11 */;
+		echo LR\Filters::escapeHtmlText($this->call(func()['x'])()) /* line %d% */;
 		echo '
 -';
 %A%

@@ -6,7 +6,7 @@
 		$iterations = 0;
 		foreach ([0, 1, 2, 3] as $i) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($i) /* line 3 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			if (true) {
 				echo "</li>\n";
 				break;
@@ -22,7 +22,7 @@
 		$iterations = 0;
 		foreach ([0, 1, 2, 3] as $i) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($i) /* line 7 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			if (true) {
 				echo "</li>\n";
 				continue;
@@ -38,7 +38,7 @@
 		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($i) /* line 11 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			if (true) {
 				echo "</li>\n";
 				{
@@ -58,7 +58,7 @@
 	<li>';
 		$iterations = 0;
 		foreach ([0, 1, 2, 3] as $i) {
-			echo LR\Filters::escapeHtmlText($i) /* line 16 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			if (true) break;
 			$iterations++;
 		}
@@ -69,7 +69,7 @@
 	<li>';
 		$iterations = 0;
 		foreach ([0, 1, 2, 3] as $i) {
-			echo LR\Filters::escapeHtmlText($i) /* line 20 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			if (true) continue;
 			$iterations++;
 		}
@@ -80,7 +80,7 @@
 	<li>';
 		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) {
-			echo LR\Filters::escapeHtmlText($i) /* line 24 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			if (true) {
 				$iterator->skipRound();
 				continue;

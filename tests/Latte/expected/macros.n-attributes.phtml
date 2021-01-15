@@ -38,7 +38,7 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '<p';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "";
 			echo '>';
-			echo LR\Filters::escapeHtmlText($foo) /* line 10 */;
+			echo LR\Filters::escapeHtmlText($foo) /* line %d% */;
 			echo '</p>
 ';
 			$iterations++;
@@ -72,7 +72,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line 27 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			echo '</li>
 ';
 			$iterations++;
@@ -85,7 +85,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) {
 			echo '	<li>
 		';
-			echo LR\Filters::escapeHtmlText($person) /* line 32 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			echo '
 	</li>
 ';
@@ -99,7 +99,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '		';
-			echo LR\Filters::escapeHtmlText($person) /* line 38 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			echo "\n";
 			$iterations++;
 		}
@@ -113,7 +113,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		}
 		echo '		';
-		echo LR\Filters::escapeHtmlText($person) /* line 44 */;
+		echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 		echo "\n";
 		if ($ʟ_if[1]) {
 			echo '	</li>
@@ -127,7 +127,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$i<3;
 		$i++) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($i) /* line 49 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo '</li>
 ';
 		}
@@ -137,7 +137,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		while (--$i>0) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($i) /* line 53 */;
+			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo '</li>
 ';
 		}
@@ -183,7 +183,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
 				echo '	<li>';
-				echo LR\Filters::escapeHtmlText($person) /* line 75 */;
+				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 				echo '</li>
 ';
 			}
@@ -198,7 +198,7 @@ final class Template%a% extends Latte\Runtime\Template
 			$iterations = 0;
 			foreach ($people as $person) {
 				if (strlen($person)===4) {
-					echo LR\Filters::escapeHtmlText($person) /* line 79 */;
+					echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 				}
 				$iterations++;
 			}
@@ -213,7 +213,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
 				echo '	<li>';
-				echo LR\Filters::escapeHtmlText(($this->filters->lower)($person)) /* line 83 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->lower)($person)) /* line %d% */;
 				echo '</li>
 ';
 			}
@@ -338,7 +338,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line 109 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			if (true) {
 				echo "</li>\n";
 				break;
@@ -354,7 +354,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($people as $person) {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line 113 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			if (true) {
 				echo "</li>\n";
 				continue;
@@ -370,7 +370,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<li>';
 		$iterations = 0;
 		foreach ($people as $person) {
-			echo LR\Filters::escapeHtmlText($person) /* line 118 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			if (true) break;
 			$iterations++;
 		}
@@ -381,7 +381,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<li>';
 		$iterations = 0;
 		foreach ($people as $person) {
-			echo LR\Filters::escapeHtmlText($person) /* line 122 */;
+			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			if (true) continue;
 			$iterations++;
 		}
@@ -408,7 +408,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) {
 			if (strlen($person)===4) {
 				echo '	<li>';
-				echo LR\Filters::escapeHtmlText($person) /* line 19 */;
+				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 				echo '</li>
 ';
 			}

@@ -3,19 +3,19 @@
 		echo 'object methods
 
 ';
-		echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line 3 */;
+		echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([$obj, (string) 'method'])()) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($this->call([$obj, (string) 'method'])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([$obj, $method])()) /* line 5 */;
+		echo LR\Filters::escapeHtmlText($this->call([$obj, $method])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line 6 */;
+		echo LR\Filters::escapeHtmlText($this->call([$obj, 'method'])()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->call($this->call([$obj, 'method'])())()) /* line 7 */;
+		echo LR\Filters::escapeHtmlText($this->call($this->call([$obj, 'method'])())()) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->call([$obj, 'method'])(), 'prop')->prop) /* line 8 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->call([$obj, 'method'])(), 'prop')->prop) /* line %d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($this->prop($this->call([$obj, 'method'])(), 'prop')->prop) /* line 9 */;
+		echo LR\Filters::escapeHtmlText($this->prop($this->call([$obj, 'method'])(), 'prop')->prop) /* line %d% */;
 		echo '
 -';
 %A%
