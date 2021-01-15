@@ -16,22 +16,22 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		echo '
 a) ';
-		$this->renderBlock($ʟ_nm = 'test', [1] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [1] + [], 'html') /* line %d% */;
 		echo '
 
 
 b) ';
-		$this->renderBlock($ʟ_nm = 'outer', get_defined_vars(), 'html');
+		$this->renderBlock($ʟ_nm = 'outer', get_defined_vars(), 'html') /* line %d% */;
 		echo '
 
 ';
 		$var1 = 'outer';
 		echo 'c) ';
-		$this->renderBlock($ʟ_nm = 'test', [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [], 'html') /* line %d% */;
 		echo '
 
 d) ';
-		$this->renderBlock($ʟ_nm = 'test', [null] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', [null] + [], 'html') /* line %d% */;
 		return get_defined_vars();
 	}
 
@@ -56,7 +56,7 @@ d) ';
 	{
 		extract($this->params);
 		extract($ʟ_args);
-		$this->renderBlock($ʟ_nm = 'test', ['hello'] + [], 'html');
+		$this->renderBlock($ʟ_nm = 'test', ['hello'] + [], 'html') /* line %d% */;
 
 	}
 

@@ -151,7 +151,7 @@ class BlockMacros extends MacroSet
 		if ($node->tokenizer->nextToken('from')) {
 			$node->tokenizer->nextToken($node->tokenizer::T_WHITESPACE);
 			return $writer->write(
-				'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw, %word);',
+				'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw, %word) %node.line;',
 				$node->modifiers
 					? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 					: PhpHelpers::dump($noEscape ? null : implode($node->context)),
@@ -181,7 +181,7 @@ class BlockMacros extends MacroSet
 			. ($node->modifiers
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
-			. ');'
+			. ') %node.line;'
 		);
 	}
 
@@ -197,7 +197,7 @@ class BlockMacros extends MacroSet
 		$node->validate(true);
 		return $writer->write(
 			'ob_start(function () {});
-			$this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var);
+			$this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var) %node.line;
 			echo rtrim(ob_get_clean());',
 			implode($node->context)
 		);
@@ -212,7 +212,7 @@ class BlockMacros extends MacroSet
 		$node->validate(true);
 		$file = $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
-		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render();', $file);
+		$code = $writer->write('$this->createTemplate(%word, $this->params, "import")->render() %node.line;', $file);
 		if ($this->getCompiler()->isInHead()) {
 			$this->imports[] = $code;
 			return '';
@@ -592,7 +592,7 @@ class BlockMacros extends MacroSet
 		$this->index = $node->data->prevIndex;
 		return $writer->write(
 			'}
-			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var); }
+			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var) %node.line; }
 			finally { $this->setBlockLayer(%var); }',
 			implode($node->context),
 			$this->index

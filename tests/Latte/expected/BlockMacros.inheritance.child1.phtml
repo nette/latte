@@ -11,7 +11,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 %A%
-		$this->createTemplate("inc", $this->params, 'includeblock')->renderToContentType('html');
+		$this->createTemplate("inc", $this->params, 'includeblock')->renderToContentType('html') /* line %d% */;
 		echo "\n";
 		if ($this->getParentName()) {
 			return get_defined_vars();
@@ -34,7 +34,7 @@ final class Template%a% extends Latte\Runtime\Template
 			}
 		}
 		$this->parentName = "parent";
-		$this->createTemplate("inc", $this->params, "import")->render();
+		$this->createTemplate("inc", $this->params, "import")->render() /* line %d% */;
 
 	}
 
@@ -44,8 +44,8 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		echo 'Homepage | ';
-		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars());
-		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars());
+		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars()) /* line %d% */;
+		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars()) /* line %d% */;
 
 	}
 
