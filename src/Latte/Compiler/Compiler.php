@@ -143,10 +143,10 @@ class Compiler
 	 */
 	public function compile(array $tokens, string $className, string $comment = null, bool $strictMode = false): string
 	{
-		$code = "<?php\n"
-			. ($comment === null ? '' : "// $comment\n\n")
+		$code = "<?php\n\n"
 			. ($strictMode ? "declare(strict_types=1);\n\n" : '')
 			. "use Latte\\Runtime as LR;\n\n"
+			. ($comment === null ? '' : '/** ' . str_replace('*/', '* /', $comment) . " */\n")
 			. "final class $className extends Latte\\Runtime\\Template\n{\n"
 			. $this->buildClassBody($tokens)
 			. "\n\n}\n";
