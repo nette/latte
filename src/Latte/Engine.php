@@ -33,6 +33,9 @@ class Engine
 	/** @var callable[] */
 	public $onCompile = [];
 
+	/** @internal */
+	public $probe;
+
 	/** @var Parser|null */
 	private $parser;
 
@@ -74,6 +77,7 @@ class Engine
 	{
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new \stdClass;
+		$this->probe = function () {};
 
 		$defaults = new Runtime\Defaults;
 		foreach ($defaults->getFilters() as $name => $callback) {
@@ -91,8 +95,9 @@ class Engine
 	 */
 	public function render(string $name, $params = [], string $block = null): void
 	{
-		$this->createTemplate($name, $this->processParams($params))
-			->render($block);
+		$template = $this->createTemplate($name, $this->processParams($params));
+		($this->probe)($template);
+		$template->render($block);
 	}
 
 
@@ -103,6 +108,7 @@ class Engine
 	public function renderToString(string $name, $params = [], string $block = null): string
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
+		($this->probe)($template);
 		return $template->capture(function () use ($template, $block) { $template->render($block); });
 	}
 
