@@ -11,11 +11,9 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::notContains('declare(strict_types=1)', $latte->compile(''));
-Assert::same('// source: {123}', explode("\n", $latte->compile('{123}'))[1]);
 
 $latte->setStrictTypes(true);
 Assert::contains('declare(strict_types=1)', $latte->compile(''));
-Assert::same('// source: {123}', explode("\n", $latte->compile('{123}'))[1]);
 
 Assert::noError(function () use ($latte) {
 	$latte->render('');
