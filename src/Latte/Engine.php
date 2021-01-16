@@ -133,6 +133,7 @@ class Engine
 		$this->onCompile = [];
 
 		$source = $this->getLoader()->getContent($name);
+		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
 
 		try {
 			$tokens = $this->getParser()
@@ -143,7 +144,7 @@ class Engine
 				->setContentType($this->contentType)
 				->setFunctions(array_keys((array) $this->functions))
 				->setPolicy($this->sandboxed ? $this->policy : null)
-				->compile($tokens, $this->getTemplateClass($name));
+				->compile($tokens, $this->getTemplateClass($name), $comment, $this->strictTypes);
 
 		} catch (\Exception $e) {
 			if (!$e instanceof CompileException) {
@@ -155,14 +156,6 @@ class Engine
 			throw $e->setSource($source, $line, $name);
 		}
 
-		if ($this->strictTypes) {
-			$code = "<?php\ndeclare(strict_types=1);\n?>" . $code;
-		}
-		if (!preg_match('#\n|\?#', $name)) {
-			$code = "<?php\n// source: $name\n?>" . $code;
-		}
-		$code = PhpHelpers::inlineHtmlToEcho($code);
-		$code = PhpHelpers::reformatCode($code);
 		return $code;
 	}
 
