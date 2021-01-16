@@ -231,6 +231,8 @@ class Template
 			$this->blocks[self::LAYER_SNIPPET] += $referred->blocks[self::LAYER_SNIPPET];
 			$referred->blocks[self::LAYER_SNIPPET] = &$this->blocks[self::LAYER_SNIPPET];
 		}
+
+		($this->engine->probe)($referred);
 		return $referred;
 	}
 
