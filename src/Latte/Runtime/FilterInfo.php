@@ -27,4 +27,13 @@ class FilterInfo
 	{
 		$this->contentType = $contentType;
 	}
+
+
+	public function validate(array $contentTypes, string $name = null): void
+	{
+		if (!in_array($this->contentType, $contentTypes, true)) {
+			$name = $name ? " |$name" : $name;
+			throw new Latte\CompileException("Filter$name used with incompatible type " . strtoupper($this->contentType));
+		}
+	}
 }
