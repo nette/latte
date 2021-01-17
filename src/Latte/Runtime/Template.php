@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
+use Latte\CompileException;
 use Latte\Engine;
 use Latte\Policy;
 
@@ -329,11 +330,11 @@ class Template
 			$block->contentType = $contentType;
 
 		} elseif ($block->contentType !== $contentType) {
-			trigger_error(sprintf(
+			throw new CompileException(sprintf(
 				"Overridden block $name with content type %s by incompatible type %s.",
 				strtoupper($contentType),
 				strtoupper($block->contentType)
-			), E_USER_WARNING);
+			));
 		}
 
 		$block->functions = array_merge($block->functions, $functions);
@@ -355,11 +356,11 @@ class Template
 			echo $filter($this->capture($function));
 
 		} else {
-			trigger_error(sprintf(
+			throw new CompileException(sprintf(
 				"Including $name with content type %s into incompatible type %s.",
 				strtoupper($contentType),
 				strtoupper($mod)
-			), E_USER_WARNING);
+			));
 		}
 	}
 

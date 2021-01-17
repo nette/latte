@@ -122,7 +122,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::error(function () use ($latte) {
 	$latte->compile('{=`whoami`}');
-}, [E_USER_DEPRECATED, E_USER_DEPRECATED]);
+}, Latte\CompileException::class, 'Backtick operator is forbidden in Latte.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{$ʟ_tmp}');

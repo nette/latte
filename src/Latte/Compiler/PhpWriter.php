@@ -218,11 +218,7 @@ class PhpWriter
 				throw new CompileException('Unexpected ' . $tokenValue);
 
 			} elseif ($tokens->isCurrent('`')) {
-				if ($this->policy) {
-					throw new CompileException('Forbidden backtick operator.');
-				} else {
-					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
-				}
+				throw new CompileException('Backtick operator is forbidden in Latte.');
 
 			} elseif (
 				Helpers::startsWith($tokenValue, '$ʟ_')

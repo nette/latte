@@ -16,9 +16,9 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 
-Assert::error(function () use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->renderToString('{block local, a}');
-}, E_USER_NOTICE, "Unexpected arguments 'a' in {block}");
+}, Latte\CompileException::class, "Unexpected arguments 'a' in {block}");
 
 
 Assert::same(

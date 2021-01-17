@@ -20,6 +20,6 @@ Assert::match(
 	$latte->renderToString('{block}Block')
 );
 
-Assert::error(function () use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->renderToString('{block}{block}Block');
-}, E_USER_WARNING, 'Missing {/block}');
+}, Latte\CompileException::class, 'Missing {/block}');

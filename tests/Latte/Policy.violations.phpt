@@ -102,10 +102,6 @@ Assert::error(function () use ($latte) {
 }, PHP_VERSION_ID < 80000 ? E_NOTICE : E_WARNING, '%a% property %a%');
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{=`whoami`}');
-}, Latte\CompileException::class, 'Forbidden backtick operator.');
-
-Assert::exception(function () use ($latte) {
 	$latte->compile('{$this->filters}');
 }, Latte\CompileException::class, 'Forbidden variable $this.');
 

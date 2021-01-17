@@ -200,7 +200,7 @@ class Compiler
 
 		while ($this->macroNode) {
 			if ($this->macroNode->parentNode) {
-				trigger_error('Missing {/' . $this->macroNode->name . '}', E_USER_WARNING);
+				throw new CompileException('Missing {/' . $this->macroNode->name . '}');
 			}
 			if (~$this->flags[$this->macroNode->name] & Macro::AUTO_CLOSE) {
 				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));

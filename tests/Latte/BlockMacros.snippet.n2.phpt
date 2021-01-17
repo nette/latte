@@ -40,9 +40,9 @@ EOD
 ));
 
 
-Assert::error(function () use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:snippet="abc" n:foreach="$items as $item">hello</p>');
-}, E_USER_WARNING, 'Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.');
+}, Latte\CompileException::class, 'Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:snippet="abc" id="a">hello</p>');
