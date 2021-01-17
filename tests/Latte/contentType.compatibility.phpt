@@ -316,7 +316,7 @@ Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('context6a');
-}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT');
+}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT.');
 
 
 
@@ -349,7 +349,7 @@ Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('context6a');
-}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT');
+}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT.');
 
 
 

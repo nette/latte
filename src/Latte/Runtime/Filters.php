@@ -203,9 +203,7 @@ class Filters
 	 */
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
-		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
-			throw new RuntimeException('Filter |stripHtml used with incompatible type ' . strtoupper($info->contentType));
-		}
+		$info->validate([null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
 		$info->contentType = Engine::CONTENT_TEXT;
 		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
@@ -219,9 +217,7 @@ class Filters
 	public static function stripTags(FilterInfo $info, $s): string
 	{
 		$info->contentType = $info->contentType ?? 'html';
-		if (!in_array($info->contentType, ['html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
-			throw new RuntimeException('Filter |stripTags used with incompatible type ' . strtoupper($info->contentType));
-		}
+		$info->validate(['html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
 		return strip_tags((string) $s);
 	}
 
