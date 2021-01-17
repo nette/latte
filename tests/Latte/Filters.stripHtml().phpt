@@ -17,9 +17,9 @@ require __DIR__ . '/../bootstrap.php';
 
 test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
-	Assert::error(function () use ($info) {
+	Assert::exception(function () use ($info) {
 		Filters::stripHtml($info, '');
-	}, E_USER_WARNING, 'Filter |stripHtml used with incompatible type TEXT');
+	}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type TEXT');
 });
 
 

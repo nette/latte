@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Runtime;
 
+use Latte;
 use Latte\Engine;
 use Latte\Helpers;
 
@@ -126,8 +127,8 @@ class FilterExecutor
 		}
 		// classic filter
 		if ($info->contentType !== Engine::CONTENT_TEXT) {
-			trigger_error("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
-				. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'), E_USER_WARNING);
+			throw new Latte\RuntimeException("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
+				. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'));
 		}
 		$res = ($this->$name)(...$args);
 		if ($res instanceof HtmlStringable) {

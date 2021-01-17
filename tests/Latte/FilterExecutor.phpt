@@ -109,9 +109,9 @@ test('', function () {
 	$filters->add('f2', function ($val) {
 		return strtolower($val);
 	});
-	Assert::error(function () use ($filters) {
+	Assert::exception(function () use ($filters) {
 		$filters->filterContent('f2', new FilterInfo('html'), 'aA<b>');
-	}, E_USER_WARNING, 'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.');
+	}, Latte\RuntimeException::class, 'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 
 	// FilterInfo aware called as FilterInfo aware

@@ -329,11 +329,11 @@ class Template
 			$block->contentType = $contentType;
 
 		} elseif ($block->contentType !== $contentType) {
-			trigger_error(sprintf(
+			throw new Latte\RuntimeException(sprintf(
 				"Overridden block $name with content type %s by incompatible type %s.",
 				strtoupper($contentType),
 				strtoupper($block->contentType)
-			), E_USER_WARNING);
+			));
 		}
 
 		$block->functions = array_merge($block->functions, $functions);
@@ -355,11 +355,11 @@ class Template
 			echo $filter($this->capture($function));
 
 		} else {
-			trigger_error(sprintf(
+			throw new Latte\RuntimeException(sprintf(
 				"Including $name with content type %s into incompatible type %s.",
 				strtoupper($contentType),
 				strtoupper($mod)
-			), E_USER_WARNING);
+			));
 		}
 	}
 

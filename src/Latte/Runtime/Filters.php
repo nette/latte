@@ -11,6 +11,7 @@ namespace Latte\Runtime;
 
 use Latte;
 use Latte\Engine;
+use Latte\RuntimeException;
 
 
 /**
@@ -203,7 +204,7 @@ class Filters
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
 		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
-			trigger_error('Filter |stripHtml used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
+			throw new RuntimeException('Filter |stripHtml used with incompatible type ' . strtoupper($info->contentType));
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
 		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -218,7 +219,7 @@ class Filters
 	public static function stripTags(FilterInfo $info, $s): string
 	{
 		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
-			trigger_error('Filter |stripTags used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
+			throw new RuntimeException('Filter |stripTags used with incompatible type ' . strtoupper($info->contentType));
 		}
 		return strip_tags((string) $s);
 	}
@@ -236,7 +237,7 @@ class Filters
 			$info->contentType = $dest;
 			return $conv($s);
 		} else {
-			trigger_error('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest), E_USER_WARNING);
+			throw new RuntimeException('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest));
 			return $s;
 		}
 	}

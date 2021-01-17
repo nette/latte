@@ -17,13 +17,9 @@ require __DIR__ . '/../bootstrap.php';
 
 test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
-	Assert::error(function () use ($info) {
+	Assert::exception(function () use ($info) {
 		Filters::stripTags($info, '');
-	}, E_USER_WARNING, 'Filter |stripTags used with incompatible type TEXT');
-
-	Assert::same('', @Filters::stripTags($info, ''));
-	Assert::same('abc', @Filters::stripTags($info, 'abc'));
-	Assert::same('&lt;  c', @Filters::stripTags($info, '&lt; <b> c'));
+	}, Latte\RuntimeException::class, 'Filter |stripTags used with incompatible type TEXT');
 });
 
 

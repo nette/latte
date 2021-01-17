@@ -171,7 +171,7 @@ class MacroSet implements Latte\Macro
 	{
 		if ($node->tokenizer->isNext()) {
 			$args = Latte\Runtime\Filters::truncate($node->tokenizer->joinAll(), 20);
-			trigger_error("Unexpected arguments '$args' in " . $node->getNotation());
+			throw new CompileException("Unexpected arguments '$args' in " . $node->getNotation());
 		}
 	}
 }

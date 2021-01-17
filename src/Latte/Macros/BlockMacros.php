@@ -238,7 +238,7 @@ class BlockMacros extends MacroSet
 			$this->extends = $writer->write('%node.word%node.args');
 		}
 		if (!$this->getCompiler()->isInHead()) {
-			trigger_error($node->getNotation() . ' must be placed in template head.', E_USER_WARNING);
+			throw new CompileException($node->getNotation() . ' must be placed in template head.');
 		}
 	}
 
@@ -441,7 +441,7 @@ class BlockMacros extends MacroSet
 
 		if ($node->prefix) {
 			if (isset($node->htmlNode->macroAttrs['foreach'])) {
-				trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
+				throw new CompileException('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.');
 			}
 			$node->attrCode = $writer->write(
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>",
