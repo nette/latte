@@ -19,11 +19,11 @@ class FilterInfo
 {
 	use Latte\Strict;
 
-	/** @var string|null */
+	/** @var string */
 	public $contentType;
 
 
-	public function __construct(string $contentType = null)
+	public function __construct(string $contentType = Latte\Engine::CONTENT_TEXT)
 	{
 		$this->contentType = $contentType;
 	}

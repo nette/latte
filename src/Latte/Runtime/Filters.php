@@ -202,7 +202,7 @@ class Filters
 	 */
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
-		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
+		if (!in_array($info->contentType, ['html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
 			trigger_error('Filter |stripHtml used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		$info->contentType = Engine::CONTENT_TEXT;
@@ -217,7 +217,7 @@ class Filters
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
 	{
-		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
+		if (!in_array($info->contentType, ['html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
 			trigger_error('Filter |stripTags used with incompatible type ' . strtoupper($info->contentType), E_USER_WARNING);
 		}
 		return strip_tags((string) $s);
@@ -229,7 +229,7 @@ class Filters
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, $s): string
 	{
-		$source = $info->contentType ?: Engine::CONTENT_TEXT;
+		$source = $info->contentType;
 		if ($source === $dest) {
 			return $s;
 		} elseif ($conv = self::getConvertor($source, $dest)) {
