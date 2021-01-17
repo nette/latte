@@ -347,9 +347,6 @@ class CoreMacros extends MacroSet
 
 		$node->replaced = false;
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
-		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error("Macro {{$node->name}} provides auto-escaping, remove |escape.");
-		}
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
 		}

@@ -142,9 +142,6 @@ class BlockMacros extends MacroSet
 		}
 
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
-		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
-		}
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
 		}
@@ -269,9 +266,6 @@ class BlockMacros extends MacroSet
 			return 'ob_start(function () {});';
 		}
 
-		if (Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Tag ' . $node->getNotation() . ' provides auto-escaping, remove |escape.');
-		}
 		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
 			$node->context[1] = '';
 			$node->modifiers .= '|escape';
