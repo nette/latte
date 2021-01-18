@@ -564,19 +564,27 @@ class BlockMacros extends MacroSet
 	/**
 	 * {embed "file"}
 	 */
-	public function macroEmbed(MacroNode $node, PhpWriter $writer): string
+	public function macroEmbed(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->validate(true);
-		$node->replaced = true;
+		$node->replaced = false;
 		$node->data->prevIndex = $this->index;
 		$this->index = count($this->blocks);
 		$this->blocks[$this->index] = [];
 
-		return $writer->write(
-			'$this->initBlockLayer(%0_var);
+		$node->openingCode = $writer->write(
+			'<?php
+			$this->initBlockLayer(%0_var);
 			$this->setBlockLayer(%0_var);
-			if (false) {',
+			if (false) { ?>',
 			$this->index
+		);
+		$node->closingCode = $writer->write(
+			'<?php }
+			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var) %node.line; }
+			finally { $this->setBlockLayer(%var); } ?>' . "\n",
+			implode($node->context),
+			$node->data->prevIndex
 		);
 	}
 
@@ -584,16 +592,9 @@ class BlockMacros extends MacroSet
 	/**
 	 * {/embed}
 	 */
-	public function macroEmbedEnd(MacroNode $node, PhpWriter $writer): string
+	public function macroEmbedEnd(MacroNode $node, PhpWriter $writer): void
 	{
 		$this->index = $node->data->prevIndex;
-		return $writer->write(
-			'}
-			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var) %node.line; }
-			finally { $this->setBlockLayer(%var); }',
-			implode($node->context),
-			$this->index
-		);
 	}
 
 
