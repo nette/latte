@@ -98,11 +98,11 @@ test('', function () {
 
 	// FilterInfo aware called as classic
 	$filters->add('f1', function (FilterInfo $info, $val) {
-		return $info->contentType . ',' . strtolower($val);
+		return gettype($info->contentType) . ',' . strtolower($val);
 	}, true);
 
-	Assert::same('text,aa', ($filters->f1)('aA'));
-	Assert::same('text,aa', ($filters->f1)('aA'));
+	Assert::same('NULL,aa', ($filters->f1)('aA'));
+	Assert::same('NULL,aa', ($filters->f1)('aA'));
 
 
 	// classic called as FilterInfo aware

@@ -19,11 +19,11 @@ class FilterInfo
 {
 	use Latte\Strict;
 
-	/** @var string */
+	/** @var string|null */
 	public $contentType;
 
 
-	public function __construct(string $contentType = Latte\Engine::CONTENT_TEXT)
+	public function __construct(string $contentType = null)
 	{
 		$this->contentType = $contentType;
 	}
@@ -33,7 +33,7 @@ class FilterInfo
 	{
 		if (!in_array($this->contentType, $contentTypes, true)) {
 			$name = $name ? " |$name" : $name;
-			throw new Latte\CompileException("Filter$name used with incompatible type " . strtoupper($this->contentType));
+			throw new Latte\CompileException("Filter$name used with incompatible type" . ($this->contentType ? ' ' . strtoupper($this->contentType) : ''));
 		}
 	}
 }
