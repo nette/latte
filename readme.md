@@ -2,7 +2,7 @@
 =================================================================
 
 [![Downloads this Month](https://img.shields.io/packagist/dm/latte/latte.svg)](https://packagist.org/packages/latte/latte)
-[![Build Status](https://travis-ci.org/nette/latte.svg?branch=master)](https://travis-ci.org/nette/latte)
+[![Tests](https://github.com/nette/latte/workflows/Tests/badge.svg?branch=master)](https://github.com/nette/latte/actions)
 [![Coverage Status](https://coveralls.io/repos/github/nette/latte/badge.svg?branch=master)](https://coveralls.io/github/nette/latte?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/latte/latte/v/stable)](https://github.com/nette/latte/releases)
 [![License](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://github.com/nette/latte/blob/master/license.md)
