@@ -218,7 +218,8 @@ class Filters
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
 	{
-		if (!in_array($info->contentType, [null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
+		$info->contentType = $info->contentType ?? 'html';
+		if (!in_array($info->contentType, ['html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], true)) {
 			throw new RuntimeException('Filter |stripTags used with incompatible type ' . strtoupper($info->contentType));
 		}
 		return strip_tags((string) $s);

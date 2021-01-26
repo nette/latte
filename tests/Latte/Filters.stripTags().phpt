@@ -15,6 +15,14 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
+$latte = new Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+Assert::same(
+	'&quot;',
+	$latte->renderToString('{="<br>&quot;"|stripTags}')
+);
+
+
 test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
 	Assert::exception(function () use ($info) {
