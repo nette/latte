@@ -15,11 +15,11 @@ final class Template%a% extends Latte\Runtime\Template
 		if ($this->getParentName()) {
 			return get_defined_vars();
 		}
-		$this->renderBlock('title', get_defined_vars());
+		$this->renderBlock('title', get_defined_vars()) /* line %d% */;
 		echo '
 
 ';
-		$this->renderBlock('content', get_defined_vars());
+		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
 %A%
 	}
 
@@ -58,7 +58,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '	<ul>
 ';
 		$iterations = 0;
-		foreach ($people as $person) {
+		foreach ($people as $person) /* line %d% */ {
 			echo '		<li>';
 			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 			echo '</li>

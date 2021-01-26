@@ -21,6 +21,6 @@ if (!function_exists('xdebug_break')) {
 	}
 }
 
-Assert::match('%A%xdebug_break();%A%', $latte->compile('{debugbreak}'));
+Assert::match('%A%xdebug_break()%A%', $latte->compile('{debugbreak}'));
 
-Assert::match('%A%if ($i==1) xdebug_break();%A%', $latte->compile('{debugbreak $i==1}'));
+Assert::match('%A%if ($i==1) xdebug_break()%A%', $latte->compile('{debugbreak $i==1}'));

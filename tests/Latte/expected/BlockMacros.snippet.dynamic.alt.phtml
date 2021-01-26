@@ -13,14 +13,14 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer1'));
 		echo '">';
-		$this->renderBlock('outer1', [], null, 'snippet');
+		$this->renderBlock('outer1', [], null, 'snippet') /* line %d% */;
 		echo '</div>
 
 
 <div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer2'));
 		echo '">';
-		$this->renderBlock('outer2', [], null, 'snippet');
+		$this->renderBlock('outer2', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
 %A%
 	}
@@ -40,12 +40,12 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->global->snippetDriver->enter("outer1", 'static');
 		try {
 			$iterations = 0;
-			foreach (array(1,2,3) as $id) {
+			foreach (array(1,2,3) as $id) /* line %d% */ {
 				echo '		<div';
 				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-$id")) . '"';
 				echo '>
 ';
-				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic');
+				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic') /* line %d% */;
 				try {
 					echo '				#';
 					echo LR\Filters::escapeHtmlText($id) /* line %d% */;
@@ -74,12 +74,12 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->global->snippetDriver->enter("outer2", 'static');
 		try {
 			$iterations = 0;
-			foreach (array(1,2,3) as $id) {
+			foreach (array(1,2,3) as $id) /* line %d% */ {
 				echo '		<div';
 				echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-$id")) . '"';
 				echo '>
 ';
-				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic');
+				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic') /* line %d% */;
 				try {
 					echo '				#';
 					echo LR\Filters::escapeHtmlText($id) /* line %d% */;

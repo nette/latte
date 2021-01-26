@@ -9,14 +9,14 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo '    ';
-		$this->renderBlock('bar', get_defined_vars());
+		$this->renderBlock('bar', get_defined_vars()) /* line %d% */;
 		echo "\n";
 		$ʟ_fi = new LR\FilterInfo('html');
 		$foo = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
 		echo "\n";
-		$this->renderBlock('content', get_defined_vars());
+		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
 		return get_defined_vars();
 	}
 %A%

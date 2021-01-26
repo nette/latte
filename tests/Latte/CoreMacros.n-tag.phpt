@@ -72,7 +72,7 @@ Assert::match(
 		echo '<';
 		echo $ʟ_tag[0];
 		echo ' class="bar" ';
-		if (isset($id)) {
+		if (isset($id)) /* line 1 */ {
 			echo 'id="content"';
 		}
 		echo '></';

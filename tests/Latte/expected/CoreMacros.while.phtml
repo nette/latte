@@ -1,6 +1,6 @@
 <?php
 %A%
-		while ($i++ < 10) {
+		while ($i++ < 10) /* line %d% */ {
 			echo '	';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo "\n";
@@ -8,7 +8,7 @@
 		echo '
 
 ';
-		do {
+		do /* line %d% */ {
 			echo '	';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo "\n";
@@ -17,9 +17,9 @@
 		echo '
 
 ';
-		while ($i++ < 10) {
-			if (true) break;
-			if (true) continue;
+		while ($i++ < 10) /* line %d% */ {
+			if (true) /* line %d% */ break;
+			if (true) /* line %d% */ continue;
 			echo '	';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo "\n";

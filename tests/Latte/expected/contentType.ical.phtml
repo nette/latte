@@ -9,11 +9,11 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) {
-			header('Content-Type: text/calendar; charset=utf-8');
+			header('Content-Type: text/calendar; charset=utf-8') /* line %d% */;
 		}
 		$start = '2011-06-06';
 		$end = '2011-06-07';
-		$info = "Hello \"hello\", \nWorld";
+		$info = "Hello \"hello\", \nWorld" /* line %d% */;
 		echo 'BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//example.org//iCal 4.0.3//CS

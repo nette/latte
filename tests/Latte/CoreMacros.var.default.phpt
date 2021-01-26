@@ -46,18 +46,18 @@ test('', function () use ($compiler) { // {var ... }
 
 
 test('', function () use ($compiler) { // {default ...}
-	Assert::same("<?php extract(['var'=>null, 'var2'=>null], EXTR_SKIP) ?>", @$compiler->expandMacro('default', 'var, var2', '')->openingCode); // @ deprecated syntax
-	Assert::same("<?php extract(['var'=>null, 'var2'=>null], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var, $var2', '')->openingCode);
-	Assert::same("<?php extract(['var' => 'hello'], EXTR_SKIP) ?>", @$compiler->expandMacro('default', 'var => hello', '')->openingCode); // @ deprecated syntax
-	Assert::same("<?php extract(['var' => 123], EXTR_SKIP) ?>", @$compiler->expandMacro('default', '$var => 123', '')->openingCode); // @ deprecated syntax
-	Assert::same("<?php extract(['var' => 123], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var = 123', '')->openingCode);
-	Assert::same("<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP) ?>", @$compiler->expandMacro('default', 'var1 = 123, $var2 => "nette framework"', '')->openingCode); // @ deprecated syntax
-	Assert::same("<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var1 = 123, $var2 = "nette framework"', '')->openingCode);
+	Assert::same("<?php extract(['var'=>null, 'var2'=>null], EXTR_SKIP); ?>", @$compiler->expandMacro('default', 'var, var2', '')->openingCode); // @ deprecated syntax
+	Assert::same("<?php extract(['var'=>null, 'var2'=>null], EXTR_SKIP); ?>", $compiler->expandMacro('default', '$var, $var2', '')->openingCode);
+	Assert::same("<?php extract(['var' => 'hello'], EXTR_SKIP); ?>", @$compiler->expandMacro('default', 'var => hello', '')->openingCode); // @ deprecated syntax
+	Assert::same("<?php extract(['var' => 123], EXTR_SKIP); ?>", @$compiler->expandMacro('default', '$var => 123', '')->openingCode); // @ deprecated syntax
+	Assert::same("<?php extract(['var' => 123], EXTR_SKIP); ?>", $compiler->expandMacro('default', '$var = 123', '')->openingCode);
+	Assert::same("<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP); ?>", @$compiler->expandMacro('default', 'var1 = 123, $var2 => "nette framework"', '')->openingCode); // @ deprecated syntax
+	Assert::same("<?php extract(['var1' => 123, 'var2' => \"nette framework\"], EXTR_SKIP); ?>", $compiler->expandMacro('default', '$var1 = 123, $var2 = "nette framework"', '')->openingCode);
 
 	// types
-	Assert::same('<?php extract([, ], EXTR_SKIP) ?>', $compiler->expandMacro('default', 'int var, string var2', '')->openingCode); // invalid syntax
-	Assert::same("<?php extract([ 'var' => 123], EXTR_SKIP) ?>", $compiler->expandMacro('default', 'null|int|string[] $var = 123', '')->openingCode);
-	Assert::same("<?php extract([ 'var1' => 123,  'var2' => \"nette framework\"], EXTR_SKIP) ?>", $compiler->expandMacro('default', 'int|string[] $var1 = 123, ?class $var2 = "nette framework"', '')->openingCode);
+	Assert::same('<?php extract([, ], EXTR_SKIP); ?>', $compiler->expandMacro('default', 'int var, string var2', '')->openingCode); // invalid syntax
+	Assert::same("<?php extract([ 'var' => 123], EXTR_SKIP); ?>", $compiler->expandMacro('default', 'null|int|string[] $var = 123', '')->openingCode);
+	Assert::same("<?php extract([ 'var1' => 123,  'var2' => \"nette framework\"], EXTR_SKIP); ?>", $compiler->expandMacro('default', 'int|string[] $var1 = 123, ?class $var2 = "nette framework"', '')->openingCode);
 
 	// errors
 	Assert::exception(function () use ($compiler) {
@@ -65,13 +65,13 @@ test('', function () use ($compiler) { // {default ...}
 	}, Latte\CompileException::class, "Unexpected '->' in {default \$temp->var1 = 123}");
 
 	// preprocess
-	Assert::same("<?php extract(['var1' => true ? 'a' : null], EXTR_SKIP) ?>", $compiler->expandMacro('default', '$var1 = true ? a', '')->openingCode);
+	Assert::same("<?php extract(['var1' => true ? 'a' : null], EXTR_SKIP); ?>", $compiler->expandMacro('default', '$var1 = true ? a', '')->openingCode);
 });
 
 
 test('', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
-	Assert::contains('$var = 1;', $latte->compile('{var ?\Nm\Class $var = 1}'));
-	Assert::contains('$var = 1;', $latte->compile('{var int|null $var = 1}'));
+	Assert::contains('$var = 1 /* line 1 */;', $latte->compile('{var ?\Nm\Class $var = 1}'));
+	Assert::contains('$var = 1 /* line 1 */;', $latte->compile('{var int|null $var = 1}'));
 });

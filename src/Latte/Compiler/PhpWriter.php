@@ -82,7 +82,7 @@ class PhpWriter
 		}
 
 		$code = preg_replace_callback(
-			'#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
+			'#([,+]?\s*)?%(node_|\d+_|)(word|var|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
 			function ($m) use ($word, &$args) {
 				[, $l, $source, $format, $cond, $r] = $m;
 
@@ -108,7 +108,8 @@ class PhpWriter
 					case 'raw':
 						$code = (string) $arg; break;
 					case 'line':
-						$code = $this->line ? "/* line $this->line */" : ''; break;
+						$l = trim($l);
+						$code = $this->line ? " /* line $this->line */" : ''; break;
 				}
 
 				if ($cond && $code === '') {

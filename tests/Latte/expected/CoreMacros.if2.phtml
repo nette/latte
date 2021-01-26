@@ -1,18 +1,18 @@
 <?php
 %A%
-		if (true) {
+		if (true) /* line %d% */ {
 			echo '	a
 ';
 		}
-		elseif ($b) {
+		elseif ($b) /* line %d% */ {
 			echo '	b
 ';
 		}
-		elseif (isset($c)) {
+		elseif (isset($c)) /* line %d% */ {
 			echo '	c
 ';
 		}
-		else {
+		else /* line %d% */ {
 			echo '	d
 ';
 		}
@@ -20,23 +20,23 @@
 --
 
 ';
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo '	a
 ';
-		if (true) echo ob_get_clean();
+		if (true) /* line %d% */ echo ob_get_clean();
 		else ob_end_clean();
 		echo '
 
 --
 
 ';
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo '	a
 ';
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo '	d
 ';
-		if (true) {
+		if (true) /* line %d% */ {
 			ob_end_clean();
 			echo ob_get_clean();
 		}
@@ -50,19 +50,19 @@
 --
 
 ';
-		if (isset($a)) {
+		if (isset($a)) /* line %d% */ {
 			echo '	a
 ';
 		}
-		elseif ($b) {
+		elseif ($b) /* line %d% */ {
 			echo '	b
 ';
 		}
-		elseif (isset($c)) {
+		elseif (isset($c)) /* line %d% */ {
 			echo '	c
 ';
 		}
-		else {
+		else /* line %d% */ {
 			echo '	d
 ';
 		}

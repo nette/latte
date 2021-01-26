@@ -37,13 +37,13 @@ final class Template%a% extends Latte\Runtime\Template
 		echo LR\Filters::escapeHtmlText($el2) /* line %d% */;
 		echo '</li>
 	<li>Translated: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->translate)($people[1]));
+		echo LR\Filters::escapeHtmlText(($this->filters->translate)($people[1])) /* line %d% */;
 		echo '</li>
 	<li>Translated string: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj'));
+		echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj')) /* line %d% */;
 		echo '</li>
 	<li>Non-escaped and translated: ';
-		echo ($this->filters->translate)($people[1]);
+		echo ($this->filters->translate)($people[1]) /* line %d% */;
 		echo '</li>
 	<li>Condition: ';
 		echo LR\Filters::escapeHtmlText($hello ? 'yes' : null) /* line %d% */;
@@ -64,10 +64,10 @@ final class Template%a% extends Latte\Runtime\Template
 { test} {"test} {\'test}
 
 <p val = ';
-		if (true) {
+		if (true) /* line %d% */ {
 			echo '"a"';
 		}
-		else {
+		else /* line %d% */ {
 			echo '"b"';
 		}
 		echo '> </p>
@@ -99,17 +99,17 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		if ($hello) {
+		if ($hello) /* line %d% */ {
 			echo '	';
 			echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
 			echo "\n";
 		}
-		elseif ($any) {
+		elseif ($any) /* line %d% */ {
 			echo '	';
 			echo LR\Filters::escapeHtmlText($any) /* line %d% */;
 			echo "\n";
 		}
-		else {
+		else /* line %d% */ {
 			echo '	none
 ';
 		}
@@ -117,11 +117,11 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator(array(true), $ʟ_it ?? null) as $foo) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator(array(true), $ʟ_it ?? null) as $foo) /* line %d% */ {
 			$iterations = 0;
-			foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
+			foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 				echo '	';
-				if ($iterator->isFirst()) {
+				if ($iterator->isFirst()) /* line %d% */ {
 					echo '<ul>';
 				}
 				echo '
@@ -133,7 +133,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
 				echo '</li>
 	';
-				if ($iterator->isLast()) {
+				if ($iterator->isLast()) /* line %d% */ {
 					echo '</ul>';
 				}
 				echo "\n";
@@ -222,34 +222,34 @@ var prop2 = ';
 
 
 ';
-		$counter = 0;
+		$counter = 0 /* line %d% */;
 		if ($this->getParentName()) {
 			return get_defined_vars();
 		}
-		$this->renderBlock('menu', get_defined_vars());
+		$this->renderBlock('menu', get_defined_vars()) /* line %d% */;
 		echo '
 
 
 ';
-		extract(['varx' => 2], EXTR_SKIP);
+		extract(['varx' => 2], EXTR_SKIP) /* line %d% */;
 		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo "\n";
-		extract(['varx' => 4], EXTR_SKIP);
+		extract(['varx' => 4], EXTR_SKIP) /* line %d% */;
 		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo '
 
 ';
-		$varx = 8;
+		$varx = 8 /* line %d% */;
 		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo "\n";
-		$varx = 9;
+		$varx = 9 /* line %d% */;
 		echo LR\Filters::escapeHtmlText($varx) /* line %d% */;
 		echo '
 
 ';
-		$now = new DateTime;
-		$foo = $now->format('u');
-		extract(['foo' => $now->format('u')], EXTR_SKIP);
+		$now = new DateTime /* line %d% */;
+		$foo = $now->format('u') /* line %d% */;
+		extract(['foo' => $now->format('u')], EXTR_SKIP) /* line %d% */;
 		echo '
 
 
@@ -257,27 +257,27 @@ var prop2 = ';
 
 
 ';
-		echo 'test';
+		echo 'test' /* line %d% */;
 		echo '
 
 { }
 
 ';
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo 'true';
-		if (true) echo ob_get_clean();
+		if (true) /* line %d% */ echo ob_get_clean();
 		else ob_end_clean();
 		echo "\n";
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo 'false';
-		if (false) echo ob_get_clean();
+		if (false) /* line %d% */ echo ob_get_clean();
 		else ob_end_clean();
 		echo "\n";
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo 'true';
-		ob_start(function () {});
+		ob_start(function () {}) /* line %d% */;
 		echo 'false';
-		if (true) {
+		if (true) /* line %d% */ {
 			ob_end_clean();
 			echo ob_get_clean();
 		}
@@ -290,18 +290,18 @@ var prop2 = ';
 
 
 ';
-		$ʟ_switch = (2);
+		$ʟ_switch = (2) /* line %d% */;
 		if (false) {
 		}
-		elseif (in_array($ʟ_switch, ['x'], true)) {
+		elseif (in_array($ʟ_switch, ['x'], true)) /* line %d% */ {
 			echo 'x
 ';
 		}
-		elseif (in_array($ʟ_switch, [2], true)) {
+		elseif (in_array($ʟ_switch, [2], true)) /* line %d% */ {
 			echo 'y
 ';
 		}
-		else {
+		else /* line %d% */ {
 			echo 'z
 ';
 		}
@@ -338,16 +338,16 @@ var prop2 = ';
 		echo '<ul>
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($menu, $ʟ_it ?? null) as $item) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($menu, $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($counter++) /* line %d% */;
 			echo ' ';
-			if (is_array($item)) {
+			if (is_array($item)) /* line %d% */ {
 				echo ' ';
 				$this->renderBlock($ʟ_nm = 'menu', ['menu' => $item] + get_defined_vars(), 'html') /* line %d% */;
 				echo ' ';
 			}
-			else {
+			else /* line %d% */ {
 				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			}
 			echo '</li>

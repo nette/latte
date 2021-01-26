@@ -9,7 +9,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) {
-			header('Content-Type: application/xml; charset=utf-8');
+			header('Content-Type: application/xml; charset=utf-8') /* line %d% */;
 		}
 		echo '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="';
@@ -17,7 +17,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '"?>
 
 <script>';
-		if (1) {
+		if (1) /* line %d% */ {
 			echo '<meta />';
 		}
 		echo '</script>
@@ -95,7 +95,7 @@ var html = ';
 <ul>
 ';
 		$iterations = 0;
-		foreach ($people as $person) {
+		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeXml($person) /* line %d% */;
 			echo '</li>
@@ -105,7 +105,7 @@ var html = ';
 		echo '</ul>
 
 ';
-		if (true) {
+		if (true) /* line %d% */ {
 			echo '<p>
 	<div><p>true</div>
 </p>
@@ -115,10 +115,10 @@ var html = ';
 <input/> <input />
 
 <p val = ';
-		if (true) {
+		if (true) /* line %d% */ {
 			echo '"a"';
 		}
-		else {
+		else /* line %d% */ {
 			echo '"b"';
 		}
 		echo '> </p>

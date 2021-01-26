@@ -4,10 +4,10 @@
 <ul title="foreach break">
 ';
 		$iterations = 0;
-		foreach ([0, 1, 2, 3] as $i) {
+		foreach ([0, 1, 2, 3] as $i) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
-			if (true) {
+			if (true) /* line %d% */ {
 				echo "</li>\n";
 				break;
 			}
@@ -20,10 +20,10 @@
 <ul title="foreach continue">
 ';
 		$iterations = 0;
-		foreach ([0, 1, 2, 3] as $i) {
+		foreach ([0, 1, 2, 3] as $i) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
-			if (true) {
+			if (true) /* line %d% */ {
 				echo "</li>\n";
 				continue;
 			}
@@ -36,10 +36,10 @@
 <ul title="foreach skip">
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
-			if (true) {
+			if (true) /* line %d% */ {
 				echo "</li>\n";
 				{
 					$iterator->skipRound();
@@ -57,9 +57,9 @@
 <ul title="inner foreach break">
 	<li>';
 		$iterations = 0;
-		foreach ([0, 1, 2, 3] as $i) {
+		foreach ([0, 1, 2, 3] as $i) /* line %d% */ {
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
-			if (true) break;
+			if (true) /* line %d% */ break;
 			$iterations++;
 		}
 		echo '</li>
@@ -68,9 +68,9 @@
 <ul title="inner foreach continue">
 	<li>';
 		$iterations = 0;
-		foreach ([0, 1, 2, 3] as $i) {
+		foreach ([0, 1, 2, 3] as $i) /* line %d% */ {
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
-			if (true) continue;
+			if (true) /* line %d% */ continue;
 			$iterations++;
 		}
 		echo '</li>
@@ -79,9 +79,9 @@
 <ul title="inner foreach skip">
 	<li>';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) /* line %d% */ {
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
-			if (true) {
+			if (true) /* line %d% */ {
 				$iterator->skipRound();
 				continue;
 			};

@@ -2,7 +2,7 @@
 %A%
 		for ($i = 0;
 		$i < 10;
-		$++) {
+		$++) /* line %d% */ {
 			echo '	';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo "\n";
@@ -12,9 +12,9 @@
 ';
 		for ($i = 0;
 		$i < 10;
-		$++) {
-			if (true) break;
-			if (true) continue;
+		$++) /* line %d% */ {
+			if (true) /* line %d% */ break;
+			if (true) /* line %d% */ continue;
 			echo '	';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo "\n";

@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId(''));
 		echo '">';
-		$this->renderBlock('', [], null, 'snippet');
+		$this->renderBlock('', [], null, 'snippet') /* line %d% */;
 		echo '</div>
 
 
@@ -21,13 +21,13 @@ final class Template%a% extends Latte\Runtime\Template
 <div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
 		echo '">';
-		$this->renderBlock('outer', [], null, 'snippet');
+		$this->renderBlock('outer', [], null, 'snippet') /* line %d% */;
 		echo '</div>
 
 
 
 	@';
-		if (true) {
+		if (true) /* line %d% */ {
 			echo ' Hello World @';
 		}
 		echo '
@@ -35,13 +35,13 @@ final class Template%a% extends Latte\Runtime\Template
 	<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title'));
 		echo '">';
-		$this->renderBlock('title', [], null, 'snippet');
+		$this->renderBlock('title', [], null, 'snippet') /* line %d% */;
 		echo '</div>
 
 	<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('title2'));
 		echo '">';
-		$this->renderBlock('title2', [], null, 'snippet');
+		$this->renderBlock('title2', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
 		return get_defined_vars();
 	}
@@ -74,7 +74,7 @@ final class Template%a% extends Latte\Runtime\Template
 		<div id="';
 			echo htmlspecialchars($this->global->snippetDriver->getHtmlId('inner'));
 			echo '">';
-			$this->renderBlock('inner', [], null, 'snippet');
+			$this->renderBlock('inner', [], null, 'snippet') /* line %d% */;
 			echo '</div>
 	/Outer
 ';

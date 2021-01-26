@@ -1,6 +1,6 @@
 <?php
 %A%
-		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
 			if (($ʟ_loc[1] ?? null) !== ($ʟ_tmp = [$i])) {
 				$ʟ_loc[1] = $ʟ_tmp;
@@ -22,7 +22,7 @@
 
 ';
 		$iterations = 0;
-		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
 			if (($ʟ_loc[3] ?? null) !== ($ʟ_tmp = [$i])) {
 				$ʟ_loc[3] = $ʟ_tmp;
@@ -30,7 +30,7 @@
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 				echo ' ';
 			}
-			else {
+			else /* line %d% */ {
 				echo ' else ';
 			}
 			echo ' ';
@@ -42,10 +42,10 @@
 
 ';
 		$iterations = 0;
-		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
 			ob_start(function () {});
-			try {
+			try /* line %d% */ {
 				echo ' -';
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 				echo '- ';
@@ -65,10 +65,10 @@
 
 ';
 		$iterations = 0;
-		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
 			ob_start(function () {});
-			try {
+			try /* line %d% */ {
 				echo ' -';
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 				echo '- ';
@@ -79,7 +79,7 @@
 			if (($ʟ_loc[5] ?? null) !== $ʟ_tmp) {
 				echo $ʟ_loc[5] = $ʟ_tmp;
 			}
-			else {
+			else /* line %d% */ {
 				echo ' else ';
 			}
 			echo ' ';
@@ -91,10 +91,10 @@
 
 ';
 		$iterations = 0;
-		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
 			ob_start(function () {});
-			try {
+			try /* line %d% */ {
 				echo '<span>';
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 				echo '</span>';
@@ -112,10 +112,10 @@
 
 ';
 		$iterations = 0;
-		foreach ([1, 1, 2, 3, 3, 3] as $i) {
+		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
 			ob_start(function () {});
-			try {
+			try /* line %d% */ {
 				echo '<span class="';
 				echo LR\Filters::escapeHtmlAttr($i) /* line %d% */;
 				echo '"></span>';

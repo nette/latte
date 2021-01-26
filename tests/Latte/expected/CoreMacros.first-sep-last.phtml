@@ -8,18 +8,18 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo "\n";
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 			echo '	';
-			if ($iterator->isFirst()) {
+			if ($iterator->isFirst()) /* line %d% */ {
 				echo '(';
 			}
 			echo ' ';
 			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (!$iterator->isLast()) {
+			if (!$iterator->isLast()) /* line %d% */ {
 				echo ', ';
 			}
 			echo ' ';
-			if ($iterator->isLast()) {
+			if ($iterator->isLast()) /* line %d% */ {
 				echo ')';
 			}
 			echo "\n";
@@ -30,27 +30,27 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 			echo '	';
-			if ($iterator->isFirst()) {
+			if ($iterator->isFirst()) /* line %d% */ {
 				echo '(';
 			}
-			else {
+			else /* line %d% */ {
 				echo '[';
 			}
 			echo ' ';
 			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (!$iterator->isLast()) {
+			if (!$iterator->isLast()) /* line %d% */ {
 				echo ', ';
 			}
-			else {
+			else /* line %d% */ {
 				echo ';';
 			}
 			echo ' ';
-			if ($iterator->isLast()) {
+			if ($iterator->isLast()) /* line %d% */ {
 				echo ')';
 			}
-			else {
+			else /* line %d% */ {
 				echo ']';
 			}
 			echo "\n";
@@ -61,18 +61,18 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 			echo '	';
-			if ($iterator->isFirst(2)) {
+			if ($iterator->isFirst(2)) /* line %d% */ {
 				echo '(';
 			}
 			echo ' ';
 			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (!$iterator->isLast(2)) {
+			if (!$iterator->isLast(2)) /* line %d% */ {
 				echo ', ';
 			}
 			echo ' ';
-			if ($iterator->isLast(2)) {
+			if ($iterator->isLast(2)) /* line %d% */ {
 				echo ')';
 			}
 			echo "\n";
@@ -83,18 +83,18 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 			echo '	';
-			if ($iterator->isFirst(1)) {
+			if ($iterator->isFirst(1)) /* line %d% */ {
 				echo '(';
 			}
 			echo ' ';
 			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (!$iterator->isLast(1)) {
+			if (!$iterator->isLast(1)) /* line %d% */ {
 				echo ', ';
 			}
 			echo ' ';
-			if ($iterator->isLast(1)) {
+			if ($iterator->isLast(1)) /* line %d% */ {
 				echo ')';
 			}
 			echo "\n";
@@ -105,17 +105,17 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) {
-			if ($iterator->isFirst(0)) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
+			if ($iterator->isFirst(0)) /* line %d% */ {
 				echo '	<span>(</span>';
 			}
 			echo ' ';
 			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (!$iterator->isLast()) {
+			if (!$iterator->isLast()) /* line %d% */ {
 				echo '<span>, </span>';
 			}
 			echo ' ';
-			if ($iterator->isLast()) {
+			if ($iterator->isLast()) /* line %d% */ {
 				echo '<span>)</span>
 ';
 			}

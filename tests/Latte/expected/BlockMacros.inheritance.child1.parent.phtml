@@ -10,7 +10,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
-		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP);
+		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) /* line %d% */;
 		echo '<!DOCTYPE html>
 <head>
 	<title>';
@@ -20,14 +20,14 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
-		});
+		}) /* line %d% */;
 		echo '</title>
 </head>
 
 <body>
 	<div id="sidebar">
 ';
-		$this->renderBlock('sidebar', get_defined_vars());
+		$this->renderBlock('sidebar', get_defined_vars()) /* line %d% */;
 		echo '
 	</div>
 

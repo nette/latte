@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="';
 		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
 		echo '">';
-		$this->renderBlock('outer', [], null, 'snippet');
+		$this->renderBlock('outer', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
 %A%
 	}
@@ -33,11 +33,11 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {
 			$iterations = 0;
-			foreach (array(1,2,3) as $id) {
+			foreach (array(1,2,3) as $id) /* line %d% */ {
 				echo '		<div id="';
 				echo htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-$id"));
 				echo '">';
-				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic');
+				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic') /* line %d% */;
 				try {
 					echo '
 				#';

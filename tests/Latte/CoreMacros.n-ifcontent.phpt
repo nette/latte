@@ -66,7 +66,7 @@ Assert::match(
 %A%
 		ob_start(function () {});
 		echo '<div class="bar" ';
-		if (isset($id)) {
+		if (isset($id)) /* line 1 */ {
 			echo 'id="content"';
 		}
 		echo '>';

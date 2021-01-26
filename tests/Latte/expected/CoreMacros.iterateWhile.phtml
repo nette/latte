@@ -1,10 +1,10 @@
 <?php
 %A%
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	pre ';
 			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			echo "\n";
-			do {
+			do /* line %d% */ {
 				if (!$iterator->hasNext() || !($item % 2)) {
 					break;
 				}
@@ -26,11 +26,11 @@
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	pre ';
 			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			echo "\n";
-			do {
+			do /* line %d% */ {
 				echo '		inner ';
 				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 				echo "\n";
@@ -53,13 +53,13 @@
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator(['a' => [0], 'b' => [1], 'c' => [2]], $ʟ_it ?? null) as $key => [$i]) {
+		foreach ($iterator = $ʟ_it = new LR\CachingIterator(['a' => [0], 'b' => [1], 'c' => [2]], $ʟ_it ?? null) as $key => [$i]) /* line %d% */ {
 			echo '	pre ';
 			echo LR\Filters::escapeHtmlText($key) /* line %d% */;
 			echo ' ';
 			echo LR\Filters::escapeHtmlText($i) /* line %d% */;
 			echo "\n";
-			do {
+			do /* line %d% */ {
 				echo '		inner ';
 				echo LR\Filters::escapeHtmlText($key) /* line %d% */;
 				echo ' ';
