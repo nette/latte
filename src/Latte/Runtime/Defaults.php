@@ -27,6 +27,7 @@ class Defaults
 			'capitalize' => extension_loaded('mbstring')
 				? [Filters::class, 'capitalize']
 				: function () { throw new RuntimeException('Filter |capitalize requires mbstring extension.'); },
+			'ceil' => [Filters::class, 'ceil'],
 			'clamp' => [Filters::class, 'clamp'],
 			'dataStream' => [Filters::class, 'dataStream'],
 			'date' => [Filters::class, 'date'],
@@ -37,12 +38,17 @@ class Defaults
 			'escapeJs' => [Filters::class, 'escapeJs'],
 			'escapeUrl' => 'rawurlencode',
 			'escapeXml' => [Filters::class, 'escapeXml'],
+			'explode' => [Filters::class, 'explode'],
+			'first' => [Filters::class, 'first'],
 			'firstUpper' => extension_loaded('mbstring')
 				? [Filters::class, 'firstUpper']
 				: function () { throw new RuntimeException('Filter |firstUpper requires mbstring extension.'); },
+			'floor' => [Filters::class, 'floor'],
 			'checkUrl' => [Filters::class, 'safeUrl'],
 			'implode' => [Filters::class, 'implode'],
 			'indent' => [Filters::class, 'indent'],
+			'join' => [Filters::class, 'implode'],
+			'last' => [Filters::class, 'last'],
 			'length' => [Filters::class, 'length'],
 			'lower' => extension_loaded('mbstring')
 				? [Filters::class, 'lower']
@@ -51,11 +57,16 @@ class Defaults
 			'padLeft' => [Filters::class, 'padLeft'],
 			'padRight' => [Filters::class, 'padRight'],
 			'query' => [Filters::class, 'query'],
+			'random' => [Filters::class, 'random'],
 			'repeat' => [Filters::class, 'repeat'],
 			'replace' => [Filters::class, 'replace'],
 			'replaceRe' => [Filters::class, 'replaceRe'],
 			'reverse' => [Filters::class, 'reverse'],
+			'round' => [Filters::class, 'round'],
+			'slice' => [Filters::class, 'slice'],
 			'sort' => [Filters::class, 'sort'],
+			'spaceless' => [Filters::class, 'strip'],
+			'split' => [Filters::class, 'explode'],
 			'strip' => [Filters::class, 'strip'],
 			'stripHtml' => [Filters::class, 'stripHtml'],
 			'stripTags' => [Filters::class, 'stripTags'],
@@ -77,6 +88,12 @@ class Defaults
 	{
 		return [
 			'clamp' => [Filters::class, 'clamp'],
+			'divisibleBy' => [Filters::class, 'divisibleBy'],
+			'even' => [Filters::class, 'even'],
+			'first' => [Filters::class, 'first'],
+			'last' => [Filters::class, 'last'],
+			'odd' => [Filters::class, 'odd'],
+			'slice' => [Filters::class, 'slice'],
 		];
 	}
 }

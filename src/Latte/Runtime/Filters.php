@@ -406,6 +406,17 @@ class Filters
 
 
 	/**
+	 * Splits a string by a string.
+	 */
+	public static function explode(string $value, string $separator = ''): array
+	{
+		return $separator === ''
+			? preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY)
+			: explode($separator, $value);
+	}
+
+
+	/**
 	 * Repeats text.
 	 * @return string plain text
 	 */
@@ -735,6 +746,106 @@ class Filters
 		return is_string($data)
 			? urlencode($data)
 			: http_build_query($data, '', '&');
+	}
+
+
+	/**
+	 * Is divisible by?
+	 */
+	public static function divisibleBy(int $value, int $by): bool
+	{
+		return $value % $by === 0;
+	}
+
+
+	/**
+	 * Is odd?
+	 */
+	public static function odd(int $value): bool
+	{
+		return $value % 2 !== 0;
+	}
+
+
+	/**
+	 * Is even?
+	 */
+	public static function even(int $value): bool
+	{
+		return $value % 2 === 0;
+	}
+
+
+	/**
+	 * Returns the first item from the array or null if array is empty.
+	 * @param  string|array  $value
+	 * @return mixed
+	 */
+	public static function first($value)
+	{
+		return is_string($value)
+			? self::substring($value, 0, 1)
+			: (count($value) ? reset($value) : null);
+	}
+
+
+	/**
+	 * Returns the last item from the array or null if array is empty.
+	 * @param  string|array  $value
+	 * @return mixed
+	 */
+	public static function last($value)
+	{
+		return is_string($value)
+			? self::substring($value, -1)
+			: (count($value) ? end($value) : null);
+	}
+
+
+	/**
+	 * Extracts a slice of an array or string.
+	 * @param  string|array  $value
+	 * @return string|array
+	 */
+	public static function slice($value, int $start, int $length = null, bool $preserveKeys = false)
+	{
+		return is_string($value)
+			? self::substring($value, $start, $length)
+			: array_slice($value, $start, $length, $preserveKeys);
+	}
+
+
+	public static function round(float $value, int $precision = 0): float
+	{
+		return round($value, $precision);
+	}
+
+
+	public static function floor(float $value, int $precision = 0): float
+	{
+		return floor($value * 10 ** $precision) / 10 ** $precision;
+	}
+
+
+	public static function ceil(float $value, int $precision = 0): float
+	{
+		return ceil($value * 10 ** $precision) / 10 ** $precision;
+	}
+
+
+	/**
+	 * Picks random element/char.
+	 * @param  string|array  $value
+	 * @return mixed
+	 */
+	public static function random($values)
+	{
+		if (is_string($values)) {
+			$values = preg_split('//u', $values, -1, PREG_SPLIT_NO_EMPTY);
+		}
+		return $values
+			? $values[array_rand($values, 1)]
+			: null;
 	}
 
 
