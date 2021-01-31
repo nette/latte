@@ -128,7 +128,7 @@ class BlockMacros extends MacroSet
 		$node->replaced = false;
 
 		$tmp = $node->tokenizer->joinUntil('=');
-		if ($node->tokenizer->isNext('=')) {
+		if ($node->tokenizer->isNext('=') && !$node->tokenizer->depth) {
 			trigger_error('The assignment in the {' . $node->name . ' ' . $tmp . '= ...} looks like an error.', E_USER_NOTICE);
 		}
 		$node->tokenizer->reset();
