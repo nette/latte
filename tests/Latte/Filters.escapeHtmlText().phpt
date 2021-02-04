@@ -35,3 +35,6 @@ Assert::same('`hello', Filters::escapeHtmlText('`hello'));
 // invalid UTF-8
 Assert::same("foo \u{FFFD} bar", Filters::escapeHtmlText("foo \u{D800} bar")); // invalid codepoint high surrogates
 Assert::same("foo \u{FFFD}\" bar", Filters::escapeHtmlText("foo \xE3\x80\x22 bar")); // stripped UTF
+
+// JS
+Assert::same('hello {<!-- -->{ worlds }}', Filters::escapeHtmlText('hello {{ worlds }}'));
