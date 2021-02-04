@@ -44,9 +44,12 @@ class Filters
 	 */
 	public static function escapeHtmlText($s): string
 	{
-		return $s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString
-			? $s->__toString(true)
-			: htmlspecialchars((string) $s, ENT_NOQUOTES, 'UTF-8');
+		if ($s instanceof IHtmlString || $s instanceof \Nette\Utils\IHtmlString) {
+			return $s->__toString(true);
+		}
+		$s = htmlspecialchars((string) $s, ENT_NOQUOTES, 'UTF-8');
+		$s = str_replace('{{', '{<!-- -->{', $s);
+		return $s;
 	}
 
 
