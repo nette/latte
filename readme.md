@@ -21,12 +21,14 @@ ensures the output is protected against vulnerabilities, such as XSS.
 Documentation can be found on the [website](https://latte.nette.org).
 
 
-Support Project
----------------
+Support Latte
+-------------
 
 Do you like Latte? Are you looking forward to the new features?
 
-[![Donate](https://files.nette.org/icons/donation-1.svg?)](https://nette.org/make-donation?to=latte)
+[![Buy me a coffee](https://files.nette.org/icons/donation-3.svg)](https://github.com/sponsors/dg)
+
+Thank you!
 
 
 Getting Started
