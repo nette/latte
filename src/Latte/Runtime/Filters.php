@@ -477,11 +477,21 @@ class Filters
 	/**
 	 * Performs a search and replace.
 	 * @param  string|string[]  $search
-	 * @param  string|string[]  $replacement
+	 * @param  string|string[]  $replace
 	 */
-	public static function replace(FilterInfo $info, $subject, $search, $replacement = ''): string
+	public static function replace(FilterInfo $info, $subject, $search, $replace = null): string
 	{
-		return str_replace($search, $replacement, (string) $subject);
+		$subject = (string) $subject;
+		if (is_array($search)) {
+			if (is_array($replace)) {
+				return strtr($subject, array_combine($search, $replace));
+			} elseif ($replace === null && is_string(key($search))) {
+				return strtr($subject, $search);
+			} else {
+				return strtr($subject, array_fill_keys($search, $replace));
+			}
+		}
+		return str_replace($search, $replace ?? '', $subject);
 	}
 
 
