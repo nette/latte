@@ -12,6 +12,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\Engine;
 use Latte\RuntimeException;
+use function is_array, is_string, count, strlen;
 
 
 /**
