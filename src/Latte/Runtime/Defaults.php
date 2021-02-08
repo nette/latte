@@ -50,9 +50,7 @@ class Defaults
 			'number' => 'number_format',
 			'padLeft' => [Filters::class, 'padLeft'],
 			'padRight' => [Filters::class, 'padRight'],
-			'query' => function (array $data): string {
-				return http_build_query($data, '', '&');
-			},
+			'query' => [Filters::class, 'query'],
 			'repeat' => [Filters::class, 'repeat'],
 			'replace' => [Filters::class, 'replace'],
 			'replaceRe' => [Filters::class, 'replaceRe'],

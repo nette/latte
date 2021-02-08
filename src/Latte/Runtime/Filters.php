@@ -726,6 +726,19 @@ class Filters
 
 
 	/**
+	 * Generates URL-encoded query string
+	 * @param  string|array  $data
+	 * @return string
+	 */
+	public static function query($data): string
+	{
+		return is_string($data)
+			? urlencode($data)
+			: http_build_query($data, '', '&');
+	}
+
+
+	/**
 	 * Returns element's attributes.
 	 */
 	public static function htmlAttributes($attrs): string
