@@ -715,7 +715,7 @@ class Filters
 	 */
 	public static function sort(array $array): array
 	{
-		sort($array);
+		asort($array);
 		return $array;
 	}
 
