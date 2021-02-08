@@ -23,5 +23,13 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 		PhpCsFixer\Fixer\Import\OrderedImportsFixer::class => [
 			'src/Latte/Runtime/Filters.php',
 		],
+
+		// #Attribute
+		SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class => [
+			'src/Latte/attributes.php',
+		],
+		Nette\CodingStandard\Sniffs\WhiteSpace\FunctionSpacingSniff::class => [
+			'tests/Latte/Engine.paramsObject.phpt',
+		],
 	]);
 };
