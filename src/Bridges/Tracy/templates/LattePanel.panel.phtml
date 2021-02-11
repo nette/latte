@@ -88,9 +88,11 @@ $colors = [
 		<?php endforeach ?>
 	</table>
 
+	<?php if ($dumpParameters): ?>
 	<h2>Parameters</h2>
 
 	<div class="tracy-inner">
 		<?= Dumper::toHtml(reset($list)->template->getParameters(), [Dumper::LIVE => true]); ?>
 	</div>
+	<?php endif ?>
 </div>

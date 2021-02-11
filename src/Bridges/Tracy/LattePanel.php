@@ -22,6 +22,9 @@ class LattePanel implements Tracy\IBarPanel
 {
 	use Nette\SmartObject;
 
+	/** @var bool */
+	public $dumpParameters = true;
+
 	/** @var Template[] */
 	private $templates = [];
 
@@ -74,6 +77,7 @@ class LattePanel implements Tracy\IBarPanel
 
 		return Nette\Utils\Helpers::capture(function () {
 			$list = $this->list;
+			$dumpParameters = $this->dumpParameters;
 			require __DIR__ . '/templates/LattePanel.panel.phtml';
 		});
 	}
