@@ -45,8 +45,8 @@ class Template
 	/** @var Block[][] */
 	private $blocks;
 
-	/** @var int  current layer */
-	private $index = self::LAYER_TOP;
+	/** @var mixed[][] */
+	private $blockStack = [];
 
 	/** @var Engine */
 	private $engine;
@@ -226,7 +226,7 @@ class Template
 			foreach ($referred->blocks[self::LAYER_TOP] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
-			$referred->blocks[self::LAYER_TOP] = &$this->blocks[$this->index];
+			$referred->blocks[self::LAYER_TOP] = &$this->blocks[self::LAYER_TOP];
 
 			$this->blocks[self::LAYER_SNIPPET] += $referred->blocks[self::LAYER_SNIPPET];
 			$referred->blocks[self::LAYER_SNIPPET] = &$this->blocks[self::LAYER_SNIPPET];
@@ -280,7 +280,7 @@ class Template
 	{
 		$block = $layer
 			? ($this->blocks[$layer][$name] ?? null)
-			: ($this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[$this->index][$name] ?? null);
+			: ($this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[self::LAYER_TOP][$name] ?? null);
 
 		if (!$block) {
 			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames($layer), $name))
@@ -306,7 +306,7 @@ class Template
 	 */
 	public function renderBlockParent(string $name, array $params): void
 	{
-		$block = $this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[$this->index][$name] ?? null;
+		$block = $this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[self::LAYER_TOP][$name] ?? null;
 		if (!$block || ($function = next($block->functions)) === false) {
 			throw new Latte\RuntimeException("Cannot include undefined parent block '$name'.");
 		}
@@ -323,7 +323,7 @@ class Template
 	 */
 	protected function addBlock(string $name, string $contentType, array $functions, $layer = null): void
 	{
-		$block = &$this->blocks[$layer ?? $this->index][$name];
+		$block = &$this->blocks[$layer ?? self::LAYER_TOP][$name];
 		$block = $block ?? new Block;
 		if ($block->contentType === null) {
 			$block->contentType = $contentType;
@@ -385,29 +385,35 @@ class Template
 
 
 	/**
-	 * @param  int|string  $id
+	 * @param  int|string  $staticId
 	 */
-	protected function initBlockLayer($id): void
+	private function initBlockLayer($staticId, int $destId = null): void
 	{
-		$blocks = &$this->blocks[$id];
-		$blocks = [];
-		foreach (static::BLOCKS[$id] ?? [] as $nm => $info) {
-			$blocks[$nm] = $block = new Block;
-			[$method, $block->contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
-			$block->functions[] = [$this, $method];
+		$destId = $destId ?? $staticId;
+		$this->blocks[$destId] = [];
+		foreach (static::BLOCKS[$staticId] ?? [] as $nm => $info) {
+			[$method, $contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
+			$this->addBlock($nm, $contentType, [[$this, $method]], $destId);
 		}
 	}
 
 
-	protected function setBlockLayer(int $id): void
+	protected function enterBlockLayer(int $staticId): void
 	{
-		$this->index = $id;
+		$this->blockStack[] = $this->blocks[self::LAYER_TOP];
+		$this->initBlockLayer($staticId, self::LAYER_TOP);
+	}
+
+
+	protected function leaveBlockLayer(): void
+	{
+		$this->blocks[self::LAYER_TOP] = array_pop($this->blockStack);
 	}
 
 
 	public function hasBlock(string $name): bool
 	{
-		return isset($this->blocks[self::LAYER_LOCAL][$name]) || isset($this->blocks[$this->index][$name]);
+		return isset($this->blocks[self::LAYER_LOCAL][$name]) || isset($this->blocks[self::LAYER_TOP][$name]);
 	}
 
 

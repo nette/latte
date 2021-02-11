@@ -577,10 +577,8 @@ class BlockMacros extends MacroSet
 		$this->blocks[$this->index] = [];
 
 		return $writer->write(
-			'$this->initBlockLayer(%var);
-			$this->setBlockLayer(%var);
+			'$this->enterBlockLayer(%var);
 			if (false) {',
-			$this->index,
 			$this->index
 		);
 	}
@@ -595,9 +593,8 @@ class BlockMacros extends MacroSet
 		return $writer->write(
 			'}
 			try { $this->createTemplate(%node.word, %node.array, "embed")->renderToContentType(%var); }
-			finally { $this->setBlockLayer(%var); }',
-			implode($node->context),
-			$this->index
+			finally { $this->leaveBlockLayer(); }',
+			implode($node->context)
 		);
 	}
 
