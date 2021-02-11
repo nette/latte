@@ -52,6 +52,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("", 'static');
 		try {
 			echo "\n";
@@ -68,6 +69,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {
 			echo '	Outer
@@ -91,6 +93,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("inner", 'static');
 		try {
 			echo 'Inner';
@@ -107,6 +110,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("title", 'static');
 		try {
 			echo 'Title 1';
@@ -123,6 +127,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("title2", 'static');
 		try {
 			echo 'Title 2';

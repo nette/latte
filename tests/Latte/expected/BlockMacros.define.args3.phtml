@@ -39,6 +39,7 @@ c) ';
 		$var1 = $ʟ_args[0] ?? $ʟ_args['var1'] ?? null;
 		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ?? null;
 		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ?? null;
+		unset($ʟ_args);
 		echo '	Variables ';
 		echo LR\Filters::escapeHtmlText($var1) /* line %d% */;
 		echo ', ';

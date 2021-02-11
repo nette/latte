@@ -28,6 +28,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo '<div';
 		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')) . '"';
 		echo '>
@@ -44,6 +45,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo '<div';
 		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-$id")) . '"';
 		echo '>
@@ -67,6 +69,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("snippet", 'static');
 		try {
 			echo '		static
@@ -84,6 +87,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		$this->global->snippetDriver->enter("outer", 'static');
 		try {
 			echo 'begin

@@ -43,6 +43,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo 'Homepage | ';
 		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars()) /* line %d% */;
 		$this->renderBlockParent($ʟ_nm = 'title', get_defined_vars()) /* line %d% */;
@@ -55,6 +56,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo '	<ul>
 ';
 		$iterations = 0;

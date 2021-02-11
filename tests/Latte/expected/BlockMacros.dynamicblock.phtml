@@ -70,6 +70,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockName(array $ʟ_args): void
 	{
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo '		Dynamic block #';
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo "\n";
@@ -80,6 +81,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockWord_name(array $ʟ_args): void
 	{
 		extract($ʟ_args);
+		unset($ʟ_args);
 		if (false) /* line %d% */ {
 			echo '<div></div>';
 		}
@@ -91,6 +93,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockStrip_name(array $ʟ_args): void
 	{
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo '<span>hello</span>';
 	}
 
@@ -99,6 +102,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function blockRand_5_a_b(array $ʟ_args): void
 	{
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo ' expression';
 	}
 
@@ -108,6 +112,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		extract($ʟ_args);
+		unset($ʟ_args);
 		echo '	Static block #';
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo "\n";

@@ -375,7 +375,7 @@ class BlockMacros extends MacroSet
 			$node->content = rtrim($node->content, " \t");
 			$this->getCompiler()->addMethod(
 				$func,
-				$this->getCompiler()->expandTokens("extract(\$ʟ_args);\n?>{$node->content}<?php"),
+				$this->getCompiler()->expandTokens("extract(\$ʟ_args); unset(\$ʟ_args);\n?>{$node->content}<?php"),
 				'array $ʟ_args',
 				'void',
 				"{{$node->name} {$node->args}} on line {$node->startLine}"
@@ -553,7 +553,10 @@ class BlockMacros extends MacroSet
 	private function extractMethod(MacroNode $node, Block $block, string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
-			$node->content = '<?php extract($this->params);' . ($params ?? 'extract($ʟ_args);') . '?>' . $node->content;
+			$node->content = '<?php extract($this->params);'
+				. ($params ?? 'extract($ʟ_args);')
+				. 'unset($ʟ_args);?>'
+				. $node->content;
 		}
 		$block->code = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 		$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($block->code));
