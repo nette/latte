@@ -243,6 +243,75 @@ testTemplate('embed in series II.', [
 ');
 
 
+testTemplate('nested embedding with different overwritten blocks', [
+	'main' => '
+		{var $counter = 1}
+		{block local outer}
+			{if $counter < 3}
+				{embed embed, counter: $counter}
+					{import "import$counter.latte"}
+
+					{block c}main C
+						{include block outer, counter: $counter + 1}
+					{/block}
+				{/embed}
+			{/if}
+		{/block}
+
+		{define embed}
+			{block a}embed-A{/block}
+			{block b}embed-B{/block}
+			{block c}embed-C{/block}
+		{/define}
+	',
+	'import1.latte' => '
+		{block a}import1-A{/block}
+		{block b}import1-B{/block}
+		{block c}import1-C{/block}
+	',
+	'import2.latte' => '
+		{block a}import2-A{/block}
+	',
+], '
+			import1-A
+			import1-B
+			main C
+			import2-A
+			import1-B
+			main C
+');
+
+
+testTemplate('import on top layer', [
+	'main' => '
+		{import "import.latte"}
+
+		{block a}outer-A{/block}
+
+		{embed embed1}
+			{block a}main-A{/block}
+		{/embed}
+
+		{include a}
+	',
+	'import.latte' => '
+		{define embed1}
+			{block a}import-A{/block}
+			{block b}import-B{/block}
+		{/define}
+	',
+], '
+
+		outer-A
+
+			main-A
+			import-B
+
+
+outer-A
+');
+
+
 // generated code
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([

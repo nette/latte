@@ -13,17 +13,17 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		echo "\n";
-		$this->initBlockLayer(1, true);
-		$this->setBlockLayer(1);
+		$this->enterBlockLayer(1) /* line %d% */;
 		if (false) {
 			$this->renderBlock('a', get_defined_vars()) /* line %d% */;
 			echo "\n";
 		}
+		$this->copyBlockLayer();
 		try {
-			$this->renderBlock('embed1', [], 'html');
+			$this->renderBlock('embed1', [], 'html') /* line %d% */;
 		}
 		finally {
-			$this->setBlockLayer(0);
+			$this->leaveBlockLayer();
 		}
 		echo '
 
@@ -61,18 +61,18 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		$this->initBlockLayer(2, true);
-		$this->setBlockLayer(2);
+		$this->enterBlockLayer(2) /* line %d% */;
 		if (false) {
 			echo '					';
 			$this->renderBlock('a', get_defined_vars()) /* line %d% */;
 			echo "\n";
 		}
+		$this->copyBlockLayer();
 		try {
-			$this->renderBlock('embed1', [], 'html');
+			$this->renderBlock('embed1', [], 'html') /* line %d% */;
 		}
 		finally {
-			$this->setBlockLayer(1);
+			$this->leaveBlockLayer();
 		}
 		echo "\n";
 	}

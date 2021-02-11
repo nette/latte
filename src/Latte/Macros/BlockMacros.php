@@ -580,8 +580,7 @@ class BlockMacros extends MacroSet
 
 		$node->openingCode = $writer->write(
 			'<?php
-			$this->initBlockLayer(%0_var' . ($mod === 'block' ? ', true' : '') . ');
-			$this->setBlockLayer(%0_var);
+			$this->enterBlockLayer(%0_var) %node.line;
 			if (false) { ?>',
 			$this->index
 		);
@@ -590,20 +589,19 @@ class BlockMacros extends MacroSet
 			$node->closingCode = $writer->write(
 				'<?php }
 				try { $this->createTemplate(%word, %node.array, "embed")->renderToContentType(%var) %node.line; }
-				finally { $this->setBlockLayer(%var); } ?>' . "\n",
+				finally { $this->leaveBlockLayer(); } ?>' . "\n",
 				$name,
-				implode($node->context),
-				$node->data->prevIndex
+				implode($node->context)
 			);
 
 		} else {
 			$node->closingCode = $writer->write(
 				'<?php }
-				try { $this->renderBlock(%raw, %node.array, %var); }
-				finally { $this->setBlockLayer(%var); } ?>' . "\n",
+				$this->copyBlockLayer();
+				try { $this->renderBlock(%raw, %node.array, %var) %node.line; }
+				finally { $this->leaveBlockLayer(); } ?>' . "\n",
 				$this->isDynamic($name) ? $writer->formatWord($name) : PhpHelpers::dump($name),
-				implode($node->context),
-				$node->data->prevIndex
+				implode($node->context)
 			);
 		}
 	}

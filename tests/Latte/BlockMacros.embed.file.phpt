@@ -642,6 +642,46 @@ testTemplate('extending embed', [
 ');
 
 
+testTemplate('nested embedding with different overwritten blocks', [
+	'main' => '
+		{var $counter = 1}
+		{block local outer}
+			{if $counter < 3}
+				{embed embed.latte, counter: $counter}
+					{import "import$counter.latte"}
+
+					{block c}main C
+						{include block outer, counter: $counter + 1}
+					{/block}
+				{/embed}
+			{/if}
+		{/block}
+	',
+	'embed.latte' => '
+		{block a}embed-A{/block}
+		{block b}embed-B{/block}
+		{block c}embed-C{/block}
+	',
+	'import1.latte' => '
+		{block a}import1-A{/block}
+		{block b}import1-B{/block}
+		{block c}import1-C{/block}
+	',
+	'import2.latte' => '
+		{block a}import2-A{/block}
+	',
+], '
+
+		import1-A
+		import1-B
+		main C
+
+		import2-A
+		embed-B
+		main C
+');
+
+
 // generated code
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
