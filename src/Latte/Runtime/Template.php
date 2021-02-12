@@ -163,6 +163,21 @@ class Template
 	 */
 	public function render(string $block = null): void
 	{
+		$level = ob_get_level();
+		try {
+			$this->doRender($block);
+
+		} catch (\Throwable $e) {
+			while (ob_get_level() > $level) {
+				ob_end_clean();
+			}
+			throw $e;
+		}
+	}
+
+
+	private function doRender(string $block = null): void
+	{
 		$this->prepare();
 
 		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
