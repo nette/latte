@@ -374,14 +374,11 @@ class Template
 	{
 		try {
 			ob_start(function () {});
-			$this->global->coreCaptured = true;
 			$function();
 			return ob_get_clean();
 		} catch (\Throwable $e) {
 			ob_end_clean();
 			throw $e;
-		} finally {
-			$this->global->coreCaptured = false;
 		}
 	}
 

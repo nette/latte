@@ -96,6 +96,7 @@ class Engine
 	public function render(string $name, $params = [], string $block = null): void
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
+		$template->global->coreCaptured = false;
 		($this->probe)($template);
 		$template->render($block);
 	}
@@ -108,6 +109,7 @@ class Engine
 	public function renderToString(string $name, $params = [], string $block = null): string
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
+		$template->global->coreCaptured = true;
 		($this->probe)($template);
 		return $template->capture(function () use ($template, $block) { $template->render($block); });
 	}
