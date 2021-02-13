@@ -724,7 +724,7 @@ class Filters
 	 * @param  mixed[]  $array
 	 * @return mixed[]
 	 */
-	public static function sort(array $array, callable $callback = null): array
+	public static function sort(array $array, \Closure $callback = null): array
 	{
 		$callback ? uasort($array, $callback) : asort($array);
 		return $array;
