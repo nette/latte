@@ -51,17 +51,22 @@ class SecurityPolicy implements Latte\Policy
 		// php (but 'do' is allowed), sandbox, snippet, snippetArea, templatePrint, varPrint, embed
 		$policy->allowMacros([
 			'_', '=', 'attr', 'block', 'breakIf', 'capture', 'case', 'class', 'continueIf', 'default',
-			'define', 'do', 'else', 'elseif', 'elseifset', 'first', 'for', 'foreach', 'if', 'ifchanged', 'ifcontent',
-			'ifset', 'l', 'last', 'r', 'rollback', 'sep', 'skipIf', 'spaceless', 'switch', 'templateType', 'try', 'var', 'varType', 'while',
+			'define', 'do', 'else', 'elseif', 'elseifset', 'first', 'for', 'foreach', 'if', 'ifchanged',
+			'ifcontent', 'iterateWhile', 'ifset', 'l', 'last', 'r', 'rollback', 'sep', 'skipIf', 'spaceless',
+			'switch', 'templateType', 'try', 'var', 'varType', 'while',
 		]);
 
 		// does not include: dataStream, noEscape, noCheck
 		$policy->allowFilters([
-			'batch', 'breakLines', 'bytes', 'capitalize', 'clamp', 'date', 'escapeCss', 'escapeHtml', 'escapeHtmlComment', 'escapeICal',
-			'escapeJs', 'escapeUrl', 'escapeXml', 'firstUpper', 'checkUrl', 'implode', 'indent', 'length', 'lower', 'number',
-			'padLeft', 'padRight', 'repeat', 'replace', 'replaceRe', 'reverse', 'sort', 'strip', 'stripHtml', 'stripTags', 'substr',
+			'batch', 'breakLines', 'bytes', 'capitalize', 'ceil', 'clamp', 'date', 'escapeCss', 'escapeHtml',
+			'escapeHtmlComment', 'escapeICal', 'escapeJs', 'escapeUrl', 'escapeXml', 'explode', 'first',
+			'firstUpper', 'floor', 'checkUrl', 'implode', 'indent', 'join', 'last', 'length', 'lower',
+			'number', 'padLeft', 'padRight', 'query', 'random', 'repeat', 'replace', 'replaceRe', 'reverse',
+			'round', 'slice', 'sort', 'spaceless', 'split', 'strip', 'stripHtml', 'stripTags', 'substr',
 			'trim', 'truncate', 'upper', 'webalize',
 		]);
+
+		$policy->allowFunctions(['clamp', 'divisibleBy', 'even', 'first', 'last', 'odd', 'slice']);
 
 		$policy->allowMethods(Latte\Runtime\CachingIterator::class, self::ALL);
 		$policy->allowProperties(Latte\Runtime\CachingIterator::class, self::ALL);
