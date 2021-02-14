@@ -63,6 +63,8 @@ class SecurityPolicy implements Latte\Policy
 			'trim', 'truncate', 'upper', 'webalize',
 		]);
 
+		$policy->allowFunctions(['clamp']);
+
 		$policy->allowMethods(Latte\Runtime\CachingIterator::class, self::ALL);
 		$policy->allowProperties(Latte\Runtime\CachingIterator::class, self::ALL);
 
