@@ -42,6 +42,9 @@ class Template
 	/** @var string|false|null  @internal */
 	protected $parentName;
 
+	/** @var mixed[][] */
+	protected $varStack = [];
+
 	/** @var Block[][] */
 	private $blocks;
 
@@ -409,10 +412,11 @@ class Template
 	}
 
 
-	protected function enterBlockLayer(int $staticId): void
+	protected function enterBlockLayer(int $staticId, array $vars): void
 	{
 		$this->blockStack[] = $this->blocks[self::LAYER_TOP];
 		$this->initBlockLayer($staticId, self::LAYER_TOP);
+		$this->varStack[] = $vars;
 	}
 
 
@@ -427,6 +431,7 @@ class Template
 	protected function leaveBlockLayer(): void
 	{
 		$this->blocks[self::LAYER_TOP] = array_pop($this->blockStack);
+		array_pop($this->varStack);
 	}
 
 

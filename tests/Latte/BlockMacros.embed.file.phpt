@@ -142,6 +142,38 @@ testTemplate('overwritten block + variables', [
 ');
 
 
+testTemplate('outer variables', [
+	'main' => '
+		outer
+		{var $var1 = "OUT1"}
+		{var $var2 = "OUT2"}
+		{embed "embed.latte"}
+			{block a}{$var1} {$var2} {$var3} {block b}{$var1} {$var2} {$var3}{/block} {/block}
+		{/embed}
+		outer
+	',
+	'embed.latte' => '
+		embed start
+			{var $var2 = "IN2"}
+			{var $var3 = "IN3"}
+			{block a}embed A{/block}
+			{block b}embed B{/block}
+			{block c}embed C {$var1 ?? unset} {$var2 ?? unset} {$var3 ?? unset}{/block}
+		embed end
+	',
+], '
+		outer
+
+		embed start
+			OUT1 IN2 IN3 OUT1 IN2 IN3
+			OUT1 IN2 IN3
+			embed C unset IN2 IN3
+		embed end
+
+		outer
+');
+
+
 testTemplate('overwritten block + passed variables', [
 	'main' => '
 		{var $a = "M"}
@@ -647,7 +679,7 @@ testTemplate('nested embedding with different overwritten blocks', [
 		{var $counter = 1}
 		{block local outer}
 			{if $counter < 3}
-				{embed embed.latte, counter: $counter}
+				{embed embed.latte}
 					{import "import$counter.latte"}
 
 					{block c}main C

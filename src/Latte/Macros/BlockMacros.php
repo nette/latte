@@ -553,7 +553,7 @@ class BlockMacros extends MacroSet
 	private function extractMethod(MacroNode $node, Block $block, string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
-			$node->content = '<?php extract($this->params);'
+			$node->content = '<?php extract(' . ($node->name === 'block' && $node->closest(['embed']) ? 'end($this->varStack)' : '$this->params') . ');'
 				. ($params ?? 'extract($ʟ_args);')
 				. 'unset($ʟ_args);?>'
 				. $node->content;
@@ -580,7 +580,7 @@ class BlockMacros extends MacroSet
 
 		$node->openingCode = $writer->write(
 			'<?php
-			$this->enterBlockLayer(%0_var) %node.line;
+			$this->enterBlockLayer(%0_var, get_defined_vars()) %node.line;
 			if (false) { ?>',
 			$this->index
 		);

@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 		echo "\n";
-		$this->enterBlockLayer(1) /* line %d% */;
+		$this->enterBlockLayer(1, get_defined_vars()) /* line 2 */;
 		if (false) {
 			$this->renderBlock('a', get_defined_vars()) /* line %d% */;
 			echo "\n";
@@ -57,11 +57,11 @@ final class Template%a% extends Latte\Runtime\Template
 	/** {block a} on line %d% */
 	public function blockA1(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract(end($this->varStack));
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		$this->enterBlockLayer(2) /* line %d% */;
+		$this->enterBlockLayer(2, get_defined_vars()) /* line 4 */;
 		if (false) {
 			echo '					';
 			$this->renderBlock('a', get_defined_vars()) /* line %d% */;
