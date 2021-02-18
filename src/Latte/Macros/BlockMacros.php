@@ -261,7 +261,7 @@ class BlockMacros extends MacroSet
 			$node->modifiers .= '|escape';
 			$node->closingCode = $writer->write(
 				'<?php $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); ?>',
-				$node->context[0]
+				implode($node->context)
 			);
 			return $writer->write('ob_start(function () {}) %node.line;');
 		}
