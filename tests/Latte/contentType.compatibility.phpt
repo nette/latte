@@ -379,4 +379,7 @@ Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="<hr> &quot;"</p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
-Assert::same('<!-- <-->', $latte->renderToString('context6a'));
+
+Assert::error(function () use ($latte) {
+	$latte->renderToString('context6a');
+}, E_USER_WARNING, 'Filter |stripHtml used with incompatible type HTMLCOMMENT');
