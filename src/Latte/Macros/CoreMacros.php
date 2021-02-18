@@ -213,7 +213,7 @@ class CoreMacros extends MacroSet
 				$value = 'ob_get_clean()';
 			}
 
-			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, %raw))', $node->context[0], $value);
+			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $_fi, %raw))', implode($node->context), $value);
 
 		} elseif ($node->empty = ($node->args !== '')) {
 			return $writer->write('echo %modify(($this->filters->translate)(%node.args))');
@@ -269,7 +269,7 @@ class CoreMacros extends MacroSet
 		$body = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
-		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body);", $node->context[0], $node->data->variable);
+		return $writer->write("\$_fi = new LR\\FilterInfo(%var); %raw = %modifyContent($body);", implode($node->context), $node->data->variable);
 	}
 
 
