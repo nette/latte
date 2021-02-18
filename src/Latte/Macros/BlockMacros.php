@@ -393,7 +393,7 @@ class BlockMacros extends MacroSet
 
 		} elseif ($node->modifiers) { // anonymous block with modifier
 			$node->modifiers .= '|escape';
-			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', $node->context[0]);
+			return $writer->write('$_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean());', implode($node->context));
 		}
 	}
 
