@@ -45,3 +45,8 @@ Assert::match( // bug #215
 	'',
 	$latte->renderToString('{capture $var|strip} <html> {/capture}')
 );
+
+Assert::match(
+	'<!--  --> &lt;foo&gt;',
+	$latte->renderToString('<!-- {capture $x}<foo>{/capture} --> {$x}')
+);
