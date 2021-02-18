@@ -165,7 +165,10 @@ class Template
 	{
 		$level = ob_get_level();
 		try {
-			$this->doRender($block);
+			$this->prepare();
+			if (!$this->doRender($block)) {
+				$this->main();
+			}
 
 		} catch (\Throwable $e) {
 			while (ob_get_level() > $level) {
@@ -176,10 +179,8 @@ class Template
 	}
 
 
-	private function doRender(string $block = null): void
+	private function doRender(string $block = null): bool
 	{
-		$this->prepare();
-
 		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
 			$this->parentName = ($this->global->coreParentFinder)($this);
 		}
@@ -187,37 +188,33 @@ class Template
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
 		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', static::CONTENT_TYPE);
+		$this->params['_l'] = new \stdClass; // old accumulators for back compatibility
+		$this->params['_g'] = $this->global;
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
 				throw new Latte\RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
 			}
-			return;
 
 		} elseif ($this->parentName) { // extends
 			ob_start(function () {});
 			$this->params = $this->main();
 			ob_end_clean();
 			$this->createTemplate($this->parentName, $this->params, 'extends')->render($block);
-			return;
 
 		} elseif ($block !== null) { // single block rendering
 			$this->renderBlock($block, $this->params);
-			return;
-		}
 
-		// old accumulators for back compatibility
-		$this->params['_l'] = new \stdClass;
-		$this->params['_g'] = $this->global;
-		if (
+		} elseif (
 			isset($this->global->snippetDriver)
-			&& $this->global->snippetBridge->isSnippetMode()
 			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LAYER_SNIPPET], $this->params)
 		) {
-			return;
+			// nothing
+		} else {
+			return false;
 		}
 
-		$this->main();
+		return true;
 	}
 
 
