@@ -110,3 +110,9 @@ Assert::match(
 	<div n:foreach="[a, b] as $i">{$i}</div>
 ')
 );
+
+// trim inside <script>
+Assert::match(
+	'<script>123;</script>',
+	$latte->renderToString('<script>{block|trim}  123;  {/block}</script>')
+);
