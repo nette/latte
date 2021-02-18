@@ -249,7 +249,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {block [local] [name]}
 	 */
-	public function macroBlock(MacroNode $node, PhpWriter $writer): string
+	public function macroBlock(MacroNode $node, PhpWriter $writer)
 	{
 		[$name, $local] = $node->tokenizer->fetchWordWithModifier('local');
 		$layer = $local ? Template::LAYER_LOCAL : null;
@@ -258,15 +258,17 @@ class BlockMacros extends MacroSet
 		$this->checkExtraArgs($node);
 
 		if ($data->name === '') {
-			if ($node->modifiers === '') {
-				return '';
+			$node->openingCode = '<?php (function () { extract(func_get_arg(0)); ?>';
+			$node->closingCode = '<?php })(get_defined_vars()); ?>';
+			if ($node->modifiers !== '') {
+				$node->modifiers .= '|escape';
+				$node->openingCode = $writer->write('<?php ob_start(function () {}) %node.line; ?>') . $node->openingCode;
+				$node->closingCode .= $writer->write(
+					'<?php $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); ?>',
+					implode($node->context)
+				);
 			}
-			$node->modifiers .= '|escape';
-			$node->closingCode = $writer->write(
-				'<?php $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); ?>',
-				implode($node->context)
-			);
-			return $writer->write('ob_start(function () {}) %node.line;');
+			return;
 		}
 
 		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
