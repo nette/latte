@@ -194,8 +194,6 @@ class Template
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
 		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', static::CONTENT_TYPE);
-		$this->params['_l'] = new \stdClass; // old accumulators for back compatibility
-		$this->params['_g'] = $this->global;
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
