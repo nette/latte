@@ -323,7 +323,7 @@ class CoreMacros extends MacroSet
 
 			return $writer->write(
 				'$ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw)) %node.line;',
-				$node->context[0],
+				implode($node->context),
 				$value
 			);
 
@@ -409,7 +409,7 @@ class CoreMacros extends MacroSet
 			: 'ob_get_clean()';
 		return $writer->write(
 			'$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
-			$node->context[0],
+			implode($node->context),
 			$node->data->variable,
 			$body
 		);
