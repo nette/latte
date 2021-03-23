@@ -25,3 +25,6 @@ Assert::same('&lt;br&gt;', Filters::escapeHtmlAttrConv(new Latte\Runtime\Html('<
 Assert::same('`hello ', Filters::escapeHtmlAttrConv('`hello'));
 Assert::same('`hello&quot;', Filters::escapeHtmlAttrConv('`hello"'));
 Assert::same('`hello&#039;', Filters::escapeHtmlAttrConv("`hello'"));
+
+// JS
+Assert::same('hello &#123; worlds }', Filters::escapeHtmlAttrConv('hello { worlds }'));
