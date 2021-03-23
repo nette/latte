@@ -50,7 +50,7 @@ class Filters
 			return $s->__toString(true);
 		}
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
-		$s = str_replace('{{', '{<!-- -->{', $s);
+		$s = strtr($s, ['{{' => '{<!-- -->{', '{' => '&#123;']);
 		return $s;
 	}
 
@@ -67,7 +67,9 @@ class Filters
 		if (strpos($s, '`') !== false && strpbrk($s, ' <>"\'') === false) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
-		return htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', $double);
+		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', $double);
+		$s = str_replace('{', '&#123;', $s);
+		return $s;
 	}
 
 
