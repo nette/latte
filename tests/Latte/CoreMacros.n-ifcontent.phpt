@@ -52,6 +52,11 @@ Assert::match(
 
 
 Assert::exception(function () use ($latte) {
+	$latte->compile('<div n:ifcontent=x></div>');
+}, Latte\CompileException::class, 'Arguments are not allowed in n:ifcontent');
+
+
+Assert::exception(function () use ($latte) {
 	$latte->compile('<html>{ifcontent}');
 }, Latte\CompileException::class, 'Unknown {ifcontent}, use n:ifcontent attribute.');
 

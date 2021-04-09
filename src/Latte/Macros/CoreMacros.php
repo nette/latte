@@ -236,6 +236,7 @@ class CoreMacros extends MacroSet
 		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 		}
+		$node->validate(false);
 	}
 
 
