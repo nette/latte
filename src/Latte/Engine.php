@@ -10,10 +10,11 @@ declare(strict_types=1);
 namespace Latte;
 
 
+use ErrorException;
 use Latte\Compiler\Compiler;
 use Latte\Compiler\Macro;
 use Latte\Compiler\Parser;
-use Latte\Compiler\PhpHelpers;
+use Throwable;
 
 /**
  * Templating engine Latte.
@@ -259,7 +260,15 @@ class Engine
 
 	private function isExpired(string $file, string $name): bool
 	{
-		return $this->autoRefresh && $this->getLoader()->isExpired($name, (int) @filemtime($file)); // @ - file may not exist
+		if ($this->autoRefresh) {
+			try {
+				$fileTime = (int)@filemtime($file); // @ - file may not exist
+			} catch (Throwable $e) {
+				$fileTime = 0;
+			}
+			return $this->getLoader()->isExpired($name, $fileTime);
+		}
+		return false;
 	}
 
 
