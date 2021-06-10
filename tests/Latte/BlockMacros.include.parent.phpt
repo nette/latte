@@ -39,10 +39,9 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 // with modifier
-Assert::match(
-	'- parent  -',
-	$latte->renderToString('main1')
-);
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('main1');
+}, Latte\CompileException::class, 'Filters are not allowed in {include parent}');
 
 // with params
 Assert::match(

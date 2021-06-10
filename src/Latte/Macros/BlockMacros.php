@@ -141,6 +141,9 @@ class BlockMacros extends MacroSet
 			$name = ltrim($name, '#');
 		}
 
+		if ($name === 'parent' && $node->modifiers !== '') {
+			throw new CompileException('Filters are not allowed in {include parent}');
+		}
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
