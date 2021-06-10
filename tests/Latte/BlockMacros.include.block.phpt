@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: {include file}
+ * Test: {include block}
  */
 
 declare(strict_types=1);
