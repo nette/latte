@@ -13,15 +13,15 @@ named arguments import
 		$this->createTemplate("import.latte", $this->params, "import")->render() /* line %d% */;
 		echo '
 a) ';
-		$this->renderBlock($ʟ_nm = 'test', [1, 'var1' => 2] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [1, 'var1' => 2] + [], 'html') /* line %d% */;
 		echo '
 
 b) ';
-		$this->renderBlock($ʟ_nm = 'test', ['var2' => 1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['var2' => 1] + [], 'html') /* line %d% */;
 		echo '
 
 c) ';
-		$this->renderBlock($ʟ_nm = 'test', ['hello' => 1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['hello' => 1] + [], 'html') /* line %d% */;
 		return get_defined_vars();
 	}
 

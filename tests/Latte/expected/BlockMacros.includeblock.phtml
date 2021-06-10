@@ -10,7 +10,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->createTemplate("inc", get_defined_vars(), "includeblock")->renderToContentType('html') /* line %d% */;
 		echo rtrim(ob_get_clean());
 		echo "\n";
-		$this->renderBlock($ʟ_nm = 'test', [], 'html') /* line %d% */;
+		$this->renderBlock('test', [], 'html') /* line %d% */;
 %A%
 	}
 

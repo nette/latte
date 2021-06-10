@@ -177,7 +177,7 @@ class BlockMacros extends MacroSet
 
 		return $writer->write(
 			'$this->renderBlock' . ($parent ? 'Parent' : '')
-			. '($ʟ_nm = ' . $phpName . ', '
+			. '(' . $phpName . ', '
 			. '%node.array? + ' . $key
 			. ($node->modifiers
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'

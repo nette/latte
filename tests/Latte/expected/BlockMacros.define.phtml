@@ -16,9 +16,9 @@ final class Template%a% extends Latte\Runtime\Template
 			return get_defined_vars();
 		}
 		echo "\n";
-		$this->renderBlock($ʟ_nm = 'test', ['var' => 20] + get_defined_vars(), 'html') /* line %d% */;
+		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html') /* line %d% */;
 		echo "\n";
-		$this->renderBlock($ʟ_nm = 'true', get_defined_vars(), 'html') /* line %d% */;
+		$this->renderBlock('true', get_defined_vars(), 'html') /* line %d% */;
 		return get_defined_vars();
 	}
 

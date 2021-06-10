@@ -13,15 +13,15 @@ final class Template%a% extends Latte\Runtime\Template
 		echo 'named arguments order
 
 a) ';
-		$this->renderBlock($ʟ_nm = 'test', [1, 'var1' => 2] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [1, 'var1' => 2] + [], 'html') /* line %d% */;
 		echo '
 
 b) ';
-		$this->renderBlock($ʟ_nm = 'test', ['var2' => 1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['var2' => 1] + [], 'html') /* line %d% */;
 		echo '
 
 c) ';
-		$this->renderBlock($ʟ_nm = 'test', ['hello' => 1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['hello' => 1] + [], 'html') /* line %d% */;
 		echo '
 
 ';

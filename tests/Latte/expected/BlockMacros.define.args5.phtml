@@ -18,11 +18,11 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		echo '
 a) ';
-		$this->renderBlock($ʟ_nm = 'test', [1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [1] + [], 'html') /* line %d% */;
 		echo '
 
 b) ';
-		$this->renderBlock($ʟ_nm = 'test', ['var1' => 1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['var1' => 1] + [], 'html') /* line %d% */;
 		return get_defined_vars();
 	}
 
