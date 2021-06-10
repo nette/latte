@@ -20,6 +20,16 @@ Assert::exception(function () use ($latte) {
 	$latte->renderToString('{include this}');
 }, Latte\CompileException::class, 'Cannot include this block outside of any block.');
 
+// in anonymous block
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('{block} {include this} {/block}');
+}, Latte\CompileException::class, 'Cannot include this block outside of any block.');
+
+Assert::match(
+	'  2   1',
+	$latte->renderToString('{block foo} {block} {$i--} {if $i}{include this}{/if} {/block} {/block}', ['i' => 2])
+);
+
 // in snippet block
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{snippet foo} {include this} {/snippet}');

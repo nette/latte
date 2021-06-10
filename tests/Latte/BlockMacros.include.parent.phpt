@@ -20,6 +20,11 @@ Assert::exception(function () use ($latte) {
 	$latte->renderToString('{include parent}');
 }, Latte\CompileException::class, 'Cannot include parent block outside of any block.');
 
+// in anonymous block
+Assert::exception(function () use ($latte) {
+	$latte->renderToString('{block} {include parent} {/block}');
+}, Latte\CompileException::class, 'Cannot include parent block outside of any block.');
+
 // in snippet block
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{snippet foo} {include parent} {/snippet}');

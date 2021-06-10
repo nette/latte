@@ -159,7 +159,7 @@ class BlockMacros extends MacroSet
 
 		$parent = $name === 'parent';
 		if ($name === 'parent' || $name === 'this') {
-			$item = $node->closest(['block', 'define'], function ($node) { return isset($node->data->name); });
+			$item = $node->closest(['block', 'define'], function ($node) { return $node->data->name !== ''; });
 			if (!$item) {
 				throw new CompileException("Cannot include $name block outside of any block.");
 			}
