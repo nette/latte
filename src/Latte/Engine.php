@@ -217,7 +217,7 @@ class Engine
 		if ($lock) {
 			flock($lock, LOCK_UN); // release shared lock so we can get exclusive
 		}
-		$lock = $this->acquireLock("$file.lock", LOCK_EX);
+		$this->acquireLock("$file.lock", LOCK_EX);
 
 		// while waiting for exclusive lock, someone might have already created the cache
 		if (!is_file($file) || $this->isExpired($file, $name)) {
@@ -301,7 +301,7 @@ class Engine
 	public function addFilterLoader(callable $callback)
 	{
 		$this->filters->add(null, function ($name) use ($callback) {
-			if ($filter = $callback($name)) {
+			if ($callback($name)) {
 				$this->filters->add($name, $callback($name));
 			}
 		});
