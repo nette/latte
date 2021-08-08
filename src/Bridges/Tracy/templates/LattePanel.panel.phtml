@@ -19,11 +19,11 @@ $colors = [
 ?>
 
 <style class="tracy-debug">
-	#tracy-debug .nette-LattePanel td {
+	#tracy-debug .LattePanel td {
 		white-space: nowrap;
 	}
 
-	#tracy-debug .nette-LattePanel-php {
+	#tracy-debug .LattePanel-php {
 		background: #8993be;
 		color: white;
 		border-radius: 79px;
@@ -36,7 +36,7 @@ $colors = [
 		margin-left: 2ex;
 	}
 
-	#tracy-debug .nette-LattePanel-type {
+	#tracy-debug .LattePanel-type {
 		border-radius: 2px;
 		padding: 2px 4px;
 		font-size: 80%;
@@ -44,43 +44,43 @@ $colors = [
 		font-weight: bold;
 	}
 
-	#tracy-debug .nette-LattePanel-include {
+	#tracy-debug .LattePanel-include {
 		background: #00000052;
 	}
 
-	#tracy-debug .nette-LattePanel-extends {
+	#tracy-debug .LattePanel-extends {
 		background: #cd1c1c7d;
 	}
 
-	#tracy-debug .nette-LattePanel-import,
-	#tracy-debug .nette-LattePanel-includeblock {
+	#tracy-debug .LattePanel-import,
+	#tracy-debug .LattePanel-includeblock {
 		background: #17c35b8f;
 	}
 
-	#tracy-debug .nette-LattePanel-embed {
+	#tracy-debug .LattePanel-embed {
 		background: #4f1ccd7d;
 	}
 
-	#tracy-debug .nette-LattePanel-sandbox {
+	#tracy-debug .LattePanel-sandbox {
 		background: black;
 	}
 </style>
 
 <h1>Rendered Templates</h1>
 
-<div class="tracy-inner nette-LattePanel">
+<div class="tracy-inner LattePanel">
 	<table>
 		<?php foreach ($list as $item): ?>
 			<tr>
 				<td>
 					<?php if ($item->template->getReferenceType()): ?>
 						<span style="margin-left: <?= $item->depth * 4 ?>ex"></span>└ 
-						<span class="nette-LattePanel-type" style="background: <?= $colors[$item->template->getReferenceType()] ?>"><?= Helpers::escapeHtml($item->template->getReferenceType()) ?></span>
+						<span class="LattePanel-type" style="background: <?= $colors[$item->template->getReferenceType()] ?>"><?= Helpers::escapeHtml($item->template->getReferenceType()) ?></span>
 					<?php endif ?>
 
 					<?= Helpers::editorLink($item->template->getName()) ?>
 
-					<a href="<?= Helpers::escapeHtml(Helpers::editorUri($item->phpFile)) ?>" class="nette-LattePanel-php">php</a>
+					<a href="<?= Helpers::escapeHtml(Helpers::editorUri($item->phpFile)) ?>" class="LattePanel-php">php</a>
 				</td>
 
 				<td><?= $item->count > 1 ? $item->count . '×' : '' ?></td>

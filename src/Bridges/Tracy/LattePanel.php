@@ -11,7 +11,6 @@ namespace Latte\Bridges\Tracy;
 
 use Latte\Engine;
 use Latte\Runtime\Template;
-use Nette;
 use Tracy;
 
 
@@ -20,8 +19,6 @@ use Tracy;
  */
 class LattePanel implements Tracy\IBarPanel
 {
-	use Nette\SmartObject;
-
 	/** @var bool */
 	public $dumpParameters = true;
 
@@ -60,7 +57,7 @@ class LattePanel implements Tracy\IBarPanel
 			return null;
 		}
 
-		return Nette\Utils\Helpers::capture(function () {
+		return Tracy\Helpers::capture(function () {
 			$name = $this->name ?? basename(reset($this->templates)->getName());
 			require __DIR__ . '/templates/LattePanel.tab.phtml';
 		});
@@ -75,7 +72,7 @@ class LattePanel implements Tracy\IBarPanel
 		$this->list = [];
 		$this->buildList($this->templates[0]);
 
-		return Nette\Utils\Helpers::capture(function () {
+		return Tracy\Helpers::capture(function () {
 			$list = $this->list;
 			$dumpParameters = $this->dumpParameters;
 			require __DIR__ . '/templates/LattePanel.panel.phtml';
