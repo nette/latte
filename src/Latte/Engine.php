@@ -297,7 +297,7 @@ class Engine
 	{
 		$this->filters->add(null, function ($name) use ($callback) {
 			if ($filter = $callback($name)) {
-				$this->filters->add($name, $callback($name));
+				$this->filters->add($name, $filter);
 			}
 		});
 		return $this;
