@@ -20,7 +20,7 @@ Assert::same(2, Filters::length(['one', 'two']));
 
 class CountableClass implements Countable
 {
-	public function count()
+	public function count(): int
 	{
 		return 4;
 	}
@@ -31,7 +31,7 @@ Assert::same(4, Filters::length(new CountableClass));
 
 class TraversableClass implements IteratorAggregate
 {
-	public function getIterator()
+	public function getIterator(): ArrayIterator
 	{
 		return new ArrayIterator(['one', 'two', 'three']);
 	}

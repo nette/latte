@@ -59,12 +59,12 @@ class CountableTraversableStringClass implements Countable, IteratorAggregate
 	}
 
 
-	public function count()
+	public function count(): int
 	{
 	}
 
 
-	public function getIterator()
+	public function getIterator(): Iterator
 	{
 	}
 }

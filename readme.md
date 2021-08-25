@@ -85,7 +85,7 @@ The recommended way to install Latte is via Composer (alternatively you can [dow
 composer require latte/latte
 ```
 
-Latte requires PHP version 7.1 and supports PHP up to 8.0.
+Latte requires PHP version 7.1 and supports PHP up to 8.1.
 
 
 Usage

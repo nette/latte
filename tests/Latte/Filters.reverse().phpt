@@ -21,7 +21,7 @@ Assert::same([1 => 'two', 0 => 'one'], Filters::reverse(['one', 'two'], true));
 
 class TraversableClass implements IteratorAggregate
 {
-	public function getIterator()
+	public function getIterator(): ArrayIterator
 	{
 		return new ArrayIterator(['one', 'two', 'three']);
 	}

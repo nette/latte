@@ -87,7 +87,7 @@ test('object', function () {
 
 class RecursiveIteratorAggregate implements IteratorAggregate
 {
-	public function getIterator()
+	public function getIterator(): ArrayObject
 	{
 		return new ArrayObject(['Nette', 'Framework']);
 	}
