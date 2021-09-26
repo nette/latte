@@ -35,6 +35,10 @@ Assert::same(
 	'<?php if ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) { ?>',
 	$compiler->expandMacro('ifset', '#block1, block2, $var3, item(abc)')->openingCode
 );
+Assert::same(
+	'<?php if ($this->hasBlock("footer") && $this->hasBlock("header") && $this->hasBlock("main")) { ?>',
+	$compiler->expandMacro('ifset', 'footer, header, main')->openingCode
+);
 
 Assert::exception(function () use ($compiler) {
 	$compiler->expandMacro('ifset', '$var');
