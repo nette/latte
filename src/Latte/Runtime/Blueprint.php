@@ -85,7 +85,7 @@ class Blueprint
 			if ($native) {
 				$prop->setType($type);
 			} else {
-				$doctype = $printer->printType($type, false, $class->getNamespace()) ?: 'mixed';
+				$doctype = $this->printType($type, false, $class->getNamespace()) ?: 'mixed';
 				$prop->setComment("@var $doctype");
 			}
 		}
@@ -100,9 +100,45 @@ class Blueprint
 		$printer = new Php\Printer;
 		foreach ($funcs as $name => $func) {
 			$method = (new Php\Factory)->fromCallable($func);
-			$type = $printer->printType($method->getReturnType(), $method->isReturnNullable(), $class->getNamespace()) ?: 'mixed';
-			$class->addComment("@method $type $name" . $printer->printParameters($method, $class->getNamespace()));
+			$type = $this->printType($method->getReturnType(), $method->isReturnNullable(), $class->getNamespace()) ?: 'mixed';
+			$class->addComment("@method $type $name" . $this->printParameters($method, $class->getNamespace()));
 		}
+	}
+
+
+	private function printType(?string $type, bool $nullable, ?Php\PhpNamespace $namespace): string
+	{
+		if ($type === null) {
+			return '';
+		}
+		if ($namespace) {
+			$type = $namespace->unresolveName($type);
+		}
+		if ($nullable && strcasecmp($type, 'mixed')) {
+			$type = strpos($type, '|') !== false
+				? $type . '|null'
+				: '?' . $type;
+		}
+		return $type;
+	}
+
+
+	/**
+	 * @param Closure|GlobalFunction|Method  $function
+	 */
+	public function printParameters($function, Php\PhpNamespace $namespace = null): string
+	{
+		$params = [];
+		$list = $function->getParameters();
+		foreach ($list as $param) {
+			$variadic = $function->isVariadic() && $param === end($list);
+			$params[] = ltrim($this->printType($param->getType(), $param->isNullable(), $namespace) . ' ')
+				. ($param->isReference() ? '&' : '')
+				. ($variadic ? '...' : '')
+				. '$' . $param->getName()
+				. ($param->hasDefaultValue() && !$variadic ? ' = ' . var_export($param->getDefaultValue(), true) : '');
+		}
+		return '(' . implode(', ', $params) . ')';
 	}
 
 
