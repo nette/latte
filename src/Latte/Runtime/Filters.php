@@ -22,7 +22,7 @@ use function is_array, is_string, count, strlen;
 class Filters
 {
 	/** @var string  @deprecated */
-	public static $dateFormat = '%x';
+	public static $dateFormat = 'j. n. Y';
 
 	/** @var bool  @internal use XHTML syntax? */
 	public static $xhtml = false;
