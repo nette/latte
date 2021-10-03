@@ -26,3 +26,15 @@ Assert::exception(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{templateType stdClass}');
 });
+
+class ExampleTemplateType {
+  public $a;
+  public int $b;
+  public ?ExampleTemplateType $c;
+  private $private;
+}
+
+Assert::matchFile(
+  __DIR__ . '/expected/CoreMacros.templateType.phtml',
+  $latte->compile('{templateType ExampleTemplateType}{define test}{$a}{/define}')
+);

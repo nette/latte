@@ -46,3 +46,28 @@ Assert::noError(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{varType array{0: int, 1: int} $var}');
 });
+
+Assert::contains('/** @var int|null $var */', $latte->compile('{varType int|null $var}'));
+
+$template = <<<'XX'
+
+{varType string $a}
+
+{$a}
+
+{varType string $c}
+
+{include test}
+
+{define test}
+  {varType int $b}
+  {var $b = 5}
+  {$a}{$b}
+{/define}
+
+XX;
+
+Assert::matchFile(
+	__DIR__ . '/expected/CoreMacros.varType.phtml',
+	$latte->compile($template)
+);

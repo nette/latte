@@ -17,7 +17,6 @@ use Latte\MacroNode;
 use Latte\PhpHelpers;
 use Latte\PhpWriter;
 
-
 /**
  * Basic macros for Latte.
  */
@@ -813,15 +812,20 @@ class CoreMacros extends MacroSet
 		$tokens = $node->tokenizer;
 		$params = [];
 		while ($tokens->isNext()) {
-			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
-				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
+			$type = $tokens->nextValue($tokens::T_SYMBOL, '?', 'null', '\\');
+			if ($type) {
+				$type .= $tokens->joinAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
 			$param = $tokens->consumeValue($tokens::T_VARIABLE);
 			$default = $tokens->nextToken('=')
 				? $tokens->joinUntilSameDepth(',')
 				: 'null';
+			$mask ='%raw = $this->params[%var] ?? $this->params[%var] ?? %raw;';
+			if($type) {
+			  $mask = "/** @var $type $param */\n" . $mask;
+			}
 			$params[] = $writer->write(
-				'%raw = $this->params[%var] ?? $this->params[%var] ?? %raw;',
+				$mask,
 				$param,
 				count($params),
 				substr($param, 1),
@@ -838,7 +842,7 @@ class CoreMacros extends MacroSet
 	/**
 	 * {varType type $var}
 	 */
-	public function macroVarType(MacroNode $node): void
+	public function macroVarType(MacroNode $node, PhpWriter $writer): string
 	{
 		if ($node->modifiers) {
 			$node->setArgs($node->args . $node->modifiers);
@@ -847,9 +851,16 @@ class CoreMacros extends MacroSet
 		$node->validate(true);
 
 		$type = trim($node->tokenizer->joinUntil($node->tokenizer::T_VARIABLE));
-		$variable = $node->tokenizer->nextToken($node->tokenizer::T_VARIABLE);
+		$variable = $node->tokenizer->nextValue($node->tokenizer::T_VARIABLE);
 		if (!$type || !$variable) {
 			throw new CompileException('Unexpected content, expecting {varType type $var}.');
+		}
+		$comment = "/** @var $type $variable */\n";
+		if ($this->getCompiler()->isInHead()) {
+			$this->getCompiler()->paramsExtraction .= $comment;
+			return "";
+		} else {
+			return $writer->write($comment);
 		}
 	}
 
@@ -869,12 +880,38 @@ class CoreMacros extends MacroSet
 	/**
 	 * {templateType ClassName}
 	 */
-	public function macroTemplateType(MacroNode $node): void
+	public function macroTemplateType(MacroNode $node)
 	{
 		if (!$this->getCompiler()->isInHead()) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
 		}
 		$node->validate('class name');
+		try {
+			$reflectionClass = new \ReflectionClass($node->args);
+			foreach ($reflectionClass->getProperties() as $property) {
+				if(!$property->isPublic()) {
+					continue;
+				}
+				$propertyName = $property->getName();
+				$type = $property->getType();
+				$typeName = null;
+				if ($type instanceof \ReflectionNamedType) {
+					$typeName = ($type->allowsNull() ? "?" : "") . $type->getName();
+				} elseif ($type instanceof \ReflectionUnionType) {
+					$typeName = implode("|", array_map(
+						function(\ReflectionNamedType $type) { return $type->getName(); },
+						$type->getTypes()
+					));
+				}
+				if(!$typeName) {
+					$typeName = "mixed";
+				}
+				$comment = "/** @var $typeName \$$propertyName ({$node->args}) */\n";
+				$this->getCompiler()->paramsExtraction .= $comment;
+			}
+		} catch (\ReflectionException $e) {
+
+		}
 	}
 
 

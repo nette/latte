@@ -50,8 +50,11 @@ class Compiler
 	/** @var string[] @internal */
 	public $placeholders = [];
 
-	/** @var string|null */
+	/** @var string */
 	public $paramsExtraction;
+
+	/** @var string */
+	private $defaultParamsExtraction = 'extract($this->params);';
 
 	/** @var Token[] */
 	private $tokens;
@@ -166,7 +169,8 @@ class Compiler
 		$output = '';
 		$this->output = &$output;
 		$this->inHead = true;
-		$this->htmlNode = $this->macroNode = $this->context = $this->paramsExtraction = null;
+		$this->htmlNode = $this->macroNode = $this->context = null;
+		$this->paramsExtraction = $this->defaultParamsExtraction;
 		$this->placeholders = $this->properties = $this->constants = [];
 		$this->methods = ['main' => null, 'prepare' => null];
 
@@ -215,7 +219,7 @@ class Compiler
 			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
 
-		$extractParams = $this->paramsExtraction ?? 'extract($this->params);';
+		$extractParams = $this->paramsExtraction;
 		$this->addMethod('main', $this->expandTokens($extractParams . "?>\n$output$epilogs<?php return get_defined_vars();"), '', 'array');
 
 		if ($prepare) {

@@ -334,15 +334,20 @@ class BlockMacros extends MacroSet
 		$tokens = $node->tokenizer;
 		$params = [];
 		while ($tokens->isNext()) {
-			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
-				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
+			$type = $tokens->nextValue($tokens::T_SYMBOL, '?', 'null', '\\');
+			if ($type) {
+				$type .= $tokens->joinAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
 			$param = $tokens->consumeValue($tokens::T_VARIABLE);
 			$default = $tokens->nextToken('=')
 				? $tokens->joinUntilSameDepth(',')
 				: 'null';
+			$mask ='%raw = $ʟ_args[%var] ?? $ʟ_args[%var] ?? %raw;';
+			if($type) {
+			  $mask = "/** @var $type $param */\n" . $mask;
+			}
 			$params[] = $writer->write(
-				'%raw = $ʟ_args[%var] ?? $ʟ_args[%var] ?? %raw;',
+				$mask,
 				$param,
 				count($params),
 				substr($param, 1),
@@ -556,7 +561,7 @@ class BlockMacros extends MacroSet
 	private function extractMethod(MacroNode $node, Block $block, string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
-			$node->content = '<?php extract(' . ($node->name === 'block' && $node->closest(['embed']) ? 'end($this->varStack)' : '$this->params') . ');'
+			$node->content = '<?php ' . ($node->name === 'block' && $node->closest(['embed']) ? 'extract(end($this->varStack));' : $this->getCompiler()->paramsExtraction)
 				. ($params ?? 'extract($ʟ_args);')
 				. 'unset($ʟ_args);?>'
 				. $node->content;
