@@ -67,7 +67,7 @@ class Blueprint
 
 		$end = $this->printCanvas();
 		$this->printHeader('varPrint');
-		$this->printCode($res ?: 'No variables');
+		$this->printCode($res ?: 'No variables', 'latte');
 		echo $end;
 	}
 
@@ -144,6 +144,8 @@ class Blueprint
 
 	public function printCanvas(): string
 	{
+		echo '<script src="https://nette.github.io/resources/prism/prism.js"></script>';
+		echo '<link rel="stylesheet" href="https://nette.github.io/resources/prism/prism.css">';
 		echo "<div style='all:initial;position:fixed;overflow:auto;z-index:1000;left:0;right:0;top:0;bottom:0;color:black;background:white;padding:1em'>\n";
 		return "</div>\n";
 	}
@@ -151,12 +153,16 @@ class Blueprint
 
 	public function printHeader(string $string): void
 	{
-		echo "<h1 style='all:initial;display:block;font-size:2em;margin:1em 0'>", htmlspecialchars($string), "</h1>\n";
+		echo "<h1 style='all:initial;display:block;font-size:2em;margin:1em 0'>",
+			htmlspecialchars($string),
+			"</h1>\n";
 	}
 
 
-	public function printCode(string $code): void
+	public function printCode(string $code, string $lang = 'php'): void
 	{
-		echo "<xmp style='margin:0;user-select:all'>", $code, "</xmp>\n";
+		echo '<pre><code class="language-', htmlspecialchars($lang), '">',
+			htmlspecialchars($code),
+			"</code></pre>\n";
 	}
 }
