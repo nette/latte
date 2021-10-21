@@ -40,6 +40,7 @@
 		"classmap": ["src/"]
 	},
 	"minimum-stability": "dev",
+	"bin": ["bin/latte-lint"],
 	"scripts": {
 		"phpstan": "phpstan analyse",
 		"tester": "tester tests -s"

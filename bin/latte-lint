@@ -1,0 +1,125 @@
+<?php
+
+declare(strict_types=1);
+
+if (
+	!(is_file($file = __DIR__ . '/../vendor/autoload.php') && include $file) &&
+	!(is_file($file = __DIR__ . '/../../../autoload.php') && include $file)
+) {
+	fwrite(STDERR, "Install packages using Composer.\n");
+	exit(1);
+}
+
+if (function_exists('pcntl_signal')) {
+	pcntl_signal(SIGINT, function (): void {
+		pcntl_signal(SIGINT, SIG_DFL);
+		echo "Terminated\n";
+		exit(1);
+	});
+} elseif (function_exists('sapi_windows_set_ctrl_handler')) {
+	sapi_windows_set_ctrl_handler(function () {
+		echo "Terminated\n";
+		exit(1);
+	});
+}
+
+set_time_limit(0);
+
+
+echo '
+Latte linter
+------------
+';
+
+if ($argc < 2) {
+	echo "Usage: php latte-lint <path>\n";
+	exit(1);
+}
+
+$ok = scanPath($argv[1]);
+exit($ok ? 0 : 1);
+
+
+function scanPath(string $path): bool
+{
+	echo "Scanning $path\n";
+
+	$it = new RecursiveDirectoryIterator($path);
+	$it = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::LEAVES_ONLY);
+	$it = new RegexIterator($it, '~\.latte$~');
+
+	$counter = 0;
+	$success = true;
+	$latte = createLatte();
+	foreach ($it as $file) {
+		echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
+		$success = lintLatte($latte, (string) $file) && $success;
+	}
+
+	echo str_pad('', 40), "\x0D";
+	echo "Done.\n";
+	return $success;
+}
+
+
+function createLatte(): Latte\Engine
+{
+	$latte = new Latte\Engine;
+	$latte->setLoader(new Latte\Loaders\StringLoader);
+
+	if (class_exists(Nette\Bridges\CacheLatte\CacheMacro::class)) {
+		$latte->getCompiler()->addMacro('cache', new Nette\Bridges\CacheLatte\CacheMacro);
+	}
+	if (class_exists(Nette\Bridges\ApplicationLatte\UIMacros::class)) {
+		Nette\Bridges\ApplicationLatte\UIMacros::install($latte->getCompiler());
+	}
+	if (class_exists(Nette\Bridges\FormsLatte\FormMacros::class)) {
+		Nette\Bridges\FormsLatte\FormMacros::install($latte->getCompiler());
+	}
+
+	return $latte;
+}
+
+
+function lintLatte(Latte\Engine $latte, string $file): bool
+{
+	try {
+		$code = $latte->compile(file_get_contents($file));
+
+	} catch (Latte\CompileException $e) {
+		fwrite(STDERR, "[ERROR]    $file    {$e->getMessage()}\n");
+		return false;
+	}
+
+	if ($error = lintPHP($code)) {
+		fwrite(STDERR, "[ERROR]    $file    $error\n");
+		return false;
+	}
+
+	return true;
+}
+
+
+function lintPHP(string $code): ?string
+{
+	$php = defined('PHP_BINARY') ? PHP_BINARY : 'php';
+	$stdin = tmpfile();
+	fwrite($stdin, $code);
+	fseek($stdin, 0);
+	$process = proc_open(
+		$php . ' -l -d display_errors=1',
+		[$stdin, ['pipe', 'w'], ['pipe', 'w']],
+		$pipes,
+		null,
+		null,
+		['bypass_shell' => true],
+	);
+	if (!is_resource($process)) {
+		return 'Unable to lint PHP code';
+	}
+	$error = stream_get_contents($pipes[1]);
+	if (proc_close($process)) {
+		return strip_tags(explode("\n", $error)[1]);
+	}
+	return null;
+}
