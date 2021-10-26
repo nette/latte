@@ -101,3 +101,11 @@ Assert::exception(function () use ($latte) {
 Assert::noError(function () use ($latte) {
 	$latte->compile('{php function () { yield; }}');
 });
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=#comment}');
+}, Latte\CompileException::class, 'Forbidden # inside macro');
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=//comment}');
+}, Latte\CompileException::class, 'Forbidden // inside macro');
