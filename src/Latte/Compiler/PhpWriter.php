@@ -209,8 +209,11 @@ class PhpWriter
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			$tokenValue = $tokens->currentValue();
-			if ($tokens->isCurrent('?>')) {
-				throw new CompileException('Forbidden ?> inside tag');
+			if ($tokens->isCurrent('?>') || $tokens->isCurrent('#')) {
+				throw new CompileException("Forbidden $tokenValue inside tag");
+
+			} elseif ($tokens->isCurrent('/') && $tokens->isNext('/')) {
+				throw new CompileException('Forbidden // inside tag');
 
 			} elseif ($tokens->isCurrent('(', '[', '{')) {
 				static $counterpart = ['(' => ')', '[' => ']', '{' => '}'];

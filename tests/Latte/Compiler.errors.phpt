@@ -124,6 +124,14 @@ Assert::error(function () use ($latte) {
 	$latte->compile('{=`whoami`}');
 }, Latte\CompileException::class, 'Backtick operator is forbidden in Latte.');
 
+Assert::error(function () use ($latte) {
+	$latte->compile('{=#comment}');
+}, Latte\CompileException::class, 'Forbidden # inside tag');
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=//comment}');
+}, Latte\CompileException::class, 'Forbidden // inside tag');
+
 Assert::exception(function () use ($latte) {
 	$latte->compile('{$ʟ_tmp}');
 }, Latte\CompileException::class, 'Forbidden variable $ʟ_tmp.');
