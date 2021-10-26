@@ -124,6 +124,14 @@ Assert::error(function () use ($latte) {
 	$latte->compile('{=`whoami`}');
 }, [E_USER_DEPRECATED, E_USER_DEPRECATED]);
 
+Assert::error(function () use ($latte) {
+	$latte->compile('{=#comment}');
+}, Latte\CompileException::class, 'Forbidden # inside tag');
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=//comment}');
+}, Latte\CompileException::class, 'Forbidden // inside tag');
+
 Assert::exception(function () use ($latte) {
 	$latte->compile('{$ʟ_tmp}');
 }, Latte\CompileException::class, 'Forbidden variable $ʟ_tmp.');
