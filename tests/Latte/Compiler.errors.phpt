@@ -121,3 +121,11 @@ Assert::exception(function () use ($latte) {
 Assert::error(function () use ($latte) {
 	$latte->compile('{=`whoami`}');
 }, [E_USER_DEPRECATED, E_USER_DEPRECATED]);
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=#comment}');
+}, Latte\CompileException::class, 'Forbidden # inside macro');
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=//comment}');
+}, Latte\CompileException::class, 'Forbidden // inside macro');

@@ -196,8 +196,11 @@ class PhpWriter
 		$pos = $tokens->position;
 		while ($tokens->nextToken()) {
 			$tokenValue = $tokens->currentValue();
-			if ($tokens->isCurrent('?>')) {
-				throw new CompileException('Forbidden ?> inside macro');
+			if ($tokens->isCurrent('?>') || $tokens->isCurrent('#')) {
+				throw new CompileException("Forbidden $tokenValue inside macro");
+
+			} elseif ($tokens->isCurrent('/') && $tokens->isNext('/')) {
+				throw new CompileException('Forbidden // inside macro');
 
 			} elseif ($tokens->isCurrent('(', '[', '{')) {
 				static $counterpart = ['(' => ')', '[' => ']', '{' => '}'];
