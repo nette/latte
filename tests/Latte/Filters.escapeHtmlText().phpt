@@ -38,3 +38,4 @@ Assert::same("foo \u{FFFD}\" bar", Filters::escapeHtmlText("foo \xE3\x80\x22 bar
 
 // JS
 Assert::same('hello {<!-- -->{ worlds }}', Filters::escapeHtmlText('hello {{ worlds }}'));
+Assert::same('hello &#123; worlds }', Filters::escapeHtmlText('hello { worlds }'));
