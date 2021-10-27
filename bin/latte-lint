@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 declare(strict_types=1);
@@ -32,7 +33,7 @@ Latte linter
 ';
 
 if ($argc < 2) {
-	echo "Usage: php latte-lint <path>\n";
+	echo "Usage: latte-lint <path>\n";
 	exit(1);
 }
 
