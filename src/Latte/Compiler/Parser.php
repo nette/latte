@@ -94,6 +94,11 @@ class Parser
 			$input = substr($input, 3);
 		}
 
+		if (preg_match('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]#', $input, $m, PREG_OFFSET_CAPTURE)) {
+			trigger_error('Template contains control character \x' . dechex(ord($m[0][0])) . ' on line ' . (substr_count($input, "\n", 0, $m[0][1]) + 1) . '.', E_USER_WARNING);
+			$input = preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]#', '', $input);
+		}
+
 		$this->input = $input = str_replace("\r\n", "\n", $input);
 		$this->offset = 0;
 		$this->line = 1;
