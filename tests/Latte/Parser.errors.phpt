@@ -60,3 +60,10 @@ Assert::exception(function () use (&$parser) {
 	$parser->parse("\n{");
 }, Latte\CompileException::class, 'Malformed tag.');
 Assert::same(2, $parser->getLine());
+
+
+Assert::error(function () use (&$res) {
+	$parser = new Parser;
+	$res = $parser->parse("a\x00\x1F\x7Fb");
+}, E_USER_WARNING, 'Template contains control character \x0 on line 1.');
+Assert::same('ab', $res[0]->text);
