@@ -62,8 +62,8 @@ Assert::exception(function () use (&$parser) {
 Assert::same(2, $parser->getLine());
 
 
-Assert::error(function () use (&$res) {
+Assert::exception(function () use (&$parser) {
 	$parser = new Parser;
-	$res = $parser->parse("a\x00\x1F\x7Fb");
-}, E_USER_WARNING, 'Template contains control character \x0 on line 1.');
-Assert::same('ab', $res[0]->text);
+	$parser->parse("a\x00\x1F\x7Fb");
+}, Latte\CompileException::class, 'Template contains control character \x0');
+Assert::same(1, $parser->getLine());
