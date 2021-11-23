@@ -94,11 +94,6 @@ class Parser
 			$input = substr($input, 3);
 		}
 
-		if (preg_match('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]#', $input, $m, PREG_OFFSET_CAPTURE)) {
-			trigger_error('Template contains control character \x' . dechex(ord($m[0][0])) . ' on line ' . (substr_count($input, "\n", 0, $m[0][1]) + 1) . '.', E_USER_WARNING);
-			$input = preg_replace('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]#', '', $input);
-		}
-
 		$this->input = $input = str_replace("\r\n", "\n", $input);
 		$this->offset = 0;
 		$this->line = 1;
@@ -108,6 +103,10 @@ class Parser
 			preg_match('#(?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})*+#A', $input, $m);
 			$this->line += substr_count($m[0], "\n");
 			throw new CompileException('Template is not valid UTF-8 stream.');
+
+		} elseif (preg_match('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]#', $input, $m, PREG_OFFSET_CAPTURE)) {
+			$this->line += substr_count($input, "\n", 0, $m[0][1]);
+			throw new CompileException('Template contains control character \x' . dechex(ord($m[0][0])));
 		}
 
 		$this->setSyntax($this->defaultSyntax);
