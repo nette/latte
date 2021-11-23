@@ -107,7 +107,7 @@ class Parser
 		if (!preg_match('##u', $input)) {
 			preg_match('#(?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})*+#A', $input, $m);
 			$this->line += substr_count($m[0], "\n");
-			throw new \InvalidArgumentException('Template is not valid UTF-8 stream.');
+			throw new CompileException('Template is not valid UTF-8 stream.');
 		}
 
 		$this->setSyntax($this->defaultSyntax);
