@@ -687,7 +687,7 @@ class CoreMacros extends MacroSet
 				&& $tokens->isCurrent($tokens::T_SYMBOL)
 				&& (
 					$tokens->isNext(',', '=>', '=')
-					|| !$tokens->isNext()
+					|| !$tokens->isNext(...$tokens::SIGNIFICANT)
 				)
 			) {
 				trigger_error("Inside tag {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
@@ -812,7 +812,7 @@ class CoreMacros extends MacroSet
 
 		$tokens = $node->tokenizer;
 		$params = [];
-		while ($tokens->isNext()) {
+		while ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
@@ -827,7 +827,7 @@ class CoreMacros extends MacroSet
 				substr($param, 1),
 				$default
 			);
-			if ($tokens->isNext()) {
+			if ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 				$tokens->consumeValue(',');
 			}
 		}

@@ -333,7 +333,7 @@ class BlockMacros extends MacroSet
 
 		$tokens = $node->tokenizer;
 		$params = [];
-		while ($tokens->isNext()) {
+		while ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
@@ -348,7 +348,7 @@ class BlockMacros extends MacroSet
 				substr($param, 1),
 				$default
 			);
-			if ($tokens->isNext()) {
+			if ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 				$tokens->consumeValue(',');
 			}
 		}

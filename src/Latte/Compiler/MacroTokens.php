@@ -26,6 +26,10 @@ class MacroTokens extends TokenIterator
 		T_KEYWORD = 8,
 		T_CHAR = 9;
 
+	public const
+		SIGNIFICANT = [self::T_SYMBOL, self::T_NUMBER, self::T_VARIABLE, self::T_STRING, self::T_CAST, self::T_KEYWORD, self::T_CHAR],
+		NON_SIGNIFICANT = [self::T_COMMENT, self::T_WHITESPACE];
+
 	/** @var int */
 	public $depth = 0;
 
@@ -39,7 +43,7 @@ class MacroTokens extends TokenIterator
 	public function __construct($input = [])
 	{
 		parent::__construct(is_array($input) ? $input : $this->parse($input));
-		$this->ignored = [self::T_COMMENT, self::T_WHITESPACE];
+		$this->ignored = self::NON_SIGNIFICANT;
 	}
 
 
