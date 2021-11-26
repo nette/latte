@@ -17,8 +17,8 @@ class Engine
 {
 	use Strict;
 
-	public const VERSION = '2.10.5';
-	public const VERSION_ID = 21005;
+	public const VERSION = '2.10.6';
+	public const VERSION_ID = 21006;
 
 	/** Content types */
 	public const
