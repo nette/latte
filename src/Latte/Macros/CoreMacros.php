@@ -463,7 +463,7 @@ class CoreMacros extends MacroSet
 				&& $tokens->isCurrent($tokens::T_SYMBOL)
 				&& (
 					$tokens->isNext(',', '=>', '=')
-					|| !$tokens->isNext()
+					|| !$tokens->isNext(...$tokens::SIGNIFICANT)
 				)
 			) {
 				trigger_error("Inside macro {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);

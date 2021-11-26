@@ -304,7 +304,11 @@ class PhpWriter
 		$res = new MacroTokens;
 		$inTernary = [];
 		while ($tokens->nextToken()) {
-			if ($tokens->isCurrent('?') && $tokens->isNext() && !$tokens->isNext(',', ')', ']', '|', '[')) {
+			if (
+				$tokens->isCurrent('?')
+				&& $tokens->isNext(...$tokens::SIGNIFICANT)
+				&& !$tokens->isNext(',', ')', ']', '|', '[')
+			) {
 				$inTernary[] = $tokens->depth;
 
 			} elseif ($tokens->isCurrent(':')) {
@@ -347,7 +351,7 @@ class PhpWriter
 			do {
 				if ($tokens->nextToken('?')) {
 					if ( // is it ternary operator?
-						$tokens->isNext()
+						$tokens->isNext(...$tokens::SIGNIFICANT)
 						&& (
 							!$tokens->isNext($tokens::T_CHAR)
 							|| $tokens->isNext('(', '[', '{', ':', '!', '@', '\\')
@@ -430,8 +434,8 @@ class PhpWriter
 		while ($tokens->nextToken()) {
 			$res->append(
 				$tokens->isCurrent($tokens::T_SYMBOL)
-				&& (!$tokens->isPrev() || $tokens->isPrev(',', '(', '[', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '=', 'and', 'or', 'xor', '??'))
-				&& (!$tokens->isNext() || $tokens->isNext(',', ';', ')', ']', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', 'and', 'or', 'xor', '??'))
+				&& (!$tokens->isPrev(...$tokens::SIGNIFICANT) || $tokens->isPrev(',', '(', '[', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '=', 'and', 'or', 'xor', '??'))
+				&& (!$tokens->isNext(...$tokens::SIGNIFICANT) || $tokens->isNext(',', ';', ')', ']', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', 'and', 'or', 'xor', '??'))
 				&& !preg_match('#^[A-Z_][A-Z0-9_]{2,}$#', $tokens->currentValue())
 					? "'" . $tokens->currentValue() . "'"
 					: $tokens->currentToken()
@@ -459,7 +463,7 @@ class PhpWriter
 				}
 
 				if ($depth === $tokens->depth && $tokens->nextValue('in') && ($arr[] = $tokens->nextToken('['))) {
-					while ($tokens->isNext()) {
+					while ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 						$arr[] = $tokens->nextToken();
 						if ($tokens->isCurrent(']') && $tokens->depth === $depth) {
 							$new = array_merge($tokens->parse('in_array('), $expr, $tokens->parse(', '), $arr, $tokens->parse(', true)'));
