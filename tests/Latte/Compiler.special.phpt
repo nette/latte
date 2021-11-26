@@ -33,3 +33,8 @@ Assert::match(
 	'%A%echo LR\Filters::escapeHtmlText(test(fn () => 1))%A%',
 	$latte->compile('{test(fn () => 1)}')
 );
+
+Assert::match(
+	"%A%('foo')/ **/('bar')%A%",
+	$latte->compile('{(foo)//**/**/(bar)}')
+);
