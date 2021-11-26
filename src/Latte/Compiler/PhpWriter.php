@@ -274,9 +274,7 @@ class PhpWriter
 	{
 		$res = new MacroTokens;
 		while ($tokens->nextToken()) {
-			if (!$tokens->isCurrent($tokens::T_COMMENT)) {
-				$res->append($tokens->currentToken());
-			}
+			$res->append($tokens->isCurrent($tokens::T_COMMENT) ? ' ' : $tokens->currentToken());
 		}
 		return $res;
 	}

@@ -87,10 +87,11 @@ test('special', function () {
 	Assert::same("'symbol' => \$this->var, ", formatArgs('symbol => $this -> var, '));
 	Assert::same("'symbol' => \$this->VAR, ", formatArgs('symbol => $this -> VAR, '));
 	Assert::same("'symbol' => \$this->var", formatArgs('symbol => $this -> var'));
-	Assert::same("'symbol1' => 'value'", formatArgs('symbol1 => /*value,* /symbol2=>*/value/**/'));
+	Assert::same("'symbol1' =>  'value' ", formatArgs('symbol1 => /*value,* /symbol2=>*/value/**/'));
 	Assert::same('(array)', formatArgs('(array)'));
 	Assert::same('func()[1]', formatArgs('func()[1]'));
 	Assert::same('$var = match(7) {8 => true, default => false,}', formatArgs('$var = match(7) {8 => true, default => false,}'));
+	Assert::same('a b', formatArgs('a/**/b'));
 });
 
 
