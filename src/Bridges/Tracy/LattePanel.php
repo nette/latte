@@ -32,14 +32,14 @@ class LattePanel implements Tracy\IBarPanel
 	private $name;
 
 
-	public static function initialize(Engine $latte, string $name = null, Tracy\Bar $bar = null): void
+	public static function initialize(Engine $latte, ?string $name = null, ?Tracy\Bar $bar = null): void
 	{
 		$bar = $bar ?? Tracy\Debugger::getBar();
 		$bar->addPanel(new self($latte, $name));
 	}
 
 
-	public function __construct(Engine $latte, string $name = null)
+	public function __construct(Engine $latte, ?string $name = null)
 	{
 		$this->name = $name;
 		$latte->probe = function (Template $template): void {

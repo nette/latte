@@ -20,7 +20,7 @@ use Tracy\Helpers;
  */
 class BlueScreenPanel
 {
-	public static function initialize(BlueScreen $blueScreen = null): void
+	public static function initialize(?BlueScreen $blueScreen = null): void
 	{
 		$blueScreen = $blueScreen ?? Tracy\Debugger::getBlueScreen();
 		$blueScreen->addPanel([self::class, 'renderError']);

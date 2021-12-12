@@ -109,7 +109,7 @@ class Compiler
 	 * Adds new macro with Macro flags.
 	 * @return static
 	 */
-	public function addMacro(string $name, Macro $macro, int $flags = null)
+	public function addMacro(string $name, Macro $macro, ?int $flags = null)
 	{
 		if (!preg_match('#^[a-z_=]\w*(?:[.:-]\w+)*$#iD', $name)) {
 			throw new \LogicException("Invalid tag name '$name'.");
@@ -142,7 +142,7 @@ class Compiler
 	 * Compiles tokens to PHP file
 	 * @param  Token[]  $tokens
 	 */
-	public function compile(array $tokens, string $className, string $comment = null, bool $strictMode = false): string
+	public function compile(array $tokens, string $className, ?string $comment = null, bool $strictMode = false): string
 	{
 		$code = "<?php\n\n"
 			. ($strictMode ? "declare(strict_types=1);\n\n" : '')
@@ -331,7 +331,7 @@ class Compiler
 		string $body,
 		string $arguments = '',
 		string $returns = '',
-		string $comment = null
+		?string $comment = null
 	): void {
 		$body = trim($body);
 		$this->methods[$name] = compact('body', 'arguments', 'returns', 'comment');
@@ -622,7 +622,7 @@ class Compiler
 		string $args = '',
 		string $modifiers = '',
 		bool $isRightmost = false,
-		string $nPrefix = null
+		?string $nPrefix = null
 	): MacroNode {
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -650,7 +650,7 @@ class Compiler
 		string $args = '',
 		string $modifiers = '',
 		bool $isRightmost = false,
-		string $nPrefix = null
+		?string $nPrefix = null
 	): MacroNode {
 		$node = $this->macroNode;
 
@@ -837,7 +837,7 @@ class Compiler
 	 * Expands macro and returns node & code.
 	 * @internal
 	 */
-	public function expandMacro(string $name, string $args, string $modifiers = '', string $nPrefix = null): MacroNode
+	public function expandMacro(string $name, string $args, string $modifiers = '', ?string $nPrefix = null): MacroNode
 	{
 		if (empty($this->macros[$name])) {
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')

@@ -41,7 +41,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	/**
 	 * @param  array|\Traversable|\stdClass|mixed  $iterator
 	 */
-	public function __construct($iterator, self $parent = null)
+	public function __construct($iterator, ?self $parent = null)
 	{
 		if (is_array($iterator) || $iterator instanceof \stdClass) {
 			$iterator = new \ArrayIterator($iterator);
@@ -66,7 +66,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	/**
 	 * Is the current element the first one?
 	 */
-	public function isFirst(int $width = null): bool
+	public function isFirst(?int $width = null): bool
 	{
 		return $this->counter === 1 || ($width && $this->counter !== 0 && (($this->counter - 1) % $width) === 0);
 	}
@@ -75,7 +75,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	/**
 	 * Is the current element the last one?
 	 */
-	public function isLast(int $width = null): bool
+	public function isLast(?int $width = null): bool
 	{
 		return !$this->hasNext() || ($width && ($this->counter % $width) === 0);
 	}
