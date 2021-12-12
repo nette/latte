@@ -340,7 +340,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer): string
 	{
-		[$file, ] = $node->tokenizer->fetchWordWithModifier('file');
+		[$file,] = $node->tokenizer->fetchWordWithModifier('file');
 		$mode = 'include';
 		if ($node->tokenizer->isNext('with') && !$node->tokenizer->isPrev(',')) {
 			$node->tokenizer->consumeValue('with');

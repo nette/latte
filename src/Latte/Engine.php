@@ -154,7 +154,7 @@ class Engine
 				->setPolicy($this->sandboxed ? $this->policy : null)
 				->compile($tokens, $this->getTemplateClass($name), $comment, $this->strictTypes);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException) {
 				$e = new CompileException($e instanceof SecurityViolationException ? $e->getMessage() : "Thrown exception '{$e->getMessage()}'", 0, $e);
 			}

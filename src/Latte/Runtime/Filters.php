@@ -12,6 +12,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\Engine;
 use Latte\RuntimeException;
+use Nette;
 use function is_array, is_string, count, strlen;
 
 
@@ -22,7 +23,7 @@ use function is_array, is_string, count, strlen;
 class Filters
 {
 	/** @deprecated */
-	public static $dateFormat = 'j. n. Y';
+	public static $dateFormat = "j.\u{a0}n.\u{a0}Y";
 
 	/** @internal @var bool  use XHTML syntax? */
 	public static $xhtml = false;
@@ -46,7 +47,7 @@ class Filters
 	 */
 	public static function escapeHtmlText($s): string
 	{
-		if ($s instanceof HtmlStringable || $s instanceof \Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			return $s->__toString(true);
 		}
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -165,7 +166,7 @@ class Filters
 	 */
 	public static function escapeJs($s): string
 	{
-		if ($s instanceof HtmlStringable || $s instanceof \Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			$s = $s->__toString(true);
 		}
 
