@@ -79,6 +79,7 @@ class Engine
 		foreach ($defaults->getFilters() as $name => $callback) {
 			$this->filters->add($name, $callback);
 		}
+
 		foreach ($defaults->getFunctions() as $name => $callback) {
 			$this->functions->$name = $callback;
 		}
@@ -117,6 +118,7 @@ class Engine
 		if (!class_exists($class, false)) {
 			$this->loadTemplate($name);
 		}
+
 		$this->providers['fn'] = $this->functions;
 		return new $class($this, $params, $this->filters, $this->providers, $name, $this->sandboxed ? $this->policy : null);
 	}
@@ -130,6 +132,7 @@ class Engine
 		foreach ($this->onCompile ?: [] as $cb) {
 			(Helpers::checkCallback($cb))($this);
 		}
+
 		$this->onCompile = [];
 
 		$source = $this->getLoader()->getContent($name);
@@ -149,6 +152,7 @@ class Engine
 			if (!$e instanceof CompileException) {
 				$e = new CompileException($e instanceof SecurityViolationException ? $e->getMessage() : "Thrown exception '{$e->getMessage()}'", 0, $e);
 			}
+
 			$line = isset($tokens)
 				? $this->getCompiler()->getLine()
 				: $this->getParser()->getLine();
@@ -192,6 +196,7 @@ class Engine
 				throw (new CompileException('Error in template: ' . error_get_last()['message']))
 					->setSource($code, error_get_last()['line'], "$name (compiled)");
 			}
+
 			return;
 		}
 
@@ -211,6 +216,7 @@ class Engine
 		if ($lock) {
 			flock($lock, LOCK_UN); // release shared lock so we can get exclusive
 		}
+
 		$lock = $this->acquireLock("$file.lock", LOCK_EX);
 
 		// while waiting for exclusive lock, someone might have already created the cache
@@ -220,6 +226,7 @@ class Engine
 				@unlink("$file.tmp"); // @ - file may not exist
 				throw new RuntimeException("Unable to create '$file'.");
 			}
+
 			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, true); // @ can be restricted
 			}
@@ -247,6 +254,7 @@ class Engine
 		} elseif (!@flock($handle, $mode)) { // @ is escalated to exception
 			throw new RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
 		}
+
 		return $handle;
 	}
 
@@ -283,6 +291,7 @@ class Engine
 		if ($name !== null && !preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid filter name '$name'.");
 		}
+
 		$this->filters->add($name, $callback);
 		return $this;
 	}
@@ -329,6 +338,7 @@ class Engine
 		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid function name '$name'.");
 		}
+
 		$this->functions->$name = $callback;
 		return $this;
 	}
@@ -347,6 +357,7 @@ class Engine
 				: '.';
 			throw new \LogicException("Function '$name' is not defined$hint");
 		}
+
 		return ($this->functions->$name)(...$args);
 	}
 
@@ -361,6 +372,7 @@ class Engine
 		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid provider name '$name'.");
 		}
+
 		$this->providers[$name] = $value;
 		return $this;
 	}
@@ -446,6 +458,7 @@ class Engine
 		if (!$this->parser) {
 			$this->parser = new Parser;
 		}
+
 		return $this->parser;
 	}
 
@@ -457,6 +470,7 @@ class Engine
 			Macros\CoreMacros::install($this->compiler);
 			Macros\BlockMacros::install($this->compiler);
 		}
+
 		return $this->compiler;
 	}
 
@@ -474,6 +488,7 @@ class Engine
 		if (!$this->loader) {
 			$this->loader = new Loaders\FileLoader;
 		}
+
 		return $this->loader;
 	}
 

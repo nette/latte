@@ -130,6 +130,7 @@ class BlockMacros extends MacroSet
 		if ($node->tokenizer->isNext('=')) {
 			trigger_error('The assignment in the {' . $node->name . ' ' . $tmp . '= ...} looks like an error.', E_USER_NOTICE);
 		}
+
 		$node->tokenizer->reset();
 
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
@@ -137,6 +138,7 @@ class BlockMacros extends MacroSet
 			if ($mod === 'file' || !$name || !preg_match('~#|[\w-]+$~DA', $name)) {
 				return false; // {include file}
 			}
+
 			$name = ltrim($name, '#');
 		}
 
@@ -165,6 +167,7 @@ class BlockMacros extends MacroSet
 			if (!$item) {
 				throw new CompileException("Cannot include $name block outside of any block.");
 			}
+
 			$name = $item->data->name;
 		}
 
@@ -239,6 +242,7 @@ class BlockMacros extends MacroSet
 		} else {
 			$this->extends = $writer->write('%node.word%node.args');
 		}
+
 		if (!$this->getCompiler()->isInHead()) {
 			trigger_error($node->getNotation() . ' must be placed in template head.', E_USER_WARNING);
 		}
@@ -260,6 +264,7 @@ class BlockMacros extends MacroSet
 			if ($node->modifiers === '') {
 				return '';
 			}
+
 			$node->modifiers .= '|escape';
 			$node->closingCode = $writer->write(
 				'<?php $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); ?>',
@@ -317,6 +322,7 @@ class BlockMacros extends MacroSet
 			$node->setArgs($node->args . $node->modifiers);
 			$node->modifiers = '';
 		}
+
 		$node->validate(true);
 
 		[$name, $local] = $node->tokenizer->fetchWordWithModifier('local');
@@ -339,6 +345,7 @@ class BlockMacros extends MacroSet
 			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 			}
+
 			$param = $tokens->consumeValue($tokens::T_VARIABLE);
 			$default = $tokens->nextToken('=')
 				? $tokens->joinUntilSameDepth(',')
@@ -447,6 +454,7 @@ class BlockMacros extends MacroSet
 			if (isset($node->htmlNode->macroAttrs['foreach'])) {
 				trigger_error('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.', E_USER_WARNING);
 			}
+
 			$node->attrCode = $writer->write(
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>",
 				$data->name
@@ -477,6 +485,7 @@ class BlockMacros extends MacroSet
 					$node->closingCode = $node->openingCode = '<?php ?>';
 				};
 			}
+
 			$node->attrCode = $writer->write(
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(\$ʟ_nm = %word)) . '\"' ?>",
 				$data->name
@@ -532,6 +541,7 @@ class BlockMacros extends MacroSet
 		if (isset($node->data->after)) {
 			($node->data->after)();
 		}
+
 		return $node->name === 'define'
 			? ' ' // consume next new line
 			: '';
@@ -559,6 +569,7 @@ class BlockMacros extends MacroSet
 		if (preg_match('#\$|n:#', $node->content)) {
 			$node->content = '<?php extract($this->params);' . ($params ?? 'extract($ʟ_args);') . '?>' . $node->content;
 		}
+
 		$block->code = preg_replace('#^\n+|(?<=\n)[ \t]+$#D', '', $node->content);
 		$node->content = substr_replace($node->content, $node->openingCode . "\n", strspn($node->content, "\n"), strlen($block->code));
 		$node->openingCode = '<?php ?>';
@@ -610,12 +621,14 @@ class BlockMacros extends MacroSet
 		if (!preg_match('~(#|block\s)|[\w-]+$~DA', $node->args)) {
 			return false;
 		}
+
 		$list = [];
 		while ([$name, $block] = $node->tokenizer->fetchWordWithModifier('block')) {
 			$list[] = $block || preg_match('~#|[\w-]+$~DA', $name)
 				? '$this->hasBlock(' . $writer->formatWord(ltrim($name, '#')) . ')'
 				: 'isset(' . $writer->formatArgs(new Latte\MacroTokens($name)) . ')';
 		}
+
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (' . implode(' && ', $list) . ') {';
 	}
@@ -630,6 +643,7 @@ class BlockMacros extends MacroSet
 		while (isset($methods[$lower . $counter])) {
 			$counter++;
 		}
+
 		return $name . $counter;
 	}
 

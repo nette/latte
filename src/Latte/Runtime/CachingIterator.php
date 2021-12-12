@@ -50,7 +50,6 @@ class CachingIterator extends \CachingIterator implements \Countable
 			do {
 				$iterator = $iterator->getIterator();
 			} while (!$iterator instanceof \Iterator);
-
 		} elseif ($iterator instanceof \Traversable) {
 			if (!$iterator instanceof \Iterator) {
 				$iterator = new \IteratorIterator($iterator);
@@ -227,6 +226,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 			$ret = $this->$m();
 			return $ret;
 		}
+
 		throw new \LogicException('Attempt to read undeclared property ' . static::class . "::\$$name.");
 	}
 

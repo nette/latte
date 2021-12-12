@@ -120,6 +120,7 @@ class Compiler
 		} elseif ($flags && $this->flags[$name] !== $flags) {
 			throw new \LogicException("Incompatible flags for tag '$name'.");
 		}
+
 		$this->macros[$name][] = $macro;
 		return $this;
 	}
@@ -169,6 +170,7 @@ class Compiler
 			)) {
 				$this->inHead = false;
 			}
+
 			$this->{"process$token->type"}($token);
 		}
 
@@ -176,6 +178,7 @@ class Compiler
 			if (!empty($this->htmlNode->macroAttrs)) {
 				throw new CompileException('Missing ' . self::printEndTag($this->htmlNode));
 			}
+
 			$this->htmlNode = $this->htmlNode->parentNode;
 		}
 
@@ -183,9 +186,11 @@ class Compiler
 			if ($this->macroNode->parentNode) {
 				trigger_error('Missing {/' . $this->macroNode->name . '}', E_USER_WARNING);
 			}
+
 			if (~$this->flags[$this->macroNode->name] & Macro::AUTO_CLOSE) {
 				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
 			}
+
 			$this->closeMacro($this->macroNode->name);
 		}
 
@@ -202,6 +207,7 @@ class Compiler
 		if ($prepare) {
 			$this->addMethod('prepare', $extractParams . "?>$prepare<?php", '', 'void');
 		}
+
 		if ($this->contentType !== self::CONTENT_HTML) {
 			$this->addConstant('CONTENT_TYPE', $this->contentType);
 		}
@@ -210,9 +216,11 @@ class Compiler
 		foreach ($this->constants as $name => $value) {
 			$members[] = "\tprotected const $name = " . PhpHelpers::dump($value, true) . ';';
 		}
+
 		foreach ($this->properties as $name => $value) {
 			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, true) . ';';
 		}
+
 		foreach (array_filter($this->methods) as $name => $method) {
 			$members[] = "\n\tpublic function $name($method[arguments])"
 				. ($method['returns'] ? ': ' . $method['returns'] : '')
@@ -368,6 +376,7 @@ class Compiler
 		) {
 			$this->lastAttrValue = $token->text;
 		}
+
 		$this->output .= $this->escape($token->text);
 	}
 
@@ -395,11 +404,13 @@ class Compiler
 					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
 				$token->empty = $t ? !$t->closing : true;
 			}
+
 			$node = $this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
 				if ($node->empty) {
 					throw new CompileException("Unexpected /} in tag {$token->text}");
 				}
+
 				$this->closeMacro($token->name, '', '', $isRightmost);
 			}
 		}
@@ -413,14 +424,18 @@ class Compiler
 				if (strcasecmp($this->htmlNode->name, $token->name) === 0) {
 					break;
 				}
+
 				if ($this->htmlNode->macroAttrs) {
 					throw new CompileException("Unexpected </$token->name>, expecting " . self::printEndTag($this->htmlNode));
 				}
+
 				$this->htmlNode = $this->htmlNode->parentNode;
 			}
+
 			if (!$this->htmlNode) {
 				$this->htmlNode = new HtmlNode($token->name);
 			}
+
 			$this->htmlNode->closing = true;
 			$this->htmlNode->endLine = $this->getLine();
 			$this->context = self::CONTEXT_HTML_TEXT;
@@ -436,6 +451,7 @@ class Compiler
 			$this->htmlNode->startLine = $this->getLine();
 			$this->context = self::CONTEXT_HTML_TAG;
 		}
+
 		$this->tagOffset = strlen($this->output);
 		$this->output .= $this->escape($token->text);
 	}
@@ -510,6 +526,7 @@ class Compiler
 			} elseif ($this->macroNode && $this->macroNode->htmlNode === $this->htmlNode) {
 				throw new CompileException("n:attribute must not appear inside tags; found {$token->name} inside {{$this->macroNode->name}}.");
 			}
+
 			$this->htmlNode->macroAttrs[$name] = $token->value;
 			return;
 		}
@@ -597,6 +614,7 @@ class Compiler
 			$this->output = &$node->content;
 			$this->output = '';
 		}
+
 		return $node;
 	}
 
@@ -650,6 +668,7 @@ class Compiler
 		if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
 			$this->htmlNode->attrCode .= $node->attrCode;
 		}
+
 		$this->output = &$node->saved[0];
 		$this->writeCode((string) $node->openingCode, $node->replaced, $node->saved[1]);
 		$this->output .= $node->content;
@@ -666,6 +685,7 @@ class Compiler
 			if ($isReplaced === null) {
 				$isReplaced = preg_match('#<\?php.*\secho\s#As', $code);
 			}
+
 			if ($isLeftmost && !$isReplaced) {
 				$this->output = substr($this->output, 0, $leftOfs); // alone macro without output -> remove indentation
 				if (!$isClosing && substr($code, -2) !== '?>') {
@@ -675,6 +695,7 @@ class Compiler
 				$code .= "\n"; // double newline to avoid newline eating by PHP
 			}
 		}
+
 		$this->output .= $code;
 	}
 
@@ -707,6 +728,7 @@ class Compiler
 					}
 				});
 			}
+
 			unset($attrs[$attrName]);
 		}
 
@@ -720,7 +742,6 @@ class Compiler
 				$this->output .= $innerMarker;
 			});
 		}
-
 
 		foreach (array_reverse($this->macros) as $name => $foo) {
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
@@ -756,6 +777,7 @@ class Compiler
 						}
 					});
 				}
+
 				unset($attrs[$name]);
 			}
 		}

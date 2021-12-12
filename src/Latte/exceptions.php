@@ -34,6 +34,7 @@ class CompileException extends \Exception
 			$this->message = rtrim($this->message, '.')
 				. ' in ' . str_replace(dirname($name, 2), '...', $name) . ($line ? ":$line" : '');
 		}
+
 		return $this;
 	}
 }

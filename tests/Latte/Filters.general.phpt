@@ -31,6 +31,7 @@ function types()
 	foreach (func_get_args() as $arg) {
 		$res[] = gettype($arg);
 	}
+
 	return implode(', ', $res);
 }
 

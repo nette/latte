@@ -50,9 +50,11 @@ class SnippetDriver
 			if ($type === self::TYPE_DYNAMIC && $this->nestingLevel === 0) {
 				trigger_error('Dynamic snippets are allowed only inside static snippet/snippetArea.', E_USER_WARNING);
 			}
+
 			$this->nestingLevel++;
 			return;
 		}
+
 		$obStarted = false;
 		if (
 			($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
@@ -64,6 +66,7 @@ class SnippetDriver
 		} elseif ($this->nestingLevel > 0) {
 			$this->nestingLevel++;
 		}
+
 		$this->stack[] = [$name, $obStarted];
 		$this->bridge->markRedrawn($name);
 	}
@@ -75,6 +78,7 @@ class SnippetDriver
 			$this->nestingLevel--;
 			return;
 		}
+
 		[$name, $obStarted] = array_pop($this->stack);
 		if ($this->nestingLevel > 0 && --$this->nestingLevel === 0) {
 			$content = ob_get_clean();
@@ -100,15 +104,18 @@ class SnippetDriver
 		if ($this->renderingSnippets || !$this->bridge->isSnippetMode()) {
 			return false;
 		}
+
 		$this->renderingSnippets = true;
 		$this->bridge->setSnippetMode(false);
 		foreach ($blocks as $name => $block) {
 			if (!$this->bridge->needsRedraw($name)) {
 				continue;
 			}
+
 			$function = reset($block->functions);
 			$function($params);
 		}
+
 		$this->bridge->setSnippetMode(true);
 		$this->bridge->renderChildren();
 		return true;

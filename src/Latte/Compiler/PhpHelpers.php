@@ -45,6 +45,7 @@ class PhpHelpers
 						} elseif (substr($next[1], -1) === "\n") {
 							$php .= "\n" . str_repeat("\t", $level);
 						}
+
 						$tokens->next();
 
 					} else {
@@ -56,16 +57,18 @@ class PhpHelpers
 							} else {
 								$php = rtrim($php, "\t");
 							}
+
 							$res .= $php . $token;
 						}
+
 						$php = '';
 						$lastChar = ';';
 					}
-
 				} elseif ($name === T_ELSE || $name === T_ELSEIF) {
 					if ($tokens[$n + 1] === ':' && $lastChar === '}') {
 						$php .= ';'; // semicolon needed in if(): ... if() ... else:
 					}
+
 					$lastChar = '';
 					$php .= $token;
 
@@ -80,6 +83,7 @@ class PhpHelpers
 					} elseif ($prev[0] === T_OPEN_TAG) {
 						$token = '';
 					}
+
 					$php .= $token;
 
 				} elseif ($name === T_OBJECT_OPERATOR) {
@@ -90,6 +94,7 @@ class PhpHelpers
 					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true)) {
 						$level++;
 					}
+
 					$lastChar = '';
 					$php .= $token;
 				}
@@ -109,6 +114,7 @@ class PhpHelpers
 						$token .= "\n" . str_repeat("\t", $level); // indent last line
 					}
 				}
+
 				$lastChar = $token;
 				$php .= $token;
 			}
@@ -117,6 +123,7 @@ class PhpHelpers
 		if ($php) {
 			$res .= "<?php\n" . str_repeat("\t", $openLevel) . $php;
 		}
+
 		$res = str_replace(["\t\x08", "\x08"], '', $res);
 		return $res;
 	}
@@ -135,6 +142,7 @@ class PhpHelpers
 					? ($s === '' ? "\n" : '') . "\t" . ($indexed ? '' : self::dump($k) . ' => ') . self::dump($v) . ",\n"
 					: ($s === '' ? '' : ', ') . ($indexed ? '' : self::dump($k) . ' => ') . self::dump($v);
 			}
+
 			return '[' . $s . ']';
 		} elseif ($value === null) {
 			return 'null';
@@ -166,6 +174,7 @@ class PhpHelpers
 						) {
 							break;
 						}
+
 						$n++;
 					}
 
@@ -173,11 +182,13 @@ class PhpHelpers
 					$res .= "<?php echo $export ?>";
 					continue;
 				}
+
 				$res .= $token[1];
 			} else {
 				$res .= $token;
 			}
 		}
+
 		return $res;
 	}
 }

@@ -32,6 +32,7 @@ class Helpers
 		if (!is_callable($callable, false, $text)) {
 			throw new \InvalidArgumentException("Callback '$text' is not callable.");
 		}
+
 		return $callable;
 	}
 
@@ -50,6 +51,7 @@ class Helpers
 				$best = $item;
 			}
 		}
+
 		return $best;
 	}
 
