@@ -61,6 +61,7 @@ class StringLoader implements Latte\Loader
 		if ($this->templates === null) {
 			throw new \LogicException("Missing template '$name'.");
 		}
+
 		return $name;
 	}
 

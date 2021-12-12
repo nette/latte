@@ -49,6 +49,7 @@ class SnippetDriver
 		if (!$this->renderingSnippets) {
 			return;
 		}
+
 		$obStarted = false;
 		if (
 			($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
@@ -60,6 +61,7 @@ class SnippetDriver
 		} elseif ($this->nestingLevel > 0) {
 			$this->nestingLevel++;
 		}
+
 		$this->stack[] = [$name, $obStarted];
 		$this->bridge->markRedrawn($name);
 	}
@@ -70,6 +72,7 @@ class SnippetDriver
 		if (!$this->renderingSnippets) {
 			return;
 		}
+
 		[$name, $obStarted] = array_pop($this->stack);
 		if ($this->nestingLevel > 0 && --$this->nestingLevel === 0) {
 			$content = ob_get_clean();
@@ -91,6 +94,7 @@ class SnippetDriver
 		if ($this->renderingSnippets || !$this->bridge->isSnippetMode()) {
 			return false;
 		}
+
 		$this->renderingSnippets = true;
 		$this->bridge->setSnippetMode(false);
 		foreach ($blocks as $name => $function) {
@@ -100,6 +104,7 @@ class SnippetDriver
 			$function = reset($function);
 			$function($params);
 		}
+
 		$this->bridge->setSnippetMode(true);
 		$this->bridge->renderChildren();
 		return true;

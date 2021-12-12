@@ -115,10 +115,12 @@ class Parser
 			if ($this->{'context' . $this->context[0]}() === false) {
 				break;
 			}
+
 			while ($tokenCount < count($this->output)) {
 				$this->filter($this->output[$tokenCount++]);
 			}
 		}
+
 		if ($this->context[0] === self::CONTEXT_MACRO) {
 			throw new CompileException('Malformed macro');
 		}
@@ -126,6 +128,7 @@ class Parser
 		if ($this->offset < strlen($input)) {
 			$this->addToken(Token::TEXT, substr($this->input, $this->offset));
 		}
+
 		return $this->output;
 	}
 
@@ -176,6 +179,7 @@ class Parser
 		if (empty($matches['tag'])) {
 			return $this->processMacro($matches);
 		}
+
 		// </tag
 		$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
 		$token->name = $this->lastHtmlTag;
@@ -219,6 +223,7 @@ class Parser
 					$this->setContext(self::CONTEXT_HTML_ATTRIBUTE, $matches['value']);
 				}
 			}
+
 			return true;
 
 		} else {
@@ -240,6 +245,7 @@ class Parser
 		if (empty($matches['quote'])) {
 			return $this->processMacro($matches);
 		}
+
 		// (attribute end) '"
 		$this->addToken(Token::HTML_ATTRIBUTE_END, $matches[0]);
 		$this->setContext(self::CONTEXT_HTML_TAG);
@@ -260,6 +266,7 @@ class Parser
 		if (empty($matches['htmlcomment'])) {
 			return $this->processMacro($matches);
 		}
+
 		// -->
 		$this->addToken(Token::HTML_TAG_END, $matches[0]);
 		$this->setContext(self::CONTEXT_HTML_TEXT);
@@ -320,6 +327,7 @@ class Parser
 		if (empty($matches['macro'])) {
 			return false;
 		}
+
 		// {macro} or {* *}
 		$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
 		return true;
@@ -336,6 +344,7 @@ class Parser
 			if (preg_last_error()) {
 				throw new RegexpException(null, preg_last_error());
 			}
+
 			return [];
 		}
 
@@ -343,10 +352,12 @@ class Parser
 		if ($value !== '') {
 			$this->addToken(Token::TEXT, $value);
 		}
+
 		$this->offset = $matches[0][1] + strlen($matches[0][0]);
 		foreach ($matches as $k => $v) {
 			$matches[$k] = $v[0];
 		}
+
 		return $matches;
 	}
 
@@ -363,6 +374,7 @@ class Parser
 		} else {
 			$this->setContext(self::CONTEXT_NONE);
 		}
+
 		return $this;
 	}
 
@@ -425,11 +437,14 @@ class Parser
 			if (preg_last_error()) {
 				throw new RegexpException(null, preg_last_error());
 			}
+
 			return null;
 		}
+
 		if ($match['name'] === '') {
 			$match['name'] = $match['shortname'] ?: ($match['closing'] ? '' : '=');
 		}
+
 		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty'], (bool) $match['closing']];
 	}
 

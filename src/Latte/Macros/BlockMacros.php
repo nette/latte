@@ -122,6 +122,7 @@ class BlockMacros extends MacroSet
 			if (!$item) {
 				throw new CompileException("Cannot include $name block outside of any block.");
 			}
+
 			$name = $item->data->name;
 		}
 
@@ -204,6 +205,7 @@ class BlockMacros extends MacroSet
 		} else {
 			$this->extends = $writer->write('%node.word%node.args');
 		}
+
 		if (!$this->getCompiler()->isInHead()) {
 			trigger_error($node->getNotation() . ' must be placed in template head.', E_USER_WARNING);
 		}
@@ -346,6 +348,7 @@ class BlockMacros extends MacroSet
 					$tokens->consumeValue(',');
 				}
 			}
+
 			if ($args) {
 				$node->data->args = '[' . implode(', ', $args) . '] = $ʟ_args + [' . str_repeat('null, ', count($args)) . '];';
 			}
@@ -430,12 +433,14 @@ class BlockMacros extends MacroSet
 		if (!preg_match('~#|[\w-]+$~DA', $node->args)) {
 			return false;
 		}
+
 		$list = [];
 		while (($name = $node->tokenizer->fetchWord()) !== null) {
 			$list[] = preg_match('~#|[\w-]+$~DA', $name)
 				? '$this->blockQueue["' . ltrim($name, '#') . '"]'
 				: $writer->formatArgs(new Latte\MacroTokens($name));
 		}
+
 		return ($node->name === 'elseifset' ? '} else' : '')
 			. 'if (isset(' . implode(', ', $list) . ')) {';
 	}

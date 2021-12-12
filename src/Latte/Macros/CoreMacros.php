@@ -505,6 +505,7 @@ class CoreMacros extends MacroSet
 				$res->append($tokens->currentToken());
 			}
 		}
+
 		if ($var === null) {
 			$res->append($node->name === 'default' ? '=>null' : '=null');
 		}

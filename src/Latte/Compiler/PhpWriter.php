@@ -220,9 +220,11 @@ class PhpWriter
 				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
 		}
+
 		if ($brackets) {
 			throw new CompileException('Missing ' . array_pop($brackets));
 		}
+
 		$tokens->position = $pos;
 	}
 
@@ -251,6 +253,7 @@ class PhpWriter
 				throw new CompileException("Forbidden keyword '{$tokens->currentValue()}' inside macro.");
 			}
 		}
+
 		$tokens->position = $pos;
 	}
 
@@ -264,6 +267,7 @@ class PhpWriter
 		while ($tokens->nextToken()) {
 			$res->append($tokens->isCurrent($tokens::T_COMMENT) ? ' ' : $tokens->currentToken());
 		}
+
 		return $res;
 	}
 
@@ -285,11 +289,13 @@ class PhpWriter
 				if ($name !== $orig) {
 					trigger_error("Case mismatch on function name '$name', correct name is '$orig'.", E_USER_WARNING);
 				}
+
 				$res->append('($this->global->fn->' . $orig . ')');
 			} else {
 				$res->append($tokens->currentToken());
 			}
 		}
+
 		return $res;
 	}
 
@@ -319,12 +325,14 @@ class PhpWriter
 				$res->append(' : null');
 				array_pop($inTernary);
 			}
+
 			$res->append($tokens->currentToken());
 		}
 
 		if ($inTernary) {
 			$res->append(' : null');
 		}
+
 		return $res;
 	}
 
@@ -377,6 +385,7 @@ class PhpWriter
 						$expr->append($addBraces);
 						break;
 					}
+
 					$expr->append($tokens->currentToken());
 
 				} elseif ($tokens->nextToken('[', '(')) {
@@ -419,6 +428,7 @@ class PhpWriter
 		} else {
 			$res->prepend('array_merge(')->append($expand ? ', [])' : '])');
 		}
+
 		return $res;
 	}
 
@@ -439,6 +449,7 @@ class PhpWriter
 					: $tokens->currentToken()
 			);
 		}
+
 		return $res;
 	}
 
@@ -471,9 +482,11 @@ class PhpWriter
 						}
 					}
 				}
+
 				$tokens->position = $start;
 			}
 		}
+
 		return $tokens->reset();
 	}
 
@@ -525,12 +538,14 @@ class PhpWriter
 						if (!$this->policy->isFunctionAllowed($name)) {
 							throw new SecurityViolationException("Function $name() is not allowed.");
 						}
+
 						$static = false;
 						$expr->append('(');
 					} else { // any calling
 						$expr->prepend('$this->call(');
 						$expr->append(')(');
 					}
+
 					$expr->tokens = array_merge($expr->tokens, $this->sandboxPass($tokens)->tokens);
 
 				} elseif ($tokens->nextToken('->', '::')) { // property, method or constant
@@ -549,6 +564,7 @@ class PhpWriter
 						$expr->append('::class');
 						$static = false;
 					}
+
 					$expr->append(', ');
 
 					if ($tokens->nextToken($tokens::T_SYMBOL)) { // $obj->member or $obj::member
@@ -562,7 +578,6 @@ class PhpWriter
 						} else {
 							$expr->append($tokens->currentValue());
 						}
-
 					} elseif ($tokens->nextToken('{')) { // $obj->{...}
 						$member = array_merge([$tokens->currentToken()], $this->sandboxPass($tokens)->tokens);
 						$expr->append('(string) ');
@@ -584,7 +599,6 @@ class PhpWriter
 						$expr->append(')' . $op);
 						$expr->tokens = array_merge($expr->tokens, $member);
 					}
-
 				} elseif ($tokens->nextToken('[', '{')) { // array access
 					$static = false;
 					$expr->tokens = array_merge($expr->tokens, [$tokens->currentToken()], $this->sandboxPass($tokens)->tokens);
@@ -614,6 +628,7 @@ class PhpWriter
 				$result->append($tokens->currentToken());
 			}
 		}
+
 		return $result;
 	}
 
@@ -655,12 +670,14 @@ class PhpWriter
 				} else {
 					array_shift($result->tokens);
 				}
+
 				return $result->tokens;
 
 			} else {
 				$current->append($tokens->currentToken());
 			}
 		}
+
 		throw new CompileException('Unbalanced brackets.');
 	}
 
@@ -698,6 +715,7 @@ class PhpWriter
 					} else {
 						$res = $this->escapePass($res);
 					}
+
 					$tokens->nextToken('|');
 				} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
 					$res->prepend('LR\Filters::safeUrl(');
@@ -712,6 +730,7 @@ class PhpWriter
 					if ($this->policy && !$this->policy->isFilterAllowed($name)) {
 						throw new SecurityViolationException("Filter |$name is not allowed.");
 					}
+
 					$name = strtolower($name);
 					$res->prepend(
 						$isContent
@@ -724,9 +743,11 @@ class PhpWriter
 				throw new CompileException("Modifier name must be alphanumeric string, '{$tokens->currentValue()}' given.");
 			}
 		}
+
 		if ($inside) {
 			$res->append(')');
 		}
+
 		return $res;
 	}
 

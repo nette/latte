@@ -221,6 +221,7 @@ class Template
 			foreach ($referred->blockTypes as $nm => $type) {
 				$this->checkBlockContentType($type, $nm);
 			}
+
 			$referred->blockQueue = &$this->blockQueue;
 			$referred->blockTypes = &$this->blockTypes;
 		}

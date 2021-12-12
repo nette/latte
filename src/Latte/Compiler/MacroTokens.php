@@ -82,6 +82,7 @@ class MacroTokens extends TokenIterator
 				is_array($val) ? [$val] : $this->parse($val)
 			);
 		}
+
 		return $this;
 	}
 
@@ -96,6 +97,7 @@ class MacroTokens extends TokenIterator
 		if ($val != null) { // intentionally @
 			array_splice($this->tokens, 0, 0, is_array($val) ? [$val] : $this->parse($val));
 		}
+
 		return $this;
 	}
 
@@ -124,6 +126,7 @@ class MacroTokens extends TokenIterator
 			&& (($dot = $this->nextValue('.')) || $this->isPrev('.'))) {
 			$words[0] .= $space . $dot . $this->joinUntil(',');
 		}
+
 		$this->nextToken(',');
 		$this->nextAll(self::T_WHITESPACE, self::T_COMMENT);
 		return $words === [''] ? [] : $words;
