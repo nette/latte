@@ -72,7 +72,7 @@ class MacroTokens extends TokenIterator
 	 * @param  string|array{string, int, int}  $val
 	 * @return static
 	 */
-	public function append($val, int $position = null)
+	public function append($val, ?int $position = null)
 	{
 		if ($val != null) { // intentionally @
 			array_splice(

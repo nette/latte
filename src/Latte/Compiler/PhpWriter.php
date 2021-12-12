@@ -33,7 +33,7 @@ class PhpWriter
 	private $functions = [];
 
 
-	public static function using(MacroNode $node, Compiler $compiler = null): self
+	public static function using(MacroNode $node, ?Compiler $compiler = null): self
 	{
 		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;
@@ -46,7 +46,7 @@ class PhpWriter
 	/**
 	 * @param  array{string, mixed}|null  $context
 	 */
-	public function __construct(MacroTokens $tokens, string $modifiers = null, array $context = null)
+	public function __construct(MacroTokens $tokens, ?string $modifiers = null, ?array $context = null)
 	{
 		$this->tokens = $tokens;
 		$this->modifiers = $modifiers;
@@ -138,7 +138,7 @@ class PhpWriter
 	/**
 	 * Formats macro arguments to PHP code. (It advances tokenizer to the end as a side effect.)
 	 */
-	public function formatArgs(MacroTokens $tokens = null): string
+	public function formatArgs(?MacroTokens $tokens = null): string
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->quotingPass($tokens);
@@ -150,7 +150,7 @@ class PhpWriter
 	/**
 	 * Formats macro arguments to PHP array. (It advances tokenizer to the end as a side effect.)
 	 */
-	public function formatArray(MacroTokens $tokens = null): string
+	public function formatArray(?MacroTokens $tokens = null): string
 	{
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->expandCastPass($tokens);
@@ -174,7 +174,7 @@ class PhpWriter
 	/**
 	 * Preprocessor for tokens. (It advances tokenizer to the end as a side effect.)
 	 */
-	public function preprocess(MacroTokens $tokens = null): MacroTokens
+	public function preprocess(?MacroTokens $tokens = null): MacroTokens
 	{
 		$tokens = $tokens ?? $this->tokens;
 		$this->validateTokens($tokens);

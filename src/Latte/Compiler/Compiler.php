@@ -103,7 +103,7 @@ class Compiler
 	 * Adds new macro with Macro flags.
 	 * @return static
 	 */
-	public function addMacro(string $name, Macro $macro, int $flags = null)
+	public function addMacro(string $name, Macro $macro, ?int $flags = null)
 	{
 		if (!isset($this->flags[$name])) {
 			$this->flags[$name] = $flags ?: Macro::DEFAULT_FLAGS;
@@ -565,7 +565,7 @@ class Compiler
 		string $args = '',
 		string $modifiers = '',
 		bool $isRightmost = false,
-		string $nPrefix = null
+		?string $nPrefix = null
 	): MacroNode {
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -593,7 +593,7 @@ class Compiler
 		string $args = '',
 		string $modifiers = '',
 		bool $isRightmost = false,
-		string $nPrefix = null
+		?string $nPrefix = null
 	): MacroNode {
 		$node = $this->macroNode;
 
@@ -780,7 +780,7 @@ class Compiler
 	 * Expands macro and returns node & code.
 	 * @internal
 	 */
-	public function expandMacro(string $name, string $args, string $modifiers = '', string $nPrefix = null): MacroNode
+	public function expandMacro(string $name, string $args, string $modifiers = '', ?string $nPrefix = null): MacroNode
 	{
 		if (empty($this->macros[$name])) {
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')

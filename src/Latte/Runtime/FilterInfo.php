@@ -23,7 +23,7 @@ class FilterInfo
 	public $contentType;
 
 
-	public function __construct(string $contentType = null)
+	public function __construct(?string $contentType = null)
 	{
 		$this->contentType = $contentType;
 	}

@@ -154,7 +154,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	public function render(string $block = null): void
+	public function render(?string $block = null): void
 	{
 		$this->prepare();
 
