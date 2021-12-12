@@ -90,7 +90,7 @@ class Engine
 	 * Renders template to output.
 	 * @param  object|mixed[]  $params
 	 */
-	public function render(string $name, $params = [], string $block = null): void
+	public function render(string $name, $params = [], ?string $block = null): void
 	{
 		$this->createTemplate($name, $this->processParams($params))
 			->render($block);
@@ -101,7 +101,7 @@ class Engine
 	 * Renders template to string.
 	 * @param  object|mixed[]  $params
 	 */
-	public function renderToString(string $name, $params = [], string $block = null): string
+	public function renderToString(string $name, $params = [], ?string $block = null): string
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
 		return $template->capture(function () use ($template, $block) { $template->render($block); });

@@ -548,7 +548,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function addBlock(MacroNode $node, string $layer = null): Block
+	private function addBlock(MacroNode $node, ?string $layer = null): Block
 	{
 		$data = $node->data;
 		if ($layer === Template::LAYER_SNIPPET
@@ -564,7 +564,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function extractMethod(MacroNode $node, Block $block, string $params = null): void
+	private function extractMethod(MacroNode $node, Block $block, ?string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
 			$node->content = '<?php extract($this->params);' . ($params ?? 'extract($ʟ_args);') . '?>' . $node->content;

@@ -21,7 +21,7 @@ class Blueprint
 {
 	use Latte\Strict;
 
-	public function printClass(Template $template, string $name = null): void
+	public function printClass(Template $template, ?string $name = null): void
 	{
 		if (!class_exists(Php\ClassType::class)) {
 			throw new \LogicException('Nette PhpGenerator is required to print template, install package `nette/php-generator`.');
@@ -76,7 +76,7 @@ class Blueprint
 	/**
 	 * @param  mixed[]  $props
 	 */
-	public function addProperties(Php\ClassType $class, array $props, bool $native = null): void
+	public function addProperties(Php\ClassType $class, array $props, ?bool $native = null): void
 	{
 		$printer = new Php\Printer;
 		$native = $native ?? (PHP_VERSION_ID >= 70400);
@@ -130,7 +130,7 @@ class Blueprint
 	/**
 	 * @param Closure|GlobalFunction|Method  $function
 	 */
-	public function printParameters($function, Php\PhpNamespace $namespace = null): string
+	public function printParameters($function, ?Php\PhpNamespace $namespace = null): string
 	{
 		$params = [];
 		$list = $function->getParameters();

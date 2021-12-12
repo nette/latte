@@ -23,7 +23,7 @@ class FileLoader implements Latte\Loader
 	protected $baseDir;
 
 
-	public function __construct(string $baseDir = null)
+	public function __construct(?string $baseDir = null)
 	{
 		$this->baseDir = $baseDir ? $this->normalizePath("$baseDir/") : null;
 	}

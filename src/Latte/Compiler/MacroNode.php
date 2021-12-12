@@ -91,9 +91,9 @@ class MacroNode
 		string $name,
 		string $args = '',
 		string $modifiers = '',
-		self $parentNode = null,
-		HtmlNode $htmlNode = null,
-		string $prefix = null
+		?self $parentNode = null,
+		?HtmlNode $htmlNode = null,
+		?string $prefix = null
 	) {
 		$this->macro = $macro;
 		$this->name = $name;
@@ -124,7 +124,7 @@ class MacroNode
 	/**
 	 * @param  string[]  $names
 	 */
-	public function closest(array $names, callable $condition = null): ?self
+	public function closest(array $names, ?callable $condition = null): ?self
 	{
 		$node = $this->parentNode;
 		while ($node && (

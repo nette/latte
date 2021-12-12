@@ -39,7 +39,7 @@ class MacroSet implements Latte\Macro
 	 * @param  string|callable|null  $end
 	 * @param  string|callable|null  $attr
 	 */
-	public function addMacro(string $name, $begin, $end = null, $attr = null, int $flags = null): self
+	public function addMacro(string $name, $begin, $end = null, $attr = null, ?int $flags = null): self
 	{
 		if (!$begin && !$end && !$attr) {
 			throw new \InvalidArgumentException("At least one argument must be specified for tag '$name'.");

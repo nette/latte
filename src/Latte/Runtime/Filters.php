@@ -350,7 +350,7 @@ class Filters
 	/**
 	 * Output buffering handler for spacelessHtml.
 	 */
-	public static function spacelessHtmlHandler(string $s, int $phase = null): string
+	public static function spacelessHtmlHandler(string $s, ?int $phase = null): string
 	{
 		static $strip;
 		$left = $right = '';
@@ -432,7 +432,7 @@ class Filters
 	 * Date/time formatting.
 	 * @param  string|int|\DateTimeInterface|\DateInterval  $time
 	 */
-	public static function date($time, string $format = null): ?string
+	public static function date($time, ?string $format = null): ?string
 	{
 		if ($time == null) { // intentionally ==
 			return null;
@@ -507,7 +507,7 @@ class Filters
 	 * The data: URI generator.
 	 * @return string plain text
 	 */
-	public static function dataStream(string $data, string $type = null): string
+	public static function dataStream(string $data, ?string $type = null): string
 	{
 		if ($type === null) {
 			$type = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $data);
@@ -529,7 +529,7 @@ class Filters
 	/**
 	 * Returns a part of string.
 	 */
-	public static function substring($s, int $start, int $length = null): string
+	public static function substring($s, int $start, ?int $length = null): string
 	{
 		$s = (string) $s;
 		if ($length === null) {
