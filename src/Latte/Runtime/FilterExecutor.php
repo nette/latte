@@ -11,6 +11,7 @@ namespace Latte\Runtime;
 
 use Latte\Engine;
 use Latte\Helpers;
+use Nette\Utils\Strings;
 
 
 /**
@@ -57,7 +58,7 @@ class FilterExecutor
 		'trim' => [[Filters::class, 'trim'], true],
 		'truncate' => [[Filters::class, 'truncate'], false],
 		'upper' => [[Filters::class, 'upper'], false],
-		'webalize' => [[\Nette\Utils\Strings::class, 'webalize'], false],
+		'webalize' => [[Strings::class, 'webalize'], false],
 	];
 
 
