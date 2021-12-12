@@ -179,6 +179,7 @@ class Template
 			while (ob_get_level() > $level) {
 				ob_end_clean();
 			}
+
 			throw $e;
 		}
 	}
@@ -243,6 +244,7 @@ class Template
 			foreach ($referred->blocks[self::LAYER_TOP] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
+
 			$referred->blocks[self::LAYER_TOP] = &$this->blocks[self::LAYER_TOP];
 
 			$this->blocks[self::LAYER_SNIPPET] += $referred->blocks[self::LAYER_SNIPPET];

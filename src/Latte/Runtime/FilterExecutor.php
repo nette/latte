@@ -40,6 +40,7 @@ class FilterExecutor
 			$this->_static[$name] = [$callback, null];
 			unset($this->$name);
 		}
+
 		return $this;
 	}
 
@@ -72,6 +73,7 @@ class FilterExecutor
 						$args[1] = $args[1]->__toString();
 						$info->contentType = Engine::CONTENT_HTML;
 					}
+
 					$res = $callback(...$args);
 					return $info->contentType === Engine::CONTENT_HTML
 						? new Html($res)
@@ -93,6 +95,7 @@ class FilterExecutor
 					return ($this->$name)(...func_get_args());
 				}
 			}
+
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name))
 				? ", did you mean '$t'?"
 				: '.';
@@ -121,21 +124,25 @@ class FilterExecutor
 		if ($info->contentType === Engine::CONTENT_HTML && $args[0] instanceof HtmlStringable) {
 			$args[0] = $args[0]->__toString();
 		}
+
 		if ($aware) { // FilterInfo aware filter
 			array_unshift($args, $info);
 			return $callback(...$args);
 		}
+
 		// classic filter
 		if ($info->contentType !== Engine::CONTENT_TEXT) {
 			throw new Latte\RuntimeException("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
 				. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'));
 		}
+
 		$res = ($this->$name)(...$args);
 		if ($res instanceof HtmlStringable) {
 			trigger_error("Filter |$name should be changed to content-aware filter.");
 			$info->contentType = Engine::CONTENT_HTML;
 			$res = $res->__toString();
 		}
+
 		return $res;
 	}
 

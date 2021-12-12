@@ -44,6 +44,7 @@ class MacroSet implements Latte\Macro
 		if (!$begin && !$end && !$attr) {
 			throw new \InvalidArgumentException("At least one argument must be specified for tag '$name'.");
 		}
+
 		foreach ([$begin, $end, $attr] as $arg) {
 			if ($arg && !is_string($arg)) {
 				Latte\Helpers::checkCallback($arg);
@@ -110,6 +111,7 @@ class MacroSet implements Latte\Macro
 			} elseif (!$node->attrCode) {
 				$node->attrCode = "<?php $res ?>";
 			}
+
 			$node->context[1] = Latte\Compiler::CONTEXT_HTML_TEXT;
 
 		} elseif ($node->empty && $node->prefix) {
@@ -122,10 +124,10 @@ class MacroSet implements Latte\Macro
 			} elseif (!$node->openingCode && is_string($res) && $res !== '') {
 				$node->openingCode = "<?php $res ?>";
 			}
-
 		} elseif (!$end) {
 			return false;
 		}
+
 		return null;
 	}
 

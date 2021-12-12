@@ -133,6 +133,7 @@ class MacroNode
 		)) {
 			$node = $node->parentNode;
 		}
+
 		return $node;
 	}
 

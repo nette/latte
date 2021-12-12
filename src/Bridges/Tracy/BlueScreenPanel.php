@@ -62,6 +62,7 @@ class BlueScreenPanel
 				];
 			}
 		}
+
 		return null;
 	}
 
@@ -80,6 +81,7 @@ class BlueScreenPanel
 				'label' => 'fix it',
 			];
 		}
+
 		return null;
 	}
 }

@@ -50,6 +50,7 @@ class Filters
 		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			return $s->__toString(true);
 		}
+
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
 		$s = strtr($s, ['{{' => '{<!-- -->{', '{' => '&#123;']);
 		return $s;
@@ -68,6 +69,7 @@ class Filters
 		if (strpos($s, '`') !== false && strpbrk($s, ' <>"\'') === false) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
+
 		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', $double);
 		$s = str_replace('{', '&#123;', $s);
 		return $s;
@@ -110,10 +112,12 @@ class Filters
 		if ($s && ($s[0] === '-' || $s[0] === '>' || $s[0] === '!')) {
 			$s = ' ' . $s;
 		}
+
 		$s = str_replace('--', '- - ', $s);
 		if (substr($s, -1) === '-') {
 			$s .= ' ';
 		}
+
 		return $s;
 	}
 
@@ -356,11 +360,13 @@ class Filters
 			$left = substr($s, 0, strlen($s) - strlen($tmp));
 			$s = $tmp;
 		}
+
 		if ($phase & PHP_OUTPUT_HANDLER_FINAL) {
 			$tmp = rtrim($s);
 			$right = substr($s, strlen($tmp));
 			$s = $tmp;
 		}
+
 		return $left . self::spacelessHtml($s, $strip) . $right;
 	}
 
@@ -389,11 +395,13 @@ class Filters
 			if (preg_last_error()) {
 				throw new Latte\RegexpException(null, preg_last_error());
 			}
+
 			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 			$s = strtr($s, "\x1F\x1E\x1D\x1A", " \t\r\n");
 		} else {
 			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
 		}
+
 		return $s;
 	}
 
@@ -459,8 +467,10 @@ class Filters
 			if (PHP_VERSION_ID >= 80100) {
 				trigger_error("Function strftime() used by filter |date is deprecated since PHP 8.1, use format without % characters like 'Y-m-d'.", E_USER_DEPRECATED);
 			}
+
 			return @strftime($format, $time->format('U') + 0);
 		}
+
 		return $time->format($format);
 	}
 
@@ -477,8 +487,10 @@ class Filters
 			if (abs($bytes) < 1024 || $unit === end($units)) {
 				break;
 			}
+
 			$bytes /= 1024;
 		}
+
 		return round($bytes, $precision) . ' ' . $unit;
 	}
 
@@ -500,6 +512,7 @@ class Filters
 				return strtr($subject, array_fill_keys($search, $replace));
 			}
 		}
+
 		return str_replace($search, $replace ?? '', $subject);
 	}
 
@@ -513,6 +526,7 @@ class Filters
 		if (preg_last_error()) {
 			throw new Latte\RegexpException(null, preg_last_error());
 		}
+
 		return $res;
 	}
 
@@ -526,6 +540,7 @@ class Filters
 		if ($type === null) {
 			$type = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $data);
 		}
+
 		return 'data:' . ($type ? "$type;" : '') . 'base64,' . base64_encode($data);
 	}
 
@@ -548,9 +563,11 @@ class Filters
 		if ($length === null) {
 			$length = self::strLength($s);
 		}
+
 		if (function_exists('mb_substr')) {
 			return mb_substr($s, $start, $length, 'UTF-8'); // MB is much faster
 		}
+
 		return iconv_substr($s, $start, $length, 'UTF-8');
 	}
 
@@ -574,6 +591,7 @@ class Filters
 				return self::substring($s, 0, $length) . $append;
 			}
 		}
+
 		return $s;
 	}
 
@@ -657,6 +675,7 @@ class Filters
 		if (preg_last_error()) {
 			throw new Latte\RegexpException(null, preg_last_error());
 		}
+
 		return $s;
 	}
 
@@ -722,6 +741,7 @@ class Filters
 					$batch[] = $rest;
 				}
 			}
+
 			yield $batch;
 		}
 	}
@@ -751,6 +771,7 @@ class Filters
 		if ($min > $max) {
 			throw new \InvalidArgumentException("Minimum ($min) is not less than maximum ($max).");
 		}
+
 		return min(max($value, $min), $max);
 	}
 
@@ -862,6 +883,7 @@ class Filters
 		if (is_string($values)) {
 			$values = preg_split('//u', $values, -1, PREG_SPLIT_NO_EMPTY);
 		}
+
 		return $values
 			? $values[array_rand($values, 1)]
 			: null;
@@ -888,6 +910,7 @@ class Filters
 				} else {
 					$s .= ' ' . $key;
 				}
+
 				continue;
 
 			} elseif (is_array($value)) {
@@ -900,6 +923,7 @@ class Filters
 							: (is_string($k) ? $k . ':' . $v : $v);
 					}
 				}
+
 				if ($tmp === null) {
 					continue;
 				}
@@ -920,6 +944,7 @@ class Filters
 				. (strpos($value, '`') !== false && strpbrk($value, ' <>"\'') === false ? ' ' : '')
 				. $q;
 		}
+
 		return $s;
 	}
 

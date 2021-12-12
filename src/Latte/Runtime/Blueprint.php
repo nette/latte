@@ -61,6 +61,7 @@ class Blueprint
 			if (Latte\Helpers::startsWith($name, 'ʟ_') || $name === '_l' || $name === '_g') {
 				continue;
 			}
+
 			$type = Php\Type::getType($value) ?: 'mixed';
 			$res .= "{varType $type $$name}\n";
 		}
@@ -111,14 +112,17 @@ class Blueprint
 		if ($type === null) {
 			return '';
 		}
+
 		if ($namespace) {
 			$type = $namespace->unresolveName($type);
 		}
+
 		if ($nullable && strcasecmp($type, 'mixed')) {
 			$type = strpos($type, '|') !== false
 				? $type . '|null'
 				: '?' . $type;
 		}
+
 		return $type;
 	}
 
@@ -138,6 +142,7 @@ class Blueprint
 				. '$' . $param->getName()
 				. ($param->hasDefaultValue() && !$variadic ? ' = ' . var_export($param->getDefaultValue(), true) : '');
 		}
+
 		return '(' . implode(', ', $params) . ')';
 	}
 

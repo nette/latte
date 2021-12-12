@@ -153,11 +153,13 @@ class SecurityPolicy implements Latte\Policy
 		if (isset($res)) {
 			return $res;
 		}
+
 		foreach ($this->methods as $c => $methods) {
 			if (is_a($class, $c, true) && (isset($methods[$method]) || isset($methods['*']))) {
 				return $res = true;
 			}
 		}
+
 		return $res = false;
 	}
 
@@ -170,11 +172,13 @@ class SecurityPolicy implements Latte\Policy
 		if (isset($res)) {
 			return $res;
 		}
+
 		foreach ($this->properties as $c => $properties) {
 			if (is_a($class, $c, true) && (isset($properties[$property]) || isset($properties['*']))) {
 				return $res = true;
 			}
 		}
+
 		return $res = false;
 	}
 }

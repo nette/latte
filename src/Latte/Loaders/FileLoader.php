@@ -46,6 +46,7 @@ class FileLoader implements Latte\Loader
 				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
 			}
 		}
+
 		return file_get_contents($file);
 	}
 
@@ -65,6 +66,7 @@ class FileLoader implements Latte\Loader
 		if ($this->baseDir || !preg_match('#/|\\\\|[a-z][a-z0-9+.-]*:#iA', $file)) {
 			$file = $this->normalizePath($referringFile . '/../' . $file);
 		}
+
 		return $file;
 	}
 
@@ -88,6 +90,7 @@ class FileLoader implements Latte\Loader
 				$res[] = $part;
 			}
 		}
+
 		return implode(DIRECTORY_SEPARATOR, $res);
 	}
 }

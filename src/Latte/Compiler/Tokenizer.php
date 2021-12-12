@@ -51,6 +51,7 @@ class Tokenizer
 		if (preg_last_error()) {
 			throw new RegexpException(null, preg_last_error());
 		}
+
 		$len = 0;
 		$count = count($this->types);
 		foreach ($tokens as &$match) {
@@ -63,14 +64,17 @@ class Tokenizer
 					break;
 				}
 			}
+
 			$match = [self::VALUE => $match[0], self::OFFSET => $len, self::TYPE => $type];
 			$len += strlen($match[self::VALUE]);
 		}
+
 		if ($len !== strlen($input)) {
 			[$line, $col] = $this->getCoordinates($input, $len);
 			$token = str_replace("\n", '\n', substr($input, $len, 10));
 			throw new CompileException("Unexpected '$token' on line $line, column $col.");
 		}
+
 		return $tokens;
 	}
 

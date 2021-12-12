@@ -81,11 +81,11 @@ class Tracer
 						];
 					}
 				}
-
 			} elseif ($object instanceof Engine) {
 				break;
 			}
 		}
+
 		return $res;
 	}
 
@@ -95,6 +95,7 @@ class Tracer
 		if (!is_file($compiledFile)) {
 			return 0;
 		}
+
 		$line = file($compiledFile)[$line - 1];
 		return preg_match('~/\* line (\d+) \*/~', $line, $m)
 			? (int) $m[1]
@@ -109,6 +110,7 @@ class Tracer
 				unset($params[$key]);
 			}
 		}
+
 		unset($params['_l'], $params['_g']);
 		return $params;
 	}
