@@ -25,6 +25,17 @@ class BlueScreenPanel
 		$blueScreen = $blueScreen ?? Tracy\Debugger::getBlueScreen();
 		$blueScreen->addPanel([self::class, 'renderError']);
 		$blueScreen->addAction([self::class, 'renderUnknownMacro']);
+		if (
+			version_compare(Tracy\Debugger::VERSION, '2.9.0', '>=')
+			&& version_compare(Tracy\Debugger::VERSION, '3.0', '<')
+		) {
+			Tracy\Debugger::addSourceMapper([self::class, 'mapLatteSourceCode']);
+			$blueScreen->addFileGenerator(function (string $file) {
+				return substr($file, -6) === '.latte'
+					? "{block content}\n\$END\$"
+					: null;
+			});
+		}
 	}
 
 
@@ -45,22 +56,19 @@ class BlueScreenPanel
 					. '</div></pre>',
 			];
 
-		} elseif ($e && strpos($file = $e->getFile(), '.latte--')) {
-			$lines = file($file);
-			if (
-				preg_match('#/\*\* source: (\S+\.latte)#', $lines[4], $m)
-				&& @is_file($m[1]) // @ - may trigger error
-			) {
-				$templateFile = $m[1];
-				$templateLine = $e->getLine() && preg_match('#/\* line (\d+) \*/#', $lines[$e->getLine() - 1], $m) ? (int) $m[1] : 0;
-				return [
-					'tab' => 'Template',
-					'panel' => '<p><b>File:</b> ' . Helpers::editorLink($templateFile, $templateLine) . '</p>'
-						. ($templateLine === null
-							? ''
-							: BlueScreen::highlightFile($templateFile, $templateLine)),
-				];
-			}
+		} elseif (
+			$e
+			&& ($file = $e->getFile())
+			&& (version_compare(Tracy\Debugger::VERSION, '2.9.0', '<'))
+			&& ($mapped = self::mapLatteSourceCode($file, $e->getLine()))
+		) {
+			return [
+				'tab' => 'Template',
+				'panel' => '<p><b>File:</b> ' . Helpers::editorLink($mapped['file'], $mapped['line']) . '</p>'
+					. ($mapped['line']
+						? BlueScreen::highlightFile($mapped['file'], $mapped['line'])
+						: ''),
+			];
 		}
 
 		return null;
@@ -83,5 +91,26 @@ class BlueScreenPanel
 		}
 
 		return null;
+	}
+
+
+	/** @return array{file: string, line: int, label: string, active: bool} */
+	public static function mapLatteSourceCode(string $file, int $line): ?array
+	{
+		if (!strpos($file, '.latte--')) {
+			return null;
+		}
+
+		$lines = file($file);
+		if (
+			!preg_match('#^/\*\* source: (\S+\.latte)#m', implode('', array_slice($lines, 0, 10)), $m)
+			|| !@is_file($m[1]) // @ - may trigger error
+		) {
+			return null;
+		}
+
+		$file = $m[1];
+		$line = $line && preg_match('#/\* line (\d+) \*/#', $lines[$line - 1], $m) ? (int) $m[1] : 0;
+		return ['file' => $file, 'line' => $line, 'label' => 'Latte', 'active' => true];
 	}
 }
