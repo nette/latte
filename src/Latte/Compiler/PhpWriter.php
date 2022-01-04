@@ -223,6 +223,14 @@ class PhpWriter
 				}
 
 			} elseif (
+				$this->policy
+				&& $tokens->isCurrent($tokens::T_STRING)
+				&& $tokenValue[0] === '"'
+				&& (strpos($tokenValue, '{$') !== false || strpos($tokenValue, '${') !== false)
+			) {
+				throw new CompileException('Forbidden complex expressions in strings.');
+
+			} elseif (
 				Helpers::startsWith($tokenValue, '$ʟ_')
 				|| ($this->policy && $tokens->isCurrent('$this'))
 			) {
