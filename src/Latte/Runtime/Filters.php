@@ -11,6 +11,7 @@ namespace Latte\Runtime;
 
 use Latte;
 use Latte\Engine;
+use Nette;
 
 
 /**
@@ -44,7 +45,7 @@ class Filters
 	 */
 	public static function escapeHtmlText($s): string
 	{
-		if ($s instanceof HtmlStringable || $s instanceof \Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			return $s->__toString(true);
 		}
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -163,7 +164,7 @@ class Filters
 	 */
 	public static function escapeJs($s): string
 	{
-		if ($s instanceof HtmlStringable || $s instanceof \Nette\Utils\IHtmlString) {
+		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			$s = $s->__toString(true);
 		}
 

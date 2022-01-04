@@ -19,7 +19,7 @@ CoreMacros::install($compiler);
 
 function error()
 {
-	throw new \Exception;
+	throw new Exception;
 }
 
 
