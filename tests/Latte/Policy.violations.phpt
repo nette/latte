@@ -116,3 +116,15 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('{do new stdClass}');
 }, Latte\CompileException::class, "Forbidden keyword 'new' inside macro.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{="{$var}"}');
+}, Latte\CompileException::class, 'Forbidden complex expressions in strings.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{="${var}"}');
+}, Latte\CompileException::class, 'Forbidden complex expressions in strings.');
+
+Assert::noError(function () use ($latte) {
+	$latte->compile('{=\'${var}\'}');
+});

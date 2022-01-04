@@ -216,6 +216,14 @@ class PhpWriter
 					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
 				}
 
+			} elseif (
+				$this->policy
+				&& $tokens->isCurrent($tokens::T_STRING)
+				&& $tokenValue[0] === '"'
+				&& (strpos($tokenValue, '{$') !== false || strpos($tokenValue, '${') !== false)
+			) {
+				throw new CompileException('Forbidden complex expressions in strings.');
+
 			} elseif ($this->policy && $tokens->isCurrent('$this')) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
