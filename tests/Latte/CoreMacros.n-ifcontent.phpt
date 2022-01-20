@@ -51,6 +51,19 @@ Assert::match(
 );
 
 
+Assert::match(
+	'<div>1</div>',
+	$latte->renderToString('<div n:foreach="[1,2] as $n" n:ifcontent>{$n}{breakIf true}</div>')
+);
+
+
+Assert::match(
+	'<div>1</div>
+<div>2</div>',
+	$latte->renderToString('<div n:foreach="[1,2] as $n" n:ifcontent>{$n}{continueIf true}</div>')
+);
+
+
 Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:ifcontent=x></div>');
 }, Latte\CompileException::class, 'Arguments are not allowed in n:ifcontent');
@@ -70,18 +83,24 @@ Assert::match(
 	<<<'XX'
 %A%
 		ob_start(function () {});
-		echo '<div class="bar" ';
-		if (isset($id)) /* line 1 */ {
-			echo 'id="content"';
-		}
-		echo '>';
-		ob_start();
-		$ʟ_ifc = ob_get_flush();
-		echo '</div>';
-		if (rtrim($ʟ_ifc) === "") {
-			ob_end_clean();
-		} else {
-			echo ob_get_clean();
+		try {
+			echo '<div class="bar" ';
+			if (isset($id)) /* line 1 */ {
+				echo 'id="content"';
+			}
+			echo '>';
+			ob_start();
+			try {
+			} finally {
+				$ʟ_ifc[1] = rtrim(ob_get_flush()) === '';
+			}
+			echo '</div>';
+		} finally {
+			if ($ʟ_ifc[1] ?? null) {
+				ob_end_clean();
+			} else {
+				echo ob_get_clean();
+			}
 		}
 %A%
 XX

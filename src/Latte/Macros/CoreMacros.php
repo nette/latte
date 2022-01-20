@@ -261,11 +261,12 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer): void
 	{
-		$node->openingCode = '<?php ob_start(function () {}); ?>';
-		$node->innerContent = '<?php ob_start(); ?>'
+		$id = ++$this->idCounter;
+		$node->openingCode = '<?php ob_start(function () {}); try { ?>';
+		$node->innerContent = '<?php ob_start(); try { ?>'
 			. $node->innerContent
-			. '<?php $ʟ_ifc = ob_get_flush(); ?>';
-		$node->closingCode = '<?php if (rtrim($ʟ_ifc) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
+			. "<?php } finally { \$ʟ_ifc[$id] = rtrim(ob_get_flush()) === ''; } ?>";
+		$node->closingCode = "<?php } finally { if (\$ʟ_ifc[$id] ?? null) { ob_end_clean(); } else { echo ob_get_clean(); } } ?>";
 	}
 
 
