@@ -137,7 +137,7 @@ class CoreMacros extends MacroSet
 	{
 		$node->validate(null);
 		if ($node->data->capture = ($node->args === '')) {
-			return $writer->write('ob_start(function () {}) %node.line;');
+			return $writer->write('ob_start(function () {}) %node.line; try {');
 		}
 
 		if ($node->prefix === $node::PREFIX_TAG) {
@@ -165,16 +165,25 @@ class CoreMacros extends MacroSet
 		}
 
 		$node->validate('condition');
-		return $writer->write(
-			'if (%node.args) %node.line '
-			. (isset($node->data->else)
-				? '{ ob_end_clean(); echo ob_get_clean(); }'
-				: 'echo ob_get_clean();')
-			. ' else '
-			. (isset($node->data->else)
-				? '{ $ʟ_tmp = ob_get_clean(); ob_end_clean(); echo $ʟ_tmp; }'
-				: 'ob_end_clean();')
-		);
+
+		if (isset($node->data->else)) {
+			return $writer->write('
+					} finally {
+						$ʟ_ifB = ob_get_clean();
+					}
+				} finally {
+					$ʟ_ifA = ob_get_clean();
+				}
+				echo (%node.args) ? $ʟ_ifA : $ʟ_ifB %node.line;
+			');
+		}
+
+		return $writer->write('
+			} finally {
+				$ʟ_ifA = ob_get_clean();
+			}
+			if (%node.args) %node.line { echo $ʟ_ifA; }
+		');
 	}
 
 
@@ -196,7 +205,7 @@ class CoreMacros extends MacroSet
 
 		$parent->data->else = true;
 		if ($parent->name === 'if' && $parent->data->capture) {
-			return $writer->write('ob_start(function () {}) %node.line;');
+			return $writer->write('ob_start(function () {}) %node.line; try {');
 
 		} elseif ($parent->name === 'foreach') {
 			return $writer->write('$iterations++; } if ($iterator->isEmpty()) %node.line {');

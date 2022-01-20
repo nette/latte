@@ -59,3 +59,29 @@ Assert::matchFile(
 	__DIR__ . '/expected/CoreMacros.if2.phtml',
 	$latte->compile($template)
 );
+
+
+
+// breaking
+$template = <<<'X'
+{foreach [1, 0] as $cond}
+	{$cond}
+	{if}
+		if
+		{else}
+		else
+		{continueIf $cond}
+		breaked
+	{/if true}
+	end
+{/foreach}
+X;
+
+Assert::match(
+	'	1
+	0
+		if
+
+	end',
+	$latte->renderToString($template)
+);

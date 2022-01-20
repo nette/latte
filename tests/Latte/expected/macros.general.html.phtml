@@ -261,27 +261,41 @@ var prop2 = ';
 
 ';
 		ob_start(function () {}) /* line %d% */;
-		echo 'true';
-		if (true) /* line %d% */ echo ob_get_clean();
-		else ob_end_clean();
-		echo "\n";
-		ob_start(function () {}) /* line %d% */;
-		echo 'false';
-		if (false) /* line %d% */ echo ob_get_clean();
-		else ob_end_clean();
-		echo "\n";
-		ob_start(function () {}) /* line %d% */;
-		echo 'true';
-		ob_start(function () {}) /* line %d% */;
-		echo 'false';
-		if (true) /* line %d% */ {
-			ob_end_clean();
-			echo ob_get_clean();
-		} else {
-			$ʟ_tmp = ob_get_clean();
-			ob_end_clean();
-			echo $ʟ_tmp;
+		try {
+			echo 'true';
+
+		} finally {
+			$ʟ_ifA = ob_get_clean();
 		}
+		if (true) /* line %d% */ {
+			echo $ʟ_ifA;
+		}
+		echo "\n";
+		ob_start(function () {}) /* line %d% */;
+		try {
+			echo 'false';
+
+		} finally {
+			$ʟ_ifA = ob_get_clean();
+		}
+		if (false) /* line %d% */ {
+			echo $ʟ_ifA;
+		}
+		echo "\n";
+		ob_start(function () {}) /* line %d% */;
+		try {
+			echo 'true';
+			ob_start(function () {}) /* line %d% */;
+			try {
+				echo 'false';
+
+			} finally {
+				$ʟ_ifB = ob_get_clean();
+			}
+		} finally {
+			$ʟ_ifA = ob_get_clean();
+		}
+		echo (true) ? $ʟ_ifA : $ʟ_ifB /* line %d% */;
 		echo '
 
 

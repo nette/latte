@@ -200,7 +200,8 @@ class BlockMacros extends MacroSet
 		//trigger_error('Macro {includeblock} is deprecated, use {include 'file.latte' with blocks} or similar macro {import}.', E_USER_DEPRECATED);
 		$node->replaced = false;
 		$node->validate(true);
-		return $writer->write('
+		return $writer->write(
+			'
 			ob_start(function () {});
 			try {
 				$this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var) %node.line;
