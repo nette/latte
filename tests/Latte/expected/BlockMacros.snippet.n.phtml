@@ -46,8 +46,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			echo '	<p>Outer</p>
 ';
-		}
-		finally {
+		} finally {
 			$this->global->snippetDriver->leave();
 		}
 
@@ -64,8 +63,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			echo '	<p>Inner</p>
 ';
-		}
-		finally {
+		} finally {
 			$this->global->snippetDriver->leave();
 		}
 
@@ -80,8 +78,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 		$this->global->snippetDriver->enter("gallery", 'static');
 		try {
-		}
-		finally {
+		} finally {
 			$this->global->snippetDriver->leave();
 		}
 

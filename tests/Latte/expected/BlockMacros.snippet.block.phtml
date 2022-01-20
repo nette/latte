@@ -54,8 +54,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			echo '		dynamic
 ';
-		}
-		finally {
+		} finally {
 			$this->global->snippetDriver->leave();
 		}
 		echo '</div>
@@ -74,8 +73,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			echo '		static
 ';
-		}
-		finally {
+		} finally {
 			$this->global->snippetDriver->leave();
 		}
 
@@ -95,8 +93,7 @@ final class Template%a% extends Latte\Runtime\Template
 			$this->renderBlock('block2', get_defined_vars()) /* line %d% */;
 			echo 'end
 ';
-		}
-		finally {
+		} finally {
 			$this->global->snippetDriver->leave();
 		}
 

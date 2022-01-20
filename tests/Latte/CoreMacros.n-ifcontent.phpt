@@ -80,8 +80,7 @@ Assert::match(
 		echo '</div>';
 		if (rtrim($ʟ_ifc) === "") {
 			ob_end_clean();
-		}
-		else {
+		} else {
 			echo ob_get_clean();
 		}
 %A%

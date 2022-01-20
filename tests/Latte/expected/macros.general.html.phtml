@@ -66,8 +66,7 @@ final class Template%a% extends Latte\Runtime\Template
 <p val = ';
 		if (true) /* line %d% */ {
 			echo '"a"';
-		}
-		else /* line %d% */ {
+		} else /* line %d% */ {
 			echo '"b"';
 		}
 		echo '> </p>
@@ -103,13 +102,11 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '	';
 			echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
 			echo "\n";
-		}
-		elseif ($any) /* line %d% */ {
+		} elseif ($any) /* line %d% */ {
 			echo '	';
 			echo LR\Filters::escapeHtmlText($any) /* line %d% */;
 			echo "\n";
-		}
-		else /* line %d% */ {
+		} else /* line %d% */ {
 			echo '	none
 ';
 		}
@@ -280,8 +277,7 @@ var prop2 = ';
 		if (true) /* line %d% */ {
 			ob_end_clean();
 			echo ob_get_clean();
-		}
-		else {
+		} else {
 			$ʟ_tmp = ob_get_clean();
 			ob_end_clean();
 			echo $ʟ_tmp;
@@ -292,16 +288,13 @@ var prop2 = ';
 ';
 		$ʟ_switch = (2) /* line %d% */;
 		if (false) {
-		}
-		elseif (in_array($ʟ_switch, ['x'], true)) /* line %d% */ {
+		} elseif (in_array($ʟ_switch, ['x'], true)) /* line %d% */ {
 			echo 'x
 ';
-		}
-		elseif (in_array($ʟ_switch, [2], true)) /* line %d% */ {
+		} elseif (in_array($ʟ_switch, [2], true)) /* line %d% */ {
 			echo 'y
 ';
-		}
-		else /* line %d% */ {
+		} else /* line %d% */ {
 			echo 'z
 ';
 		}
@@ -347,8 +340,7 @@ var prop2 = ';
 				echo ' ';
 				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'html') /* line %d% */;
 				echo ' ';
-			}
-			else /* line %d% */ {
+			} else /* line %d% */ {
 				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			}
 			echo '</li>

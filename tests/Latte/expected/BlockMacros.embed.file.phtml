@@ -19,8 +19,7 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		try {
 			$this->createTemplate("embed1.latte", [], "embed")->renderToContentType('html') /* line %d% */;
-		}
-		finally {
+		} finally {
 			$this->leaveBlockLayer();
 		}
 		echo '
@@ -44,8 +43,7 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		try {
 			$this->createTemplate("embed2.latte", [], "embed")->renderToContentType('html') /* line %d% */;
-		}
-		finally {
+		} finally {
 			$this->leaveBlockLayer();
 		}
 		echo "\n";

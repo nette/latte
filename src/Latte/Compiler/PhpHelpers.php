@@ -79,7 +79,9 @@ class PhpHelpers
 				} elseif ($name === T_WHITESPACE) {
 					$prev = $tokens[$n - 1];
 					$lines = substr_count($token, "\n");
-					if ($prev === '{' || $prev === '}' || $prev === ';' || $lines) {
+					if ($prev === '}' && in_array($next[0], [T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY], true)) {
+						$token = ' ';
+					} elseif ($prev === '{' || $prev === '}' || $prev === ';' || $lines) {
 						$token = str_repeat("\n", max(1, $lines)) . str_repeat("\t", $level); // indent last line
 					} elseif ($prev[0] === T_OPEN_TAG) {
 						$token = '';
