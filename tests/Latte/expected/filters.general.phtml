@@ -92,7 +92,8 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		ob_start(function () {}) /* line %d% */;
-		echo '  <a   href="#"
+		try {
+			echo '  <a   href="#"
 > test</a
 
 >
@@ -103,8 +104,10 @@ A   A
 alert();
 </script>
 ';
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('strip', $ʟ_fi, ob_get_clean()));
+		} finally {
+			$ʟ_fi = new LR\FilterInfo('html');
+			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('strip', $ʟ_fi, ob_get_clean()));
+		}
 		echo '
 
 
@@ -145,14 +148,20 @@ Captured with modifier: ';
 <p>
 Nested blocks: ';
 		ob_start(function () {}) /* line %d% */;
-		echo ' Outer   ';
-		ob_start(function () {}) /* line %d% */;
-		echo ' Inner Block ';
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean())));
-		echo '  Block ';
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('truncate', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean()), 20));
+		try {
+			echo ' Outer   ';
+			ob_start(function () {}) /* line %d% */;
+			try {
+				echo ' Inner Block ';
+			} finally {
+				$ʟ_fi = new LR\FilterInfo('html');
+				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean())));
+			}
+			echo '  Block ';
+		} finally {
+			$ʟ_fi = new LR\FilterInfo('html');
+			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('truncate', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean()), 20));
+		}
 		echo '
 </p>
 

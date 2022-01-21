@@ -272,10 +272,10 @@ class BlockMacros extends MacroSet
 
 			$node->modifiers .= '|escape';
 			$node->closingCode = $writer->write(
-				'<?php $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); ?>',
+				'<?php } finally { $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); } ?>',
 				implode($node->context)
 			);
-			return $writer->write('ob_start(function () {}) %node.line;');
+			return $writer->write('ob_start(function () {}) %node.line; try {');
 		}
 
 		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {

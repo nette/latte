@@ -21,12 +21,15 @@
 
 ';
 		ob_start(function () {}) /* line %d% */;
-		echo '	';
-		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
-		echo "\n";
-		$var = 'blockmod' /* line %d% */;
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
+		try {
+			echo '	';
+			echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+			echo "\n";
+			$var = 'blockmod' /* line %d% */;
+		} finally {
+			$ʟ_fi = new LR\FilterInfo('html');
+			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
+		}
 		echo '
 
 ';
