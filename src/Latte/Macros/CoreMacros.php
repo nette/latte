@@ -418,7 +418,7 @@ class CoreMacros extends MacroSet
 
 		$this->checkExtraArgs($node);
 		$node->data->variable = $variable;
-		return $writer->write('ob_start(function () {}) %node.line;');
+		return $writer->write('ob_start(function () {}) %node.line; try {');
 	}
 
 
@@ -431,10 +431,13 @@ class CoreMacros extends MacroSet
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write(
-			'$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent(%raw);',
+			'} finally {
+				$ʟ_tmp = %raw;
+			}
+			$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent($ʟ_tmp);',
+			$body,
 			implode($node->context),
-			$node->data->variable,
-			$body
+			$node->data->variable
 		);
 	}
 

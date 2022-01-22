@@ -114,14 +114,18 @@ alert();
 
 ';
 		ob_start(function () {}) /* line %d% */;
-		echo '<ul>
+		try {
+			echo '<ul>
 	<li>lower: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->lower)($hello)) /* line %d% */;
-		echo '</li>
+			echo LR\Filters::escapeHtmlText(($this->filters->lower)($hello)) /* line %d% */;
+			echo '</li>
 </ul>
 ';
+		} finally {
+			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
+		}
 		$ʟ_fi = new LR\FilterInfo('html');
-		$capture = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
+		$capture = $ʟ_tmp;
 		echo '
 <p>
 Captured: ';
@@ -132,10 +136,14 @@ Captured: ';
 
 ';
 		ob_start(function () {}) /* line %d% */;
-		echo 'Hello
+		try {
+			echo 'Hello
 ';
+		} finally {
+			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
+		}
 		$ʟ_fi = new LR\FilterInfo('html');
-		$capture = $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()));
+		$capture = $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $ʟ_tmp));
 		echo '
 <p>
 Captured with modifier: ';
