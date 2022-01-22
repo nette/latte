@@ -334,17 +334,24 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->closing) {
 			if (strpos($node->content, '<?php') === false) {
-				$value = PhpHelpers::dump($node->content);
+				$tmp = $node->content;
 				$node->content = '';
-			} else {
-				$node->openingCode = '<?php ob_start(function () {}) ?>' . $node->openingCode;
-				$value = 'ob_get_clean()';
+				return $writer->write(
+					'$ʟ_fi = new LR\FilterInfo(%var);
+					echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw)) %node.line;',
+					implode($node->context),
+					PhpHelpers::dump($tmp)
+				);
 			}
 
+			$node->openingCode = '<?php ob_start(function () {}); try { ?>' . $node->openingCode;
 			return $writer->write(
-				'$ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw)) %node.line;',
-				implode($node->context),
-				$value
+				'} finally {
+					$ʟ_tmp = ob_get_clean();
+				}
+				$ʟ_fi = new LR\FilterInfo(%var);
+				echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, $ʟ_tmp)) %node.line;',
+				implode($node->context)
 			);
 
 		} elseif ($node->empty = ($node->args !== '')) {

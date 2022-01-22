@@ -30,9 +30,13 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '</li>
 	<li>Translated HTML: ';
 		ob_start(function () {});
-		echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
+		try {
+			echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
+		} finally {
+			$ʟ_tmp = ob_get_clean();
+		}
 		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, ob_get_clean())) /* line %d% */;
+		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, $ʟ_tmp)) /* line %d% */;
 		echo '</li>
 	<li>Translated HTML: ';
 		$ʟ_fi = new LR\FilterInfo('html');
