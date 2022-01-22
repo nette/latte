@@ -207,6 +207,7 @@ class CoreMacros extends MacroSet
 			return $res;
 
 		} elseif ($parent->name === 'try') {
+			$node->replaced = false;
 			$node->openingCode = $parent->data->code;
 			$parent->closingCode = '<?php } ?>';
 			return '';

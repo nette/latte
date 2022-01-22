@@ -72,7 +72,7 @@ Assert::match(
 	<<<'XX'
 top begin
 	in1 in2
-	top end
+top end
 XX
 ,
 	$latte->renderToString(
@@ -93,7 +93,6 @@ XX
 Assert::match(
 	<<<'XX'
 top begin
-
 	error
 top end
 XX
@@ -136,7 +135,6 @@ XX
 Assert::match(
 	<<<'XX'
 top begin
-
 	error
 top end
 XX

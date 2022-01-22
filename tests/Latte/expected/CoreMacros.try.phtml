@@ -7,7 +7,7 @@
 ';
 			throw new LR\RollbackException;
 			echo '	b
-	';
+';
 			echo ob_get_clean();
 		}
 		catch (\Throwable $ʟ_e) {
@@ -16,8 +16,7 @@
 			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			}
-			echo '
-	c
+			echo '	c
 ';
 		}
 %A%
