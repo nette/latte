@@ -216,9 +216,8 @@ class CoreMacros extends MacroSet
 			return $res;
 
 		} elseif ($parent->name === 'try') {
-			$node->replaced = false;
-			$node->openingCode = $parent->data->code;
-			$parent->closingCode = '<?php } ?>';
+			$node->openingCode = $parent->data->codeCatch;
+			$parent->closingCode = $parent->data->codeFinally;
 			return '';
 		}
 
@@ -299,15 +298,21 @@ class CoreMacros extends MacroSet
 		$node->replaced = false;
 		$node->validate(false);
 		for ($id = 0, $tmp = $node; $tmp = $tmp->closest(['try']); $id++);
-		$node->data->code = $writer->write('<?php echo ob_get_clean();
-			} catch (\Throwable $ʟ_e) {
-			$iterator = $ʟ_it = $ʟ_try[%0_var][0];
-			ob_end_clean();
-			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
-				($this->global->coreExceptionHandler)($ʟ_e, $this);
+		$node->data->codeCatch = '<?php
+			} catch (Throwable $ʟ_e) {
+				ob_end_clean();
+				if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+					($this->global->coreExceptionHandler)($ʟ_e, $this);
+				}
+			?>';
+		$node->data->codeFinally = $writer->write('<?php
+				ob_start();
+			} finally {
+				echo ob_get_clean();
+				$iterator = $ʟ_it = $ʟ_try[%0_var][0];
 			} ?>', $id);
 		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [$ʟ_it ?? null]; ob_start(function () {}); try %node.line { ?>', $id);
-		$node->closingCode = $node->data->code . '<?php } ?>';
+		$node->closingCode = $node->data->codeCatch . $node->data->codeFinally;
 	}
 
 
