@@ -446,9 +446,9 @@ class CoreMacros extends MacroSet
 	{
 		$node->validate(false);
 		$node->openingCode = $writer->write(in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
-			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096) %node.line; ?>"
-			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096) %node.line; ?>");
-		$node->closingCode = '<?php ob_end_flush(); ?>';
+			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
+			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096) %node.line; try { ?>");
+		$node->closingCode = '<?php } finally { ob_end_flush(); } ?>';
 	}
 
 
