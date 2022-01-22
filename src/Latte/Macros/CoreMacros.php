@@ -301,12 +301,12 @@ class CoreMacros extends MacroSet
 		for ($id = 0, $tmp = $node; $tmp = $tmp->closest(['try']); $id++);
 		$node->data->code = $writer->write('<?php echo ob_get_clean();
 			} catch (\Throwable $ʟ_e) {
-			$iterator = $ʟ_it = $ʟ_try[%0_var][1];
-			while (ob_get_level() > $ʟ_try[%0_var][0]) ob_end_clean();
+			$iterator = $ʟ_it = $ʟ_try[%0_var][0];
+			ob_end_clean();
 			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			} ?>', $id);
-		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [ob_get_level(), $ʟ_it ?? null]; ob_start(function () {}); try %node.line { ?>', $id);
+		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [$ʟ_it ?? null]; ob_start(function () {}); try %node.line { ?>', $id);
 		$node->closingCode = $node->data->code . '<?php } ?>';
 	}
 
