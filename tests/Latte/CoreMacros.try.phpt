@@ -31,7 +31,6 @@ Assert::match(
 	<<<'XX'
 top begin
 	in1 in2
-
 top end
 XX
 ,
@@ -51,7 +50,6 @@ XX
 Assert::match(
 	<<<'XX'
 top begin
-
 top end
 XX
 ,
@@ -115,7 +113,6 @@ XX
 Assert::match(
 	<<<'XX'
 top begin
-
 top end
 XX
 ,

@@ -35,9 +35,7 @@ XX
 // restoring $iterator
 Assert::match(
 	<<<'XX'
-
 	a
-
 	b
 
 is null
@@ -77,7 +75,6 @@ Assert::match(
 	<<<'XX'
 
 		test
-
 test
 XX
 ,

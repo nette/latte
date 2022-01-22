@@ -286,6 +286,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroTry(MacroNode $node, PhpWriter $writer): void
 	{
+		$node->replaced = false;
 		$node->validate(false);
 		for ($id = 0, $tmp = $node; $tmp = $tmp->closest(['try']); $id++);
 		$node->data->code = $writer->write('<?php echo ob_get_clean();
