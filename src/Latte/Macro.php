@@ -16,7 +16,6 @@ namespace Latte;
 interface Macro
 {
 	public const
-		AUTO_EMPTY = 4, // deprecated
 		AUTO_CLOSE = 64,
 		ALLOWED_IN_HEAD = 128,
 		DEFAULT_FLAGS = 0;

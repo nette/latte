@@ -415,18 +415,6 @@ class Compiler
 		if ($token->closing) {
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
-			if (!$token->empty && ($this->flags[$token->name] ?? null) & Macro::AUTO_EMPTY) {
-				$pos = $this->position;
-				while (($t = $this->tokens[++$pos] ?? null)
-					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)
-					&& ($t->type !== Token::HTML_ATTRIBUTE_BEGIN || $t->name !== Parser::N_PREFIX . $token->name));
-				$token->empty = $t ? !$t->closing : true;
-				if ($token->empty) {
-					$tmp = substr($token->text, 0, -1) . ' /}';
-					trigger_error("Auto-empty behaviour is deprecated, replace {$token->text} with $tmp (on line {$this->getLine()})", E_USER_DEPRECATED);
-				}
-			}
-
 			$node = $this->openMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 			if ($token->empty) {
 				if ($node->empty) {
