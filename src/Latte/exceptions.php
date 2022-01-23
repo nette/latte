@@ -15,14 +15,9 @@ namespace Latte;
  */
 class CompileException extends \Exception
 {
-	/** @var string */
-	public $sourceCode;
-
-	/** @var string */
-	public $sourceName;
-
-	/** @var ?int */
-	public $sourceLine;
+	public string $sourceCode;
+	public string $sourceName;
+	public ?int $sourceLine = null;
 
 
 	public function setSource(string $code, ?int $line, ?string $name = null): self

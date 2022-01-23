@@ -15,17 +15,10 @@ use Nette;
 
 final class Linter
 {
-	/** @var bool */
-	private $debug;
-
-	/** @var Latte\Engine|null */
-	private $engine;
-
-
-	public function __construct(?Latte\Engine $engine = null, bool $debug = false)
-	{
-		$this->engine = $engine;
-		$this->debug = $debug;
+	public function __construct(
+		private ?Latte\Engine $engine = null,
+		private bool $debug = false,
+	) {
 	}
 
 

@@ -42,45 +42,41 @@ class Parser
 		CONTEXT_HTML_COMMENT = 'htmlComment',
 		CONTEXT_HTML_CDATA = 'htmlCData';
 
-	/** @var string default macro tag syntax */
-	public $defaultSyntax = 'latte';
+	/** default macro tag syntax */
+	public string $defaultSyntax = 'latte';
 
 	/** @var array<string, array{string, string}> */
-	public $syntaxes = [
+	public array $syntaxes = [
 		'latte' => ['\{(?![\s\'"{}])', '\}'], // {...}
 		'double' => ['\{\{(?![\s\'"{}])', '\}\}'], // {{...}}
 		'off' => ['\{(?=/syntax\})', '\}'], // {/syntax}
 	];
 
 	/** @var string[] */
-	private $delimiters;
+	private array $delimiters;
 
-	/** @var string source template */
-	private $input;
+	/** source template */
+	private string $input;
 
 	/** @var Token[] */
-	private $output;
+	private array $output;
 
-	/** @var int  position on source template */
-	private $offset;
+	/** position on source template */
+	private int $offset;
 
-	/** @var int */
-	private $line;
+	private int $line;
 
 	/** @var array{string, mixed} */
-	private $context = [self::CONTEXT_HTML_TEXT, null];
+	private array $context = [self::CONTEXT_HTML_TEXT, null];
 
-	/** @var string|null */
-	private $lastHtmlTag;
+	private ?string $lastHtmlTag = null;
 
-	/** @var string|null used by filter() */
-	private $syntaxEndTag;
+	/** used by filter() */
+	private ?string $syntaxEndTag = null;
 
-	/** @var int */
-	private $syntaxEndLevel = 0;
+	private int $syntaxEndLevel = 0;
 
-	/** @var bool */
-	private $xmlMode;
+	private bool $xmlMode = false;
 
 
 	/**

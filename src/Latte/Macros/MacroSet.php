@@ -21,11 +21,10 @@ class MacroSet implements Latte\Macro
 {
 	use Latte\Strict;
 
-	/** @var Latte\Compiler */
-	private $compiler;
+	private Latte\Compiler $compiler;
 
 	/** @var array<string, array{string|callable|null, string|callable|null, string|callable|null}> */
-	private $macros;
+	private array $macros;
 
 
 	public function __construct(Latte\Compiler $compiler)
