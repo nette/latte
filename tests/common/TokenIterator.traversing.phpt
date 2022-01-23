@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\TokenIterator traversing
+ * Test: Latte\MacroTokens traversing
  */
 
 declare(strict_types=1);
 
-use Latte\Compiler\TokenIterator;
+use Latte\Compiler\MacroTokens;
 use Latte\Compiler\Tokenizer;
 use Tester\Assert;
 
@@ -19,7 +19,7 @@ test('', function () {
 		T_WHITESPACE => '\s+',
 		T_STRING => '\w+',
 	]);
-	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
+	$traverser = new MacroTokens($tokenizer->tokenize('say 123'));
 
 	Assert::false($traverser->isPrev());
 	Assert::true($traverser->isNext());
@@ -48,7 +48,7 @@ test('', function () {
 		T_WHITESPACE => '\s+',
 		T_STRING => '\w+',
 	]);
-	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
+	$traverser = new MacroTokens($tokenizer->tokenize('say 123'));
 	$traverser->ignored[] = T_WHITESPACE;
 
 	Assert::same(-1, $traverser->position);
@@ -128,7 +128,7 @@ test('', function () {
 		T_WHITESPACE => '\s+',
 		T_STRING => '\w+',
 	]);
-	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
+	$traverser = new MacroTokens($tokenizer->tokenize('say 123'));
 	$traverser->ignored[] = T_WHITESPACE;
 
 	Assert::same(-1, $traverser->position);
