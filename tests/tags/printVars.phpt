@@ -17,5 +17,5 @@ Assert::match(
 	'%A%{varType int $int}
 {varType mixed $unknown}
 %A%',
-	$res
+	$res,
 );

@@ -26,12 +26,12 @@ $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
 $template = <<<'EOD'
-{var $var = 10}
-{$var}
-{foreach [] as $item}
-{/foreach}
+	{var $var = 10}
+	{$var}
+	{foreach [] as $item}
+	{/foreach}
 
-EOD;
+	EOD;
 
 // compile-time
 $latte->compile($template);
@@ -39,7 +39,7 @@ Assert::same(
 	[
 		'macros' => ['var', '=', 'foreach'],
 	],
-	$policy->log
+	$policy->log,
 );
 
 
@@ -49,5 +49,5 @@ $policy->log = [];
 $latte->renderToString($template);
 Assert::same(
 	[],
-	$policy->log
+	$policy->log,
 );

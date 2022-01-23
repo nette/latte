@@ -539,6 +539,6 @@ class Engine
 			}
 		}
 
-		return array_filter((array) $params, function ($key) { return $key[0] !== "\0"; }, ARRAY_FILTER_USE_KEY);
+		return array_filter((array) $params, fn($key) => $key[0] !== "\0", ARRAY_FILTER_USE_KEY);
 	}
 }

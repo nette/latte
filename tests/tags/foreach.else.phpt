@@ -24,7 +24,7 @@ Assert::matchFile(
 	{else}
 	empty
 {/foreach}
-')
+'),
 );
 
 
@@ -38,7 +38,7 @@ Assert::match(
 {else}
 	Empty
 {/foreach}
-')
+'),
 );
 
 
@@ -52,7 +52,7 @@ Assert::match(
 {else}
 	Empty
 {/foreach}
-')
+'),
 );
 
 
@@ -67,7 +67,7 @@ Assert::match(
 {else}
 	Empty
 {/foreach}
-')
+'),
 );
 
 
@@ -85,7 +85,7 @@ Assert::match(
 {else}
 	Empty Outer
 {/foreach}
-')
+'),
 );
 
 
@@ -103,5 +103,5 @@ Assert::match(
 {else}
 	Empty Outer
 {/foreach}
-')
+'),
 );

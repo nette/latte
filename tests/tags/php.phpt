@@ -19,12 +19,12 @@ Assert::match(
 	'%A%$a = \'test\' ? ([]) : null%A%',
 	$latte->compile('
 {php $a = test ? ([])}
-')
+'),
 );
 
 Assert::match(
 	'%A%$a = \'test\' ? ([]) : null%A%',
 	$latte->compile('
 {php $a = test ? ([])}
-')
+'),
 );

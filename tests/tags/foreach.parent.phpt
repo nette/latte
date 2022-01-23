@@ -30,7 +30,7 @@ Assert::match(
 		a
 		b
 		b',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );
 
 
@@ -51,5 +51,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );

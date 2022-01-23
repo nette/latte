@@ -27,7 +27,7 @@ Assert::match(
 two',
 	$latte->renderToString('one
 {define foo}Hello{/define}
-two')
+two'),
 );
 
 Assert::exception(function () use ($latte) {

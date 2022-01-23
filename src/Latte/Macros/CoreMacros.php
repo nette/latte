@@ -115,7 +115,7 @@ class CoreMacros extends MacroSet
 
 		$code = '';
 		if ($this->overwrittenVars) {
-			$vars = array_map(function ($l) { return implode(', ', $l); }, $this->overwrittenVars);
+			$vars = array_map(fn($l) => implode(', ', $l), $this->overwrittenVars);
 			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $ʟ_v => $ʟ_l) { '
 				. 'trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l"); } ';
 		}
@@ -142,12 +142,12 @@ class CoreMacros extends MacroSet
 
 		if ($node->prefix === $node::PREFIX_TAG) {
 			for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
-			$node->htmlNode->data->id = $node->htmlNode->data->id ?? $id;
+			$node->htmlNode->data->id ??= $id;
 			return $writer->write(
 				$node->htmlNode->closing
 					? 'if ($ʟ_if[%var]) %node.line {'
 					: 'if ($ʟ_if[%var] = (%node.args)) %node.line {',
-				$node->htmlNode->data->id
+				$node->htmlNode->data->id,
 			);
 		}
 
@@ -284,7 +284,7 @@ class CoreMacros extends MacroSet
 		} else {
 			$node->openingCode = $writer->write(
 				'<?php if (($ʟ_loc[%0_var] ?? null) !== ($ʟ_tmp = [%node.args])) { $ʟ_loc[%0_var] = $ʟ_tmp; ?>',
-				$id
+				$id,
 			);
 		}
 	}
@@ -345,7 +345,7 @@ class CoreMacros extends MacroSet
 					'$ʟ_fi = new LR\FilterInfo(%var);
 					echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw)) %node.line;',
 					implode('', $node->context),
-					PhpHelpers::dump($tmp)
+					PhpHelpers::dump($tmp),
 				);
 			}
 
@@ -356,7 +356,7 @@ class CoreMacros extends MacroSet
 				}
 				$ʟ_fi = new LR\FilterInfo(%var);
 				echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, $ʟ_tmp)) %node.line;',
-				implode('', $node->context)
+				implode('', $node->context),
 			);
 
 		} elseif ($node->empty = ($node->args !== '')) {
@@ -392,7 +392,7 @@ class CoreMacros extends MacroSet
 			$mode,
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
-				: PhpHelpers::dump($noEscape ? null : implode('', $node->context))
+				: PhpHelpers::dump($noEscape ? null : implode('', $node->context)),
 		);
 	}
 
@@ -411,7 +411,7 @@ class CoreMacros extends MacroSet
 				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($ʟ_e, $this); }
 				else { echo ob_get_clean(); throw $ʟ_e; }
 			}',
-			implode('', $node->context)
+			implode('', $node->context),
 		);
 	}
 
@@ -449,7 +449,7 @@ class CoreMacros extends MacroSet
 			$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent($ʟ_tmp);',
 			$body,
 			implode('', $node->context),
-			$node->data->variable
+			$node->data->variable,
 		);
 	}
 
@@ -643,7 +643,7 @@ class CoreMacros extends MacroSet
 	public function macroTagEnd(MacroNode $node, PhpWriter $writer): void
 	{
 		for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
-		$node->htmlNode->data->id = $node->htmlNode->data->id ?? $id;
+		$node->htmlNode->data->id ??= $id;
 
 		$node->openingCode = $writer->write('<?php
 			$ʟ_tag[%0_var] = (%node.args) ?? %1_var;
@@ -653,12 +653,12 @@ class CoreMacros extends MacroSet
 		$node->content = preg_replace(
 			'~^(\s*<)' . Latte\Parser::RE_TAG_NAME . '~',
 			"\$1<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n",
-			$node->content
+			$node->content,
 		);
 		$node->content = preg_replace(
 			'~</' . Latte\Parser::RE_TAG_NAME . '(\s*>\s*)$~',
 			"</<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n\$1",
-			$node->content
+			$node->content,
 		);
 	}
 
@@ -672,7 +672,7 @@ class CoreMacros extends MacroSet
 		$args = $writer->formatArgs();
 		return $writer->write(
 			'Tracy\Debugger::barDump(' . ($args ? "($args)" : 'get_defined_vars()') . ', %var) %node.line;',
-			$args ?: 'variables'
+			$args ?: 'variables',
 		);
 	}
 
@@ -793,7 +793,7 @@ class CoreMacros extends MacroSet
 		return $writer->write(
 			$node->name === '='
 				? 'echo %modify(%node.args) %node.line;'
-				: '%modify(%node.args) %node.line;'
+				: '%modify(%node.args) %node.line;',
 		);
 	}
 
@@ -831,7 +831,7 @@ class CoreMacros extends MacroSet
 		if (strpos($node->args, '/') && !$node->htmlNode) {
 			return $writer->write(
 				'if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) { header(%var) %node.line; } ',
-				'Content-Type: ' . $node->args
+				'Content-Type: ' . $node->args,
 			);
 		}
 
@@ -871,7 +871,7 @@ class CoreMacros extends MacroSet
 				$param,
 				count($params),
 				substr($param, 1),
-				$default
+				$default,
 			);
 			if ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 				$tokens->consumeValue(',');

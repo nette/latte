@@ -27,10 +27,10 @@ $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
 $template = <<<'EOD'
-{var $var = ("xxx"|upper|truncate:10)}
-{$var|lower|truncate:20}
+	{var $var = ("xxx"|upper|truncate:10)}
+	{$var|lower|truncate:20}
 
-EOD;
+	EOD;
 
 // compile-time
 $latte->compile($template);
@@ -39,7 +39,7 @@ Assert::equal(
 		'macros' => Expect::type('array'),
 		'filters' => ['upper', 'truncate', 'lower', 'truncate'],
 	],
-	$policy->log
+	$policy->log,
 );
 
 
@@ -49,5 +49,5 @@ $policy->log = [];
 $latte->renderToString($template);
 Assert::same(
 	[],
-	$policy->log
+	$policy->log,
 );

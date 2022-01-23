@@ -24,5 +24,5 @@ content
 
 Assert::matchFile(
 	__DIR__ . '/expected/extendsCheck.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );

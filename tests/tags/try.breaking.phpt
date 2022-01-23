@@ -22,14 +22,14 @@ Assert::match(
 		inner 3',
 	$latte->renderToString(
 		<<<'XX'
-{foreach [1,2,3] as $n}
-	{try}
-		inner {$n}
-		{continueIf true}
-	{/try}
-{/foreach}
-XX
-	)
+			{foreach [1,2,3] as $n}
+				{try}
+					inner {$n}
+					{continueIf true}
+				{/try}
+			{/foreach}
+			XX,
+	),
 );
 
 
@@ -39,14 +39,14 @@ Assert::match(
 		inner 3',
 	$latte->renderToString(
 		<<<'XX'
-{foreach [1,2,3] as $n}
-	{try}
-		inner {$n}
-		{continueIf true}
-		{else}
-		else
-	{/try}
-{/foreach}
-XX
-	)
+			{foreach [1,2,3] as $n}
+				{try}
+					inner {$n}
+					{continueIf true}
+					{else}
+					else
+				{/try}
+			{/foreach}
+			XX,
+	),
 );

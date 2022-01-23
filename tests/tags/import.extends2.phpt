@@ -31,5 +31,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'test block',
-	trim($latte->renderToString('main'))
+	trim($latte->renderToString('main')),
 );

@@ -28,9 +28,9 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.5.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.5.html',
-	$latte->renderToString('main', ['ext' => 'parent'])
+	$latte->renderToString('main', ['ext' => 'parent']),
 );

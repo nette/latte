@@ -32,14 +32,14 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/import.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );
 Assert::match(
 	'Test block',
-	trim($latte->renderToString('main'))
+	trim($latte->renderToString('main')),
 );
 
 Assert::match(
 	'Test block',
-	trim($latte->renderToString('main-dynamic'))
+	trim($latte->renderToString('main-dynamic')),
 );

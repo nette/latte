@@ -19,22 +19,22 @@ Assert::match(
 	'%A%echo LR\Filters::escapeHtmlText(test(function () {
 			return 1;
 		}))%A%',
-	$latte->compile('{test(function () { return 1;})}')
+	$latte->compile('{test(function () { return 1;})}'),
 );
 
 Assert::match(
 	'%A%echo LR\Filters::escapeHtmlText(test(function () use ($a) {
 			return 1;
 		}))%A%',
-	$latte->compile('{test(function () use ($a) { return 1;})}')
+	$latte->compile('{test(function () use ($a) { return 1;})}'),
 );
 
 Assert::match(
 	'%A%echo LR\Filters::escapeHtmlText(test(fn () => 1))%A%',
-	$latte->compile('{test(fn () => 1)}')
+	$latte->compile('{test(fn () => 1)}'),
 );
 
 Assert::match(
 	"%A%('foo')/ **/('bar')%A%",
-	$latte->compile('{(foo)//**/**/(bar)}')
+	$latte->compile('{(foo)//**/**/(bar)}'),
 );

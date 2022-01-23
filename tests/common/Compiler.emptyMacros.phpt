@@ -41,9 +41,7 @@ test('With {=} macro', function () {
 	$latte = new EnhancedEngine;
 	$latte->setLoader(new StringLoader);
 	$set = new MacroSet($latte->getCompiler());
-	$set->addMacro('=', function (MacroNode $node, PhpWriter $writer) {
-		return $writer->write('echo %modify(%node.args)');
-	});
+	$set->addMacro('=', fn(MacroNode $node, PhpWriter $writer) => $writer->write('echo %modify(%node.args)'));
 
 	Assert::equal('bar', $latte->renderToString('{$foo}', ['foo' => 'bar']));
 	Assert::equal('bar', $latte->renderToString('{=$foo}', ['foo' => 'bar']));

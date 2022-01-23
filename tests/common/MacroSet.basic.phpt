@@ -77,7 +77,7 @@ test('', function () use ($set) {
 test('', function () use ($set) {
 	$set->addMacro('noattr', function () use (&$called) {
 		$called = true;
-	}, null, function () { return false; });
+	}, null, fn() => false);
 
 	$node = new MacroNode($set, 'noattr');
 	$node->prefix = $node::PREFIX_NONE;
@@ -120,9 +120,7 @@ test('', function () use ($set) {
 
 
 test('', function () use ($set) {
-	$set->addMacro('reject', function (MacroNode $node) {
-		return false;
-	});
+	$set->addMacro('reject', fn(MacroNode $node) => false);
 
 	$node = new MacroNode($set, 'reject');
 	Assert::false($set->nodeOpened($node));

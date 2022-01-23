@@ -141,11 +141,11 @@ test('optionalChainingPass', function () {
 		PHP_VERSION_ID >= 80000
 			? '$var?->prop?->elem[1]?->call(2)?->item'
 			: '(($ʟ_tmp = $var) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1]) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2)) === null ? null : $ʟ_tmp->item))))',
-		formatArgs('$var?->prop?->elem[1]?->call(2)?->item')
+		formatArgs('$var?->prop?->elem[1]?->call(2)?->item'),
 	);
 	Assert::same(
 		'(($ʟ_tmp = $var ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1] ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2) ?? null) === null ? null : $ʟ_tmp->item))))',
-		formatArgs('$var??->prop??->elem[1]??->call(2)??->item')
+		formatArgs('$var??->prop??->elem[1]??->call(2)??->item'),
 	);
 });
 

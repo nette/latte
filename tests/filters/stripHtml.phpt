@@ -19,7 +19,7 @@ $latte = new Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::same(
 	'"',
-	$latte->renderToString('{="<br>&quot;"|stripHtml}')
+	$latte->renderToString('{="<br>&quot;"|stripHtml}'),
 );
 
 

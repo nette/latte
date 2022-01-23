@@ -28,29 +28,29 @@ $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
 $template = <<<'EOD'
-{var $trim = trim}
+	{var $trim = trim}
 
-{trim('a')}
-{\trim('a')}
-{ns\test('a')}
-{='trim'('a')}
-{$trim('a')}
+	{trim('a')}
+	{\trim('a')}
+	{ns\test('a')}
+	{='trim'('a')}
+	{$trim('a')}
 
-{var $class = MyClass}
-{var $method = foo}
-{=MyClass::foo()}
-{=\MyClass::$method()}
-{=$class::foo()}
-{=$class::$method()}
-{="$class::foo"()}
-{=[$class, 'foo']()}
+	{var $class = MyClass}
+	{var $method = foo}
+	{=MyClass::foo()}
+	{=\MyClass::$method()}
+	{=$class::foo()}
+	{=$class::$method()}
+	{="$class::foo"()}
+	{=[$class, 'foo']()}
 
-{var $obj = new MyClass}
-{=$obj -> foo()}
-{=$obj->$method()}
-{=[$obj, $method]()}
+	{var $obj = new MyClass}
+	{=$obj -> foo()}
+	{=$obj->$method()}
+	{=[$obj, $method]()}
 
-EOD;
+	EOD;
 
 // compile-time
 $latte->compile($template);
@@ -59,7 +59,7 @@ Assert::equal(
 		'macros' => Expect::type('array'),
 		'functions' => ['trim', '\\trim', 'ns\\test'],
 	],
-	$policy->log
+	$policy->log,
 );
 
 
@@ -82,5 +82,5 @@ Assert::same(
 			['MyClass', 'foo'],
 		],
 	],
-	$policy->log
+	$policy->log,
 );

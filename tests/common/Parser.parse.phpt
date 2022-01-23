@@ -16,9 +16,10 @@ require __DIR__ . '/../bootstrap.php';
 function parse($s)
 {
 	$parser = new Latte\Parser;
-	return array_map(function (Token $token) {
-		return array_filter([$token->type, $token->text, $token->name, $token->value]);
-	}, $parser->parse($s));
+	return array_map(
+		fn(Token $token) => array_filter([$token->type, $token->text, $token->name, $token->value]),
+		$parser->parse($s),
+	);
 }
 
 

@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	'Block',
-	$latte->renderToString('{block}Block')
+	$latte->renderToString('{block}Block'),
 );
 
 Assert::exception(function () use ($latte) {

@@ -20,42 +20,42 @@ Assert::match(
 	'',
 	$latte->renderToString(
 		<<<'XX'
-{try}
-	inner
-	{if}
-		if
-		{rollback}
-	{/if false}
-{/try}
-XX
-	)
+			{try}
+				inner
+				{if}
+					if
+					{rollback}
+				{/if false}
+			{/try}
+			XX,
+	),
 );
 
 
 // restoring $iterator
 Assert::match(
 	<<<'XX'
-	a
-	b
+			a
+			b
 
-is null
-XX
+		is null
+		XX
 ,
 	$latte->renderToString(
 		<<<'XX'
-{foreach [a, b] as $a}
-	{try}
-	{foreach [1, 2] as $b}
-			{rollback}
-			{$iterator->counter}
-	{/foreach}
-	{/try}
-	{$iterator->current()}
-{/foreach}
+			{foreach [a, b] as $a}
+				{try}
+				{foreach [1, 2] as $b}
+						{rollback}
+						{$iterator->counter}
+				{/foreach}
+				{/try}
+				{$iterator->current()}
+			{/foreach}
 
-{$iterator === null ? 'is null'}
-XX
-	)
+			{$iterator === null ? 'is null'}
+			XX,
+	),
 );
 
 
@@ -74,9 +74,9 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 Assert::match(
 	<<<'XX'
 
+				test
 		test
-test
-XX
+		XX
 ,
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );

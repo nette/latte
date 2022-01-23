@@ -34,6 +34,6 @@ Assert::match(
 {/define}
 
 {include a}
-'
-	)
+',
+	),
 );

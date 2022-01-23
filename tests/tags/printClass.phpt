@@ -31,7 +31,7 @@ class Template
 	public $unknown;
 }
 %A%',
-		$res
+		$res,
 	);
 
 } else {
@@ -48,6 +48,6 @@ class Template
 	public $unknown;
 }
 %A%',
-		$res
+		$res,
 	);
 }

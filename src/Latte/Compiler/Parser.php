@@ -397,7 +397,7 @@ class Parser
 	 */
 	public function setSyntax(?string $type)
 	{
-		$type = $type ?? $this->defaultSyntax;
+		$type ??= $this->defaultSyntax;
 		if (!isset($this->syntaxes[$type])) {
 			throw new \InvalidArgumentException("Unknown syntax '$type'");
 		}

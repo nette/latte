@@ -79,7 +79,7 @@ class Blueprint
 	public function addProperties(Php\ClassType $class, array $props, ?bool $native = null): void
 	{
 		$printer = new Php\Printer;
-		$native = $native ?? (PHP_VERSION_ID >= 70400);
+		$native ??= (PHP_VERSION_ID >= 70400);
 		foreach ($props as $name => $value) {
 			$type = Php\Type::getType($value);
 			$prop = $class->addProperty($name);

@@ -36,7 +36,7 @@ Assert::error(function () use ($latte) {
 
 Assert::match(
 	'before <b>included 1</b> after',
-	$latte->renderToString('main2')
+	$latte->renderToString('main2'),
 );
 
 Assert::exception(function () use ($latte) {

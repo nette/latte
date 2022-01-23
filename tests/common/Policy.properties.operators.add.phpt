@@ -25,16 +25,16 @@ $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
 $template = <<<'EOD'
-{var $class = MyClass}
-{var $prop = bar}
-{var $staticProp = 'static'}
+	{var $class = MyClass}
+	{var $prop = bar}
+	{var $staticProp = 'static'}
 
-{=\MyClass::$static++}
-{=\MyClass::$$staticProp++}
-{=$obj->bar++}
-{=$obj->$prop++}
-{=$obj::$$staticProp++}
-EOD;
+	{=\MyClass::$static++}
+	{=\MyClass::$$staticProp++}
+	{=$obj->bar++}
+	{=$obj->$prop++}
+	{=$obj::$$staticProp++}
+	EOD;
 
 $obj = new MyClass;
 $latte->renderToString($template, ['obj' => $obj]);

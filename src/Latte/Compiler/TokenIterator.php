@@ -203,7 +203,7 @@ class TokenIterator
 		bool $advance,
 		bool $strings = false,
 		bool $until = false,
-		bool $prev = false
+		bool $prev = false,
 	) {
 		$res = $onlyFirst ? null : ($strings ? '' : []);
 		$pos = $this->position + ($prev ? -1 : 1);

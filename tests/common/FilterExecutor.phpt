@@ -59,18 +59,14 @@ test('', function () {
 
 test('', function () {
 	$filters = new FilterExecutor;
-	$filters->add(null, function ($name, $val) {
-		return implode(',', func_get_args());
-	});
+	$filters->add(null, fn($name, $val) => implode(',', func_get_args()));
 	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
 	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
 	Assert::same('dynamic,1,2', ($filters->Dynamic)(1, 2));
 	Assert::same('another,1,2', ($filters->another)(1, 2));
 
 	$filters2 = new FilterExecutor;
-	$filters2->add(null, function ($name, $val) {
-		return 'different';
-	});
+	$filters2->add(null, fn($name, $val) => 'different');
 	Assert::same('different', ($filters2->dynamic)(1, 2));
 });
 
@@ -79,9 +75,7 @@ test('', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name, $val) use ($filters) {
 		if ($name === 'dynamic') {
-			$filters->add($name, function ($val) {
-				return implode(',', func_get_args());
-			});
+			$filters->add($name, fn($val) => implode(',', func_get_args()));
 		}
 	});
 	Assert::same('1,2', ($filters->dynamic)(1, 2));
@@ -97,18 +91,14 @@ test('', function () {
 	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic
-	$filters->add('f1', function (FilterInfo $info, $val) {
-		return gettype($info->contentType) . ',' . strtolower($val);
-	}, true);
+	$filters->add('f1', fn(FilterInfo $info, $val) => gettype($info->contentType) . ',' . strtolower($val), true);
 
 	Assert::same('NULL,aa', ($filters->f1)('aA'));
 	Assert::same('NULL,aa', ($filters->f1)('aA'));
 
 
 	// classic called as FilterInfo aware
-	$filters->add('f2', function ($val) {
-		return strtolower($val);
-	});
+	$filters->add('f2', fn($val) => strtolower($val));
 	Assert::exception(function () use ($filters) {
 		$filters->filterContent('f2', new FilterInfo('html'), 'aA<b>');
 	}, Latte\RuntimeException::class, 'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.');
@@ -143,9 +133,7 @@ test('', function () {
 
 
 	// classic called as FilterInfo aware with Latte\Runtime\Html
-	$filters->add('f5', function ($val) {
-		return new Html(strtolower($val));
-	});
+	$filters->add('f5', fn($val) => new Html(strtolower($val)));
 	Assert::error(function () use ($filters) {
 		$filters->filterContent('f5', new FilterInfo('text'), 'aA');
 	}, E_USER_NOTICE, 'Filter |f5 should be changed to content-aware filter.');

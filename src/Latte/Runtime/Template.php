@@ -77,7 +77,7 @@ class Template
 		FilterExecutor $filters,
 		array $providers,
 		string $name,
-		?Policy $policy
+		?Policy $policy,
 	) {
 		$this->engine = $engine;
 		$this->params = $params;
@@ -201,7 +201,7 @@ class Template
 			}
 
 		} elseif ($this->parentName) { // extends
-			ob_start(function () {});
+			ob_start(fn() => '');
 			$this->params = $this->main();
 			ob_end_clean();
 			$this->createTemplate($this->parentName, $this->params, 'extends')->render($block);
@@ -264,7 +264,7 @@ class Template
 			function () use ($block) { $this->render($block); },
 			$mod,
 			static::CONTENT_TYPE,
-			"'$this->name'"
+			"'$this->name'",
 		);
 	}
 
@@ -313,7 +313,7 @@ class Template
 			function () use ($block, $params): void { reset($block->functions)($params); },
 			$mod,
 			$block->contentType,
-			"block $name"
+			"block $name",
 		);
 	}
 
@@ -343,7 +343,7 @@ class Template
 	protected function addBlock(string $name, string $contentType, array $functions, $layer = null): void
 	{
 		$block = &$this->blocks[$layer ?? self::LAYER_TOP][$name];
-		$block = $block ?? new Block;
+		$block ??= new Block;
 		if ($block->contentType === null) {
 			$block->contentType = $contentType;
 
@@ -351,7 +351,7 @@ class Template
 			throw new Latte\RuntimeException(sprintf(
 				"Overridden block $name with content type %s by incompatible type %s.",
 				strtoupper($contentType),
-				strtoupper($block->contentType)
+				strtoupper($block->contentType),
 			));
 		}
 
@@ -377,7 +377,7 @@ class Template
 			throw new Latte\RuntimeException(sprintf(
 				"Including $name with content type %s into incompatible type %s.",
 				strtoupper($contentType),
-				strtoupper($mod)
+				strtoupper($mod),
 			));
 		}
 	}
@@ -390,7 +390,7 @@ class Template
 	public function capture(callable $function): string
 	{
 		try {
-			ob_start(function () {});
+			ob_start(fn() => '');
 			$function();
 			return ob_get_clean();
 		} catch (\Throwable $e) {
@@ -405,7 +405,7 @@ class Template
 	 */
 	private function initBlockLayer($staticId, ?int $destId = null): void
 	{
-		$destId = $destId ?? $staticId;
+		$destId ??= $staticId;
 		$this->blocks[$destId] = [];
 		foreach (static::BLOCKS[$staticId] ?? [] as $nm => $info) {
 			[$method, $contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
@@ -465,7 +465,7 @@ class Template
 		} elseif (is_object($callable)) {
 			$allowed = $callable instanceof \Closure
 				? true
-				: $this->policy->isMethodAllowed(get_class($callable), '__invoke');
+				: $this->policy->isMethodAllowed($callable::class, '__invoke');
 		} else {
 			$allowed = false;
 		}
@@ -486,7 +486,7 @@ class Template
 	 */
 	protected function prop($obj, $prop)
 	{
-		$class = is_object($obj) ? get_class($obj) : $obj;
+		$class = is_object($obj) ? $obj::class : $obj;
 		if (is_string($class) && !$this->policy->isPropertyAllowed($class, (string) $prop)) {
 			throw new Latte\SecurityViolationException("Access to '$prop' property on a $class object is not allowed.");
 		}

@@ -27,7 +27,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::match(
 	'  2   1',
-	$latte->renderToString('{block foo} {block} {$i--} {if $i}{include this}{/if} {/block} {/block}', ['i' => 2])
+	$latte->renderToString('{block foo} {block} {$i--} {if $i}{include this}{/if} {/block} {/block}', ['i' => 2]),
 );
 
 // in snippet block
@@ -38,17 +38,17 @@ Assert::exception(function () use ($latte) {
 // with modifier
 Assert::match(
 	'  2 1',
-	$latte->renderToString('{block foo}  {$i--} {if $i}{include this|trim}{/if}  {/block}', ['i' => 2])
+	$latte->renderToString('{block foo}  {$i--} {if $i}{include this|trim}{/if}  {/block}', ['i' => 2]),
 );
 
 // with params
 Assert::match(
 	' 2  -1',
-	$latte->renderToString('{block foo} {$i--} {if $i > 0}{include this, i: $i - 2}{/if} {/block}', ['i' => 2])
+	$latte->renderToString('{block foo} {$i--} {if $i > 0}{include this, i: $i - 2}{/if} {/block}', ['i' => 2]),
 );
 
 // double
 Assert::match(
 	' 2  1     1',
-	$latte->renderToString('{block foo} {$i--} {if $i}{include this}{/if} {if $i}{include this}{/if} {/block}', ['i' => 2])
+	$latte->renderToString('{block foo} {$i--} {if $i}{include this}{/if} {if $i}{include this}{/if} {/block}', ['i' => 2]),
 );

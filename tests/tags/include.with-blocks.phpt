@@ -29,15 +29,15 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.html',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.inc.phtml',
-	$latte->compile('inc')
+	$latte->compile('inc'),
 );
 
 

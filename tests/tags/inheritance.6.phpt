@@ -17,19 +17,19 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => '{$foo}',
 
 	'main' => <<<'EOD'
-{layout "parent"}
-{* This should be erased *}
-{var $foo = 1}
-This should be erased
+		{layout "parent"}
+		{* This should be erased *}
+		{var $foo = 1}
+		This should be erased
 
-EOD
+		EOD,
 ]));
 
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.6.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );
 Assert::same(
 	'1',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );

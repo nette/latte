@@ -39,13 +39,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.1.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.1.html',
-	$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']])
+	$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']]),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.1.parent.phtml',
-	$latte->compile('parent')
+	$latte->compile('parent'),
 );

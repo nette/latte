@@ -16,28 +16,28 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(<<<'EOD'
-qwerty
+	qwerty
 
-EOD
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-{contentType text}
-qwerty
+		{contentType text}
+		qwerty
 
-EOD
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
 
-asdfgh
-EOD
+	asdfgh
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
 
-{contentType text}
-asdfgh
-EOD
+		{contentType text}
+		asdfgh
+		EOD,
 ));

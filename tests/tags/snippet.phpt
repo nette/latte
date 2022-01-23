@@ -16,28 +16,28 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
-	{snippet}
+		{snippet}
 
-	{/snippet}
-
-
-
-	{snippet outer}
-	Outer
-		{snippet inner}Inner{/snippet inner}
-	/Outer
-	{/snippet outer}
+		{/snippet}
 
 
 
-	@{if true} Hello World @{/if}
+		{snippet outer}
+		Outer
+			{snippet inner}Inner{/snippet inner}
+		/Outer
+		{/snippet outer}
 
-	{snippet title}Title 1{/snippet title}
 
-	{snippet title2}Title 2{/snippet}
-EOD;
+
+		@{if true} Hello World @{/if}
+
+		{snippet title}Title 1{/snippet title}
+
+		{snippet title2}Title 2{/snippet}
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/snippet.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );

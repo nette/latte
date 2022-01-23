@@ -28,8 +28,8 @@ $latte->setSandboxMode();
 $latte->addFunction('fnc', 'trim');
 
 $template = <<<'EOD'
-{fnc(" abc ")}
-EOD;
+	{fnc(" abc ")}
+	EOD;
 
 // compile-time
 $latte->compile($template);
@@ -38,7 +38,7 @@ Assert::equal(
 		'macros' => Expect::type('array'),
 		'functions' => ['fnc'],
 	],
-	$policy->log
+	$policy->log,
 );
 
 
@@ -48,5 +48,5 @@ $policy->log = [];
 $latte->renderToString($template);
 Assert::same(
 	[],
-	$policy->log
+	$policy->log,
 );

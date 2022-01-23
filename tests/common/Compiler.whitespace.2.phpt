@@ -16,120 +16,120 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(<<<'EOD'
-qwerty
+	qwerty
 
-EOD
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-{* comment
-*}
-qwerty
+		{* comment
+		*}
+		qwerty
 
-EOD
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
-qwerty
+	qwerty
 
-EOD
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-{* comment
-*}
+		{* comment
+		*}
 
-qwerty
+		qwerty
 
-EOD
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
 
-qwerty
+	qwerty
 
-EOD
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-{* comment
-*}
+		{* comment
+		*}
 
 
-qwerty
+		qwerty
 
-EOD
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
-qwerty
+	qwerty
 
-EOD
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-{* comment
-*}
+		{* comment
+		*}
 
-{contentType text}
-qwerty
+		{contentType text}
+		qwerty
 
-EOD
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
-qwerty
+	qwerty
 
-EOD
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-{* comment
-*}
-{contentType text}
-qwerty
+		{* comment
+		*}
+		{contentType text}
+		qwerty
 
-EOD
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
-line 1
-line 2
-EOD
+	line 1
+	line 2
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-line 1 {* comment *}
-line 2
-EOD
+		line 1 {* comment *}
+		line 2
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
-word 1  word 2
-EOD
+	word 1  word 2
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-word 1 {* comment *} word 2
-EOD
+		word 1 {* comment *} word 2
+		EOD,
 ));
 
 
 Assert::match(<<<'EOD'
-	<link>
-	<link>
-EOD
+		<link>
+		<link>
+	EOD
 
 , $latte->renderToString(
 	<<<'EOD'
-	<link>
-	{* comment *}
-	<link>
-EOD
+			<link>
+			{* comment *}
+			<link>
+		EOD,
 ));

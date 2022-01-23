@@ -29,12 +29,12 @@ $params['mxss'] = '`mxss';
 
 Assert::matchFile(
 	__DIR__ . '/expected/contentType.xml.phtml',
-	$latte->compile(__DIR__ . '/templates/contentType.xml.latte')
+	$latte->compile(__DIR__ . '/templates/contentType.xml.latte'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/contentType.xml.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/contentType.xml.latte',
-		$params
-	)
+		$params,
+	),
 );

@@ -17,25 +17,25 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-{while $i++ < 10}
-	{$i}
-{/while}
+	{while $i++ < 10}
+		{$i}
+	{/while}
 
 
-{while}
-	{$i}
-{/while $i++ < 10}
+	{while}
+		{$i}
+	{/while $i++ < 10}
 
 
-{while $i++ < 10}
-	{breakIf true}
-	{continueIf true}
-	{$i}
-{/while}
+	{while $i++ < 10}
+		{breakIf true}
+		{continueIf true}
+		{$i}
+	{/while}
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/while.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );

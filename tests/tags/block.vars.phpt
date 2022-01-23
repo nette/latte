@@ -16,45 +16,45 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'XX'
-{var $var = a}
+	{var $var = a}
 
-{define a}
+	{define a}
+		{$var}
+		{var $var = define}
+	{/define}
+
 	{$var}
-	{var $var = define}
-{/define}
-
-{$var}
 
 
-{block b}
+	{block b}
+		{$var}
+		{var $var = blocknamed}
+	{/block}
+
 	{$var}
-	{var $var = blocknamed}
-{/block}
-
-{$var}
 
 
-{block|trim}
+	{block|trim}
+		{$var}
+		{var $var = blockmod}
+	{/block}
+
 	{$var}
-	{var $var = blockmod}
-{/block}
-
-{$var}
 
 
-{block}
+	{block}
+		{$var}
+		{var $var = block}
+	{/block}
+
 	{$var}
-	{var $var = block}
-{/block}
-
-{$var}
-XX;
+	XX;
 
 Assert::matchFile(
 	__DIR__ . '/expected/vars.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/vars.html',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );

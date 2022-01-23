@@ -16,19 +16,19 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'XX'
-{foreach [1, 0] as $cond}
-	{$cond}
-	{block|stripHtml|upper}
-		before
-		{continueIf $cond}
-		after
-	{/block}
-{/foreach}
-XX;
+	{foreach [1, 0] as $cond}
+		{$cond}
+		{block|stripHtml|upper}
+			before
+			{continueIf $cond}
+			after
+		{/block}
+	{/foreach}
+	XX;
 
 Assert::matchFile(
 	__DIR__ . '/expected/breaking.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 Assert::match(
 	'	1
@@ -36,5 +36,5 @@ Assert::match(
 	0
 		BEFORE
 		AFTER',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );

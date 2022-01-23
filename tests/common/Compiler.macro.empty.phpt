@@ -50,17 +50,17 @@ $latte->addMacro('one', new TestMacro);
 
 Assert::match(
 	'%A%opening%A%',
-	$latte->compile('{one}')
+	$latte->compile('{one}'),
 );
 
 Assert::match(
 	'%A%opening<div attr></div>%A%',
-	$latte->compile('<div n:one></div>')
+	$latte->compile('<div n:one></div>'),
 );
 
 Assert::match(
 	'%A%opening<div attr>@</div>%A%',
-	$latte->compile('<div n:one>@</div>')
+	$latte->compile('<div n:one>@</div>'),
 );
 
 Assert::exception(function () use ($latte) {

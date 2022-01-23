@@ -21,6 +21,6 @@ Assert::matchFile(
 	__DIR__ . '/expected/contentType.html.comments.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/contentType.html.comments.latte',
-		$params
-	)
+		$params,
+	),
 );
