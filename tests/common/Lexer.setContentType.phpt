@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Test: Latte\Parser::parse()
- */
-
 declare(strict_types=1);
 
 use Latte\Compiler\LegacyToken;
@@ -16,9 +12,9 @@ require __DIR__ . '/../bootstrap.php';
 
 function parse($s, $contentType = null)
 {
-	$parser = new Latte\Compiler\Parser;
-	$parser->setContentType($contentType ?: Engine::CONTENT_HTML);
-	return array_map(fn(LegacyToken $token) => [$token->type, $token->text], $parser->parse($s));
+	$lexer = new Latte\Compiler\Lexer;
+	$lexer->setContentType($contentType ?: Engine::CONTENT_HTML);
+	return array_map(fn(LegacyToken $token) => [$token->type, $token->text], $lexer->tokenize($s));
 }
 
 

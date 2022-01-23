@@ -91,7 +91,7 @@ class TagInfo
 	public function getNotation(): string
 	{
 		return $this->prefix
-			? Parser::N_PREFIX . ($this->prefix === self::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
+			? Lexer::N_PREFIX . ($this->prefix === self::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
 			: '{' . $this->name . '}';
 	}
 

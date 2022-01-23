@@ -722,12 +722,12 @@ class CoreExtension extends MacroSet
 		?>', $node->htmlNode->data->id, $node->htmlNode->name);
 
 		$node->content = preg_replace(
-			'~^(\s*<)' . Latte\Compiler\Parser::RE_TAG_NAME . '~',
+			'~^(\s*<)' . Latte\Compiler\Lexer::RE_TAG_NAME . '~',
 			"\$1<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n",
 			$node->content,
 		);
 		$node->content = preg_replace(
-			'~</' . Latte\Compiler\Parser::RE_TAG_NAME . '(\s*>\s*)$~',
+			'~</' . Latte\Compiler\Lexer::RE_TAG_NAME . '(\s*>\s*)$~',
 			"</<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n\$1",
 			$node->content,
 		);

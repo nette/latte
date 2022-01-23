@@ -113,7 +113,7 @@ class Engine
 			throw new \LogicException('In sandboxed mode you need to set a security policy.');
 		}
 
-		$parser = $this->createParser();
+		$lexer = $this->createLexer();
 		$compiler = $this->createCompiler();
 
 		Extensions\CoreExtension::install($compiler);
@@ -123,9 +123,9 @@ class Engine
 		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
 
 		try {
-			$tokens = $parser
+			$tokens = $lexer
 				->setContentType($this->contentType)
-				->parse($source);
+				->tokenize($source);
 
 			$code = $compiler
 				->setContentType($this->contentType)
@@ -140,7 +140,7 @@ class Engine
 
 			$line = isset($tokens)
 				? $compiler->getLine()
-				: $parser->getLine();
+				: $lexer->getLine();
 			throw $e->setSource($source, $line, $name);
 		}
 
@@ -438,9 +438,9 @@ class Engine
 	}
 
 
-	public function createParser(): Compiler\Parser
+	public function createLexer(): Compiler\Lexer
 	{
-		return new Compiler\Parser;
+		return new Compiler\Lexer;
 	}
 
 

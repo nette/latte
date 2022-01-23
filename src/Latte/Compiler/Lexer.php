@@ -16,9 +16,9 @@ use Latte\Strict;
 
 
 /**
- * Latte parser.
+ * Latte lexer.
  */
-class Parser
+class Lexer
 {
 	use Strict;
 
@@ -88,7 +88,7 @@ class Parser
 	 * Process all {macros} and <tags/>.
 	 * @return LegacyToken[]
 	 */
-	public function parse(string $input): array
+	public function tokenize(string $input): array
 	{
 		if (str_starts_with($input, "\u{FEFF}")) { // BOM
 			$input = substr($input, 3);
@@ -365,7 +365,7 @@ class Parser
 
 
 	/**
-	 * @param  string  $type  Parser::CONTENT_HTML, CONTENT_XML or CONTENT_TEXT
+	 * @param  string  $type  Lexer::CONTENT_HTML, CONTENT_XML or CONTENT_TEXT
 	 */
 	public function setContentType(string $type): static
 	{

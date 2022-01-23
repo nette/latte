@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Parser and former shortNoEscape.
+ * Test: Former shortNoEscape.
  */
 
 declare(strict_types=1);
