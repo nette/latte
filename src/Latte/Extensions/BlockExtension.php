@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Latte\Macros;
+namespace Latte\Extensions;
 
 use Latte;
 use Latte\CompileException;
@@ -23,7 +23,7 @@ use Latte\Runtime\Template;
 /**
  * Block macros.
  */
-class BlockMacros extends MacroSet
+class BlockExtension extends MacroSet
 {
 	public string $snippetAttribute = 'id';
 

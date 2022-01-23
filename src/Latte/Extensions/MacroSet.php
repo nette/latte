@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Latte\Macros;
+namespace Latte\Extensions;
 
 use Latte;
 use Latte\CompileException;
@@ -18,7 +18,7 @@ use Latte\Compiler\MacroNode;
 /**
  * Base Macro implementation. Allows add multiple macros.
  */
-class MacroSet implements Latte\Macro
+class MacroSet implements Latte\Extension
 {
 	use Latte\Strict;
 

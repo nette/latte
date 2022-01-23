@@ -13,9 +13,9 @@ use Latte\Compiler\MacroNode;
 
 
 /**
- * Latte macro.
+ * Latte extension.
  */
-interface Macro
+interface Extension
 {
 	public const
 		AUTO_CLOSE = 64,

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Latte\Macros;
+namespace Latte\Extensions;
 
 use Latte;
 use Latte\CompileException;
@@ -21,7 +21,7 @@ use Latte\Helpers;
 /**
  * Basic macros for Latte.
  */
-class CoreMacros extends MacroSet
+class CoreExtension extends MacroSet
 {
 	/** @var array<string, int[]> */
 	private array $overwrittenVars;

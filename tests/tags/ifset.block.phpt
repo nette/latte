@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Macros\BlockMacros;
+use Latte\Extensions\BlockExtension;
 use Tester\Assert;
 
 
@@ -14,7 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $compiler = new Latte\Compiler\Compiler;
-BlockMacros::install($compiler);
+BlockExtension::install($compiler);
 
 // {ifset ... }
 Assert::same('<?php if ($this->hasBlock("block")) { ?>', $compiler->expandMacro('ifset', '#block')->openingCode);

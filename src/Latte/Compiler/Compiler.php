@@ -11,8 +11,8 @@ namespace Latte\Compiler;
 
 use Latte\CompileException;
 use Latte\Engine;
+use Latte\Extension;
 use Latte\Helpers;
-use Latte\Macro;
 use Latte\Policy;
 use Latte\SecurityViolationException;
 use Latte\Strict;
@@ -68,7 +68,7 @@ class Compiler
 	/** position on source template */
 	private int $position = 0;
 
-	/** @var array<string, Macro[]> */
+	/** @var array<string, Extension[]> */
 	private array $macros = [];
 
 	/** @var string[] of orig name */
@@ -106,13 +106,13 @@ class Compiler
 	/**
 	 * Adds new macro with Macro flags.
 	 */
-	public function addMacro(string $name, Macro $macro, ?int $flags = null): static
+	public function addMacro(string $name, Extension $macro, ?int $flags = null): static
 	{
 		if (!preg_match('#^[a-z_=]\w*(?:[.:-]\w+)*$#iD', $name)) {
 			throw new \LogicException("Invalid tag name '$name'.");
 
 		} elseif (!isset($this->flags[$name])) {
-			$this->flags[$name] = $flags ?: Macro::DEFAULT_FLAGS;
+			$this->flags[$name] = $flags ?: Extension::DEFAULT_FLAGS;
 
 		} elseif ($flags && $this->flags[$name] !== $flags) {
 			throw new \LogicException("Incompatible flags for tag '$name'.");
@@ -180,7 +180,7 @@ class Compiler
 		foreach ($tokens as $this->position => $token) {
 			if ($this->inHead && !(
 				$token->type === $token::COMMENT
-				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & Macro::ALLOWED_IN_HEAD
+				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & Extension::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
 				$this->inHead = false;
@@ -202,7 +202,7 @@ class Compiler
 				throw new CompileException('Missing {/' . $this->macroNode->name . '}');
 			}
 
-			if (~$this->flags[$this->macroNode->name] & Macro::AUTO_CLOSE) {
+			if (~$this->flags[$this->macroNode->name] & Extension::AUTO_CLOSE) {
 				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
 			}
 
@@ -282,7 +282,7 @@ class Compiler
 
 
 	/**
-	 * @return Macro[][]
+	 * @return Extension[][]
 	 */
 	public function getMacros(): array
 	{

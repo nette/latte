@@ -315,11 +315,11 @@ class Engine
 
 
 	/**
-	 * Adds new macro.
+	 * Adds new extension.
 	 */
-	public function addMacro(string $name, Macro $macro): static
+	public function addExtension(string $name, Extension $extension): static
 	{
-		$this->getCompiler()->addMacro($name, $macro);
+		$this->getCompiler()->addMacro($name, $extension);
 		return $this;
 	}
 
@@ -451,8 +451,8 @@ class Engine
 	{
 		if (!$this->compiler) {
 			$this->compiler = new Compiler\Compiler;
-			Macros\CoreMacros::install($this->compiler);
-			Macros\BlockMacros::install($this->compiler);
+			Extensions\CoreExtension::install($this->compiler);
+			Extensions\BlockExtension::install($this->compiler);
 		}
 
 		return $this->compiler;

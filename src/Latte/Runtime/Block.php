@@ -16,15 +16,15 @@ final class Block
 	/** content type */
 	public ?string $contentType = null;
 
-	/** used by BlockMacros */
+	/** used by BlockExtension */
 	public ?string $code = null;
 
 	/** @var callable[]  used by Template */
 	public array $functions = [];
 
-	/** used by BlockMacros */
+	/** used by BlockExtension */
 	public bool $hasParameters = false;
 
-	/** used by BlockMacros */
+	/** used by BlockExtension */
 	public ?string $comment = null;
 }

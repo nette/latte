@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Macros\CoreMacros;
+use Latte\Extensions\CoreExtension;
 use Tester\Assert;
 
 
@@ -14,7 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $compiler = new Latte\Compiler\Compiler;
-CoreMacros::install($compiler);
+CoreExtension::install($compiler);
 
 // {_...}
 Assert::same('<?php echo LR\Filters::escapeHtmlText(($this->filters->translate)(\'var\')); ?>', $compiler->expandMacro('_', 'var', '')->openingCode);

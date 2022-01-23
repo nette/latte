@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Macros\CoreMacros;
+use Latte\Extensions\CoreExtension;
 use Tester\Assert;
 
 
@@ -14,7 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $compiler = new Latte\Compiler\Compiler;
-CoreMacros::install($compiler);
+CoreExtension::install($compiler);
 
 Assert::same('<?php if (isset($var)) { ?>', $compiler->expandMacro('ifset', '$var')->openingCode);
 Assert::same('<?php if (isset($item->var["test"])) { ?>', $compiler->expandMacro('ifset', '$item->var["test"]')->openingCode);
