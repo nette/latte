@@ -31,11 +31,8 @@ class CachingIterator extends \CachingIterator implements \Countable
 {
 	use Latte\Strict;
 
-	/** @var int */
-	private $counter = 0;
-
-	/** @var self|null */
-	private $parent;
+	private int $counter = 0;
+	private ?self $parent = null;
 
 
 	/**

@@ -24,13 +24,9 @@ use Latte\PhpWriter;
 class CoreMacros extends MacroSet
 {
 	/** @var array<string, int[]> */
-	private $overwrittenVars;
-
-	/** @var string|null */
-	private $printTemplate;
-
-	/** @var int */
-	private $idCounter = 0;
+	private array $overwrittenVars;
+	private ?string $printTemplate = null;
+	private int $idCounter = 0;
 
 
 	public static function install(Latte\Compiler $compiler): void

@@ -21,10 +21,10 @@ use Latte\Helpers;
 class FilterExecutor
 {
 	/** @var callable[] */
-	private $_dynamic = [];
+	private array $_dynamic = [];
 
 	/** @var array<string, array{callable, ?bool}>  [name => [callback, FilterInfo aware] */
-	private $_static = [];
+	private array $_static = [];
 
 
 	/**

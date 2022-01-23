@@ -22,68 +22,39 @@ class MacroNode
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = 'none';
 
-	/** @var Macro */
-	public $macro;
+	public Macro $macro;
+	public string $name;
+	public bool $empty = false;
+	public string $args;
+	public string $modifiers;
+	public bool $closing = false;
+	public ?bool $replaced = null;
+	public MacroTokens $tokenizer;
+	public ?MacroNode $parentNode = null;
+	public ?string $openingCode = null;
+	public ?string $closingCode = null;
+	public ?string $attrCode = null;
+	public ?string $content = null;
+	public string $innerContent = '';
+	public \stdClass $data;
 
-	/** @var string */
-	public $name;
-
-	/** @var bool */
-	public $empty = false;
-
-	/** @var string  raw arguments */
-	public $args;
-
-	/** @var string  raw modifier */
-	public $modifiers;
-
-	/** @var bool */
-	public $closing = false;
-
-	/** @var bool  has output? */
-	public $replaced;
-
-	/** @var MacroTokens */
-	public $tokenizer;
-
-	/** @var MacroNode|null */
-	public $parentNode;
-
-	/** @var string */
-	public $openingCode;
-
-	/** @var string */
-	public $closingCode;
-
-	/** @var string */
-	public $attrCode;
-
-	/** @var string */
-	public $content;
-
-	/** @var string */
-	public $innerContent;
-
-	/** @var \stdClass  user data */
-	public $data;
-
-	/** @var HtmlNode|null  closest HTML node */
-	public $htmlNode;
+	/** closest HTML node */
+	public ?HtmlNode $htmlNode = null;
 
 	/** @var array{string, mixed} [contentType, context] */
-	public $context;
+	public ?array $context = null;
 
-	/** @var string|null  indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
-	public $prefix;
+	/** indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
+	public ?string $prefix = null;
 
-	/** @var int  position of start tag in source template */
-	public $startLine;
+	/** position of start tag in source template */
+	public ?int $startLine = null;
 
-	/** @var int  position of end tag in source template */
-	public $endLine;
+	/** position of end tag in source template */
+	public ?int $endLine = null;
 
 	/** @var array{string, bool}|null */
-	public $saved;
+	public ?array $saved = null;
 
 
 	public function __construct(

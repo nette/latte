@@ -25,23 +25,21 @@ use Latte\Runtime\Template;
  */
 class BlockMacros extends MacroSet
 {
-	/** @var string */
-	public $snippetAttribute = 'id';
+	public string $snippetAttribute = 'id';
 
 	/** @var Block[][] */
-	private $blocks;
+	private array $blocks;
 
-	/** @var int  current layer */
-	private $index;
+	/** current layer */
+	private int $index;
 
-	/** @var string|bool|null */
-	private $extends;
+	private string|bool|null $extends = null;
 
 	/** @var string[] */
-	private $imports;
+	private array $imports;
 
 	/** @var array[] */
-	private $placeholders;
+	private array $placeholders;
 
 
 	public static function install(Latte\Compiler $compiler): void

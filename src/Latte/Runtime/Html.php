@@ -19,8 +19,7 @@ class Html implements HtmlStringable
 {
 	use Latte\Strict;
 
-	/** @var string */
-	private $value;
+	private string $value;
 
 
 	public function __construct($value)

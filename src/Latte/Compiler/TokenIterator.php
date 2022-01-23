@@ -19,13 +19,12 @@ class TokenIterator
 	use Strict;
 
 	/** @var array<array{string, int, int}> */
-	public $tokens;
+	public array $tokens;
 
-	/** @var int */
-	public $position = -1;
+	public int $position = -1;
 
 	/** @var int[] */
-	public $ignored = [];
+	public array $ignored = [];
 
 
 	/**

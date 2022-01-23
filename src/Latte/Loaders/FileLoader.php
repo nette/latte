@@ -19,8 +19,7 @@ class FileLoader implements Latte\Loader
 {
 	use Latte\Strict;
 
-	/** @var string|null */
-	protected $baseDir;
+	protected ?string $baseDir = null;
 
 
 	public function __construct(?string $baseDir = null)

@@ -20,7 +20,7 @@ class StringLoader implements Latte\Loader
 	use Latte\Strict;
 
 	/** @var string[]|null  [name => content] */
-	private $templates;
+	private ?array $templates = null;
 
 
 	/**

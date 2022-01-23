@@ -35,41 +35,21 @@ class Engine
 	/** @internal */
 	public $probe;
 
-	/** @var Parser|null */
-	private $parser;
-
-	/** @var Compiler|null */
-	private $compiler;
-
-	/** @var Loader|null */
-	private $loader;
-
-	/** @var Runtime\FilterExecutor */
-	private $filters;
-
-	/** @var \stdClass */
-	private $functions;
+	private ?Parser $parser = null;
+	private ?Compiler $compiler = null;
+	private ?Loader $loader = null;
+	private Runtime\FilterExecutor $filters;
+	private \stdClass $functions;
 
 	/** @var mixed[] */
-	private $providers = [];
+	private array $providers = [];
 
-	/** @var string */
-	private $contentType = self::CONTENT_HTML;
-
-	/** @var string|null */
-	private $tempDirectory;
-
-	/** @var bool */
-	private $autoRefresh = true;
-
-	/** @var bool */
-	private $strictTypes = false;
-
-	/** @var Policy|null */
-	private $policy;
-
-	/** @var bool */
-	private $sandboxed = false;
+	private string $contentType = self::CONTENT_HTML;
+	private ?string $tempDirectory = null;
+	private bool $autoRefresh = true;
+	private bool $strictTypes = false;
+	private ?Policy $policy = null;
+	private bool $sandboxed = false;
 
 
 	public function __construct()

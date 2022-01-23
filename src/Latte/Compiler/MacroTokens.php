@@ -30,11 +30,8 @@ class MacroTokens extends TokenIterator
 		SIGNIFICANT = [self::T_SYMBOL, self::T_NUMBER, self::T_VARIABLE, self::T_STRING, self::T_CAST, self::T_KEYWORD, self::T_CHAR],
 		NON_SIGNIFICANT = [self::T_COMMENT, self::T_WHITESPACE];
 
-	/** @var int */
-	public $depth = 0;
-
-	/** @var Tokenizer|null */
-	private static $tokenizer;
+	public int $depth = 0;
+	private static ?Tokenizer $tokenizer = null;
 
 
 	/**

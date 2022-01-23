@@ -17,23 +17,19 @@ class PhpWriter
 {
 	use Strict;
 
-	/** @var MacroTokens */
-	private $tokens;
+	private MacroTokens $tokens;
 
-	/** @var string */
-	private $modifiers;
+	private ?string $modifiers;
 
 	/** @var array{string, mixed}|null */
-	private $context;
+	private ?array $context = null;
 
-	/** @var Policy|null */
-	private $policy;
+	private ?Policy $policy = null;
 
 	/** @var string[] */
-	private $functions = [];
+	private array $functions = [];
 
-	/** @var int|null */
-	private $line;
+	private ?int $line = null;
 
 
 	public static function using(MacroNode $node, ?Compiler $compiler = null): self
