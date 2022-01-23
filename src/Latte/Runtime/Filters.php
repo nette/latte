@@ -23,10 +23,10 @@ use function is_array, is_string, count, strlen;
 class Filters
 {
 	/** @deprecated */
-	public static $dateFormat = "j.\u{a0}n.\u{a0}Y";
+	public static string $dateFormat = "j.\u{a0}n.\u{a0}Y";
 
-	/** @internal @var bool  use XML syntax? */
-	public static $xml = false;
+	/** @internal use XML syntax? */
+	public static bool $xml = false;
 
 
 	/**

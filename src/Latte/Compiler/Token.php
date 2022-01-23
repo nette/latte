@@ -26,27 +26,27 @@ class Token
 		HTML_ATTRIBUTE_END = 'htmlAttributeEnd',
 		COMMENT = 'comment'; // latte comment
 
-	/** @var string  token type [TEXT | MACRO_TAG | HTML_TAG_BEGIN | HTML_TAG_END | HTML_ATTRIBUTE_BEGIN | HTML_ATTRIBUTE_END | COMMENT] */
-	public $type;
+	/** token type [TEXT | MACRO_TAG | HTML_TAG_BEGIN | HTML_TAG_END | HTML_ATTRIBUTE_BEGIN | HTML_ATTRIBUTE_END | COMMENT] */
+	public string $type;
 
-	/** @var string  original text content of the token */
-	public $text;
+	/** original text content of the token */
+	public string $text;
 
-	/** @var int  line number */
-	public $line;
+	/** line number */
+	public int $line;
 
-	/** @var string  name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
-	public $name;
+	/** name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
+	public string $name = '';
 
-	/** @var string  value of macro tag or HTML attribute; used for types MACRO_TAG, HTML_ATTRIBUTE_BEGIN */
-	public $value;
+	/** value of macro tag or HTML attribute; used for types MACRO_TAG, HTML_ATTRIBUTE_BEGIN */
+	public string $value;
 
-	/** @var string  macro modifiers; used for type MACRO_TAG */
-	public $modifiers;
+	/** macro modifiers; used for type MACRO_TAG */
+	public string $modifiers = '';
 
-	/** @var bool  is closing macro or HTML tag </tag>? used for types MACRO_TAG, HTML_TAG_BEGIN */
-	public $closing;
+	/** is closing macro or HTML tag </tag>? used for types MACRO_TAG, HTML_TAG_BEGIN */
+	public bool $closing = false;
 
-	/** @var bool  is tag empty {name/}? used for type MACRO_TAG */
-	public $empty;
+	/** is tag empty {name/}? used for type MACRO_TAG */
+	public bool $empty = false;
 }

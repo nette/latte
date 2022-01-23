@@ -47,61 +47,52 @@ class Compiler
 		CONTEXT_XML_BOGUS_COMMENT = self::CONTEXT_HTML_BOGUS_COMMENT;
 
 	/** @var string[] @internal */
-	public $placeholders = [];
+	public array $placeholders = [];
 
-	/** @var string|null */
-	public $paramsExtraction;
+	public ?string $paramsExtraction = null;
 
 	/** @var Token[] */
-	private $tokens;
+	private array $tokens;
 
-	/** @var string pointer to current node content */
-	private $output;
+	/** pointer to current node content */
+	private ?string $output;
 
-	/** @var int  position on source template */
-	private $position;
+	/** position on source template */
+	private int $position = 0;
 
 	/** @var array<string, Macro[]> */
-	private $macros = [];
+	private array $macros = [];
 
 	/** @var string[] of orig name */
-	private $functions = [];
+	private array $functions = [];
 
 	/** @var int[] Macro flags */
-	private $flags;
+	private array $flags;
 
-	/** @var HtmlNode|null */
-	private $htmlNode;
+	private ?HtmlNode $htmlNode = null;
 
-	/** @var MacroNode|null */
-	private $macroNode;
+	private ?MacroNode $macroNode = null;
 
-	/** @var string */
-	private $contentType = self::CONTENT_HTML;
+	private string $contentType = self::CONTENT_HTML;
 
-	/** @var string|null */
-	private $context;
+	private ?string $context = null;
 
-	/** @var mixed */
-	private $lastAttrValue;
+	private mixed $lastAttrValue = null;
 
-	/** @var int */
-	private $tagOffset;
+	private int $tagOffset;
 
-	/** @var bool */
-	private $inHead;
+	private bool $inHead;
 
 	/** @var array<string, ?array{body: string, arguments: string, returns: string, comment: ?string}> */
-	private $methods = [];
+	private array $methods = [];
 
 	/** @var array<string, mixed> */
-	private $properties = [];
+	private array $properties = [];
 
 	/** @var array<string, mixed> */
-	private $constants = [];
+	private array $constants = [];
 
-	/** @var Policy|null */
-	private $policy;
+	private ?Policy $policy = null;
 
 
 	/**
@@ -441,6 +432,7 @@ class Compiler
 				$this->htmlNode = new HtmlNode($token->name);
 			}
 
+			$this->htmlNode->empty = false;
 			$this->htmlNode->closing = true;
 			$this->htmlNode->endLine = $this->getLine();
 			$this->context = self::CONTEXT_HTML_TEXT;

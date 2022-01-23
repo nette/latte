@@ -26,16 +26,10 @@ class SnippetDriver
 		TYPE_AREA = 'area';
 
 	/** @var array<array{string, bool}> */
-	private $stack = [];
-
-	/** @var int */
-	private $nestingLevel = 0;
-
-	/** @var bool */
-	private $renderingSnippets = false;
-
-	/** @var SnippetBridge */
-	private $bridge;
+	private array $stack = [];
+	private int $nestingLevel = 0;
+	private bool $renderingSnippets = false;
+	private SnippetBridge $bridge;
 
 
 	public function __construct(SnippetBridge $bridge)

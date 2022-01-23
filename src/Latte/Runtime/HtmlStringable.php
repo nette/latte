@@ -12,6 +12,6 @@ namespace Latte\Runtime;
 
 interface HtmlStringable
 {
-	/** @return string in HTML format */
+	/** in HTML format */
 	function __toString(): string;
 }

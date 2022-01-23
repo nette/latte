@@ -16,7 +16,7 @@ function parse($s)
 {
 	$parser = new Latte\Parser;
 	return array_map(
-		fn(Token $token) => array_filter([$token->type, $token->text, $token->name, $token->value]),
+		fn(Token $token) => array_filter([$token->type, $token->text, $token->name ?? null, $token->value ?? null]),
 		$parser->parse($s),
 	);
 }

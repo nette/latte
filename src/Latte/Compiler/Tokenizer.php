@@ -23,11 +23,10 @@ class Tokenizer
 		OFFSET = 1,
 		TYPE = 2;
 
-	/** @var string */
-	private $re;
+	private string $re;
 
 	/** @var int[] */
-	private $types;
+	private array $types;
 
 
 	/**

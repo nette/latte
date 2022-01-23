@@ -30,41 +30,31 @@ class Template
 
 	protected const BLOCKS = [];
 
-	/** @var \stdClass global accumulators for intermediate results */
-	public $global;
+	/** global accumulators for intermediate results */
+	public \stdClass $global;
 
 	/** @var mixed[]  @internal */
-	protected $params = [];
+	protected array $params = [];
 
-	/** @var FilterExecutor */
-	protected $filters;
+	protected FilterExecutor $filters;
 
-	/** @var string|false|null  @internal */
-	protected $parentName;
+	/** @internal */
+	protected string|false|null $parentName = null;
 
 	/** @var mixed[][] */
-	protected $varStack = [];
+	protected array $varStack = [];
 
 	/** @var Block[][] */
-	private $blocks;
+	private array $blocks;
 
 	/** @var mixed[][] */
-	private $blockStack = [];
+	private array $blockStack = [];
 
-	/** @var Engine */
-	private $engine;
-
-	/** @var string */
-	private $name;
-
-	/** @var Policy|null */
-	private $policy;
-
-	/** @var Template|null */
-	private $referringTemplate;
-
-	/** @var string|null */
-	private $referenceType;
+	private Engine $engine;
+	private string $name;
+	private ?Policy $policy = null;
+	private ?Template $referringTemplate = null;
+	private ?string $referenceType = null;
 
 
 	/**

@@ -22,25 +22,25 @@ class SecurityPolicy implements Latte\Policy
 	public const ALL = ['*'];
 
 	/** @var string[] */
-	private $tags = [];
+	private array $tags = [];
 
 	/** @var string[] */
-	private $filters = [];
+	private array $filters = [];
 
 	/** @var string[] */
-	private $functions = [];
+	private array $functions = [];
 
 	/** @var string[][] */
-	private $methods = [];
+	private array $methods = [];
 
 	/** @var string[][] */
-	private $properties = [];
+	private array $properties = [];
 
 	/** @var array<string, array<string, bool>> */
-	private $methodCache = [];
+	private array $methodCache = [];
 
 	/** @var array<string, array<string, bool>> */
-	private $propertyCache = [];
+	private array $propertyCache = [];
 
 
 	public static function createSafePolicy(): self

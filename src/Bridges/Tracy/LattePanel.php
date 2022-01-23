@@ -19,17 +19,12 @@ use Tracy;
  */
 class LattePanel implements Tracy\IBarPanel
 {
-	/** @var bool */
-	public $dumpParameters = true;
+	public bool $dumpParameters = true;
 
 	/** @var Template[] */
-	private $templates = [];
-
-	/** @var array */
-	private $list;
-
-	/** @var string|null */
-	private $name;
+	private array $templates = [];
+	private array $list;
+	private ?string $name = null;
 
 
 	public static function initialize(Engine $latte, ?string $name = null, ?Tracy\Bar $bar = null): void

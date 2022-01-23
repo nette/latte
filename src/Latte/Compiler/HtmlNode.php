@@ -17,38 +17,33 @@ class HtmlNode
 {
 	use Strict;
 
-	/** @var string */
-	public $name;
+	public string $name;
 
-	/** @var bool */
-	public $empty;
+	public bool $empty;
 
 	/** @var string[] */
-	public $attrs = [];
+	public array $attrs = [];
 
 	/** @var string[] */
-	public $macroAttrs = [];
+	public array $macroAttrs = [];
 
-	/** @var bool */
-	public $closing = false;
+	public bool $closing = false;
 
-	/** @var HtmlNode|null */
-	public $parentNode;
+	public ?HtmlNode $parentNode = null;
 
-	/** @var string */
-	public $attrCode;
+	public ?string $attrCode = null;
 
-	/** @var int  position of start tag in source template */
-	public $startLine;
+	/** position of start tag in source template */
+	public ?int $startLine = null;
 
-	/** @var int  position of end tag in source template */
-	public $endLine;
+	/** position of end tag in source template */
+	public ?int $endLine = null;
 
-	/** @var \stdClass  user data */
-	public $data;
+	/** user data */
+	public \stdClass $data;
 
-	/** @var string @internal */
-	public $innerMarker;
+	/** @internal */
+	public string $innerMarker = '';
 
 
 	public function __construct(string $name, ?self $parentNode = null)
