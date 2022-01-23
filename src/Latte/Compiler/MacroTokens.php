@@ -13,7 +13,7 @@ namespace Latte\Compiler;
 /**
  * Macro tag tokenizer.
  */
-class MacroTokens extends TokenIterator
+class MacroTokens extends LegacyTokenStream
 {
 	public const
 		T_WHITESPACE = 1,

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler\TokenIterator;
+use Latte\Compiler\LegacyTokenStream;
 use Latte\Compiler\Tokenizer;
 use Tester\Assert;
 
@@ -20,7 +20,7 @@ test('', function () {
 		T_WHITESPACE => '\s+',
 		T_STRING => '\w+',
 	]);
-	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
+	$traverser = new LegacyTokenStream($tokenizer->tokenize('say 123'));
 	$traverser->ignored[] = T_WHITESPACE;
 
 	Assert::same(-1, $traverser->position);
@@ -96,7 +96,7 @@ test('', function () {
 		'\s+',
 		'\w+',
 	]);
-	$traverser = new TokenIterator($tokenizer->tokenize('say 123'));
+	$traverser = new LegacyTokenStream($tokenizer->tokenize('say 123'));
 	Assert::null($traverser->nextValue('s'));
 	Assert::same('say', $traverser->nextValue('say'));
 	Assert::same(' ', $traverser->nextValue());

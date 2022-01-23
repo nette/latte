@@ -17,7 +17,7 @@ use Latte\Strict;
  * Traversing helper.
  * @internal
  */
-class TokenIterator
+class LegacyTokenStream
 {
 	use Strict;
 
