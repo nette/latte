@@ -58,7 +58,7 @@ class Blueprint
 
 		$res = '';
 		foreach ($vars as $name => $value) {
-			if (Latte\Helpers::startsWith($name, 'ʟ_')) {
+			if (str_starts_with($name, 'ʟ_')) {
 				continue;
 			}
 
@@ -118,7 +118,7 @@ class Blueprint
 		}
 
 		if ($nullable && strcasecmp($type, 'mixed')) {
-			$type = strpos($type, '|') !== false
+			$type = str_contains($type, '|')
 				? $type . '|null'
 				: '?' . $type;
 		}

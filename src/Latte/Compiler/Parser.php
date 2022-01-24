@@ -89,7 +89,7 @@ class Parser
 	 */
 	public function parse(string $input): array
 	{
-		if (Helpers::startsWith($input, "\u{FEFF}")) { // BOM
+		if (str_starts_with($input, "\u{FEFF}")) { // BOM
 			$input = substr($input, 3);
 		}
 
@@ -204,7 +204,7 @@ class Parser
 
 		if (!empty($matches['end'])) { // end of HTML tag />
 			$this->addToken(Token::HTML_TAG_END, $matches[0]);
-			$empty = strpos($matches[0], '/') !== false;
+			$empty = str_contains($matches[0], '/');
 			$this->setContext(!$this->xmlMode && !$empty && in_array($this->lastHtmlTag, ['script', 'style'], true) ? self::CONTEXT_HTML_CDATA : self::CONTEXT_HTML_TEXT);
 			return true;
 
@@ -214,7 +214,7 @@ class Parser
 			$token->value = $matches['value'] ?? '';
 
 			if ($token->value === '"' || $token->value === "'") { // attribute = "'
-				if (Helpers::startsWith($token->name, self::N_PREFIX)) {
+				if (str_starts_with($token->name, self::N_PREFIX)) {
 					$token->value = '';
 					if ($m = $this->match('~(.*?)' . $matches['value'] . '~xsi')) {
 						$token->value = $m[1];
@@ -491,9 +491,9 @@ class Parser
 			$this->setSyntax($this->defaultSyntax);
 
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
-			if (strpos($token->value, 'html') !== false) {
+			if (str_contains($token->value, 'html')) {
 				$this->setContentType(self::CONTENT_HTML);
-			} elseif (strpos($token->value, 'xml') !== false) {
+			} elseif (str_contains($token->value, 'xml')) {
 				$this->setContentType(self::CONTENT_XML);
 			} else {
 				$this->setContentType(self::CONTENT_TEXT);

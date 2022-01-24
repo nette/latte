@@ -51,9 +51,9 @@ class PhpHelpers
 
 					} else {
 						if (trim($php) !== '' || substr($res, -1) === '<') { // skip <?php ?) but preserve <<?php
-							$inline = strpos($php, "\n") === false && strlen($res) - strrpos($res, "\n") < $lineLength;
+							$inline = !str_contains($php, "\n") && strlen($res) - strrpos($res, "\n") < $lineLength;
 							$res .= '<?php' . ($inline ? ' ' : "\n" . str_repeat("\t", $openLevel));
-							if (strpos($next[1], "\n") === false) {
+							if (!str_contains($next[1], "\n")) {
 								$token = rtrim($token, "\n");
 							} else {
 								$php = rtrim($php, "\t");
