@@ -257,7 +257,7 @@ class BlockMacros extends MacroSet
 			return $writer->write("ob_start(fn() => '') %node.line; try {");
 		}
 
-		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
+		if (str_starts_with((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
 			$node->context[1] = '';
 			$node->modifiers .= '|escape';
 		} elseif ($node->modifiers) {
@@ -659,6 +659,6 @@ class BlockMacros extends MacroSet
 
 	private function isDynamic(string $name): bool
 	{
-		return strpos($name, '$') !== false || strpos($name, ' ') !== false;
+		return str_contains($name, '$') || str_contains($name, ' ');
 	}
 }

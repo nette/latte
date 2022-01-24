@@ -86,18 +86,18 @@ class MacroSet implements Latte\Macro
 
 		if (
 			$node->modifiers
-			&& (!$begin || (is_string($begin) && strpos($begin, '%modify') === false))
-			&& (!$end || (is_string($end) && strpos($end, '%modify') === false))
-			&& (!$attr || (is_string($attr) && strpos($attr, '%modify') === false))
+			&& (!$begin || (is_string($begin) && !str_contains($begin, '%modify')))
+			&& (!$end || (is_string($end) && !str_contains($end, '%modify')))
+			&& (!$attr || (is_string($attr) && !str_contains($attr, '%modify')))
 		) {
 			throw new CompileException('Filters are not allowed in ' . $node->getNotation());
 		}
 
 		if (
 			$node->args !== ''
-			&& (!$begin || (is_string($begin) && strpos($begin, '%node') === false))
-			&& (!$end || (is_string($end) && strpos($end, '%node') === false))
-			&& (!$attr || (is_string($attr) && strpos($attr, '%node') === false))
+			&& (!$begin || (is_string($begin) && !str_contains($begin, '%node')))
+			&& (!$end || (is_string($end) && !str_contains($end, '%node')))
+			&& (!$attr || (is_string($attr) && !str_contains($attr, '%node')))
 		) {
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation());
 		}

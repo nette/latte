@@ -66,7 +66,7 @@ class Filters
 	{
 		$double = $double && $s instanceof HtmlStringable ? false : $double;
 		$s = (string) $s;
-		if (strpos($s, '`') !== false && strpbrk($s, ' <>"\'') === false) {
+		if (str_contains($s, '`') && strpbrk($s, ' <>"\'') === false) {
 			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
 		}
 
@@ -454,7 +454,7 @@ class Filters
 			$time = new \DateTime($time);
 		}
 
-		if (strpos($format, '%') !== false) {
+		if (str_contains($format, '%')) {
 			if (PHP_VERSION_ID >= 80100) {
 				trigger_error("Function strftime() used by filter |date is deprecated since PHP 8.1, use format without % characters like 'Y-m-d'.", E_USER_DEPRECATED);
 			}
@@ -925,14 +925,14 @@ class Filters
 				$value = (string) $value;
 			}
 
-			$q = strpos($value, '"') === false ? '"' : "'";
+			$q = !str_contains($value, '"') ? '"' : "'";
 			$s .= ' ' . $key . '=' . $q
 				. str_replace(
 					['&', $q, '<'],
 					['&amp;', $q === '"' ? '&quot;' : '&#39;', self::$xml ? '&lt;' : '<'],
 					$value,
 				)
-				. (strpos($value, '`') !== false && strpbrk($value, ' <>"\'') === false ? ' ' : '')
+				. (str_contains($value, '`') && strpbrk($value, ' <>"\'') === false ? ' ' : '')
 				. $q;
 		}
 
