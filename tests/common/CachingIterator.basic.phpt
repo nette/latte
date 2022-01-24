@@ -82,8 +82,7 @@ test('', function () {
 test('Check if next position is valid', function () {
 	// empty iterator
 	$inner = new class implements Iterator {
-		#[ReturnTypeWillChange]
-		public function current()
+		public function current(): mixed
 		{
 			throw new RuntimeException('Invalid state');
 		}
@@ -94,8 +93,7 @@ test('Check if next position is valid', function () {
 		}
 
 
-		#[ReturnTypeWillChange]
-		public function key()
+		public function key(): mixed
 		{
 			throw new RuntimeException('Invalid state');
 		}

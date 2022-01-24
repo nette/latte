@@ -53,9 +53,8 @@ class PhpWriter
 
 	/**
 	 * Expands %node.word, %node.array, %node.args, %node.line, %escape(), %modify(), %var, %raw, %word in code.
-	 * @param  mixed  ...$args
 	 */
-	public function write(string $mask, ...$args): string
+	public function write(string $mask, mixed ...$args): string
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
 		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', fn($m) => $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll(), $mask);
@@ -762,7 +761,7 @@ class PhpWriter
 	 * @param  string|array<array{string, int, int}>  $var
 	 * @throws CompileException
 	 */
-	public function modifierPass(MacroTokens $tokens, $var, bool $isContent = false): MacroTokens
+	public function modifierPass(MacroTokens $tokens, string|array $var, bool $isContent = false): MacroTokens
 	{
 		$inside = 0;
 		$res = new MacroTokens($var);

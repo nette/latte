@@ -104,10 +104,9 @@ class Template
 
 
 	/**
-	 * @param  int|string  $layer
 	 * @return string[]
 	 */
-	public function getBlockNames($layer = self::LAYER_TOP): array
+	public function getBlockNames(int|string $layer = self::LAYER_TOP): array
 	{
 		return array_keys($this->blocks[$layer] ?? []);
 	}
@@ -233,7 +232,7 @@ class Template
 	 * @param  string|\Closure|null  $mod  content-type name or modifier closure
 	 * @internal
 	 */
-	public function renderToContentType($mod, ?string $block = null): void
+	public function renderToContentType(string|\Closure|null $mod, ?string $block = null): void
 	{
 		$this->filter(
 			function () use ($block) { $this->render($block); },
@@ -267,17 +266,20 @@ class Template
 	 * Renders block.
 	 * @param  mixed[]  $params
 	 * @param  string|\Closure|null  $mod  content-type name or modifier closure
-	 * @param  int|string  $layer
 	 * @internal
 	 */
-	public function renderBlock(string $name, array $params, $mod = null, $layer = null): void
-	{
+	public function renderBlock(
+		string $name,
+		array $params,
+		string|\Closure|null $mod = null,
+		int|string|null $layer = null,
+	): void {
 		$block = $layer
 			? ($this->blocks[$layer][$name] ?? null)
 			: ($this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[self::LAYER_TOP][$name] ?? null);
 
 		if (!$block) {
-			$hint = ($t = Latte\Helpers::getSuggestion($this->getBlockNames($layer), $name))
+			$hint = $layer && ($t = Latte\Helpers::getSuggestion($this->getBlockNames($layer), $name))
 				? ", did you mean '$t'?"
 				: '.';
 			$name = $layer ? "$layer $name" : $name;
@@ -312,11 +314,14 @@ class Template
 	/**
 	 * Creates block if doesn't exist and checks if content type is the same.
 	 * @param  callable[]  $functions
-	 * @param  int|string  $layer
 	 * @internal
 	 */
-	protected function addBlock(string $name, string $contentType, array $functions, $layer = null): void
-	{
+	protected function addBlock(
+		string $name,
+		string $contentType,
+		array $functions,
+		int|string|null $layer = null,
+	): void {
 		$block = &$this->blocks[$layer ?? self::LAYER_TOP][$name];
 		$block ??= new Block;
 		if ($block->contentType === null) {
@@ -337,7 +342,7 @@ class Template
 	/**
 	 * @param  string|\Closure|null  $mod  content-type name or modifier closure
 	 */
-	private function filter(callable $function, $mod, string $contentType, string $name): void
+	private function filter(callable $function, string|\Closure|null $mod, string $contentType, string $name): void
 	{
 		if ($mod === null || $mod === $contentType) {
 			$function();
@@ -375,10 +380,7 @@ class Template
 	}
 
 
-	/**
-	 * @param  int|string  $staticId
-	 */
-	private function initBlockLayer($staticId, ?int $destId = null): void
+	private function initBlockLayer(int|string $staticId, ?int $destId = null): void
 	{
 		$destId ??= $staticId;
 		$this->blocks[$destId] = [];
@@ -422,11 +424,9 @@ class Template
 
 
 	/**
-	 * @param  mixed  $callable
-	 * @return mixed
 	 * @internal
 	 */
-	protected function call($callable)
+	protected function call(mixed $callable): mixed
 	{
 		if (!is_callable($callable)) {
 			throw new Latte\SecurityViolationException('Invalid callable.');
@@ -454,12 +454,9 @@ class Template
 
 
 	/**
-	 * @param  mixed  $obj
-	 * @param  mixed  $prop
-	 * @return mixed
 	 * @internal
 	 */
-	protected function prop($obj, $prop)
+	protected function prop(mixed $obj, mixed $prop): mixed
 	{
 		$class = is_object($obj) ? $obj::class : $obj;
 		if (is_string($class) && !$this->policy->isPropertyAllowed($class, (string) $prop)) {

@@ -33,13 +33,13 @@ class MacroSet implements Latte\Macro
 	}
 
 
-	/**
-	 * @param  string|callable|null  $begin
-	 * @param  string|callable|null  $end
-	 * @param  string|callable|null  $attr
-	 */
-	public function addMacro(string $name, $begin, $end = null, $attr = null, ?int $flags = null): self
-	{
+	public function addMacro(
+		string $name,
+		string|callable|null $begin,
+		string|callable|null $end = null,
+		string|callable|null $attr = null,
+		?int $flags = null,
+	): self {
 		if (!$begin && !$end && !$attr) {
 			throw new \InvalidArgumentException("At least one argument must be specified for tag '$name'.");
 		}
@@ -148,10 +148,8 @@ class MacroSet implements Latte\Macro
 
 	/**
 	 * Generates code.
-	 * @param  string|callable  $def
-	 * @return string|bool|null
 	 */
-	private function compile(MacroNode $node, $def)
+	private function compile(MacroNode $node, string|callable $def): string|bool|null
 	{
 		$node->tokenizer->reset();
 		$writer = Latte\PhpWriter::using($node, $this->compiler);

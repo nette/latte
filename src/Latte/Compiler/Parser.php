@@ -361,9 +361,8 @@ class Parser
 
 	/**
 	 * @param  string  $type  Parser::CONTENT_HTML, CONTENT_XML or CONTENT_TEXT
-	 * @return static
 	 */
-	public function setContentType(string $type)
+	public function setContentType(string $type): static
 	{
 		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XML], true)) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
@@ -376,11 +375,7 @@ class Parser
 	}
 
 
-	/**
-	 * @param  mixed  $quote
-	 * @return static
-	 */
-	public function setContext(string $context, $quote = null)
+	public function setContext(string $context, mixed $quote = null): static
 	{
 		$this->context = [$context, $quote];
 		return $this;
@@ -389,9 +384,8 @@ class Parser
 
 	/**
 	 * Changes macro tag delimiters.
-	 * @return static
 	 */
-	public function setSyntax(?string $type)
+	public function setSyntax(?string $type): static
 	{
 		$type ??= $this->defaultSyntax;
 		if (!isset($this->syntaxes[$type])) {
@@ -405,9 +399,8 @@ class Parser
 
 	/**
 	 * Changes macro tag delimiters (as regular expression).
-	 * @return static
 	 */
-	public function setDelimiters(string $left, string $right)
+	public function setDelimiters(string $left, string $right): static
 	{
 		$this->delimiters = [$left, $right];
 		return $this;

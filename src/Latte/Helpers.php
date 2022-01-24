@@ -25,9 +25,8 @@ class Helpers
 
 	/**
 	 * Checks callback.
-	 * @param  mixed  $callable
 	 */
-	public static function checkCallback($callable): callable
+	public static function checkCallback(mixed $callable): callable
 	{
 		if (!is_callable($callable, false, $text)) {
 			throw new \InvalidArgumentException("Callback '$text' is not callable.");

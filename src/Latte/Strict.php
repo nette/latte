@@ -20,10 +20,9 @@ trait Strict
 	/**
 	 * Call to undefined method.
 	 * @param  mixed[]  $args
-	 * @return mixed
 	 * @throws LogicException
 	 */
-	public function __call(string $name, array $args)
+	public function __call(string $name, array $args): mixed
 	{
 		$class = method_exists($this, $name) ? 'parent' : static::class;
 		$items = (new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -38,10 +37,9 @@ trait Strict
 	/**
 	 * Call to undefined static method.
 	 * @param  mixed[]  $args
-	 * @return mixed
 	 * @throws LogicException
 	 */
-	public static function __callStatic(string $name, array $args)
+	public static function __callStatic(string $name, array $args): mixed
 	{
 		$rc = new \ReflectionClass(static::class);
 		$items = array_filter($rc->getMethods(\ReflectionMethod::IS_STATIC), fn($m) => $m->isPublic());
@@ -55,10 +53,9 @@ trait Strict
 
 	/**
 	 * Access to undeclared property.
-	 * @return mixed
 	 * @throws LogicException
 	 */
-	public function &__get(string $name)
+	public function &__get(string $name): mixed
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), fn($p) => !$p->isStatic());
@@ -72,10 +69,9 @@ trait Strict
 
 	/**
 	 * Access to undeclared property.
-	 * @param  mixed  $value
 	 * @throws LogicException
 	 */
-	public function __set(string $name, $value): void
+	public function __set(string $name, mixed $value): void
 	{
 		$rc = new \ReflectionClass($this);
 		$items = array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), fn($p) => !$p->isStatic());

@@ -13,6 +13,7 @@ use Latte;
 use Latte\Engine;
 use Latte\RuntimeException;
 use Nette;
+use Stringable;
 use function is_array, is_string, count, strlen;
 
 
@@ -31,8 +32,6 @@ class Filters
 
 	/**
 	 * Escapes string for use everywhere inside HTML (except for comments).
-	 * @param  mixed  $s  plain text
-	 * @return string HTML
 	 */
 	public static function escapeHtml($s): string
 	{
@@ -42,8 +41,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML text.
-	 * @param  mixed  $s  plain text or HtmlStringable
-	 * @return string HTML
 	 */
 	public static function escapeHtmlText($s): string
 	{
@@ -59,8 +56,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML attribute value.
-	 * @param  mixed  $s  plain text
-	 * @return string HTML
 	 */
 	public static function escapeHtmlAttr($s, bool $double = true): string
 	{
@@ -78,8 +73,6 @@ class Filters
 
 	/**
 	 * Escapes HTML for use inside HTML attribute.
-	 * @param  mixed  $s  HTML text
-	 * @return string HTML
 	 */
 	public static function escapeHtmlAttrConv($s): string
 	{
@@ -89,8 +82,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML attribute name.
-	 * @param  string  $s  plain text
-	 * @return string HTML
 	 */
 	public static function escapeHtmlAttrUnquoted($s): string
 	{
@@ -103,8 +94,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside HTML/XML comments.
-	 * @param  string  $s  plain text
-	 * @return string HTML
 	 */
 	public static function escapeHtmlComment($s): string
 	{
@@ -124,8 +113,6 @@ class Filters
 
 	/**
 	 * Escapes string for use everywhere inside XML (except for comments).
-	 * @param  string  $s  plain text
-	 * @return string XML
 	 */
 	public static function escapeXml($s): string
 	{
@@ -139,8 +126,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside XML attribute name.
-	 * @param  string  $s  plain text
-	 * @return string XML
 	 */
 	public static function escapeXmlAttrUnquoted($s): string
 	{
@@ -153,8 +138,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside CSS template.
-	 * @param  string  $s  plain text
-	 * @return string CSS
 	 */
 	public static function escapeCss($s): string
 	{
@@ -165,10 +148,8 @@ class Filters
 
 	/**
 	 * Escapes variables for use inside <script>.
-	 * @param  mixed  $s  plain text
-	 * @return string JSON
 	 */
-	public static function escapeJs($s): string
+	public static function escapeJs(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
 			$s = $s->__toString();
@@ -185,7 +166,6 @@ class Filters
 
 	/**
 	 * Escapes string for use inside iCal template.
-	 * @param  string  $s  plain text
 	 */
 	public static function escapeICal($s): string
 	{
@@ -198,8 +178,6 @@ class Filters
 
 	/**
 	 * Escapes CSS/JS for usage in <script> and <style>..
-	 * @param  string  $s  CSS/JS
-	 * @return string HTML RAWTEXT
 	 */
 	public static function escapeHtmlRawText($s): string
 	{
@@ -209,8 +187,6 @@ class Filters
 
 	/**
 	 * Converts HTML to plain text.
-	 * @param  string  $s  HTML
-	 * @return string plain text
 	 */
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
@@ -222,8 +198,6 @@ class Filters
 
 	/**
 	 * Removes tags from HTML (but remains HTML entites).
-	 * @param  string  $s  HTML
-	 * @return string HTML
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
 	{
@@ -236,7 +210,7 @@ class Filters
 	/**
 	 * Converts ... to ...
 	 */
-	public static function convertTo(FilterInfo $info, string $dest, $s): string
+	public static function convertTo(FilterInfo $info, string $dest, string $s): string
 	{
 		$source = $info->contentType ?: Engine::CONTENT_TEXT;
 		if ($source === $dest) {
@@ -293,20 +267,15 @@ class Filters
 
 	/**
 	 * Sanitizes string for use inside href attribute.
-	 * @param  string  $s  plain text
-	 * @return string plain text
 	 */
-	public static function safeUrl($s): string
+	public static function safeUrl(string $s): string
 	{
-		$s = (string) $s;
 		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
 	}
 
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string  $s  text|HTML
-	 * @return string text|HTML
 	 */
 	public static function strip(FilterInfo $info, string $s): string
 	{
@@ -318,9 +287,6 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @param  string  $s  HTML
-	 * @param  bool  $strip  stripping mode
-	 * @return string HTML
 	 */
 	public static function spacelessHtml(string $s, bool &$strip = true): string
 	{
@@ -366,7 +332,6 @@ class Filters
 
 	/**
 	 * Replaces all repeated white spaces with a single space.
-	 * @return string text
 	 */
 	public static function spacelessText(string $s): string
 	{
@@ -400,7 +365,6 @@ class Filters
 	/**
 	 * Join array of text or HTML elements with a string.
 	 * @param  string[]  $arr
-	 * @return string text|HTML
 	 */
 	public static function implode(array $arr, string $glue = ''): string
 	{
@@ -421,7 +385,6 @@ class Filters
 
 	/**
 	 * Repeats text.
-	 * @return string plain text
 	 */
 	public static function repeat(FilterInfo $info, $s, int $count): string
 	{
@@ -431,9 +394,8 @@ class Filters
 
 	/**
 	 * Date/time formatting.
-	 * @param  string|int|\DateTimeInterface|\DateInterval  $time
 	 */
-	public static function date($time, ?string $format = null): ?string
+	public static function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
 	{
 		if ($time == null) { // intentionally ==
 			return null;
@@ -468,7 +430,6 @@ class Filters
 
 	/**
 	 * Converts to human readable file size.
-	 * @return string plain text
 	 */
 	public static function bytes(float $bytes, int $precision = 2): string
 	{
@@ -488,11 +449,13 @@ class Filters
 
 	/**
 	 * Performs a search and replace.
-	 * @param  string|string[]  $search
-	 * @param  string|string[]  $replace
 	 */
-	public static function replace(FilterInfo $info, $subject, $search, $replace = null): string
-	{
+	public static function replace(
+		FilterInfo $info,
+		string|array $subject,
+		string|array $search,
+		string|array|null $replace = null,
+	): string {
 		$subject = (string) $subject;
 		if (is_array($search)) {
 			if (is_array($replace)) {
@@ -524,7 +487,6 @@ class Filters
 
 	/**
 	 * The data: URI generator.
-	 * @return string plain text
 	 */
 	public static function dataStream(string $data, ?string $type = null): string
 	{
@@ -536,10 +498,7 @@ class Filters
 	}
 
 
-	/**
-	 * @param  string  $s  plain text
-	 */
-	public static function breaklines($s): Html
+	public static function breaklines(string|Stringable $s): Html
 	{
 		return new Html(nl2br(htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8'), self::$xml));
 	}
@@ -548,7 +507,7 @@ class Filters
 	/**
 	 * Returns a part of string.
 	 */
-	public static function substring($s, int $start, ?int $length = null): string
+	public static function substring(string|Stringable $s, int $start, ?int $length = null): string
 	{
 		$s = (string) $s;
 		if ($length === null) {
@@ -565,9 +524,8 @@ class Filters
 
 	/**
 	 * Truncates string to maximal length.
-	 * @return string plain text
 	 */
-	public static function truncate($s, $length, $append = "\u{2026}"): string
+	public static function truncate(string|Stringable $s, int $length, string $append = "\u{2026}"): string
 	{
 		$s = (string) $s;
 		if (self::strLength($s) > $length) {
@@ -589,8 +547,6 @@ class Filters
 
 	/**
 	 * Convert to lower case.
-	 * @param  string  $s  plain text
-	 * @return string plain text
 	 */
 	public static function lower($s): string
 	{
@@ -600,8 +556,6 @@ class Filters
 
 	/**
 	 * Convert to upper case.
-	 * @param  string  $s  plain text
-	 * @return string plain text
 	 */
 	public static function upper($s): string
 	{
@@ -611,8 +565,6 @@ class Filters
 
 	/**
 	 * Convert first character to upper case.
-	 * @param  string  $s  plain text
-	 * @return string plain text
 	 */
 	public static function firstUpper($s): string
 	{
@@ -623,8 +575,6 @@ class Filters
 
 	/**
 	 * Capitalize string.
-	 * @param  string  $s  plain text
-	 * @return string plain text
 	 */
 	public static function capitalize($s): string
 	{
@@ -634,9 +584,8 @@ class Filters
 
 	/**
 	 * Returns length of string or iterable.
-	 * @param  array|\Countable|\Traversable|string  $val
 	 */
-	public static function length($val): int
+	public static function length(array|\Countable|\Traversable|string $val): int
 	{
 		if (is_array($val) || $val instanceof \Countable) {
 			return count($val);
@@ -659,7 +608,7 @@ class Filters
 	/**
 	 * Strips whitespace.
 	 */
-	public static function trim(FilterInfo $info, $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
+	public static function trim(FilterInfo $info, string $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '', (string) $s);
@@ -697,9 +646,8 @@ class Filters
 
 	/**
 	 * Reverses string or array.
-	 * @param  string|array|\Traversable  $val
 	 */
-	public static function reverse($val, bool $preserveKeys = false)
+	public static function reverse(string|array|\Traversable $val, bool $preserveKeys = false)
 	{
 		if (is_array($val)) {
 			return array_reverse($val, $preserveKeys);
@@ -713,9 +661,8 @@ class Filters
 
 	/**
 	 * Chunks items by returning an array of arrays with the given number of items.
-	 * @param  array|\Traversable  $list
 	 */
-	public static function batch($list, int $length, $rest = null): \Generator
+	public static function batch(array|\Traversable $list, int $length, $rest = null): \Generator
 	{
 		$batch = [];
 		foreach ($list as $key => $value) {
@@ -752,12 +699,8 @@ class Filters
 
 	/**
 	 * Returns value clamped to the inclusive range of min and max.
-	 * @param  int|float  $value
-	 * @param  int|float  $min
-	 * @param  int|float  $max
-	 * @return int|float
 	 */
-	public static function clamp($value, $min, $max)
+	public static function clamp(int|float $value, int|float $min, int|float $max): int|float
 	{
 		if ($min > $max) {
 			throw new \InvalidArgumentException("Minimum ($min) is not less than maximum ($max).");
@@ -769,10 +712,8 @@ class Filters
 
 	/**
 	 * Generates URL-encoded query string
-	 * @param  string|array  $data
-	 * @return string
 	 */
-	public static function query($data): string
+	public static function query(string|array $data): string
 	{
 		return is_array($data)
 			? http_build_query($data, '', '&')
@@ -809,10 +750,8 @@ class Filters
 
 	/**
 	 * Returns the first item from the array or null if array is empty.
-	 * @param  string|array  $value
-	 * @return mixed
 	 */
-	public static function first($value)
+	public static function first(string|array $value): mixed
 	{
 		return is_array($value)
 			? (count($value) ? reset($value) : null)
@@ -822,10 +761,8 @@ class Filters
 
 	/**
 	 * Returns the last item from the array or null if array is empty.
-	 * @param  string|array  $value
-	 * @return mixed
 	 */
-	public static function last($value)
+	public static function last(string|array $value): mixed
 	{
 		return is_array($value)
 			? (count($value) ? end($value) : null)
@@ -835,11 +772,13 @@ class Filters
 
 	/**
 	 * Extracts a slice of an array or string.
-	 * @param  string|array  $value
-	 * @return string|array
 	 */
-	public static function slice($value, int $start, ?int $length = null, bool $preserveKeys = false)
-	{
+	public static function slice(
+		string|array $value,
+		int $start,
+		?int $length = null,
+		bool $preserveKeys = false,
+	): string|array {
 		return is_array($value)
 			? array_slice($value, $start, $length, $preserveKeys)
 			: self::substring($value, $start, $length);
@@ -866,10 +805,8 @@ class Filters
 
 	/**
 	 * Picks random element/char.
-	 * @param  string|array  $value
-	 * @return mixed
 	 */
-	public static function random($values)
+	public static function random(string|array $values): mixed
 	{
 		if (is_string($values)) {
 			$values = preg_split('//u', $values, -1, PREG_SPLIT_NO_EMPTY);
