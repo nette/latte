@@ -35,10 +35,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 	private ?self $parent = null;
 
 
-	/**
-	 * @param  array|\Traversable|\stdClass|mixed  $iterator
-	 */
-	public function __construct($iterator, ?self $parent = null)
+	public function __construct(mixed $iterator, ?self $parent = null)
 	{
 		if (is_array($iterator) || $iterator instanceof \stdClass) {
 			$iterator = new \ArrayIterator($iterator);
@@ -180,9 +177,8 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Returns the next key or null if position is not valid.
-	 * @return mixed
 	 */
-	public function getNextKey()
+	public function getNextKey(): mixed
 	{
 		$iterator = $this->getInnerIterator();
 		return $iterator->valid() ? $iterator->key() : null;
@@ -191,9 +187,8 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Returns the next element or null if position is not valid.
-	 * @return mixed
 	 */
-	public function getNextValue()
+	public function getNextValue(): mixed
 	{
 		$iterator = $this->getInnerIterator();
 		return $iterator->valid() ? $iterator->current() : null;
@@ -214,10 +209,9 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 	/**
 	 * Returns property value.
-	 * @return mixed
 	 * @throws \LogicException if the property is not defined.
 	 */
-	public function &__get(string $name)
+	public function &__get(string $name): mixed
 	{
 		if (method_exists($this, $m = 'get' . $name) || method_exists($this, $m = 'is' . $name)) {
 			$ret = $this->$m();

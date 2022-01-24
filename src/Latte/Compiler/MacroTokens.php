@@ -37,7 +37,7 @@ class MacroTokens extends TokenIterator
 	/**
 	 * @param  string|array<array{string, int, int}>  $input
 	 */
-	public function __construct($input = [])
+	public function __construct(string|array $input = [])
 	{
 		parent::__construct(is_array($input) ? $input : $this->parse($input));
 		$this->ignored = self::NON_SIGNIFICANT;
@@ -67,9 +67,8 @@ class MacroTokens extends TokenIterator
 	/**
 	 * Appends simple token or string (will be parsed).
 	 * @param  string|array{string, int, int}  $val
-	 * @return static
 	 */
-	public function append($val, ?int $position = null)
+	public function append($val, ?int $position = null): static
 	{
 		if ($val != null) { // intentionally @
 			array_splice(
@@ -87,9 +86,8 @@ class MacroTokens extends TokenIterator
 	/**
 	 * Prepends simple token or string (will be parsed).
 	 * @param  string|array{string, int, int}  $val
-	 * @return static
 	 */
-	public function prepend($val)
+	public function prepend($val): static
 	{
 		if ($val != null) { // intentionally @
 			array_splice($this->tokens, 0, 0, is_array($val) ? [$val] : $this->parse($val));
@@ -146,7 +144,7 @@ class MacroTokens extends TokenIterator
 	/**
 	 * @param  int|string  ...$args  token type or value to stop before (required)
 	 */
-	public function joinUntilSameDepth(...$args): string
+	public function joinUntilSameDepth(int|string ...$args): string
 	{
 		$depth = $this->depth;
 		$res = '';
@@ -165,7 +163,7 @@ class MacroTokens extends TokenIterator
 	 * @param  string|string[]  $modifiers
 	 * @return ?array{string, ?string}
 	 */
-	public function fetchWordWithModifier($modifiers): ?array
+	public function fetchWordWithModifier(string|array $modifiers): ?array
 	{
 		$modifiers = (array) $modifiers;
 		$pos = $this->position;
@@ -183,8 +181,7 @@ class MacroTokens extends TokenIterator
 	}
 
 
-	/** @return static */
-	public function reset()
+	public function reset(): static
 	{
 		$this->depth = 0;
 		return parent::reset();

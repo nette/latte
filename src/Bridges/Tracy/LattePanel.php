@@ -75,7 +75,7 @@ class LattePanel implements Tracy\IBarPanel
 	}
 
 
-	private function buildList(Template $template, int $depth = 0, int $count = 1)
+	private function buildList(Template $template, int $depth = 0, int $count = 1): void
 	{
 		$this->list[] = (object) [
 			'template' => $template,

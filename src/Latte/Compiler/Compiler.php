@@ -97,9 +97,8 @@ class Compiler
 
 	/**
 	 * Adds new macro with Macro flags.
-	 * @return static
 	 */
-	public function addMacro(string $name, Macro $macro, ?int $flags = null)
+	public function addMacro(string $name, Macro $macro, ?int $flags = null): static
 	{
 		if (!preg_match('#^[a-z_=]\w*(?:[.:-]\w+)*$#iD', $name)) {
 			throw new \LogicException("Invalid tag name '$name'.");
@@ -119,9 +118,8 @@ class Compiler
 	/**
 	 * Registers run-time functions.
 	 * @param  string[]  $names
-	 * @return static
 	 */
-	public function setFunctions(array $names)
+	public function setFunctions(array $names): static
 	{
 		$this->functions = array_combine(array_map('strtolower', $names), $names);
 		return $this;
@@ -238,8 +236,7 @@ class Compiler
 	}
 
 
-	/** @return static */
-	public function setPolicy(?Policy $policy)
+	public function setPolicy(?Policy $policy): static
 	{
 		$this->policy = $policy;
 		return $this;
@@ -252,8 +249,7 @@ class Compiler
 	}
 
 
-	/** @return static */
-	public function setContentType(string $type)
+	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
 		$this->context = null;
@@ -337,10 +333,9 @@ class Compiler
 
 	/**
 	 * Adds custom property to template.
-	 * @param  mixed  $value
 	 * @internal
 	 */
-	public function addProperty(string $name, $value): void
+	public function addProperty(string $name, mixed $value): void
 	{
 		$this->properties[$name] = $value;
 	}
@@ -359,10 +354,9 @@ class Compiler
 
 	/**
 	 * Adds custom constant to template.
-	 * @param  mixed  $value
 	 * @internal
 	 */
-	public function addConstant(string $name, $value): void
+	public function addConstant(string $name, mixed $value): void
 	{
 		$this->constants[$name] = $value;
 	}
@@ -825,8 +819,6 @@ class Compiler
 			throw new SecurityViolationException('Tag ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
 		}
 
-		$modifiers = (string) $modifiers;
-
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
 				if (!Helpers::removeFilter($modifiers, 'nocheck')) {
@@ -879,10 +871,7 @@ class Compiler
 	}
 
 
-	/**
-	 * @param  HtmlNode|MacroNode  $node
-	 */
-	private static function printEndTag($node): string
+	private static function printEndTag(HtmlNode|MacroNode $node): string
 	{
 		return $node instanceof HtmlNode
 			? "</{$node->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs))

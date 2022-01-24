@@ -34,7 +34,7 @@ class Filters
 	 * @param  mixed  $s  plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtml($s): string
+	public static function escapeHtml(mixed $s): string
 	{
 		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
 	}
@@ -45,7 +45,7 @@ class Filters
 	 * @param  mixed  $s  plain text or HtmlStringable
 	 * @return string HTML
 	 */
-	public static function escapeHtmlText($s): string
+	public static function escapeHtmlText(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			return $s->__toString(true);
@@ -62,7 +62,7 @@ class Filters
 	 * @param  mixed  $s  plain text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlAttr($s, bool $double = true): string
+	public static function escapeHtmlAttr(mixed $s, bool $double = true): string
 	{
 		$double = $double && $s instanceof HtmlStringable ? false : $double;
 		$s = (string) $s;
@@ -81,7 +81,7 @@ class Filters
 	 * @param  mixed  $s  HTML text
 	 * @return string HTML
 	 */
-	public static function escapeHtmlAttrConv($s): string
+	public static function escapeHtmlAttrConv(mixed $s): string
 	{
 		return self::escapeHtmlAttr($s, false);
 	}
@@ -168,7 +168,7 @@ class Filters
 	 * @param  mixed  $s  plain text
 	 * @return string JSON
 	 */
-	public static function escapeJs($s): string
+	public static function escapeJs(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\Utils\IHtmlString) {
 			$s = $s->__toString(true);
@@ -866,9 +866,8 @@ class Filters
 	/**
 	 * Picks random element/char.
 	 * @param  string|array  $value
-	 * @return mixed
 	 */
-	public static function random($values)
+	public static function random($values): mixed
 	{
 		if (is_string($values)) {
 			$values = preg_split('//u', $values, -1, PREG_SPLIT_NO_EMPTY);

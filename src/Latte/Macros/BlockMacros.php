@@ -117,9 +117,8 @@ class BlockMacros extends MacroSet
 
 	/**
 	 * {include [block] name [,] [params]}
-	 * @return string|false
 	 */
-	public function macroInclude(MacroNode $node, PhpWriter $writer)
+	public function macroInclude(MacroNode $node, PhpWriter $writer): string|false
 	{
 		$node->validate(true, [], true);
 		$node->replaced = false;
@@ -621,9 +620,8 @@ class BlockMacros extends MacroSet
 	/**
 	 * {ifset block}
 	 * {elseifset block}
-	 * @return string|false
 	 */
-	public function macroIfset(MacroNode $node, PhpWriter $writer)
+	public function macroIfset(MacroNode $node, PhpWriter $writer): string|false
 	{
 		$node->validate(true);
 		if (!preg_match('~#|\w~A', $node->args)) {

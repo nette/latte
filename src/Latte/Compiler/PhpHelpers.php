@@ -132,10 +132,7 @@ class PhpHelpers
 	}
 
 
-	/**
-	 * @param  mixed  $value
-	 */
-	public static function dump($value, bool $multiline = false): string
+	public static function dump(mixed $value, bool $multiline = false): string
 	{
 		if (is_array($value)) {
 			$indexed = $value && array_keys($value) === range(0, count($value) - 1);
