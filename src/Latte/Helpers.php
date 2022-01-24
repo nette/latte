@@ -65,13 +65,4 @@ class Helpers
 		$modifier = preg_replace('#\|(' . $filter . ')\s?(?=\||$)#Di', '', $modifier, -1, $found);
 		return (bool) $found;
 	}
-
-
-	/**
-	 * Starts the $haystack string with the prefix $needle?
-	 */
-	public static function startsWith(string $haystack, string $needle): bool
-	{
-		return strncmp($haystack, $needle, strlen($needle)) === 0;
-	}
 }

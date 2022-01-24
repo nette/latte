@@ -70,7 +70,7 @@ class PhpWriter
 
 		$pos = $this->tokens->position;
 		$word = null;
-		if (strpos($mask, '%node_word') !== false) {
+		if (str_contains($mask, '%node_word')) {
 			$word = $this->tokens->fetchWord();
 			if ($word === null) {
 				throw new CompileException('Invalid content of tag');
@@ -238,12 +238,12 @@ class PhpWriter
 				$this->policy
 				&& $tokens->isCurrent($tokens::T_STRING)
 				&& $tokenValue[0] === '"'
-				&& (strpos($tokenValue, '{$') !== false || strpos($tokenValue, '${') !== false)
+				&& (str_contains($tokenValue, '{$') || str_contains($tokenValue, '${'))
 			) {
 				throw new CompileException('Forbidden complex expressions in strings.');
 
 			} elseif (
-				Helpers::startsWith($tokenValue, '$ʟ_')
+				str_starts_with($tokenValue, '$ʟ_')
 				|| ($this->policy && $tokens->isCurrent('$this'))
 			) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");

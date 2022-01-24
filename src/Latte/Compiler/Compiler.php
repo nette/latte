@@ -389,7 +389,7 @@ class Compiler
 		if (
 			$this->lastAttrValue === ''
 			&& $this->context
-			&& Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)
+			&& str_starts_with($this->context, self::CONTEXT_HTML_ATTRIBUTE)
 		) {
 			$this->lastAttrValue = $token->text;
 		}
@@ -403,7 +403,7 @@ class Compiler
 		if (
 			$this->context === self::CONTEXT_HTML_TAG
 			|| $this->context
-			&& Helpers::startsWith($this->context, self::CONTEXT_HTML_ATTRIBUTE)
+			&& str_starts_with($this->context, self::CONTEXT_HTML_ATTRIBUTE)
 		) {
 			$this->lastAttrValue = true;
 		}
@@ -474,7 +474,7 @@ class Compiler
 		$end = '';
 
 		if (!$htmlNode->closing) {
-			$htmlNode->empty = strpos($token->text, '/') !== false;
+			$htmlNode->empty = str_contains($token->text, '/');
 			if ($this->contentType === self::CONTENT_HTML) {
 				$emptyElement = isset(Helpers::$emptyElements[strtolower($htmlNode->name)]);
 				$htmlNode->empty = $htmlNode->empty || $emptyElement;
@@ -519,7 +519,7 @@ class Compiler
 
 	private function processHtmlAttributeBegin(Token $token): void
 	{
-		if (Helpers::startsWith($token->name, Parser::N_PREFIX)) {
+		if (str_starts_with($token->name, Parser::N_PREFIX)) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
 			if (isset($this->htmlNode->macroAttrs[$name])) {
 				throw new CompileException("Found multiple attributes {$token->name}.");
@@ -540,7 +540,7 @@ class Compiler
 			$this->lastAttrValue = '';
 			$this->context = self::CONTEXT_HTML_ATTRIBUTE;
 			if ($this->contentType === self::CONTENT_HTML) {
-				if (Helpers::startsWith($lower, 'on')) {
+				if (str_starts_with($lower, 'on')) {
 					$this->context = self::CONTEXT_HTML_ATTRIBUTE_JS;
 				} elseif ($lower === 'style') {
 					$this->context = self::CONTEXT_HTML_ATTRIBUTE_CSS;
@@ -637,7 +637,7 @@ class Compiler
 			!$node
 			|| ($node->name !== $name && $name !== '')
 			|| $modifiers
-			|| ($args !== '' && $node->args !== '' && !Helpers::startsWith($node->args . ' ', $args . ' '))
+			|| ($args !== '' && $node->args !== '' && !str_starts_with($node->args . ' ', $args . ' '))
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix

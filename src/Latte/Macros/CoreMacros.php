@@ -193,7 +193,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroElse(MacroNode $node, PhpWriter $writer): string
 	{
-		if ($node->args !== '' && Helpers::startsWith($node->args, 'if')) {
+		if ($node->args !== '' && str_starts_with($node->args, 'if')) {
 			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
 		}
 
@@ -343,7 +343,7 @@ class CoreMacros extends MacroSet
 	public function macroTranslate(MacroNode $node, PhpWriter $writer): string
 	{
 		if ($node->closing) {
-			if (strpos($node->content, '<?php') === false) {
+			if (!str_contains($node->content, '<?php')) {
 				$tmp = $node->content;
 				$node->content = '';
 				return $writer->write(
@@ -432,7 +432,7 @@ class CoreMacros extends MacroSet
 		$variable = $node->tokenizer->fetchWord();
 		if (!$variable) {
 			throw new CompileException('Missing variable in {capture}.');
-		} elseif (!Helpers::startsWith($variable, '$')) {
+		} elseif (!str_starts_with($variable, '$')) {
 			throw new CompileException("Invalid capture block variable '$variable'");
 		}
 
@@ -815,21 +815,21 @@ class CoreMacros extends MacroSet
 		$node->validate(true);
 		if (
 			!$this->getCompiler()->isInHead()
-			&& !($node->htmlNode && strtolower($node->htmlNode->name) === 'script' && strpos($node->args, 'html') !== false)
+			&& !($node->htmlNode && strtolower($node->htmlNode->name) === 'script' && str_contains($node->args, 'html'))
 		) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
 		}
 
 		$compiler = $this->getCompiler();
-		if (strpos($node->args, 'html') !== false) {
+		if (str_contains($node->args, 'html')) {
 			$type = $compiler::CONTENT_HTML;
-		} elseif (strpos($node->args, 'xml') !== false) {
+		} elseif (str_contains($node->args, 'xml')) {
 			$type = $compiler::CONTENT_XML;
-		} elseif (strpos($node->args, 'javascript') !== false) {
+		} elseif (str_contains($node->args, 'javascript')) {
 			$type = $compiler::CONTENT_JS;
-		} elseif (strpos($node->args, 'css') !== false) {
+		} elseif (str_contains($node->args, 'css')) {
 			$type = $compiler::CONTENT_CSS;
-		} elseif (strpos($node->args, 'calendar') !== false) {
+		} elseif (str_contains($node->args, 'calendar')) {
 			$type = $compiler::CONTENT_ICAL;
 		} else {
 			$type = $compiler::CONTENT_TEXT;

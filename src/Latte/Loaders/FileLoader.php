@@ -35,7 +35,7 @@ class FileLoader implements Latte\Loader
 	public function getContent($fileName): string
 	{
 		$file = $this->baseDir . $fileName;
-		if ($this->baseDir && !Latte\Helpers::startsWith($this->normalizePath($file), $this->baseDir)) {
+		if ($this->baseDir && !str_starts_with($this->normalizePath($file), $this->baseDir)) {
 			throw new Latte\RuntimeException("Template '$file' is not within the allowed path '{$this->baseDir}'.");
 
 		} elseif (!is_file($file)) {

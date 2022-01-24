@@ -45,7 +45,7 @@ class Tracer
 			if ($object instanceof Template) {
 				$method = $item['function'] ?? '';
 
-				if (Latte\Helpers::startsWith($method, 'block')) {
+				if (str_starts_with($method, 'block')) {
 					// begin of block
 					$comment = (new \ReflectionMethod($object, $method))->getDocComment();
 					$res[] = [
@@ -106,7 +106,7 @@ class Tracer
 	private static function filterParams(array $params): array
 	{
 		foreach ($params as $key => $foo) {
-			if (is_string($key) && Latte\Helpers::startsWith($key, 'ʟ_')) {
+			if (is_string($key) && str_starts_with($key, 'ʟ_')) {
 				unset($params[$key]);
 			}
 		}
