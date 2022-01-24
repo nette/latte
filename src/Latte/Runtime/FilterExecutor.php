@@ -29,9 +29,8 @@ class FilterExecutor
 
 	/**
 	 * Registers run-time filter.
-	 * @return static
 	 */
-	public function add(?string $name, callable $callback)
+	public function add(?string $name, callable $callback): static
 	{
 		if ($name === null) {
 			array_unshift($this->_dynamic, $callback);
@@ -106,10 +105,8 @@ class FilterExecutor
 
 	/**
 	 * Calls filter with FilterInfo.
-	 * @param  mixed  ...$args
-	 * @return mixed
 	 */
-	public function filterContent(string $name, FilterInfo $info, ...$args)
+	public function filterContent(string $name, FilterInfo $info, mixed ...$args): mixed
 	{
 		$lname = strtolower($name);
 		if (!isset($this->_static[$lname])) {

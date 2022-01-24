@@ -110,11 +110,10 @@ class MacroNode
 
 
 	/**
-	 * @param  string|bool|null  $arguments
 	 * @param  string[]  $parents
 	 * @throws CompileException
 	 */
-	public function validate($arguments, array $parents = [], bool $modifiers = false): void
+	public function validate(string|bool|null $arguments, array $parents = [], bool $modifiers = false): void
 	{
 		if ($parents && (!$this->parentNode || !in_array($this->parentNode->name, $parents, true))) {
 			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.');

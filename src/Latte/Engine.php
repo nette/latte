@@ -73,7 +73,7 @@ class Engine
 	 * Renders template to output.
 	 * @param  object|mixed[]  $params
 	 */
-	public function render(string $name, $params = [], ?string $block = null): void
+	public function render(string $name, object|array $params = [], ?string $block = null): void
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
 		$template->global->coreCaptured = false;
@@ -86,7 +86,7 @@ class Engine
 	 * Renders template to string.
 	 * @param  object|mixed[]  $params
 	 */
-	public function renderToString(string $name, $params = [], ?string $block = null): string
+	public function renderToString(string $name, object|array $params = [], ?string $block = null): string
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
 		$template->global->coreCaptured = true;
@@ -268,9 +268,8 @@ class Engine
 
 	/**
 	 * Registers run-time filter.
-	 * @return static
 	 */
-	public function addFilter(?string $name, callable $callback)
+	public function addFilter(?string $name, callable $callback): static
 	{
 		if ($name !== null && !preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid filter name '$name'.");
@@ -283,9 +282,8 @@ class Engine
 
 	/**
 	 * Registers run-time filter loader.
-	 * @return static
 	 */
-	public function addFilterLoader(callable $callback)
+	public function addFilterLoader(callable $callback): static
 	{
 		$this->filters->add(null, function ($name) use ($callback) {
 			if ($filter = $callback($name)) {
@@ -309,9 +307,8 @@ class Engine
 	/**
 	 * Call a run-time filter.
 	 * @param  mixed[]  $args
-	 * @return mixed
 	 */
-	public function invokeFilter(string $name, array $args)
+	public function invokeFilter(string $name, array $args): mixed
 	{
 		return ($this->filters->$name)(...$args);
 	}
@@ -319,9 +316,8 @@ class Engine
 
 	/**
 	 * Adds new macro.
-	 * @return static
 	 */
-	public function addMacro(string $name, Macro $macro)
+	public function addMacro(string $name, Macro $macro): static
 	{
 		$this->getCompiler()->addMacro($name, $macro);
 		return $this;
@@ -330,9 +326,8 @@ class Engine
 
 	/**
 	 * Registers run-time function.
-	 * @return static
 	 */
-	public function addFunction(string $name, callable $callback)
+	public function addFunction(string $name, callable $callback): static
 	{
 		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid function name '$name'.");
@@ -346,9 +341,8 @@ class Engine
 	/**
 	 * Call a run-time function.
 	 * @param  mixed[]  $args
-	 * @return mixed
 	 */
-	public function invokeFunction(string $name, array $args)
+	public function invokeFunction(string $name, array $args): mixed
 	{
 		if (!isset($this->functions->$name)) {
 			$hint = ($t = Helpers::getSuggestion(array_keys((array) $this->functions), $name))
@@ -363,10 +357,8 @@ class Engine
 
 	/**
 	 * Adds new provider.
-	 * @param  mixed  $value
-	 * @return static
 	 */
-	public function addProvider(string $name, $value)
+	public function addProvider(string $name, mixed $value): static
 	{
 		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid provider name '$name'.");
@@ -387,32 +379,28 @@ class Engine
 	}
 
 
-	/** @return static */
-	public function setPolicy(?Policy $policy)
+	public function setPolicy(?Policy $policy): static
 	{
 		$this->policy = $policy;
 		return $this;
 	}
 
 
-	/** @return static */
-	public function setExceptionHandler(callable $callback)
+	public function setExceptionHandler(callable $callback): static
 	{
 		$this->providers['coreExceptionHandler'] = $callback;
 		return $this;
 	}
 
 
-	/** @return static */
-	public function setSandboxMode(bool $on = true)
+	public function setSandboxMode(bool $on = true): static
 	{
 		$this->sandboxed = $on;
 		return $this;
 	}
 
 
-	/** @return static */
-	public function setContentType(string $type)
+	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
 		return $this;
@@ -421,9 +409,8 @@ class Engine
 
 	/**
 	 * Sets path to temporary directory.
-	 * @return static
 	 */
-	public function setTempDirectory(?string $path)
+	public function setTempDirectory(?string $path): static
 	{
 		$this->tempDirectory = $path;
 		return $this;
@@ -432,9 +419,8 @@ class Engine
 
 	/**
 	 * Sets auto-refresh mode.
-	 * @return static
 	 */
-	public function setAutoRefresh(bool $on = true)
+	public function setAutoRefresh(bool $on = true): static
 	{
 		$this->autoRefresh = $on;
 		return $this;
@@ -443,9 +429,8 @@ class Engine
 
 	/**
 	 * Enables declare(strict_types=1) in templates.
-	 * @return static
 	 */
-	public function setStrictTypes(bool $on = true)
+	public function setStrictTypes(bool $on = true): static
 	{
 		$this->strictTypes = $on;
 		return $this;
@@ -474,8 +459,7 @@ class Engine
 	}
 
 
-	/** @return static */
-	public function setLoader(Loader $loader)
+	public function setLoader(Loader $loader): static
 	{
 		$this->loader = $loader;
 		return $this;
@@ -496,7 +480,7 @@ class Engine
 	 * @param  object|mixed[]  $params
 	 * @return mixed[]
 	 */
-	private function processParams($params): array
+	private function processParams(object|array $params): array
 	{
 		if (is_array($params)) {
 			return $params;
