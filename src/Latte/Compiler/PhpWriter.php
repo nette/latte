@@ -833,7 +833,7 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
+						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump(implode('', $this->context)) . ', ')
 							->append(')');
 					} else {
 						$res = $this->escapePass($res);

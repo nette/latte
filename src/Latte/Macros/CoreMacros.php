@@ -344,7 +344,7 @@ class CoreMacros extends MacroSet
 				return $writer->write(
 					'$ʟ_fi = new LR\FilterInfo(%var);
 					echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, %raw)) %node.line;',
-					implode($node->context),
+					implode('', $node->context),
 					PhpHelpers::dump($tmp)
 				);
 			}
@@ -356,7 +356,7 @@ class CoreMacros extends MacroSet
 				}
 				$ʟ_fi = new LR\FilterInfo(%var);
 				echo %modifyContent($this->filters->filterContent("translate", $ʟ_fi, $ʟ_tmp)) %node.line;',
-				implode($node->context)
+				implode('', $node->context)
 			);
 
 		} elseif ($node->empty = ($node->args !== '')) {
@@ -392,7 +392,7 @@ class CoreMacros extends MacroSet
 			$mode,
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
-				: PhpHelpers::dump($noEscape ? null : implode($node->context))
+				: PhpHelpers::dump($noEscape ? null : implode('', $node->context))
 		);
 	}
 
@@ -411,7 +411,7 @@ class CoreMacros extends MacroSet
 				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($ʟ_e, $this); }
 				else { echo ob_get_clean(); throw $ʟ_e; }
 			}',
-			implode($node->context)
+			implode('', $node->context)
 		);
 	}
 
@@ -439,7 +439,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer): string
 	{
-		$body = in_array(implode($node->context), [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
+		$body = in_array(implode('', $node->context), [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write(
@@ -448,7 +448,7 @@ class CoreMacros extends MacroSet
 			}
 			$ʟ_fi = new LR\FilterInfo(%var); %raw = %modifyContent($ʟ_tmp);',
 			$body,
-			implode($node->context),
+			implode('', $node->context),
 			$node->data->variable
 		);
 	}

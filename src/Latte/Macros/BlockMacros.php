@@ -110,7 +110,7 @@ class BlockMacros extends MacroSet
 		}
 
 		return [
-			($this->extends === null ? '' : '$this->parentName = ' . $this->extends . ';') . implode($this->imports),
+			($this->extends === null ? '' : '$this->parentName = ' . $this->extends . ';') . implode('', $this->imports),
 		];
 	}
 
@@ -158,7 +158,7 @@ class BlockMacros extends MacroSet
 				'$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw, %word) %node.line;',
 				$node->modifiers
 					? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
-					: PhpHelpers::dump($noEscape ? null : implode($node->context)),
+					: PhpHelpers::dump($noEscape ? null : implode('', $node->context)),
 				$name
 			);
 		}
@@ -185,7 +185,7 @@ class BlockMacros extends MacroSet
 			. '%node.array? + ' . $key
 			. ($node->modifiers
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
-				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode($node->context))))
+				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode('', $node->context))))
 			. ') %node.line;'
 		);
 	}
@@ -208,7 +208,7 @@ class BlockMacros extends MacroSet
 			} finally {
 				echo rtrim(ob_get_clean());
 			}',
-			implode($node->context)
+			implode('', $node->context)
 		);
 	}
 
@@ -274,7 +274,7 @@ class BlockMacros extends MacroSet
 			$node->modifiers .= '|escape';
 			$node->closingCode = $writer->write(
 				'<?php } finally { $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); } ?>',
-				implode($node->context)
+				implode('', $node->context)
 			);
 			return $writer->write('ob_start(function () {}) %node.line; try {');
 		}
@@ -401,7 +401,7 @@ class BlockMacros extends MacroSet
 		return $writer->write(
 			'$this->addBlock($ʟ_nm = %word, %var, [[$this, %var]], %var);',
 			$data->name,
-			implode($node->context),
+			implode('', $node->context),
 			$func,
 			$layer
 		);
@@ -562,7 +562,7 @@ class BlockMacros extends MacroSet
 		}
 
 		$block = $this->blocks[$layer ?? $this->index][$data->name] = new Block;
-		$block->contentType = implode($node->context);
+		$block->contentType = implode('', $node->context);
 		$block->comment = "{{$node->name} {$node->args}} on line {$node->startLine}";
 		return $block;
 	}
@@ -610,7 +610,7 @@ class BlockMacros extends MacroSet
 				try { $this->createTemplate(%word, %node.array, "embed")->renderToContentType(%var) %node.line; }
 				finally { $this->leaveBlockLayer(); } ?>' . "\n",
 				$name,
-				implode($node->context)
+				implode('', $node->context)
 			);
 
 		} else {
@@ -620,7 +620,7 @@ class BlockMacros extends MacroSet
 				try { $this->renderBlock(%raw, %node.array, %var) %node.line; }
 				finally { $this->leaveBlockLayer(); } ?>' . "\n",
 				$this->isDynamic($name) ? $writer->formatWord($name) : PhpHelpers::dump($name),
-				implode($node->context)
+				implode('', $node->context)
 			);
 		}
 	}
