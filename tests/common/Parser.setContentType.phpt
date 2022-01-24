@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler\Token;
+use Latte\Compiler\LegacyToken;
 use Latte\Engine;
 use Tester\Assert;
 
@@ -17,7 +17,7 @@ function parse($s, $contentType = null)
 {
 	$parser = new Latte\Compiler\Parser;
 	$parser->setContentType($contentType ?: Engine::CONTENT_HTML);
-	return array_map(fn(Token $token) => [$token->type, $token->text], $parser->parse($s));
+	return array_map(fn(LegacyToken $token) => [$token->type, $token->text], $parser->parse($s));
 }
 
 

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler\Token;
+use Latte\Compiler\LegacyToken;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -16,7 +16,7 @@ function parse($s)
 {
 	$parser = new Latte\Compiler\Parser;
 	return array_map(
-		fn(Token $token) => array_filter([$token->type, $token->text, $token->name ?? null, $token->value ?? null]),
+		fn(LegacyToken $token) => array_filter([$token->type, $token->text, $token->name ?? null, $token->value ?? null]),
 		$parser->parse($s),
 	);
 }

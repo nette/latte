@@ -59,7 +59,7 @@ class Compiler
 
 	public ?string $paramsExtraction = null;
 
-	/** @var Token[] */
+	/** @var LegacyToken[] */
 	private array $tokens;
 
 	/** pointer to current node content */
@@ -136,7 +136,7 @@ class Compiler
 
 	/**
 	 * Compiles tokens to PHP file
-	 * @param  Token[]  $tokens
+	 * @param  LegacyToken[]  $tokens
 	 */
 	public function compile(array $tokens, string $className, ?string $comment = null, bool $strictMode = false): string
 	{
@@ -155,7 +155,7 @@ class Compiler
 
 
 	/**
-	 * @param  Token[]  $tokens
+	 * @param  LegacyToken[]  $tokens
 	 */
 	private function buildClassBody(array $tokens): string
 	{
@@ -377,7 +377,7 @@ class Compiler
 	}
 
 
-	private function processText(Token $token): void
+	private function processText(LegacyToken $token): void
 	{
 		if (
 			$this->lastAttrValue === ''
@@ -391,7 +391,7 @@ class Compiler
 	}
 
 
-	private function processMacroTag(Token $token): void
+	private function processMacroTag(LegacyToken $token): void
 	{
 		if (
 			$this->context === self::CONTEXT_HTML_TAG
@@ -419,7 +419,7 @@ class Compiler
 	}
 
 
-	private function processHtmlTagBegin(Token $token): void
+	private function processHtmlTagBegin(LegacyToken $token): void
 	{
 		if ($token->closing) {
 			while ($this->htmlNode) {
@@ -456,7 +456,7 @@ class Compiler
 	}
 
 
-	private function processHtmlTagEnd(Token $token): void
+	private function processHtmlTagEnd(LegacyToken $token): void
 	{
 		if (in_array($this->context, [self::CONTEXT_HTML_COMMENT, self::CONTEXT_HTML_BOGUS_COMMENT], true)) {
 			$this->output .= $token->text;
@@ -511,7 +511,7 @@ class Compiler
 	}
 
 
-	private function processHtmlAttributeBegin(Token $token): void
+	private function processHtmlAttributeBegin(LegacyToken $token): void
 	{
 		if (str_starts_with($token->name, Parser::N_PREFIX)) {
 			$name = substr($token->name, strlen(Parser::N_PREFIX));
@@ -557,14 +557,14 @@ class Compiler
 	}
 
 
-	private function processHtmlAttributeEnd(Token $token): void
+	private function processHtmlAttributeEnd(LegacyToken $token): void
 	{
 		$this->context = self::CONTEXT_HTML_TAG;
 		$this->output .= $token->text;
 	}
 
 
-	private function processComment(Token $token): void
+	private function processComment(LegacyToken $token): void
 	{
 		$leftOfs = ($tmp = strrpos($this->output, "\n")) === false ? 0 : $tmp + 1;
 		$isLeftmost = trim(substr($this->output, $leftOfs)) === '';

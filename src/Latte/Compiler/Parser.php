@@ -63,7 +63,7 @@ class Parser
 	/** source template */
 	private string $input;
 
-	/** @var Token[] */
+	/** @var LegacyToken[] */
 	private array $output;
 
 	/** position on source template */
@@ -86,7 +86,7 @@ class Parser
 
 	/**
 	 * Process all {macros} and <tags/>.
-	 * @return Token[]
+	 * @return LegacyToken[]
 	 */
 	public function parse(string $input): array
 	{
@@ -128,7 +128,7 @@ class Parser
 		}
 
 		if ($this->offset < strlen($input)) {
-			$this->addToken(Token::TEXT, substr($this->input, $this->offset));
+			$this->addToken(LegacyToken::TEXT, substr($this->input, $this->offset));
 		}
 
 		return $this->output;
@@ -147,7 +147,7 @@ class Parser
 		~xsi');
 
 		if (!empty($matches['htmlcomment'])) { // <! <?
-			$this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
+			$this->addToken(LegacyToken::HTML_TAG_BEGIN, $matches[0]);
 			$end = $matches['htmlcomment'] === '!--'
 				? '--'
 				: ($matches['htmlcomment'] === '?' && $this->xmlMode ? '\?' : '');
@@ -155,7 +155,7 @@ class Parser
 			return true;
 
 		} elseif (!empty($matches['tag'])) { // <tag or </tag
-			$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
+			$token = $this->addToken(LegacyToken::HTML_TAG_BEGIN, $matches[0]);
 			$token->name = $matches['tag'];
 			$token->closing = (bool) $matches['closing'];
 			$this->lastHtmlTag = $matches['closing'] . strtolower($matches['tag']);
@@ -183,7 +183,7 @@ class Parser
 		}
 
 		// </tag
-		$token = $this->addToken(Token::HTML_TAG_BEGIN, $matches[0]);
+		$token = $this->addToken(LegacyToken::HTML_TAG_BEGIN, $matches[0]);
 		$token->name = $this->lastHtmlTag;
 		$token->closing = true;
 		$this->lastHtmlTag = '/' . $this->lastHtmlTag;
@@ -204,13 +204,13 @@ class Parser
 		~xsi');
 
 		if (!empty($matches['end'])) { // end of HTML tag />
-			$this->addToken(Token::HTML_TAG_END, $matches[0]);
+			$this->addToken(LegacyToken::HTML_TAG_END, $matches[0]);
 			$empty = str_contains($matches[0], '/');
 			$this->setContext(!$this->xmlMode && !$empty && in_array($this->lastHtmlTag, ['script', 'style'], true) ? self::CONTEXT_HTML_CDATA : self::CONTEXT_HTML_TEXT);
 			return true;
 
 		} elseif (isset($matches['attr']) && $matches['attr'] !== '') { // HTML attribute
-			$token = $this->addToken(Token::HTML_ATTRIBUTE_BEGIN, $matches[0]);
+			$token = $this->addToken(LegacyToken::HTML_ATTRIBUTE_BEGIN, $matches[0]);
 			$token->name = $matches['attr'];
 			$token->value = $matches['value'] ?? '';
 
@@ -249,7 +249,7 @@ class Parser
 		}
 
 		// (attribute end) '"
-		$this->addToken(Token::HTML_ATTRIBUTE_END, $matches[0]);
+		$this->addToken(LegacyToken::HTML_ATTRIBUTE_END, $matches[0]);
 		$this->setContext(self::CONTEXT_HTML_TAG);
 		return true;
 	}
@@ -270,7 +270,7 @@ class Parser
 		}
 
 		// -->
-		$this->addToken(Token::HTML_TAG_END, $matches[0]);
+		$this->addToken(LegacyToken::HTML_TAG_END, $matches[0]);
 		$this->setContext(self::CONTEXT_HTML_TEXT);
 		return true;
 	}
@@ -305,13 +305,13 @@ class Parser
 		~xsiA');
 
 		if (!empty($matches['macro'])) {
-			$token = $this->addToken(Token::MACRO_TAG, $this->context[1][1] . $matches[0]);
+			$token = $this->addToken(LegacyToken::MACRO_TAG, $this->context[1][1] . $matches[0]);
 			[$token->name, $token->value, $token->modifiers, $token->empty, $token->closing] = $this->parseMacroTag($matches['macro']);
 			$this->context = $this->context[1][0];
 			return true;
 
 		} elseif (!empty($matches['comment'])) {
-			$this->addToken(Token::COMMENT, $this->context[1][1] . $matches[0]);
+			$this->addToken(LegacyToken::COMMENT, $this->context[1][1] . $matches[0]);
 			$this->context = $this->context[1][0];
 			return true;
 
@@ -352,7 +352,7 @@ class Parser
 
 		$value = substr($this->input, $this->offset, $matches[0][1] - $this->offset);
 		if ($value !== '') {
-			$this->addToken(Token::TEXT, $value);
+			$this->addToken(LegacyToken::TEXT, $value);
 		}
 
 		$this->offset = $matches[0][1] + strlen($matches[0][0]);
@@ -442,9 +442,9 @@ class Parser
 	}
 
 
-	private function addToken(string $type, string $text): Token
+	private function addToken(string $type, string $text): LegacyToken
 	{
-		$this->output[] = $token = new Token;
+		$this->output[] = $token = new LegacyToken;
 		$token->type = $type;
 		$token->text = $text;
 		$token->line = $this->line;
@@ -462,29 +462,29 @@ class Parser
 	/**
 	 * Process low-level macros.
 	 */
-	protected function filter(Token $token): void
+	protected function filter(LegacyToken $token): void
 	{
-		if ($token->type === Token::MACRO_TAG && $token->name === 'syntax') {
+		if ($token->type === LegacyToken::MACRO_TAG && $token->name === 'syntax') {
 			$this->setSyntax($token->closing ? $this->defaultSyntax : $token->value);
-			$token->type = Token::COMMENT;
+			$token->type = LegacyToken::COMMENT;
 
-		} elseif ($token->type === Token::HTML_ATTRIBUTE_BEGIN && $token->name === 'n:syntax') {
+		} elseif ($token->type === LegacyToken::HTML_ATTRIBUTE_BEGIN && $token->name === 'n:syntax') {
 			$this->setSyntax($token->value);
 			$this->syntaxEndTag = $this->lastHtmlTag;
 			$this->syntaxEndLevel = 1;
-			$token->type = Token::COMMENT;
+			$token->type = LegacyToken::COMMENT;
 
-		} elseif ($token->type === Token::HTML_TAG_BEGIN && $this->lastHtmlTag === $this->syntaxEndTag) {
+		} elseif ($token->type === LegacyToken::HTML_TAG_BEGIN && $this->lastHtmlTag === $this->syntaxEndTag) {
 			$this->syntaxEndLevel++;
 
 		} elseif (
-			$token->type === Token::HTML_TAG_END
+			$token->type === LegacyToken::HTML_TAG_END
 			&& $this->lastHtmlTag === ('/' . $this->syntaxEndTag)
 			&& --$this->syntaxEndLevel === 0
 		) {
 			$this->setSyntax($this->defaultSyntax);
 
-		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
+		} elseif ($token->type === LegacyToken::MACRO_TAG && $token->name === 'contentType') {
 			if (str_contains($token->value, 'html')) {
 				$this->setContentType(self::CONTENT_HTML);
 			} elseif (str_contains($token->value, 'xml')) {

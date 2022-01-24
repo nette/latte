@@ -15,7 +15,7 @@ use Latte\Strict;
 /**
  * Latte parser token.
  */
-class Token
+class LegacyToken
 {
 	use Strict;
 
