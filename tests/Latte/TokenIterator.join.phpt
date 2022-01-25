@@ -72,17 +72,17 @@ test('', function () {
 
 	$traverser->position = 2;
 	Assert::null($traverser->nextValue());
-	Assert::same(2, $traverser->position);
+	Assert::same(3, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::null($traverser->nextValue());
 	Assert::null($traverser->nextValue(T_STRING, T_DNUMBER, T_WHITESPACE));
-	Assert::same(2, $traverser->position);
+	Assert::same(3, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::same('', $traverser->joinAll());
 	Assert::same('', $traverser->joinAll(T_STRING, T_DNUMBER, T_WHITESPACE));
-	Assert::same(2, $traverser->position);
+	Assert::same(3, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::same('', $traverser->joinUntil(T_STRING, T_DNUMBER, T_WHITESPACE));

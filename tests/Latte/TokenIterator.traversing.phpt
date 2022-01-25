@@ -105,17 +105,17 @@ test('', function () {
 	$traverser->position = 2;
 	Assert::null($traverser->nextToken());
 	Assert::null($traverser->nextToken());
-	Assert::same(2, $traverser->position);
+	Assert::same(3, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::null($traverser->nextToken());
 	Assert::null($traverser->nextToken(T_STRING, T_DNUMBER, T_WHITESPACE));
-	Assert::same(2, $traverser->position);
+	Assert::same(3, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::same([], $traverser->nextAll());
 	Assert::same([], $traverser->nextAll(T_STRING, T_DNUMBER, T_WHITESPACE));
-	Assert::same(2, $traverser->position);
+	Assert::same(3, $traverser->position);
 
 	$traverser->position = 2;
 	Assert::same([], $traverser->nextUntil(T_STRING, T_DNUMBER, T_WHITESPACE));
