@@ -33,6 +33,8 @@ class CompileException extends \Exception
 		if (@is_file($name)) { // @ - may trigger error
 			$this->message = rtrim($this->message, '.')
 				. ' in ' . str_replace(dirname($name, 2), '...', $name) . ($line ? ":$line" : '');
+		} elseif ($line > 1) {
+			$this->message = rtrim($this->message, '.') . ' (on line ' . $line . ')';
 		}
 
 		return $this;

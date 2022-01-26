@@ -57,4 +57,4 @@ Assert::exception(function () use ($latte) {
 		<li><a n:tag-if="$iterator->odd"></li>
 	{/foreach}
 	');
-}, Latte\CompileException::class, 'Unexpected </li>, expecting </a> for n:tag-if');
+}, Latte\CompileException::class, 'Unexpected </li>, expecting </a> for n:tag-if (on line 3)');
