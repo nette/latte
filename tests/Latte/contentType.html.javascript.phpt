@@ -40,10 +40,9 @@ Assert::match(
 	$latte->renderToString('<script>{=[1,2,3]}')
 );
 
-Assert::match(
-	'<script>"123"',
-	$latte->renderToString('<script>"{=123|noescape}"')
-);
+Assert::exception(function () use ($latte) {
+	$latte->compile('<script>"{=123|noescape}"');
+}, Latte\CompileException::class, 'Do not place {=123|noescape} inside quotes in JavaScript.');
 
 Assert::match(
 	'<script id="&lt;&gt;">',
@@ -52,11 +51,11 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<script> "{$var}" </script>');
-}, Latte\CompileException::class, 'Do not place {$var} inside quotes.');
+}, Latte\CompileException::class, 'Do not place {$var} inside quotes in JavaScript.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile("<script> '{\$var}' </script>");
-}, Latte\CompileException::class, 'Do not place {$var} inside quotes.');
+}, Latte\CompileException::class, 'Do not place {$var} inside quotes in JavaScript.');
 
 Assert::match(
 	'<script type="TEXT/X-JAVASCRIPT">"<>"',

@@ -863,15 +863,16 @@ class Compiler
 
 			if (!Helpers::removeFilter($modifiers, 'noescape')) {
 				$modifiers .= '|escape';
-				if (
-					$this->context === self::CONTEXT_HTML_JS
-					&& $name === '='
-					&& preg_match('#["\'] *$#D', $this->tokens[$this->position - 1]->text)
-				) {
-					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
-				}
 			} elseif ($this->policy && !$this->policy->isFilterAllowed('noescape')) {
 				throw new SecurityViolationException('Filter |noescape is not allowed.');
+			}
+
+			if (
+				$this->context === self::CONTEXT_HTML_JS
+				&& $name === '='
+				&& preg_match('#["\']$#D', $this->tokens[$this->position - 1]->text)
+			) {
+				throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes in JavaScript.");
 			}
 		}
 
