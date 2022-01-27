@@ -133,7 +133,7 @@ class Compiler
 			. implode("\n\n", $members)
 			. "\n\n}\n";
 
-		$code = PhpHelpers::inlineHtmlToEcho($code);
+		$code = PhpHelpers::optimizeEcho($code);
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
 	}
