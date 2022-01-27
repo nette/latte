@@ -59,15 +59,6 @@ class Engine
 		$this->probe = function () {};
 		$this->addExtension(new Extensions\CoreExtension);
 		$this->addExtension(new Extensions\BlockExtension);
-
-		$defaults = new Runtime\Defaults;
-		foreach ($defaults->getFilters() as $name => $callback) {
-			$this->filters->add($name, $callback);
-		}
-
-		foreach ($defaults->getFunctions() as $name => $callback) {
-			$this->functions->$name = $callback;
-		}
 	}
 
 
@@ -322,6 +313,14 @@ class Engine
 	public function addExtension(Extension $extension): static
 	{
 		$this->extensions[] = $extension;
+		foreach ($extension->getFilters() as $name => $callback) {
+			$this->filters->add($name, $callback);
+		}
+
+		foreach ($extension->getFunctions() as $name => $callback) {
+			$this->functions->$name = $callback;
+		}
+
 		return $this;
 	}
 
