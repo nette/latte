@@ -11,6 +11,7 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Helpers;
 use Latte\Policy;
 use Latte\SecurityViolationException;
 
@@ -125,8 +126,9 @@ class PhpWriter
 	public function formatModifiers(string $var, bool $isContent = false): string
 	{
 		static $uniq;
+		$modifier = $this->completeModifier($this->modifiers);
 		$uniq ??= '$' . bin2hex(random_bytes(5));
-		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
+		$tokens = new MacroTokens(ltrim($modifier, '|'));
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->modifierPass($tokens, $uniq, $isContent);
 		$tokens = $this->quotingPass($tokens);
@@ -831,6 +833,25 @@ class PhpWriter
 		}
 
 		return $res;
+	}
+
+
+	private function completeModifier(string $modifier): string
+	{
+		[$contentType, $context] = $this->context;
+		if (
+			$contentType === Compiler::CONTENT_HTML
+			&& in_array($context, [Compiler::CONTEXT_HTML_ATTRIBUTE_URL, Compiler::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)
+		) {
+			if (!Helpers::removeFilter($modifier, 'nocheck')) {
+				if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifier)) {
+					$modifier = '|checkUrl' . $modifier;
+				}
+			} elseif ($this->policy && !$this->policy->isFilterAllowed('nocheck')) {
+				throw new SecurityViolationException('Filter |nocheck is not allowed.');
+			}
+		}
+		return $modifier;
 	}
 
 

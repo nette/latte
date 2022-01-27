@@ -828,16 +828,6 @@ class Compiler
 		}
 
 		if (strpbrk($name, '=~%^&_')) {
-			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
-				if (!Helpers::removeFilter($modifiers, 'nocheck')) {
-					if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
-						$modifiers .= '|checkUrl';
-					}
-				} elseif ($this->policy && !$this->policy->isFilterAllowed('nocheck')) {
-					throw new SecurityViolationException('Filter |nocheck is not allowed.');
-				}
-			}
-
 			if (!Helpers::removeFilter($modifiers, 'noescape')) {
 				$modifiers .= '|escape';
 			} elseif ($this->policy && !$this->policy->isFilterAllowed('noescape')) {
