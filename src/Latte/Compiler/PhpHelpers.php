@@ -152,41 +152,38 @@ class PhpHelpers
 	}
 
 
-	public static function inlineHtmlToEcho(string $source): string
+	public static function optimizeEcho(string $source): string
 	{
 		$res = '';
 		$tokens = token_get_all($source);
+		$start = null;
 
 		for ($i = 0; $i < \count($tokens); $i++) {
 			$token = $tokens[$i];
-			if (is_array($token)) {
-				if ($token[0] === T_INLINE_HTML) {
-					$str = $token[1];
-					$n = $i + 1;
-					while (isset($tokens[$n])) {
-						if ($tokens[$n][0] === T_INLINE_HTML) {
-							$str .= $tokens[$n][1];
-							$i = $n;
-						} elseif (
-							$tokens[$n][0] !== T_OPEN_TAG
-							&& $tokens[$n][0] !== T_CLOSE_TAG
-							&& $tokens[$n][0] !== T_WHITESPACE
-						) {
-							break;
-						}
-
-						$n++;
-					}
-
-					$export = $str === "\n" ? '"\n"' : var_export($str, true);
-					$res .= "<?php echo $export ?>";
-					continue;
+			if ($token[0] === T_ECHO) {
+				if (!$start) {
+					$str = '';
+					$start = strlen($res);
 				}
 
-				$res .= $token[1];
-			} else {
-				$res .= $token;
+			} elseif ($start && $token[0] === T_CONSTANT_ENCAPSED_STRING && $token[1][0] === "'") {
+				$str .= stripslashes(substr($token[1], 1, -1));
+
+			} elseif ($start && $token === ';') {
+				if ($str !== '') {
+					$res = substr_replace(
+						$res,
+						'echo ' . ($str === "\n" ? '"\n"' : var_export($str, true)),
+						$start,
+						strlen($res) - $start,
+					);
+				}
+
+			} elseif ($token[0] !== T_WHITESPACE) {
+				$start = null;
 			}
+
+			$res .= is_array($token) ? $token[1] : $token;
 		}
 
 		return $res;
