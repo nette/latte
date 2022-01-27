@@ -59,21 +59,13 @@ abstract class MacroSet implements Latte\Extension
 	}
 
 
-	/**
-	 * Initializes before template parsing.
-	 * @return void
-	 */
-	public function initialize()
+	public function beforeParse(): void
 	{
 	}
 
 
-	/**
-	 * Finishes template parsing.
-	 */
-	public function finalize()
+	public function afterCompile(Compiler $compiler)
 	{
-		return null;
 	}
 
 

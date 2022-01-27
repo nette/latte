@@ -11,6 +11,7 @@ namespace Latte\Extensions;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\Compiler;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\TagInfo;
@@ -59,11 +60,19 @@ class BlockExtension extends MacroSet
 	}
 
 
-	/**
-	 * Initializes before template parsing.
-	 * @return void
-	 */
-	public function initialize()
+	public function getFilters(): array
+	{
+		return [];
+	}
+
+
+	public function getFunctions(): array
+	{
+		return [];
+	}
+
+
+	public function beforeParse(): void
 	{
 		$this->blocks = [[]];
 		$this->index = Template::LAYER_TOP;
@@ -73,12 +82,8 @@ class BlockExtension extends MacroSet
 	}
 
 
-	/**
-	 * Finishes template parsing.
-	 */
-	public function finalize()
+	public function afterCompile(Compiler $compiler)
 	{
-		$compiler = $this->getCompiler();
 		foreach ($this->placeholders as $key => [$index, $blockName]) {
 			$block = $this->blocks[$index][$blockName] ?? $this->blocks[Template::LAYER_LOCAL][$blockName] ?? null;
 			$compiler->placeholders[$key] = $block && !$block->hasParameters

@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Latte;
 
-use Latte\Compiler\TagInfo;
-
 
 /**
  * Latte extension.
@@ -23,26 +21,24 @@ interface Extension
 		DEFAULT_FLAGS = 0;
 
 	/**
-	 * Initializes before template parsing.
-	 * @return void
+	 * Returns a list of |filters.
+	 * @return array<string, callable>
 	 */
-	function initialize();
+	function getFilters(): array;
+
+	/**
+	 * Returns a list of functions used in templates.
+	 * @return array<string, callable>
+	 */
+	function getFunctions(): array;
+
+	/**
+	 * Initializes before template parsing.
+	 */
+	function beforeParse(): void;
 
 	/**
 	 * Finishes template parsing.
-	 * @return array{string, string}|array{string}|null  (prolog, epilog)
 	 */
-	function finalize();
-
-	/**
-	 * New node is found. Returns false to reject.
-	 * @return bool|null
-	 */
-	function nodeOpened(TagInfo $node);
-
-	/**
-	 * Node is closed.
-	 * @return void
-	 */
-	function nodeClosed(TagInfo $node);
+	function afterCompile(Compiler\Compiler $compiler); //: void;
 }

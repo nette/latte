@@ -11,6 +11,7 @@ namespace Latte\Extensions;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\Compiler;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\TagInfo;
@@ -89,21 +90,26 @@ class CoreExtension extends MacroSet
 	}
 
 
-	/**
-	 * Initializes before template parsing.
-	 * @return void
-	 */
-	public function initialize()
+	public function getFilters(): array
+	{
+		return [];
+	}
+
+
+	public function getFunctions(): array
+	{
+		return [];
+	}
+
+
+	public function beforeParse(): void
 	{
 		$this->overwrittenVars = [];
 		$this->idCounter = 0;
 	}
 
 
-	/**
-	 * Finishes template parsing.
-	 */
-	public function finalize()
+	public function afterCompile(Compiler $compiler)
 	{
 		if ($this->printTemplate) {
 			return ["(new Latte\\Runtime\\Blueprint)->printClass(\$this, {$this->printTemplate}); exit;"];

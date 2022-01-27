@@ -174,7 +174,7 @@ class Compiler
 		}
 
 		foreach ($macroHandlers as $handler) {
-			$handler->initialize($this);
+			$handler->beforeParse();
 		}
 
 		foreach ($tokens as $this->position => $token) {
@@ -211,7 +211,7 @@ class Compiler
 
 		$prepare = $epilogs = '';
 		foreach ($macroHandlers as $handler) {
-			$res = $handler->finalize();
+			$res = $handler->afterCompile($this);
 			$prepare .= empty($res[0]) ? '' : "<?php $res[0] ?>";
 			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
