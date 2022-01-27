@@ -137,6 +137,10 @@ class Engine
 	 */
 	public function compile(string $name): string
 	{
+		if ($this->sandboxed && !$this->policy) {
+			throw new \LogicException('In sandboxed mode you need to set a security policy.');
+		}
+
 		foreach ($this->onCompile ?: [] as $cb) {
 			(Helpers::checkCallback($cb))($this);
 		}

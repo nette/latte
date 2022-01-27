@@ -27,3 +27,8 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{="trim"("hello")}');
 }, Latte\SecurityViolationException::class, 'Calling trim() is not allowed.');
+
+$latte->setPolicy(null);
+Assert::exception(function () use ($latte) {
+	$latte->compile('');
+}, LogicException::class, 'In sandboxed mode you need to set a security policy.');
