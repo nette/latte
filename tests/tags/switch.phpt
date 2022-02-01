@@ -69,18 +69,21 @@ Assert::matchFile(
 );
 
 Assert::match(
-	'
-def
+	<<<'X'
 
----
+		def
 
-a
+		---
 
----
+		a
 
-def
+		---
 
----
-',
+		def
+
+		---
+
+		X
+,
 	$latte->renderToString($template),
 );

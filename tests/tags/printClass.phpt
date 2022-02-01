@@ -22,32 +22,36 @@ $res = ob_get_clean();
 
 if (PHP_VERSION_ID >= 70400) {
 	Assert::match(
-		'%A%/**
- * @method mixed Abc(stdClass $a, $b = 132)
- */
-class Template
-{
-	public int $int;
-	public $unknown;
-}
-%A%',
+		<<<'XX'
+			%A%/**
+			 * @method mixed Abc(stdClass $a, $b = 132)
+			 */
+			class Template
+			{
+				public int $int;
+				public $unknown;
+			}
+			%A%
+			XX,
 		$res,
 	);
 
 } else {
 	Assert::match(
-		'%A%/**
- * @method mixed Abc(stdClass $a, $b = 132)
- */
-class Template
-{
-	/** @var int */
-	public $int;
+		<<<'XX'
+			%A%/**
+			 * @method mixed Abc(stdClass $a, $b = 132)
+			 */
+			class Template
+			{
+				/** @var int */
+				public $int;
 
-	/** @var mixed */
-	public $unknown;
-}
-%A%',
+				/** @var mixed */
+				public $unknown;
+			}
+			%A%
+			XX,
 		$res,
 	);
 }

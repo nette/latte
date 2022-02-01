@@ -52,9 +52,13 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Unexpected {/if}, expecting </span> for n:if and n:foreach');
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('
-	{foreach [] as $item}
-		<li><a n:tag-if="$iterator->odd"></li>
-	{/foreach}
-	');
+	$latte->compile(
+		<<<'XX'
+
+				{foreach [] as $item}
+					<li><a n:tag-if="$iterator->odd"></li>
+				{/foreach}
+
+			XX,
+	);
 }, Latte\CompileException::class, 'Unexpected </li>, expecting </a> for n:tag-if (on line 3)');

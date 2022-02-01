@@ -39,8 +39,7 @@ Assert::match(
 			b
 
 		is null
-		XX
-,
+		XX,
 	$latte->renderToString(
 		<<<'XX'
 			{foreach [a, b] as $a}
@@ -61,22 +60,21 @@ Assert::match(
 
 // restoring blocks
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-		{block test}test{/block}
-		{try}
-			{embed embed.latte}{/embed}
-		{/try}
-		{include test}
-	',
+	'main' => <<<'X'
+				{block test}test{/block}
+				{try}
+					{embed embed.latte}{/embed}
+				{/try}
+				{include test}
+		X
+	,
 	'embed.latte' => '{rollback}',
 ]));
 
 Assert::match(
 	<<<'XX'
-
 				test
 		test
-		XX
-,
+		XX,
 	$latte->renderToString('main'),
 );

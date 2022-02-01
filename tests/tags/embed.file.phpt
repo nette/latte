@@ -31,711 +31,965 @@ testTemplate('expression', [
 ], 'embed');
 
 
-testTemplate('no blocks', [
-	'main' => '
-		outer
-		{embed "embed.latte"}{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed
-	',
-], '
-		outer
+testTemplate(
+	'no blocks',
+	[
+		'main' => <<<'XX'
 
-		embed
+					outer
+					{embed "embed.latte"}{/embed}
+					outer
 
-		outer
-');
+			XX,
+		'embed.latte' => <<<'XX'
 
+					embed
 
-testTemplate('no overwritten blocks', [
-	'main' => '
-		outer
-		{embed "embed.latte"}extra text{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed start
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer
+			XX,
+	],
+	<<<'XX'
 
-		embed start
-			embed A
-		embed end
+				outer
 
-		outer
-');
+				embed
+
+				outer
+
+		XX,
+);
 
 
-testTemplate('extra overwritten block', [
-	'main' => '
-		outer
-		{embed "embed.latte"}
-			{block a}main-A{/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed
-	',
-], '
-		outer
+testTemplate(
+	'no overwritten blocks',
+	[
+		'main' => <<<'XX'
 
-		embed
+					outer
+					{embed "embed.latte"}extra text{/embed}
+					outer
 
-		outer
-');
+			XX,
+		'embed.latte' => <<<'XX'
 
+					embed start
+						{block a}embed A{/block}
+					embed end
 
-testTemplate('one overwritten block', [
-	'main' => '
-		outer
-		{embed "embed.latte"}
-			{block a}main-A {include parent}{/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed start
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer
+			XX,
+	],
+	<<<'XX'
 
-		embed start
-			main-A embed A
-		embed end
+				outer
 
-		outer
-');
+				embed start
+					embed A
+				embed end
+
+				outer
+
+		XX,
+);
 
 
-testTemplate('overwritten block + variables', [
-	'main' => '
-		{var $a = "M"}
-		outer
-		{embed "embed.latte"}
-			{$a}
-			{block a}main-A {$a}{/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		{default $a = "W"}
-		embed start {$a}
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer
+testTemplate(
+	'extra overwritten block',
+	[
+		'main' => <<<'XX'
 
-		embed start W
-			main-A W
-		embed end
+					outer
+					{embed "embed.latte"}
+						{block a}main-A{/block}
+					{/embed}
+					outer
 
-		outer
-');
+			XX,
+		'embed.latte' => <<<'XX'
 
+					embed
 
-testTemplate('outer variables', [
-	'main' => '
-		outer
-		{var $var1 = "OUT1"}
-		{var $var2 = "OUT2"}
-		{embed "embed.latte"}
-			{block a}{$var1} {$var2} {$var3} {block b}{$var1} {$var2} {$var3}{/block} {/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed start
-			{var $var2 = "IN2"}
-			{var $var3 = "IN3"}
-			{block a}embed A{/block}
-			{block b}embed B{/block}
-			{block c}embed C {$var1 ?? unset} {$var2 ?? unset} {$var3 ?? unset}{/block}
-		embed end
-	',
-], '
-		outer
+			XX,
+	],
+	<<<'XX'
 
-		embed start
-			OUT1 IN2 IN3 OUT1 IN2 IN3
-			OUT1 IN2 IN3
-			embed C unset IN2 IN3
-		embed end
+				outer
 
-		outer
-');
+				embed
+
+				outer
+
+		XX,
+);
 
 
-testTemplate('overwritten block + passed variables', [
-	'main' => '
-		{var $a = "M"}
-		outer
-		{embed "embed.latte", a => "P"}
-			{$a}
-			{block a}main-A {$a}{/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		{default $a = "W"}
-		embed start {$a}
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer
+testTemplate(
+	'one overwritten block',
+	[
+		'main' => <<<'XX'
 
-		embed start P
-			main-A P
-		embed end
+					outer
+					{embed "embed.latte"}
+						{block a}main-A {include parent}{/block}
+					{/embed}
+					outer
 
-		outer
-');
+			XX,
+		'embed.latte' => <<<'XX'
 
+					embed start
+						{block a}embed A{/block}
+					embed end
 
-testTemplate('only outer blocks', [
-	'main' => '
-		{block a}outer-A{/block}
+			XX,
+	],
+	<<<'XX'
 
-		{embed "embed.latte"}extra text{/embed}
+				outer
 
-		{block d}outer-D{/block}
-	',
-	'embed.latte' => '
-		embed start
-			{block c}embed C{/block}
+				embed start
+					main-A embed A
+				embed end
 
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer-A
+				outer
+
+		XX,
+);
 
 
-		embed start
-			embed C
+testTemplate(
+	'overwritten block + variables',
+	[
+		'main' => <<<'XX'
 
-			embed A
-		embed end
+					{var $a = "M"}
+					outer
+					{embed "embed.latte"}
+						{$a}
+						{block a}main-A {$a}{/block}
+					{/embed}
+					outer
 
+			XX,
+		'embed.latte' => <<<'XX'
 
-		outer-D
-');
+					{default $a = "W"}
+					embed start {$a}
+						{block a}embed A{/block}
+					embed end
 
+			XX,
+	],
+	<<<'XX'
 
-testTemplate('overwritten & outer blocks', [
-	'main' => '
-		{block a}outer-A{/block}
+				outer
 
-		{embed "embed.latte"}
-			{block a}main-A{/block}
-			{block b}main-B{/block}
-		{/embed}
+				embed start W
+					main-A W
+				embed end
 
-		{block d}outer-D{/block}
-	',
-	'embed.latte' => '
-		embed start
-			{block c}embed C{/block}
+				outer
 
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer-A
-
-
-		embed start
-			embed C
-
-			main-A
-		embed end
+		XX,
+);
 
 
-		outer-D
-');
+testTemplate(
+	'outer variables',
+	[
+		'main' => <<<'XX'
+
+					outer
+					{var $var1 = "OUT1"}
+					{var $var2 = "OUT2"}
+					{embed "embed.latte"}
+						{block a}{$var1} {$var2} {$var3} {block b}{$var1} {$var2} {$var3}{/block} {/block}
+					{/embed}
+					outer
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed start
+						{var $var2 = "IN2"}
+						{var $var3 = "IN3"}
+						{block a}embed A{/block}
+						{block b}embed B{/block}
+						{block c}embed C {$var1 ?? unset} {$var2 ?? unset} {$var3 ?? unset}{/block}
+					embed end
+
+			XX,
+	],
+	<<<'XX'
+
+				outer
+
+				embed start
+					OUT1 IN2 IN3 OUT1 IN2 IN3
+					OUT1 IN2 IN3
+					embed C unset IN2 IN3
+				embed end
+
+				outer
+
+		XX,
+);
 
 
-testTemplate('include instead of block', [
-	'main' => '
-		outer
-		{embed "embed.latte"}
-			{block a}main-A{/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed start
-			{include a}
-		embed end
-	',
-], '
-		outer
+testTemplate(
+	'overwritten block + passed variables',
+	[
+		'main' => <<<'XX'
 
-		embed start
-main-A		embed end
+					{var $a = "M"}
+					outer
+					{embed "embed.latte", a => "P"}
+						{$a}
+						{block a}main-A {$a}{/block}
+					{/embed}
+					outer
 
-		outer
-');
+			XX,
+		'embed.latte' => <<<'XX'
 
+					{default $a = "W"}
+					embed start {$a}
+						{block a}embed A{/block}
+					embed end
 
-testTemplate('import in embed', [
-	'main' => '
-		outer
-		{embed "embed.latte"}
-			{import import.latte}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed start
-			{include a}
-		embed end
-	',
-	'import.latte' => '{block a}main-A{/block}',
-], '
-		outer
+			XX,
+	],
+	<<<'XX'
 
-		embed start
-main-A		embed end
+				outer
 
-		outer
-');
+				embed start P
+					main-A P
+				embed end
+
+				outer
+
+		XX,
+);
 
 
-testTemplate('local outer block include from main', [
-	'main' => '
-		outer
-		{embed "embed.latte"}
-			{block a}*{include outer}*{/block}
-		{/embed}
+testTemplate(
+	'only outer blocks',
+	[
+		'main' => <<<'XX'
 
-		{block local outer}outer-D{/block}
-	',
-	'embed.latte' => '
-		embed start
-			{block a}embed A{/block}
-		embed end
-	',
-], '
-		outer
+					{block a}outer-A{/block}
 
-		embed start
-			*outer-D*
-		embed end
+					{embed "embed.latte"}extra text{/embed}
+
+					{block d}outer-D{/block}
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed start
+						{block c}embed C{/block}
+
+						{block a}embed A{/block}
+					embed end
+
+			XX,
+	],
+	<<<'XX'
+
+				outer-A
 
 
-		outer-D
-');
+				embed start
+					embed C
+
+					embed A
+				embed end
+
+
+				outer-D
+
+		XX,
+);
+
+
+testTemplate(
+	'overwritten & outer blocks',
+	[
+		'main' => <<<'XX'
+
+					{block a}outer-A{/block}
+
+					{embed "embed.latte"}
+						{block a}main-A{/block}
+						{block b}main-B{/block}
+					{/embed}
+
+					{block d}outer-D{/block}
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed start
+						{block c}embed C{/block}
+
+						{block a}embed A{/block}
+					embed end
+
+			XX,
+	],
+	<<<'XX'
+
+				outer-A
+
+
+				embed start
+					embed C
+
+					main-A
+				embed end
+
+
+				outer-D
+
+		XX,
+);
+
+
+testTemplate(
+	'include instead of block',
+	[
+		'main' => <<<'XX'
+
+					outer
+					{embed "embed.latte"}
+						{block a}main-A{/block}
+					{/embed}
+					outer
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed start
+						{include a}
+					embed end
+
+			XX,
+	],
+	<<<'XX'
+
+				outer
+
+				embed start
+		main-A		embed end
+
+				outer
+
+		XX,
+);
+
+
+testTemplate(
+	'import in embed',
+	[
+		'main' => <<<'XX'
+
+					outer
+					{embed "embed.latte"}
+						{import import.latte}
+					{/embed}
+					outer
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed start
+						{include a}
+					embed end
+
+			XX,
+		'import.latte' => '{block a}main-A{/block}',
+	],
+	<<<'XX'
+
+				outer
+
+				embed start
+		main-A		embed end
+
+				outer
+
+		XX,
+);
+
+
+testTemplate(
+	'local outer block include from main',
+	[
+		'main' => <<<'XX'
+
+					outer
+					{embed "embed.latte"}
+						{block a}*{include outer}*{/block}
+					{/embed}
+
+					{block local outer}outer-D{/block}
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed start
+						{block a}embed A{/block}
+					embed end
+
+			XX,
+	],
+	<<<'XX'
+
+				outer
+
+				embed start
+					*outer-D*
+				embed end
+
+
+				outer-D
+
+		XX,
+);
 
 
 Assert::exception(function () {
 	testTemplate('outer block include from main', [
-		'main' => '
-			outer
-			{embed "embed.latte"}
-				{block a}*{include outer}*{/block}
-			{/embed}
+		'main' => <<<'XX'
 
-			{block outer}outer-D{/block}
-		',
-		'embed.latte' => '
-			embed start
-				{block a}embed A{/block}
-			embed end
-		',
+						outer
+						{embed "embed.latte"}
+							{block a}*{include outer}*{/block}
+						{/embed}
+
+						{block outer}outer-D{/block}
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+						embed start
+							{block a}embed A{/block}
+						embed end
+
+			XX,
 	]);
 }, Latte\RuntimeException::class, "Cannot include undefined block 'outer'.");
 
 
 Assert::exception(function () {
 	testTemplate('outer block include from embed', [
-		'main' => '
-			{block a}outer-A{/block}
+		'main' => <<<'XX'
 
-			{embed "embed.latte"}{/embed}
-		',
-		'embed.latte' => '
-			embed start
-				{include a}
-			embed end
-		',
+						{block a}outer-A{/block}
+
+						{embed "embed.latte"}{/embed}
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+						embed start
+							{include a}
+						embed end
+
+			XX,
 	]);
 }, Latte\RuntimeException::class, "Cannot include undefined block 'a'.");
 
 
-testTemplate('embeds block include', [
-	'main' => '
-		outer
-		{embed "embed.latte"}
-			{block b}*{include a}*{/block}
-		{/embed}
-		outer
-	',
-	'embed.latte' => '
-		embed start
-			{block a}embed A{/block}
-			{block b}embed B{/block}
-		embed end
-	',
-], '
-		outer
+testTemplate(
+	'embeds block include',
+	[
+		'main' => <<<'XX'
 
-		embed start
-			embed A
-			*embed A*
-		embed end
+					outer
+					{embed "embed.latte"}
+						{block b}*{include a}*{/block}
+					{/embed}
+					outer
 
-		outer
-');
+			XX,
+		'embed.latte' => <<<'XX'
 
+					embed start
+						{block a}embed A{/block}
+						{block b}embed B{/block}
+					embed end
 
-testTemplate('embed in series I.', [
-	'main' => '
-		{embed "embed1.latte"}
-			{block a}main-A{/block}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{embed "embed2.latte"}{/embed}
-			{block a}embed1-A{/block}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
-], '
+			XX,
+	],
+	<<<'XX'
 
-		embed1-start
+				outer
 
-		embed2-start
-			embed2-A
-		embed2-end
+				embed start
+					embed A
+					*embed A*
+				embed end
 
-			main-A
-		embed1-end
-');
+				outer
+
+		XX,
+);
 
 
-testTemplate('embed in series II.', [
-	'main' => '
-		{embed "embed1.latte"}
-			{block a}main-A{/block}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{embed "embed2.latte"}
-				{block a}embed1-A{/block}
-			{/embed}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
-], '
+testTemplate(
+	'embed in series I.',
+	[
+		'main' => <<<'XX'
 
-		embed1-start
+					{embed "embed1.latte"}
+						{block a}main-A{/block}
+					{/embed}
 
-		embed2-start
-			embed1-A
-		embed2-end
+			XX,
+		'embed1.latte' => <<<'XX'
 
-		embed1-end
-');
+					embed1-start
+						{embed "embed2.latte"}{/embed}
+						{block a}embed1-A{/block}
+					embed1-end
 
+			XX,
+		'embed2.latte' => <<<'XX'
 
-testTemplate('embed in series III.', [
-	'main' => '
-		{embed "embed1.latte"}
-			{block a}main-A{/block}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{block a}
-				embed1-A
-				{embed "embed2.latte"}{/embed}
-			{/block}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
-], '
+					embed2-start
+						{block a}embed2-A{/block}
+					embed2-end
 
-		embed1-start
-main-A
-		embed1-end
-');
+			XX,
+	],
+	<<<'XX'
 
 
-testTemplate('embed in series IV.', [
-	'main' => '
-		{embed "embed1.latte"}
-			{block a}main-A{/block}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{block a}
-				embed1-A
-				{embed "embed2.latte"}
-					{block a}embed nested A{/block}
-				{/embed}
-			{/block}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
-], '
+				embed1-start
 
-		embed1-start
-main-A
-		embed1-end
-');
+				embed2-start
+					embed2-A
+				embed2-end
+
+					main-A
+				embed1-end
+
+		XX,
+);
 
 
-testTemplate('embeds nested in extra space', [
-	'main' => '
-		{embed "embed1.latte"}
-			{embed "embed2.latte"}
-				{block a}nested embeds A{/block}
-			{/embed}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{block a}embed1-A{/block}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
-], '
+testTemplate(
+	'embed in series II.',
+	[
+		'main' => <<<'XX'
 
-		embed1-start
-			embed1-A
-		embed1-end
-');
+					{embed "embed1.latte"}
+						{block a}main-A{/block}
+					{/embed}
 
+			XX,
+		'embed1.latte' => <<<'XX'
 
-testTemplate('nested embeds', [
-	'main' => '
-		{embed "embed1.latte"}
-			{block a}
-				{embed "embed2.latte"}
-					{block a}nested embeds A{/block}
-				{/embed}
-			{/block}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{block a}embed1-A{/block}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
-], '
+					embed1-start
+						{embed "embed2.latte"}
+							{block a}embed1-A{/block}
+						{/embed}
+					embed1-end
 
-		embed1-start
+			XX,
+		'embed2.latte' => <<<'XX'
 
-		embed2-start
-			nested embeds A
-		embed2-end
+					embed2-start
+						{block a}embed2-A{/block}
+					embed2-end
+
+			XX,
+	],
+	<<<'XX'
 
 
-		embed1-end
-');
+				embed1-start
+
+				embed2-start
+					embed1-A
+				embed2-end
+
+				embed1-end
+
+		XX,
+);
 
 
-testTemplate('nested embeds', [
-	'main' => '
-		{define outer}outer block{/define}
-		outer top:
-		{ifset outer}{include outer}{/ifset}
-		{ifset inembed1}{include inembed1}{/ifset}
-		{ifset inembed2}{include inembed2}{/ifset}
+testTemplate(
+	'embed in series III.',
+	[
+		'main' => <<<'XX'
 
-		{embed "embed1.latte"}
-			{block inembed1}embed1 block{/block}
-			{block a}
-				embed1 top:
-				{ifset outer}{include outer}{/ifset}
-				{ifset inembed1}{include inembed1}{/ifset}
-				{ifset inembed2}{include inembed2}{/ifset}
+					{embed "embed1.latte"}
+						{block a}main-A{/block}
+					{/embed}
 
-				{embed "embed2.latte"}
-					{block inembed2}embed2 block{/block}
-					{block a}
-						embed2:
-						{ifset outer}{include outer}{/ifset}
-						{ifset inembed1}{include inembed1}{/ifset}
-						{ifset inembed2}{include inembed2}{/ifset}
+			XX,
+		'embed1.latte' => <<<'XX'
+
+					embed1-start
+						{block a}
+							embed1-A
+							{embed "embed2.latte"}{/embed}
+						{/block}
+					embed1-end
+
+			XX,
+		'embed2.latte' => <<<'XX'
+
+					embed2-start
+						{block a}embed2-A{/block}
+					embed2-end
+
+			XX,
+	],
+	<<<'XX'
+
+
+				embed1-start
+		main-A
+				embed1-end
+
+		XX,
+);
+
+
+testTemplate(
+	'embed in series IV.',
+	[
+		'main' => <<<'XX'
+
+					{embed "embed1.latte"}
+						{block a}main-A{/block}
+					{/embed}
+
+			XX,
+		'embed1.latte' => <<<'XX'
+
+					embed1-start
+						{block a}
+							embed1-A
+							{embed "embed2.latte"}
+								{block a}embed nested A{/block}
+							{/embed}
+						{/block}
+					embed1-end
+
+			XX,
+		'embed2.latte' => <<<'XX'
+
+					embed2-start
+						{block a}embed2-A{/block}
+					embed2-end
+
+			XX,
+	],
+	<<<'XX'
+
+
+				embed1-start
+		main-A
+				embed1-end
+
+		XX,
+);
+
+
+testTemplate(
+	'embeds nested in extra space',
+	[
+		'main' => <<<'XX'
+
+					{embed "embed1.latte"}
+						{embed "embed2.latte"}
+							{block a}nested embeds A{/block}
+						{/embed}
+					{/embed}
+
+			XX,
+		'embed1.latte' => <<<'XX'
+
+					embed1-start
+						{block a}embed1-A{/block}
+					embed1-end
+
+			XX,
+		'embed2.latte' => <<<'XX'
+
+					embed2-start
+						{block a}embed2-A{/block}
+					embed2-end
+
+			XX,
+	],
+	<<<'XX'
+
+
+				embed1-start
+					embed1-A
+				embed1-end
+
+		XX,
+);
+
+
+testTemplate(
+	'nested embeds',
+	[
+		'main' => <<<'XX'
+
+					{embed "embed1.latte"}
+						{block a}
+							{embed "embed2.latte"}
+								{block a}nested embeds A{/block}
+							{/embed}
+						{/block}
+					{/embed}
+
+			XX,
+		'embed1.latte' => <<<'XX'
+
+					embed1-start
+						{block a}embed1-A{/block}
+					embed1-end
+
+			XX,
+		'embed2.latte' => <<<'XX'
+
+					embed2-start
+						{block a}embed2-A{/block}
+					embed2-end
+
+			XX,
+	],
+	<<<'XX'
+
+
+				embed1-start
+
+				embed2-start
+					nested embeds A
+				embed2-end
+
+
+				embed1-end
+
+		XX,
+);
+
+
+testTemplate(
+	'nested embeds',
+	[
+		'main' => <<<'XX'
+
+					{define outer}outer block{/define}
+					outer top:
+					{ifset outer}{include outer}{/ifset}
+					{ifset inembed1}{include inembed1}{/ifset}
+					{ifset inembed2}{include inembed2}{/ifset}
+
+					{embed "embed1.latte"}
+						{block inembed1}embed1 block{/block}
+						{block a}
+							embed1 top:
+							{ifset outer}{include outer}{/ifset}
+							{ifset inembed1}{include inembed1}{/ifset}
+							{ifset inembed2}{include inembed2}{/ifset}
+
+							{embed "embed2.latte"}
+								{block inembed2}embed2 block{/block}
+								{block a}
+									embed2:
+									{ifset outer}{include outer}{/ifset}
+									{ifset inembed1}{include inembed1}{/ifset}
+									{ifset inembed2}{include inembed2}{/ifset}
+								{/block}
+							{/embed}
+
+							embed1 bottom:
+							{ifset outer}{include outer}{/ifset}
+							{ifset inembed1}{include inembed1}{/ifset}
+							{ifset inembed2}{include inembed2}{/ifset}
+						{/block}
+					{/embed}
+
+					outer bottom:
+					{ifset outer}{include outer}{/ifset}
+					{ifset inembed1}{include inembed1}{/ifset}
+					{ifset inembed2}{include inembed2}{/ifset}
+
+			XX,
+		'embed1.latte' => <<<'XX'
+
+					{block a}embed1-A{/block}
+
+			XX,
+		'embed2.latte' => <<<'XX'
+
+					{block a}embed2-A{/block}
+
+			XX,
+	],
+	<<<'XX'
+
+						outer top:
+				outer block
+
+
+
+
+								embed1 top:
+
+						embed1 block
+
+
+
+										embed2:
+
+
+								embed2 block
+
+
+
+						embed1 bottom:
+
+						embed1 block
+
+
+
+
+				outer bottom:
+				outer block
+
+		XX,
+);
+
+
+testTemplate(
+	'extending embed',
+	[
+		'main' => <<<'XX'
+
+					{embed "embed.latte"}
+						{block a}main-A{/block}
+					{/embed}
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					{extends embed-ext.latte}
+					embed-start
+						{block a}embed-A{/block}
+					embed-end
+
+			XX,
+		'embed-ext.latte' => <<<'XX'
+
+					embed-ext-start
+						{block a}embed-ext-A{/block}
+					embed-ext-end
+
+			XX,
+	],
+	<<<'XX'
+
+
+				embed-ext-start
+					main-A
+				embed-ext-end
+
+		XX,
+);
+
+
+testTemplate(
+	'nested embedding with different overwritten blocks',
+	[
+		'main' => <<<'XX'
+
+					{var $counter = 1}
+					{block local outer}
+						{if $counter < 3}
+							{embed embed.latte}
+								{import "import$counter.latte"}
+
+								{block c}main C
+									{include block outer, counter: $counter + 1}
+								{/block}
+							{/embed}
+						{/if}
 					{/block}
-				{/embed}
 
-				embed1 bottom:
-				{ifset outer}{include outer}{/ifset}
-				{ifset inembed1}{include inembed1}{/ifset}
-				{ifset inembed2}{include inembed2}{/ifset}
-			{/block}
-		{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
 
-		outer bottom:
-		{ifset outer}{include outer}{/ifset}
-		{ifset inembed1}{include inembed1}{/ifset}
-		{ifset inembed2}{include inembed2}{/ifset}
-	',
-	'embed1.latte' => '
-		{block a}embed1-A{/block}
-	',
-	'embed2.latte' => '
-		{block a}embed2-A{/block}
-	',
-], '
-				outer top:
-		outer block
+					{block a}embed-A{/block}
+					{block b}embed-B{/block}
+					{block c}embed-C{/block}
 
+			XX,
+		'import1.latte' => <<<'XX'
 
+					{block a}import1-A{/block}
+					{block b}import1-B{/block}
+					{block c}import1-C{/block}
+
+			XX,
+		'import2.latte' => <<<'XX'
+
+					{block a}import2-A{/block}
+
+			XX,
+	],
+	<<<'XX'
 
 
-						embed1 top:
+				import1-A
+				import1-B
+				main C
 
-				embed1 block
+				import2-A
+				embed-B
+				main C
 
-
-
-								embed2:
-
-
-						embed2 block
-
-
-
-				embed1 bottom:
-
-				embed1 block
-
-
-
-
-		outer bottom:
-		outer block
-');
-
-
-testTemplate('extending embed', [
-	'main' => '
-		{embed "embed.latte"}
-			{block a}main-A{/block}
-		{/embed}
-	',
-	'embed.latte' => '
-		{extends embed-ext.latte}
-		embed-start
-			{block a}embed-A{/block}
-		embed-end
-	',
-	'embed-ext.latte' => '
-		embed-ext-start
-			{block a}embed-ext-A{/block}
-		embed-ext-end
-	',
-], '
-
-		embed-ext-start
-			main-A
-		embed-ext-end
-');
-
-
-testTemplate('nested embedding with different overwritten blocks', [
-	'main' => '
-		{var $counter = 1}
-		{block local outer}
-			{if $counter < 3}
-				{embed embed.latte}
-					{import "import$counter.latte"}
-
-					{block c}main C
-						{include block outer, counter: $counter + 1}
-					{/block}
-				{/embed}
-			{/if}
-		{/block}
-	',
-	'embed.latte' => '
-		{block a}embed-A{/block}
-		{block b}embed-B{/block}
-		{block c}embed-C{/block}
-	',
-	'import1.latte' => '
-		{block a}import1-A{/block}
-		{block b}import1-B{/block}
-		{block c}import1-C{/block}
-	',
-	'import2.latte' => '
-		{block a}import2-A{/block}
-	',
-], '
-
-		import1-A
-		import1-B
-		main C
-
-		import2-A
-		embed-B
-		main C
-');
+		XX,
+);
 
 
 // generated code
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-		{embed "embed1.latte"}
-			{block a}
-				{embed "embed2.latte"}
-					{block a}nested embeds A{/block}
+	'main' => <<<'XX'
+
+				{embed "embed1.latte"}
+					{block a}
+						{embed "embed2.latte"}
+							{block a}nested embeds A{/block}
+						{/embed}
+					{/block}
 				{/embed}
-			{/block}
-		{/embed}
-	',
-	'embed1.latte' => '
-		embed1-start
-			{block a}embed1-A{/block}
-		embed1-end
-	',
-	'embed2.latte' => '
-		embed2-start
-			{block a}embed2-A{/block}
-		embed2-end
-	',
+
+		XX,
+	'embed1.latte' => <<<'XX'
+
+				embed1-start
+					{block a}embed1-A{/block}
+				embed1-end
+
+		XX,
+	'embed2.latte' => <<<'XX'
+
+				embed2-start
+					{block a}embed2-A{/block}
+				embed2-end
+
+		XX,
 ]));
 
 Assert::matchFile(

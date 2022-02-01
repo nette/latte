@@ -17,41 +17,39 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-<p n:attr="title => hello, lang => isset($lang) ? $lang"> </p>
+	<p n:attr="title => hello, lang => isset($lang) ? $lang"> </p>
 
-<p n:attr="[title => hello]"> </p>
+	<p n:attr="[title => hello]"> </p>
 
-EOD;
+	EOD;
 
 Assert::match(
 	<<<'XX'
-%A%
-		echo '
-<p';
-		$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-		echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
-		echo '> </p>
+		%A%
+				echo '
+		<p';
+				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
+				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
+				echo '> </p>
 
-<p';
-		$ʟ_tmp = [['title' => 'hello']];
-		echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
-		echo '> </p>
-';
-%A%
-XX
-,
-	$latte->compile($template)
+		<p';
+				$ʟ_tmp = [['title' => 'hello']];
+				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
+				echo '> </p>
+		';
+		%A%
+		XX,
+	$latte->compile($template),
 );
 
 Assert::match(
 	<<<'XX'
 
-<p title="hello"> </p>
+		<p title="hello"> </p>
 
-<p title="hello"> </p>
-XX
-,
-	$latte->renderToString($template)
+		<p title="hello"> </p>
+		XX,
+	$latte->renderToString($template),
 );
 
 

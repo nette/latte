@@ -16,9 +16,11 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	'	<hr>
-	<div id="main space" class = 1> <p> Text </p> block </div> <!-- /main -->
-	<hr>',
+	<<<'XX'
+			<hr>
+			<div id="main space" class = 1> <p> Text </p> block </div> <!-- /main -->
+			<hr>
+		XX,
 	$latte->renderToString(
 		<<<'EOD'
 				<hr>
@@ -38,9 +40,11 @@ Assert::match(
 
 
 Assert::match(
-	'	<hr>
-	<div class = a> <p> Text </p> </div>
-	<hr>',
+	<<<'XX'
+			<hr>
+			<div class = a> <p> Text </p> </div>
+			<hr>
+		XX,
 	$latte->renderToString(
 		<<<'EOD'
 				<hr>

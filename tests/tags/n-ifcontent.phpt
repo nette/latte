@@ -103,7 +103,6 @@ Assert::match(
 					}
 				}
 		%A%
-		XX
-,
+		XX,
 	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:ifcontent></div>'),
 );
