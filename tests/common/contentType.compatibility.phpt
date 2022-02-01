@@ -293,7 +293,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context1a' => '<p>{block html|noescape}<hr> " &lt;{/block}</p>',
 	'context1b' => '<p>{block html|upper}<hr> " &lt;{/block}</p>',
 	'context1c' => '<p>{block html|stripHtml|upper}<hr> " &lt;{/block}</p>',
-	'context2' => '<p title="{block html}<hr> &quot;{/block}"</p>',
+	'context2' => '<p title="{block html}<hr> &quot;{/block}"></p>',
 	'context2a' => '<p title="{block html|stripHtml|upper}<hr> &quot;{/block}"></p>',
 	'context6' => '<!--{block html}<hr> &lt;{/block}-->',
 	'context6a' => '<!--{block html|stripHtml|upper}<hr> &lt;{/block}-->',
@@ -310,7 +310,7 @@ Assert::exception(function () use ($latte) {
 }, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
-Assert::same('<p title="&lt;hr&gt; &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
@@ -326,7 +326,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context1a' => '<p>{var $n=html}{block $n|noescape}<hr> " &lt;{/block}</p>',
 	'context1b' => '<p>{var $n=html}{block $n|upper}<hr> " &lt;{/block}</p>',
 	'context1c' => '<p>{var $n=html}{block $n|stripHtml|upper}<hr> " &lt;{/block}</p>',
-	'context2' => '<p title="{var $n=html}{block $n}<hr> &quot;{/block}"</p>',
+	'context2' => '<p title="{var $n=html}{block $n}<hr> &quot;{/block}"></p>',
 	'context2a' => '<p title="{var $n=html}{block $n|stripHtml|upper}<hr> &quot;{/block}"></p>',
 	'context6' => '<!--{var $n=html}{block $n}<hr> &lt;{/block}-->',
 	'context6a' => '<!--{var $n=html}{block $n|stripHtml|upper}<hr> &lt;{/block}-->',
@@ -343,7 +343,7 @@ Assert::exception(function () use ($latte) {
 }, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
-Assert::same('<p title="&lt;hr&gt; &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
@@ -359,7 +359,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context1a' => '<p>{block|noescape}<hr> " &lt;{/block}</p>',
 	'context1b' => '<p>{block|upper}<hr> " &lt;{/block}</p>',
 	'context1c' => '<p>{block|stripHtml|upper}<hr> " &lt;{/block}</p>',
-	'context2' => '<p title="{block}<hr> &quot;{/block}"</p>',
+	'context2' => '<p title="{block}<hr> &quot;{/block}"></p>',
 	'context2a' => '<p title="{block|stripHtml|upper}<hr> &quot;{/block}"></p>',
 	'context6' => '<!--{block}<hr> &lt;{/block}-->',
 	'context6a' => '<!--{block|stripHtml|upper}<hr> &lt;{/block}-->',
@@ -376,7 +376,7 @@ Assert::exception(function () use ($latte) {
 }, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
-Assert::same('<p title="<hr> &quot;"</p>', $latte->renderToString('context2'));
+Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 

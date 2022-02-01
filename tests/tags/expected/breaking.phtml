@@ -1,15 +1,15 @@
 <?php
 %A%
 		$iterations = 0;
-		foreach ([1, 0] as $cond) /* line %d% */ {
+		foreach ([1, 0] as $cond) /* line 1 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($cond) /* line %d% */;
+			echo LR\Filters::escapeHtmlText($cond) /* line 2 */;
 			echo "\n";
-			ob_start(function () {}) /* line %d% */;
+			ob_start(function () {}) /* line 3 */;
 			try {
 				echo '		before
 ';
-				if ($cond) /* line %d% */ continue;
+				if ($cond) /* line 5 */ continue;
 				echo '		after
 	';
 			} finally {
