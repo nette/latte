@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine and n:tag.
+ * n:tag
  */
 
 declare(strict_types=1);

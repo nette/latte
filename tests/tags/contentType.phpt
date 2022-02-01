@@ -26,6 +26,21 @@ Assert::exception(function () use ($latte) {
 	$latte->createTemplate('<div>{contentType xml}</div>');
 }, Latte\CompileException::class, '{contentType} is allowed only in template header.');
 
+Assert::same(
+	'<script> <p n:if=0 /> </script>',
+	$latte->renderToString('{contentType html}<script> <p n:if=0 /> </script>')
+);
+
+Assert::same(
+	'<script>  </script>',
+	$latte->renderToString('{contentType xml}<script> <p n:if=0 /> </script>')
+);
+
+Assert::same(
+	'<p n:if=0 />',
+	$latte->renderToString('{contentType text}<p n:if=0 />')
+);
+
 // defined on $latte
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
