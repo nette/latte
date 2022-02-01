@@ -39,6 +39,11 @@ interface Extension
 	function beforeParse(): void;
 
 	/**
+	 * After template is parsed.
+	 */
+	function afterParse(Compiler\Node $node): void;
+
+	/**
 	 * Finishes template parsing.
 	 */
 	function afterCompile(Compiler\Compiler $compiler); //: void;

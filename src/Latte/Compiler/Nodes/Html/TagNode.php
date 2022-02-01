@@ -132,4 +132,13 @@ class TagNode extends Node
 
 		return $context;
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->name;
+		if ($this->attrs) {
+			yield $this->attrs;
+		}
+	}
 }

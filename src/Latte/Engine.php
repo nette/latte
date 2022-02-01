@@ -135,6 +135,10 @@ class Engine
 				->setPolicy($this->sandboxed ? $this->policy : null)
 				->parse($tokens);
 
+			foreach ($this->extensions as $extension) {
+				$extension->afterParse($node);
+			}
+
 			$code = $compiler
 				->setContentType($this->contentType)
 				->setFunctions(array_keys((array) $this->functions))

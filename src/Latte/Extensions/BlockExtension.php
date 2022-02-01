@@ -13,6 +13,7 @@ use Latte;
 use Latte\CompileException;
 use Latte\Compiler\Block;
 use Latte\Compiler\Compiler;
+use Latte\Compiler\Node;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\TagInfo;
@@ -85,6 +86,11 @@ class BlockExtension extends MacroSet
 		$this->extends = null;
 		$this->imports = [];
 		$this->placeholders = [];
+	}
+
+
+	public function afterParse(Node $node): void
+	{
 	}
 
 

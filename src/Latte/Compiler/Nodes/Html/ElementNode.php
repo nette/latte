@@ -65,4 +65,20 @@ class ElementNode extends Node
 		]);
 		$this->endStmt = new CallableNode(fn() => "echo $var ?? ''; $var = null;");
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		if ($this->startStmt) {
+			yield $this->startStmt;
+		} else {
+			yield $this->startTag;
+		}
+		if ($this->content) {
+			yield $this->content;
+		}
+		if ($this->endTag) {
+			yield $this->endTag;
+		}
+	}
 }

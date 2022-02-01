@@ -12,6 +12,7 @@ namespace Latte\Extensions;
 use Latte;
 use Latte\CompileException;
 use Latte\Compiler\Compiler;
+use Latte\Compiler\Node;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\TagInfo;
@@ -181,6 +182,11 @@ class CoreExtension extends MacroSet
 	{
 		$this->overwrittenVars = [];
 		$this->idCounter = 0;
+	}
+
+
+	public function afterParse(Node $node): void
+	{
 	}
 
 

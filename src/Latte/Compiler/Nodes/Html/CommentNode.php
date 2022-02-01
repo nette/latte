@@ -29,4 +29,10 @@ class CommentNode extends Node
 		$compiler->setContext(Compiler::CONTEXT_HTML_TEXT);
 		return "echo '<!--'; $content echo '-->';";
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->content;
+	}
 }
