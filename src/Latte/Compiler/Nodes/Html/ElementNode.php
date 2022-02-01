@@ -111,4 +111,16 @@ class ElementNode extends AreaNode
 		$context->restoreEscape();
 		return $res;
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->tagNode;
+		if ($this->attributes) {
+			yield $this->attributes;
+		}
+		if ($this->content) {
+			yield $this->content;
+		}
+	}
 }

@@ -23,4 +23,10 @@ final class TemplateNode extends Node
 	{
 		throw new \LogicException('Cannot directly print TemplateNode');
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->main;
+	}
 }

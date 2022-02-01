@@ -30,4 +30,10 @@ class CommentNode extends AreaNode
 		$context->restoreEscape();
 		return "echo '<!--'; $content echo '-->';";
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->content;
+	}
 }
