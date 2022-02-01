@@ -184,4 +184,16 @@ class ElementNode extends AreaNode
 			default => null,
 		};
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->tagNode;
+		if ($this->attributes) {
+			yield $this->attributes;
+		}
+		if ($this->content) {
+			yield $this->content;
+		}
+	}
 }

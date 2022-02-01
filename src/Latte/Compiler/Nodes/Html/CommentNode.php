@@ -31,4 +31,10 @@ class CommentNode extends AreaNode
 		$context->setEscapingContext(Context::HtmlText);
 		return "echo '<!--'; $content echo '-->';";
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->content;
+	}
 }
