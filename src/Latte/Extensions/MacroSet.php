@@ -18,7 +18,7 @@ use Latte\Compiler\TagInfo;
 /**
  * Base Macro implementation. Allows add multiple macros.
  */
-class MacroSet implements Latte\Extension
+abstract class MacroSet implements Latte\Extension
 {
 	use Latte\Strict;
 
@@ -28,9 +28,11 @@ class MacroSet implements Latte\Extension
 	private array $macros;
 
 
-	public function __construct(Compiler $compiler)
+	public function __construct(Compiler $compiler = null)
 	{
-		$this->compiler = $compiler;
+		if ($compiler) {
+			$this->compiler = $compiler;
+		}
 	}
 
 
