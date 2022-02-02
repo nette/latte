@@ -441,7 +441,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {include [file] "file" [with blocks] [,] [params]}
 	 */
-	public function macroInclude(TagInfo $node, PhpWriter $writer): string
+	public static function macroInclude(TagInfo $node, PhpWriter $writer): string
 	{
 		[$file,] = $node->tokenizer->fetchWordWithModifier('file');
 		$mode = 'include';

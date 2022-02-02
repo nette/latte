@@ -138,7 +138,8 @@ class BlockExtension extends MacroSet
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
 		if ($mod !== 'block') {
 			if ($mod === 'file' || !$name || !preg_match('~#|[\w-]+$~DA', $name)) {
-				return false; // {include file}
+				$node->tokenizer->reset();
+				return CoreExtension::macroInclude($node, $writer); // {include file}
 			}
 
 			$name = ltrim($name, '#');
@@ -625,8 +626,8 @@ class BlockExtension extends MacroSet
 	public function macroIfset(TagInfo $node, PhpWriter $writer): string|false
 	{
 		$node->validate(true);
-		if (!preg_match('~#|\w~A', $node->args)) {
-			return false;
+		if (!preg_match('~#|\w~A', $node->args)) { // {ifset $var}
+			return $writer->write(($node->name === 'elseifset' ? '} else' : '') . 'if (isset(%node.args)) %node.line {');
 		}
 
 		$list = [];

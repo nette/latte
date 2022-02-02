@@ -68,7 +68,7 @@ class Compiler
 	/** position on source template */
 	private int $position = 0;
 
-	/** @var array<string, Extension[]> */
+	/** @var array<string, Extension> */
 	private array $macros = [];
 
 	/** @var string[] of orig name */
@@ -118,7 +118,7 @@ class Compiler
 			throw new \LogicException("Incompatible flags for tag '$name'.");
 		}
 
-		$this->macros[$name][] = $macro;
+		$this->macros[$name] = $macro;
 		return $this;
 	}
 
@@ -170,7 +170,7 @@ class Compiler
 		$macroHandlers = new \SplObjectStorage;
 
 		if ($this->macros) {
-			array_map([$macroHandlers, 'attach'], array_merge(...array_values($this->macros)));
+			array_map([$macroHandlers, 'attach'], array_merge($this->macros));
 		}
 
 		foreach ($macroHandlers as $handler) {
@@ -282,7 +282,7 @@ class Compiler
 
 
 	/**
-	 * @return Extension[][]
+	 * @return Extension[]
 	 */
 	public function getMacros(): array
 	{
@@ -861,13 +861,12 @@ class Compiler
 			$context = [$this->contentType, $this->context];
 		}
 
-		foreach (array_reverse($this->macros[$name]) as $macro) {
-			$node = new TagInfo($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
-			$node->context = $context;
-			$node->startLine = $nPrefix ? $this->htmlNode->startLine : $this->getLine();
-			if ($macro->nodeOpened($node) !== false) {
-				return $node;
-			}
+		$macro = $this->macros[$name];
+		$node = new TagInfo($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
+		$node->context = $context;
+		$node->startLine = $nPrefix ? $this->htmlNode->startLine : $this->getLine();
+		if ($macro->nodeOpened($node) !== false) {
+			return $node;
 		}
 
 		throw new CompileException('Unknown ' . ($nPrefix
