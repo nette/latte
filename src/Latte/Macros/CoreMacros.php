@@ -741,24 +741,12 @@ class CoreMacros extends MacroSet
 		$tokens = $node->tokenizer;
 		$res = new Latte\MacroTokens;
 		while ($tokens->nextToken()) {
-			if (
-				$var
-				&& $tokens->isCurrent($tokens::T_SYMBOL)
-				&& (
-					$tokens->isNext(',', '=>', '=')
-					|| !$tokens->isNext(...$tokens::SIGNIFICANT)
-				)
-			) {
-				trigger_error("Inside tag {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}' (on line $node->startLine)", E_USER_DEPRECATED);
-
-			} elseif ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
+			if ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextToken();
 				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
 				$hasType = true;
-				continue;
-			}
 
-			if ($var && $tokens->isCurrent($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
+			} elseif ($var && $tokens->isCurrent($tokens::T_VARIABLE)) {
 				if ($node->name === 'default') {
 					$res->append("'" . ltrim($tokens->currentValue(), '$') . "'");
 				} else {
@@ -767,15 +755,11 @@ class CoreMacros extends MacroSet
 
 				$var = null;
 
-			} elseif ($tokens->isCurrent('=', '=>') && $tokens->depth === 0) {
-				if ($tokens->isCurrent('=>')) {
-					trigger_error("Inside tag {{$node->name} {$node->args}} should be '=>' replaced with '=' (on line $node->startLine)", E_USER_DEPRECATED);
-				}
-
+			} elseif ($var === null && $tokens->isCurrent('=')) {
 				$res->append($node->name === 'default' ? '=>' : '=');
 				$var = false;
 
-			} elseif ($tokens->isCurrent(',') && $tokens->depth === 0) {
+			} elseif (!$var && $tokens->isCurrent(',') && $tokens->depth === 0) {
 				if ($var === null) {
 					$res->append($node->name === 'default' ? '=>null' : '=null');
 				}
@@ -794,6 +778,8 @@ class CoreMacros extends MacroSet
 
 		if ($var === null) {
 			$res->append($node->name === 'default' ? '=>null' : '=null');
+		} elseif ($var === true) {
+			throw new CompileException("Unexpected end in {{$node->name} {$node->args}}");
 		}
 
 		$res = $writer->preprocess($res);
