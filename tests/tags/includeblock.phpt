@@ -29,13 +29,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/includeblock.phtml',
-	$latte->compile('main')
+	@$latte->compile('main') // deprecated
 );
 Assert::matchFile(
 	__DIR__ . '/expected/includeblock.html',
-	$latte->renderToString('main')
+	@$latte->renderToString('main') // deprecated
 );
 Assert::matchFile(
 	__DIR__ . '/expected/includeblock.inc.phtml',
-	$latte->compile('inc')
+	@$latte->compile('inc') // deprecated
 );

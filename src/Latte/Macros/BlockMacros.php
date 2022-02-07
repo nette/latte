@@ -197,7 +197,7 @@ class BlockMacros extends MacroSet
 	 */
 	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer): string
 	{
-		//trigger_error('Macro {includeblock} is deprecated, use {include 'file.latte' with blocks} or similar macro {import}.', E_USER_DEPRECATED);
+		trigger_error("Macro {includeblock} is deprecated, use {include $node->args with blocks} or similar macro {import}.", E_USER_DEPRECATED);
 		$node->replaced = false;
 		$node->validate(true);
 		return $writer->write(
