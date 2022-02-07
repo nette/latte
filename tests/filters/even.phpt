@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::even()
+ * Test: Latte\Extensions\Filters::even()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Extensions\Filters;
 use Tester\Assert;
 
 

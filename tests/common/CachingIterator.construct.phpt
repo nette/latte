@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\CachingIterator constructor.
+ * Test: CachingIterator constructor.
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\CachingIterator;
+use Latte\Extensions\CachingIterator;
 use Tester\Assert;
 
 

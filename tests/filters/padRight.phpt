@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::padLeft()
+ * Test: Latte\Extensions\Filters::padLeft()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Extensions\Filters;
 use Tester\Assert;
 
 

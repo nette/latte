@@ -7,10 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Latte\Runtime;
+namespace Latte\Compiler;
 
 
 /** @internal */
-class RollbackException extends \Exception
+final class Block
 {
+	public ?string $contentType = null;
+	public ?string $code = null;
+	public bool $hasParameters = false;
+	public ?string $comment = null;
 }

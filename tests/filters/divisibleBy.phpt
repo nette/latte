@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::divisibleBy()
+ * Test: Latte\Extensions\Filters::divisibleBy()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Extensions\Filters;
 use Tester\Assert;
 
 

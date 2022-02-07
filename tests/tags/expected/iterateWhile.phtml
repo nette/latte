@@ -1,6 +1,6 @@
 <?php
 %A%
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	pre ';
 			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			echo "\n";
@@ -26,7 +26,7 @@
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	pre ';
 			echo LR\Filters::escapeHtmlText($item) /* line %d% */;
 			echo "\n";
@@ -53,7 +53,7 @@
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator(['a' => [0], 'b' => [1], 'c' => [2]], $ʟ_it ?? null) as $key => [$i]) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator(['a' => [0], 'b' => [1], 'c' => [2]], $ʟ_it ?? null) as $key => [$i]) /* line %d% */ {
 			echo '	pre ';
 			echo LR\Filters::escapeHtmlText($key) /* line %d% */;
 			echo ' ';

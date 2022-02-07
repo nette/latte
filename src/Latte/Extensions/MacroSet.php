@@ -164,7 +164,7 @@ abstract class MacroSet implements Latte\Extension
 	protected function checkExtraArgs(TagInfo $node): void
 	{
 		if ($node->tokenizer->isNext(...$node->tokenizer::SIGNIFICANT)) {
-			$args = Latte\Runtime\Filters::truncate($node->tokenizer->joinAll(), 20);
+			$args = Filters::truncate($node->tokenizer->joinAll(), 20);
 			throw new CompileException("Unexpected arguments '$args' in " . $node->getNotation());
 		}
 	}

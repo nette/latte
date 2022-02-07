@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::clamp()
+ * Test: Latte\Extensions\Filters::clamp()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Extensions\Filters;
 use Tester\Assert;
 
 

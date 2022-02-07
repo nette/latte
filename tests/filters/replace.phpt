@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::replace()
+ * Test: Latte\Extensions\Filters::replace()
  */
 
 declare(strict_types=1);
 
 use Latte\Engine;
+use Latte\Extensions\Filters;
 use Latte\Runtime\FilterInfo;
-use Latte\Runtime\Filters;
 use Tester\Assert;
 
 

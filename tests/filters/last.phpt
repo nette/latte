@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::last()
+ * Test: Latte\Extensions\Filters::last()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Extensions\Filters;
 use Tester\Assert;
 
 

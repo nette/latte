@@ -1,5 +1,5 @@
 %A%
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([1,2,3], $ʟ_it ?? null) as $foo) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([1,2,3], $ʟ_it ?? null) as $foo) /* line %d% */ {
 			echo '	<b';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* line %d% */;
 			echo '>item</b>
@@ -9,7 +9,7 @@
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo "\n";
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([1, 2, 3], $ʟ_it ?? null) as $foo) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([1, 2, 3], $ʟ_it ?? null) as $foo) /* line %d% */ {
 			echo '<p';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* line %d% */;
 			echo '>';

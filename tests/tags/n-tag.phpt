@@ -70,7 +70,7 @@ Assert::match(
 	<<<'XX'
 		%A%
 				$ʟ_tag[0] = ('h' . 1) ?? 'div';
-				Latte\Runtime\Filters::checkTagSwitch('div', $ʟ_tag[0]);
+				Latte\Extensions\Filters::checkTagSwitch('div', $ʟ_tag[0]);
 				echo '<';
 				echo $ʟ_tag[0];
 				echo ' class="bar" ';

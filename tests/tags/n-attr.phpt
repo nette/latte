@@ -29,12 +29,12 @@ Assert::match(
 				echo '
 		<p';
 				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
+				echo Latte\Extensions\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
 				echo '> </p>
 
 		<p';
 				$ʟ_tmp = [['title' => 'hello']];
-				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
+				echo Latte\Extensions\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
 				echo '> </p>
 		';
 		%A%

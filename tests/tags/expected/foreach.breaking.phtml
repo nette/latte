@@ -1,7 +1,7 @@
 <?php
 %A%
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			if ($item % 2) /* line %d% */ continue;
 			echo '	';
 			echo LR\Filters::escapeHtmlText($iterator->counter) /* line %d% */;
@@ -15,7 +15,7 @@
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			if ($item % 2) /* line %d% */ {
 				$iterator->skipRound();
 				continue;
@@ -32,7 +32,7 @@
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $item) /* line %d% */ {
 			if ($item % 2) /* line %d% */ break;
 			echo '	';
 			echo LR\Filters::escapeHtmlText($iterator->counter) /* line %d% */;

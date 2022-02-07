@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::breaklines()
+ * Test: Latte\Extensions\Filters::breaklines()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Extensions\Filters;
 use Latte\Runtime\Html;
 use Tester\Assert;
 

@@ -17,7 +17,6 @@ use Latte\Compiler\PhpWriter;
 use Latte\Compiler\TagInfo;
 use Latte\Engine;
 use Latte\Helpers;
-use Latte\Runtime\Filters;
 use Latte\RuntimeException;
 use Nette;
 
@@ -66,7 +65,7 @@ class CoreExtension extends MacroSet
 		$me->addMacro('default', [$me, 'macroVar']);
 		$me->addMacro('dump', [$me, 'macroDump']);
 		$me->addMacro('debugbreak', [$me, 'macroDebugbreak']);
-		$me->addMacro('trace', 'LR\Tracer::throw() %node.line;');
+		$me->addMacro('trace', 'Latte\Extensions\Tracer::throw() %node.line;');
 		$me->addMacro('l', '?>{<?php');
 		$me->addMacro('r', '?>}<?php');
 
@@ -106,20 +105,20 @@ class CoreExtension extends MacroSet
 			'clamp' => [Filters::class, 'clamp'],
 			'dataStream' => [Filters::class, 'dataStream'],
 			'date' => [Filters::class, 'date'],
-			'escapeCss' => [Filters::class, 'escapeCss'],
-			'escapeHtml' => [Filters::class, 'escapeHtml'],
-			'escapeHtmlComment' => [Filters::class, 'escapeHtmlComment'],
-			'escapeICal' => [Filters::class, 'escapeICal'],
-			'escapeJs' => [Filters::class, 'escapeJs'],
+			'escapeCss' => [Latte\Runtime\Filters::class, 'escapeCss'],
+			'escapeHtml' => [Latte\Runtime\Filters::class, 'escapeHtml'],
+			'escapeHtmlComment' => [Latte\Runtime\Filters::class, 'escapeHtmlComment'],
+			'escapeICal' => [Latte\Runtime\Filters::class, 'escapeICal'],
+			'escapeJs' => [Latte\Runtime\Filters::class, 'escapeJs'],
 			'escapeUrl' => 'rawurlencode',
-			'escapeXml' => [Filters::class, 'escapeXml'],
+			'escapeXml' => [Latte\Runtime\Filters::class, 'escapeXml'],
 			'explode' => [Filters::class, 'explode'],
 			'first' => [Filters::class, 'first'],
 			'firstUpper' => extension_loaded('mbstring')
 				? [Filters::class, 'firstUpper']
 				: function () { throw new RuntimeException('Filter |firstUpper requires mbstring extension.'); },
 			'floor' => [Filters::class, 'floor'],
-			'checkUrl' => [Filters::class, 'safeUrl'],
+			'checkUrl' => [Latte\Runtime\Filters::class, 'safeUrl'],
 			'implode' => [Filters::class, 'implode'],
 			'indent' => [Filters::class, 'indent'],
 			'join' => [Filters::class, 'implode'],
@@ -373,7 +372,7 @@ class CoreExtension extends MacroSet
 		$node->data->codeCatch = '<?php
 			} catch (Throwable $ʟ_e) {
 				ob_end_clean();
-				if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				if (!($ʟ_e instanceof Latte\Extensions\RollbackException) && isset($this->global->coreExceptionHandler)) {
 					($this->global->coreExceptionHandler)($ʟ_e, $this);
 				}
 			?>';
@@ -400,7 +399,7 @@ class CoreExtension extends MacroSet
 
 		$node->validate(false);
 
-		return $writer->write('throw new LR\RollbackException;');
+		return $writer->write('throw new Latte\Extensions\RollbackException;');
 	}
 
 
@@ -533,8 +532,8 @@ class CoreExtension extends MacroSet
 	{
 		$node->validate(false);
 		$node->openingCode = $writer->write($node->context[0] === Engine::CONTENT_HTML
-			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
-			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096) %node.line; try { ?>");
+			? "<?php ob_start('Latte\\Extensions\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
+			: "<?php ob_start('Latte\\Extensions\\Filters::spacelessText', 4096) %node.line; try { ?>");
 		$node->closingCode = '<?php } finally { ob_end_flush(); } ?>';
 	}
 
@@ -593,7 +592,7 @@ class CoreExtension extends MacroSet
 			&& preg_match('#\$iterator\W|\Wget_defined_vars\W#', $this->getCompiler()->expandTokens($node->content))
 		) {
 			$args = preg_replace('#(.*)\s+as\s+#i', '$1, $ʟ_it ?? null) as ', $args, 1);
-			$node->openingCode .= $writer->write('foreach ($iterator = $ʟ_it = new LR\CachingIterator(%raw) %node.line { ?>', $args);
+			$node->openingCode .= $writer->write('foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator(%raw) %node.line { ?>', $args);
 			$node->closingCode = '<?php $iterations++; } $iterator = $ʟ_it = $ʟ_it->getParent(); ?>';
 		} else {
 			$node->openingCode .= $writer->write('foreach (%raw) %node.line { ?>', $args);
@@ -689,7 +688,7 @@ class CoreExtension extends MacroSet
 	public function macroAttr(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(true);
-		return $writer->write('$ʟ_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) %node.line;');
+		return $writer->write('$ʟ_tmp = %node.array; echo Latte\Extensions\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) %node.line;');
 	}
 
 
@@ -719,7 +718,7 @@ class CoreExtension extends MacroSet
 
 		$node->openingCode = $writer->write('<?php
 			$ʟ_tag[%0_var] = (%node.args) ?? %1_var;
-			Latte\Runtime\Filters::checkTagSwitch(%1_var, $ʟ_tag[%0_var]);
+			Latte\Extensions\Filters::checkTagSwitch(%1_var, $ʟ_tag[%0_var]);
 		?>', $node->htmlNode->data->id, $node->htmlNode->name);
 
 		$node->content = preg_replace(

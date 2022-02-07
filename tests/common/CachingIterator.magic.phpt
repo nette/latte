@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\CachingIterator basic usage.
+ * Test: CachingIterator basic usage.
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\CachingIterator;
+use Latte\Extensions\CachingIterator;
 use Tester\Assert;
 
 
@@ -30,19 +30,19 @@ test('Two items in array', function () {
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$iterator->undeclared();
-}, LogicException::class, 'Call to undefined method Latte\Runtime\CachingIterator::undeclared().');
+}, LogicException::class, 'Call to undefined method Latte\Extensions\CachingIterator::undeclared().');
 
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$iterator->rewnd();
-}, LogicException::class, 'Call to undefined method Latte\Runtime\CachingIterator::rewnd(), did you mean rewind()?');
+}, LogicException::class, 'Call to undefined method Latte\Extensions\CachingIterator::rewnd(), did you mean rewind()?');
 
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$iterator->undeclared = 'value';
-}, LogicException::class, 'Attempt to write to undeclared property Latte\Runtime\CachingIterator::$undeclared.');
+}, LogicException::class, 'Attempt to write to undeclared property Latte\Extensions\CachingIterator::$undeclared.');
 
 Assert::exception(function () {
 	$iterator = new CachingIterator([]);
 	$val = $iterator->undeclared;
-}, LogicException::class, 'Attempt to read undeclared property Latte\Runtime\CachingIterator::$undeclared.');
+}, LogicException::class, 'Attempt to read undeclared property Latte\Extensions\CachingIterator::$undeclared.');
