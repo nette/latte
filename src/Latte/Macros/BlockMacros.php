@@ -48,7 +48,6 @@ class BlockMacros extends MacroSet
 	{
 		$me = new static($compiler);
 		$me->addMacro('include', [$me, 'macroInclude']);
-		$me->addMacro('includeblock', [$me, 'macroIncludeBlock']); // deprecated
 		$me->addMacro('import', [$me, 'macroImport'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('extends', [$me, 'macroExtends'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('layout', [$me, 'macroExtends'], null, null, self::ALLOWED_IN_HEAD);
@@ -188,28 +187,6 @@ class BlockMacros extends MacroSet
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode('', $node->context))))
 			. ') %node.line;'
-		);
-	}
-
-
-	/**
-	 * {includeblock "file"}
-	 * @deprecated
-	 */
-	public function macroIncludeBlock(MacroNode $node, PhpWriter $writer): string
-	{
-		trigger_error("Macro {includeblock} is deprecated, use {include $node->args with blocks} or similar macro {import} (on line $node->startLine)", E_USER_DEPRECATED);
-		$node->replaced = false;
-		$node->validate(true);
-		return $writer->write(
-			'
-			ob_start(function () {});
-			try {
-				$this->createTemplate(%node.word, %node.array? + get_defined_vars(), "includeblock")->renderToContentType(%var) %node.line;
-			} finally {
-				echo rtrim(ob_get_clean());
-			}',
-			implode('', $node->context)
 		);
 	}
 

@@ -47,7 +47,7 @@ class SecurityPolicy implements Latte\Policy
 	{
 		$policy = new self;
 
-		// does not include: contentType, debugbreak, dump, extends, import, include, includeblock, layout,
+		// does not include: contentType, debugbreak, dump, extends, import, include, layout,
 		// php (but 'do' is allowed), sandbox, snippet, snippetArea, templatePrint, varPrint, embed
 		$policy->allowTags([
 			'_', '=', 'attr', 'block', 'breakIf', 'capture', 'case', 'class', 'continueIf', 'default',
