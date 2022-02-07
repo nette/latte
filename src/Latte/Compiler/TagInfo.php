@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use Latte\Extension;
+use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\Strict;
 
 
@@ -26,55 +26,45 @@ class TagInfo
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = 'none';
 
-	public Extension $macro;
-	public string $name;
-	public bool $empty = false;
 	public string $args;
-	public string $modifiers;
-	public bool $closing = false;
-	public ?bool $replaced = null;
 	public MacroTokens $tokenizer;
-	public ?TagInfo $parentNode = null;
-	public ?string $openingCode = null;
-	public ?string $closingCode = null;
-	public ?string $attrCode = null;
-	public ?string $content = null;
-	public string $innerContent = '';
 	public \stdClass $data;
-
-	/** closest HTML node */
-	public ?HtmlNode $htmlNode = null;
-
-	/** @var array{string, mixed} [contentType, context] */
-	public ?array $context = null;
-
-	/** indicates n:attribute macro and type of prefix (PREFIX_INNER, PREFIX_TAG, PREFIX_NONE) */
-	public ?string $prefix = null;
-
-	/** position of start tag in source template */
-	public ?int $line = null;
-
-	/** @var array{string, bool}|null */
-	public ?array $saved = null;
 
 
 	public function __construct(
-		Extension $macro,
-		string $name,
-		string $args = '',
-		string $modifiers = '',
-		?self $parentNode = null,
-		?HtmlNode $htmlNode = null,
-		?string $prefix = null,
+		public /*readonly*/ string $name,
+		string /*readonly*/ $args,
+		public /*readonly*/ string $modifiers = '',
+		public /*readonly*/ bool $empty = false,
+		public /*readonly*/ bool $closing = false,
+		public /*readonly*/ ?int $line = null,
+		public /*readonly*/ int $location = 0,
+		public /*readonly*/ ?ElementNode $htmlElement = null,
+		public /*readonly*/ ?self $parent = null,
+		public /*readonly*/ ?string $prefix = null,
+		public /*readonly*/ ?string $indentation = null,
+		public /*readonly*/ bool $newline = false,
 	) {
-		$this->macro = $macro;
-		$this->name = $name;
-		$this->modifiers = $modifiers;
-		$this->parentNode = $parentNode;
-		$this->htmlNode = $htmlNode;
-		$this->prefix = $prefix;
 		$this->data = new \stdClass;
 		$this->setArgs($args);
+	}
+
+
+	public function isInHead(): bool
+	{
+		return $this->location === Parser::LOCATION_HEAD;
+	}
+
+
+	public function isInText(): bool
+	{
+		return $this->location <= Parser::LOCATION_TEXT;
+	}
+
+
+	public function isInTag(): bool
+	{
+		return $this->location === Parser::LOCATION_TAG;
 	}
 
 
@@ -93,20 +83,17 @@ class TagInfo
 	}
 
 
-	/**
-	 * @param  string[]  $names
-	 */
 	public function closest(array $names, ?callable $condition = null): ?self
 	{
-		$node = $this->parentNode;
-		while ($node && (
-			!in_array($node->name, $names, true)
-			|| ($condition && !$condition($node))
-		)) {
-			$node = $node->parentNode;
+		$item = $this->parent;
+		while ($item && (
+				!in_array($item->name, $names, true)
+				|| ($condition && !$condition($item))
+			)) {
+			$item = $item->parent;
 		}
 
-		return $node;
+		return $item;
 	}
 
 

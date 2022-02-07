@@ -114,10 +114,13 @@ class Engine
 		}
 
 		$lexer = $this->createLexer();
+		$parser = $this->createParser();
 		$compiler = $this->createCompiler();
 
-		Extensions\CoreExtension::install($compiler);
-		Extensions\BlockExtension::install($compiler);
+		foreach ($this->extensions as $extension) {
+			$parser->addParsers($extension->getTags());
+			$extension->beforeParse();
+		}
 
 		$source = $this->getLoader()->getContent($name);
 		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
@@ -127,11 +130,16 @@ class Engine
 				->setContentType($this->contentType)
 				->tokenize($source);
 
+			$node = $parser
+				->setContentType($this->contentType)
+				->setPolicy($this->sandboxed ? $this->policy : null)
+				->parse($tokens);
+
 			$code = $compiler
 				->setContentType($this->contentType)
 				->setFunctions(array_keys((array) $this->functions))
 				->setPolicy($this->sandboxed ? $this->policy : null)
-				->compile($tokens, $this->getTemplateClass($name), $comment, $this->strictTypes);
+				->compile($node, $this->getTemplateClass($name), $comment, $this->strictTypes, $this->extensions);
 
 		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException) {
@@ -139,7 +147,7 @@ class Engine
 			}
 
 			$line = isset($tokens)
-				? $compiler->getLine()
+				? $parser->getLine()
 				: $lexer->getLine();
 			throw $e->setSource($source, $line, $name);
 		}
@@ -441,6 +449,12 @@ class Engine
 	public function createLexer(): Compiler\Lexer
 	{
 		return new Compiler\Lexer;
+	}
+
+
+	public function createParser(): Compiler\Parser
+	{
+		return new Compiler\Parser;
 	}
 
 

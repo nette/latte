@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<a {if}n:href>');
-}, Latte\CompileException::class, 'n:attribute must not appear inside tags; found n:href inside {if}.');
+}, Latte\CompileException::class, 'Attribute n:href must not appear inside {tags}');
 
 
 Assert::exception(function () use ($latte) {
@@ -38,12 +38,12 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{forech}');
-}, Latte\CompileException::class, 'Unknown tag {forech}, did you mean {foreach}?');
+}, Latte\CompileException::class, 'Unexpected tag {forech}, did you mean {foreach}?');
 
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:forech>');
-}, 'Latte\CompileException', 'Unknown attribute n:forech, did you mean n:foreach?');
+}, 'Latte\CompileException', 'Unexpected attribute n:forech, did you mean n:foreach?');
 
 
 Assert::exception(function () use ($latte) {

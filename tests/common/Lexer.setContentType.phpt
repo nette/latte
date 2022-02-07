@@ -14,7 +14,7 @@ function parse($s, $contentType = null)
 {
 	$lexer = new Latte\Compiler\Lexer;
 	$lexer->setContentType($contentType ?: Engine::CONTENT_HTML);
-	return array_map(fn(LegacyToken $token) => [$token->type, $token->text], $lexer->tokenize($s));
+	return array_map(fn(LegacyToken $token) => [$token->type, $token->text], $lexer->tokenize($s)->getTokens());
 }
 
 
@@ -47,34 +47,12 @@ Assert::same([
 ], parse('<script> <div /> </script>', Engine::CONTENT_XML));
 
 Assert::same([
-	['macroTag', '{contentType xml}'],
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
-	['text', ' '],
-	['htmlTagBegin', '<div'],
-	['htmlTagEnd', ' />'],
-	['text', ' '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
-], parse('{contentType xml}<script> <div /> </script>'));
-
-Assert::same([
 	['text', '<script> <div /> </script>'],
 ], parse('<script> <div /> </script>', Engine::CONTENT_TEXT));
 
 Assert::same([
-	['macroTag', '{contentType text}'],
-	['text', '<script> <div /> </script>'],
-], parse('{contentType text}<script> <div /> </script>'));
-
-Assert::same([
 	['text', '<script> <div /> </script>'],
 ], parse('<script> <div /> </script>', Engine::CONTENT_ICAL));
-
-Assert::same([
-	['macroTag', '{contentType ical}'],
-	['text', '<script> <div /> </script>'],
-], parse('{contentType ical}<script> <div /> </script>'));
 
 Assert::same([
 	['htmlTagBegin', '<script'],

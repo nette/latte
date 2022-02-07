@@ -92,6 +92,12 @@ class CoreExtension extends MacroSet
 	}
 
 
+	public function getTags(): array
+	{
+		return [];
+	}
+
+
 	public function getFilters(): array
 	{
 		return [
@@ -212,13 +218,13 @@ class CoreExtension extends MacroSet
 		}
 
 		if ($node->prefix === $node::PREFIX_TAG) {
-			for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
-			$node->htmlNode->data->id ??= $id;
+			for ($id = 0, $tmp = $node->htmlElement; $tmp = $tmp->parentNode; $id++);
+			$node->htmlElement->data->id ??= $id;
 			return $writer->write(
-				$node->htmlNode->closing
+				$node->htmlElement->closing
 					? 'if ($ʟ_if[%var]) %node.line {'
 					: 'if ($ʟ_if[%var] = (%node.args)) %node.line {',
-				$node->htmlNode->data->id,
+				$node->htmlElement->data->id,
 			);
 		}
 
@@ -673,7 +679,7 @@ class CoreExtension extends MacroSet
 	 */
 	public function macroClass(TagInfo $node, PhpWriter $writer): string
 	{
-		if (isset($node->htmlNode->attrs['class'])) {
+		if (isset($node->htmlElement->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
 
@@ -700,7 +706,7 @@ class CoreExtension extends MacroSet
 		if (!$node->prefix || $node->prefix !== TagInfo::PREFIX_NONE) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 
-		} elseif (preg_match('(style$|script$)iA', $node->htmlNode->name)) {
+		} elseif (preg_match('(style$|script$)iA', $node->htmlElement->name)) {
 			throw new CompileException("Attribute {$node->getNotation()} is not allowed in <script> or <style>");
 		}
 
@@ -713,22 +719,22 @@ class CoreExtension extends MacroSet
 	 */
 	public function macroTagEnd(TagInfo $node, PhpWriter $writer): void
 	{
-		for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
-		$node->htmlNode->data->id ??= $id;
+		for ($id = 0, $tmp = $node->htmlElement; $tmp = $tmp->parentNode; $id++);
+		$node->htmlElement->data->id ??= $id;
 
 		$node->openingCode = $writer->write('<?php
 			$ʟ_tag[%0_var] = (%node.args) ?? %1_var;
 			Latte\Extensions\Filters::checkTagSwitch(%1_var, $ʟ_tag[%0_var]);
-		?>', $node->htmlNode->data->id, $node->htmlNode->name);
+		?>', $node->htmlElement->data->id, $node->htmlElement->name);
 
 		$node->content = preg_replace(
 			'~^(\s*<)' . Latte\Compiler\Lexer::RE_TAG_NAME . '~',
-			"\$1<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n",
+			"\$1<?php echo \$ʟ_tag[{$node->htmlElement->data->id}]; ?>\n",
 			$node->content,
 		);
 		$node->content = preg_replace(
 			'~</' . Latte\Compiler\Lexer::RE_TAG_NAME . '(\s*>\s*)$~',
-			"</<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n\$1",
+			"</<?php echo \$ʟ_tag[{$node->htmlElement->data->id}]; ?>\n\$1",
 			$node->content,
 		);
 	}
@@ -877,7 +883,7 @@ class CoreExtension extends MacroSet
 		$node->validate(true);
 		if (
 			!$this->getCompiler()->isInHead()
-			&& !($node->htmlNode && strtolower($node->htmlNode->name) === 'script' && str_contains($node->args, 'html'))
+			&& !($node->htmlElement && strtolower($node->htmlElement->name) === 'script' && str_contains($node->args, 'html'))
 		) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
 		}
@@ -899,7 +905,7 @@ class CoreExtension extends MacroSet
 
 		$compiler->setContentType($type);
 
-		if (strpos($node->args, '/') && !$node->htmlNode) {
+		if (strpos($node->args, '/') && !$node->htmlElement) {
 			return $writer->write(
 				'if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) { header(%var) %node.line; } ',
 				'Content-Type: ' . $node->args,

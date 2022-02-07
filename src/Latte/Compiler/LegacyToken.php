@@ -51,4 +51,15 @@ class LegacyToken
 
 	/** is tag empty {name/}? used for type MACRO_TAG */
 	public bool $empty = false;
+
+	public ?string $indentation = null;
+
+	public bool $newline = false;
+
+
+	public function is(int|string ...$args): bool
+	{
+		return in_array($this->text, $args, true)
+			|| in_array($this->type, $args, true);
+	}
 }

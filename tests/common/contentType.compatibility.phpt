@@ -213,7 +213,7 @@ Assert::exception(function () use ($latte) {
 	$latte->renderToString('context3');
 }, Latte\RuntimeException::class, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
 
-Assert::same(' <>', $latte->renderToString('context4'));
+Assert::same('  <>', $latte->renderToString('context4'));
 
 Assert::same('<p> <></p>', $latte->renderToString('context5'));
 

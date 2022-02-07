@@ -60,6 +60,12 @@ class BlockExtension extends MacroSet
 	}
 
 
+	public function getTags(): array
+	{
+		return [];
+	}
+
+
 	public function getFilters(): array
 	{
 		return [];
@@ -398,10 +404,10 @@ class BlockExtension extends MacroSet
 		$data->name = (string) $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
 
-		if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
+		if ($node->prefix && isset($node->htmlElement->attrs[$this->snippetAttribute])) {
 			throw new CompileException("Cannot combine HTML attribute {$this->snippetAttribute} with n:snippet.");
 
-		} elseif ($node->prefix && isset($node->htmlNode->macroAttrs['ifcontent'])) {
+		} elseif ($node->prefix && isset($node->htmlElement->macroAttrs['ifcontent'])) {
 			throw new CompileException('Cannot combine n:ifcontent with n:snippet.');
 
 		} elseif ($this->isDynamic($data->name)) {
@@ -439,7 +445,7 @@ class BlockExtension extends MacroSet
 		};
 
 		if ($node->prefix) {
-			if (isset($node->htmlNode->macroAttrs['foreach'])) {
+			if (isset($node->htmlElement->macroAttrs['foreach'])) {
 				throw new CompileException('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.');
 			}
 

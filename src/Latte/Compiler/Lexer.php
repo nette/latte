@@ -86,9 +86,8 @@ class Lexer
 
 	/**
 	 * Process all {macros} and <tags/>.
-	 * @return LegacyToken[]
 	 */
-	public function tokenize(string $input): array
+	public function tokenize(string $input): TokenStream
 	{
 		if (str_starts_with($input, "\u{FEFF}")) { // BOM
 			$input = substr($input, 3);
@@ -131,7 +130,7 @@ class Lexer
 			$this->addToken(LegacyToken::TEXT, substr($this->input, $this->offset));
 		}
 
-		return $this->output;
+		return new TokenStream($this->output);
 	}
 
 
@@ -143,7 +142,7 @@ class Lexer
 		$matches = $this->match('~
 			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>' . self::RE_TAG_NAME . ')|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
 			<(?P<htmlcomment>!(?:--(?!>))?|\?)|     ##  begin of <!, <!--, <!DOCTYPE, <?
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (!empty($matches['htmlcomment'])) { // <! <?
@@ -175,7 +174,7 @@ class Lexer
 	{
 		$matches = $this->match('~
 			</(?P<tag>' . $this->lastHtmlTag . ')(?=[\s/>])| ##  end HTML tag </tag
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (empty($matches['tag'])) {
@@ -184,7 +183,7 @@ class Lexer
 
 		// </tag
 		$token = $this->addToken(LegacyToken::HTML_TAG_BEGIN, $matches[0]);
-		$token->name = $this->lastHtmlTag;
+		$token->name = $matches['tag'];
 		$token->closing = true;
 		$this->lastHtmlTag = '/' . $this->lastHtmlTag;
 		$this->setContext(self::CONTEXT_HTML_TAG);
@@ -262,7 +261,7 @@ class Lexer
 	{
 		$matches = $this->match('~
 			(?P<htmlcomment>' . $this->context[1] . '>)|   ##  end of HTML comment
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (empty($matches['htmlcomment'])) {
@@ -282,7 +281,7 @@ class Lexer
 	private function contextNone(): bool
 	{
 		$matches = $this->match('~
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 		return $this->processMacro($matches);
 	}
@@ -294,24 +293,28 @@ class Lexer
 	private function contextMacro(): bool
 	{
 		$matches = $this->match('~
-			(?P<comment>\*.*?\*' . $this->delimiters[1] . '\n{0,2})|
+			(?P<comment>\*.*?\*' . $this->delimiters[1] . ')(?P<newline>\n{0,2})|
 			(?P<macro>(?>
 				' . self::RE_STRING . '|
 				\{(?>' . self::RE_STRING . '|[^\'"{}])*+\}|
 				[^\'"{}]+
 			)++)
 			' . $this->delimiters[1] . '
-			(?P<rmargin>[ \t]*(?=\n))?
+			(?P<rmargin>[ \t]*\n)?
 		~xsiA');
 
 		if (!empty($matches['macro'])) {
-			$token = $this->addToken(LegacyToken::MACRO_TAG, $this->context[1][1] . $matches[0]);
+			$token = $this->addToken(LegacyToken::MACRO_TAG, $this->context[1][2] . $this->context[1][1] . $matches[0]);
 			[$token->name, $token->value, $token->modifiers, $token->empty, $token->closing] = $this->parseMacroTag($matches['macro']);
+			$token->indentation = $this->context[1][2];
+			$token->newline = isset($matches['rmargin']);
 			$this->context = $this->context[1][0];
 			return true;
 
 		} elseif (!empty($matches['comment'])) {
-			$this->addToken(LegacyToken::COMMENT, $this->context[1][1] . $matches[0]);
+			$token = $this->addToken(LegacyToken::COMMENT, $this->context[1][2] . $this->context[1][1] . $matches[0]);
+			$token->indentation = $this->context[1][2];
+			$token->newline = (bool) $matches['newline'];
 			$this->context = $this->context[1][0];
 			return true;
 
@@ -331,7 +334,7 @@ class Lexer
 		}
 
 		// {macro} or {* *}
-		$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro']]);
+		$this->setContext(self::CONTEXT_MACRO, [$this->context, $matches['macro'], $matches['indent'] ?? null]);
 		return true;
 	}
 
@@ -342,7 +345,7 @@ class Lexer
 	 */
 	private function match(string $re): array
 	{
-		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE, $this->offset)) {
+		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL, $this->offset)) {
 			if (preg_last_error()) {
 				throw new RegexpException(null, preg_last_error());
 			}

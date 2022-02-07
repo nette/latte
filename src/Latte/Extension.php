@@ -15,11 +15,6 @@ namespace Latte;
  */
 interface Extension
 {
-	public const
-		AUTO_CLOSE = 64,
-		ALLOWED_IN_HEAD = 128,
-		DEFAULT_FLAGS = 0;
-
 	/**
 	 * Returns a list of |filters.
 	 * @return array<string, callable>
@@ -31,6 +26,12 @@ interface Extension
 	 * @return array<string, callable>
 	 */
 	function getFunctions(): array;
+
+	/**
+	 * Returns a list of parsers for Latte tags.
+	 * @return array<string, callable(Compiler\TagInfo, Compiler\Parser): Compiler\Node>
+	 */
+	function getTags(): array;
 
 	/**
 	 * Initializes before template parsing.

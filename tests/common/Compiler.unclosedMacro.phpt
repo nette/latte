@@ -17,15 +17,15 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{if 1}');
-}, Latte\CompileException::class, 'Missing {/if}');
+}, Latte\CompileException::class, 'Unexpected end, expecting {/if}');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1>');
-}, Latte\CompileException::class, 'Missing </span> for n:if');
+}, Latte\CompileException::class, 'Unexpected end, expecting </span> for element started on line 1');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1></i>');
-}, Latte\CompileException::class, 'Unexpected </i>, expecting </span> for n:if');
+}, Latte\CompileException::class, 'Unexpected </i, expecting </span> for element started on line 1');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{/if}');
@@ -40,16 +40,16 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Unexpected {/if 2}, expecting {/if}');
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('<span n:if=1 n:foreach=2>{foreach}</span>');
-}, Latte\CompileException::class, 'Unexpected </span> for n:if and n:foreach, expecting {/foreach}');
+	$latte->compile('<span n:if=1 n:foreach=2>{foreach x}</span>');
+}, Latte\CompileException::class, 'Unexpected end, expecting {/foreach}');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<span n:if=1 n:foreach=2>{/foreach}');
-}, Latte\CompileException::class, 'Unexpected {/foreach}, expecting </span> for n:if and n:foreach');
+}, Latte\CompileException::class, 'Unexpected {/foreach}, expecting </span> for element started on line 1');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<span n:if=1 n:foreach=2>{/if}');
-}, Latte\CompileException::class, 'Unexpected {/if}, expecting </span> for n:if and n:foreach');
+}, Latte\CompileException::class, 'Unexpected {/if}, expecting </span> for element started on line 1');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile(
@@ -61,4 +61,4 @@ Assert::exception(function () use ($latte) {
 
 			XX,
 	);
-}, Latte\CompileException::class, 'Unexpected </li>, expecting </a> for n:tag-if (on line 3)');
+}, Latte\CompileException::class, 'Unexpected </li, expecting </a> for element started on line 3 (on line 3)');

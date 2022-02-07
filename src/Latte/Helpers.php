@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace Latte;
 
+use Latte\Compiler\Node;
+use Latte\Compiler\Nodes;
+
 
 /**
  * Latte helpers.
@@ -73,6 +76,31 @@ class Helpers
 			return new \ReflectionMethod($callable, '__invoke');
 		} else {
 			return new \ReflectionFunction($callable);
+		}
+	}
+
+
+	public static function nodeToString(?Node $node): ?string
+	{
+		if ($node instanceof Nodes\FragmentNode) {
+			$res = null;
+			foreach ($node->children as $child) {
+				if (($s = self::nodeToString($child)) === null) {
+					return null;
+				}
+				$res .= $s;
+			}
+
+			return $res;
+
+		} elseif ($node instanceof Nodes\TextNode) {
+			return $node->content;
+
+		} elseif ($node instanceof Nodes\Html\QuotedValue) {
+			return self::nodeToString($node->value);
+
+		} else {
+			return null;
 		}
 	}
 }
