@@ -514,7 +514,7 @@ class Compiler
 		if ($htmlNode->macroAttrs) {
 			$html = substr($this->output, $this->tagOffset) . $token->text;
 			$this->output = substr($this->output, 0, $this->tagOffset);
-			$this->writeAttrsMacro($html);
+			$this->writeAttrsMacro($html, $emptyElement ?? null);
 		} else {
 			$this->output .= $token->text . $end;
 		}
@@ -730,7 +730,7 @@ class Compiler
 	 * Generates code for macro <tag n:attr> to the output.
 	 * @internal
 	 */
-	public function writeAttrsMacro(string $html): void
+	public function writeAttrsMacro(string $html, ?bool $empty = null): void
 	{
 		//     none-2 none-1 tag-1 tag-2       <el attr-1 attr-2>   /tag-2 /tag-1 [none-2] [none-1] inner-2 inner-1
 		// /inner-1 /inner-2 [none-1] [none-2] tag-1 tag-2  </el>   /tag-2 /tag-1 /none-1 /none-2
@@ -741,6 +741,9 @@ class Compiler
 			$attrName = MacroNode::PREFIX_INNER . "-$name";
 			if (!isset($attrs[$attrName])) {
 				continue;
+			}
+			if ($empty) {
+				trigger_error("Unexpected n:$attrName on void element <{$this->htmlNode->name}>", E_USER_WARNING);
 			}
 
 			if ($this->htmlNode->closing) {
@@ -773,6 +776,9 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (!isset($attrs[$attrName])) {
 				continue;
+			}
+			if ($empty) {
+				trigger_error("Unexpected n:$attrName on void element <{$this->htmlNode->name}>", E_USER_WARNING);
 			}
 
 			$left[] = function () use ($name, $attrs, $attrName) {
