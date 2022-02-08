@@ -137,7 +137,7 @@ class CoreMacros extends MacroSet
 	{
 		$node->validate(null);
 		if ($node->data->capture = ($node->args === '')) {
-			return $writer->write('ob_start(function () {}) %node.line; try {');
+			return $writer->write("ob_start(fn() => '') %node.line; try {");
 		}
 
 		if ($node->prefix === $node::PREFIX_TAG) {
@@ -205,7 +205,7 @@ class CoreMacros extends MacroSet
 
 		$parent->data->else = true;
 		if ($parent->name === 'if' && $parent->data->capture) {
-			return $writer->write('ob_start(function () {}) %node.line; try {');
+			return $writer->write("ob_start(fn() => '') %node.line; try {");
 
 		} elseif ($parent->name === 'foreach') {
 			return $writer->write('$iterations++; } if ($iterator->isEmpty()) %node.line {');
@@ -261,7 +261,7 @@ class CoreMacros extends MacroSet
 	public function macroEndIfContent(MacroNode $node, PhpWriter $writer): void
 	{
 		$id = ++$this->idCounter;
-		$node->openingCode = '<?php ob_start(function () {}); try { ?>';
+		$node->openingCode = "<?php ob_start(fn() => ''); try { ?>";
 		$node->innerContent = '<?php ob_start(); try { ?>'
 			. $node->innerContent
 			. "<?php } finally { \$ʟ_ifc[$id] = rtrim(ob_get_flush()) === ''; } ?>";
@@ -277,7 +277,7 @@ class CoreMacros extends MacroSet
 		$node->validate(null);
 		$id = $node->data->id = ++$this->idCounter;
 		if ($node->data->capture = ($node->args === '')) {
-			$node->openingCode = $writer->write('<?php ob_start(function () {}); try %node.line { ?>');
+			$node->openingCode = $writer->write("<?php ob_start(fn() => ''); try %node.line { ?>");
 			$node->closingCode =
 				'<?php } finally { $ʟ_tmp = ob_get_clean(); } '
 				. "if ((\$ʟ_loc[$id] ?? null) !== \$ʟ_tmp) { echo \$ʟ_loc[$id] = \$ʟ_tmp; } ?>";
@@ -311,7 +311,7 @@ class CoreMacros extends MacroSet
 				echo ob_get_clean();
 				$iterator = $ʟ_it = $ʟ_try[%0_var][0];
 			} ?>', $id);
-		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [$ʟ_it ?? null]; ob_start(function () {}); try %node.line { ?>', $id);
+		$node->openingCode = $writer->write('<?php $ʟ_try[%var] = [$ʟ_it ?? null]; ob_start(fn() => \'\'); try %node.line { ?>', $id);
 		$node->closingCode = $node->data->codeCatch . $node->data->codeFinally;
 	}
 
@@ -349,7 +349,7 @@ class CoreMacros extends MacroSet
 				);
 			}
 
-			$node->openingCode = '<?php ob_start(function () {}); try { ?>' . $node->openingCode;
+			$node->openingCode = "<?php ob_start(fn() => ''); try { ?>" . $node->openingCode;
 			return $writer->write(
 				'} finally {
 					$ʟ_tmp = ob_get_clean();
@@ -405,7 +405,7 @@ class CoreMacros extends MacroSet
 		$node->validate(null);
 		$node->replaced = false;
 		return $writer->write(
-			'ob_start(function () {});
+			'ob_start(fn() => \'\');
 			try { $this->createTemplate(%node.word, %node.array, "sandbox")->renderToContentType(%var) %node.line; echo ob_get_clean(); }
 			catch (\Throwable $ʟ_e) {
 				if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($ʟ_e, $this); }
@@ -430,7 +430,7 @@ class CoreMacros extends MacroSet
 
 		$this->checkExtraArgs($node);
 		$node->data->variable = $variable;
-		return $writer->write('ob_start(function () {}) %node.line; try {');
+		return $writer->write("ob_start(fn() => '') %node.line; try {");
 	}
 
 

@@ -43,7 +43,7 @@
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
-			ob_start(function () {});
+			ob_start(fn() => '');
 			try /* line %d% */ {
 				echo ' -';
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
@@ -65,7 +65,7 @@
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
-			ob_start(function () {});
+			ob_start(fn() => '');
 			try /* line %d% */ {
 				echo ' -';
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
@@ -90,7 +90,7 @@
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
-			ob_start(function () {});
+			ob_start(fn() => '');
 			try /* line %d% */ {
 				echo '<span>';
 				echo LR\Filters::escapeHtmlText($i) /* line %d% */;
@@ -110,7 +110,7 @@
 		$iterations = 0;
 		foreach ([1, 1, 2, 3, 3, 3] as $i) /* line %d% */ {
 			echo ' ';
-			ob_start(function () {});
+			ob_start(fn() => '');
 			try /* line %d% */ {
 				echo '<span class="';
 				echo LR\Filters::escapeHtmlAttr($i) /* line %d% */;

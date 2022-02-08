@@ -29,7 +29,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo LR\Filters::escapeHtmlText(($this->filters->truncate)(($this->filters->translate)($hello), 3)) /* line %d% */;
 		echo '</li>
 	<li>Translated HTML: ';
-		ob_start(function () {});
+		ob_start(fn() => '');
 		try {
 			echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
 		} finally {
@@ -95,7 +95,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo '  <a   href="#"
 > test</a
@@ -117,7 +117,7 @@ alert();
 
 
 ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo '<ul>
 	<li>lower: ';
@@ -139,7 +139,7 @@ Captured: ';
 
 
 ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo 'Hello
 ';
@@ -159,10 +159,10 @@ Captured with modifier: ';
 
 <p>
 Nested blocks: ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo ' Outer   ';
-			ob_start(function () {}) /* line %d% */;
+			ob_start(fn() => '') /* line %d% */;
 			try {
 				echo ' Inner Block ';
 			} finally {

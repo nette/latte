@@ -260,7 +260,7 @@ var prop2 = ';
 { }
 
 ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo 'true';
 
@@ -271,7 +271,7 @@ var prop2 = ';
 			echo $ʟ_ifA;
 		}
 		echo "\n";
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo 'false';
 
@@ -282,10 +282,10 @@ var prop2 = ';
 			echo $ʟ_ifA;
 		}
 		echo "\n";
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo 'true';
-			ob_start(function () {}) /* line %d% */;
+			ob_start(fn() => '') /* line %d% */;
 			try {
 				echo 'false';
 
