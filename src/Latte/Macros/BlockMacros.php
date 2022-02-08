@@ -431,6 +431,10 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Snippet name must start with letter a-z, '$data->name' given.");
 		}
 
+		if ($node->prefix && $node->prefix !== $node::PREFIX_NONE) {
+			trigger_error("Use n:snippet instead of {$node->getNotation()}", E_USER_DEPRECATED);
+		}
+
 		$block = $this->addBlock($node, Template::LAYER_SNIPPET);
 
 		$data->after = function () use ($node, $writer, $data, $block) {
