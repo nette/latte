@@ -30,5 +30,5 @@ EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/snippet.n.phtml',
-	$latte->compile($template)
+	@$latte->compile($template) // deprecated n:inner-snippet
 );
