@@ -51,14 +51,14 @@ Assert::same(2, $lexer->getLine());
 Assert::exception(function () use (&$lexer) {
 	$lexer = new Lexer;
 	$lexer->tokenize('{');
-}, Latte\CompileException::class, 'Malformed tag.');
+}, Latte\CompileException::class, 'Malformed tag contents.');
 Assert::same(1, $lexer->getLine());
 
 
 Assert::exception(function () use (&$lexer) {
 	$lexer = new Lexer;
 	$lexer->tokenize("\n{");
-}, Latte\CompileException::class, 'Malformed tag.');
+}, Latte\CompileException::class, 'Malformed tag contents.');
 Assert::same(2, $lexer->getLine());
 
 
