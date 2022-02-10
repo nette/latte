@@ -15,9 +15,9 @@ use Latte\Strict;
 
 
 /**
- * Macro element node.
+ * Latte tag info.
  */
-class MacroNode
+class TagInfo
 {
 	use Strict;
 
@@ -34,7 +34,7 @@ class MacroNode
 	public bool $closing = false;
 	public ?bool $replaced = null;
 	public MacroTokens $tokenizer;
-	public ?MacroNode $parentNode = null;
+	public ?TagInfo $parentNode = null;
 	public ?string $openingCode = null;
 	public ?string $closingCode = null;
 	public ?string $attrCode = null;

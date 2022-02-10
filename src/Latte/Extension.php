@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte;
 
-use Latte\Compiler\MacroNode;
+use Latte\Compiler\TagInfo;
 
 
 /**
@@ -38,11 +38,11 @@ interface Extension
 	 * New node is found. Returns false to reject.
 	 * @return bool|null
 	 */
-	function nodeOpened(MacroNode $node);
+	function nodeOpened(TagInfo $node);
 
 	/**
 	 * Node is closed.
 	 * @return void
 	 */
-	function nodeClosed(MacroNode $node);
+	function nodeClosed(TagInfo $node);
 }

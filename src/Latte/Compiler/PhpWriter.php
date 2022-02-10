@@ -37,7 +37,7 @@ class PhpWriter
 	private ?int $line = null;
 
 
-	public static function using(MacroNode $node, ?Compiler $compiler = null): self
+	public static function using(TagInfo $node, ?Compiler $compiler = null): self
 	{
 		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;

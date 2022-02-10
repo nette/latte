@@ -11,9 +11,9 @@ namespace Latte\Extensions;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Compiler\MacroNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
+use Latte\Compiler\TagInfo;
 use Latte\Engine;
 use Latte\Helpers;
 
@@ -129,7 +129,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {if ...}
 	 */
-	public function macroIf(MacroNode $node, PhpWriter $writer): string
+	public function macroIf(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		if ($node->data->capture = ($node->args === '')) {
@@ -154,7 +154,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {/if ...}
 	 */
-	public function macroEndIf(MacroNode $node, PhpWriter $writer): string
+	public function macroEndIf(TagInfo $node, PhpWriter $writer): string
 	{
 		if (!$node->data->capture) {
 			return '}';
@@ -186,7 +186,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {else}
 	 */
-	public function macroElse(MacroNode $node, PhpWriter $writer): string
+	public function macroElse(TagInfo $node, PhpWriter $writer): string
 	{
 		if ($node->args !== '' && str_starts_with($node->args, 'if')) {
 			throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?');
@@ -225,7 +225,7 @@ class CoreExtension extends MacroSet
 	 * {elseif}
 	 * {elseifset}
 	 */
-	public function macroElseIf(MacroNode $node, PhpWriter $writer): string
+	public function macroElseIf(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(true, ['if', 'ifset']);
 		if (isset($node->parentNode->data->else) || !empty($node->parentNode->data->capture)) {
@@ -241,9 +241,9 @@ class CoreExtension extends MacroSet
 	/**
 	 * n:ifcontent
 	 */
-	public function macroIfContent(MacroNode $node, PhpWriter $writer): void
+	public function macroIfContent(TagInfo $node, PhpWriter $writer): void
 	{
-		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
+		if (!$node->prefix || $node->prefix !== TagInfo::PREFIX_NONE) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 		}
 
@@ -254,7 +254,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * n:ifcontent
 	 */
-	public function macroEndIfContent(MacroNode $node, PhpWriter $writer): void
+	public function macroEndIfContent(TagInfo $node, PhpWriter $writer): void
 	{
 		$id = ++$this->idCounter;
 		$node->openingCode = "<?php ob_start(fn() => ''); try { ?>";
@@ -268,7 +268,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {ifchanged [...]}
 	 */
-	public function macroIfChanged(MacroNode $node, PhpWriter $writer): void
+	public function macroIfChanged(TagInfo $node, PhpWriter $writer): void
 	{
 		$node->validate(null);
 		$id = $node->data->id = ++$this->idCounter;
@@ -289,7 +289,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {try}
 	 */
-	public function macroTry(MacroNode $node, PhpWriter $writer): void
+	public function macroTry(TagInfo $node, PhpWriter $writer): void
 	{
 		$node->replaced = false;
 		$node->validate(false);
@@ -315,7 +315,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {rollback}
 	 */
-	public function macroRollback(MacroNode $node, PhpWriter $writer): string
+	public function macroRollback(TagInfo $node, PhpWriter $writer): string
 	{
 		$parent = $node->closest(['try']);
 		if (!$parent || isset($parent->data->catch)) {
@@ -331,7 +331,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {_$var |modifiers}
 	 */
-	public function macroTranslate(MacroNode $node, PhpWriter $writer): string
+	public function macroTranslate(TagInfo $node, PhpWriter $writer): string
 	{
 		if ($node->closing) {
 			if (!str_contains($node->content, '<?php')) {
@@ -366,7 +366,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {include [file] "file" [with blocks] [,] [params]}
 	 */
-	public function macroInclude(MacroNode $node, PhpWriter $writer): string
+	public function macroInclude(TagInfo $node, PhpWriter $writer): string
 	{
 		[$file,] = $node->tokenizer->fetchWordWithModifier('file');
 		$mode = 'include';
@@ -396,7 +396,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {sandbox "file" [,] [params]}
 	 */
-	public function macroSandbox(MacroNode $node, PhpWriter $writer): string
+	public function macroSandbox(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		$node->replaced = false;
@@ -415,7 +415,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {capture $variable}
 	 */
-	public function macroCapture(MacroNode $node, PhpWriter $writer): string
+	public function macroCapture(TagInfo $node, PhpWriter $writer): string
 	{
 		$variable = $node->tokenizer->fetchWord();
 		if (!$variable) {
@@ -433,7 +433,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {/capture}
 	 */
-	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer): string
+	public function macroCaptureEnd(TagInfo $node, PhpWriter $writer): string
 	{
 		$body = implode('', $node->context) === Engine::CONTENT_HTML
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
@@ -453,7 +453,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {spaceless} ... {/spaceless}
 	 */
-	public function macroSpaceless(MacroNode $node, PhpWriter $writer): void
+	public function macroSpaceless(TagInfo $node, PhpWriter $writer): void
 	{
 		$node->validate(false);
 		$node->openingCode = $writer->write($node->context[0] === Engine::CONTENT_HTML
@@ -466,7 +466,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {while ...}
 	 */
-	public function macroWhile(MacroNode $node, PhpWriter $writer): string
+	public function macroWhile(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		if ($node->data->do = ($node->args === '')) {
@@ -480,7 +480,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {/while ...}
 	 */
-	public function macroEndWhile(MacroNode $node, PhpWriter $writer): string
+	public function macroEndWhile(TagInfo $node, PhpWriter $writer): string
 	{
 		if ($node->data->do) {
 			$node->validate(true);
@@ -494,7 +494,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {foreach ...}
 	 */
-	public function macroEndForeach(MacroNode $node, PhpWriter $writer): void
+	public function macroEndForeach(TagInfo $node, PhpWriter $writer): void
 	{
 		$noCheck = Helpers::removeFilter($node->modifiers, 'nocheck');
 		$noIterator = Helpers::removeFilter($node->modifiers, 'noiterator');
@@ -529,7 +529,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {iterateWhile ...}
 	 */
-	public function macroIterateWhile(MacroNode $node, PhpWriter $writer): void
+	public function macroIterateWhile(TagInfo $node, PhpWriter $writer): void
 	{
 		if (!$node->closest(['foreach'])) {
 			throw new CompileException('Tag ' . $node->getNotation() . ' must be inside {foreach} ... {/foreach}.');
@@ -542,7 +542,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {/iterateWhile ...}
 	 */
-	public function macroEndIterateWhile(MacroNode $node, PhpWriter $writer): void
+	public function macroEndIterateWhile(TagInfo $node, PhpWriter $writer): void
 	{
 		$node->validate(true);
 		$foreach = $node->closest(['foreach']);
@@ -569,7 +569,7 @@ class CoreExtension extends MacroSet
 	 * {continueIf ...}
 	 * {skipIf ...}
 	 */
-	public function macroBreakContinueIf(MacroNode $node, PhpWriter $writer): string
+	public function macroBreakContinueIf(TagInfo $node, PhpWriter $writer): string
 	{
 		if ($node->name === 'skipIf') {
 			$ancestors = ['foreach'];
@@ -596,7 +596,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * n:class="..."
 	 */
-	public function macroClass(MacroNode $node, PhpWriter $writer): string
+	public function macroClass(TagInfo $node, PhpWriter $writer): string
 	{
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
@@ -610,7 +610,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * n:attr="..."
 	 */
-	public function macroAttr(MacroNode $node, PhpWriter $writer): string
+	public function macroAttr(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(true);
 		return $writer->write('$ʟ_tmp = %node.array; echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) %node.line;');
@@ -620,9 +620,9 @@ class CoreExtension extends MacroSet
 	/**
 	 * n:tag="..."
 	 */
-	public function macroTag(MacroNode $node, PhpWriter $writer): void
+	public function macroTag(TagInfo $node, PhpWriter $writer): void
 	{
-		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
+		if (!$node->prefix || $node->prefix !== TagInfo::PREFIX_NONE) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 
 		} elseif (preg_match('(style$|script$)iA', $node->htmlNode->name)) {
@@ -636,7 +636,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * n:tag="..."
 	 */
-	public function macroTagEnd(MacroNode $node, PhpWriter $writer): void
+	public function macroTagEnd(TagInfo $node, PhpWriter $writer): void
 	{
 		for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
 		$node->htmlNode->data->id ??= $id;
@@ -662,7 +662,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {dump ...}
 	 */
-	public function macroDump(MacroNode $node, PhpWriter $writer): string
+	public function macroDump(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		$args = $writer->formatArgs();
@@ -676,7 +676,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {debugbreak ...}
 	 */
-	public function macroDebugbreak(MacroNode $node, PhpWriter $writer): string
+	public function macroDebugbreak(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
@@ -690,7 +690,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {case ...}
 	 */
-	public function macroCase(MacroNode $node, PhpWriter $writer): string
+	public function macroCase(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(true, ['switch']);
 		if (isset($node->parentNode->data->default)) {
@@ -706,7 +706,7 @@ class CoreExtension extends MacroSet
 	 * {default ...}
 	 * {default} in {switch}
 	 */
-	public function macroVar(MacroNode $node, PhpWriter $writer): string
+	public function macroVar(TagInfo $node, PhpWriter $writer): string
 	{
 		if ($node->name === 'default' && $node->parentNode && $node->parentNode->name === 'switch') {
 			$node->validate(false, ['switch']);
@@ -783,7 +783,7 @@ class CoreExtension extends MacroSet
 	 * {php ...}
 	 * {do ...}
 	 */
-	public function macroExpr(MacroNode $node, PhpWriter $writer): string
+	public function macroExpr(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(true, [], $node->name === '=');
 		return $writer->write(
@@ -797,7 +797,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {contentType ...}
 	 */
-	public function macroContentType(MacroNode $node, PhpWriter $writer): string
+	public function macroContentType(TagInfo $node, PhpWriter $writer): string
 	{
 		$node->validate(true);
 		if (
@@ -838,7 +838,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {parameters type $var, ...}
 	 */
-	public function macroParameters(MacroNode $node, PhpWriter $writer): void
+	public function macroParameters(TagInfo $node, PhpWriter $writer): void
 	{
 		if (!$this->getCompiler()->isInHead()) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
@@ -881,7 +881,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {varType type $var}
 	 */
-	public function macroVarType(MacroNode $node): void
+	public function macroVarType(TagInfo $node): void
 	{
 		if ($node->modifiers) {
 			$node->setArgs($node->args . $node->modifiers);
@@ -901,7 +901,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {varPrint [all]}
 	 */
-	public function macroVarPrint(MacroNode $node): string
+	public function macroVarPrint(TagInfo $node): string
 	{
 		$vars = $node->tokenizer->fetchWord() === 'all'
 			? 'get_defined_vars()'
@@ -913,7 +913,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {templateType ClassName}
 	 */
-	public function macroTemplateType(MacroNode $node): void
+	public function macroTemplateType(TagInfo $node): void
 	{
 		if (!$this->getCompiler()->isInHead()) {
 			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
@@ -926,7 +926,7 @@ class CoreExtension extends MacroSet
 	/**
 	 * {templatePrint [ClassName]}
 	 */
-	public function macroTemplatePrint(MacroNode $node): void
+	public function macroTemplatePrint(TagInfo $node): void
 	{
 		$this->printTemplate = PhpHelpers::dump($node->tokenizer->fetchWord() ?: null);
 	}
