@@ -12,7 +12,7 @@ namespace Latte\Macros;
 use Latte;
 use Latte\CompileException;
 use Latte\Compiler\Compiler;
-use Latte\Compiler\MacroNode;
+use Latte\Compiler\Tag;
 
 
 /**
@@ -79,7 +79,7 @@ class MacroSet implements Latte\Macro
 	 * New node is found.
 	 * @return bool|null
 	 */
-	public function nodeOpened(MacroNode $node)
+	public function nodeOpened(Tag $node)
 	{
 		[$begin, $end, $attr] = $this->macros[$node->name];
 		$node->empty = !$end;
@@ -136,7 +136,7 @@ class MacroSet implements Latte\Macro
 	 * Node is closed.
 	 * @return void
 	 */
-	public function nodeClosed(MacroNode $node)
+	public function nodeClosed(Tag $node)
 	{
 		if (isset($this->macros[$node->name][1])) {
 			$res = $this->compile($node, $this->macros[$node->name][1]);
@@ -150,7 +150,7 @@ class MacroSet implements Latte\Macro
 	/**
 	 * Generates code.
 	 */
-	private function compile(MacroNode $node, string|callable $def): string|bool|null
+	private function compile(Tag $node, string|callable $def): string|bool|null
 	{
 		$node->tokenizer->reset();
 		$writer = Latte\Compiler\PhpWriter::using($node, $this->compiler);
@@ -167,7 +167,7 @@ class MacroSet implements Latte\Macro
 
 
 	/** @internal */
-	protected function checkExtraArgs(MacroNode $node): void
+	protected function checkExtraArgs(Tag $node): void
 	{
 		if ($node->tokenizer->isNext(...$node->tokenizer::SIGNIFICANT)) {
 			$args = Latte\Runtime\Filters::truncate($node->tokenizer->joinAll(), 20);

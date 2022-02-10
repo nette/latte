@@ -15,9 +15,9 @@ use Latte\Macro;
 
 
 /**
- * Macro element node.
+ * Latte tag or n:attribute.
  */
-class MacroNode
+final class Tag
 {
 	use Latte\Strict;
 
@@ -34,7 +34,7 @@ class MacroNode
 	public bool $closing = false;
 	public ?bool $replaced = null;
 	public MacroTokens $tokenizer;
-	public ?MacroNode $parentNode = null;
+	public ?Tag $parentNode = null;
 	public ?string $openingCode = null;
 	public ?string $closingCode = null;
 	public ?string $attrCode = null;
@@ -101,15 +101,15 @@ class MacroNode
 	 */
 	public function closest(array $names, ?callable $condition = null): ?self
 	{
-		$node = $this->parentNode;
-		while ($node && (
-			!in_array($node->name, $names, true)
-			|| ($condition && !$condition($node))
+		$tag = $this->parentNode;
+		while ($tag && (
+			!in_array($tag->name, $names, true)
+			|| ($condition && !$condition($tag))
 		)) {
-			$node = $node->parentNode;
+			$tag = $tag->parentNode;
 		}
 
-		return $node;
+		return $tag;
 	}
 
 

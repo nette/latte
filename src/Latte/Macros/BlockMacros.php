@@ -11,9 +11,9 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Compiler\MacroNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
+use Latte\Compiler\Tag;
 use Latte\Helpers;
 use Latte\Runtime\Block;
 use Latte\Runtime\SnippetDriver;
@@ -118,7 +118,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {include [block] name [,] [params]}
 	 */
-	public function macroInclude(MacroNode $node, PhpWriter $writer): string|false
+	public function macroInclude(Tag $node, PhpWriter $writer): string|false
 	{
 		$node->validate(true, [], true);
 		$node->replaced = false;
@@ -191,7 +191,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {import "file"}
 	 */
-	public function macroImport(MacroNode $node, PhpWriter $writer): string
+	public function macroImport(Tag $node, PhpWriter $writer): string
 	{
 		$node->validate(true);
 		$file = $node->tokenizer->fetchWord();
@@ -211,7 +211,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {extends none | $var | "file"}
 	 */
-	public function macroExtends(MacroNode $node, PhpWriter $writer): void
+	public function macroExtends(Tag $node, PhpWriter $writer): void
 	{
 		$node->validate(true);
 		if ($node->parentNode) {
@@ -233,7 +233,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {block [local] [name]}
 	 */
-	public function macroBlock(MacroNode $node, PhpWriter $writer): string
+	public function macroBlock(Tag $node, PhpWriter $writer): string
 	{
 		[$name, $local] = $node->tokenizer->fetchWordWithModifier('local');
 		$layer = $local ? Template::LAYER_LOCAL : null;
@@ -294,7 +294,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {define [local] name}
 	 */
-	public function macroDefine(MacroNode $node, PhpWriter $writer): string
+	public function macroDefine(Tag $node, PhpWriter $writer): string
 	{
 		if ($node->modifiers) { // modifier may be union|type
 			$node->setArgs($node->args . $node->modifiers);
@@ -355,7 +355,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function beginDynamicBlockOrDefine(MacroNode $node, PhpWriter $writer, ?string $layer): string
+	private function beginDynamicBlockOrDefine(Tag $node, PhpWriter $writer, ?string $layer): string
 	{
 		$this->checkExtraArgs($node);
 		$data = $node->data;
@@ -386,7 +386,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {snippet [name]}
 	 */
-	public function macroSnippet(MacroNode $node, PhpWriter $writer): string
+	public function macroSnippet(Tag $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		$data = $node->data;
@@ -413,7 +413,7 @@ class BlockMacros extends MacroSet
 		$block = $this->addBlock($node, Template::LAYER_SNIPPET);
 
 		$data->after = function () use ($node, $writer, $data, $block) {
-			if ($node->prefix === MacroNode::PREFIX_NONE) { // n:snippet -> n:inner-snippet
+			if ($node->prefix === Tag::PREFIX_NONE) { // n:snippet -> n:inner-snippet
 				$node->content = $node->innerContent;
 			}
 
@@ -427,7 +427,7 @@ class BlockMacros extends MacroSet
 
 			$this->extractMethod($node, $block);
 
-			if ($node->prefix === MacroNode::PREFIX_NONE) {
+			if ($node->prefix === Tag::PREFIX_NONE) {
 				$node->innerContent = $node->openingCode . $node->content . $node->closingCode;
 				$node->closingCode = $node->openingCode = '<?php ?>';
 			}
@@ -455,13 +455,13 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function beginDynamicSnippet(MacroNode $node, PhpWriter $writer): string
+	private function beginDynamicSnippet(Tag $node, PhpWriter $writer): string
 	{
 		$data = $node->data;
 		$node->closingCode = '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
 
 		if ($node->prefix) {
-			if ($node->prefix === MacroNode::PREFIX_NONE) { // n:snippet -> n:inner-snippet
+			if ($node->prefix === Tag::PREFIX_NONE) { // n:snippet -> n:inner-snippet
 				$data->after = function () use ($node) {
 					$node->innerContent = $node->openingCode . $node->innerContent . $node->closingCode;
 					$node->closingCode = $node->openingCode = '<?php ?>';
@@ -489,7 +489,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {snippetArea [name]}
 	 */
-	public function macroSnippetArea(MacroNode $node, PhpWriter $writer): string
+	public function macroSnippetArea(Tag $node, PhpWriter $writer): string
 	{
 		$node->validate(null);
 		$data = $node->data;
@@ -518,7 +518,7 @@ class BlockMacros extends MacroSet
 	 * {/snippet}
 	 * {/snippetArea}
 	 */
-	public function macroBlockEnd(MacroNode $node, PhpWriter $writer): string
+	public function macroBlockEnd(Tag $node, PhpWriter $writer): string
 	{
 		if (isset($node->data->after)) {
 			($node->data->after)();
@@ -530,7 +530,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function addBlock(MacroNode $node, ?string $layer = null): Block
+	private function addBlock(Tag $node, ?string $layer = null): Block
 	{
 		$data = $node->data;
 		if ($layer === Template::LAYER_SNIPPET
@@ -547,7 +547,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	private function extractMethod(MacroNode $node, Block $block, ?string $params = null): void
+	private function extractMethod(Tag $node, Block $block, ?string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
 			$node->content = '<?php extract(' . ($node->name === 'block' && $node->closest(['embed']) ? 'end($this->varStack)' : '$this->params') . ');'
@@ -565,7 +565,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {embed [block|file] name [,] [params]}
 	 */
-	public function macroEmbed(MacroNode $node, PhpWriter $writer): void
+	public function macroEmbed(Tag $node, PhpWriter $writer): void
 	{
 		$node->validate(true);
 		$node->replaced = false;
@@ -611,7 +611,7 @@ class BlockMacros extends MacroSet
 	/**
 	 * {/embed}
 	 */
-	public function macroEmbedEnd(MacroNode $node, PhpWriter $writer): void
+	public function macroEmbedEnd(Tag $node, PhpWriter $writer): void
 	{
 		$this->index = $node->data->prevIndex;
 	}
@@ -621,7 +621,7 @@ class BlockMacros extends MacroSet
 	 * {ifset block}
 	 * {elseifset block}
 	 */
-	public function macroIfset(MacroNode $node, PhpWriter $writer): string|false
+	public function macroIfset(Tag $node, PhpWriter $writer): string|false
 	{
 		$node->validate(true);
 		if (!preg_match('~#|\w~A', $node->args)) {
