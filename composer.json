@@ -20,10 +20,10 @@
 		"ext-tokenizer": "*"
 	},
 	"require-dev": {
-		"nette/tester": "~2.0",
+		"nette/tester": "^2.0",
 		"tracy/tracy": "^2.3",
 		"nette/utils": "^3.0",
-		"phpstan/phpstan": "^0.12",
+		"phpstan/phpstan": "^1",
 		"nette/php-generator": "^3.3.4"
 	},
 	"suggest": {
