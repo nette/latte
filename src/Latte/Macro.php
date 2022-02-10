@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte;
 
-use Latte\Compiler\MacroNode;
+use Latte\Compiler\Tag;
 
 
 /**
@@ -38,11 +38,11 @@ interface Macro
 	 * New node is found. Returns false to reject.
 	 * @return bool|null
 	 */
-	function nodeOpened(MacroNode $node);
+	function nodeOpened(Tag $tag);
 
 	/**
 	 * Node is closed.
 	 * @return void
 	 */
-	function nodeClosed(MacroNode $node);
+	function nodeClosed(Tag $tag);
 }

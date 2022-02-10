@@ -79,7 +79,7 @@ class Compiler
 
 	private ?HtmlNode $htmlNode = null;
 
-	private ?MacroNode $macroNode = null;
+	private ?Tag $macroNode = null;
 
 	private string $contentType = self::CONTENT_HTML;
 
@@ -271,7 +271,7 @@ class Compiler
 	}
 
 
-	public function getMacroNode(): ?MacroNode
+	public function getMacroNode(): ?Tag
 	{
 		return $this->macroNode;
 	}
@@ -596,11 +596,11 @@ class Compiler
 		string $modifiers = '',
 		bool $isRightmost = false,
 		?string $nPrefix = null,
-	): MacroNode {
+	): Tag {
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
 			$this->writeCode((string) $node->openingCode, $node->replaced, $isRightmost);
-			if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
+			if ($node->prefix && $node->prefix !== Tag::PREFIX_TAG) {
 				$this->htmlNode->attrCode .= $node->attrCode;
 			}
 		} else {
@@ -624,7 +624,7 @@ class Compiler
 		string $modifiers = '',
 		bool $isRightmost = false,
 		?string $nPrefix = null,
-	): MacroNode {
+	): Tag {
 		$node = $this->macroNode;
 
 		if (
@@ -645,7 +645,7 @@ class Compiler
 			$node->setArgs($args);
 		}
 
-		if ($node->prefix === MacroNode::PREFIX_NONE) {
+		if ($node->prefix === Tag::PREFIX_NONE) {
 			$parts = explode($node->htmlNode->innerMarker, $node->content);
 			if (count($parts) === 3) { // markers may be destroyed by inner macro
 				$node->innerContent = $parts[1];
@@ -660,7 +660,7 @@ class Compiler
 			$node->content = implode($node->htmlNode->innerMarker, [$parts[0], $node->innerContent, $parts[2]]);
 		}
 
-		if ($node->prefix && $node->prefix !== MacroNode::PREFIX_TAG) {
+		if ($node->prefix && $node->prefix !== Tag::PREFIX_TAG) {
 			$this->htmlNode->attrCode .= $node->attrCode;
 		}
 
@@ -707,7 +707,7 @@ class Compiler
 		$left = $right = [];
 
 		foreach ($this->macros as $name => $foo) {
-			$attrName = MacroNode::PREFIX_INNER . "-$name";
+			$attrName = Tag::PREFIX_INNER . "-$name";
 			if (!isset($attrs[$attrName])) {
 				continue;
 			}
@@ -717,11 +717,11 @@ class Compiler
 
 			if ($this->htmlNode->closing) {
 				$left[] = function () use ($name) {
-					$this->closeMacro($name, '', '', false, MacroNode::PREFIX_INNER);
+					$this->closeMacro($name, '', '', false, Tag::PREFIX_INNER);
 				};
 			} else {
 				array_unshift($right, function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_INNER)->empty) {
+					if ($this->openMacro($name, $attrs[$attrName], '', false, Tag::PREFIX_INNER)->empty) {
 						throw new CompileException("Unexpected prefix in n:$attrName.");
 					}
 				});
@@ -742,7 +742,7 @@ class Compiler
 		}
 
 		foreach (array_reverse($this->macros) as $name => $foo) {
-			$attrName = MacroNode::PREFIX_TAG . "-$name";
+			$attrName = Tag::PREFIX_TAG . "-$name";
 			if (!isset($attrs[$attrName])) {
 				continue;
 			}
@@ -751,12 +751,12 @@ class Compiler
 			}
 
 			$left[] = function () use ($name, $attrs, $attrName) {
-				if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_TAG)->empty) {
+				if ($this->openMacro($name, $attrs[$attrName], '', false, Tag::PREFIX_TAG)->empty) {
 					throw new CompileException("Unexpected prefix in n:$attrName.");
 				}
 			};
 			array_unshift($right, function () use ($name) {
-				$this->closeMacro($name, '', '', false, MacroNode::PREFIX_TAG);
+				$this->closeMacro($name, '', '', false, Tag::PREFIX_TAG);
 			});
 			unset($attrs[$attrName]);
 		}
@@ -765,11 +765,11 @@ class Compiler
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
 					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', '', false, MacroNode::PREFIX_NONE);
+						$this->closeMacro($name, '', '', false, Tag::PREFIX_NONE);
 					};
 				} else {
 					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
-						$node = $this->openMacro($name, $attrs[$name], '', false, MacroNode::PREFIX_NONE);
+						$node = $this->openMacro($name, $attrs[$name], '', false, Tag::PREFIX_NONE);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {
@@ -816,7 +816,7 @@ class Compiler
 	 * Expands macro and returns node & code.
 	 * @internal
 	 */
-	public function expandMacro(string $name, string $args, string $modifiers = '', ?string $nPrefix = null): MacroNode
+	public function expandMacro(string $name, string $args, string $modifiers = '', ?string $nPrefix = null): Tag
 	{
 		if (empty($this->macros[$name])) {
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')
@@ -853,9 +853,9 @@ class Compiler
 			}
 		}
 
-		if ($nPrefix === MacroNode::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'script')) {
+		if ($nPrefix === Tag::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'script')) {
 			$context = [$this->contentType, self::CONTEXT_HTML_JS];
-		} elseif ($nPrefix === MacroNode::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'style')) {
+		} elseif ($nPrefix === Tag::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'style')) {
 			$context = [$this->contentType, self::CONTEXT_HTML_CSS];
 		} elseif ($nPrefix) {
 			$context = [$this->contentType, self::CONTEXT_HTML_TEXT];
@@ -864,7 +864,7 @@ class Compiler
 		}
 
 		foreach (array_reverse($this->macros[$name]) as $macro) {
-			$node = new MacroNode($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
+			$node = new Tag($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
 			$node->context = $context;
 			$node->startLine = $nPrefix ? $this->htmlNode->startLine : $this->getLine();
 			if ($macro->nodeOpened($node) !== false) {
@@ -873,13 +873,13 @@ class Compiler
 		}
 
 		throw new CompileException('Unknown ' . ($nPrefix
-			? 'attribute ' . Parser::N_PREFIX . ($nPrefix === MacroNode::PREFIX_NONE ? '' : "$nPrefix-") . $name
+			? 'attribute ' . Parser::N_PREFIX . ($nPrefix === Tag::PREFIX_NONE ? '' : "$nPrefix-") . $name
 			: 'tag {' . $name . ($args ? " $args" : '') . '}'
 		));
 	}
 
 
-	private static function printEndTag(HtmlNode|MacroNode $node): string
+	private static function printEndTag(HtmlNode|Tag $node): string
 	{
 		return $node instanceof HtmlNode
 			? "</{$node->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs))

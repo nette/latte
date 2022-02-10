@@ -34,13 +34,13 @@ class PhpWriter
 	private ?int $line = null;
 
 
-	public static function using(MacroNode $node, ?Compiler $compiler = null): self
+	public static function using(Tag $tag, ?Compiler $compiler = null): self
 	{
-		$me = new static($node->tokenizer, null, $node->context);
-		$me->modifiers = &$node->modifiers;
+		$me = new static($tag->tokenizer, null, $tag->context);
+		$me->modifiers = &$tag->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
 		$me->policy = $compiler ? $compiler->getPolicy() : null;
-		$me->line = $node->startLine;
+		$me->line = $tag->startLine;
 		return $me;
 	}
 
