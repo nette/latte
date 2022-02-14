@@ -15,13 +15,6 @@ require __DIR__ . '/../bootstrap.php';
 $parser = new Latte\Parser;
 
 
-Assert::same(['?', 'echo', '', false, false], $parser->parseMacroTag('? echo'));
-Assert::same(['?', 'echo', '', false, false], $parser->parseMacroTag('?echo'));
-Assert::same(['?', 'echo', '', true, false], $parser->parseMacroTag('?echo/'));
-Assert::same(['?', '', '', false, false], $parser->parseMacroTag('?'));
-Assert::same(['?', '', '', true, false], $parser->parseMacroTag('?/'));
-Assert::same(['?', '', '', true, false], $parser->parseMacroTag('? /'));
-Assert::same(['?', '/', '', false, false], $parser->parseMacroTag('? / '));
 Assert::same(['=', '$var', '', false, false], $parser->parseMacroTag('$var'));
 Assert::same(['=', '$var', '|noescape', false, false], $parser->parseMacroTag('$var|noescape'));
 Assert::same(['=', '$var', '|noescape', true, false], $parser->parseMacroTag('$var|noescape/'));
