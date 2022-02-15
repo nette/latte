@@ -26,8 +26,6 @@ $template = <<<'EOD'
 
 <p>Default: {$person}</p>
 
-<p n:syntax="">Default: {$person}</p>
-
 <p n:syntax="latte">Default: {$person}</p>
 
 <p n:syntax="off">Default: {$person}</p>
