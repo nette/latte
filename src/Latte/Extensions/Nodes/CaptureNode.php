@@ -32,7 +32,8 @@ class CaptureNode extends StatementNode
 	/** @return \Generator<int, ?array, array{FragmentNode, ?TagInfo}, self> */
 	public static function parse(TagInfo $tag): \Generator
 	{
-		$tag->validate(true, [], true);
+		$tag->extractModifier();
+		$tag->validate(true);
 		if (!str_starts_with($tag->args, '$')) {
 			throw new CompileException("Invalid capture block variable '$tag->args'");
 		}

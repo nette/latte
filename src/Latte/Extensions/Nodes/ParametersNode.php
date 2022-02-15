@@ -30,10 +30,6 @@ class ParametersNode extends StatementNode
 		if (!$tag->isInHead()) {
 			throw new CompileException('{parameters} is allowed only in template header.');
 		}
-		if ($tag->modifiers) {
-			$tag->setArgs($tag->args . $tag->modifiers);
-			$tag->modifiers = '';
-		}
 		$tag->validate(true);
 		$node = new self;
 		$node->parameters = self::parseParameters($tag->tokenizer);

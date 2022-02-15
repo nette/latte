@@ -35,6 +35,7 @@ class BlockNode extends StatementNode
 	/** @return \Generator<int, ?array, array{FragmentNode, ?TagInfo}, self> */
 	public static function parse(TagInfo $tag, Parser $parser): \Generator
 	{
+		$tag->extractModifier();
 		[$name, $local] = $tag->tokenizer->fetchWordWithModifier('local');
 		$tag->checkExtraArgs();
 		$name = ltrim((string) $name, '#');

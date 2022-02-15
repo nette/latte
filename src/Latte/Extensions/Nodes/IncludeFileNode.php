@@ -31,8 +31,6 @@ class IncludeFileNode extends StatementNode
 
 	public static function parse(TagInfo $tag): self
 	{
-		$tag->validate(true, [], true);
-
 		$node = new self;
 		$node->expression = $tag->tokenizer;
 

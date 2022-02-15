@@ -305,7 +305,7 @@ class Lexer
 
 		if (!empty($matches['macro'])) {
 			$token = $this->addToken(LegacyToken::MACRO_TAG, $this->context[1][2] . $this->context[1][1] . $matches[0]);
-			[$token->name, $token->value, $token->modifiers, $token->empty, $token->closing] = $this->parseMacroTag($matches['macro']);
+			[$token->name, $token->value, $token->empty, $token->closing] = $this->parseMacroTag($matches['macro']);
 			$token->indentation = $this->context[1][2];
 			$token->newline = isset($matches['rmargin']);
 			$this->context = $this->context[1][0];
@@ -417,17 +417,15 @@ class Lexer
 
 	/**
 	 * Parses macro tag to name, arguments a modifiers parts.
-	 * @param  string  $tag  {name arguments | modifiers}
-	 * @return array{string, string, string, bool, bool}|null
+	 * @return array{string, string, bool, bool}|null
 	 * @internal
 	 */
 	public function parseMacroTag(string $tag): ?array
 	{
 		if (!preg_match('~^
 			(?P<closing>/?)
-			(?P<name>=|_(?!_)|[a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\)|)   ## name, /name, but not function( or class:: or namespace\
+			(?P<name>=|_(?!_)|[a-z]\\w*+(?:[.:-]\\w+)*+(?!::|\\(|\\\\)|)   ## name, /name, but not function( or class:: or namespace\\
 			(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
-			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
 			(?P<empty>/?$)
 		()$~Disx', $tag, $match)) {
 			if (preg_last_error()) {
@@ -441,7 +439,7 @@ class Lexer
 			$match['name'] = $match['closing'] ? '' : '=';
 		}
 
-		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty'], (bool) $match['closing']];
+		return [$match['name'], trim($match['args']), (bool) $match['empty'], (bool) $match['closing']];
 	}
 
 

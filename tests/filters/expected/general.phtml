@@ -51,7 +51,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj|ahojahojahojahoj')) /* line %d% */;
 		echo '</li>
 	<li>spaces: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello" )) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello")) /* line %d% */;
 		echo '</li>
 	<li>dynamic: ';
 		echo LR\Filters::escapeHtmlText(($this->filters->dynamic)($hello)) /* line %d% */;

@@ -280,7 +280,6 @@ class Parser
 			closing: $token->closing,
 			name: $token->name,
 			args: $token->value,
-			modifiers: $token->modifiers,
 			empty: $token->empty,
 			location: $this->location,
 			htmlElement: $this->htmlElement,

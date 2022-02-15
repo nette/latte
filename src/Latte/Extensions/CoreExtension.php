@@ -227,7 +227,8 @@ final class CoreExtension implements Latte\Extension
 	 */
 	public function parseInclude(TagInfo $tag, Parser $parser): Nodes\IncludeBlockNode|Nodes\IncludeFileNode
 	{
-		$tag->validate(true, [], true);
+		$tag->extractModifier();
+		$tag->validate(true);
 		[$name, $mod] = $tag->tokenizer->fetchWordWithModifier(['block', 'file']);
 		$tag->tokenizer->reset();
 		return $mod === 'file' || (!$mod && $name && !preg_match('~#|[\w-]+$~DA', $name))

@@ -36,7 +36,8 @@ class ForeachNode extends StatementNode
 	/** @return \Generator<int, ?array, array{FragmentNode, ?TagInfo}, self> */
 	public static function parse(TagInfo $tag): \Generator
 	{
-		$tag->validate(true, [], true);
+		$tag->extractModifier();
+		$tag->validate(true);
 
 		$tag->data->iterateWhile = $tag->args;
 

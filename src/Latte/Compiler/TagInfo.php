@@ -30,12 +30,12 @@ class TagInfo
 	public string $args;
 	public MacroTokens $tokenizer;
 	public \stdClass $data;
+	public string $modifiers = '';
 
 
 	public function __construct(
 		public /*readonly*/ string $name,
 		string /*readonly*/ $args,
-		public /*readonly*/ string $modifiers = '',
 		public /*readonly*/ bool $empty = false,
 		public /*readonly*/ bool $closing = false,
 		public /*readonly*/ ?int $line = null,
@@ -69,7 +69,7 @@ class TagInfo
 	}
 
 
-	public function setArgs(string $args): void
+	private function setArgs(string $args): void
 	{
 		$this->args = $args;
 		$this->tokenizer = new MacroTokens($args);
@@ -101,18 +101,11 @@ class TagInfo
 
 
 	/**
-	 * @param  string[]  $parents
 	 * @throws CompileException
 	 */
-	public function validate(string|bool|null $arguments, array $parents = [], bool $modifiers = false): void
+	public function validate(string|bool|null $arguments): void
 	{
-		if ($parents && (!$this->parentNode || !in_array($this->parentNode->name, $parents, true))) {
-			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.');
-
-		} elseif ($this->modifiers !== '' && !$modifiers) {
-			throw new CompileException('Filters are not allowed in ' . $this->getNotation());
-
-		} elseif ($arguments && $this->args === '') {
+		if ($arguments && $this->args === '') {
 			$label = is_string($arguments) ? $arguments : 'arguments';
 			throw new CompileException('Missing ' . $label . ' in ' . $this->getNotation());
 
@@ -127,6 +120,18 @@ class TagInfo
 		if ($this->tokenizer->isNext(...$this->tokenizer::SIGNIFICANT)) {
 			$args = Filters::truncate($this->tokenizer->joinAll(), 20);
 			throw new CompileException("Unexpected arguments '$args' in " . $this->getNotation());
+		}
+	}
+
+
+	public function extractModifier(): void
+	{
+		if (preg_match('~^
+			(?<args>(?:' . Lexer::RE_STRING . '|[^\'"])*?)
+			(?<modifiers>(?<!\|)\|[a-z](?<modArgs>(?:' . Lexer::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
+		$~Disx', $this->args, $match)) {
+			$this->setArgs(trim($match['args']));
+			$this->modifiers = $match['modifiers'] ?? '';
 		}
 	}
 }

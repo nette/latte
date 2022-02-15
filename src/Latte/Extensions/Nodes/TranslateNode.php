@@ -33,6 +33,7 @@ class TranslateNode extends StatementNode
 	/** @return \Generator<int, ?array, array{FragmentNode, ?TagInfo}, self> */
 	public static function parse(TagInfo $tag, Parser $parser): \Generator
 	{
+		$tag->extractModifier();
 		if (Helpers::removeFilter($tag->modifiers, 'noescape')) {
 			$parser->checkFilterIsAllowed('noescape');
 		} else {

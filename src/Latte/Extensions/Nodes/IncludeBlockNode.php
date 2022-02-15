@@ -37,8 +37,6 @@ class IncludeBlockNode extends StatementNode
 
 	public static function parse(TagInfo $tag, Parser $parser): self
 	{
-		$tag->validate(true, [], true);
-
 		[$name] = $tag->tokenizer->fetchWordWithModifier(['block']);
 		$name = ltrim($name, '#');
 

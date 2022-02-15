@@ -35,11 +35,6 @@ class DefineNode extends StatementNode
 	/** @return \Generator<int, ?array, array{FragmentNode, ?TagInfo}, self> */
 	public static function parse(TagInfo $tag, Parser $parser): \Generator
 	{
-		if ($tag->modifiers) { // modifier may be union|type
-			$tag->setArgs($tag->args . $tag->modifiers);
-			$tag->modifiers = '';
-		}
-
 		$tag->validate(true);
 		[$name, $local] = $tag->tokenizer->fetchWordWithModifier('local');
 		$name = ltrim((string) $name, '#');

@@ -40,12 +40,13 @@ class PrintNode extends StatementNode
 			throw new CompileException("Do not place {$stream->peek(-1)->text} inside quotes in JavaScript.");
 		}
 
+		$tag->extractModifier();
+		$tag->validate(true);
 		if (Helpers::removeFilter($tag->modifiers, 'noescape')) {
 			$parser->checkFilterIsAllowed('noescape');
 		} else {
 			$tag->modifiers .= '|escape';
 		}
-		$tag->validate(true, [], true);
 		$node = new self;
 		$node->expression = $tag->tokenizer;
 		return $node;

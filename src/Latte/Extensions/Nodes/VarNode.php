@@ -29,10 +29,6 @@ class VarNode extends StatementNode
 
 	public static function parse(TagInfo $tag): self
 	{
-		if ($tag->modifiers) {
-			$tag->setArgs($tag->args . $tag->modifiers);
-			$tag->modifiers = '';
-		}
 		$tag->validate(true);
 
 		$node = new self;
