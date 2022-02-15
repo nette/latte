@@ -396,9 +396,9 @@ class Parser
 	 * Changes macro tag delimiters.
 	 * @return static
 	 */
-	public function setSyntax(string $type)
+	public function setSyntax(?string $type)
 	{
-		$type = $type ?: $this->defaultSyntax;
+		$type = $type ?? $this->defaultSyntax;
 		if (!isset($this->syntaxes[$type])) {
 			throw new \InvalidArgumentException("Unknown syntax '$type'");
 		}
@@ -471,12 +471,8 @@ class Parser
 	 */
 	protected function filter(Token $token): void
 	{
-		if ($token->type === Token::MACRO_TAG && $token->name === '/syntax') {
-			$this->setSyntax($this->defaultSyntax);
-			$token->type = Token::COMMENT;
-
-		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'syntax') {
-			$this->setSyntax($token->value);
+		if ($token->type === Token::MACRO_TAG && $token->name === 'syntax') {
+			$this->setSyntax($token->closing ? $this->defaultSyntax : $token->value);
 			$token->type = Token::COMMENT;
 
 		} elseif ($token->type === Token::HTML_ATTRIBUTE_BEGIN && $token->name === 'n:syntax') {
