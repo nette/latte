@@ -444,7 +444,6 @@ class Compiler
 
 			$this->htmlNode->empty = false;
 			$this->htmlNode->closing = true;
-			$this->htmlNode->endLine = $this->getLine();
 			$this->context = self::CONTEXT_HTML_TEXT;
 
 		} elseif ($token->text === '<!--') {
@@ -455,7 +454,7 @@ class Compiler
 
 		} else {
 			$this->htmlNode = new HtmlNode($token->name, $this->htmlNode);
-			$this->htmlNode->startLine = $this->getLine();
+			$this->htmlNode->line = $this->getLine();
 			$this->context = self::CONTEXT_HTML_TAG;
 		}
 
@@ -661,7 +660,6 @@ class Compiler
 		}
 
 		$node->closing = true;
-		$node->endLine = $node->prefix ? $node->htmlNode->endLine : $this->getLine();
 		$node->macro->nodeClosed($node);
 
 		if (isset($parts[1]) && $node->innerContent !== $parts[1]) {
@@ -864,7 +862,7 @@ class Compiler
 		$macro = $this->macros[$name];
 		$node = new TagInfo($macro, $name, $args, $modifiers, $this->macroNode, $this->htmlNode, $nPrefix);
 		$node->context = $context;
-		$node->startLine = $nPrefix ? $this->htmlNode->startLine : $this->getLine();
+		$node->line = $nPrefix ? $this->htmlNode->line : $this->getLine();
 		if ($macro->nodeOpened($node) !== false) {
 			return $node;
 		}

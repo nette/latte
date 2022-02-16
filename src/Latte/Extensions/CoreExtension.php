@@ -583,7 +583,7 @@ class CoreExtension extends MacroSet
 		if (!$noCheck) {
 			preg_match('#.+\s+as\s*\$(\w+)(?:\s*=>\s*\$(\w+))?#i', $args, $m);
 			for ($i = 1; $i < count($m); $i++) {
-				$this->overwrittenVars[$m[$i]][] = $node->startLine;
+				$this->overwrittenVars[$m[$i]][] = $node->line;
 			}
 		}
 

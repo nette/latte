@@ -36,10 +36,7 @@ class HtmlNode
 	public ?string $attrCode = null;
 
 	/** position of start tag in source template */
-	public ?int $startLine = null;
-
-	/** position of end tag in source template */
-	public ?int $endLine = null;
+	public ?int $line = null;
 
 	/** user data */
 	public \stdClass $data;

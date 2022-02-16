@@ -44,7 +44,7 @@ class PhpWriter
 		$me->modifiers = &$node->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
 		$me->policy = $compiler ? $compiler->getPolicy() : null;
-		$me->line = $node->startLine;
+		$me->line = $node->line;
 		return $me;
 	}
 

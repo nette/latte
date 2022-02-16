@@ -373,7 +373,7 @@ class BlockExtension extends MacroSet
 				$this->getCompiler()->expandTokens("extract(\$ʟ_args); unset(\$ʟ_args);\n?>{$node->content}<?php"),
 				'array $ʟ_args',
 				'void',
-				"{{$node->name} {$node->args}} on line {$node->startLine}",
+				"{{$node->name} {$node->args}} on line {$node->line}",
 			);
 			$node->content = '';
 		};
@@ -547,7 +547,7 @@ class BlockExtension extends MacroSet
 
 		$block = $this->blocks[$layer ?? $this->index][$data->name] = new Block;
 		$block->contentType = implode('', $node->context);
-		$block->comment = "{{$node->name} {$node->args}} on line {$node->startLine}";
+		$block->comment = "{{$node->name} {$node->args}} on line {$node->line}";
 		return $block;
 	}
 
