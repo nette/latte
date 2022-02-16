@@ -48,6 +48,7 @@ class Parser
 	private array $attrParsers = [];
 
 	private TokenStream $stream;
+	private ?Lexer $lexer = null;
 	private ?Policy $policy = null;
 	private string $contentType = Compiler::CONTENT_HTML;
 	private ?Html\ElementNode $htmlElement = null;
@@ -84,9 +85,10 @@ class Parser
 	 * Parses tokens to nodes.
 	 * @throws CompileException
 	 */
-	public function parse(TokenStream $stream): Node
+	public function parse(TokenStream $stream, Lexer $lexer): Node
 	{
 		$this->stream = $stream;
+		$this->lexer = $lexer;
 		$node = $this->parseFragment([$this, 'htmlTextContext']);
 		if ($token = $this->stream->current()) {
 			throw new CompileException('Unexpected ' . trim($token->text));
@@ -105,6 +107,7 @@ class Parser
 	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
+		$this->lexer?->setContentType($type);
 		return $this;
 	}
 
@@ -128,6 +131,13 @@ class Parser
 	public function getStream(): TokenStream
 	{
 		return $this->stream;
+	}
+
+
+	/** @internal */
+	public function getLexer(): Lexer
+	{
+		return $this->lexer;
 	}
 
 
@@ -586,7 +596,8 @@ class Parser
 
 	private function checkEndTag(TagInfo $start, ?TagInfo $end): void
 	{
-		if ($start->name === 'block' && !$this->tagInfo->parent) { // TODO: hardcoded
+		if ($start->name === 'syntax'
+			|| $start->name === 'block' && !$this->tagInfo->parent) { // TODO: hardcoded
 			return;
 		}
 

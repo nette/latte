@@ -21,40 +21,48 @@ class TokenStream
 	use Strict;
 
 	/** @var LegacyToken[] */
-	private array $tokens;
+	private array $tokens = [];
 	private int $index = 0;
+	private \Generator $generator;
 
 
-	/**
-	 * @param  LegacyToken[]  $tokens
-	 */
-	public function __construct(array $tokens)
+	public function __construct(\Generator $generator)
 	{
-		$this->tokens = $tokens;
+		$this->generator = $generator;
+		$this->tokens[] = $generator->current();
 	}
 
 
 	public function current(): ?LegacyToken
 	{
-		return $this->tokens[$this->index] ?? null;
+		return $this->peek(0);
 	}
 
 
 	public function is(int|string ...$args): bool
 	{
-		$this->current()?->is(...$args) ?? false;
+		return $this->peek(0)?->is(...$args) ?? false;
 	}
 
 
 	public function peek(int $offset): ?LegacyToken
 	{
-		return $this->tokens[$this->index + $offset] ?? null;
+		$pos = $this->index + $offset;
+		while ($pos >= 0 && !isset($this->tokens[$pos])) {
+			$this->generator->next();
+			if (!$this->generator->valid()) {
+				break;
+			}
+			$this->tokens[] = $this->generator->current();
+		}
+
+		return $this->tokens[$pos] ?? null;
 	}
 
 
 	public function consume(int|string ...$args): LegacyToken
 	{
-		$token = $this->tokens[$this->index] ?? null;
+		$token = $this->peek(0);
 		if (!$token) {
 			throw new CompileException('Unexpected end.');
 		} elseif ($args && !$token->is(...$args)) {
@@ -67,7 +75,7 @@ class TokenStream
 
 	public function tryConsume(int|string ...$args): ?LegacyToken
 	{
-		$token = $this->tokens[$this->index] ?? null;
+		$token = $this->peek(0);
 		if ($token?->is(...$args)) {
 			$this->index++;
 			return $token;
@@ -93,6 +101,7 @@ class TokenStream
 
 	public function getTokens(): array
 	{
+		$this->peek(1000000);
 		return $this->tokens;
 	}
 }

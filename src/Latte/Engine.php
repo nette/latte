@@ -132,7 +132,7 @@ class Engine
 			$node = $parser
 				->setContentType($this->contentType)
 				->setPolicy($this->sandboxed ? $this->policy : null)
-				->parse($tokens);
+				->parse($tokens, $lexer);
 
 			foreach ($this->extensions as $extension) {
 				$extension->afterParse($node);

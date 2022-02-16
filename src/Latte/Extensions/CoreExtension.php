@@ -63,6 +63,7 @@ final class CoreExtension implements Latte\Extension
 			'trace' => [Nodes\TraceNode::class, 'parse'],
 			'l' => [$this, 'parseLR'],
 			'r' => [$this, 'parseLR'],
+			'syntax' => [$this, 'parseSyntax'],
 
 			'_' => [Nodes\TranslateNode::class, 'parse'],
 			'=' => [Nodes\PrintNode::class, 'parse'],
@@ -218,6 +219,21 @@ final class CoreExtension implements Latte\Extension
 	{
 		$tag->validate(false);
 		return new TextNode($tag->name === 'l' ? '{' : '}');
+	}
+
+
+	/**
+	 * {syntax ...}
+	 *
+	 * @return \Generator<int, ?array, array{FragmentNode, ?TagInfo}, FragmentNode>
+	 */
+	public function parseSyntax(TagInfo $tag, Parser $parser): \Generator
+	{
+		$tag->validate(true);
+		$parser->getLexer()->setSyntax($tag->args);
+		[$inner] = yield;
+		$parser->getLexer()->setSyntax(null);
+		return $inner;
 	}
 
 
