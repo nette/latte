@@ -84,6 +84,19 @@ class TokenStream
 	}
 
 
+	public function join(int $length): ?string
+	{
+		$res = '';
+		$start = min($length, 0);
+		$end = max($length, 0);
+		for ($i = $start; $i < $end; $i++) {
+			$res .= $this->peek($i)?->text;
+		}
+
+		return $res === '' ? null : $res;
+	}
+
+
 	public function seek(int $index): void
 	{
 		if ($index > count($this->tokens)) {

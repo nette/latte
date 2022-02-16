@@ -90,8 +90,8 @@ class Parser
 		$this->stream = $stream;
 		$this->lexer = $lexer;
 		$node = $this->parseFragment([$this, 'htmlTextContext']);
-		if ($token = $this->stream->current()) {
-			throw new CompileException('Unexpected ' . trim($token->text));
+		if ($this->stream->current()) {
+			throw new CompileException('Unexpected ' . trim($this->stream->join(4) ?? 'end'));
 		}
 		return $node;
 	}
@@ -168,6 +168,7 @@ class Parser
 			LegacyToken::COMMENT => $this->parseLatteComment(),
 			LegacyToken::MACRO_TAG => $this->parseLatteMarkup(),
 			LegacyToken::HTML_TAG_BEGIN => $this->parseHtmlMarkup(),
+			default => throw new CompileException('Unexpected ' . trim($this->stream->join(3))),
 		};
 	}
 
@@ -183,6 +184,7 @@ class Parser
 			LegacyToken::HTML_ATTRIBUTE_BEGIN => $this->parseHtmlAttribute(),
 			LegacyToken::HTML_ATTRIBUTE_END => $this->parseHtmlAttributeEnd(),
 			LegacyToken::HTML_TAG_END => null,
+			default => throw new CompileException('Unexpected ' . trim($this->stream->join(3))),
 		};
 	}
 
@@ -427,6 +429,7 @@ class Parser
 				LegacyToken::COMMENT => $this->parseLatteComment(),
 				LegacyToken::MACRO_TAG => $this->parseLatteMarkup(),
 				LegacyToken::HTML_ATTRIBUTE_END => null,
+				default => throw new CompileException('Unexpected ' . trim($this->stream->join(3))),
 			});
 		}
 
@@ -450,6 +453,7 @@ class Parser
 			LegacyToken::COMMENT => $this->parseLatteComment(),
 			LegacyToken::MACRO_TAG => $this->parseLatteMarkup(),
 			LegacyToken::HTML_TAG_END => null,
+			default => throw new CompileException('Unexpected ' . trim($this->stream->join(3))),
 		}), $token->line);
 		$this->stream->consume(LegacyToken::HTML_TAG_END);
 		$this->location = self::LOCATION_TEXT;
@@ -501,7 +505,7 @@ class Parser
 
 		$token = $this->stream->current();
 		if (!$this->isClosingTag($token, $elem->startTag->getName())) {
-			throw new CompileException('Unexpected ' . ($token ? $token->text : 'end')
+			throw new CompileException('Unexpected ' . trim($this->stream->join(2) ?? 'end')
 				. ", expecting </{$elem->startTag->getName()}> for element started on line $elem->line");
 		}
 

@@ -25,7 +25,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1></i>');
-}, Latte\CompileException::class, 'Unexpected </i, expecting </span> for element started on line 1');
+}, Latte\CompileException::class, 'Unexpected </i>, expecting </span> for element started on line 1');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{/if}');
@@ -61,4 +61,4 @@ Assert::exception(function () use ($latte) {
 
 			XX,
 	);
-}, Latte\CompileException::class, 'Unexpected </li, expecting </a> for element started on line 3 (on line 3)');
+}, Latte\CompileException::class, 'Unexpected </li>, expecting </a> for element started on line 3 (on line 3)');
