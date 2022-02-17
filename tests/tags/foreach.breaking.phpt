@@ -16,15 +16,15 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{breakIf}');
+	$latte->compile('{breakIf true}');
 }, Latte\CompileException::class, 'Tag {breakIf} is unexpected here.');
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{for}{breakIf}{/for}');
+	$latte->compile('{breakIf}');
 }, Latte\CompileException::class, 'Missing condition in {breakIf}');
 
 Assert::noError(function () use ($latte) {
-	$latte->compile('{for}{if true}{breakIf true}{/if}{/for}');
+	$latte->compile('{for ;;;}{if true}{breakIf true}{/if}{/for}');
 });
 
 

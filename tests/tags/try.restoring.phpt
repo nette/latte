@@ -74,7 +74,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 Assert::match(
 	<<<'XX'
 				test
-		test
+				test
 		XX,
 	$latte->renderToString('main'),
 );

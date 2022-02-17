@@ -11,6 +11,7 @@ namespace Latte\Compiler;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\Extensions\Filters;
 use Latte\Strict;
 
 
@@ -72,6 +73,8 @@ class TagInfo
 	{
 		$this->args = $args;
 		$this->tokenizer = new MacroTokens($args);
+		$this->tokenizer->line = $this->line;
+		$this->tokenizer->modifier = &$this->modifiers;
 	}
 
 
@@ -115,6 +118,15 @@ class TagInfo
 
 		} elseif ($arguments === false && $this->args !== '') {
 			throw new CompileException('Arguments are not allowed in ' . $this->getNotation());
+		}
+	}
+
+
+	public function checkExtraArgs(): void
+	{
+		if ($this->tokenizer->isNext(...$this->tokenizer::SIGNIFICANT)) {
+			$args = Filters::truncate($this->tokenizer->joinAll(), 20);
+			throw new CompileException("Unexpected arguments '$args' in " . $this->getNotation());
 		}
 	}
 }

@@ -23,7 +23,7 @@ class PhpWriter
 {
 	use Latte\Strict;
 
-	private MacroTokens $tokens;
+	private ?MacroTokens $tokens = null;
 
 	private ?string $modifiers;
 
@@ -35,16 +35,13 @@ class PhpWriter
 	/** @var string[] */
 	private array $functions = [];
 
-	private ?int $line = null;
 
-
-	public static function using(TagInfo $node, ?Compiler $compiler = null): self
+	public static function using(Compiler $compiler): self
 	{
-		$me = new static($node->tokenizer, null, $node->context);
-		$me->modifiers = &$node->modifiers;
-		$me->functions = $compiler ? $compiler->getFunctions() : [];
-		$me->policy = $compiler ? $compiler->getPolicy() : null;
-		$me->line = $node->line;
+		$me = new self(null);
+		$me->context = $compiler->getContext();
+		$me->functions = $compiler->getFunctions();
+		$me->policy = $compiler->getPolicy();
 		return $me;
 	}
 
@@ -52,7 +49,7 @@ class PhpWriter
 	/**
 	 * @param  array{string, mixed}|null  $context
 	 */
-	public function __construct(MacroTokens $tokens, ?string $modifiers = null, ?array $context = null)
+	public function __construct(?MacroTokens $tokens, ?string $modifiers = null, ?array $context = null)
 	{
 		$this->tokens = $tokens;
 		$this->modifiers = $modifiers;
@@ -65,11 +62,14 @@ class PhpWriter
 	 */
 	public function write(string $mask, mixed ...$args): string
 	{
+		if (str_contains($mask, '%modify')) {
+			$this->modifiers = array_shift($args);
+		}
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
 		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', fn($m) => $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll(), $mask);
 		$mask = preg_replace_callback('#%modify(Content)?(\(([^()]*+|(?2))+\))#', fn($m) => $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]), $mask);
 
-		$pos = $this->tokens->position;
+		$pos = $this->tokens?->position;
 		$word = null;
 		if (str_contains($mask, '%node_word')) {
 			$word = $this->tokens->fetchWord();
@@ -85,7 +85,7 @@ class PhpWriter
 
 				switch ($source) {
 					case 'node_':
-						$arg = $word; break;
+						$arg = null; break;
 					case '':
 						$arg = current($args); next($args); break;
 					default:
@@ -94,11 +94,11 @@ class PhpWriter
 
 				switch ($format) {
 					case 'word':
-						$code = $this->formatWord($arg); break;
+						$code = $this->formatWord($arg ?? $word); break;
 					case 'args':
-						$code = $this->formatArgs(); break;
+						$code = $this->formatArgs($arg); break;
 					case 'array':
-						$code = $this->formatArray();
+						$code = $this->formatArray($arg);
 						$code = $cond && $code === '[]' ? '' : $code; break;
 					case 'var':
 						$code = PhpHelpers::dump($arg); break;
@@ -106,7 +106,8 @@ class PhpWriter
 						$code = (string) $arg; break;
 					case 'line':
 						$l = trim($l);
-						$code = $this->line ? " /* line $this->line */" : ''; break;
+						$line = (int) $arg;
+						$code = $line ? " /* line $line */" : ''; break;
 				}
 
 				if ($cond && $code === '') {
@@ -118,7 +119,9 @@ class PhpWriter
 			$mask,
 		);
 
-		$this->tokens->position = $pos;
+		if ($pos !== null) {
+			$this->tokens->position = $pos;
+		}
 		return $code;
 	}
 

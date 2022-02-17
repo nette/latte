@@ -12,9 +12,7 @@
 
 ';
 		$this->renderBlock('b', get_defined_vars()) /* line %d% */;
-		echo '
-
-';
+		echo "\n";
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo '
 
@@ -30,9 +28,7 @@
 			$ʟ_fi = new LR\FilterInfo('html');
 			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
 		}
-		echo '
-
-';
+		echo "\n";
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo '
 
@@ -55,11 +51,11 @@
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '	';
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo "\n";
 		$var = 'define' /* line %d% */;
-
 	}
 
 
@@ -69,10 +65,10 @@
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '	';
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo "\n";
 		$var = 'blocknamed' /* line %d% */;
-
 	}
 %A%

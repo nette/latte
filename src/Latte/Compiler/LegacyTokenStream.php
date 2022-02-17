@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte\CompileException;
+use Latte\Compiler\Nodes\ExpressionNode;
 use Latte\Strict;
 
 
@@ -17,7 +18,7 @@ use Latte\Strict;
  * Traversing helper.
  * @internal
  */
-class LegacyTokenStream
+class LegacyTokenStream extends ExpressionNode
 {
 	use Strict;
 
@@ -240,5 +241,11 @@ class LegacyTokenStream
 
 			$pos += $prev ? -1 : 1;
 		} while (true);
+	}
+
+
+	public function compile(Compiler $compiler): string
+	{
+		return $compiler->write('%modify(%args)', $this->modifier, $this);
 	}
 }

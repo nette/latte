@@ -3,9 +3,9 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 	protected const BLOCKS = [
-		['embed1' => 'blockEmbed1', 'a' => 'blockA'],
-		['a' => 'blockA1'],
-		['a' => 'blockA2'],
+		1 => ['a' => 'blockA'],
+		2 => ['a' => 'blockA1'],
+		0 => ['embed1' => 'blockEmbed1', 'a' => 'blockA2'],
 	];
 
 
@@ -14,20 +14,38 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		echo "\n";
 		$this->enterBlockLayer(1, get_defined_vars()) /* line %d% */;
-		if (false) {
-			$this->renderBlock('a', get_defined_vars()) /* line %d% */;
-			echo "\n";
-		}
 		$this->copyBlockLayer();
 		try {
 			$this->renderBlock('embed1', [], 'html') /* line %d% */;
 		} finally {
 			$this->leaveBlockLayer();
 		}
-		echo '
-
-';
+		echo "\n";
 		return get_defined_vars();
+	}
+
+
+	/** {block a} on line %d% */
+	public function blockA(array $ʟ_args): void
+	{
+		extract(end($this->varStack));
+		extract($ʟ_args);
+		unset($ʟ_args);
+
+		$this->enterBlockLayer(2, get_defined_vars()) /* line %d% */;
+		$this->copyBlockLayer();
+		try {
+			$this->renderBlock('embed1', [], 'html') /* line %d% */;
+		} finally {
+			$this->leaveBlockLayer();
+		}
+	}
+
+
+	/** {block a} on line %d% */
+	public function blockA1(array $ʟ_args): void
+	{
+		echo 'nested embeds A';
 	}
 
 
@@ -37,6 +55,7 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '		embed1-start
 			';
 		$this->renderBlock('a', get_defined_vars()) /* line %d% */;
@@ -47,39 +66,9 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 	/** {block a} on line %d% */
-	public function blockA(array $ʟ_args): void
-	{
-		echo 'embed1-A';
-	}
-
-
-	/** {block a} on line %d% */
-	public function blockA1(array $ʟ_args): void
-	{
-		extract(end($this->varStack));
-		extract($ʟ_args);
-		unset($ʟ_args);
-
-		$this->enterBlockLayer(2, get_defined_vars()) /* line %d% */;
-		if (false) {
-			echo '					';
-			$this->renderBlock('a', get_defined_vars()) /* line %d% */;
-			echo "\n";
-		}
-		$this->copyBlockLayer();
-		try {
-			$this->renderBlock('embed1', [], 'html') /* line %d% */;
-		} finally {
-			$this->leaveBlockLayer();
-		}
-		echo "\n";
-	}
-
-
-	/** {block a} on line %d% */
 	public function blockA2(array $ʟ_args): void
 	{
-		echo 'nested embeds A';
+		echo 'embed1-A';
 	}
 
 }

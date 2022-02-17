@@ -13,8 +13,18 @@ namespace Latte\Compiler;
 /** @internal */
 final class Block
 {
-	public ?string $contentType = null;
-	public ?string $code = null;
-	public bool $hasParameters = false;
-	public ?string $comment = null;
+	public array $parameters = [];
+
+
+	public function __construct(
+		public /*readonly*/ string $name,
+		public /*readonly*/ int|string $layer,
+	) {
+	}
+
+
+	public static function isDynamic($name): bool
+	{
+		return str_contains($name, '$') || str_contains($name, ' ');
+	}
 }

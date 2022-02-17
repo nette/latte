@@ -58,7 +58,6 @@ class Engine
 		$this->functions = new \stdClass;
 		$this->probe = function () {};
 		$this->addExtension(new Extensions\CoreExtension);
-		$this->addExtension(new Extensions\BlockExtension);
 	}
 
 

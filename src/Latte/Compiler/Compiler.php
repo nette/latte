@@ -50,10 +50,13 @@ class Compiler
 		CONTEXT_XML_COMMENT = self::CONTEXT_HTML_COMMENT,
 		CONTEXT_XML_BOGUS_COMMENT = self::CONTEXT_HTML_BOGUS_COMMENT;
 
+	public ?string $paramsExtraction;
 	private string $contentType = self::CONTENT_HTML;
 	private ?string $context = null;
 	private ?Policy $policy = null;
 	private string $prepare = '';
+	private int $counter = 0;
+	private array $blocks = [];
 
 	/** @var string[] of orig name */
 	private array $functions = [];
@@ -106,6 +109,10 @@ class Compiler
 
 		if ($this->contentType !== self::CONTENT_HTML) {
 			$this->addConstant('CONTENT_TYPE', $this->contentType);
+		}
+
+		if ($this->blocks) {
+			$this->addConstant('BLOCKS', $this->blocks);
 		}
 
 		$members = [];
@@ -252,9 +259,57 @@ class Compiler
 	}
 
 
-	public function write(Node $node, string $mask, ...$args): string
+	public function write(string $mask, ...$args): string
 	{
-		return PhpWriter::using($node, $this)
+		return PhpWriter::using($this)
 			->write($mask, ...$args);
+	}
+
+
+	public function generateId(): int
+	{
+		return $this->counter++;
+	}
+
+
+	public function addBlock(Block $block, Node $content, TagInfo $tag, array $context = null): void
+	{
+		$this->addMethod(
+			$method = $this->generateMethodName($block->name),
+			'',
+			'array $ʟ_args',
+			'void',
+			"{{$tag->name} {$tag->args}} on line {$tag->line}",
+		);
+
+		$context = implode('', $context ??= $this->getContext());
+		$this->blocks[$block->layer][$block->name] = $this->contentType === $context
+			? $method
+			: [$method, $context];
+
+		$content = $content->compile($this); // must be compiled after method is added
+		if (str_contains($content, '$')) {
+			$embedded = $tag->name === 'block' && is_int($block->layer) && $block->layer;
+			$content = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');'
+				. ($block->parameters ? implode('', $block->parameters) : 'extract($ʟ_args);')
+				. 'unset($ʟ_args);'
+				. "\n\n"
+				. $content;
+		}
+		$this->methods[$method]['body'] = trim($content);
+	}
+
+
+	public function generateMethodName(string $blockName): string
+	{
+		$name = 'block' . ucfirst(trim(preg_replace('#\W+#', '_', $blockName), '_'));
+		$lower = strtolower($name);
+		$methods = array_change_key_case($this->methods) + ['block' => 1];
+		$counter = null;
+		while (isset($methods[$lower . $counter])) {
+			$counter++;
+		}
+
+		return $name . $counter;
 	}
 }

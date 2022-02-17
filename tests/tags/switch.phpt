@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{case}');
-}, Latte\CompileException::class, 'Tag {case} is unexpected here.');
+}, Latte\CompileException::class, 'Unexpected tag {case}');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{switch}{case}{/switch}');
@@ -31,17 +31,13 @@ Assert::exception(function () use ($latte) {
 	$latte->compile('{switch}{default}{default}{/switch}');
 }, Latte\CompileException::class, 'Tag {switch} may only contain one {default} clause.');
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{switch}{default}{case 1}{/switch}');
-}, Latte\CompileException::class, 'Tag {default} must follow after {case} clause.');
-
 
 $template = <<<'EOD'
 
 	{switch 0}
 	{case ''}string
-	{case 0.0}flot
 	{default}def
+	{case 0.0}flot
 	{/switch}
 
 	---

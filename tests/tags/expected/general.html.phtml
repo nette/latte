@@ -110,6 +110,7 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '	none
 ';
 		}
+
 		echo '
 
 ';
@@ -137,9 +138,11 @@ final class Template%a% extends Latte\Runtime\Template
 				$iterations++;
 			}
 			$iterator = $ʟ_it = $ʟ_it->getParent();
+
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo '
 
 
@@ -211,8 +214,7 @@ var prop2 = ';
 		echo '\'
  onfocus="alert(';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($el)) /* line %d% */;
-		echo ')"
->click on me ';
+		echo ')">click on me ';
 		echo LR\Filters::escapeHtmlText($xss) /* line %d% */;
 		echo '</p>
 
@@ -225,7 +227,6 @@ var prop2 = ';
 		}
 		$this->renderBlock('menu', get_defined_vars()) /* line %d% */;
 		echo '
-
 
 ';
 		extract(['varx' => 2], EXTR_SKIP) /* line %d% */;
@@ -256,7 +257,6 @@ var prop2 = ';
 ';
 		echo 'test' /* line %d% */;
 		echo '
-
 { }
 
 ';
@@ -285,6 +285,7 @@ var prop2 = ';
 		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo 'true';
+
 			ob_start(fn() => '') /* line %d% */;
 			try {
 				echo 'false';
@@ -296,19 +297,19 @@ var prop2 = ';
 			$ʟ_ifA = ob_get_clean();
 		}
 		echo (true) ? $ʟ_ifA : $ʟ_ifB /* line %d% */;
+
 		echo '
 
 
 ';
 		$ʟ_switch = (2) /* line %d% */;
-		if (false) {
-		} elseif (in_array($ʟ_switch, ['x'], true)) /* line %d% */ {
+		if (in_array($ʟ_switch, ['x'], true)) /* line %d% */ {
 			echo 'x
 ';
 		} elseif (in_array($ʟ_switch, [2], true)) /* line %d% */ {
 			echo 'y
 ';
-		} else /* line %d% */ {
+		} else {
 			echo 'z
 ';
 		}
@@ -329,11 +330,10 @@ var prop2 = ';
 	{
 		extract($this->params);
 		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			foreach (array_intersect_key(['person' => '47', 'foo' => '46', 'item' => '104'], $this->params) as $ʟ_v => $ʟ_l) {
+			foreach (array_intersect_key(['foo' => '46', 'person' => '47', 'item' => '104'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
-
 	}
 
 
@@ -343,6 +343,7 @@ var prop2 = ';
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '<ul>
 ';
 		$iterations = 0;
@@ -362,6 +363,7 @@ var prop2 = ';
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo '</ul>
 ';
 	}

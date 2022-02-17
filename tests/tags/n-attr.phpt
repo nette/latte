@@ -60,4 +60,4 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<div n:inner-attr/>');
-}, Latte\CompileException::class, 'Unknown attribute n:inner-attr');
+}, Latte\CompileException::class, 'Unexpected attribute n:inner-attr, did you mean n:inner-try?');

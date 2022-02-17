@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Html;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Helpers;
 use Latte\Policy;
+use Latte\Runtime\Template;
 use Latte\SecurityViolationException;
 use Latte\Strict;
 
@@ -36,6 +37,10 @@ class Parser
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = '';
 
+	/** @var Block[][] */
+	public array $blocks = [[]];
+	public int $layer = Template::LAYER_TOP;
+
 	/** @var array<string, callable(TagInfo, self): Node> */
 	private array $tagParsers = [];
 
@@ -48,6 +53,7 @@ class Parser
 	private ?Html\ElementNode $htmlElement = null;
 	private ?int $htmlDepth = null;
 	private int $tagDepth = 0;
+	private int $counter = 0;
 	private int $location = self::LOCATION_HEAD;
 	private array $filters = [];
 	private ?TagInfo $tagInfo = null;
@@ -269,28 +275,16 @@ class Parser
 
 	private function createTagInfo(LegacyToken $token): TagInfo
 	{
-		$modifiers = $token->modifiers;
-
-		if (strpbrk($token->name, '=~%^&_')) {
-			if (!Helpers::removeFilter($modifiers, 'noescape')) {
-				$modifiers .= '|escape';
-			} elseif ($this->policy && !$this->policy->isFilterAllowed('noescape')) {
-				throw new SecurityViolationException('Filter |noescape is not allowed.');
-			}
-
-			if (
-				$token->name === '='
-				&& $this->htmlElement
-				&& ($prev = $this->stream->peek(-1))
-				&& $this->contentType === Compiler::CONTENT_HTML
-				&& strcasecmp($this->htmlElement?->startTag->getName(), 'script') === 0
-				&& preg_match('#["\']$#D', $prev->text)
-			) {
-				throw new CompileException("Do not place {$token->text} inside quotes in JavaScript.");
-			}
-		}
-
-		return new TagInfo($token->name, $token->value, $modifiers, $token->empty, $token->closing, $token->line, $this->location, $this->htmlElement);
+		return new TagInfo(
+			line: $token->line,
+			closing: $token->closing,
+			name: $token->name,
+			args: $token->value,
+			modifiers: $token->modifiers,
+			empty: $token->empty,
+			location: $this->location,
+			htmlElement: $this->htmlElement,
+		);
 	}
 
 
@@ -593,6 +587,10 @@ class Parser
 
 	private function checkEndTag(TagInfo $start, ?TagInfo $end): void
 	{
+		if ($start->name === 'block' && !$this->tagInfo->parent) { // TODO: hardcoded
+			return;
+		}
+
 		if (!$end
 			|| ($end->name !== $start->name && $end->name !== '')
 			|| !$end->closing
@@ -619,11 +617,39 @@ class Parser
 	}
 
 
+	public function generateId(): int
+	{
+		return $this->counter++;
+	}
+
+
+	public function addBlock(string $name, ?string $layer, string $type): Block
+	{
+		if ($layer === Template::LAYER_SNIPPET
+			? isset($this->blocks[$layer][$name])
+			: (isset($this->blocks[Template::LAYER_LOCAL][$name]) || isset($this->blocks[$this->layer][$name]))
+		) {
+			throw new CompileException("Cannot redeclare {$type} '{$name}'");
+		}
+
+		$layer ??= $this->layer;
+		return $this->blocks[$layer][$name] = new Block($name, $layer);
+	}
+
+
 	public function checkTagIsAllowed(string $name, bool $isAttr = false): void
 	{
 		if ($this->policy && !$this->policy->isMacroAllowed($name)) {
 			$name = $isAttr ? 'n:' . $name : '{' . $name . '}';
 			throw new SecurityViolationException("Tag $name is not allowed.");
+		}
+	}
+
+
+	public function checkFilterIsAllowed(string $name): void
+	{
+		if ($this->policy && !$this->policy->isFilterAllowed($name)) {
+			throw new SecurityViolationException("Filter |$name is not allowed.");
 		}
 	}
 }

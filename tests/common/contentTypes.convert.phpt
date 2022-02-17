@@ -89,11 +89,11 @@ Assert::same(
 );
 
 Assert::same(
-	'<meta content="val" />',
+	'<meta content="val"/>',
 	$latte->renderToString('{contentType xml}<meta content="{block|stripHtml}val{/block}" />'),
 );
 
 Assert::same(
-	'<meta content="val" />',
+	'<meta content="val"/>',
 	$latte->renderToString('{contentType xml}<meta content="{block name|stripHtml}val{/block}" />'),
 );

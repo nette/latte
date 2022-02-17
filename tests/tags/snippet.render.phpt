@@ -182,12 +182,12 @@ $dataSets = [
 	//embed
 	[
 		[
-			'main' => '{embed "embed"}{snippet foo}hello{/snippet}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
+			'main' => '{embed "embed"}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
 			'embed' => '{block embed}{/block}',
 		],
-		['foo' => 'hello'],
+		['bar' => 'world'],
 		'<div id="bar">world</div>',
-		['foo'],
+		['bar'],
 	],
 ];
 

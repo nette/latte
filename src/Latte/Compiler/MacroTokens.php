@@ -31,6 +31,8 @@ class MacroTokens extends LegacyTokenStream
 		NON_SIGNIFICANT = [self::T_COMMENT, self::T_WHITESPACE];
 
 	public int $depth = 0;
+	public ?int $line;
+	public ?string $modifier;
 	private static ?Tokenizer $tokenizer = null;
 
 

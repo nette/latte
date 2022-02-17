@@ -18,16 +18,15 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->renderBlock('static', get_defined_vars()) /* line %d% */;
 		echo '
 
-
 ';
 		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Extensions\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) /* line %d% */ {
 			$this->addBlock($ʟ_nm = $name, 'html', [[$this, 'blockName']], 'local');
 			$this->renderBlock($ʟ_nm, get_defined_vars());
-			echo "\n";
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo "\n";
 		$this->renderBlock('dynamic', ['var' => 20] + [], 'html') /* line %d% */;
 		echo "\n";
@@ -58,7 +57,19 @@ final class Template%a% extends Latte\Runtime\Template
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
+	}
 
+
+	/** {block local static} on line %d% */
+	public function blockStatic(array $ʟ_args): void
+	{
+		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
+
+		echo '	Static block #';
+		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+		echo "\n";
 	}
 
 
@@ -67,6 +78,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '		Dynamic block #';
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo "\n";
@@ -78,10 +90,10 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		if (false) /* line %d% */ {
 			echo '<div></div>';
 		}
-
 	}
 
 
@@ -90,19 +102,8 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '<span>hello</span>';
-	}
-
-
-	/** {block local static} on line %d% */
-	public function blockStatic(array $ʟ_args): void
-	{
-		extract($this->params);
-		extract($ʟ_args);
-		unset($ʟ_args);
-		echo '	Static block #';
-		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
-		echo "\n";
 	}
 
 }

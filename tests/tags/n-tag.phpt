@@ -32,7 +32,7 @@ Assert::match(
 			<h1
 		class="a" title="b">
 				<h2></h2
-				>
+			>
 			</h1>
 		XX,
 	$latte->renderToString(
@@ -69,9 +69,9 @@ Assert::match(
 Assert::match(
 	<<<'XX'
 		%A%
+				echo '<';
 				$ʟ_tag[0] = ('h' . 1) ?? 'div';
 				Latte\Extensions\Filters::checkTagSwitch('div', $ʟ_tag[0]);
-				echo '<';
 				echo $ʟ_tag[0];
 				echo ' class="bar" ';
 				if (isset($id)) /* line 1 */ {
@@ -87,13 +87,13 @@ Assert::match(
 
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:tag>');
+	$latte->compile('<div n:tag/>');
 }, Latte\CompileException::class, 'Missing arguments in n:tag');
 
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:inner-tag>');
-}, Latte\CompileException::class, 'Unknown n:inner-tag, use n:tag attribute.');
+	$latte->compile('<div n:inner-tag/>');
+}, Latte\CompileException::class, 'Unexpected attribute n:inner-tag, did you mean n:inner-try?');
 
 
 Assert::exception(function () use ($latte) {

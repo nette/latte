@@ -25,6 +25,7 @@ Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', ['foo' =
 Assert::match(
 	<<<'XX'
 		one
+
 		two
 		XX,
 	$latte->renderToString(

@@ -71,12 +71,12 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<html>{ifcontent}');
-}, Latte\CompileException::class, 'Unknown {ifcontent}, use n:ifcontent attribute.');
+}, Latte\CompileException::class, 'Unexpected tag {ifcontent}');
 
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:inner-ifcontent>');
-}, Latte\CompileException::class, 'Unknown n:inner-ifcontent, use n:ifcontent attribute.');
+	$latte->compile('<div n:inner-ifcontent/>');
+}, Latte\CompileException::class, 'Unexpected attribute n:inner-ifcontent');
 
 
 Assert::match(
@@ -91,12 +91,13 @@ Assert::match(
 					echo '>';
 					ob_start();
 					try {
+
 					} finally {
-						$ʟ_ifc[1] = rtrim(ob_get_flush()) === '';
+						$ʟ_ifc[0] = rtrim(ob_get_flush()) === '';
 					}
 					echo '</div>';
 				} finally {
-					if ($ʟ_ifc[1] ?? null) {
+					if ($ʟ_ifc[0] ?? null) {
 						ob_end_clean();
 					} else {
 						echo ob_get_clean();

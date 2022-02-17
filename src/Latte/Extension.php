@@ -46,5 +46,5 @@ interface Extension
 	/**
 	 * Finishes template parsing.
 	 */
-	function afterCompile(Compiler\Compiler $compiler); //: void;
+	function afterCompile(Compiler\Compiler $compiler): void;
 }

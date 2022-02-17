@@ -6,16 +6,71 @@
 
 declare(strict_types=1);
 
-use Latte\Extensions\CoreExtension;
 use Tester\Assert;
-
 
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler\Compiler;
-CoreExtension::install($compiler);
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
 
 // {_...}
-Assert::same('<?php echo LR\Filters::escapeHtmlText(($this->filters->translate)(\'var\')); ?>', $compiler->expandMacro('_', 'var', '')->openingCode);
-Assert::same('<?php echo LR\Filters::escapeHtmlText(($this->filters->filter)(($this->filters->translate)(\'var\'))); ?>', $compiler->expandMacro('_', 'var', '|filter')->openingCode);
+Assert::contains(
+	'echo LR\Filters::escapeHtmlText(($this->filters->translate)(\'var\')) /*',
+	$latte->compile('{_var}'),
+);
+
+Assert::contains(
+	'echo LR\Filters::escapeHtmlText(($this->filters->filter)(($this->filters->translate)(\'var\'))) /*',
+	$latte->compile('{_var|filter}'),
+);
+
+// {_} ... {/}
+Assert::match(
+	<<<'XX'
+		%A%
+				$ʟ_fi = new LR\FilterInfo('html');
+				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('translate', $ʟ_fi, 'abc')) /* line 1 */;
+		%A%
+		XX,
+	$latte->compile('{_}abc{/_}'),
+);
+
+Assert::match(
+	<<<'XX'
+		%A%
+				$ʟ_fi = new LR\FilterInfo('html');
+				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('filter', $ʟ_fi, $this->filters->filterContent('translate', $ʟ_fi, 'abc'))) /* line 1 */;
+		%A%
+		XX,
+	$latte->compile('{_|filter}abc{/_}'),
+);
+
+Assert::match(
+	<<<'XX'
+		%A%
+				ob_start(fn() => '');
+				try {
+					if (true) /* line 1 */ {
+						echo 'abc';
+					}
+
+				} finally {
+					$ʟ_tmp = ob_get_clean();
+				}
+				$ʟ_fi = new LR\FilterInfo('html');
+				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('translate', $ʟ_fi, $ʟ_tmp)) /* line 1 */;
+		%A%
+		XX,
+	$latte->compile('{_}{if true}abc{/if}{/_}'),
+);
+
+Assert::match(
+	<<<'XX'
+		%A%
+				extract($this->params);
+				return get_defined_vars();
+		%A%
+		XX,
+	$latte->compile('{_ /}'),
+);

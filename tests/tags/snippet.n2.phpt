@@ -23,16 +23,6 @@ $latte->addProvider('snippetBridge', $bridge);
 Assert::match(<<<'EOD'
 	<p id="abc">hello</p>
 	EOD
-, @$latte->renderToString( // deprecated n:inner-snippet
-	<<<'EOD'
-		<p n:inner-snippet="abc">hello</p>
-		EOD,
-));
-
-
-Assert::match(<<<'EOD'
-	<p id="abc">hello</p>
-	EOD
 , $latte->renderToString(
 	<<<'EOD'
 		<p n:snippet="abc">hello</p>
@@ -51,3 +41,7 @@ Assert::exception(function () use ($latte) {
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:snippet="abc" n:ifcontent>hello</p>');
 }, Latte\CompileException::class, 'Cannot combine n:ifcontent with n:snippet.');
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('<div n:inner-snippet="inner"></div>');
+}, Latte\CompileException::class, 'Use n:snippet instead of n:inner-snippet');

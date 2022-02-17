@@ -82,7 +82,6 @@ Assert::match(
 			1
 			0
 				if
-
 			end
 		XX,
 	$latte->renderToString($template),

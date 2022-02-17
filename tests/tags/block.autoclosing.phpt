@@ -22,4 +22,4 @@ Assert::match(
 
 Assert::exception(function () use ($latte) {
 	$latte->renderToString('{block}{block}Block');
-}, Latte\CompileException::class, 'Missing {/block}');
+}, Latte\CompileException::class, 'Unexpected end, expecting {/block}');
