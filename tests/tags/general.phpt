@@ -26,11 +26,11 @@ $params['el'] = new Html("<div title='1/2\"'></div>");
 $params['el2'] = Nette\Utils\Html::el('span', ['title' => '/"'])->setText('foo');
 
 Assert::matchFile(
-	__DIR__ . '/expected/general.html.phtml',
+	__DIR__ . '/expected/general.phtml',
 	$latte->compile(__DIR__ . '/templates/general.latte')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/general.html.html',
+	__DIR__ . '/expected/general.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/general.latte',
 		$params

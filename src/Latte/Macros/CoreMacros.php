@@ -447,7 +447,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroCaptureEnd(MacroNode $node, PhpWriter $writer): string
 	{
-		$body = in_array(implode('', $node->context), [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
+		$body = implode('', $node->context) === Engine::CONTENT_HTML
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write(
@@ -468,7 +468,7 @@ class CoreMacros extends MacroSet
 	public function macroSpaceless(MacroNode $node, PhpWriter $writer): void
 	{
 		$node->validate(false);
-		$node->openingCode = $writer->write(in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
+		$node->openingCode = $writer->write($node->context[0] === Engine::CONTENT_HTML
 			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
 			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096) %node.line; try { ?>");
 		$node->closingCode = '<?php } finally { ob_end_flush(); } ?>';
@@ -821,9 +821,7 @@ class CoreMacros extends MacroSet
 		}
 
 		$compiler = $this->getCompiler();
-		if (strpos($node->args, 'xhtml') !== false) {
-			$type = $compiler::CONTENT_XHTML;
-		} elseif (strpos($node->args, 'html') !== false) {
+		if (strpos($node->args, 'html') !== false) {
 			$type = $compiler::CONTENT_HTML;
 		} elseif (strpos($node->args, 'xml') !== false) {
 			$type = $compiler::CONTENT_XML;

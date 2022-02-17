@@ -864,7 +864,6 @@ class PhpWriter
 		$tokens = clone $tokens;
 		[$contentType, $context] = $this->context;
 		switch ($contentType) {
-			case Compiler::CONTENT_XHTML:
 			case Compiler::CONTENT_HTML:
 				switch ($context) {
 					case Compiler::CONTEXT_HTML_TEXT:

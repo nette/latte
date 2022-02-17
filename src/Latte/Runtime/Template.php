@@ -178,7 +178,7 @@ class Template
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
-		Filters::$xhtml = (bool) preg_match('#xml|xhtml#', static::CONTENT_TYPE);
+		Filters::$xml = static::CONTENT_TYPE === Engine::CONTENT_XML;
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {

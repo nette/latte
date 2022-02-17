@@ -23,7 +23,6 @@ class Engine
 	/** Content types */
 	public const
 		CONTENT_HTML = 'html',
-		CONTENT_XHTML = 'xhtml',
 		CONTENT_XML = 'xml',
 		CONTENT_JS = 'js',
 		CONTENT_CSS = 'css',

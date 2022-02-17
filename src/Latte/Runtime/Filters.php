@@ -25,8 +25,8 @@ class Filters
 	/** @deprecated */
 	public static $dateFormat = "j.\u{a0}n.\u{a0}Y";
 
-	/** @internal @var bool  use XHTML syntax? */
-	public static $xhtml = false;
+	/** @internal @var bool  use XML syntax? */
+	public static $xml = false;
 
 
 	/**
@@ -214,7 +214,7 @@ class Filters
 	 */
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
-		$info->validate([null, 'html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
+		$info->validate([null, 'html', 'htmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
 		$info->contentType = Engine::CONTENT_TEXT;
 		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
@@ -228,7 +228,7 @@ class Filters
 	public static function stripTags(FilterInfo $info, $s): string
 	{
 		$info->contentType = $info->contentType ?? 'html';
-		$info->validate(['html', 'xhtml', 'htmlAttr', 'xhtmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
+		$info->validate(['html', 'htmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
 		return strip_tags((string) $s);
 	}
 
@@ -254,27 +254,28 @@ class Filters
 	{
 		static $table = [
 			Engine::CONTENT_TEXT => [
-				'html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr', 'xhtmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrJs' => 'escapeHtmlAttr', 'xhtmlAttrJs' => 'escapeHtmlAttr',
-				'htmlAttrCss' => 'escapeHtmlAttr', 'xhtmlAttrCss' => 'escapeHtmlAttr',
-				'htmlAttrUrl' => 'escapeHtmlAttr', 'xhtmlAttrUrl' => 'escapeHtmlAttr',
-				'htmlComment' => 'escapeHtmlComment', 'xhtmlComment' => 'escapeHtmlComment',
-				'xml' => 'escapeXml', 'xmlAttr' => 'escapeXml',
+				'html' => 'escapeHtmlText',
+				'htmlAttr' => 'escapeHtmlAttr',
+				'htmlAttrJs' => 'escapeHtmlAttr',
+				'htmlAttrCss' => 'escapeHtmlAttr',
+				'htmlAttrUrl' => 'escapeHtmlAttr',
+				'htmlComment' => 'escapeHtmlComment',
+				'xml' => 'escapeXml',
+				'xmlAttr' => 'escapeXml',
 			],
 			Engine::CONTENT_JS => [
-				'html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr', 'xhtmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrJs' => 'escapeHtmlAttr', 'xhtmlAttrJs' => 'escapeHtmlAttr',
-				'htmlJs' => 'escapeHtmlRawText', 'xhtmlJs' => 'escapeHtmlRawText',
-				'htmlComment' => 'escapeHtmlComment', 'xhtmlComment' => 'escapeHtmlComment',
+				'html' => 'escapeHtmlText',
+				'htmlAttr' => 'escapeHtmlAttr',
+				'htmlAttrJs' => 'escapeHtmlAttr',
+				'htmlJs' => 'escapeHtmlRawText',
+				'htmlComment' => 'escapeHtmlComment',
 			],
 			Engine::CONTENT_CSS => [
-				'html' => 'escapeHtmlText', 'xhtml' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr', 'xhtmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrCss' => 'escapeHtmlAttr', 'xhtmlAttrCss' => 'escapeHtmlAttr',
-				'htmlCss' => 'escapeHtmlRawText', 'xhtmlCss' => 'escapeHtmlRawText',
-				'htmlComment' => 'escapeHtmlComment', 'xhtmlComment' => 'escapeHtmlComment',
+				'html' => 'escapeHtmlText',
+				'htmlAttr' => 'escapeHtmlAttr',
+				'htmlAttrCss' => 'escapeHtmlAttr',
+				'htmlCss' => 'escapeHtmlRawText',
+				'htmlComment' => 'escapeHtmlComment',
 			],
 			Engine::CONTENT_HTML => [
 				'htmlAttr' => 'escapeHtmlAttrConv',
@@ -282,13 +283,6 @@ class Filters
 				'htmlAttrCss' => 'escapeHtmlAttrConv',
 				'htmlAttrUrl' => 'escapeHtmlAttrConv',
 				'htmlComment' => 'escapeHtmlComment',
-			],
-			Engine::CONTENT_XHTML => [
-				'xhtmlAttr' => 'escapeHtmlAttrConv',
-				'xhtmlAttrJs' => 'escapeHtmlAttrConv',
-				'xhtmlAttrCss' => 'escapeHtmlAttrConv',
-				'xhtmlAttrUrl' => 'escapeHtmlAttrConv',
-				'xhtmlComment' => 'escapeHtmlComment',
 			],
 		];
 		return isset($table[$source][$dest])
@@ -316,7 +310,7 @@ class Filters
 	 */
 	public static function strip(FilterInfo $info, string $s): string
 	{
-		return in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
+		return $info->contentType === Engine::CONTENT_HTML
 			? trim(self::spacelessHtml($s))
 			: trim(self::spacelessText($s));
 	}
@@ -387,7 +381,7 @@ class Filters
 	{
 		if ($level < 1) {
 			// do nothing
-		} elseif (in_array($info->contentType, [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)) {
+		} elseif ($info->contentType === Engine::CONTENT_HTML) {
 			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', function ($m) {
 				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
 			}, $s);
@@ -549,7 +543,7 @@ class Filters
 	 */
 	public static function breaklines($s): Html
 	{
-		return new Html(nl2br(htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8'), self::$xhtml));
+		return new Html(nl2br(htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8'), self::$xml));
 	}
 
 
@@ -904,7 +898,7 @@ class Filters
 				continue;
 
 			} elseif ($value === true) {
-				if (static::$xhtml) {
+				if (static::$xml) {
 					$s .= ' ' . $key . '="' . $key . '"';
 				} else {
 					$s .= ' ' . $key;
@@ -937,7 +931,7 @@ class Filters
 			$s .= ' ' . $key . '=' . $q
 				. str_replace(
 					['&', $q, '<'],
-					['&amp;', $q === '"' ? '&quot;' : '&#39;', self::$xhtml ? '&lt;' : '<'],
+					['&amp;', $q === '"' ? '&quot;' : '&#39;', self::$xml ? '&lt;' : '<'],
 					$value
 				)
 				. (strpos($value, '`') !== false && strpbrk($value, ' <>"\'') === false ? ' ' : '')
