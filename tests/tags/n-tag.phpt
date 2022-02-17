@@ -52,14 +52,14 @@ Assert::match(
 
 
 Assert::match(
-	'<br>',
+	'<br/>',
 	$latte->renderToString('<img n:tag="br"/>')
 );
 
 
 // no change
 Assert::match(
-	'<img>',
+	'<img/>',
 	$latte->renderToString('<img n:tag="null"/>')
 );
 

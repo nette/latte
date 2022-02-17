@@ -16,10 +16,10 @@ require __DIR__ . '/../bootstrap.php';
 
 $input = "Hello\nmy\r\nfriend\n\r";
 
-Filters::$xhtml = true;
+Filters::$xml = true;
 Assert::equal(new Html("Hello<br />\nmy<br />\r\nfriend<br />\n\r"), Filters::breaklines($input));
 
-Filters::$xhtml = false;
+Filters::$xml = false;
 Assert::equal(new Html("Hello<br>\nmy<br>\r\nfriend<br>\n\r"), Filters::breaklines($input));
 
 Assert::equal(new Html("&lt;&gt;<br>\n&amp;"), Filters::breaklines("<>\n&"));

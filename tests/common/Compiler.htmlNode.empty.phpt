@@ -48,18 +48,6 @@ $latte->addMacro('foo', $macro);
 
 $macro->empty = true;
 Assert::match('%A%<input>%A%', $latte->compile('<input n:foo>'));
-Assert::match('%A%<input>%A%', $latte->compile('<input n:foo />'));
-Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo />'));
-Assert::match("%A%<textarea></textarea>\n %A%", $latte->compile("<textarea n:foo />\n "));
-
-$macro->empty = false;
-Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></textarea>'));
-
-
-$latte->setContentType($latte::CONTENT_XHTML);
-
-$macro->empty = true;
-Assert::match('%A%<input />%A%', $latte->compile('<input n:foo>'));
 Assert::match('%A%<input />%A%', $latte->compile('<input n:foo />'));
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo />'));
 Assert::match("%A%<textarea></textarea>\n %A%", $latte->compile("<textarea n:foo />\n "));

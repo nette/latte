@@ -20,7 +20,6 @@ class Compiler
 	/** Context-aware escaping content types */
 	public const
 		CONTENT_HTML = Engine::CONTENT_HTML,
-		CONTENT_XHTML = Engine::CONTENT_XHTML,
 		CONTENT_XML = Engine::CONTENT_XML,
 		CONTENT_JS = Engine::CONTENT_JS,
 		CONTENT_CSS = Engine::CONTENT_CSS,
@@ -484,17 +483,13 @@ class Compiler
 
 		if (!$htmlNode->closing) {
 			$htmlNode->empty = strpos($token->text, '/') !== false;
-			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)) {
+			if ($this->contentType === self::CONTENT_HTML) {
 				$emptyElement = isset(Helpers::$emptyElements[strtolower($htmlNode->name)]);
 				$htmlNode->empty = $htmlNode->empty || $emptyElement;
-				if ($htmlNode->empty) { // auto-correct
+				if ($htmlNode->empty && !$emptyElement) { // auto-correct
 					$space = substr(strstr($token->text, '>'), 1);
-					if ($emptyElement) {
-						$token->text = ($this->contentType === self::CONTENT_XHTML ? ' />' : '>') . $space;
-					} else {
-						$token->text = '>';
-						$end = "</$htmlNode->name>" . $space;
-					}
+					$token->text = '>';
+					$end = "</$htmlNode->name>" . $space;
 				}
 			}
 		}
@@ -552,7 +547,7 @@ class Compiler
 		if (in_array($token->value, ['"', "'"], true)) {
 			$this->lastAttrValue = '';
 			$this->context = self::CONTEXT_HTML_ATTRIBUTE;
-			if (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)) {
+			if ($this->contentType === self::CONTENT_HTML) {
 				if (Helpers::startsWith($lower, 'on')) {
 					$this->context = self::CONTEXT_HTML_ATTRIBUTE_JS;
 				} elseif ($lower === 'style') {
@@ -565,7 +560,7 @@ class Compiler
 		}
 
 		if (
-			in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)
+			$this->contentType === self::CONTENT_HTML
 			&& (in_array($lower, ['href', 'src', 'action', 'formaction'], true)
 				|| ($lower === 'data' && strtolower($this->htmlNode->name) === 'object'))
 		) {
