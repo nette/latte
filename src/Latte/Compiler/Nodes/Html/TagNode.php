@@ -93,7 +93,7 @@ class TagNode extends Node
 			!$this->closing && !$this->selfClosing
 			&& ($name === 'script' || $name === 'style')
 			&& is_string($attr = $this->getAttribute('type') ?? 'css')
-			&& preg_match('#(java|j|ecma|live)script|module|json|css#i', $attr)
+			&& preg_match('#(java|j|ecma|live)script|module|json|css|plain#i', $attr)
 		) {
 			return $name === 'script'
 				? Compiler::CONTEXT_HTML_JS
