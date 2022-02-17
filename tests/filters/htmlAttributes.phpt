@@ -27,7 +27,7 @@ Assert::same(' style="float:left" class="three" a=\'<>"\' b="\'" title="0" check
 
 Assert::same(' a="`test "', Filters::htmlAttributes(['a' => '`test'])); // mXSS
 
-Filters::$xhtml = true;
+Filters::$xml = true;
 Assert::same(' style="float:left" class="three" a=\'&lt;>"\' b="\'" title="0" checked="checked"', Filters::htmlAttributes([
 	'style' => 'float:left',
 	'class' => 'three',

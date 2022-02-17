@@ -40,14 +40,6 @@ test('', function () {
 
 
 test('', function () {
-	$info = new FilterInfo(Engine::CONTENT_XHTML);
-	Assert::same('', Filters::stripTags($info, ''));
-	Assert::same('abc', Filters::stripTags($info, 'abc'));
-	Assert::same('&lt;  c', Filters::stripTags($info, '&lt; <b> c'));
-});
-
-
-test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_XML);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));

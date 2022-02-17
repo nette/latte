@@ -55,14 +55,6 @@ test('', function () {
 
 
 test('', function () {
-	$info = new FilterInfo(Engine::CONTENT_XHTML);
-	Assert::same('', Filters::stripHtml(clone $info, ''));
-	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
-	Assert::same("<  c '", Filters::stripHtml(clone $info, '&lt; <b> c &apos;'));
-});
-
-
-test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_XML);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));

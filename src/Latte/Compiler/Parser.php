@@ -29,7 +29,6 @@ class Parser
 	/** Context-aware escaping content types */
 	public const
 		CONTENT_HTML = Engine::CONTENT_HTML,
-		CONTENT_XHTML = Engine::CONTENT_XHTML,
 		CONTENT_XML = Engine::CONTENT_XML,
 		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
@@ -365,12 +364,12 @@ class Parser
 
 
 	/**
-	 * @param  string  $type  Parser::CONTENT_HTML, CONTENT_XHTML, CONTENT_XML or CONTENT_TEXT
+	 * @param  string  $type  Parser::CONTENT_HTML, CONTENT_XML or CONTENT_TEXT
 	 * @return static
 	 */
 	public function setContentType(string $type)
 	{
-		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XHTML, self::CONTENT_XML], true)) {
+		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XML], true)) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
 			$this->xmlMode = $type === self::CONTENT_XML;
 		} else {

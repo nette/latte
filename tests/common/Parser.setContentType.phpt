@@ -44,23 +44,6 @@ Assert::same([
 Assert::same([
 	['htmlTagBegin', '<script'],
 	['htmlTagEnd', '>'],
-	['text', ' <div /> '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
-], parse('<script> <div /> </script>', Engine::CONTENT_XHTML));
-
-Assert::same([
-	['macroTag', '{contentType xhtml}'],
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
-	['text', ' <div /> '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
-], parse('{contentType xhtml}<script> <div /> </script>'));
-
-Assert::same([
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
 	['text', ' '],
 	['htmlTagBegin', '<div'],
 	['htmlTagEnd', ' />'],
