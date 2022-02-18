@@ -254,7 +254,7 @@ class BlockMacros extends MacroSet
 				'<?php } finally { $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); } ?>',
 				implode('', $node->context),
 			);
-			return $writer->write('ob_start(function () {}) %node.line; try {');
+			return $writer->write("ob_start(fn() => '') %node.line; try {");
 		}
 
 		if (Helpers::startsWith((string) $node->context[1], Latte\Compiler::CONTEXT_HTML_ATTRIBUTE)) {
