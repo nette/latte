@@ -233,7 +233,8 @@ class Filters
 				'htmlAttrCss' => 'escapeHtmlAttr',
 				'htmlAttrUrl' => 'escapeHtmlAttr',
 				'htmlComment' => 'escapeHtmlComment',
-				'xml' => 'escapeXml', 'xmlAttr' => 'escapeXml',
+				'xml' => 'escapeXml',
+				'xmlAttr' => 'escapeXml',
 			],
 			Context::JavaScript => [
 				'html' => 'escapeHtmlText',

@@ -10,7 +10,7 @@
 		echo LR\Filters::escapeHtmlAttrUnquoted($mxss) /* line %d% */;
 		echo '> </p>
 <p onclick = ';
-		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
+		echo '"' . LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) . '"' /* line %d% */;
 		echo '> </p>
 <p ONCLICK ="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;

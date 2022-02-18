@@ -29,6 +29,7 @@ final class PrintContext
 	private int $counter = 0;
 	private string $contentType = Context::Html;
 	private ?string $context = null;
+	private ?string $subContext = null;
 
 
 	public function format(string $mask, mixed ...$args): string
@@ -66,16 +67,17 @@ final class PrintContext
 	}
 
 
-	public function setEscapingContext(?string $context): static
+	public function setEscapingContext(?string $context, ?string $subContext = null): static
 	{
 		$this->context = $context;
+		$this->subContext = $subContext;
 		return $this;
 	}
 
 
 	public function getEscapingContext(): array
 	{
-		return [$this->contentType, $this->context];
+		return [$this->contentType, $this->context, $this->subContext];
 	}
 
 

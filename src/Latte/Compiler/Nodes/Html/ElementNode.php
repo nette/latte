@@ -136,33 +136,28 @@ class ElementNode extends AreaNode
 
 	private function setAttributeContext(PrintContext $context, AttributeNode $attr): void
 	{
-		if ($context->getContentType() !== Context::Html) {
-			$context->setEscapingContext($attr->quote ? Context::XmlAttribute : Context::XmlTag);
-			return;
-		}
-
+		$escapingContext = null;
 		$attrName = strtolower($attr->name);
 
-		if ($attr->quote) {
-			$escapingContext = Context::HtmlAttribute;
-			if (str_starts_with($attrName, 'on')) {
-				$escapingContext = Context::HtmlAttributeJavaScript;
-			} elseif ($attrName === 'style') {
-				$escapingContext = Context::HtmlAttributeCss;
-			}
-		} else {
-			$escapingContext = Context::HtmlTag;
-		}
-
-		if ((in_array($attrName, ['href', 'src', 'action', 'formaction'], true)
+		if ($context->getContentType() !== Context::Html) {
+		} elseif (str_starts_with($attrName, 'on')) {
+			$escapingContext = Context::HtmlAttributeJavaScript;
+		} elseif ($attrName === 'style') {
+			$escapingContext = Context::HtmlAttributeCss;
+		} elseif ((in_array($attrName, ['href', 'src', 'action', 'formaction'], true)
 			|| ($attrName === 'data' && strtolower($this->name) === 'object'))
 		) {
-			$escapingContext = $escapingContext === Context::HtmlTag
-				? Context::HtmlAttributeUnquotedUrl
-				: Context::HtmlAttributeUrl;
+			$escapingContext = Context::HtmlAttributeUrl;
 		}
 
-		$context->setEscapingContext($escapingContext);
+		if ($escapingContext) {
+			$flag = $attr->quote ? null : Context::HtmlAttributeUnquoted;
+		} else {
+			$escapingContext = $attr->quote ? Context::HtmlAttribute : Context::HtmlTag;
+			$flag = null;
+		}
+
+		$context->setEscapingContext($escapingContext, $flag);
 	}
 
 

@@ -841,11 +841,7 @@ class PhpWriter
 
 	private function completeModifier(string $modifier): string
 	{
-		[$contentType, $context] = $this->context;
-		if (
-			$contentType === Context::Html
-			&& in_array($context, [Context::HtmlAttributeUrl, Context::HtmlAttributeUnquotedUrl], true)
-		) {
+		if ($this->context[0] === Context::Html && $this->context[1] === Context::HtmlAttributeUrl) {
 			if (!Helpers::removeFilter($modifier, 'nocheck')) {
 				if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifier)) {
 					$modifier = '|checkUrl' . $modifier;
@@ -864,22 +860,22 @@ class PhpWriter
 	public function escapePass(MacroTokens $tokens): MacroTokens
 	{
 		$tokens = clone $tokens;
-		[$contentType, $context] = $this->context;
+		[$contentType, $context, $flag] = $this->context;
+		[$lq, $rq] = $flag === Context::HtmlAttributeUnquoted ? ["'\"' . ", " . '\"'"] : ['', ''];
 		switch ($contentType) {
 			case Context::Html:
 				switch ($context) {
 					case Context::HtmlText:
 						return $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')');
 					case Context::HtmlTag:
-					case Context::HtmlAttributeUnquotedUrl:
 						return $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
 					case Context::HtmlAttribute:
 					case Context::HtmlAttributeUrl:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
+						return $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(')->append(')' . $rq);
 					case Context::HtmlAttributeJavaScript:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))');
+						return $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))' . $rq);
 					case Context::HtmlAttributeCss:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))');
+						return $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))' . $rq);
 					case Context::HtmlComment:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
 					case Context::HtmlBogusTag:

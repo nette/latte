@@ -35,7 +35,7 @@ final class Context
 		HtmlAttributeJavaScript = 'AttrJs',
 		HtmlAttributeCss = 'AttrCss',
 		HtmlAttributeUrl = 'AttrUrl',
-		HtmlAttributeUnquotedUrl = 'AttrUnquotedUrl';
+		HtmlAttributeUnquoted = 'Unquoted';
 
 	public const
 		XmlText = null,
