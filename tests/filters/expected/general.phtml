@@ -39,7 +39,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo '  <a   href="#"
 > test</a
@@ -62,10 +62,10 @@ alert();
 
 <p>
 Nested blocks: ';
-		ob_start(function () {}) /* line %d% */;
+		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo ' Outer   ';
-			ob_start(function () {}) /* line %d% */;
+			ob_start(fn() => '') /* line %d% */;
 			try {
 				echo ' Inner Block ';
 			} finally {

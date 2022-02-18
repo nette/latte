@@ -5,7 +5,7 @@
 			echo '	';
 			echo LR\Filters::escapeHtmlText($cond) /* line 2 */;
 			echo "\n";
-			ob_start(function () {}) /* line 3 */;
+			ob_start(fn() => '') /* line 3 */;
 			try {
 				echo '		before
 ';

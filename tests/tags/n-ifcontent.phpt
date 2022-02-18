@@ -101,7 +101,7 @@ Assert::exception(
 Assert::match(
 	<<<'XX'
 		%A%
-				ob_start(function () {});
+				ob_start(fn() => '');
 				try {
 					echo '<div class="bar" ';
 					if (isset($id)) /* line 1 */ {

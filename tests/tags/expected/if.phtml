@@ -17,7 +17,7 @@
 --
 
 ';
-		ob_start(function () {}) /* line 14 */;
+		ob_start(fn() => '') /* line 14 */;
 		try {
 			echo '	a
 ';
@@ -33,11 +33,11 @@
 --
 
 ';
-		ob_start(function () {}) /* line 20 */;
+		ob_start(fn() => '') /* line 20 */;
 		try {
 			echo '	a
 ';
-			ob_start(function () {}) /* line 22 */;
+			ob_start(fn() => '') /* line 22 */;
 			try {
 				echo '	d
 ';
