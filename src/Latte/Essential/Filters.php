@@ -120,7 +120,7 @@ final class Filters
 		} elseif ($info->contentType === ContentType::Html) {
 			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', fn($m) => strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A"), $s);
 			if (preg_last_error()) {
-				throw new Latte\RegexpException(null, preg_last_error());
+				throw new Latte\RegexpException;
 			}
 
 			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
@@ -249,7 +249,7 @@ final class Filters
 	{
 		$res = preg_replace($pattern, $replacement, $subject);
 		if (preg_last_error()) {
-			throw new Latte\RegexpException(null, preg_last_error());
+			throw new Latte\RegexpException;
 		}
 
 		return $res;
@@ -385,7 +385,7 @@ final class Filters
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '', (string) $s);
 		if (preg_last_error()) {
-			throw new Latte\RegexpException(null, preg_last_error());
+			throw new Latte\RegexpException;
 		}
 
 		return $s;

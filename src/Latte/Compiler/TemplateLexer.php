@@ -335,7 +335,7 @@ final class TemplateLexer
 	{
 		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE, $this->offset)) {
 			if (preg_last_error()) {
-				throw new RegexpException(null, preg_last_error());
+				throw new RegexpException;
 			}
 
 			return [];
@@ -419,7 +419,7 @@ final class TemplateLexer
 			(?P<empty>/?$)
 		()$~Disx', $tag, $match)) {
 			if (preg_last_error()) {
-				throw new RegexpException(null, preg_last_error());
+				throw new RegexpException;
 			}
 
 			return null;
