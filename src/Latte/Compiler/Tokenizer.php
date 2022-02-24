@@ -52,7 +52,7 @@ class Tokenizer
 	{
 		preg_match_all($this->re, $input, $tokens, PREG_SET_ORDER);
 		if (preg_last_error()) {
-			throw new RegexpException(null, preg_last_error());
+			throw new RegexpException;
 		}
 
 		$len = 0;
