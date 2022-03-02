@@ -174,7 +174,7 @@ class MacroTokens extends TokenIterator
 		$pos = $this->position;
 		if (
 			($mod = $this->nextValue(...$modifiers))
-			&& $this->nextToken($this::T_WHITESPACE)
+			&& ($this->nextToken($this::T_WHITESPACE) || !ctype_alnum($mod))
 			&& ($name = $this->fetchWord())
 		) {
 			return [$name, $mod];

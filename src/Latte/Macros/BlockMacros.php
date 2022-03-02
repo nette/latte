@@ -134,13 +134,11 @@ class BlockMacros extends MacroSet
 
 		$node->tokenizer->reset();
 
-		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
-		if ($mod !== 'block') {
-			if ($mod === 'file' || !$name || !preg_match('~#|[\w-]+$~DA', $name)) {
-				return false; // {include file}
-			}
-
-			$name = ltrim($name, '#');
+		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file', '#']);
+		if ($mod !== 'block' && $mod !== '#'
+			&& ($mod === 'file' || !$name || !preg_match('~[\w-]+$~DA', $name))
+		) {
+			return false; // {include file}
 		}
 
 		if ($name === 'parent' && $node->modifiers !== '') {
@@ -652,9 +650,9 @@ class BlockMacros extends MacroSet
 		}
 
 		$list = [];
-		while ([$name, $block] = $node->tokenizer->fetchWordWithModifier('block')) {
-			$list[] = $block || preg_match('~#|\w[\w-]*$~DA', $name)
-				? '$this->hasBlock(' . $writer->formatWord(ltrim($name, '#')) . ')'
+		while ([$name, $block] = $node->tokenizer->fetchWordWithModifier(['block', '#'])) {
+			$list[] = $block || preg_match('~\w[\w-]*$~DA', $name)
+				? '$this->hasBlock(' . $writer->formatWord($name) . ')'
 				: 'isset(' . $writer->formatArgs(new Latte\MacroTokens($name)) . ')';
 		}
 
