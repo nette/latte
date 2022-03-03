@@ -250,6 +250,9 @@ class CoreMacros extends MacroSet
 		if (!$node->prefix || $node->prefix !== MacroNode::PREFIX_NONE) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 		}
+		if ($node->htmlNode->empty) {
+			trigger_error("Unnecessary n:ifcontent on empty element <{$node->htmlNode->name}> (on line {$this->getCompiler()->getLine()})", E_USER_DEPRECATED);
+		}
 
 		$node->validate(false);
 	}
