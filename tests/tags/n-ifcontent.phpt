@@ -79,14 +79,14 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Unknown n:inner-ifcontent, use n:ifcontent attribute.');
 
 
-Assert::error(function () use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->renderToString('<br n:ifcontent>');
-}, E_USER_DEPRECATED, 'Unnecessary n:ifcontent on empty element <br> (on line 1)');
+}, Latte\CompileException::class, 'Unnecessary n:ifcontent on empty element <br>');
 
 
-Assert::error(function () use ($latte) {
+Assert::exception(function () use ($latte) {
 	$latte->renderToString('<div n:ifcontent />');
-}, E_USER_DEPRECATED, 'Unnecessary n:ifcontent on empty element <div> (on line 1)');
+}, Latte\CompileException::class, 'Unnecessary n:ifcontent on empty element <div>');
 
 
 Assert::match(
