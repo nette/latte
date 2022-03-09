@@ -106,6 +106,10 @@ class Engine
 			$this->loadTemplate($name);
 		}
 
+		foreach ($this->extensions as $extension) {
+			$extension->beforeRender($this);
+		}
+
 		$this->providers['fn'] = $this->functions;
 		return new $class(
 			$this,
@@ -324,11 +328,12 @@ class Engine
 
 
 	/**
-	 * Adds new macro.
+	 * Adds new extension.
 	 */
-	public function addMacro(string $name, Macro $macro): static
+	public function addExtension(string $name, Extension $extension): static
 	{
-		$this->getCompiler()->addMacro($name, $macro);
+		$this->getCompiler()->addMacro($name, $extension);
+		$this->providers = array_merge($this->providers, $extension->getProviders());
 		return $this;
 	}
 
