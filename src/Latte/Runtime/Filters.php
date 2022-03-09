@@ -246,7 +246,6 @@ class Filters
 			return $conv($s);
 		} else {
 			throw new RuntimeException('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest));
-			return $s;
 		}
 	}
 

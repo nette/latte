@@ -1,20 +1,4 @@
 <ul>
-	<li>lower: {$hello |lower}</li>
-	<li>upper: {$hello |upper}</li>
-	<li>lower & capitalize: {$hello |lower|capitalize}</li>
-	<li>breaklines: {$hello |breakLines}</li>
-	<li>truncate: {$hello |truncate:"10"|lower}</li>
-	<li>date: {$date|date:'j. n. Y H:i:s'}</li>
-	<li>translated: {_$hello|truncate:3}</li>
-	<li>Translated HTML: {_}{$hello}{/_}</li>
-	<li>Translated HTML: {_}ahoj{/_}</li>
-	<li>Translated HTML: {_}ahoj{/}</li>
-	<li>Translated HTML: {_'ahoj|ahojahojahojahoj'}</li>
-	<li>spaces: {$hello |types , '' , ""	,	"$hello"  }</li>
-	<li>dynamic: {$hello |dynamic} {$hello |dynamic2}</li>
-</ul>
-
-<ul>
 	<li>{$hello |h1|h2}</li>
 	<li>{$hello |h1|h2|noescape}</li>
 	<li>{$hello |h2|h1}</li>
@@ -45,33 +29,8 @@ alert();
 
 
 
-{capture$capture}
-<ul>
-	<li>lower: {$hello |lower}</li>
-</ul>
-{/capture}
-
-<p>
-Captured: {$capture}
-</p>
-
-
-{capture$capture|striphtml|upper}
-Hello
-{/capture}
-
-<p>
-Captured with modifier: {$capture}
-</p>
-
-
-
 <p>
 Nested blocks: {block|striphtml|truncate:20} Outer   {block|striphtml|upper} Inner Block {/block}  Block {/block}
 </p>
 
-
-<ul>
-	<li>padLeft: {$hello |padleft:20}</li>
-	<li>padRight: {$hello |padright:20,'*'}</li>
-</ul>
+Breaklines: {="hello\nbar"|breakLines}

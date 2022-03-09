@@ -7,59 +7,6 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		echo '<ul>
-	<li>lower: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->lower)($hello)) /* line %d% */;
-		echo '</li>
-	<li>upper: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->upper)($hello)) /* line %d% */;
-		echo '</li>
-	<li>lower & capitalize: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->capitalize)(($this->filters->lower)($hello))) /* line %d% */;
-		echo '</li>
-	<li>breaklines: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->breaklines)($hello)) /* line %d% */;
-		echo '</li>
-	<li>truncate: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->lower)(($this->filters->truncate)($hello, "10"))) /* line %d% */;
-		echo '</li>
-	<li>date: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->date)($date, 'j. n. Y H:i:s')) /* line %d% */;
-		echo '</li>
-	<li>translated: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->truncate)(($this->filters->translate)($hello), 3)) /* line %d% */;
-		echo '</li>
-	<li>Translated HTML: ';
-		ob_start(function () {});
-		try {
-			echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
-		} finally {
-			$ʟ_tmp = ob_get_clean();
-		}
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, $ʟ_tmp)) /* line %d% */;
-		echo '</li>
-	<li>Translated HTML: ';
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, 'ahoj')) /* line %d% */;
-		echo '</li>
-	<li>Translated HTML: ';
-		$ʟ_fi = new LR\FilterInfo('html');
-		echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent("translate", $ʟ_fi, 'ahoj')) /* line %d% */;
-		echo '</li>
-	<li>Translated HTML: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->translate)('ahoj|ahojahojahojahoj')) /* line %d% */;
-		echo '</li>
-	<li>spaces: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello" )) /* line %d% */;
-		echo '</li>
-	<li>dynamic: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->dynamic)($hello)) /* line %d% */;
-		echo ' ';
-		echo LR\Filters::escapeHtmlText(($this->filters->dynamic2)($hello)) /* line %d% */;
-		echo '</li>
-</ul>
-
-<ul>
 	<li>';
 		echo LR\Filters::escapeHtmlText(($this->filters->h2)(($this->filters->h1)($hello))) /* line %d% */;
 		echo '</li>
@@ -116,47 +63,6 @@ alert();
 
 
 
-';
-		ob_start(function () {}) /* line %d% */;
-		try {
-			echo '<ul>
-	<li>lower: ';
-			echo LR\Filters::escapeHtmlText(($this->filters->lower)($hello)) /* line %d% */;
-			echo '</li>
-</ul>
-';
-		} finally {
-			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
-		}
-		$ʟ_fi = new LR\FilterInfo('html');
-		$capture = $ʟ_tmp;
-		echo '
-<p>
-Captured: ';
-		echo LR\Filters::escapeHtmlText($capture) /* line %d% */;
-		echo '
-</p>
-
-
-';
-		ob_start(function () {}) /* line %d% */;
-		try {
-			echo 'Hello
-';
-		} finally {
-			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
-		}
-		$ʟ_fi = new LR\FilterInfo('html');
-		$capture = $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $ʟ_tmp));
-		echo '
-<p>
-Captured with modifier: ';
-		echo LR\Filters::escapeHtmlText($capture) /* line %d% */;
-		echo '
-</p>
-
-
-
 <p>
 Nested blocks: ';
 		ob_start(function () {}) /* line %d% */;
@@ -177,16 +83,9 @@ Nested blocks: ';
 		echo '
 </p>
 
-
-<ul>
-	<li>padLeft: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->padleft)($hello, 20)) /* line %d% */;
-		echo '</li>
-	<li>padRight: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->padright)($hello, 20, '*')) /* line %d% */;
-		echo '</li>
-</ul>
-';
+Breaklines: ';
+		echo LR\Filters::escapeHtmlText(($this->filters->breaklines)("hello\nbar")) /* line 35 */;
+		echo "\n";
 %A%
 	}
 

@@ -32,7 +32,7 @@ Assert::match(
 
 Assert::match(
 	'TEST',
-	$latte->renderToString('{capture $var|stripHtml|upper}<b>Test</b>{/capture}{=$var}')
+	$latte->renderToString('{capture$var|stripHtml|upper}<b>Test</b>{/capture}{=$var}')
 );
 
 Assert::noError(function () use ($latte) { // uses keyword new
