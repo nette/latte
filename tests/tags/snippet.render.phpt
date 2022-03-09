@@ -106,7 +106,7 @@ $dataSets = [
 			'main' => '
 {snippet foo}
 	{foreach [1, 2] as $id}
-		{snippet bar-$id}{$id}{/snippet}
+		{snippet "bar-$id"}{$id}{/snippet}
 	{/foreach}
 {/snippet}
 ',
@@ -121,7 +121,7 @@ $dataSets = [
 			'main' => '
 {snippetArea foo}
 	{foreach [1, 2] as $id}
-		{snippet bar-$id}{$id}{/snippet}
+		{snippet "bar-$id"}{$id}{/snippet}
 	{/foreach}
 {/snippetArea}
 ',
@@ -136,7 +136,7 @@ $dataSets = [
 			'main' => '
 {snippetArea foo}
 	{foreach [1, 2] as $id}
-		{snippet bar-$id}{include "sub" id => $id}{/snippet}
+		{snippet "bar-$id"}{include "sub" id => $id}{/snippet}
 	{/foreach}
 {/snippetArea}
 ',

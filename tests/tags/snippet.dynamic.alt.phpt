@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 $template = <<<'EOD'
 	{snippet outer1}
 	{foreach array(1,2,3) as $id}
-		<div n:snippet="inner-$id">
+		<div n:snippet='"inner-$id"'>
 				#{$id}
 		</div>
 	{/foreach}
@@ -27,7 +27,7 @@ $template = <<<'EOD'
 
 	{snippet outer2}
 	{foreach array(1,2,3) as $id}
-		<div n:inner-snippet="inner-$id">
+		<div n:inner-snippet='"inner-$id"'>
 				#{$id}
 		</div>
 	{/foreach}
