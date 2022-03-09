@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use Latte\Macro;
+use Latte\Extension;
 use Latte\Strict;
 
 
@@ -26,7 +26,7 @@ final class Tag
 		PREFIX_TAG = 'tag',
 		PREFIX_NONE = 'none';
 
-	public Macro $macro;
+	public Extension $macro;
 	public string $name;
 	public bool $empty = false;
 	public string $args;
@@ -62,7 +62,7 @@ final class Tag
 
 
 	public function __construct(
-		Macro $macro,
+		Extension $macro,
 		string $name,
 		string $args = '',
 		string $modifiers = '',

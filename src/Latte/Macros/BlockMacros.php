@@ -59,11 +59,7 @@ class BlockMacros extends MacroSet
 	}
 
 
-	/**
-	 * Initializes before template parsing.
-	 * @return void
-	 */
-	public function initialize()
+	public function beforeCompile(): void
 	{
 		$this->blocks = [[]];
 		$this->index = Template::LAYER_TOP;
@@ -73,9 +69,6 @@ class BlockMacros extends MacroSet
 	}
 
 
-	/**
-	 * Finishes template parsing.
-	 */
 	public function finalize()
 	{
 		$compiler = $this->getCompiler();
