@@ -7,7 +7,9 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte;
 
 
 /**
@@ -15,7 +17,7 @@ namespace Latte;
  */
 class Token
 {
-	use Strict;
+	use Latte\Strict;
 
 	public const
 		TEXT = 'text',

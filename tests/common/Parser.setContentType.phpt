@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
+use Latte\Compiler\Token;
 use Latte\Engine;
-use Latte\Token;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 
 function parse($s, $contentType = null)
 {
-	$parser = new Latte\Parser;
+	$parser = new Latte\Compiler\Parser;
 	$parser->setContentType($contentType ?: Engine::CONTENT_HTML);
 	return array_map(fn(Token $token) => [$token->type, $token->text], $parser->parse($s));
 }

@@ -11,7 +11,8 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\CompileException;
-use Latte\MacroNode;
+use Latte\Compiler\Compiler;
+use Latte\Compiler\MacroNode;
 
 
 /**
@@ -21,13 +22,13 @@ class MacroSet implements Latte\Macro
 {
 	use Latte\Strict;
 
-	private Latte\Compiler $compiler;
+	private Compiler $compiler;
 
 	/** @var array<string, array{string|callable|null, string|callable|null, string|callable|null}> */
 	private array $macros;
 
 
-	public function __construct(Latte\Compiler $compiler)
+	public function __construct(Compiler $compiler)
 	{
 		$this->compiler = $compiler;
 	}
@@ -103,7 +104,7 @@ class MacroSet implements Latte\Macro
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
 			$node->empty = true;
-			$node->context[1] = Latte\Compiler::CONTEXT_HTML_ATTRIBUTE;
+			$node->context[1] = Compiler::CONTEXT_HTML_ATTRIBUTE;
 			$res = $this->compile($node, $attr);
 			if ($res === false) {
 				return false;
@@ -111,7 +112,7 @@ class MacroSet implements Latte\Macro
 				$node->attrCode = "<?php $res ?>";
 			}
 
-			$node->context[1] = Latte\Compiler::CONTEXT_HTML_TEXT;
+			$node->context[1] = Compiler::CONTEXT_HTML_TEXT;
 
 		} elseif ($node->empty && $node->prefix) {
 			return false;
@@ -152,14 +153,14 @@ class MacroSet implements Latte\Macro
 	private function compile(MacroNode $node, string|callable $def): string|bool|null
 	{
 		$node->tokenizer->reset();
-		$writer = Latte\PhpWriter::using($node, $this->compiler);
+		$writer = Latte\Compiler\PhpWriter::using($node, $this->compiler);
 		return is_string($def)
 			? $writer->write($def)
 			: $def($node, $writer);
 	}
 
 
-	public function getCompiler(): Latte\Compiler
+	public function getCompiler(): Compiler
 	{
 		return $this->compiler;
 	}

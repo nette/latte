@@ -7,7 +7,12 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte;
+use Latte\CompileException;
+use Latte\Engine;
+use Latte\RegexpException;
 
 
 /**
@@ -15,7 +20,7 @@ namespace Latte;
  */
 class Parser
 {
-	use Strict;
+	use Latte\Strict;
 
 	/** @internal regular expression for single & double quoted PHP string */
 	public const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';

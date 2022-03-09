@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\PhpHelpers;
+use Latte\Compiler\PhpHelpers;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

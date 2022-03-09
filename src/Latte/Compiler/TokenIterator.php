@@ -7,7 +7,10 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte;
+use Latte\CompileException;
 
 
 /**
@@ -16,7 +19,7 @@ namespace Latte;
  */
 class TokenIterator
 {
-	use Strict;
+	use Latte\Strict;
 
 	/** @var array<array{string, int, int}> */
 	public array $tokens;

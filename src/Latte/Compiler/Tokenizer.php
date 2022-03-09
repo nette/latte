@@ -7,7 +7,11 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte;
+use Latte\CompileException;
+use Latte\RegexpException;
 
 
 /**
@@ -16,7 +20,7 @@ namespace Latte;
  */
 class Tokenizer
 {
-	use Strict;
+	use Latte\Strict;
 
 	public const
 		VALUE = 0,

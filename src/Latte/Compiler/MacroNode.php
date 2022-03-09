@@ -7,7 +7,11 @@
 
 declare(strict_types=1);
 
-namespace Latte;
+namespace Latte\Compiler;
+
+use Latte;
+use Latte\CompileException;
+use Latte\Macro;
 
 
 /**
@@ -15,7 +19,7 @@ namespace Latte;
  */
 class MacroNode
 {
-	use Strict;
+	use Latte\Strict;
 
 	public const
 		PREFIX_INNER = 'inner',

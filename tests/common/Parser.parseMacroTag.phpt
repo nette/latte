@@ -11,7 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$parser = new Latte\Parser;
+$parser = new Latte\Compiler\Parser;
 
 
 Assert::same(['=', '$var', '', false, false], $parser->parseMacroTag('$var'));

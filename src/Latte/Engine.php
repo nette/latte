@@ -35,8 +35,8 @@ class Engine
 	/** @internal */
 	public $probe;
 
-	private ?Parser $parser = null;
-	private ?Compiler $compiler = null;
+	private ?Compiler\Parser $parser = null;
+	private ?Compiler\Compiler $compiler = null;
 	private ?Loader $loader = null;
 	private Runtime\FilterExecutor $filters;
 	private \stdClass $functions;
@@ -446,20 +446,20 @@ class Engine
 	}
 
 
-	public function getParser(): Parser
+	public function getParser(): Compiler\Parser
 	{
 		if (!$this->parser) {
-			$this->parser = new Parser;
+			$this->parser = new Compiler\Parser;
 		}
 
 		return $this->parser;
 	}
 
 
-	public function getCompiler(): Compiler
+	public function getCompiler(): Compiler\Compiler
 	{
 		if (!$this->compiler) {
-			$this->compiler = new Compiler;
+			$this->compiler = new Compiler\Compiler;
 			Macros\CoreMacros::install($this->compiler);
 			Macros\BlockMacros::install($this->compiler);
 		}
