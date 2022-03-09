@@ -4,8 +4,8 @@
 
 declare(strict_types=1);
 
-use Latte\MacroTokens;
-use Latte\PhpWriter;
+use Latte\Compiler\MacroTokens;
+use Latte\Compiler\PhpWriter;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

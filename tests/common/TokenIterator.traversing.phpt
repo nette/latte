@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
-use Latte\TokenIterator;
-use Latte\Tokenizer;
+use Latte\Compiler\TokenIterator;
+use Latte\Compiler\Tokenizer;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

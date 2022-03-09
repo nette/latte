@@ -11,11 +11,11 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\MacroNode;
+use Latte\Compiler\PhpHelpers;
+use Latte\Compiler\PhpWriter;
 use Latte\Engine;
 use Latte\Helpers;
-use Latte\MacroNode;
-use Latte\PhpHelpers;
-use Latte\PhpWriter;
 
 
 /**
@@ -29,7 +29,7 @@ class CoreMacros extends MacroSet
 	private int $idCounter = 0;
 
 
-	public static function install(Latte\Compiler $compiler): void
+	public static function install(Latte\Compiler\Compiler $compiler): void
 	{
 		$me = new static($compiler);
 
@@ -113,7 +113,7 @@ class CoreMacros extends MacroSet
 		$code = '';
 		if ($this->overwrittenVars) {
 			$vars = array_map(fn($l) => implode(', ', $l), $this->overwrittenVars);
-			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $ʟ_v => $ʟ_l) { '
+			$code .= 'foreach (array_intersect_key(' . Latte\Compiler\PhpHelpers::dump($vars) . ', $this->params) as $ʟ_v => $ʟ_l) { '
 				. 'trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l"); } ';
 		}
 
@@ -655,12 +655,12 @@ class CoreMacros extends MacroSet
 		?>', $node->htmlNode->data->id, $node->htmlNode->name);
 
 		$node->content = preg_replace(
-			'~^(\s*<)' . Latte\Parser::RE_TAG_NAME . '~',
+			'~^(\s*<)' . Latte\Compiler\Parser::RE_TAG_NAME . '~',
 			"\$1<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n",
 			$node->content,
 		);
 		$node->content = preg_replace(
-			'~</' . Latte\Parser::RE_TAG_NAME . '(\s*>\s*)$~',
+			'~</' . Latte\Compiler\Parser::RE_TAG_NAME . '(\s*>\s*)$~',
 			"</<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n\$1",
 			$node->content,
 		);
@@ -735,7 +735,7 @@ class CoreMacros extends MacroSet
 		$var = true;
 		$hasType = false;
 		$tokens = $node->tokenizer;
-		$res = new Latte\MacroTokens;
+		$res = new Latte\Compiler\MacroTokens;
 		while ($tokens->nextToken()) {
 			if ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextToken();
