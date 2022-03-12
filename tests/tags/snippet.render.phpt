@@ -52,7 +52,7 @@ $dataSets = [
 	//included template
 	[
 		[
-			'main' => '{snippet foo}{include "sub"}{/snippet}',
+			'main' => '{snippet foo}{include file "sub"}{/snippet}',
 			'sub' => '{snippet subFoo}hello{/snippet}',
 		],
 		['foo' => '<div id="subFoo">hello</div>'],
@@ -62,7 +62,7 @@ $dataSets = [
 	//included template 2
 	[
 		[
-			'main' => '{snippet foo}{include "sub"}{/snippet}',
+			'main' => '{snippet foo}{include file "sub"}{/snippet}',
 			'sub' => '{snippet subFoo}hello{/snippet}',
 		],
 		['foo' => '<div id="subFoo">hello</div>'],
@@ -72,7 +72,7 @@ $dataSets = [
 	//included template - expected empty payload
 	[
 		[
-			'main' => '{include "sub"}',
+			'main' => '{include file "sub"}',
 			'sub' => '{snippet subFoo}hello{/snippet}',
 		],
 		[],
@@ -82,7 +82,7 @@ $dataSets = [
 	//included template - snippetArea
 	[
 		[
-			'main' => '{snippetArea foo}{include "sub"}{/snippetArea}',
+			'main' => '{snippetArea foo}{include file "sub"}{/snippetArea}',
 			'sub' => '{snippet subFoo}hello{/snippet}',
 		],
 		['subFoo' => 'hello'],
@@ -92,8 +92,8 @@ $dataSets = [
 	//nested included template - snippetArea
 	[
 		[
-			'main' => '{snippetArea foo}{include "sub"}{/snippetArea}',
-			'sub' => '{include "sub2"}',
+			'main' => '{snippetArea foo}{include file "sub"}{/snippetArea}',
+			'sub' => '{include file "sub2"}',
 			'sub2' => '{snippet sub2Foo}hello{/snippet}',
 		],
 		['sub2Foo' => 'hello'],
@@ -136,7 +136,7 @@ $dataSets = [
 			'main' => '
 {snippetArea foo}
 	{foreach [1, 2] as $id}
-		{snippet "bar-$id"}{include "sub" id => $id}{/snippet}
+		{snippet "bar-$id"}{include file "sub" id => $id}{/snippet}
 	{/foreach}
 {/snippetArea}
 ',
@@ -182,7 +182,7 @@ $dataSets = [
 	//embed
 	[
 		[
-			'main' => '{embed "embed"}{snippet foo}hello{/snippet}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
+			'main' => '{embed file "embed"}{snippet foo}hello{/snippet}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
 			'embed' => '{block embed}{/block}',
 		],
 		['foo' => 'hello'],

@@ -43,5 +43,5 @@ Assert::matchFile(
 
 Assert::exception(function () use ($latte) {
 	$latte->setLoader(new Latte\Loaders\StringLoader);
-	$latte->renderToString('{include "inc", with blocks}');
+	$latte->renderToString('{include file "inc", with blocks}');
 }, ParseError::class);

@@ -135,6 +135,9 @@ class BlockMacros extends MacroSet
 		$node->tokenizer->reset();
 
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file', '#']);
+		if (!$mod && preg_match('~([\'"])[\w-]+\\1$~DA', $name)) {
+			trigger_error("Change {include $name} to {include file $name} for clarity (on line $node->startLine)", E_USER_NOTICE);
+		}
 		if ($mod !== 'block' && $mod !== '#'
 			&& ($mod === 'file' || !$name || !preg_match('~[\w-]+$~DA', $name))
 		) {
@@ -597,6 +600,9 @@ class BlockMacros extends MacroSet
 		$this->blocks[$this->index] = [];
 
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
+		if (!$mod && preg_match('~([\'"])[\w-]+\\1$~DA', $name)) {
+			trigger_error("Change {embed $name} to {embed file $name} for clarity (on line $node->startLine)", E_USER_NOTICE);
+		}
 		$mod = $mod ?? (preg_match('~^[\w-]+$~DA', $name) ? 'block' : 'file');
 
 		$node->openingCode = $writer->write(
