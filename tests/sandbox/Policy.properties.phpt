@@ -33,7 +33,6 @@ $template = <<<'EOD'
 {=$class::$static}
 {=$class::$$staticProp}
 
-{var $obj = new MyClass}
 {var $prop = bar}
 {=$obj -> bar}
 {=$obj->$prop}
@@ -49,7 +48,7 @@ Assert::equal(
 );
 
 
-$latte->renderToString($template);
+$latte->renderToString($template, ['obj' => new MyClass]);
 Assert::equal(
 	[
 		'macros' => Expect::type('array'),

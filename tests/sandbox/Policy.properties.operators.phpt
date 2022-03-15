@@ -27,7 +27,6 @@ $latte->setSandboxMode();
 
 $template = <<<'EOD'
 {var $class = MyClass}
-{var $obj = new MyClass}
 {var $prop = bar}
 {var $staticProp = 'static'}
 
@@ -51,7 +50,7 @@ Assert::equal(
 );
 
 
-$latte->renderToString($template);
+$latte->renderToString($template, ['obj' => new MyClass]);
 Assert::equal(
 	[
 		'macros' => Expect::type('array'),

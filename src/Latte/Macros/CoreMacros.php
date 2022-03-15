@@ -792,6 +792,7 @@ class CoreMacros extends MacroSet
 		}
 
 		$res = $writer->preprocess($res);
+		$writer->validateKeywords($res);
 		$out = $writer->quotingPass($res)->joinAll();
 		return $writer->write($node->name === 'default'
 			? 'extract([%raw], EXTR_SKIP) %node.line;'
@@ -875,6 +876,7 @@ class CoreMacros extends MacroSet
 		$node->validate(true);
 
 		$tokens = $node->tokenizer;
+		$writer->validateKeywords($tokens);
 		$params = [];
 		while ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 			if ($tokens->nextToken($tokens::T_SYMBOL, '?', 'null', '\\')) { // type

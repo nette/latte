@@ -45,7 +45,6 @@ $template = <<<'EOD'
 {="$class::foo"()}
 {=[$class, 'foo']()}
 
-{var $obj = new MyClass}
 {=$obj -> foo()}
 {=$obj->$method()}
 {=[$obj, $method]()}
@@ -66,7 +65,7 @@ Assert::equal(
 // run-time
 $latte->warmupCache($template);
 $policy->log = [];
-$latte->renderToString($template);
+$latte->renderToString($template, ['obj' => new MyClass]);
 Assert::same(
 	[
 		'functions' => ['trim', 'trim'],

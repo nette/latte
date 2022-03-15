@@ -18,12 +18,12 @@ class Test
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=', 'do']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=', 'do', 'var', 'parameters']));
 $latte->setSandboxMode();
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{var $abc}');
-}, Latte\CompileException::class, 'Tag {var} is not allowed.');
+	$latte->compile('{default $abc}');
+}, Latte\CompileException::class, 'Tag {default} is not allowed.');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<span n:class=""></span>');
@@ -127,6 +127,14 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{do new stdClass}');
+}, Latte\CompileException::class, "Forbidden keyword 'new' inside tag.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{var $a = new stdClass}');
+}, Latte\CompileException::class, "Forbidden keyword 'new' inside tag.");
+
+Assert::exception(function () use ($latte) {
+	$latte->compile('{parameters $a = new stdClass}');
 }, Latte\CompileException::class, "Forbidden keyword 'new' inside tag.");
 
 Assert::exception(function () use ($latte) {
