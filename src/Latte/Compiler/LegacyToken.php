@@ -26,7 +26,8 @@ class LegacyToken
 		HTML_TAG_END = 'htmlTagEnd', // end of HTML tag or comment
 		HTML_ATTRIBUTE_BEGIN = 'htmlAttributeBegin',
 		HTML_ATTRIBUTE_END = 'htmlAttributeEnd',
-		COMMENT = 'comment'; // latte comment
+		COMMENT = 'comment', // latte comment
+		END = 'end';
 
 	/** token type [TEXT | MACRO_TAG | HTML_TAG_BEGIN | HTML_TAG_END | HTML_ATTRIBUTE_BEGIN | HTML_ATTRIBUTE_END | COMMENT] */
 	public string $type;
@@ -50,4 +51,24 @@ class LegacyToken
 
 	/** is tag empty {name/}? used for type MACRO_TAG */
 	public bool $empty = false;
+
+
+	public function __construct(string $type = '', string $text = '')
+	{
+		$this->type = $type;
+		$this->text = $text;
+	}
+
+
+	public function is(int|string ...$args): bool
+	{
+		return in_array($this->text, $args, true)
+			|| in_array($this->type, $args, true);
+	}
+
+
+	public function isEnd(): bool
+	{
+		return $this->type === self::END;
+	}
 }
