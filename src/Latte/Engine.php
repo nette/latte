@@ -20,14 +20,14 @@ class Engine
 	public const VERSION = '3.0.0-dev';
 	public const VERSION_ID = 30000;
 
-	/** Content types */
+	/** @deprecated use Context::* */
 	public const
-		CONTENT_HTML = 'html',
-		CONTENT_XML = 'xml',
-		CONTENT_JS = 'js',
-		CONTENT_CSS = 'css',
-		CONTENT_ICAL = 'ical',
-		CONTENT_TEXT = 'text';
+		CONTENT_HTML = Context::Html,
+		CONTENT_XML = Context::Xml,
+		CONTENT_JS = Context::JavaScript,
+		CONTENT_CSS = Context::Css,
+		CONTENT_ICAL = Context::ICal,
+		CONTENT_TEXT = Context::Text;
 
 	/** @deprecated and unused */
 	public $onCompile = [];
@@ -44,7 +44,7 @@ class Engine
 
 	/** @var Extension[] */
 	private array $extensions = [];
-	private string $contentType = self::CONTENT_HTML;
+	private string $contentType = Context::Html;
 	private ?string $tempDirectory = null;
 	private bool $autoRefresh = true;
 	private bool $strictTypes = false;

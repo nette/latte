@@ -26,7 +26,7 @@ class Template
 		LAYER_SNIPPET = 'snippet',
 		LAYER_LOCAL = 'local';
 
-	protected const CONTENT_TYPE = Engine::CONTENT_HTML;
+	protected const CONTENT_TYPE = Latte\Context::Html;
 
 	protected const BLOCKS = [];
 

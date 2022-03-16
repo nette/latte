@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Engine;
+use Latte\Context;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
 use function is_array, is_string, count, strlen;
@@ -30,7 +30,7 @@ final class Filters
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
 		$info->validate([null, 'html', 'htmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
-		$info->contentType = Engine::CONTENT_TEXT;
+		$info->contentType = Context::Text;
 		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
 
@@ -55,7 +55,7 @@ final class Filters
 	 */
 	public static function strip(FilterInfo $info, string $s): string
 	{
-		return $info->contentType === Engine::CONTENT_HTML
+		return $info->contentType === Context::Html
 			? trim(self::spacelessHtml($s))
 			: trim(self::spacelessText($s));
 	}
@@ -126,7 +126,7 @@ final class Filters
 	{
 		if ($level < 1) {
 			// do nothing
-		} elseif ($info->contentType === Engine::CONTENT_HTML) {
+		} elseif ($info->contentType === Context::Html) {
 			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', fn($m) => strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A"), $s);
 			if (preg_last_error()) {
 				throw new Latte\RegexpException(null, preg_last_error());
