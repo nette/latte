@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Engine;
+use Latte\ContentType;
 use Latte\Essential\Filters;
 use Latte\Runtime\FilterInfo;
 use Tester\Assert;
@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$info = new FilterInfo(Engine::CONTENT_TEXT);
+$info = new FilterInfo(ContentType::Text);
 Assert::same('x', Filters::trim($info, " \t\n\r\x00\x0B\u{A0}x"));
 Assert::same('a b', Filters::trim($info, ' a b '));
 Assert::same(' a b ', Filters::trim($info, ' a b ', ''));

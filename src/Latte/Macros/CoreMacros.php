@@ -14,10 +14,7 @@ use Latte\CompileException;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\Tag;
-use Latte\Engine;
 use Latte\Helpers;
-use Latte\RuntimeException;
-use Nette;
 
 
 /**
@@ -438,7 +435,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroCaptureEnd(Tag $node, PhpWriter $writer): string
 	{
-		$body = implode('', $node->context) === Engine::CONTENT_HTML
+		$body = implode('', $node->context) === Latte\Compiler\Escaper::Html
 			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
 			: 'ob_get_clean()';
 		return $writer->write(
@@ -459,7 +456,7 @@ class CoreMacros extends MacroSet
 	public function macroSpaceless(Tag $node, PhpWriter $writer): void
 	{
 		$node->validate(false);
-		$node->openingCode = $writer->write($node->context[0] === Engine::CONTENT_HTML
+		$node->openingCode = $writer->write($node->context[0] === Latte\ContentType::Html
 			? "<?php ob_start('Latte\\Essential\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
 			: "<?php ob_start('Latte\\Essential\\Filters::spacelessText', 4096) %node.line; try { ?>");
 		$node->closingCode = '<?php } finally { ob_end_flush(); } ?>';
@@ -813,17 +810,17 @@ class CoreMacros extends MacroSet
 
 		$compiler = $this->getCompiler();
 		if (str_contains($node->args, 'html')) {
-			$type = $compiler::CONTENT_HTML;
+			$type = Latte\ContentType::Html;
 		} elseif (str_contains($node->args, 'xml')) {
-			$type = $compiler::CONTENT_XML;
+			$type = Latte\ContentType::Xml;
 		} elseif (str_contains($node->args, 'javascript')) {
-			$type = $compiler::CONTENT_JS;
+			$type = Latte\ContentType::JavaScript;
 		} elseif (str_contains($node->args, 'css')) {
-			$type = $compiler::CONTENT_CSS;
+			$type = Latte\ContentType::Css;
 		} elseif (str_contains($node->args, 'calendar')) {
-			$type = $compiler::CONTENT_ICAL;
+			$type = Latte\ContentType::ICal;
 		} else {
-			$type = $compiler::CONTENT_TEXT;
+			$type = Latte\ContentType::Text;
 		}
 
 		$compiler->setContentType($type);

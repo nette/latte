@@ -94,7 +94,7 @@ class MacroSet extends Latte\Extension
 
 		if ($attr && $node->prefix === $node::PREFIX_NONE) {
 			$node->empty = true;
-			$node->context[1] = Compiler::CONTEXT_HTML_ATTRIBUTE;
+			$node->context[1] = Latte\Compiler\Escaper::HtmlAttribute;
 			$res = $this->compile($node, $attr);
 			if ($res === false) {
 				return false;
@@ -102,7 +102,7 @@ class MacroSet extends Latte\Extension
 				$node->attrCode = "<?php $res ?>";
 			}
 
-			$node->context[1] = Compiler::CONTEXT_HTML_TEXT;
+			$node->context[1] = Latte\Compiler\Escaper::HtmlText;
 
 		} elseif ($node->empty && $node->prefix) {
 			return false;

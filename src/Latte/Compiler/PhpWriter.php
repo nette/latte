@@ -11,6 +11,7 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
+use Latte\ContentType;
 use Latte\Helpers;
 use Latte\Policy;
 use Latte\SecurityViolationException;
@@ -840,8 +841,8 @@ class PhpWriter
 	{
 		[$contentType, $context] = $this->context;
 		if (
-			$contentType === Compiler::CONTENT_HTML
-			&& in_array($context, [Compiler::CONTEXT_HTML_ATTRIBUTE_URL, Compiler::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)
+			$contentType === ContentType::Html
+			&& in_array($context, [Escaper::HtmlAttributeUrl, Escaper::HtmlAttributeUnquotedUrl], true)
 		) {
 			if (!Helpers::removeFilter($modifier, 'nocheck')) {
 				if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifier)) {
@@ -863,50 +864,50 @@ class PhpWriter
 		$tokens = clone $tokens;
 		[$contentType, $context] = $this->context;
 		switch ($contentType) {
-			case Compiler::CONTENT_HTML:
+			case ContentType::Html:
 				switch ($context) {
-					case Compiler::CONTEXT_HTML_TEXT:
+					case Escaper::HtmlText:
 						return $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')');
-					case Compiler::CONTEXT_HTML_TAG:
-					case Compiler::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL:
+					case Escaper::HtmlTag:
+					case Escaper::HtmlAttributeUnquotedUrl:
 						return $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
-					case Compiler::CONTEXT_HTML_ATTRIBUTE:
-					case Compiler::CONTEXT_HTML_ATTRIBUTE_URL:
+					case Escaper::HtmlAttribute:
+					case Escaper::HtmlAttributeUrl:
 						return $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
-					case Compiler::CONTEXT_HTML_ATTRIBUTE_JS:
+					case Escaper::HtmlAttributeJavaScript:
 						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))');
-					case Compiler::CONTEXT_HTML_ATTRIBUTE_CSS:
+					case Escaper::HtmlAttributeCss:
 						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))');
-					case Compiler::CONTEXT_HTML_COMMENT:
+					case Escaper::HtmlComment:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
-					case Compiler::CONTEXT_HTML_BOGUS_COMMENT:
+					case Escaper::HtmlBogusTag:
 						return $tokens->prepend('LR\Filters::escapeHtml(')->append(')');
-					case Compiler::CONTEXT_HTML_JS:
-					case Compiler::CONTEXT_HTML_CSS:
+					case Escaper::HtmlJavaScript:
+					case Escaper::HtmlCss:
 						return $tokens->prepend('LR\Filters::escape' . ucfirst($context) . '(')->append(')');
 					default:
 						throw new CompileException("Unknown context $contentType, $context.");
 				}
 				// break omitted
-			case Compiler::CONTENT_XML:
+			case ContentType::Xml:
 				switch ($context) {
-					case Compiler::CONTEXT_XML_TEXT:
-					case Compiler::CONTEXT_XML_ATTRIBUTE:
-					case Compiler::CONTEXT_XML_BOGUS_COMMENT:
+					case Escaper::XmlText:
+					case Escaper::XmlAttribute:
+					case Escaper::XmlBogusTag:
 						return $tokens->prepend('LR\Filters::escapeXml(')->append(')');
-					case Compiler::CONTEXT_XML_COMMENT:
+					case Escaper::XmlComment:
 						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
-					case Compiler::CONTEXT_XML_TAG:
+					case Escaper::XmlTag:
 						return $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')');
 					default:
 						throw new CompileException("Unknown context $contentType, $context.");
 				}
 				// break omitted
-			case Compiler::CONTENT_JS:
-			case Compiler::CONTENT_CSS:
-			case Compiler::CONTENT_ICAL:
+			case ContentType::JavaScript:
+			case ContentType::Css:
+			case ContentType::ICal:
 				return $tokens->prepend('LR\Filters::escape' . ucfirst($contentType) . '(')->append(')');
-			case Compiler::CONTENT_TEXT:
+			case ContentType::Text:
 				return $tokens;
 			case null:
 				return $tokens->prepend('($this->filters->escape)(')->append(')');

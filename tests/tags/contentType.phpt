@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Latte\ContentType;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -12,10 +13,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 
 $template = $latte->createTemplate('');
-Assert::same($latte::CONTENT_HTML, $template->getContentType());
+Assert::same(ContentType::Html, $template->getContentType());
 
 $template = $latte->createTemplate('{contentType xml}');
-Assert::same($latte::CONTENT_XML, $template->getContentType());
+Assert::same(ContentType::Xml, $template->getContentType());
 
 Assert::exception(
 	fn() => $latte->createTemplate('{block}{contentType xml}{/block}'),
@@ -47,7 +48,7 @@ Assert::same(
 // defined on $latte
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->setContentType($latte::CONTENT_XML);
+$latte->setContentType(ContentType::Xml);
 
 $template = $latte->createTemplate('--');
-Assert::same($latte::CONTENT_XML, $template->getContentType());
+Assert::same(ContentType::Xml, $template->getContentType());

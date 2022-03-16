@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
-use Latte\Engine;
+use Latte\ContentType;
 use Latte\Helpers;
 
 
@@ -65,11 +65,11 @@ class FilterExecutor
 					array_unshift($args, $info = new FilterInfo);
 					if ($args[1] instanceof HtmlStringable) {
 						$args[1] = $args[1]->__toString();
-						$info->contentType = Engine::CONTENT_HTML;
+						$info->contentType = ContentType::Html;
 					}
 
 					$res = $callback(...$args);
-					return $info->contentType === Engine::CONTENT_HTML
+					return $info->contentType === ContentType::Html
 						? new Html($res)
 						: $res;
 				};
@@ -108,7 +108,7 @@ class FilterExecutor
 
 		[$callback, $aware] = $this->prepareFilter($name);
 
-		if ($info->contentType === Engine::CONTENT_HTML && $args[0] instanceof HtmlStringable) {
+		if ($info->contentType === ContentType::Html && $args[0] instanceof HtmlStringable) {
 			$args[0] = $args[0]->__toString();
 		}
 
@@ -118,15 +118,15 @@ class FilterExecutor
 		}
 
 		// classic filter
-		if ($info->contentType !== Engine::CONTENT_TEXT) {
+		if ($info->contentType !== ContentType::Text) {
 			throw new Latte\RuntimeException("Filter |$name is called with incompatible content type " . strtoupper($info->contentType)
-				. ($info->contentType === Engine::CONTENT_HTML ? ', try to prepend |stripHtml.' : '.'));
+				. ($info->contentType === ContentType::Html ? ', try to prepend |stripHtml.' : '.'));
 		}
 
 		$res = ($this->$name)(...$args);
 		if ($res instanceof HtmlStringable) {
 			trigger_error("Filter |$name should be changed to content-aware filter.");
-			$info->contentType = Engine::CONTENT_HTML;
+			$info->contentType = ContentType::Html;
 			$res = $res->__toString();
 		}
 

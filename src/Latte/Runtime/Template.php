@@ -26,7 +26,7 @@ class Template
 		LAYER_SNIPPET = 'snippet',
 		LAYER_LOCAL = 'local';
 
-	protected const CONTENT_TYPE = Engine::CONTENT_HTML;
+	protected const CONTENT_TYPE = Latte\ContentType::Html;
 
 	protected const BLOCKS = [];
 
@@ -167,7 +167,7 @@ class Template
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
-		Filters::$xml = static::CONTENT_TYPE === Engine::CONTENT_XML;
+		Filters::$xml = static::CONTENT_TYPE === Latte\ContentType::Xml;
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {

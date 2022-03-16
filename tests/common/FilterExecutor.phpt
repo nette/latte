@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use Latte\ContentType;
 use Latte\Runtime\FilterExecutor;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
@@ -87,7 +88,7 @@ test('', function () {
 	// classic called as FilterInfo aware
 	$filters->add('f2', fn($val) => strtolower($val));
 	Assert::exception(
-		fn() => $filters->filterContent('f2', new FilterInfo('html'), 'aA<b>'),
+		fn() => $filters->filterContent('f2', new FilterInfo(ContentType::Html), 'aA<b>'),
 		Latte\RuntimeException::class,
 		'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.',
 	);
@@ -96,13 +97,13 @@ test('', function () {
 	// FilterInfo aware called as FilterInfo aware
 	$filters->add('f3', function (FilterInfo $info, $val) {
 		$type = $info->contentType;
-		$info->contentType = 'new';
+		$info->contentType = ContentType::Css;
 		return $type . ',' . strtolower($val);
 	}, true);
 
-	$info = new FilterInfo('html');
+	$info = new FilterInfo(ContentType::Html);
 	Assert::same('html,aa', $filters->filterContent('f3', $info, 'aA'));
-	Assert::same('new', $info->contentType);
+	Assert::same(ContentType::Css, $info->contentType);
 });
 
 
@@ -124,12 +125,12 @@ test('', function () {
 	// classic called as FilterInfo aware with Latte\Runtime\Html
 	$filters->add('f5', fn($val) => new Html(strtolower($val)));
 	Assert::error(
-		fn() => $filters->filterContent('f5', new FilterInfo('text'), 'aA'),
+		fn() => $filters->filterContent('f5', new FilterInfo(ContentType::Text), 'aA'),
 		E_USER_NOTICE,
 		'Filter |f5 should be changed to content-aware filter.',
 	);
 
-	$info = new FilterInfo('text');
+	$info = new FilterInfo(ContentType::Text);
 	Assert::same('aa', @$filters->filterContent('f5', $info, 'aA')); // @ ignore E_USER_NOTICE
-	Assert::same('html', $info->contentType);
+	Assert::same(ContentType::Html, $info->contentType);
 });

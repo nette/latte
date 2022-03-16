@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use Latte\ContentType;
 use Latte\Runtime\Html;
 use Tester\Assert;
 
@@ -16,7 +17,7 @@ restore_error_handler();
 
 
 $latte = new Latte\Engine;
-$latte->setContentType($latte::CONTENT_XML);
+$latte->setContentType(ContentType::Xml);
 
 $params['hello'] = '<i>Hello</i>';
 $params['id'] = ':/item';

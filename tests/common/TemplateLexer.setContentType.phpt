@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Latte\Compiler\Token;
-use Latte\Engine;
+use Latte\ContentType;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 function tokenize($s, $contentType = null)
 {
 	$lexer = new Latte\Compiler\TemplateLexer;
-	$lexer->setContentType($contentType ?: Engine::CONTENT_HTML);
+	$lexer->setContentType($contentType ?: ContentType::Html);
 	return array_map(fn(Token $token) => [$token->type, $token->text], $lexer->tokenize($s));
 }
 
@@ -23,7 +23,7 @@ Assert::same([
 	['text', ' <div /> '],
 	['htmlTagBegin', '</script'],
 	['htmlTagEnd', '>'],
-], tokenize('<script> <div /> </script>', Engine::CONTENT_HTML));
+], tokenize('<script> <div /> </script>', ContentType::Html));
 
 Assert::same([
 	['macroTag', '{contentType html}'],
@@ -43,7 +43,7 @@ Assert::same([
 	['text', ' '],
 	['htmlTagBegin', '</script'],
 	['htmlTagEnd', '>'],
-], tokenize('<script> <div /> </script>', Engine::CONTENT_XML));
+], tokenize('<script> <div /> </script>', ContentType::Xml));
 
 Assert::same([
 	['macroTag', '{contentType xml}'],
@@ -59,7 +59,7 @@ Assert::same([
 
 Assert::same([
 	['text', '<script> <div /> </script>'],
-], tokenize('<script> <div /> </script>', Engine::CONTENT_TEXT));
+], tokenize('<script> <div /> </script>', ContentType::Text));
 
 Assert::same([
 	['macroTag', '{contentType text}'],
@@ -68,7 +68,7 @@ Assert::same([
 
 Assert::same([
 	['text', '<script> <div /> </script>'],
-], tokenize('<script> <div /> </script>', Engine::CONTENT_ICAL));
+], tokenize('<script> <div /> </script>', ContentType::ICal));
 
 Assert::same([
 	['macroTag', '{contentType ical}'],
@@ -81,4 +81,4 @@ Assert::same([
 	['text', ' '],
 	['htmlTagBegin', '<div'],
 	['htmlTagEnd', ' />'],
-], tokenize('<script /> <div />', Engine::CONTENT_HTML));
+], tokenize('<script /> <div />', ContentType::Html));

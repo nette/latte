@@ -11,7 +11,7 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Engine;
+use Latte\ContentType;
 use Latte\RegexpException;
 
 
@@ -27,12 +27,6 @@ final class TemplateLexer
 
 	/** @internal special HTML attribute prefix */
 	public const N_PREFIX = 'n:';
-
-	/** Context-aware escaping content types */
-	public const
-		CONTENT_HTML = Engine::CONTENT_HTML,
-		CONTENT_XML = Engine::CONTENT_XML,
-		CONTENT_TEXT = Engine::CONTENT_TEXT;
 
 	/** @internal states */
 	public const
@@ -366,9 +360,9 @@ final class TemplateLexer
 	 */
 	public function setContentType(string $type): static
 	{
-		if (in_array($type, [self::CONTENT_HTML, self::CONTENT_XML], true)) {
+		if (in_array($type, [ContentType::Html, ContentType::Xml], true)) {
 			$this->setContext(self::CONTEXT_HTML_TEXT);
-			$this->xmlMode = $type === self::CONTENT_XML;
+			$this->xmlMode = $type === ContentType::Xml;
 		} else {
 			$this->setContext(self::CONTEXT_NONE);
 		}
@@ -483,11 +477,11 @@ final class TemplateLexer
 
 		} elseif ($token->type === Token::MACRO_TAG && $token->name === 'contentType') {
 			if (str_contains($token->value, 'html')) {
-				$this->setContentType(self::CONTENT_HTML);
+				$this->setContentType(ContentType::Html);
 			} elseif (str_contains($token->value, 'xml')) {
-				$this->setContentType(self::CONTENT_XML);
+				$this->setContentType(ContentType::Xml);
 			} else {
-				$this->setContentType(self::CONTENT_TEXT);
+				$this->setContentType(ContentType::Text);
 			}
 		}
 	}

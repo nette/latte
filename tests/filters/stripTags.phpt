@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use Latte\ContentType;
 use Latte\Engine;
 use Latte\Essential\Filters;
 use Latte\Runtime\FilterInfo;
@@ -23,7 +24,7 @@ Assert::same(
 
 
 test('', function () {
-	$info = new FilterInfo(Engine::CONTENT_TEXT);
+	$info = new FilterInfo(ContentType::Text);
 	Assert::exception(
 		fn() => Filters::stripTags($info, ''),
 		Latte\RuntimeException::class,
@@ -33,7 +34,7 @@ test('', function () {
 
 
 test('', function () {
-	$info = new FilterInfo(Engine::CONTENT_HTML);
+	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));
 	Assert::same('&lt;  c', Filters::stripTags($info, '&lt; <b> c'));
@@ -41,7 +42,7 @@ test('', function () {
 
 
 test('', function () {
-	$info = new FilterInfo(Engine::CONTENT_XML);
+	$info = new FilterInfo(ContentType::Xml);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));
 	Assert::same('&lt;  c', Filters::stripTags($info, '&lt; <b> c'));

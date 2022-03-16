@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
-use Latte\Engine;
+use Latte\ContentType;
 use Latte\RuntimeException;
 use Nette;
 use Stringable;
@@ -189,7 +189,7 @@ class Filters
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, string $s): string
 	{
-		$source = $info->contentType ?: Engine::CONTENT_TEXT;
+		$source = $info->contentType ?: ContentType::Text;
 		if ($source === $dest) {
 			return $s;
 		} elseif ($conv = self::getConvertor($source, $dest)) {
@@ -204,7 +204,7 @@ class Filters
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
 		$table = [
-			Engine::CONTENT_TEXT => [
+			ContentType::Text => [
 				'html' => 'escapeHtmlText',
 				'htmlAttr' => 'escapeHtmlAttr',
 				'htmlAttrJs' => 'escapeHtmlAttr',
@@ -214,21 +214,21 @@ class Filters
 				'xml' => 'escapeXml',
 				'xmlAttr' => 'escapeXml',
 			],
-			Engine::CONTENT_JS => [
+			ContentType::JavaScript => [
 				'html' => 'escapeHtmlText',
 				'htmlAttr' => 'escapeHtmlAttr',
 				'htmlAttrJs' => 'escapeHtmlAttr',
 				'htmlJs' => 'escapeHtmlRawText',
 				'htmlComment' => 'escapeHtmlComment',
 			],
-			Engine::CONTENT_CSS => [
+			ContentType::Css => [
 				'html' => 'escapeHtmlText',
 				'htmlAttr' => 'escapeHtmlAttr',
 				'htmlAttrCss' => 'escapeHtmlAttr',
 				'htmlCss' => 'escapeHtmlRawText',
 				'htmlComment' => 'escapeHtmlComment',
 			],
-			Engine::CONTENT_HTML => [
+			ContentType::Html => [
 				'htmlAttr' => 'escapeHtmlAttrConv',
 				'htmlAttrJs' => 'escapeHtmlAttrConv',
 				'htmlAttrCss' => 'escapeHtmlAttrConv',
