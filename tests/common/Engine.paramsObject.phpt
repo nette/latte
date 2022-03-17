@@ -15,44 +15,22 @@ class TemplateParams
 	private $private = 'x';
 
 
-	/** @function */
+	#[Latte\Attributes\TemplateFunction]
 	public function myFunc($a)
 	{
 		return "*$a*";
 	}
 
 
-	/** @filter */
+	#[Latte\Attributes\TemplateFilter]
 	public function myFilter($a)
 	{
 		return "%$a%";
 	}
 
 
-	/** @function @filter */
-	public function both($a)
-	{
-		return "#$a#";
-	}
-
-
-	#[Latte\Attributes\TemplateFunction]
-	public function myFunc8($a)
-	{
-		return "*$a*";
-	}
-
-
-	#[Latte\Attributes\TemplateFilter]
-	/** @filter */
-	public function myFilter8($a)
-	{
-		return "%$a%";
-	}
-
-
 	#[Latte\Attributes\TemplateFilter, Latte\Attributes\TemplateFunction]
-	public function both8($a)
+	public function both($a)
 	{
 		return "#$a#";
 	}
@@ -66,9 +44,4 @@ $latte->setTempDirectory(getTempDir());
 Assert::same(
 	'%*123*% ##123## ',
 	$latte->renderToString('{myFunc($a)|myFilter} {both(123|both)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
-);
-
-Assert::same(
-	'%*123*% ##123## ',
-	$latte->renderToString('{myFunc8($a)|myFilter8} {both8(123|both8)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
 );

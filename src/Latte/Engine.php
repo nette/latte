@@ -534,15 +534,21 @@ class Engine
 
 		$methods = (new \ReflectionClass($params))->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {
-			if ($method->getAttributes(Attributes\TemplateFilter::class)
-				|| (strpos((string) $method->getDocComment(), '@filter'))
-			) {
+			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
 				$this->addFilter($method->name, [$params, $method->name]);
 			}
 
-			if ($method->getAttributes(Attributes\TemplateFunction::class)
-				|| (strpos((string) $method->getDocComment(), '@function'))
-			) {
+			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
+				$this->addFunction($method->name, [$params, $method->name]);
+			}
+
+			if (strpos((string) $method->getDocComment(), '@filter')) {
+				trigger_error('Annotation @filter is deprecated, use attribute #[Latte\Attributes\TemplateFilter]', E_USER_DEPRECATED);
+				$this->addFilter($method->name, [$params, $method->name]);
+			}
+
+			if (strpos((string) $method->getDocComment(), '@function')) {
+				trigger_error('Annotation @function is deprecated, use attribute #[Latte\Attributes\TemplateFunction]', E_USER_DEPRECATED);
 				$this->addFunction($method->name, [$params, $method->name]);
 			}
 		}
