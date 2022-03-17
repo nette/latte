@@ -26,7 +26,7 @@ Assert::match(
 	'before  after',
 	$latte->renderToString('main'),
 );
-Assert::type(Latte\CompileException::class, $args[0]);
+Assert::type(Latte\SecurityViolationException::class, $args[0]);
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 

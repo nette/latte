@@ -161,8 +161,6 @@ $template = <<<'EOD'
 	{=$obj->{"prop"}}
 	{=$obj->{"prop"}->prop}
 	{=$obj->$prop}
-	{=$obj->$$prop}
-	{=$obj->$$prop->$prop}
 	{=$obj->$prop[$x]}
 	-
 	EOD;
@@ -192,12 +190,30 @@ Assert::matchFile(
 $template = <<<'EOD'
 	optional chaining
 
-	{=$obj?->bar}
-	{=$obj??->bar}
+	{=$obj?->prop}
+	{=$obj??->prop}
+	{=$obj?->bar()}
+	{=$obj??->bar()}
 	-
 	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/code.optional-chaining.phtml',
+	$latte->compile($template),
+);
+
+
+// firstclass callable
+$template = <<<'EOD'
+	firstclass callable
+
+	{=trim(...)}
+	{=$obj->foo(...)}
+	{=$obj::foo(...)}
+	-
+	EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/code.callable.phtml',
 	$latte->compile($template),
 );

@@ -316,7 +316,7 @@ final class TemplateParser
 			}
 			throw new CompileException("Unexpected tag {{$name}}$hint", $pos);
 		} elseif (!$this->isTagAllowed($name)) {
-			throw new SecurityViolationException("Tag {{$name}} is not allowed.");
+			throw new SecurityViolationException("Tag {{$name}} is not allowed", $pos);
 		}
 
 		return $this->tagParsers[$name];

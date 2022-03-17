@@ -12,7 +12,6 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\Compiler\Escaper;
 use Latte\Engine;
-use Latte\Policy;
 
 
 /**
@@ -53,7 +52,6 @@ class Template
 
 	private Engine $engine;
 	private string $name;
-	private ?Policy $policy = null;
 	private ?Template $referringTemplate = null;
 	private ?string $referenceType = null;
 
@@ -68,13 +66,11 @@ class Template
 		FilterExecutor $filters,
 		array $providers,
 		string $name,
-		?Policy $policy,
 	) {
 		$this->engine = $engine;
 		$this->params = $params;
 		$this->filters = $filters;
 		$this->name = $name;
-		$this->policy = $policy;
 		$this->global = (object) $providers;
 		$this->initBlockLayer(self::LayerTop);
 		$this->initBlockLayer(self::LayerLocal);
@@ -404,51 +400,5 @@ class Template
 	public function hasBlock(string $name): bool
 	{
 		return isset($this->blocks[self::LayerLocal][$name]) || isset($this->blocks[self::LayerTop][$name]);
-	}
-
-
-	/********************* policy ****************d*g**/
-
-
-	/**
-	 * @internal
-	 */
-	protected function call(mixed $callable): mixed
-	{
-		if (!is_callable($callable)) {
-			throw new Latte\SecurityViolationException('Invalid callable.');
-		} elseif (is_string($callable)) {
-			$parts = explode('::', $callable);
-			$allowed = count($parts) === 1
-				? $this->policy->isFunctionAllowed($parts[0])
-				: $this->policy->isMethodAllowed(...$parts);
-		} elseif (is_array($callable)) {
-			$allowed = $this->policy->isMethodAllowed(is_object($callable[0]) ? get_class($callable[0]) : $callable[0], $callable[1]);
-		} elseif (is_object($callable)) {
-			$allowed = $callable instanceof \Closure
-				? true
-				: $this->policy->isMethodAllowed($callable::class, '__invoke');
-		} else {
-			$allowed = false;
-		}
-
-		if (!$allowed) {
-			is_callable($callable, false, $text);
-			throw new Latte\SecurityViolationException("Calling $text() is not allowed.");
-		}
-		return $callable;
-	}
-
-
-	/**
-	 * @internal
-	 */
-	protected function prop(mixed $obj, mixed $prop): mixed
-	{
-		$class = is_object($obj) ? $obj::class : $obj;
-		if (is_string($class) && !$this->policy->isPropertyAllowed($class, (string) $prop)) {
-			throw new Latte\SecurityViolationException("Access to '$prop' property on a $class object is not allowed.");
-		}
-		return $obj;
 	}
 }

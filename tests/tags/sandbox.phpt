@@ -44,8 +44,8 @@ Assert::match(
 
 Assert::exception(
 	fn() => $latte->renderToString('main3'),
-	Latte\CompileException::class,
-	'Tag {var} is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Tag {var} is not allowed (at column 4)',
 );
 
 Assert::exception(

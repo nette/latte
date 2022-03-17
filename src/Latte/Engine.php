@@ -112,7 +112,6 @@ class Engine
 			$this->filters,
 			$this->providers,
 			$name,
-			$this->sandboxed ? $this->policy : null,
 		);
 	}
 
@@ -134,10 +133,8 @@ class Engine
 			$code = $this->generate($node, $name);
 
 		} catch (\Throwable $e) {
-			if (!$e instanceof CompileException) {
-				$e = new CompileException($e instanceof SecurityViolationException
-					? $e->getMessage()
-					: "Thrown exception '{$e->getMessage()}'", previous: $e);
+			if (!$e instanceof CompileException && !$e instanceof SecurityViolationException) {
+				$e = new CompileException("Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
 			throw $e->setSource($source, $name);
@@ -162,7 +159,7 @@ class Engine
 
 		return $parser
 			->setContentType($this->contentType)
-			->setPolicy($this->sandboxed ? $this->policy : null)
+			->setPolicy($this->getPolicy(effective: true))
 			->parse($source, $lexer);
 	}
 
@@ -449,6 +446,14 @@ class Engine
 	{
 		$this->policy = $policy;
 		return $this;
+	}
+
+
+	public function getPolicy(bool $effective = false): ?Policy
+	{
+		return !$effective || $this->sandboxed
+			? $this->policy
+			: null;
 	}
 
 

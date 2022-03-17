@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Tester\Assert;
-use Tester\Expect;
 
 
 require __DIR__ . '/../bootstrap.php';
@@ -12,8 +11,14 @@ require __DIR__ . '/Policy.Logger.php';
 
 class MyClass
 {
-	public static $static = 1;
-	public $bar = 1;
+	public function __call(string $nm, array $args)
+	{
+	}
+
+
+	public static function foo()
+	{
+	}
 }
 
 
@@ -27,38 +32,37 @@ $latte->setSandboxMode();
 
 $template = <<<'EOD'
 	{var $class = MyClass}
-	{var $prop = bar}
+	{=preg_replace_callback('/./', [$class, 'foo'], 'b')}
+	{=preg_replace_callback('/./', [$obj, 'a'], 'b')}
 
-	{=\MyClass::$static ?? null}
-	{=$obj->bar ?? null}
-	{=$obj->$prop ?? null}
-
-	{=$obj?->bar}
-	{=$obj?->$prop}
-	{=$obj??->bar}
+	{=trim(...)::class}
+	{=$obj->b(...)::class}
+	{=$obj::foo(...)::class}
 	EOD;
 
 $latte->compile($template);
 Assert::equal(
 	[
-		'tags' => Expect::type('array'),
+		'tags' => ['var', '=', '=', '=', '=', '='],
+		'functions' => ['preg_replace_callback', 'preg_replace_callback'],
 	],
 	$policy->log,
 );
 
 
+// run-time
+$latte->warmupCache($template);
+$policy->log = [];
 $latte->renderToString($template, ['obj' => new MyClass]);
 Assert::equal(
 	[
-		'tags' => Expect::type('array'),
-		'properties' => [
-			['MyClass', 'static'],
-			['MyClass', 'bar'],
-			['MyClass', 'bar'],
-			['MyClass', 'bar'],
-			['MyClass', 'bar'],
-			['MyClass', 'bar'],
+		'methods' => [
+			['MyClass', 'foo'],
+			['MyClass', 'a'],
+			['MyClass', 'b'],
+			['MyClass', 'foo'],
 		],
+		'functions' => ['trim'],
 	],
 	$policy->log,
 );

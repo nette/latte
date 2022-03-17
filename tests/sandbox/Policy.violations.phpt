@@ -22,44 +22,44 @@ $latte->setSandboxMode();
 
 Assert::exception(
 	fn() => $latte->compile('{default $abc}'),
-	Latte\CompileException::class,
-	'Tag {default} is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Tag {default} is not allowed (at column 1)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<span n:class=""></span>'),
-	Latte\CompileException::class,
-	'Attribute n:class is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Attribute n:class is not allowed (at column 7)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{$abc|upper}'),
-	Latte\CompileException::class,
-	'Filter |upper is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Filter |upper is not allowed (at column 6)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{$abc|noescape}'),
-	Latte\CompileException::class,
-	'Filter |noescape is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Filter |noescape is not allowed (at column 6)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<a href="{$abc|nocheck}">'),
-	Latte\CompileException::class,
-	'Filter |nocheck is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Filter |nocheck is not allowed (at column 15)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<a href="{$abc|datastream}">'),
-	Latte\CompileException::class,
-	'Filter |datastream is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Filter |datastream is not allowed (at column 15)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{trim(123)}'),
-	Latte\CompileException::class,
-	'Function trim() is not allowed.',
+	Latte\SecurityViolationException::class,
+	'Function trim() is not allowed (at column 2)',
 );
 
 Assert::exception(
@@ -142,62 +142,44 @@ Assert::error(
 
 Assert::exception(
 	fn() => $latte->compile('{$this->filters}'),
-	Latte\CompileException::class,
-	'Forbidden variable $this.',
+	Latte\SecurityViolationException::class,
+	'Forbidden variable $this (at column 2)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{${"this"}}'),
-	Latte\CompileException::class,
-	'Forbidden variable variables.',
-);
-
-Assert::exception(
-	fn() => $latte->compile('{$$x}}'),
-	Latte\CompileException::class,
-	'Forbidden variable variables.',
+	Latte\SecurityViolationException::class,
+	'Forbidden variable variables (at column 2)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{do echo 123}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'echo' inside tag.",
+	"Keyword 'echo' is forbidden in Latte (at column 5)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{do return 123}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'return' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{do yield 123}'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'yield' inside tag.",
+	"Unexpected 'return' (at column 5)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{do new stdClass}'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'new' inside tag.",
+	Latte\SecurityViolationException::class,
+	"Forbidden keyword 'new' (at column 5)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{var $a = new stdClass}'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'new' inside tag.",
+	Latte\SecurityViolationException::class,
+	"Forbidden keyword 'new' (at column 11)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{parameters $a = new stdClass}'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'new' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{="${var}"}'),
-	Latte\CompileException::class,
-	'Syntax ${...} is not supported (at column 4)',
+	Latte\SecurityViolationException::class,
+	"Forbidden keyword 'new' (at column 18)",
 );
 
 Assert::noError(fn() => $latte->compile('{=\'${var}\'}'));

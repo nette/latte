@@ -492,7 +492,7 @@ final class TemplateParserHtml
 				: '';
 			throw new CompileException("Unknown n:{$name}{$hint}", $pos);
 		} elseif (!$this->parser->isTagAllowed($name)) {
-			throw new SecurityViolationException("Attribute n:$name is not allowed.");
+			throw new SecurityViolationException("Attribute n:$name is not allowed", $pos);
 		}
 		return $this->attrParsers[$name];
 	}

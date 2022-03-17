@@ -53,6 +53,14 @@ class RegexpException extends \Exception implements Exception
  */
 class SecurityViolationException extends \Exception implements Exception
 {
+	use PositionAwareException;
+
+	public function __construct(string $message, ?Compiler\Position $position = null)
+	{
+		parent::__construct($message);
+		$this->position = $position;
+		$this->generateMessage();
+	}
 }
 
 

@@ -49,6 +49,8 @@ $template = <<<'EOD'
 	{=$obj->$method()}
 	{=[$obj, $method]()}
 
+	{=$obj?->foo()}
+	{=$obj??->foo()}
 	EOD;
 
 // compile-time
@@ -56,7 +58,7 @@ $latte->compile($template);
 Assert::equal(
 	[
 		'tags' => Expect::type('array'),
-		'functions' => ['trim', '\\trim', 'ns\\test'],
+		'functions' => ['trim', 'trim', 'ns\\test'],
 	],
 	$policy->log,
 );
@@ -70,6 +72,8 @@ Assert::same(
 	[
 		'functions' => ['trim', 'trim'],
 		'methods' => [
+			['MyClass', 'foo'],
+			['MyClass', 'foo'],
 			['MyClass', 'foo'],
 			['MyClass', 'foo'],
 			['MyClass', 'foo'],

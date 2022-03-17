@@ -25,10 +25,12 @@ $latte->setTempDirectory(getTempDir());
 $policy = new PolicyLogger;
 $latte->setPolicy($policy);
 $latte->setSandboxMode();
+$latte->addFilter('callable', fn() => '');
 
 $template = <<<'EOD'
 	{var $var = ("xxx"|upper|truncate:10)}
 	{$var|lower|truncate:20}
+	{$var|callable:[MyClass, foo]}
 
 	EOD;
 
@@ -37,7 +39,7 @@ $latte->compile($template);
 Assert::equal(
 	[
 		'tags' => Expect::type('array'),
-		'filters' => ['upper', 'truncate', 'lower', 'truncate'],
+		'filters' => ['upper', 'truncate', 'lower', 'truncate', 'callable'],
 	],
 	$policy->log,
 );
@@ -48,6 +50,8 @@ $latte->warmupCache($template);
 $policy->log = [];
 $latte->renderToString($template);
 Assert::same(
-	[],
+	[
+		'methods' => [['MyClass', 'foo']],
+	],
 	$policy->log,
 );

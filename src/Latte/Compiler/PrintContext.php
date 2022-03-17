@@ -279,6 +279,14 @@ final class PrintContext
 	}
 
 
+	public function memberAsString(Node $node): string
+	{
+		return $node instanceof Nodes\NameNode || $node instanceof Nodes\IdentifierNode
+			? $this->encodeString((string) $node)
+			: $node->print($this);
+	}
+
+
 	/**
 	 * Wraps the LHS of a call in parentheses if needed.
 	 */
