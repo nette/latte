@@ -28,9 +28,11 @@ class MacroSet extends Latte\Extension
 	private array $macros;
 
 
-	public function __construct(Compiler $compiler)
+	public function __construct(Compiler $compiler = null)
 	{
-		$this->compiler = $compiler;
+		if ($compiler) {
+			$this->compiler = $compiler;
+		}
 	}
 
 
