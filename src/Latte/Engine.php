@@ -133,9 +133,7 @@ class Engine
 		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
 
 		try {
-			$tokens = $lexer
-				->setContentType($this->contentType)
-				->tokenize($source);
+			$tokens = $lexer->tokenize($source, $this->contentType);
 
 			$code = $compiler
 				->setContentType($this->contentType)
