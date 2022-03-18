@@ -20,7 +20,7 @@ Assert::same(
 
 
 // static method
-$latte->addFunction('fnc', 'Latte\Runtime\Filters::reverse');
+$latte->addFunction('fnc', 'Latte\Essential\Filters::reverse');
 Assert::same(
 	' cba ',
 	$latte->renderToString('{fnc(" abc ")}'),
@@ -28,7 +28,7 @@ Assert::same(
 
 
 // static method 2
-$latte->addFunction('fnc', [Latte\Runtime\Filters::class, 'reverse']);
+$latte->addFunction('fnc', [Latte\Essential\Filters::class, 'reverse']);
 Assert::same(
 	' cba ',
 	$latte->renderToString('{fnc(" abc ")}'),

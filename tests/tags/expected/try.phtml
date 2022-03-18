@@ -5,12 +5,12 @@
 		try /* line 1 */ {
 			echo '	a
 ';
-			throw new LR\RollbackException;
+			throw new Latte\Essential\RollbackException;
 			echo '	b
 ';
 		} catch (Throwable $ʟ_e) {
 			ob_end_clean();
-			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+			if (!($ʟ_e instanceof Latte\Essential\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			}
 			echo '	c

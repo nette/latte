@@ -16,6 +16,8 @@ use Latte\Compiler\PhpWriter;
 use Latte\Compiler\Tag;
 use Latte\Engine;
 use Latte\Helpers;
+use Latte\RuntimeException;
+use Nette;
 
 
 /**
@@ -62,7 +64,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('default', [$me, 'macroVar']);
 		$me->addMacro('dump', [$me, 'macroDump']);
 		$me->addMacro('debugbreak', [$me, 'macroDebugbreak']);
-		$me->addMacro('trace', 'LR\Tracer::throw() %node.line;');
+		$me->addMacro('trace', 'Latte\Essential\Tracer::throw() %node.line;');
 		$me->addMacro('l', '?>{<?php');
 		$me->addMacro('r', '?>}<?php');
 
@@ -100,7 +102,7 @@ class CoreMacros extends MacroSet
 	public function finalize()
 	{
 		if ($this->printTemplate) {
-			return ["(new Latte\\Runtime\\Blueprint)->printClass(\$this, {$this->printTemplate}); exit;"];
+			return ["(new Latte\\Essential\\Blueprint)->printClass(\$this, {$this->printTemplate}); exit;"];
 		}
 
 		$code = '';
@@ -294,7 +296,7 @@ class CoreMacros extends MacroSet
 		$node->data->codeCatch = '<?php
 			} catch (Throwable $ʟ_e) {
 				ob_end_clean();
-				if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+				if (!($ʟ_e instanceof Latte\Essential\RollbackException) && isset($this->global->coreExceptionHandler)) {
 					($this->global->coreExceptionHandler)($ʟ_e, $this);
 				}
 			?>';
@@ -321,7 +323,7 @@ class CoreMacros extends MacroSet
 
 		$node->validate(false);
 
-		return $writer->write('throw new LR\RollbackException;');
+		return $writer->write('throw new Latte\Essential\RollbackException;');
 	}
 
 
@@ -458,8 +460,8 @@ class CoreMacros extends MacroSet
 	{
 		$node->validate(false);
 		$node->openingCode = $writer->write($node->context[0] === Engine::CONTENT_HTML
-			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
-			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096) %node.line; try { ?>");
+			? "<?php ob_start('Latte\\Essential\\Filters::spacelessHtmlHandler', 4096) %node.line; try { ?>"
+			: "<?php ob_start('Latte\\Essential\\Filters::spacelessText', 4096) %node.line; try { ?>");
 		$node->closingCode = '<?php } finally { ob_end_flush(); } ?>';
 	}
 
@@ -518,7 +520,7 @@ class CoreMacros extends MacroSet
 			&& preg_match('#\$iterator\W|\Wget_defined_vars\W#', $this->getCompiler()->expandTokens($node->content))
 		) {
 			$args = preg_replace('#(.*)\s+as\s+#i', '$1, $ʟ_it ?? null) as ', $args, 1);
-			$node->openingCode .= $writer->write('foreach ($iterator = $ʟ_it = new LR\CachingIterator(%raw) %node.line { ?>', $args);
+			$node->openingCode .= $writer->write('foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(%raw) %node.line { ?>', $args);
 			$node->closingCode = '<?php $iterations++; } $iterator = $ʟ_it = $ʟ_it->getParent(); ?>';
 		} else {
 			$node->openingCode .= $writer->write('foreach (%raw) %node.line { ?>', $args);
@@ -909,7 +911,7 @@ class CoreMacros extends MacroSet
 		$vars = $node->tokenizer->fetchWord() === 'all'
 			? 'get_defined_vars()'
 			: 'array_diff_key(get_defined_vars(), $this->getParameters())';
-		return "(new Latte\\Runtime\\Blueprint)->printVars($vars); exit;";
+		return "(new Latte\\Essential\\Blueprint)->printVars($vars); exit;";
 	}
 
 

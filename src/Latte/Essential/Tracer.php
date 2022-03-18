@@ -7,16 +7,17 @@
 
 declare(strict_types=1);
 
-namespace Latte\Runtime;
+namespace Latte\Essential;
 
 use Latte;
 use Latte\Engine;
+use Latte\Runtime\Template;
 
 
 /**
  * @internal
  */
-class Tracer
+final class Tracer
 {
 	public static function throw(): void
 	{

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::stripHtml()
+ * Test: Latte\Essential\Filters::stripHtml()
  */
 
 declare(strict_types=1);
 
 use Latte\Engine;
+use Latte\Essential\Filters;
 use Latte\Runtime\FilterInfo;
-use Latte\Runtime\Filters;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

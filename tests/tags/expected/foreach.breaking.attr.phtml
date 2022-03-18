@@ -36,7 +36,7 @@
 <ul title="foreach skip">
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) /* line 11 */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) /* line 11 */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($i) /* line 11 */;
 			if (true) /* line 11 */ {
@@ -79,7 +79,7 @@
 <ul title="inner foreach skip">
 	<li>';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) /* line 24 */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator([0, 1, 2, 3], $ʟ_it ?? null) as $i) /* line 24 */ {
 			echo LR\Filters::escapeHtmlText($i) /* line 24 */;
 			if (true) /* line 24 */ {
 				$iterator->skipRound();

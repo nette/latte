@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->addFilter('datastream', 'Latte\Runtime\Filters::dataStream');
+$latte->addFilter('datastream', 'Latte\Essential\Filters::dataStream');
 $params['url1'] = 'javascript:alert(1)';
 $params['url2'] = ' javascript:alert(1)';
 $params['url3'] = 'data:text/html;base64,PHN2Zy9vbmxvYWQ9YWxlcnQoMik+';

@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Runtime\Filters;
 use Latte\RuntimeException;
 use Nette;
 
@@ -32,20 +31,20 @@ final class CoreExtension extends Latte\Extension
 			'dataStream' => [Filters::class, 'dataStream'],
 			'datastream' => [Filters::class, 'dataStream'],
 			'date' => [Filters::class, 'date'],
-			'escapeCss' => [Filters::class, 'escapeCss'],
-			'escapeHtml' => [Filters::class, 'escapeHtml'],
-			'escapeHtmlComment' => [Filters::class, 'escapeHtmlComment'],
-			'escapeICal' => [Filters::class, 'escapeICal'],
-			'escapeJs' => [Filters::class, 'escapeJs'],
+			'escapeCss' => [Latte\Runtime\Filters::class, 'escapeCss'],
+			'escapeHtml' => [Latte\Runtime\Filters::class, 'escapeHtml'],
+			'escapeHtmlComment' => [Latte\Runtime\Filters::class, 'escapeHtmlComment'],
+			'escapeICal' => [Latte\Runtime\Filters::class, 'escapeICal'],
+			'escapeJs' => [Latte\Runtime\Filters::class, 'escapeJs'],
 			'escapeUrl' => 'rawurlencode',
-			'escapeXml' => [Filters::class, 'escapeXml'],
+			'escapeXml' => [Latte\Runtime\Filters::class, 'escapeXml'],
 			'explode' => [Filters::class, 'explode'],
 			'first' => [Filters::class, 'first'],
 			'firstUpper' => extension_loaded('mbstring')
 				? [Filters::class, 'firstUpper']
 				: function () { throw new RuntimeException('Filter |firstUpper requires mbstring extension.'); },
 			'floor' => [Filters::class, 'floor'],
-			'checkUrl' => [Filters::class, 'safeUrl'],
+			'checkUrl' => [Latte\Runtime\Filters::class, 'safeUrl'],
 			'implode' => [Filters::class, 'implode'],
 			'indent' => [Filters::class, 'indent'],
 			'join' => [Filters::class, 'implode'],

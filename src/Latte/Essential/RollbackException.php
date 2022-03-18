@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Latte\Runtime;
+namespace Latte\Essential;
 
 
 /** @internal */

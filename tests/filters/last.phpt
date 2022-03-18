@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Latte\Runtime\Filters::last()
+ * Test: Latte\Essential\Filters::last()
  */
 
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Essential\Filters;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

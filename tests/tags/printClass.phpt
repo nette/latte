@@ -14,7 +14,7 @@ $latte->addFunction('Abc', function (stdClass $a, $b = 132) {});
 
 $template = $latte->createTemplate('', ['int' => 123, 'unknown' => null]);
 
-$printer = new Latte\Runtime\Blueprint;
+$printer = new Latte\Essential\Blueprint;
 ob_start();
 $printer->printClass($template);
 $res = ob_get_clean();
