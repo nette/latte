@@ -7,18 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Latte\Runtime;
+namespace Latte\Essential;
 
+use Latte;
+use Latte\Runtime\Filters;
 use Latte\RuntimeException;
-use Nette\Utils\Strings;
+use Nette;
 
 
-/**
- * @internal
- */
-class Defaults
+final class CoreExtension extends Latte\Extension
 {
-	/** @return array<string, callable> */
 	public function getFilters(): array
 	{
 		return [
@@ -82,14 +80,13 @@ class Defaults
 			'upper' => extension_loaded('mbstring')
 				? [Filters::class, 'upper']
 				: function () { throw new RuntimeException('Filter |upper requires mbstring extension.'); },
-			'webalize' => class_exists(Strings::class)
-				? [Strings::class, 'webalize']
+			'webalize' => class_exists(Nette\Utils\Strings::class)
+				? [Nette\Utils\Strings::class, 'webalize']
 				: function () { throw new RuntimeException('Filter |webalize requires nette/utils package.'); },
 		];
 	}
 
 
-	/** @return array<string, callable> */
 	public function getFunctions(): array
 	{
 		return [
