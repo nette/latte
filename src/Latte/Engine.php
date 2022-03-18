@@ -57,15 +57,7 @@ class Engine
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new \stdClass;
 		$this->probe = function () {};
-
-		$defaults = new Runtime\Defaults;
-		foreach ($defaults->getFilters() as $name => $callback) {
-			$this->filters->add($name, $callback);
-		}
-
-		foreach ($defaults->getFunctions() as $name => $callback) {
-			$this->functions->$name = $callback;
-		}
+		$this->addExtension(new Essential\CoreExtension);
 	}
 
 
@@ -333,6 +325,14 @@ class Engine
 	public function addExtension(Extension $extension): static
 	{
 		$this->extensions[] = $extension;
+		foreach ($extension->getFilters() as $name => $callback) {
+			$this->filters->add($name, $callback);
+		}
+
+		foreach ($extension->getFunctions() as $name => $callback) {
+			$this->functions->$name = $callback;
+		}
+
 		$this->providers = array_merge($this->providers, $extension->getProviders());
 		return $this;
 	}

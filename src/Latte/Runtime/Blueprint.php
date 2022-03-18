@@ -32,7 +32,7 @@ class Blueprint
 		$class = $namespace->addClass(Php\Helpers::extractShortName($name));
 
 		$this->addProperties($class, $template->getParameters());
-		$functions = array_diff_key((array) $template->global->fn, (new Defaults)->getFunctions());
+		$functions = array_diff_key((array) $template->global->fn, (new Latte\Essential\CoreExtension)->getFunctions());
 		$this->addFunctions($class, $functions);
 
 		$end = $this->printCanvas();
