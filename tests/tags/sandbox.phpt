@@ -28,11 +28,11 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('main1');
-}, PHP_VERSION_ID < 80000 ? E_NOTICE : E_WARNING, 'Undefined variable%a%var');
+}, E_WARNING, 'Undefined variable%a%var');
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('main1', ['var' => 123]);
-}, PHP_VERSION_ID < 80000 ? E_NOTICE : E_WARNING, 'Undefined variable%a%var');
+}, E_WARNING, 'Undefined variable%a%var');
 
 Assert::match(
 	'before <b>included 1</b> after',

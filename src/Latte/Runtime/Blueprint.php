@@ -31,17 +31,12 @@ class Blueprint
 		$namespace = new Php\PhpNamespace(Php\Helpers::extractNamespace($name));
 		$class = $namespace->addClass(Php\Helpers::extractShortName($name));
 
-		$this->addProperties($class, $template->getParameters(), true);
+		$this->addProperties($class, $template->getParameters());
 		$functions = array_diff_key((array) $template->global->fn, (new Defaults)->getFunctions());
 		$this->addFunctions($class, $functions);
 
 		$end = $this->printCanvas();
 		$this->printHeader('Native types');
-		$this->printCode((string) $namespace);
-
-		$this->addProperties($class, $template->getParameters(), false);
-
-		$this->printHeader('phpDoc types');
 		$this->printCode((string) $namespace);
 		echo $end;
 	}
@@ -76,19 +71,13 @@ class Blueprint
 	/**
 	 * @param  mixed[]  $props
 	 */
-	public function addProperties(Php\ClassType $class, array $props, ?bool $native = null): void
+	public function addProperties(Php\ClassType $class, array $props): void
 	{
 		$printer = new Php\Printer;
-		$native = $native ?? (PHP_VERSION_ID >= 70400);
 		foreach ($props as $name => $value) {
 			$type = Php\Type::getType($value);
 			$prop = $class->addProperty($name);
-			if ($native) {
-				$prop->setType($type);
-			} else {
-				$doctype = $this->printType($type, false, $class->getNamespace()) ?: 'mixed';
-				$prop->setComment("@var $doctype");
-			}
+			$prop->setType($type);
 		}
 	}
 

@@ -52,7 +52,7 @@ Assert::match(
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('main6');
-}, PHP_VERSION_ID < 80000 ? E_NOTICE : E_WARNING, 'Undefined variable%a%');
+}, E_WARNING, 'Undefined variable%a%');
 
 Assert::matchFile(
 	__DIR__ . '/expected/include.block.from.phtml',

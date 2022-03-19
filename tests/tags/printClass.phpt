@@ -20,9 +20,8 @@ ob_start();
 $printer->printClass($template);
 $res = ob_get_clean();
 
-if (PHP_VERSION_ID >= 70400) {
-	Assert::match(
-		'%A%/**
+Assert::match(
+	'%A%/**
  * @method mixed Abc(stdClass $a, $b = 132)
  */
 class Template
@@ -31,23 +30,5 @@ class Template
 	public $unknown;
 }
 %A%',
-		$res
-	);
-
-} else {
-	Assert::match(
-		'%A%/**
- * @method mixed Abc(stdClass $a, $b = 132)
- */
-class Template
-{
-	/** @var int */
-	public $int;
-
-	/** @var mixed */
-	public $unknown;
-}
-%A%',
-		$res
-	);
-}
+	$res
+);

@@ -68,9 +68,7 @@ Assert::same(
 	$latte->renderToString('{myFunc($a)|myFilter} {both(123|both)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
 );
 
-if (PHP_VERSION_ID >= 80000) {
-	Assert::same(
-		'%*123*% ##123## ',
-		$latte->renderToString('{myFunc8($a)|myFilter8} {both8(123|both8)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
-	);
-}
+Assert::same(
+	'%*123*% ##123## ',
+	$latte->renderToString('{myFunc8($a)|myFilter8} {both8(123|both8)} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams)
+);
