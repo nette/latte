@@ -42,7 +42,7 @@ $template = <<<'EOD'
 $latte->compile($template);
 Assert::equal(
 	[
-		'macros' => Expect::type('array'),
+		'tags' => Expect::type('array'),
 	],
 	$policy->log,
 );
@@ -51,7 +51,7 @@ Assert::equal(
 $latte->renderToString($template, ['obj' => new MyClass]);
 Assert::equal(
 	[
-		'macros' => Expect::type('array'),
+		'tags' => Expect::type('array'),
 		'properties' => [
 			['MyClass', 'static'],
 			['MyClass', 'static'],

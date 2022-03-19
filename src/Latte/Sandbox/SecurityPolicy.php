@@ -77,17 +77,6 @@ class SecurityPolicy implements Latte\Policy
 
 
 	/**
-	 * @deprecated  use allowTags()
-	 */
-	public function allowMacros(array $tags): self
-	{
-		trigger_error(__METHOD__ . '() is deprecated, use allowTags()', E_USER_DEPRECATED);
-		$this->allowTags($tags);
-		return $this;
-	}
-
-
-	/**
 	 * @param  string[]  $tags
 	 */
 	public function allowTags(array $tags): self
@@ -139,9 +128,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
-	public function isMacroAllowed(string $macro): bool
+	public function isTagAllowed(string $tag): bool
 	{
-		return isset($this->tags[strtolower($macro)]) || isset($this->tags['*']);
+		return isset($this->tags[strtolower($tag)]) || isset($this->tags['*']);
 	}
 
 

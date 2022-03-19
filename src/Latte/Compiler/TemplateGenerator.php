@@ -794,7 +794,7 @@ final class TemplateGenerator
 				. (in_array($this->context, [Escaper::HtmlJavaScript, Escaper::HtmlCss], true) ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : '');
 			throw new CompileException("Unknown tag {{$name}}$hint");
 
-		} elseif ($this->policy && !$this->policy->isMacroAllowed($name)) {
+		} elseif ($this->policy && !$this->policy->isTagAllowed($name)) {
 			throw new SecurityViolationException('Tag ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
 		}
 

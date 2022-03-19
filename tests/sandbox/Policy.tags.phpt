@@ -36,7 +36,7 @@ $template = <<<'EOD'
 $latte->compile($template);
 Assert::same(
 	[
-		'macros' => ['var', '=', 'foreach'],
+		'tags' => ['var', '=', 'foreach'],
 	],
 	$policy->log,
 );
