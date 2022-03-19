@@ -19,7 +19,7 @@ Assert::exception(
 	'Tag {=} is not allowed.',
 );
 
-$policy->allowMacros(['=']);
+$policy->allowTags(['=']);
 
 Assert::noError(fn() => $latte->compile('{$abc}'));
 
@@ -29,7 +29,7 @@ Assert::exception(
 	'Tag {var} is not allowed.',
 );
 
-$policy->allowMacros($policy::All);
+$policy->allowTags($policy::All);
 
 Assert::noError(fn() => $latte->compile('{var $abc}'));
 

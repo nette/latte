@@ -12,7 +12,7 @@ namespace Latte;
 
 interface Policy
 {
-	function isMacroAllowed(string $macro): bool;
+	function isTagAllowed(string $macro): bool;
 
 	function isFilterAllowed(string $filter): bool;
 

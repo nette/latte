@@ -36,7 +36,7 @@ $template = <<<'EOD'
 $latte->compile($template);
 Assert::equal(
 	[
-		'macros' => Expect::type('array'),
+		'tags' => Expect::type('array'),
 		'filters' => ['upper', 'truncate', 'lower', 'truncate'],
 	],
 	$policy->log,

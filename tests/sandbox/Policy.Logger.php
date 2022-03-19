@@ -8,9 +8,9 @@ class PolicyLogger implements Latte\Policy
 	public $log = [];
 
 
-	public function isMacroAllowed(string $macro): bool
+	public function isTagAllowed(string $macro): bool
 	{
-		$this->log['macros'][] = $macro;
+		$this->log['tags'][] = $macro;
 		return true;
 	}
 

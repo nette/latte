@@ -23,7 +23,7 @@ class SecurityPolicy implements Latte\Policy
 	public const ALL = self::All;
 
 	/** @var string[] */
-	private array $macros = [];
+	private array $tags = [];
 
 	/** @var string[] */
 	private array $filters = [];
@@ -50,7 +50,7 @@ class SecurityPolicy implements Latte\Policy
 
 		// does not include: contentType, debugbreak, dump, extends, import, include, layout,
 		// php (but 'do' is allowed), sandbox, snippet, snippetArea, templatePrint, varPrint, embed
-		$policy->allowMacros([
+		$policy->allowTags([
 			'_', '=', 'attr', 'block', 'breakIf', 'capture', 'case', 'class', 'continueIf', 'default',
 			'define', 'do', 'else', 'elseif', 'elseifset', 'first', 'for', 'foreach', 'if', 'ifchanged',
 			'ifcontent', 'iterateWhile', 'ifset', 'l', 'last', 'r', 'rollback', 'sep', 'skipIf', 'spaceless',
@@ -77,11 +77,11 @@ class SecurityPolicy implements Latte\Policy
 
 
 	/**
-	 * @param  string[]  $macros
+	 * @param  string[]  $tags
 	 */
-	public function allowMacros(array $macros): self
+	public function allowTags(array $tags): self
 	{
-		$this->macros += array_flip(array_map('strtolower', $macros));
+		$this->tags += array_flip(array_map('strtolower', $tags));
 		return $this;
 	}
 
@@ -128,9 +128,9 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
-	public function isMacroAllowed(string $macro): bool
+	public function isTagAllowed(string $macro): bool
 	{
-		return isset($this->macros[strtolower($macro)]) || isset($this->macros['*']);
+		return isset($this->tags[strtolower($macro)]) || isset($this->tags['*']);
 	}
 
 

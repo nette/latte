@@ -9,7 +9,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=']));
 
 Assert::noError(fn() => $latte->compile('{var $abc}'));
 
