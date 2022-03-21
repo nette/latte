@@ -477,17 +477,4 @@ class Template
 		}
 		return $obj;
 	}
-
-
-	/**
-	 * @return mixed
-	 */
-	public function &__get(string $name)
-	{
-		if ($name === 'blocks') { // compatibility with nette/application < 3.0.8
-			$tmp = static::BLOCKS[self::LAYER_TOP] ?? [];
-			return $tmp;
-		}
-		throw new \LogicException('Attempt to read undeclared property ' . self::class . '::$' . $name);
-	}
 }
