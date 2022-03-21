@@ -27,16 +27,12 @@ $latte->setSandboxMode();
 
 $template = <<<'EOD'
 	{var $class = MyClass}
-	{var $staticProp = 'static'}
 	{=\MyClass::$static}
-	{=\MyClass::$$staticProp}
 	{=$class::$static}
-	{=$class::$$staticProp}
 
 	{var $prop = bar}
 	{=$obj -> bar}
 	{=$obj->$prop}
-	{=$obj::$$staticProp}
 	EOD;
 
 $latte->compile($template);
@@ -55,11 +51,8 @@ Assert::equal(
 		'properties' => [
 			['MyClass', 'static'],
 			['MyClass', 'static'],
-			['MyClass', 'static'],
-			['MyClass', 'static'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
-			['MyClass', 'static'],
 		],
 	],
 	$policy->log,

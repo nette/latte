@@ -26,17 +26,14 @@ $latte->setSandboxMode();
 $template = <<<'EOD'
 	{var $class = MyClass}
 	{var $prop = bar}
-	{var $staticProp = 'static'}
 
 	{=\MyClass::$static++}
-	{=\MyClass::$$staticProp++}
 	{=$obj->bar++}
 	{=$obj->$prop++}
-	{=$obj::$$staticProp++}
 	EOD;
 
 $obj = new MyClass;
 $latte->renderToString($template, ['obj' => $obj]);
 
 Assert::same(3, $obj->bar);
-Assert::same(4, MyClass::$static);
+Assert::same(2, MyClass::$static);

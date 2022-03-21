@@ -293,6 +293,16 @@ final class PrintContext
 	}
 
 
+	public function propertyAsValue($node): string
+	{
+		if ($node instanceof ExpressionNode) {
+			return $node->print($this);
+		} else {
+			return $this->encodeString((string) $node);
+		}
+	}
+
+
 	/**
 	 * Wraps the LHS of a call in parentheses if needed.
 	 */

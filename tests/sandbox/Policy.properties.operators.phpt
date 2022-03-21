@@ -28,13 +28,10 @@ $latte->setSandboxMode();
 $template = <<<'EOD'
 	{var $class = MyClass}
 	{var $prop = bar}
-	{var $staticProp = 'static'}
 
 	{=\MyClass::$static ?? null}
-	{=\MyClass::$$staticProp ?? null}
 	{=$obj->bar ?? null}
 	{=$obj->$prop ?? null}
-	{=$obj::$$staticProp ?? null}
 
 	{=$obj?->bar}
 	{=$obj?->$prop}
@@ -56,10 +53,8 @@ Assert::equal(
 		'tags' => Expect::type('array'),
 		'properties' => [
 			['MyClass', 'static'],
-			['MyClass', 'static'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
-			['MyClass', 'static'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],

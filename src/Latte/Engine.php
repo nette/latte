@@ -110,7 +110,6 @@ class Engine
 			$this->filters,
 			$this->providers,
 			$name,
-			$this->sandboxed ? $this->policy : null,
 		);
 	}
 

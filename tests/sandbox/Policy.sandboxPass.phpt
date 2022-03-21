@@ -161,8 +161,6 @@ $template = <<<'EOD'
 	{=$obj->{"prop"}}
 	{=$obj->{"prop"}->prop}
 	{=$obj->$prop}
-	{=$obj->$$prop}
-	{=$obj->$$prop->$prop}
 	{=$obj->$prop[$x]}
 	-
 	EOD;
@@ -192,8 +190,10 @@ Assert::matchFile(
 $template = <<<'EOD'
 	optional chaining
 
-	{=$obj?->bar}
-	{=$obj??->bar}
+	{=$obj?->prop}
+	{=$obj??->prop}
+	{=$obj?->bar()}
+	{=$obj??->bar()}
 	-
 	EOD;
 

@@ -153,51 +153,33 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $latte->compile('{$$x}}'),
-	Latte\CompileException::class,
-	'Forbidden variable variables.',
-);
-
-Assert::exception(
 	fn() => $latte->compile('{do echo 123}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'echo' inside tag.",
+	"Keyword 'echo' is forbidden in Latte (at column 5)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{do return 123}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'return' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{do yield 123}'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'yield' inside tag.",
+	"Unexpected 'return' (at column 5)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{do new stdClass}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'new' inside tag.",
+	"Forbidden keyword 'new'",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{var $a = new stdClass}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'new' inside tag.",
+	"Forbidden keyword 'new'",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{parameters $a = new stdClass}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'new' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{="${var}"}'),
-	Latte\CompileException::class,
-	'Syntax ${...} is not supported (at column 4)',
+	"Forbidden keyword 'new'",
 );
 
 Assert::noError(fn() => $latte->compile('{=\'${var}\'}'));
