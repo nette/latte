@@ -158,3 +158,7 @@ Assert::exception(function () use ($latte) {
 	{/foreach}
 	');
 }, Latte\CompileException::class, 'Unexpected </li>, expecting </a> for n:tag-if (on line 3)');
+
+Assert::error(function () use ($latte) {
+	$latte->compile('{=foo|noescape|trim}');
+}, E_USER_DEPRECATED, "Filter |noescape should be placed at the very end in '|noescape|trim'");
