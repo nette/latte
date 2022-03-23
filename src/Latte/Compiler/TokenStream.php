@@ -23,11 +23,11 @@ final class TokenStream
 
 	/** @var Token[] */
 	private array $tokens = [];
-	private \Iterator /*readonly*/ $source;
+	private \Fiber /*readonly*/ $source;
 	private int $index = 0;
 
 
-	public function __construct(\Iterator $source)
+	public function __construct(\Fiber $source)
 	{
 		$this->source = $source;
 	}
@@ -48,14 +48,10 @@ final class TokenStream
 	public function peek(int $offset = 0): ?Token
 	{
 		$pos = $this->index + $offset;
-		while ($pos >= 0 && !isset($this->tokens[$pos]) && $this->source->valid()) {
-			if ($this->tokens) {
-				$this->source->next();
-			}
-
-			if ($this->source->valid()) {
-				$this->tokens[] = $this->source->current();
-			}
+		while ($pos >= 0 && !isset($this->tokens[$pos]) && !$this->source->isTerminated()) {
+			$this->tokens[] = $this->tokens
+				? $this->source->resume()
+				: $this->source->start();
 		}
 
 		return $this->tokens[$pos] ?? null;

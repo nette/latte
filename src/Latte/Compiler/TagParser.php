@@ -41,7 +41,12 @@ final class TagParser extends TagParserData
 	{
 		$this->offsetDelta = $tokens[0]->position->offset ?? 0;
 		$tokens = $this->filterTokens($tokens);
-		$this->stream = new TokenStream(new \ArrayIterator($tokens));
+		$fiber = new \Fiber(function () use ($tokens): void {
+			foreach ($tokens as $token) {
+				\Fiber::suspend($token);
+			}
+		});
+		$this->stream = new TokenStream($fiber);
 	}
 
 

@@ -41,8 +41,8 @@ final class TemplateLexer
 	private bool $xmlMode;
 
 
-	/** @return \Generator<Token> */
-	public function tokenize(string $template, string $contentType = ContentType::Html): \Generator
+	/** @return \Fiber<Token> */
+	public function tokenize(string $template, string $contentType = ContentType::Html): \Fiber
 	{
 		$this->position = new Position(1, 1, 0);
 		$this->input = $this->normalize($template);
@@ -51,22 +51,24 @@ final class TemplateLexer
 		$this->setSyntax(null);
 		$this->tagLexer = new TagLexer;
 
-		do {
-			$state = $this->states[0];
-			yield from $this->{$state['name']}(...$state['args']);
-		} while ($this->states[0]['name'] !== self::StateEnd);
+		return new \Fiber(function (): void {
+			do {
+				$state = $this->states[0];
+				$this->{$state['name']}(...$state['args']);
+			} while ($this->states[0]['name'] !== self::StateEnd);
 
-		if ($this->position->offset < strlen($this->input)) {
-			throw new CompileException("Unexpected '" . substr($this->input, $this->position->offset, 10) . "'", $this->position);
-		}
+			if ($this->position->offset < strlen($this->input)) {
+				throw new CompileException("Unexpected '" . substr($this->input, $this->position->offset, 10) . "'", $this->position);
+			}
 
-		yield new Token(Token::End, '', $this->position);
+			\Fiber::suspend(new Token(Token::End, '', $this->position));
+		});
 	}
 
 
-	private function statePlain(): \Generator
+	private function statePlain(): void
 	{
-		$m = yield from $this->match('~
+		$m = $this->match('~
 			(?<Text>.+?)??
 			(?<Indentation>(?<=\n|^)[ \t]+)?
 			(
@@ -86,17 +88,20 @@ final class TemplateLexer
 	}
 
 
-	private function stateLatteTag(): \Generator
+	private function stateLatteTag(): void
 	{
 		$this->popState();
-		yield from $this->match('~
+		$this->match('~
 			(?<Slash>/)?
 			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))?   # name, /name, but not function( or class:: or namespace\
 		~xsiAu');
 
-		yield from $this->tagLexer->tokenizePartially($this->input, $this->position);
+		$tokens = $this->tagLexer->tokenizePartially($this->input, $this->position);
+		foreach ($tokens as $token) {
+			\Fiber::suspend($token);
+		}
 
-		yield from $this->match('~
+		$this->match('~
 			(?<Slash>/)?
 			(?<Latte_TagClose>' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R)?
@@ -104,10 +109,10 @@ final class TemplateLexer
 	}
 
 
-	private function stateLatteComment(): \Generator
+	private function stateLatteComment(): void
 	{
 		$this->popState();
-		yield from $this->match('~
+		$this->match('~
 			(?<Text>.+?)??
 			(?<Latte_CommentClose>\*' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R{1,2})?
@@ -115,9 +120,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlText(): \Generator
+	private function stateHtmlText(): void
 	{
-		$m = yield from $this->match('~(?J)
+		$m = $this->match('~(?J)
 			(?<Text>.+?)??
 			(
 				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Html_TagOpen><)(?<Slash>/)?(?<Html_Name>' . self::ReTagName . ')|  # <tag </tag
@@ -146,9 +151,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlTag(?string $tagName = null, ?string $attrName = null): \Generator
+	private function stateHtmlTag(?string $tagName = null, ?string $attrName = null): void
 	{
-		$m = yield from $this->match('~
+		$m = $this->match('~
 			(?<Whitespace>\s+)|                                        # whitespace
 			(?<Equals>=)|
 			(?<Quote>["\'])|
@@ -161,7 +166,7 @@ final class TemplateLexer
 		if (isset($m['Html_Name'])) {
 			$this->states[0]['args'][1] = $m['Html_Name'];
 		} elseif (isset($m['Equals'])) {
-			yield from $this->match('~
+			$this->match('~
 				(?<Whitespace>\s+)?                                    # whitespace
 				(?<Html_Name>' . self::ReHtmlValue . ')                # HTML attribute name/value
 			~xsiAu');
@@ -189,9 +194,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlQuotedValue(string $quote): \Generator
+	private function stateHtmlQuotedValue(string $quote): void
 	{
-		$m = yield from $this->match('~
+		$m = $this->match('~
 			(?<Text>.+?)??(
 				(?<Quote>' . $quote . ')|
 				(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|      # {tag
@@ -211,9 +216,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlQuotedNAttrValue(string $quote): \Generator
+	private function stateHtmlQuotedNAttrValue(string $quote): void
 	{
-		$m = yield from $this->match('~
+		$m = $this->match('~
 			(?<Text>.+?)??(?<Quote>' . $quote . ')|
 		~xsiAu');
 
@@ -225,9 +230,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlRCData(string $tagName): \Generator
+	private function stateHtmlRCData(string $tagName): void
 	{
-		$m = yield from $this->match('~
+		$m = $this->match('~
 			(?<Text>.+?)??
 			(?<Indentation>(?<=\n|^)[ \t]+)?
 			(
@@ -250,9 +255,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlComment(): \Generator
+	private function stateHtmlComment(): void
 	{
-		$m = yield from $this->match('~(?J)
+		$m = $this->match('~(?J)
 			(?<Text>.+?)??
 			(
 				(?<Html_CommentClose>-->)|                                                              # -->
@@ -273,9 +278,9 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlBogus(): \Generator
+	private function stateHtmlBogus(): void
 	{
-		$m = yield from $this->match('~
+		$m = $this->match('~
 			(?<Text>.+?)??(
 				(?<Html_TagClose>>)|                                       # >
 				(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|      # {tag
@@ -298,7 +303,7 @@ final class TemplateLexer
 	/**
 	 * Matches next token.
 	 */
-	private function match(string $re): \Generator
+	private function match(string $re): array
 	{
 		if (!preg_match($re, $this->input, $matches, PREG_UNMATCHED_AS_NULL, $this->position->offset)) {
 			if (preg_last_error()) {
@@ -310,7 +315,7 @@ final class TemplateLexer
 
 		foreach ($matches as $k => $v) {
 			if ($v !== null && !\is_int($k)) {
-				yield new Token(\constant(Token::class . '::' . $k), $v, $this->position);
+				\Fiber::suspend(new Token(\constant(Token::class . '::' . $k), $v, $this->position));
 				$this->position = $this->position->advance($v);
 			}
 		}
