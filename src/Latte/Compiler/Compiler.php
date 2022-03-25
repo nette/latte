@@ -196,7 +196,7 @@ class Compiler
 
 		$members = [];
 		foreach ($this->constants as $name => $value) {
-			$members[] = "\tprotected const $name = " . PhpHelpers::dump($value, true) . ';';
+			$members[] = "\tpublic const $name = " . PhpHelpers::dump($value, true) . ';';
 		}
 
 		foreach ($this->properties as $name => $value) {

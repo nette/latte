@@ -27,9 +27,9 @@ class Template
 		LayerSnippet = 'snippet',
 		LayerLocal = 'local';
 
-	protected const ContentType = Latte\ContentType::Html;
+	public const ContentType = Latte\ContentType::Html;
 
-	protected const Blocks = [];
+	public const Blocks = [];
 
 	/** global accumulators for intermediate results */
 	public \stdClass $global;
