@@ -113,12 +113,6 @@ class Template
 	}
 
 
-	public function getContentType(): string
-	{
-		return static::ContentType;
-	}
-
-
 	public function getParentName(): ?string
 	{
 		return $this->parentName ?: null;
