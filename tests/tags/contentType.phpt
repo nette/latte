@@ -13,10 +13,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 
 $template = $latte->createTemplate('');
-Assert::same(Context::Html, $template->getContentType());
+Assert::same(Context::Html, $template::ContentType);
 
 $template = $latte->createTemplate('{contentType xml}');
-Assert::same(Context::Xml, $template->getContentType());
+Assert::same(Context::Xml, $template::ContentType);
 
 Assert::exception(
 	fn() => $latte->createTemplate('{block}{contentType xml}{/block}'),
@@ -51,4 +51,4 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 $latte->setContentType(Context::Xml);
 
 $template = $latte->createTemplate('--');
-Assert::same(Context::Xml, $template->getContentType());
+Assert::same(Context::Xml, $template::ContentType);
