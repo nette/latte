@@ -49,7 +49,7 @@ Assert::same(' ... ', $macro->nodes[0]->content);
 
 Assert::error(function () use ($latte) {
 	$latte->compile('{test_auto}');
-}, E_USER_DEPRECATED, 'Auto-empty behaviour is deprecated, replace {test_auto} with {test_auto /} in line 1');
+}, E_USER_DEPRECATED, 'Auto-empty behaviour is deprecated, replace {test_auto} with {test_auto /} (on line 1)');
 
 @$latte->compile('{test_auto}'); // deprecated
 Assert::same('', $macro->nodes[0]->content);

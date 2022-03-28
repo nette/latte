@@ -741,7 +741,7 @@ class CoreMacros extends MacroSet
 					|| !$tokens->isNext(...$tokens::SIGNIFICANT)
 				)
 			) {
-				trigger_error("Inside tag {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
+				trigger_error("Inside tag {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}' (on line $node->startLine)", E_USER_DEPRECATED);
 
 			} elseif ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
 				$tokens->nextToken();
@@ -761,7 +761,7 @@ class CoreMacros extends MacroSet
 
 			} elseif ($tokens->isCurrent('=', '=>') && $tokens->depth === 0) {
 				if ($tokens->isCurrent('=>')) {
-					trigger_error("Inside tag {{$node->name} {$node->args}} should be => replaced with =", E_USER_DEPRECATED);
+					trigger_error("Inside tag {{$node->name} {$node->args}} should be '=>' replaced with '=' (on line $node->startLine)", E_USER_DEPRECATED);
 				}
 
 				$res->append($node->name === 'default' ? '=>' : '=');

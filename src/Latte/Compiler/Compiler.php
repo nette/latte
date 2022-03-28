@@ -427,7 +427,7 @@ class Compiler
 				$token->empty = $t ? !$t->closing : true;
 				if ($token->empty) {
 					$tmp = substr($token->text, 0, -1) . ' /}';
-					trigger_error("Auto-empty behaviour is deprecated, replace {$token->text} with $tmp in line " . $this->getLine(), E_USER_DEPRECATED);
+					trigger_error("Auto-empty behaviour is deprecated, replace {$token->text} with $tmp (on line {$this->getLine()})", E_USER_DEPRECATED);
 				}
 			}
 
@@ -743,7 +743,7 @@ class Compiler
 				continue;
 			}
 			if ($empty) {
-				trigger_error("Unexpected n:$attrName on void element <{$this->htmlNode->name}>", E_USER_WARNING);
+				trigger_error("Unexpected n:$attrName on void element <{$this->htmlNode->name}> (on line {$this->getLine()}", E_USER_WARNING);
 			}
 
 			if ($this->htmlNode->closing) {
@@ -778,7 +778,7 @@ class Compiler
 				continue;
 			}
 			if ($empty) {
-				trigger_error("Unexpected n:$attrName on void element <{$this->htmlNode->name}>", E_USER_WARNING);
+				trigger_error("Unexpected n:$attrName on void element <{$this->htmlNode->name}> (on line {$this->getLine()}", E_USER_WARNING);
 			}
 
 			$left[] = function () use ($name, $attrs, $attrName) {
