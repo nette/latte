@@ -20,10 +20,13 @@ use Latte\Helpers;
  */
 class FilterExecutor
 {
+	/** @var string[] */
+	public $_origNames = [];
+
 	/** @var callable[] */
 	private $_dynamic = [];
 
-	/** @var array<string, array{callable, ?bool}>  [name => [callback, FilterInfo aware] */
+	/** @var array<string, array{callable, ?bool}> */
 	private $_static = [];
 
 
@@ -36,9 +39,10 @@ class FilterExecutor
 		if ($name === null) {
 			array_unshift($this->_dynamic, $callback);
 		} else {
-			$name = strtolower($name);
-			$this->_static[$name] = [$callback, null];
-			unset($this->$name);
+			$lower = strtolower($name);
+			$this->_static[$lower] = [$callback, null, $name];
+			$this->_origNames[$name] = $lower;
+			unset($this->$lower);
 		}
 
 		return $this;

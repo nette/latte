@@ -68,6 +68,9 @@ class Compiler
 	/** @var string[] of orig name */
 	private $functions = [];
 
+	/** @var string[] of orig name */
+	private $filters = [];
+
 	/** @var int[] Macro flags */
 	private $flags;
 
@@ -134,6 +137,13 @@ class Compiler
 	public function setFunctions(array $names)
 	{
 		$this->functions = array_combine(array_map('strtolower', $names), $names);
+		return $this;
+	}
+
+
+	public function setFilters(array $names)
+	{
+		$this->filters = $names;
 		return $this;
 	}
 
@@ -302,6 +312,15 @@ class Compiler
 	public function getFunctions(): array
 	{
 		return $this->functions;
+	}
+
+
+	/**
+	 * @return string[]
+	 */
+	public function getFilters(): array
+	{
+		return $this->filters;
 	}
 
 

@@ -24,6 +24,7 @@ class Defaults
 		return [
 			'batch' => [Filters::class, 'batch'],
 			'breakLines' => [Filters::class, 'breaklines'],
+			'breaklines' => [Filters::class, 'breaklines'],
 			'bytes' => [Filters::class, 'bytes'],
 			'capitalize' => extension_loaded('mbstring')
 				? [Filters::class, 'capitalize']
@@ -31,6 +32,7 @@ class Defaults
 			'ceil' => [Filters::class, 'ceil'],
 			'clamp' => [Filters::class, 'clamp'],
 			'dataStream' => [Filters::class, 'dataStream'],
+			'datastream' => [Filters::class, 'dataStream'],
 			'date' => [Filters::class, 'date'],
 			'escapeCss' => [Filters::class, 'escapeCss'],
 			'escapeHtml' => [Filters::class, 'escapeHtml'],
@@ -62,6 +64,7 @@ class Defaults
 			'repeat' => [Filters::class, 'repeat'],
 			'replace' => [Filters::class, 'replace'],
 			'replaceRe' => [Filters::class, 'replaceRe'],
+			'replaceRE' => [Filters::class, 'replaceRe'],
 			'reverse' => [Filters::class, 'reverse'],
 			'round' => [Filters::class, 'round'],
 			'slice' => [Filters::class, 'slice'],
@@ -70,7 +73,9 @@ class Defaults
 			'split' => [Filters::class, 'explode'],
 			'strip' => [Filters::class, 'strip'],
 			'stripHtml' => [Filters::class, 'stripHtml'],
+			'striphtml' => [Filters::class, 'stripHtml'],
 			'stripTags' => [Filters::class, 'stripTags'],
+			'striptags' => [Filters::class, 'stripTags'],
 			'substr' => [Filters::class, 'substring'],
 			'trim' => [Filters::class, 'trim'],
 			'truncate' => [Filters::class, 'truncate'],

@@ -158,6 +158,7 @@ class Engine
 			$code = $this->getCompiler()
 				->setContentType($this->contentType)
 				->setFunctions(array_keys((array) $this->functions))
+				->setFilters($this->filters->_origNames)
 				->setPolicy($this->sandboxed ? $this->policy : null)
 				->compile($tokens, $this->getTemplateClass($name), $comment, $this->strictTypes);
 
