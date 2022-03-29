@@ -113,17 +113,6 @@ class Template
 	}
 
 
-	/** @deprecated */
-	public function getParameter(string $name)
-	{
-		trigger_error(__METHOD__ . '() is deprecated, use getParameters()', E_USER_DEPRECATED);
-		if (!array_key_exists($name, $this->params)) {
-			trigger_error("The variable '$name' does not exist in template.", E_USER_NOTICE);
-		}
-		return $this->params[$name];
-	}
-
-
 	/**
 	 * @param  int|string  $layer
 	 * @return string[]
