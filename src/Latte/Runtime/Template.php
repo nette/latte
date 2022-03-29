@@ -109,9 +109,7 @@ class Template
 	 */
 	public function getParameters(): array
 	{
-		$params = $this->params;
-		unset($params['_l'], $params['_g']);
-		return $params;
+		return $this->params;
 	}
 
 

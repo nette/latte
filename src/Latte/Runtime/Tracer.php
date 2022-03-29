@@ -111,7 +111,6 @@ class Tracer
 			}
 		}
 
-		unset($params['_l'], $params['_g']);
 		return $params;
 	}
 }
