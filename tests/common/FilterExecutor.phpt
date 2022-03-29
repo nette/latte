@@ -35,12 +35,11 @@ test('', function () {
 
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
-	Assert::same('strtoupper', $filters->F1);
+	Assert::notSame('strtoupper', $filters->F1);
 	Assert::same('AA', ($filters->f1)('aa'));
 
 	$filters->add('f1', 'trim');
 	Assert::same('trim', $filters->f1);
-	Assert::same('trim', $filters->F1);
 
 	$filters->add('f2', [new MyFilter, 'invoke']);
 	Assert::same('aa', ($filters->f2)('aA'));
@@ -52,8 +51,8 @@ test('', function () {
 	Assert::same('AA', ($filters->f4)('aA'));
 
 	Assert::exception(function () use ($filters) {
-		($filters->h3)('');
-	}, LogicException::class, "Filter 'h3' is not defined, did you mean 'f3'?");
+		($filters->F1)('');
+	}, LogicException::class, "Filter 'F1' is not defined, did you mean 'f1'?");
 });
 
 
@@ -64,7 +63,7 @@ test('', function () {
 	});
 	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
 	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
-	Assert::same('dynamic,1,2', ($filters->Dynamic)(1, 2));
+	Assert::same('Dynamic,1,2', ($filters->Dynamic)(1, 2));
 	Assert::same('another,1,2', ($filters->another)(1, 2));
 
 	$filters2 = new FilterExecutor;
