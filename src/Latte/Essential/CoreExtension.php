@@ -10,8 +10,6 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Compiler\Nodes\Php\FilterNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
@@ -40,11 +38,9 @@ final class CoreExtension extends Latte\Extension
 	public function getTags(): array
 	{
 		return [
-			'snippetArea' => [Nodes\SnippetAreaNode::class, 'create'],
 			'embed' => [Nodes\EmbedNode::class, 'create'],
 			'define' => [Nodes\DefineNode::class, 'create'],
 			'block' => [Nodes\BlockNode::class, 'create'],
-			'snippet' => [Nodes\SnippetNode::class, 'create'],
 			'layout' => [Nodes\ExtendsNode::class, 'create'],
 			'extends' => [Nodes\ExtendsNode::class, 'create'],
 			'import' => [Nodes\ImportNode::class, 'create'],
@@ -66,8 +62,6 @@ final class CoreExtension extends Latte\Extension
 			'contentType' => [Nodes\ContentTypeNode::class, 'create'],
 			'spaceless' => [Nodes\SpacelessNode::class, 'create'],
 			'capture' => [Nodes\CaptureNode::class, 'create'],
-			'_' => [$this, 'parseTranslate'],
-			'translate' => [Nodes\TranslateNode::class, 'create'],
 			'l' => fn(Tag $tag) => new TextNode('{', $tag->position),
 			'r' => fn(Tag $tag) => new TextNode('}', $tag->position),
 			'syntax' => \Closure::fromCallable([$this, 'parseSyntax']),
@@ -232,25 +226,5 @@ final class CoreExtension extends Latte\Extension
 		[$inner] = yield;
 		$parser->getLexer()->setSyntax(null);
 		return $inner;
-	}
-
-
-	/**
-	 * {_ ...}
-	 */
-	public function parseTranslate(Tag $tag): Nodes\PrintNode
-	{
-		$tag->outputMode = $tag::OutputKeepIndentation;
-		$tag->expectArguments();
-		$node = new Nodes\PrintNode;
-		$node->expression = $tag->parser->parseExpression();
-		$args = [];
-		if ($tag->parser->stream->tryConsume(',')) {
-			$args = $tag->parser->parseArguments()->toArguments();
-		}
-		$node->modifier = $tag->parser->parseModifier();
-		array_unshift($node->modifier->filters, new FilterNode(new IdentifierNode('translate'), $args));
-		$node->modifier->escape = true;
-		return $node;
 	}
 }

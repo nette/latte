@@ -45,7 +45,7 @@ class Template
 	protected array $varStack = [];
 
 	/** @var Block[][] */
-	private array $blocks;
+	protected array $blocks;
 
 	/** @var mixed[][] */
 	private array $blockStack = [];
@@ -154,9 +154,7 @@ class Template
 		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
 			$this->parentName = ($this->global->coreParentFinder)($this);
 		}
-		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
-			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
-		}
+
 		Filters::$xml = static::ContentType === Latte\ContentType::Xml;
 
 		if ($this->referenceType === 'import') {
@@ -171,11 +169,6 @@ class Template
 		} elseif ($block !== null) { // single block rendering
 			$this->renderBlock($block, $this->params);
 
-		} elseif (
-			isset($this->global->snippetDriver)
-			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LayerSnippet], $this->params)
-		) {
-			// nothing
 		} else {
 			$this->main($params);
 		}
