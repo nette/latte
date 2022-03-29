@@ -10,8 +10,6 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Compiler\Nodes\Php\FilterNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
@@ -68,9 +66,6 @@ final class CoreExtension extends Latte\Extension
 			'r' => fn(Tag $tag) => new TextNode('}', $tag->position),
 			'syntax' => \Closure::fromCallable([$this, 'parseSyntax']),
 
-			'_' => [$this, 'parseTranslate'],
-			'translate' => [Nodes\TranslateNode::class, 'create'],
-
 			'=' => [Nodes\PrintNode::class, 'create'],
 
 			'capture' => [Nodes\CaptureNode::class, 'create'],
@@ -93,11 +88,9 @@ final class CoreExtension extends Latte\Extension
 			'import' => [Nodes\ImportNode::class, 'create'],
 			'extends' => [Nodes\ExtendsNode::class, 'create'],
 			'layout' => [Nodes\ExtendsNode::class, 'create'],
-			'snippet' => [Nodes\SnippetNode::class, 'create'],
 			'block' => [Nodes\BlockNode::class, 'create'],
 			'define' => [Nodes\DefineNode::class, 'create'],
 			'embed' => [Nodes\EmbedNode::class, 'create'],
-			'snippetArea' => [Nodes\SnippetAreaNode::class, 'create'],
 		];
 	}
 
@@ -232,16 +225,5 @@ final class CoreExtension extends Latte\Extension
 		[$inner] = yield;
 		$parser->getLexer()->setSyntax(null);
 		return $inner;
-	}
-
-
-	/**
-	 * {_ ...}
-	 */
-	public function parseTranslate(Tag $tag, TemplateParser $parser): Nodes\PrintNode
-	{
-		$node = Nodes\PrintNode::create($tag, $parser);
-		array_unshift($node->modifier->filters, new FilterNode(new IdentifierNode('translate')));
-		return $node;
 	}
 }

@@ -153,9 +153,7 @@ class Template
 		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
 			$this->parentName = ($this->global->coreParentFinder)($this);
 		}
-		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
-			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
-		}
+
 		Filters::$xml = (bool) preg_match('#xml|xhtml#', static::ContentType);
 
 		if ($this->referenceType === 'import') {

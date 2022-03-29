@@ -33,13 +33,6 @@ Assert::match(
 	$latte->renderToString('{block foo} {block} {$i--} {if $i}{include this}{/if} {/block} {/block}', ['i' => 2]),
 );
 
-// in snippet block
-Assert::exception(
-	fn() => $latte->renderToString('{snippet foo} {include this} {/snippet}'),
-	Latte\CompileException::class,
-	'Cannot include this block outside of any block (at column 15)',
-);
-
 // with modifier
 Assert::match(
 	'  2 1',
