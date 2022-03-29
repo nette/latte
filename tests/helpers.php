@@ -150,9 +150,9 @@ class DumpExtension extends Latte\Extension
 }
 
 
-function exportTraversing(string $template): string
+function exportTraversing(string $template, ?Latte\Engine $latte = null): string
 {
-	$latte = new Latte\Engine;
+	$latte ??= new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->addExtension($extension = new DumpExtension);
 	$latte->compile($template);
