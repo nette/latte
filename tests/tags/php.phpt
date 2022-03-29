@@ -13,8 +13,16 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
+$latte->addExtension(new Latte\Essential\RawPhpExtension);
 
 Assert::match(
-	'%A%$a = \'test\' ? [] : null%A%',
-	$latte->compile('{php $a = test ? ([])}'),
+	<<<'XX'
+		%A%
+				/* line 1 */;
+				if ($a) {
+					echo 10;
+				}
+		%A%
+		XX,
+	$latte->compile('{php if ($a) { echo 10; }}'),
 );

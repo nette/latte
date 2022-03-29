@@ -11,11 +11,12 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
+$latte = new Latte\Engine;
+$latte->addExtension(new Latte\Essential\RawPhpExtension);
+
 Assert::match(<<<'XX'
 	Template:
 		Fragment:
-			Do:
-				Variable:
-					name: var
+			RawPhp:
 		Fragment:
-	XX, exportTraversing('{php $var}'));
+	XX, exportTraversing('{php $var}', $latte));
