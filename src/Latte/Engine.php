@@ -282,7 +282,13 @@ class Engine
 
 	public function getTemplateClass(string $name): string
 	{
-		$key = serialize([$this->getLoader()->getUniqueId($name), self::VERSION, array_keys((array) $this->functions), $this->sandboxed]);
+		$key = serialize([
+			$this->getLoader()->getUniqueId($name),
+			self::VERSION,
+			array_keys((array) $this->functions),
+			$this->sandboxed,
+			$this->contentType,
+		]);
 		return 'Template' . substr(md5($key), 0, 10);
 	}
 
