@@ -77,10 +77,12 @@ $template = <<<'X'
 	X;
 
 Assert::match(
-	'	1
-	0
-		if
+	<<<'XX'
+			1
+			0
+				if
 
-	end',
+			end
+		XX,
 	$latte->renderToString($template),
 );

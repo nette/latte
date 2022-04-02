@@ -52,18 +52,26 @@ Assert::match(
 
 Assert::match(
 	'%A%opening(2)%A%',
-	$latte->compile('
-		{one
-		}'),
+	$latte->compile(
+		<<<'XX'
+
+					{one
+					}
+			XX,
+	),
 );
 
 Assert::match(
 	'%A%opening(2)%A%',
-	$latte->compile('
-	<div
-	n:one
-	></div>
-	'),
+	$latte->compile(
+		<<<'XX'
+
+				<div
+				n:one
+				></div>
+
+			XX,
+	),
 );
 
 
@@ -76,20 +84,28 @@ Assert::match(
 
 Assert::match(
 	'%A%opening(2)%A%closing(4)%A%',
-	$latte->compile('
-		{one}
+	$latte->compile(
+		<<<'XX'
 
-		{/
-		}'),
+					{one}
+
+					{/
+					}
+			XX,
+	),
 );
 
 Assert::match(
 	'%A%opening(2)%A%closing(5)%A%',
-	$latte->compile('
-	<div
-	n:one
-	>
-	</div
-	>
-	'),
+	$latte->compile(
+		<<<'XX'
+
+				<div
+				n:one
+				>
+				</div
+				>
+
+			XX,
+	),
 );

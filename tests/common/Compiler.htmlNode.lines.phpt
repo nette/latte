@@ -43,10 +43,14 @@ class MockMacro implements Macro
 $parser = new Parser;
 $compiler = new Compiler;
 $compiler->addMacro('foo', new MockMacro);
-$compiler->compile($parser->parse('
-	<div
-	n:foo
-	>
+$compiler->compile($parser->parse(
+	<<<'XX'
 
-	</div
-	>'), 'Template');
+			<div
+			n:foo
+			>
+
+			</div
+			>
+		XX,
+), 'Template');

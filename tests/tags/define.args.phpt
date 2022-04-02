@@ -107,21 +107,25 @@ Assert::matchFile(
 
 // named arguments (file dependent)
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-named arguments import
+	'main' => <<<'XX'
 
-{import import.latte}
+		named arguments import
 
-a) {include test, 1, var1 => 2}
+		{import import.latte}
 
-b) {include test, var2 => 1}
+		a) {include test, 1, var1 => 2}
 
-c) {include test, hello => 1}',
+		b) {include test, var2 => 1}
 
-	'import.latte' => '
-{define test $var1, $var2, $var3}
-	Variables {$var1}, {$var2}, {$var3}
-{/define}',
+		c) {include test, hello => 1}
+		XX,
+
+	'import.latte' => <<<'XX'
+
+		{define test $var1, $var2, $var3}
+			Variables {$var1}, {$var2}, {$var3}
+		{/define}
+		XX,
 ]));
 
 Assert::matchFile(

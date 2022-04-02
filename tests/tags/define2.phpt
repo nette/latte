@@ -22,11 +22,17 @@ Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', ['foo' =
 
 // no empty line
 Assert::match(
-	'one
-two',
-	$latte->renderToString('one
-{define foo}Hello{/define}
-two'),
+	<<<'XX'
+		one
+		two
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+			one
+			{define foo}Hello{/define}
+			two
+			XX,
+	),
 );
 
 Assert::exception(

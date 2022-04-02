@@ -59,15 +59,17 @@ class MockMacro implements Macro
 	}
 }
 
-$latte = '
-	{foo}Text{/foo}
-	{foo}{/foo}
-	{foo/}
-	<div1>{foo}Text{/foo}</div1>
-	<div2 n:foo>Text</div2>
-	<div3 n:inner-foo>Text</div3>
-	<div4 n:tag-foo>Text</div4>
-';
+$latte = <<<'XX'
+
+		{foo}Text{/foo}
+		{foo}{/foo}
+		{foo/}
+		<div1>{foo}Text{/foo}</div1>
+		<div2 n:foo>Text</div2>
+		<div3 n:inner-foo>Text</div3>
+		<div4 n:tag-foo>Text</div4>
+
+	XX;
 
 $macro = new MockMacro;
 $parser = new Parser;

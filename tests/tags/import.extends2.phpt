@@ -13,19 +13,25 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-		{extends parent}
-		{block main}
-			{include test}
-		{/block}
-	',
-	'parent' => '
-		{import inc}
-		{include main}
-	',
-	'inc' => '
-		{define test}test block{/define}
-	',
+	'main' => <<<'XX'
+
+				{extends parent}
+				{block main}
+					{include test}
+				{/block}
+
+		XX,
+	'parent' => <<<'XX'
+
+				{import inc}
+				{include main}
+
+		XX,
+	'inc' => <<<'XX'
+
+				{define test}test block{/define}
+
+		XX,
 ]));
 
 Assert::match(

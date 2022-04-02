@@ -24,27 +24,39 @@ Assert::exception(
 
 Assert::same(
 	'local		local',
-	trim($latte->renderToString('
-		{include abc}
-		{block local abc}local{/block}
-	')),
+	trim($latte->renderToString(
+		<<<'XX'
+
+					{include abc}
+					{block local abc}local{/block}
+
+			XX,
+	)),
 );
 
 Assert::same(
 	'5 4 3 2 1 0',
-	trim($latte->renderToString('
-		{var $i = 5}
-		{block local abc}{$i} {if $i}{include this i: $i - 1}{/if} {/block}
-	')),
+	trim($latte->renderToString(
+		<<<'XX'
+
+					{var $i = 5}
+					{block local abc}{$i} {if $i}{include this i: $i - 1}{/if} {/block}
+
+			XX,
+	)),
 );
 
 
 Assert::same(
 	'5 4 3 2 1 0',
-	trim($latte->renderToString('
-		{include abc i: 5}
-		{define local abc}{$i} {if $i}{include this i: $i - 1}{/if} {/define}
-	')),
+	trim($latte->renderToString(
+		<<<'XX'
+
+					{include abc i: 5}
+					{define local abc}{$i} {if $i}{include this i: $i - 1}{/if} {/define}
+
+			XX,
+	)),
 );
 
 
@@ -56,21 +68,29 @@ Assert::same(
 
 Assert::same(
 	'5',
-	trim($latte->renderToString('
-		{var $i = 5}
-		{include abc}
-		{define local abc}{$i}{/define}
-	')),
+	trim($latte->renderToString(
+		<<<'XX'
+
+					{var $i = 5}
+					{include abc}
+					{define local abc}{$i}{/define}
+
+			XX,
+	)),
 );
 
 
 Assert::same(
 	'5',
-	trim($latte->renderToString('
-		{define local abc}{$i}{/define}
-		{var $i = 5}
-		{include abc}
-	')),
+	trim($latte->renderToString(
+		<<<'XX'
+
+					{define local abc}{$i}{/define}
+					{var $i = 5}
+					{include abc}
+
+			XX,
+	)),
 );
 
 
@@ -96,10 +116,12 @@ Assert::exception(
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-		{import "inc"}
-		{include a}
-	',
+	'main' => <<<'XX'
+
+				{import "inc"}
+				{include a}
+
+		XX,
 	'inc' => '{block local a}{/block}',
 ]));
 
@@ -111,10 +133,12 @@ Assert::exception(
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-		{import "inc"}
-		{block local a}{include parent}{/block}
-	',
+	'main' => <<<'XX'
+
+				{import "inc"}
+				{block local a}{include parent}{/block}
+
+		XX,
 	'inc' => '{block local a}{/block}',
 ]));
 
@@ -126,10 +150,12 @@ Assert::exception(
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-		{extends "inc"}
-		{block local a}{/block}
-	',
+	'main' => <<<'XX'
+
+				{extends "inc"}
+				{block local a}{/block}
+
+		XX,
 	'inc' => '{include a}',
 ]));
 

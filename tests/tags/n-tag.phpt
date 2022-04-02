@@ -27,20 +27,22 @@ Assert::match(
 
 
 Assert::match(
-	'
-	<h1
-class="a" title="b">
-		<h2></h2
-		>
-	</h1>
-',
-	$latte->renderToString('
-	<div
-class="a" n:tag="h1" title="b">
-		<div n:tag="h2"></div
-		>
-	</div>
-'),
+	<<<'XX'
+			<h1
+		class="a" title="b">
+				<h2></h2
+				>
+			</h1>
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+				<div
+			class="a" n:tag="h1" title="b">
+					<div n:tag="h2"></div
+					>
+				</div>
+			XX,
+	),
 );
 
 
@@ -78,8 +80,7 @@ Assert::match(
 				echo $ʟ_tag[0];
 				echo '>';
 		%A%
-		XX
-,
+		XX,
 	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:tag="h . 1"></div>'),
 );
 

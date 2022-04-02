@@ -13,38 +13,42 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-{foreach [a, b] as $item}
-	{foreach [c, d] as $item}
-		{$iterator->parent->current()}
-	{/foreach}
-{/foreach}
-',
+	'main' => <<<'XX'
+		{foreach [a, b] as $item}
+			{foreach [c, d] as $item}
+				{$iterator->parent->current()}
+			{/foreach}
+		{/foreach}
+
+		XX,
 ]));
 
 
 Assert::match(
-	'
-		a
-		a
-		b
-		b',
+	<<<'XX'
+				a
+				a
+				b
+				b
+		XX,
 	$latte->renderToString('main'),
 );
 
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-{foreach [a, b] as $item}
-	{include included.latte}
-{/foreach}
-',
-	'included.latte' => '
-{foreach [c, d] as $item}
-	{$iterator->parent ? "has parent"}
-{/foreach}
-',
+	'main' => <<<'XX'
+		{foreach [a, b] as $item}
+			{include included.latte}
+		{/foreach}
+
+		XX,
+	'included.latte' => <<<'XX'
+		{foreach [c, d] as $item}
+			{$iterator->parent ? "has parent"}
+		{/foreach}
+
+		XX,
 ]));
 
 

@@ -16,13 +16,15 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => file_get_contents(__DIR__ . '/templates/parent.latte'),
 
-	'main' => '
-{extends true ? $ext : "undefined"}
+	'main' => <<<'XX'
 
-{block content}
-	Content
-{/block}
-	',
+		{extends true ? $ext : "undefined"}
+
+		{block content}
+			Content
+		{/block}
+
+		XX,
 ]));
 
 Assert::matchFile(

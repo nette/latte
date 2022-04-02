@@ -13,17 +13,21 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => '
-{include (true ? "inc" : "") with blocks}
+	'main' => <<<'XX'
 
-{include test}
-	',
+		{include (true ? "inc" : "") with blocks}
 
-	'inc' => '
-{define test}
-	Parent: {basename($this->getReferringTemplate()->getName())}/{$this->getReferenceType()}
-{/define}
-	',
+		{include test}
+
+		XX,
+
+	'inc' => <<<'XX'
+
+		{define test}
+			Parent: {basename($this->getReferringTemplate()->getName())}/{$this->getReferenceType()}
+		{/define}
+
+		XX,
 ]));
 
 Assert::matchFile(

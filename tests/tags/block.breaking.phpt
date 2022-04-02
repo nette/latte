@@ -30,10 +30,12 @@ Assert::matchFile(
 	$latte->compile($template),
 );
 Assert::match(
-	'	1
-		BEFORE
-	0
-		BEFORE
-		AFTER',
+	<<<'XX'
+			1
+				BEFORE
+			0
+				BEFORE
+				AFTER
+		XX,
 	$latte->renderToString($template),
 );

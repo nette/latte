@@ -14,30 +14,36 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setTempDirectory(getTempDir());
 $latte->setLoader(new Latte\Loaders\StringLoader([
-	'parent' => '
-{block content}
-{/block}
+	'parent' => <<<'X'
 
-{define inc}
-	{embed file embed}
-		{block foo}
-			{trace}
+		{block content}
 		{/block}
-	{/embed}
-{/define}
-',
 
-	'main' => '
-{extends "parent"}
+		{define inc}
+			{embed file embed}
+				{block foo}
+					{trace}
+				{/block}
+			{/embed}
+		{/define}
 
-{block content}
-	{include inc, var: 123}
-{/block}
+		X
+	,
 
-{block inc}
-	{include parent, var2: 456}
-{/block}
-	',
+	'main' => <<<'X'
+
+		{extends "parent"}
+
+		{block content}
+			{include inc, var: 123}
+		{/block}
+
+		{block inc}
+			{include parent, var2: 456}
+		{/block}
+
+		X
+	,
 	'embed' => '{block foo}{/block}',
 ]));
 

@@ -75,47 +75,63 @@ test('', function () {
 
 		'parentvar' => '{var $name = "foo"}<meta name={block $name}{/block}>',
 
-		'context1' => '
-{extends "parent"}
-<meta name={block foo}{$foo}{/block}>
-		',
+		'context1' => <<<'XX'
 
-		'context2' => '
-{extends "parentvar"}
-<meta name={block foo}{$foo}{/block}>
-		',
+			{extends "parent"}
+			<meta name={block foo}{$foo}{/block}>
 
-		'context3' => '
-{extends "parent"}
-{block foo}{$foo}{/block}
-		',
+			XX,
 
-		'context4' => '
-{extends "parentvar"}
-{block foo}{$foo}{/block}
-		',
+		'context2' => <<<'XX'
 
-		'context5' => '
-{extends "parent"}
-<meta name="{block foo}{$foo}{/block}">
-		',
+			{extends "parentvar"}
+			<meta name={block foo}{$foo}{/block}>
 
-		'context6' => '
-{extends "parentvar"}
-<meta name="{block foo}{$foo}{/block}">
-		',
+			XX,
+
+		'context3' => <<<'XX'
+
+			{extends "parent"}
+			{block foo}{$foo}{/block}
+
+			XX,
+
+		'context4' => <<<'XX'
+
+			{extends "parentvar"}
+			{block foo}{$foo}{/block}
+
+			XX,
+
+		'context5' => <<<'XX'
+
+			{extends "parent"}
+			<meta name="{block foo}{$foo}{/block}">
+
+			XX,
+
+		'context6' => <<<'XX'
+
+			{extends "parentvar"}
+			<meta name="{block foo}{$foo}{/block}">
+
+			XX,
 
 		'parentattr' => '<meta name="{block foo}{$foo}{/block}">',
 
-		'context7' => '
-{extends "parentattr"}
-{block foo}{$foo} {include parent} "<>&amp;{/block}
-		',
+		'context7' => <<<'XX'
 
-		'context8' => '
-{extends "parent"}
-<!--{block foo}{$foo}{/block}-->
-		',
+			{extends "parentattr"}
+			{block foo}{$foo} {include parent} "<>&amp;{/block}
+
+			XX,
+
+		'context8' => <<<'XX'
+
+			{extends "parent"}
+			<!--{block foo}{$foo}{/block}-->
+
+			XX,
 	]));
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context1', ['foo' => 'b"ar']));

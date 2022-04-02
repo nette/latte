@@ -11,16 +11,20 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(function () {
-			return 1;
-		}))%A%',
+	<<<'XX'
+		%A%echo LR\Filters::escapeHtmlText(test(function () {
+					return 1;
+				}))%A%
+		XX,
 	$latte->compile('{test(function () { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(function () use ($a) {
-			return 1;
-		}))%A%',
+	<<<'XX'
+		%A%echo LR\Filters::escapeHtmlText(test(function () use ($a) {
+					return 1;
+				}))%A%
+		XX,
 	$latte->compile('{test(function () use ($a) { return 1;})}'),
 );
 

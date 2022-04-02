@@ -17,9 +17,12 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 // restoring output buffer after breakIf/continueIf
 Assert::match(
-	'		inner 1
-		inner 2
-		inner 3',
+	<<<'X'
+				inner 1
+				inner 2
+				inner 3
+		X
+,
 	$latte->renderToString(
 		<<<'XX'
 			{foreach [1,2,3] as $n}
@@ -34,9 +37,12 @@ Assert::match(
 
 
 Assert::match(
-	'		inner 1
-		inner 2
-		inner 3',
+	<<<'X'
+				inner 1
+				inner 2
+				inner 3
+		X
+,
 	$latte->renderToString(
 		<<<'XX'
 			{foreach [1,2,3] as $n}

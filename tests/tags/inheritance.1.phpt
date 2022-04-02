@@ -15,23 +15,25 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => file_get_contents(__DIR__ . '/templates/parent.latte'),
 
-	'main' => '
-{extends "parent"}
+	'main' => <<<'XX'
 
-{import "inc"}
-{include file "inc" with blocks}
+		{extends "parent"}
 
-{block title}Homepage | {include parent}{include parent}{/block}
+		{import "inc"}
+		{include file "inc" with blocks}
 
-{block content}
-	<ul>
-	{foreach $people as $person}
-		<li>{$person}</li>
-	{/foreach}
-	</ul>
-	Parent: {gettype($this->getReferringTemplate())}
-{/block}
-	',
+		{block title}Homepage | {include parent}{include parent}{/block}
+
+		{block content}
+			<ul>
+			{foreach $people as $person}
+				<li>{$person}</li>
+			{/foreach}
+			</ul>
+			Parent: {gettype($this->getReferringTemplate())}
+		{/block}
+
+		XX,
 
 	'inc' => '{define test /}',
 ]));
