@@ -15,21 +15,23 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => file_get_contents(__DIR__ . '/templates/parent.latte'),
 
-	'main' => '
-{extends "parent"}
+	'main' => <<<'XX'
 
-{block content}
-	<h1>{block title}Homepage {/block}</h1>
+		{extends "parent"}
 
-	<ul>
-	{foreach $people as $person}
-		<li>{$person}</li>
-	{/foreach}
-	</ul>
-{/block}
+		{block content}
+			<h1>{block title}Homepage {/block}</h1>
 
-{block sidebar}{/block}
-	',
+			<ul>
+			{foreach $people as $person}
+				<li>{$person}</li>
+			{/foreach}
+			</ul>
+		{/block}
+
+		{block sidebar}{/block}
+
+		XX,
 ]));
 
 Assert::matchFile(

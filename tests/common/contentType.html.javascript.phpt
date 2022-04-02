@@ -90,40 +90,52 @@ Assert::match(
 
 // content of <script> is RAWTEXT
 Assert::match(
-	'
-	<script type="text/html">
-	<div n:foreach="[a, b] as $i">def</div>
-	</script>
-	<div>a</div>
-	<div>b</div>
-',
-	$latte->renderToString('
-	{var $i = def}
-	<script type="text/html">
-	<div n:foreach="[a, b] as $i">{$i}</div>
-	</script>
-	<div n:foreach="[a, b] as $i">{$i}</div>
-'),
+	<<<'XX'
+
+			<script type="text/html">
+			<div n:foreach="[a, b] as $i">def</div>
+			</script>
+			<div>a</div>
+			<div>b</div>
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+				{var $i = def}
+				<script type="text/html">
+				<div n:foreach="[a, b] as $i">{$i}</div>
+				</script>
+				<div n:foreach="[a, b] as $i">{$i}</div>
+
+			XX,
+	),
 );
 
 // content of <script> changed to html
 Assert::match(
-	'
-	<script type="text/html">
-	<div>a</div>
-	<div>b</div>
-	</script>
-	<div>a</div>
-	<div>b</div>
-',
-	$latte->renderToString('
-	{var $i = def}
-	<script type="text/html">
-	{contentType html}
-	<div n:foreach="[a, b] as $i">{$i}</div>
-	</script>
-	<div n:foreach="[a, b] as $i">{$i}</div>
-'),
+	<<<'XX'
+
+			<script type="text/html">
+			<div>a</div>
+			<div>b</div>
+			</script>
+			<div>a</div>
+			<div>b</div>
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+				{var $i = def}
+				<script type="text/html">
+				{contentType html}
+				<div n:foreach="[a, b] as $i">{$i}</div>
+				</script>
+				<div n:foreach="[a, b] as $i">{$i}</div>
+
+			XX,
+	),
 );
 
 // trim inside <script>

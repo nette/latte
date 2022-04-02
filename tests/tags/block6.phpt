@@ -17,22 +17,26 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 // order of block & include
 Assert::match(
-	'
+	<<<'XX'
 
 
-	X',
+
+			X
+		XX,
 	$latte->renderToString(
-		'
-{define a}
-	{var $x = "X"}
-	{include #b}
-{/define}
+		<<<'XX'
 
-{define b}
-	{$x}
-{/define}
+			{define a}
+				{var $x = "X"}
+				{include #b}
+			{/define}
 
-{include a}
-',
+			{define b}
+				{$x}
+			{/define}
+
+			{include a}
+
+			XX,
 	),
 );

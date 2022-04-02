@@ -35,15 +35,17 @@ Assert::matchFile(
 );
 
 Assert::match(
-	'
-	item
-	item
+	<<<'XX'
 
----
+			item
+			item
 
-	1
-	2
-is null
-',
+		---
+
+			1
+			2
+		is null
+
+		XX,
 	$latte->renderToString($template),
 );

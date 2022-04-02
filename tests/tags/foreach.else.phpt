@@ -17,90 +17,124 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::matchFile(
 	__DIR__ . '/expected/foreach.else.phtml',
-	$latte->compile('
-{foreach [a] as $item}
-	item
-	{else}
-	empty
-{/foreach}
-'),
+	$latte->compile(
+		<<<'XX'
+
+			{foreach [a] as $item}
+				item
+				{else}
+				empty
+			{/foreach}
+
+			XX,
+	),
 );
 
 
 Assert::match(
-	'
-	Empty
-',
-	$latte->renderToString('
-{foreach [] as $item}
-	Items
-{else}
-	Empty
-{/foreach}
-'),
+	<<<'XX'
+
+			Empty
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+			{foreach [] as $item}
+				Items
+			{else}
+				Empty
+			{/foreach}
+
+			XX,
+	),
 );
 
 
 Assert::match(
-	'
-	Items
-',
-	$latte->renderToString('
-{foreach [1] as $item}
-	Items
-{else}
-	Empty
-{/foreach}
-'),
+	<<<'XX'
+
+			Items
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+			{foreach [1] as $item}
+				Items
+			{else}
+				Empty
+			{/foreach}
+
+			XX,
+	),
 );
 
 
 Assert::match(
-	'
-	Empty
-',
-	$latte->renderToString('
-{foreach [1] as $item}
-	{skipIf true}
-	Items
-{else}
-	Empty
-{/foreach}
-'),
+	<<<'XX'
+
+			Empty
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+			{foreach [1] as $item}
+				{skipIf true}
+				Items
+			{else}
+				Empty
+			{/foreach}
+
+			XX,
+	),
 );
 
 
 Assert::match(
-	'
-		Empty Inner
-',
-	$latte->renderToString('
-{foreach [1] as $item}
-	{foreach [] as $item}
-		Items
-	{else}
-		Empty Inner
-	{/foreach}
-{else}
-	Empty Outer
-{/foreach}
-'),
+	<<<'XX'
+
+				Empty Inner
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+			{foreach [1] as $item}
+				{foreach [] as $item}
+					Items
+				{else}
+					Empty Inner
+				{/foreach}
+			{else}
+				Empty Outer
+			{/foreach}
+
+			XX,
+	),
 );
 
 
 Assert::match(
-	'
-	Empty Outer
-',
-	$latte->renderToString('
-{foreach [] as $item}
-	{foreach [1] as $item}
-		Items
-	{else}
-		Empty Inner
-	{/foreach}
-{else}
-	Empty Outer
-{/foreach}
-'),
+	<<<'XX'
+
+			Empty Outer
+
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+
+			{foreach [] as $item}
+				{foreach [1] as $item}
+					Items
+				{else}
+					Empty Inner
+				{/foreach}
+			{else}
+				Empty Outer
+			{/foreach}
+
+			XX,
+	),
 );

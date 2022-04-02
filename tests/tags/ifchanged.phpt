@@ -46,27 +46,28 @@ Assert::matchFile(
 );
 
 Assert::match(
-	'
-  1   const       2     3
+	<<<'XX'
 
---
+		  1   const       2     3
 
-  1    else    2    3    else    else
+		--
 
---
+		  1    else    2    3    else    else
 
-  -1-      -2-    -3-
+		--
 
---
+		  -1-      -2-    -3-
 
-  -1-    else    -2-    -3-    else    else
+		--
 
---
+		  -1-    else    -2-    -3-    else    else
 
- <span>1</span>  <span>2</span> <span>3</span>
---
+		--
 
- <span class="1"></span>  <span class="2"></span> <span class="3"></span>
-',
+		 <span>1</span>  <span>2</span> <span>3</span>
+		--
+
+		 <span class="1"></span>  <span class="2"></span> <span class="3"></span>
+		XX,
 	$latte->renderToString($template),
 );

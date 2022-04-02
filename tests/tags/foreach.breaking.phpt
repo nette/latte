@@ -59,19 +59,21 @@ Assert::matchFile(
 );
 
 Assert::match(
-	'
-	1. item
-	3. item
+	<<<'XX'
 
----
+			1. item
+			3. item
 
-	1. item
-	2. item
+		---
 
----
+			1. item
+			2. item
 
-	1. item
-',
+		---
+
+			1. item
+
+		XX,
 	$latte->renderToString($template),
 );
 
@@ -111,37 +113,39 @@ Assert::matchFile(
 );
 
 Assert::match(
-	'
-<ul title="foreach break">
-	<li>0</li>
-</ul>
+	<<<'XX'
 
-<ul title="foreach continue">
-	<li>0</li>
-	<li>1</li>
-	<li>2</li>
-	<li>3</li>
-</ul>
+		<ul title="foreach break">
+			<li>0</li>
+		</ul>
 
-<ul title="foreach skip">
-	<li>0</li>
-	<li>1</li>
-	<li>2</li>
-	<li>3</li>
-</ul>
+		<ul title="foreach continue">
+			<li>0</li>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+		</ul>
+
+		<ul title="foreach skip">
+			<li>0</li>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+		</ul>
 
 
-<ul title="inner foreach break">
-	<li>0</li>
-</ul>
+		<ul title="inner foreach break">
+			<li>0</li>
+		</ul>
 
-<ul title="inner foreach continue">
-	<li>0123</li>
-</ul>
+		<ul title="inner foreach continue">
+			<li>0123</li>
+		</ul>
 
-<ul title="inner foreach skip">
-	<li>0123</li>
-</ul>
-',
+		<ul title="inner foreach skip">
+			<li>0123</li>
+		</ul>
+
+		XX,
 	$latte->renderToString($template),
 );

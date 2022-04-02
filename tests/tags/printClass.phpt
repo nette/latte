@@ -20,14 +20,16 @@ $printer->printClass($template);
 $res = ob_get_clean();
 
 Assert::match(
-	'%A%/**
- * @method mixed Abc(stdClass $a, $b = 132)
- */
-class Template
-{
-	public int $int;
-	public $unknown;
-}
-%A%',
+	<<<'XX'
+		%A%/**
+		 * @method mixed Abc(stdClass $a, $b = 132)
+		 */
+		class Template
+		{
+			public int $int;
+			public $unknown;
+		}
+		%A%
+		XX,
 	$res,
 );

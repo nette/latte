@@ -10,16 +10,18 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-$template = '
-{extends layout.latte}
+$template = <<<'XX'
 
-{capture $foo}
-    {block bar}{/block}
-{/capture}
+	{extends layout.latte}
 
-{block content}
-content
-';
+	{capture $foo}
+	    {block bar}{/block}
+	{/capture}
+
+	{block content}
+	content
+
+	XX;
 
 Assert::matchFile(
 	__DIR__ . '/expected/extendsCheck.phtml',

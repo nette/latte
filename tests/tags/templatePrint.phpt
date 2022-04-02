@@ -17,25 +17,27 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	<<<'XX'
-%A%
-	public function prepare(): void
-	{
-		extract($this->params);
-		(new Latte\Runtime\Blueprint)->printClass($this, null);
-		exit;
-%A%
-XX
-,   $latte->compile('Foo {block}{/block} {templatePrint}'));
+		%A%
+			public function prepare(): void
+			{
+				extract($this->params);
+				(new Latte\Runtime\Blueprint)->printClass($this, null);
+				exit;
+		%A%
+		XX,
+	$latte->compile('Foo {block}{/block} {templatePrint}'),
+);
 
 
 Assert::match(
 	<<<'XX'
-%A%
-	public function prepare(): void
-	{
-		extract($this->params);
-		(new Latte\Runtime\Blueprint)->printClass($this, 'Foo');
-		exit;
-%A%
-XX
-,   $latte->compile('{templatePrint Foo}'));
+		%A%
+			public function prepare(): void
+			{
+				extract($this->params);
+				(new Latte\Runtime\Blueprint)->printClass($this, 'Foo');
+				exit;
+		%A%
+		XX,
+	$latte->compile('{templatePrint Foo}'),
+);

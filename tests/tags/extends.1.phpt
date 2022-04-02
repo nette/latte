@@ -15,13 +15,11 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => '{$foo}',
 
-	'main' => <<<'EOD'
-		{layout "parent"}
-		{* This should be erased *}
-		{var $foo = 1}
-		This should be erased
-
-		EOD,
+	'main' => '{layout "parent"}
+{* This should be erased *}
+{var $foo = 1}
+This should be erased
+',
 ]));
 
 Assert::matchFile(

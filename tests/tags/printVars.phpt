@@ -13,8 +13,10 @@ $printer->printVars(['int' => 123, 'unknown' => null]);
 $res = ob_get_clean();
 
 Assert::match(
-	'%A%{varType int $int}
-{varType mixed $unknown}
-%A%',
+	<<<'XX'
+		%A%{varType int $int}
+		{varType mixed $unknown}
+		%A%
+		XX,
 	$res,
 );

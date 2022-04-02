@@ -42,10 +42,11 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => '<title>{block title}My website{/block}</title>',
 
-	'main' => '
-{extends "parent"}
-{block title}Homepage | {include parent}{/block}
-	',
+	'main' => <<<'X'
+		{extends "parent"}
+		{block title}Homepage | {include parent}{/block}
+		X
+	,
 ]));
 
 Assert::match(

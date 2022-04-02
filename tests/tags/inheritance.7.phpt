@@ -14,67 +14,70 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
 
-	'parent' => '
-{var $varParent = "parent"}
+	'parent' => <<<'XX'
 
-{block title}{/block}
+		{var $varParent = "parent"}
 
-{include content}
-',
+		{block title}{/block}
 
-	'inter' => '
-{layout "parent"}
-{var $varInter = "inter"}
-',
+		{include content}
 
-	'main1' => <<<'EOD'
+		XX,
+
+	'inter' => <<<'XX'
+
 		{layout "parent"}
-		{var $varMain = "main"}
+		{var $varInter = "inter"}
 
-		{block title}
-		    block: {$varMain} {$varParent ?? undef}
-		{/block}
+		XX,
 
-		{block content}
-		    include: {$varMain} {$varParent ?? undef}
-		{/block}
-		EOD
-	,
+	'main1' => '{layout "parent"}
+{var $varMain = "main"}
 
-	'main2' => <<<'EOD'
-		{layout "inter"}
-		{var $varMain = "main"}
+{block title}
+    block: {$varMain} {$varParent ?? undef}
+{/block}
 
-		{block title}
-		    block: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
-		{/block}
+{block content}
+    include: {$varMain} {$varParent ?? undef}
+{/block}',
 
-		{block content}
-		    include: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
-		{/block}
-		EOD,
+	'main2' => '{layout "inter"}
+{var $varMain = "main"}
+
+{block title}
+    block: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
+{/block}
+
+{block content}
+    include: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
+{/block}',
 ]));
 
 
 Assert::match(
-	'
-
-    block: main parent
+	<<<'XX'
 
 
-    include: main undef
-',
+		    block: main parent
+
+
+		    include: main undef
+
+		XX,
 	$latte->renderToString('main1'),
 );
 
 
 Assert::match(
-	'
-
-    block: main inter parent
+	<<<'XX'
 
 
-    include: main undef undef
-',
+		    block: main inter parent
+
+
+		    include: main undef undef
+
+		XX,
 	$latte->renderToString('main2'),
 );
