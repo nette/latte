@@ -85,7 +85,7 @@ function createLatte(): Latte\Engine
 function lintLatte(Latte\Engine $latte, string $file): bool
 {
 	set_error_handler(function (int $severity, string $message) use ($file) {
-		if ($severity === E_USER_DEPRECATED) {
+		if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
 			fwrite(STDERR, "[DEPRECATED] $file    $message\n");
 			return null;
 		}
@@ -102,7 +102,8 @@ function lintLatte(Latte\Engine $latte, string $file): bool
 		$code = $latte->compile($s);
 
 	} catch (Latte\CompileException $e) {
-		fwrite(STDERR, "[ERROR]      $file    {$e->getMessage()}\n");
+		$pos = $e->sourceLine ? ':' . $e->sourceLine : '';
+		fwrite(STDERR, "[ERROR]      $file$pos    {$e->getMessage()}\n");
 		return false;
 
 	} finally {
