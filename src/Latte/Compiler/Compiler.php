@@ -138,7 +138,7 @@ class Compiler
 			. ($comment === null ? '' : '/** ' . str_replace('*/', '* /', $comment) . " */\n")
 			. "final class $className extends Latte\\Runtime\\Template\n{\n"
 			. $this->buildClassBody($tokens)
-			. "\n\n}\n";
+			. "\n}\n";
 
 		$code = PhpHelpers::inlineHtmlToEcho($code);
 		$code = PhpHelpers::reformatCode($code);
