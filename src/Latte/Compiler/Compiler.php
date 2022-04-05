@@ -111,7 +111,7 @@ class Compiler
 	 */
 	public function addMacro(string $name, Macro $macro, ?int $flags = null)
 	{
-		if (!preg_match('#^[a-z_=]\w*(?:[.:-]\w+)*$#iD', $name)) {
+		if (!preg_match('#^[a-z_=]\w*(?:-\w+)*$#iD', $name)) {
 			throw new \LogicException("Invalid tag name '$name'.");
 
 		} elseif (!isset($this->flags[$name])) {
