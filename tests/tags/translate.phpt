@@ -1,21 +1,25 @@
 <?php
 
 /**
- * Test: Latte\Macros\CoreMacros: {_translate}
+ * Test: Latte\Macros\CoreMacros: {translate}
  */
 
 declare(strict_types=1);
 
-use Latte\Macros\CoreMacros;
 use Tester\Assert;
 
 
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler;
-CoreMacros::install($compiler);
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
 
-// {_...}
-Assert::same('<?php echo LR\Filters::escapeHtmlText(($this->filters->translate)(\'var\')); ?>', $compiler->expandMacro('_', 'var', '')->openingCode);
-Assert::same('<?php echo LR\Filters::escapeHtmlText(($this->filters->filter)(($this->filters->translate)(\'var\'))); ?>', $compiler->expandMacro('_', 'var', '|filter')->openingCode);
+Assert::contains(
+	'echo $this->filters->filterContent("translate", $ʟ_fi, \'abc\') /* line 1 */;',
+	$latte->compile('{translate}abc{/translate}')
+);
+Assert::contains(
+	'echo $this->filters->filterContent(\'filter\', $ʟ_fi, $this->filters->filterContent("translate", $ʟ_fi, \'abc\')) /* line 1 */;',
+	$latte->compile('{translate|filter}abc{/translate}')
+);

@@ -71,6 +71,7 @@ class CoreMacros extends MacroSet
 		$me->addMacro('r', '?>}<?php');
 
 		$me->addMacro('_', [$me, 'macroTranslate'], [$me, 'macroTranslate']);
+		$me->addMacro('translate', [$me, 'macroTranslate'], [$me, 'macroTranslate']);
 		$me->addMacro('=', [$me, 'macroExpr']);
 
 		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
@@ -337,6 +338,7 @@ class CoreMacros extends MacroSet
 
 	/**
 	 * {_$var |modifiers}
+	 * {translate|modifiers}
 	 */
 	public function macroTranslate(MacroNode $node, PhpWriter $writer): string
 	{
@@ -362,8 +364,11 @@ class CoreMacros extends MacroSet
 				implode('', $node->context)
 			);
 
-		} elseif ($node->empty = ($node->args !== '')) {
+		} elseif ($node->empty = ($node->args !== '') && $node->name === '_') {
 			return $writer->write('echo %modify(($this->filters->translate)(%node.args)) %node.line;');
+
+		} elseif ($node->name === '_') {
+			trigger_error("As a pair tag for translation, {translate} ... {/translate} should be used instead of {_} ... {/} (on line $node->startLine)", E_USER_DEPRECATED);
 		}
 
 		return '';
