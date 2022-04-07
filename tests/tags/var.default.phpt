@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler\Compiler;
+$compiler = new Latte\Compiler\TemplateGenerator;
 CoreMacros::install($compiler);
 
 test('', function () use ($compiler) { // {var ... }

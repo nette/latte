@@ -19,9 +19,9 @@ use Latte\Strict;
 
 
 /**
- * Latte compiler.
+ * Template code generator.
  */
-class Compiler
+final class TemplateGenerator
 {
 	use Strict;
 

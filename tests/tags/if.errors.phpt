@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler\Compiler;
+$compiler = new Latte\Compiler\TemplateGenerator;
 CoreMacros::install($compiler);
 
 Assert::same('<?php if (isset($var)) { ?>', $compiler->expandMacro('ifset', '$var')->openingCode);

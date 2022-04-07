@@ -11,8 +11,8 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Compiler\Compiler;
 use Latte\Compiler\Tag;
+use Latte\Compiler\TemplateGenerator;
 
 
 /**
@@ -22,13 +22,13 @@ class MacroSet extends Latte\Extension
 {
 	use Latte\Strict;
 
-	private Compiler $compiler;
+	private TemplateGenerator $compiler;
 
 	/** @var array<string, array{string|callable|null, string|callable|null, string|callable|null}> */
 	private array $macros;
 
 
-	public function __construct(Compiler $compiler = null)
+	public function __construct(TemplateGenerator $compiler = null)
 	{
 		if ($compiler) {
 			$this->compiler = $compiler;
@@ -150,7 +150,7 @@ class MacroSet extends Latte\Extension
 	}
 
 
-	public function getCompiler(): Compiler
+	public function getCompiler(): TemplateGenerator
 	{
 		return $this->compiler;
 	}

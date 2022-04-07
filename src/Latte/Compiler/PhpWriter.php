@@ -36,7 +36,7 @@ class PhpWriter
 	private ?int $line = null;
 
 
-	public static function using(Tag $tag, ?Compiler $compiler = null): self
+	public static function using(Tag $tag, ?TemplateGenerator $compiler = null): self
 	{
 		$me = new static($tag->tokenizer, null, $tag->context);
 		$me->modifiers = &$tag->modifiers;
