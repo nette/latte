@@ -123,7 +123,7 @@ class Engine
 			throw new \LogicException('In sandboxed mode you need to set a security policy.');
 		}
 
-		$parser = new Compiler\Parser;
+		$lexer = new Compiler\TemplateLexer;
 		$compiler = new Compiler\Compiler;
 
 		Macros\CoreMacros::install($compiler);
@@ -133,9 +133,9 @@ class Engine
 		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
 
 		try {
-			$tokens = $parser
+			$tokens = $lexer
 				->setContentType($this->contentType)
-				->parse($source);
+				->tokenize($source);
 
 			$code = $compiler
 				->setContentType($this->contentType)
@@ -150,7 +150,7 @@ class Engine
 
 			$line = isset($tokens)
 				? $compiler->getLine()
-				: $parser->getLine();
+				: $lexer->getLine();
 			throw $e->setSource($source, $line, $name);
 		}
 
