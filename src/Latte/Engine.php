@@ -124,7 +124,7 @@ class Engine
 		}
 
 		$lexer = new Compiler\TemplateLexer;
-		$compiler = new Compiler\Compiler;
+		$compiler = new Compiler\TemplateGenerator;
 
 		Macros\CoreMacros::install($compiler);
 		Macros\BlockMacros::install($compiler);

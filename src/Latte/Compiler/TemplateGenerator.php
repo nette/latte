@@ -19,9 +19,9 @@ use Latte\SecurityViolationException;
 
 
 /**
- * Latte compiler.
+ * Template code generator.
  */
-class Compiler
+final class TemplateGenerator
 {
 	use Latte\Strict;
 

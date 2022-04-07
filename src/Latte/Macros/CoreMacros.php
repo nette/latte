@@ -28,7 +28,7 @@ class CoreMacros extends MacroSet
 	private int $idCounter = 0;
 
 
-	public static function install(Latte\Compiler\Compiler $compiler): void
+	public static function install(Latte\Compiler\TemplateGenerator $compiler): void
 	{
 		$me = new static($compiler);
 
