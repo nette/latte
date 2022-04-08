@@ -1,6 +1,6 @@
 <?php
 
-/** @phpversion 8.1 */
+/** @phpversion < 8.1 */
 // Array spread
 
 declare(strict_types=1);
@@ -23,5 +23,5 @@ Assert::same(
 );
 
 __halt_compiler();
-[$a, $b] = [...$c, ...$d],
-[...$c, 'x']
+[$a, $b] = array_merge([], $c, [], $d, []),
+array_merge([], $c, ['x'])

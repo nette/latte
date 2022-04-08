@@ -60,6 +60,25 @@ class ArrayNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
+		// Converts [...$var] -> $var, because PHP 8.0 doesn't support unpacking with string keys
+		if (PHP_VERSION_ID < 80100) {
+			$res = '[';
+			$merge = false;
+			foreach ($this->items as $item) {
+				if ($item === null) {
+					$res .= ', ';
+				} elseif ($item->unpack) {
+					$res .= '], ' . $item->value->print($context) . ', [';
+					$merge = true;
+				} else {
+					$res .= $item->print($context) . ', ';
+				}
+			}
+
+			$res = str_ends_with($res, ', ') ? substr($res, 0, -2) : $res;
+			return $merge ? "array_merge($res])" : $res . ']';
+		}
+
 		return '[' . $context->implode($this->items) . ']';
 	}
 
