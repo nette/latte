@@ -63,3 +63,30 @@ Assert::match(
 	'<div> <a> </a></div>', // </a> is accepted
 	$latte->renderToString('<div n:if="1"> {if true}<a>{/if} </a></div>')
 );
+
+Assert::match(
+	'<span attr1=val></span>',
+	$latte->renderToString('<span {if true}attr1=val{else}attr2=val{/if}></span>')
+);
+
+
+// tag name vs content
+Assert::contains(
+	'escapeHtmlText(trim("a"))',
+	$latte->compile('{trim("a")}')
+);
+
+Assert::contains(
+	'escapeHtmlText(\trim("a"))',
+	$latte->compile('{\trim("a")}')
+);
+
+Assert::contains(
+	'escapeHtmlText(MyClass::foo)',
+	$latte->compile('{MyClass::foo}')
+);
+
+Assert::contains(
+	'escapeHtmlText(My\Class::foo)',
+	$latte->compile('{My\Class::foo}')
+);
