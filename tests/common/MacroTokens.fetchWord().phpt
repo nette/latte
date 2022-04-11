@@ -22,7 +22,7 @@ function testWord($expr, $word, $rest = '')
 
 
 testWord('', null);
-@testWord('$1d-,a', '$1d-', 'a'); // @ missing quotes
+testWord('$1d-,a', '$1d-', 'a');
 testWord('"item\'1""item2"', '"item\'1""item2"');
 testWord('(symbol)', '(symbol)');
 testWord('($expr)', '($expr)');
@@ -33,16 +33,8 @@ testWord('foo ::bar', 'foo ::bar');
 testWord('func (1, 2)', 'func', '(1, 2)');
 testWord('func(1, 2)', 'func(1, 2)');
 testWord('$exp and 10', '$exp', 'and 10');
-@testWord('$exp--', '$exp--'); // @ missing quotes
+testWord('$exp--', '$exp--');
 testWord('$exp --$a', '$exp', '--$a');
 testWord('word - 1', 'word', '- 1');
 testWord('word -1', 'word', '-1');
 testWord('word -$num', 'word', '-$num');
-
-Assert::error(function () {
-	testWord('a-$x', 'a-$x', '');
-}, E_USER_DEPRECATED, "The expression 'a-\$x' should be put in double quotes.");
-
-Assert::error(function () {
-	testWord('a-{$x}', 'a-{$x}', '');
-}, E_USER_DEPRECATED, "The expression 'a-{\$x}' should be put in double quotes.");

@@ -111,10 +111,6 @@ class MacroTokens extends TokenIterator
 			$expr = $this->nextValue('(') . $this->joinUntilSameDepth(')') . $this->nextValue(')');
 		} else {
 			$expr = $this->joinUntilSameDepth(self::T_WHITESPACE, ',');
-			if (preg_match('~[\w-]+\{?\$~A', $expr)) {
-				trigger_error("The expression '$expr' should be put in double quotes.", E_USER_DEPRECATED);
-			}
-
 			if ($this->isNext(...[
 				'%', '&', '*', '.', '<', '=', '>', '?', '^', '|', ':',
 				'::', '=>', '->', '?->', '??->', '<<', '>>', '<=>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '??', '**',

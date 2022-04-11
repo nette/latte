@@ -19,7 +19,7 @@ $template = <<<'EOD'
 
 {snippet outer}
 begin
-<div n:snippet='"inner-$id"' n:block="block2">
+<div n:snippet="inner-{$id}" n:block="block2">
 		dynamic
 </div>
 end
