@@ -41,6 +41,7 @@ final class TemplateParser
 
 	private TemplateParserHtml $html;
 	private ?TokenStream $stream = null;
+	private ?TemplateLexer $lexer = null;
 	private ?Policy $policy = null;
 	private string $contentType = Context::Html;
 	private int $counter = 0;
@@ -74,6 +75,7 @@ final class TemplateParser
 	 */
 	public function parse(string $template, TemplateLexer $lexer): Nodes\TemplateNode
 	{
+		$this->lexer = $lexer;
 		$this->html = new TemplateParserHtml($this, $this->attrParsers);
 		$this->stream = new TokenStream($lexer->tokenize($template, $this->contentType));
 
@@ -278,7 +280,7 @@ final class TemplateParser
 	private function checkEndTag(Tag $start, ?Tag $end): void
 	{
 		if (!$end) {
-			if ($start->name !== 'block' || $this->tag->parent) { // TODO: hardcoded
+			if ($start->name !== 'syntax' && ($start->name !== 'block' || $this->tag->parent)) { // TODO: hardcoded
 				$this->stream->throwUnexpectedException(expected: ["{/$start->name}"]);
 			}
 
@@ -323,6 +325,7 @@ final class TemplateParser
 	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
+		$this->lexer?->setContentType($type);
 		return $this;
 	}
 
@@ -343,6 +346,12 @@ final class TemplateParser
 	public function getTag(): ?Tag
 	{
 		return $this->tag;
+	}
+
+
+	public function getLexer(): TemplateLexer
+	{
+		return $this->lexer;
 	}
 
 

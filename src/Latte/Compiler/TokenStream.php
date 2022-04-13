@@ -13,21 +13,23 @@ use Latte\CompileException;
 use Latte\Strict;
 
 
+/**
+ * TokenStream loads tokens from $source iterator on-demand, and places them in a buffer to provide access
+ * to any previous token by index.
+ */
 final class TokenStream
 {
 	use Strict;
 
 	/** @var LegacyToken[] */
-	private array $tokens;
+	private array $tokens = [];
+	private \Iterator $source;
 	private int $index = 0;
 
 
-	/**
-	 * @param  LegacyToken[]  $tokens
-	 */
-	public function __construct(array $tokens)
+	public function __construct(\Iterator $source)
 	{
-		$this->tokens = $tokens;
+		$this->source = $source;
 	}
 
 
@@ -45,7 +47,18 @@ final class TokenStream
 	 */
 	public function peek(int $offset = 0): ?LegacyToken
 	{
-		return $this->tokens[$this->index + $offset] ?? null;
+		$pos = $this->index + $offset;
+		while ($pos >= 0 && !isset($this->tokens[$pos]) && $this->source->valid()) {
+			if ($this->tokens) {
+				$this->source->next();
+			}
+
+			if ($this->source->valid()) {
+				$this->tokens[] = $this->source->current();
+			}
+		}
+
+		return $this->tokens[$pos] ?? null;
 	}
 
 

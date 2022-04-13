@@ -10,21 +10,21 @@ require __DIR__ . '/../bootstrap.php';
 
 test('', function () {
 	$lexer = new TemplateLexer;
-	$lexer->tokenize("\n{a}");
-	$lexer->tokenize('');
+	iterator_to_array($lexer->tokenize("\n{a}"));
+	iterator_to_array($lexer->tokenize(''));
 });
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => $lexer->tokenize("\xA0\xA0"),
+	fn() => iterator_to_array($lexer->tokenize("\xA0\xA0"), false),
 	Latte\CompileException::class,
 	'Template is not valid UTF-8 stream (at column 1)',
 );
 
 
 $lexer = new TemplateLexer;
-$e = Assert::exception(
-	fn() => $lexer->tokenize("žluťoučký\n\xA0\xA0"),
+Assert::exception(
+	fn() => iterator_to_array($lexer->tokenize("žluťoučký\n\xA0\xA0"), false),
 	Latte\CompileException::class,
 	'Template is not valid UTF-8 stream (on line 2 at column 1)',
 );
@@ -32,7 +32,7 @@ $e = Assert::exception(
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => $lexer->tokenize("{var \n'abc}"),
+	fn() => iterator_to_array($lexer->tokenize("{var \n'abc}"), false),
 	Latte\CompileException::class,
 	'Malformed tag contents (at column 1)',
 );
@@ -40,7 +40,7 @@ Assert::exception(
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => $lexer->tokenize("\n{* \n'abc}"),
+	fn() => iterator_to_array($lexer->tokenize("\n{* \n'abc}"), false),
 	Latte\CompileException::class,
 	'Malformed tag contents (on line 2 at column 1)',
 );
@@ -48,7 +48,7 @@ Assert::exception(
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => $lexer->tokenize('{'),
+	fn() => iterator_to_array($lexer->tokenize('{'), false),
 	Latte\CompileException::class,
 	'Malformed tag contents (at column 1)',
 );
@@ -56,7 +56,7 @@ Assert::exception(
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => $lexer->tokenize("\n{"),
+	fn() => iterator_to_array($lexer->tokenize("\n{"), false),
 	Latte\CompileException::class,
 	'Malformed tag contents (on line 2 at column 1)',
 );
@@ -64,7 +64,7 @@ Assert::exception(
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => $lexer->tokenize("a\x00\x1F\x7Fb"),
+	fn() => iterator_to_array($lexer->tokenize("a\x00\x1F\x7Fb"), false),
 	Latte\CompileException::class,
 	'Template contains control character \x0 (at column 2)',
 );

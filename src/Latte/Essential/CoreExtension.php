@@ -58,6 +58,7 @@ final class CoreExtension extends Latte\Extension
 			'trace' => [Nodes\TraceNode::class, 'create'],
 			'l' => fn(Tag $tag) => new TextNode('{', $tag->position),
 			'r' => fn(Tag $tag) => new TextNode('}', $tag->position),
+			'syntax' => \Closure::fromCallable([$this, 'parseSyntax']),
 
 			'_' => [$this, 'parseTranslate'],
 			'translate' => [Nodes\TranslateNode::class, 'create'],
@@ -199,6 +200,19 @@ final class CoreExtension extends Latte\Extension
 		return $mod === 'file' || (!$mod && $name && !preg_match('~[\w-]+$~DA', $name))
 			? Nodes\IncludeFileNode::create($tag)
 			: Nodes\IncludeBlockNode::create($tag, $parser);
+	}
+
+
+	/**
+	 * {syntax ...}
+	 */
+	private function parseSyntax(Tag $tag, TemplateParser $parser): \Generator
+	{
+		$tag->expectArguments();
+		$parser->getLexer()->setSyntax($tag->args);
+		[$inner] = yield;
+		$parser->getLexer()->setSyntax(null);
+		return $inner;
 	}
 
 
