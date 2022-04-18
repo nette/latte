@@ -22,13 +22,13 @@ class Template
 	use Latte\Strict;
 
 	public const
-		LAYER_TOP = 0,
-		LAYER_SNIPPET = 'snippet',
-		LAYER_LOCAL = 'local';
+		LayerTop = 0,
+		LayerSnippet = 'snippet',
+		LayerLocal = 'local';
 
-	protected const CONTENT_TYPE = Latte\Context::Html;
+	protected const ContentType = Latte\Context::Html;
 
-	protected const BLOCKS = [];
+	protected const Blocks = [];
 
 	/** global accumulators for intermediate results */
 	public \stdClass $global;
@@ -75,9 +75,9 @@ class Template
 		$this->name = $name;
 		$this->policy = $policy;
 		$this->global = (object) $providers;
-		$this->initBlockLayer(self::LAYER_TOP);
-		$this->initBlockLayer(self::LAYER_LOCAL);
-		$this->initBlockLayer(self::LAYER_SNIPPET);
+		$this->initBlockLayer(self::LayerTop);
+		$this->initBlockLayer(self::LayerLocal);
+		$this->initBlockLayer(self::LayerSnippet);
 	}
 
 
@@ -106,7 +106,7 @@ class Template
 	/**
 	 * @return string[]
 	 */
-	public function getBlockNames(int|string $layer = self::LAYER_TOP): array
+	public function getBlockNames(int|string $layer = self::LayerTop): array
 	{
 		return array_keys($this->blocks[$layer] ?? []);
 	}
@@ -114,7 +114,7 @@ class Template
 
 	public function getContentType(): string
 	{
-		return static::CONTENT_TYPE;
+		return static::ContentType;
 	}
 
 
@@ -167,7 +167,7 @@ class Template
 		if (isset($this->global->snippetBridge) && !isset($this->global->snippetDriver)) {
 			$this->global->snippetDriver = new SnippetDriver($this->global->snippetBridge);
 		}
-		Filters::$xml = (bool) preg_match('#xml|xhtml#', static::CONTENT_TYPE);
+		Filters::$xml = (bool) preg_match('#xml|xhtml#', static::ContentType);
 
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
@@ -185,7 +185,7 @@ class Template
 
 		} elseif (
 			isset($this->global->snippetDriver)
-			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LAYER_SNIPPET], $this->params)
+			&& $this->global->snippetDriver->renderSnippets($this->blocks[self::LayerSnippet], $this->params)
 		) {
 			// nothing
 		} else {
@@ -213,14 +213,14 @@ class Template
 		$referred->global = $this->global;
 
 		if (in_array($referenceType, ['extends', 'includeblock', 'import', 'embed'], true)) {
-			foreach ($referred->blocks[self::LAYER_TOP] as $nm => $block) {
+			foreach ($referred->blocks[self::LayerTop] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}
 
-			$referred->blocks[self::LAYER_TOP] = &$this->blocks[self::LAYER_TOP];
+			$referred->blocks[self::LayerTop] = &$this->blocks[self::LayerTop];
 
-			$this->blocks[self::LAYER_SNIPPET] += $referred->blocks[self::LAYER_SNIPPET];
-			$referred->blocks[self::LAYER_SNIPPET] = &$this->blocks[self::LAYER_SNIPPET];
+			$this->blocks[self::LayerSnippet] += $referred->blocks[self::LayerSnippet];
+			$referred->blocks[self::LayerSnippet] = &$this->blocks[self::LayerSnippet];
 		}
 
 		($this->engine->probe)($referred);
@@ -237,7 +237,7 @@ class Template
 		$this->filter(
 			function () use ($block) { $this->render($block); },
 			$mod,
-			static::CONTENT_TYPE,
+			static::ContentType,
 			"'$this->name'",
 		);
 	}
@@ -276,7 +276,7 @@ class Template
 	): void {
 		$block = $layer
 			? ($this->blocks[$layer][$name] ?? null)
-			: ($this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[self::LAYER_TOP][$name] ?? null);
+			: ($this->blocks[self::LayerLocal][$name] ?? $this->blocks[self::LayerTop][$name] ?? null);
 
 		if (!$block) {
 			$hint = $layer && ($t = Latte\Helpers::getSuggestion($this->getBlockNames($layer), $name))
@@ -302,7 +302,7 @@ class Template
 	 */
 	public function renderBlockParent(string $name, array $params): void
 	{
-		$block = $this->blocks[self::LAYER_LOCAL][$name] ?? $this->blocks[self::LAYER_TOP][$name] ?? null;
+		$block = $this->blocks[self::LayerLocal][$name] ?? $this->blocks[self::LayerTop][$name] ?? null;
 		if (!$block || ($function = next($block->functions)) === false) {
 			throw new Latte\RuntimeException("Cannot include undefined parent block '$name'.");
 		}
@@ -322,7 +322,7 @@ class Template
 		array $functions,
 		int|string|null $layer = null,
 	): void {
-		$block = &$this->blocks[$layer ?? self::LAYER_TOP][$name];
+		$block = &$this->blocks[$layer ?? self::LayerTop][$name];
 		$block ??= new Block;
 		if ($block->contentType === null) {
 			$block->contentType = $contentType;
@@ -384,8 +384,8 @@ class Template
 	{
 		$destId ??= $staticId;
 		$this->blocks[$destId] = [];
-		foreach (static::BLOCKS[$staticId] ?? [] as $nm => $info) {
-			[$method, $contentType] = is_array($info) ? $info : [$info, static::CONTENT_TYPE];
+		foreach (static::Blocks[$staticId] ?? [] as $nm => $info) {
+			[$method, $contentType] = is_array($info) ? $info : [$info, static::ContentType];
 			$this->addBlock($nm, $contentType, [[$this, $method]], $destId);
 		}
 	}
@@ -393,8 +393,8 @@ class Template
 
 	protected function enterBlockLayer(int $staticId, array $vars): void
 	{
-		$this->blockStack[] = $this->blocks[self::LAYER_TOP];
-		$this->initBlockLayer($staticId, self::LAYER_TOP);
+		$this->blockStack[] = $this->blocks[self::LayerTop];
+		$this->initBlockLayer($staticId, self::LayerTop);
 		$this->varStack[] = $vars;
 	}
 
@@ -409,14 +409,14 @@ class Template
 
 	protected function leaveBlockLayer(): void
 	{
-		$this->blocks[self::LAYER_TOP] = array_pop($this->blockStack);
+		$this->blocks[self::LayerTop] = array_pop($this->blockStack);
 		array_pop($this->varStack);
 	}
 
 
 	public function hasBlock(string $name): bool
 	{
-		return isset($this->blocks[self::LAYER_LOCAL][$name]) || isset($this->blocks[self::LAYER_TOP][$name]);
+		return isset($this->blocks[self::LayerLocal][$name]) || isset($this->blocks[self::LayerTop][$name]);
 	}
 
 

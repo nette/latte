@@ -129,7 +129,7 @@ class CoreMacros extends MacroSet
 			return $writer->write("ob_start(fn() => '') %node.line; try {");
 		}
 
-		if ($node->prefix === $node::PREFIX_TAG) {
+		if ($node->prefix === $node::PrefixTag) {
 			for ($id = 0, $tmp = $node->htmlNode; $tmp = $tmp->parentNode; $id++);
 			$node->htmlNode->data->id ??= $id;
 			return $writer->write(
@@ -236,7 +236,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroIfContent(Tag $node, PhpWriter $writer): void
 	{
-		if (!$node->prefix || $node->prefix !== Tag::PREFIX_NONE) {
+		if (!$node->prefix || $node->prefix !== Tag::PrefixNone) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 		}
 		if ($node->htmlNode->empty) {
@@ -585,7 +585,7 @@ class CoreMacros extends MacroSet
 
 		$node->validate('condition');
 
-		if ($node->parentNode->prefix === $node::PREFIX_NONE) {
+		if ($node->parentNode->prefix === $node::PrefixNone) {
 			return $writer->write("if (%node.args) %node.line { echo \"</{$node->parentNode->htmlNode->name}>\\n\"; $cmd; }");
 		}
 
@@ -622,7 +622,7 @@ class CoreMacros extends MacroSet
 	 */
 	public function macroTag(Tag $node, PhpWriter $writer): void
 	{
-		if (!$node->prefix || $node->prefix !== Tag::PREFIX_NONE) {
+		if (!$node->prefix || $node->prefix !== Tag::PrefixNone) {
 			throw new CompileException("Unknown {$node->getNotation()}, use n:{$node->name} attribute.");
 
 		} elseif (preg_match('(style$|script$)iA', $node->htmlNode->name)) {
@@ -647,12 +647,12 @@ class CoreMacros extends MacroSet
 		?>', $node->htmlNode->data->id, $node->htmlNode->name);
 
 		$node->content = preg_replace(
-			'~^(\s*<)' . Latte\Compiler\TemplateLexer::RE_TAG_NAME . '~',
+			'~^(\s*<)' . Latte\Compiler\TemplateLexer::ReTagName . '~',
 			"\$1<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n",
 			$node->content,
 		);
 		$node->content = preg_replace(
-			'~</' . Latte\Compiler\TemplateLexer::RE_TAG_NAME . '(\s*>\s*)$~',
+			'~</' . Latte\Compiler\TemplateLexer::ReTagName . '(\s*>\s*)$~',
 			"</<?php echo \$ʟ_tag[{$node->htmlNode->data->id}]; ?>\n\$1",
 			$node->content,
 		);

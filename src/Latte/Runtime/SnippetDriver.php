@@ -21,9 +21,9 @@ class SnippetDriver
 	use Latte\Strict;
 
 	public const
-		TYPE_STATIC = 'static',
-		TYPE_DYNAMIC = 'dynamic',
-		TYPE_AREA = 'area';
+		TypeStatic = 'static',
+		TypeDynamic = 'dynamic',
+		TypeArea = 'area';
 
 	/** @var array<array{string, bool}> */
 	private array $stack = [];
@@ -41,7 +41,7 @@ class SnippetDriver
 	public function enter(string $name, string $type): void
 	{
 		if (!$this->renderingSnippets) {
-			if ($type === self::TYPE_DYNAMIC && $this->nestingLevel === 0) {
+			if ($type === self::TypeDynamic && $this->nestingLevel === 0) {
 				trigger_error('Dynamic snippets are allowed only inside static snippet/snippetArea.', E_USER_WARNING);
 			}
 
@@ -52,10 +52,10 @@ class SnippetDriver
 		$obStarted = false;
 		if (
 			($this->nestingLevel === 0 && $this->bridge->needsRedraw($name))
-			|| ($type === self::TYPE_DYNAMIC && ($previous = end($this->stack)) && $previous[1] === true)
+			|| ($type === self::TypeDynamic && ($previous = end($this->stack)) && $previous[1] === true)
 		) {
 			ob_start(fn() => '');
-			$this->nestingLevel = $type === self::TYPE_AREA ? 0 : 1;
+			$this->nestingLevel = $type === self::TypeArea ? 0 : 1;
 			$obStarted = true;
 		} elseif ($this->nestingLevel > 0) {
 			$this->nestingLevel++;
