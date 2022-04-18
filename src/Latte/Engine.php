@@ -124,22 +124,32 @@ class Engine
 		}
 
 		$lexer = new Compiler\TemplateLexer;
-		$compiler = new Compiler\TemplateGenerator;
+		$parser = new Compiler\TemplateParser;
+		$context = new Compiler\PrintContext;
+		$generator = new Compiler\TemplateGenerator;
 
-		Macros\CoreMacros::install($compiler);
-		Macros\BlockMacros::install($compiler);
+		foreach ($this->extensions as $extension) {
+			$extension->beforeCompile();
+			$parser->addTags($extension->getTags());
+		}
 
 		$source = $this->getLoader()->getContent($name);
 		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
 
 		try {
-			$tokens = $lexer->tokenize($source, $this->contentType);
-
-			$code = $compiler
+			$node = $parser
 				->setContentType($this->contentType)
-				->setFunctions(array_keys((array) $this->functions))
 				->setPolicy($this->sandboxed ? $this->policy : null)
-				->compile($tokens, $this->getTemplateClass($name), $comment, $this->strictTypes);
+				->parse($source, $lexer);
+
+			$context->setContentType($parser->getContentType());
+			$code = $generator->generate(
+				$context,
+				$node,
+				$this->getTemplateClass($name),
+				$comment,
+				$this->strictTypes,
+			);
 
 		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException) {
@@ -148,7 +158,7 @@ class Engine
 					: "Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			throw $e->setSource($source, $compiler->getLine(), $name);
+			throw $e->setSource($source, $name);
 		}
 
 		return $code;
@@ -178,7 +188,7 @@ class Engine
 			$code = $this->compile($name);
 			if (@eval(substr($code, 5)) === false) { // @ is escalated to exception, substr removes <?php
 				throw (new CompileException('Error in template: ' . error_get_last()['message']))
-					->setSource($code, error_get_last()['line'], "$name (compiled)");
+					->setSource($code, "$name (compiled)");
 			}
 
 			return;

@@ -36,7 +36,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	/** {snippet outer} on line %d% */
+	/** n:snippet="outer" on line %d% */
 	public function blockOuter(array $ʟ_args): void
 	{
 		extract($this->params);
@@ -70,7 +70,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	/** {snippet gallery} on line %d% */
+	/** n:snippet="gallery" on line %d% */
 	public function blockGallery(array $ʟ_args): void
 	{
 		extract($this->params);

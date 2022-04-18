@@ -15,17 +15,21 @@ namespace Latte;
  */
 abstract class Extension
 {
-	public const
-		AUTO_CLOSE = 64,
-		ALLOWED_IN_HEAD = 128,
-		DEFAULT_FLAGS = 0;
-
-
 	/**
 	 * Initializes before template is compiler.
 	 */
 	public function beforeCompile(): void
 	{
+	}
+
+
+	/**
+	 * Returns a list of parsers for Latte tags.
+	 * @return array<string, callable(Compiler\Tag, Compiler\TemplateParser): (Compiler\Node|\Generator|void)>
+	 */
+	public function getTags(): array
+	{
+		return [];
 	}
 
 

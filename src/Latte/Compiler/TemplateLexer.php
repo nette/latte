@@ -70,6 +70,7 @@ final class TemplateLexer
 			$this->send($this->createToken(LegacyToken::TEXT, substr($this->input, $this->offset)));
 		}
 
+		$this->tokens[] = $this->createToken(LegacyToken::END, '');
 		return $this->tokens;
 	}
 
@@ -77,11 +78,11 @@ final class TemplateLexer
 	private function statePlain(): void
 	{
 		$m = $this->match('~
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro']);
+			$this->pushState('stateLatte', $m['macro'], $m['indent']);
 
 		} else {
 			$this->setState(self::StateEnd);
@@ -89,27 +90,32 @@ final class TemplateLexer
 	}
 
 
-	private function stateLatte(string $delimiter): void
+	private function stateLatte(string $delimiter, ?string $indent = null): void
 	{
 		$this->popState();
 		$m = $this->match('~
-			(?P<comment>\*.*?\*' . $this->delimiters[1] . '\n{0,2})|
+			(?P<comment>\*.*?\*' . $this->delimiters[1] . ')(?P<newline>\n{0,2})|
 			(?P<macro>(?>
 				' . self::ReString . '|
 				\{(?>' . self::ReString . '|[^\'"{}])*+\}|
 				[^\'"{}]+
 			)++)
 			' . $this->delimiters[1] . '
-			(?P<rmargin>[ \t]*(?=\n))?
+			(?P<rmargin>[ \t]*\n)?
 		~xsiA');
 
 		if (!empty($m['macro'])) {
-			$token = $this->createToken(LegacyToken::MACRO_TAG, $delimiter . $m[0]);
+			$token = $this->createToken(LegacyToken::MACRO_TAG, $indent . $delimiter . $m[0]);
 			[$token->name, $token->value, $token->modifiers, $token->empty, $token->closing] = $this->parseMacroTag($m['macro']);
+			$token->indentation = $indent;
+			$token->newline = isset($m['rmargin']);
 			$this->send($token);
 
 		} elseif (!empty($m['comment'])) {
-			$this->send($this->createToken(LegacyToken::COMMENT, $delimiter . $m[0]));
+			$token = $this->createToken(LegacyToken::COMMENT, $indent . $delimiter . $m[0]);
+			$token->indentation = $indent;
+			$token->newline = (bool) $m['newline'];
+			$this->send($token);
 
 		} else {
 			throw new CompileException('Malformed tag contents.', $this->position);
@@ -122,7 +128,7 @@ final class TemplateLexer
 		$m = $this->match('~
 			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>' . self::ReTagName . ')|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
 			<(?P<htmlcomment>!(?:--(?!>))?|\?)|     ##  begin of <!, <!--, <!DOCTYPE, <?
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (!empty($m['htmlcomment'])) { // <! <?
@@ -140,7 +146,7 @@ final class TemplateLexer
 			$this->setState('stateHtmlTag', $m['closing'] . strtolower($m['tag']));
 
 		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro']);
+			$this->pushState('stateLatte', $m['macro'], $m['indent']);
 
 		} else {
 			$this->setState(self::StateEnd);
@@ -152,7 +158,7 @@ final class TemplateLexer
 	{
 		$this->lastHtmlTag = $tagName;
 		$m = $this->match('~
-			(?P<end>\s?/?>)([ \t]*\n)?|  ##  end of HTML tag
+			(?P<end>/?>)([ \t]*\n)?|  ##  end of HTML tag
 			(?P<macro>' . $this->delimiters[0] . ')|
 			\s*(?P<attr>[^\s"\'>/={]+)(?:\s*=\s*(?P<value>["\']|[^\s"\'=<>`{]+))? ## beginning of HTML attribute
 		~xsi');
@@ -218,7 +224,7 @@ final class TemplateLexer
 	{
 		$m = $this->match('~
 			</(?P<tag>' . $this->lastHtmlTag . ')(?=[\s/>])| ##  end HTML tag </tag
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (!empty($m['tag'])) { // </tag
@@ -229,7 +235,7 @@ final class TemplateLexer
 			$this->setState('stateHtmlTag');
 
 		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro']);
+			$this->pushState('stateLatte', $m['macro'], $m['indent']);
 
 		} else {
 			$this->setState(self::StateEnd);
@@ -241,7 +247,7 @@ final class TemplateLexer
 	{
 		$m = $this->match('~
 			(?P<htmlcomment>' . $ending . '>)|   ##  end of HTML comment
-			(?P<macro>' . $this->delimiters[0] . ')
+			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
 
 		if (!empty($m['htmlcomment'])) { // -->
@@ -249,7 +255,7 @@ final class TemplateLexer
 			$this->setState('stateHtmlText');
 
 		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro']);
+			$this->pushState('stateLatte', $m['macro'], $m['indent']);
 
 		} else {
 			$this->setState(self::StateEnd);
@@ -263,7 +269,7 @@ final class TemplateLexer
 	 */
 	private function match(string $re): array
 	{
-		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE, $this->offset)) {
+		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL, $this->offset)) {
 			if (preg_last_error()) {
 				throw new RegexpException;
 			}

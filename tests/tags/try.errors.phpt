@@ -6,26 +6,9 @@
 
 declare(strict_types=1);
 
-use Latte\Macros\CoreMacros;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
-
-
-$compiler = new Latte\Compiler\TemplateGenerator;
-CoreMacros::install($compiler);
-
-Assert::exception(
-	fn() => $compiler->expandMacro('try', '', '|filter'),
-	Latte\CompileException::class,
-	'Filters are not allowed in {try}',
-);
-
-Assert::exception(
-	fn() => $compiler->expandMacro('try', '$var', ''),
-	Latte\CompileException::class,
-	'Arguments are not allowed in {try}',
-);
 
 
 $latte = new Latte\Engine;

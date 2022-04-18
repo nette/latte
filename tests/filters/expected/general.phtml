@@ -42,9 +42,7 @@ final class Template%a% extends Latte\Runtime\Template
 		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo '  <a   href="#"
-> test</a
-
->
+> test</a>
 A   A
 
 <script>
@@ -52,6 +50,7 @@ A   A
 alert();
 </script>
 ';
+
 		} finally {
 			$ʟ_fi = new LR\FilterInfo('html');
 			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('strip', $ʟ_fi, ob_get_clean()));

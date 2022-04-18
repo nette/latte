@@ -52,6 +52,10 @@ class LegacyToken
 	/** is tag empty {name/}? used for type MACRO_TAG */
 	public bool $empty = false;
 
+	public ?string $indentation = null;
+
+	public bool $newline = false;
+
 
 	public function __construct(string $type = '', string $text = '')
 	{
