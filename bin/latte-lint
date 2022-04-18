@@ -86,7 +86,8 @@ function lintLatte(Latte\Engine $latte, string $file): bool
 {
 	set_error_handler(function (int $severity, string $message) use ($file) {
 		if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
-			fwrite(STDERR, "[DEPRECATED] $file    $message\n");
+			$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
+			fwrite(STDERR, "[DEPRECATED] $file$pos    $message\n");
 			return null;
 		}
 		return false;
