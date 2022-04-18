@@ -47,4 +47,12 @@ class ExtendsNode extends StatementNode
 	{
 		return $context->format('$this->parentName = %word;', $this->extends);
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		if ($this->extends) {
+			yield $this->extends;
+		}
+	}
 }

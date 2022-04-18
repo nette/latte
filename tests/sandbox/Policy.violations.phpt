@@ -197,7 +197,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{="${var}"}'),
 	Latte\CompileException::class,
-	'Forbidden complex expressions in strings.',
+	'Syntax ${...} is not supported (at column 4)',
 );
 
 Assert::noError(fn() => $latte->compile('{=\'${var}\'}'));

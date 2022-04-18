@@ -119,4 +119,13 @@ class IncludeBlockNode extends StatementNode
 			$this->position,
 		);
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		if ($this->from) {
+			yield $this->from;
+		}
+		yield $this->args;
+	}
 }

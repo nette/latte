@@ -47,10 +47,6 @@ class CaptureNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		$escapingContext = implode('', $context->getEscapingContext());
-		$body = $escapingContext === Context::Html
-			? 'ob_get_length() ? new LR\\Html(ob_get_clean()) : ob_get_clean()'
-			: 'ob_get_clean()';
-
 		return $context->format(
 			<<<'XX'
 				ob_start(fn() => '') %line;
@@ -66,7 +62,9 @@ class CaptureNode extends StatementNode
 			$this->modifier,
 			$this->position,
 			$this->content,
-			$body,
+			$escapingContext === Context::Html
+				? 'ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()'
+				: 'ob_get_clean()',
 			$escapingContext,
 			$this->variable,
 		);

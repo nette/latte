@@ -190,18 +190,4 @@ final class TemplateGenerator
 	{
 		$this->constants[$name] = $value;
 	}
-
-
-	private function closeHtmlTag($token): void
-	{
-		if ($this->htmlNode->macroAttrs) {
-			throw new CompileException("Unexpected $token, expecting " . self::printEndTag($this->htmlNode));
-		} elseif ($this->contentType === Context::Html
-			&& in_array(strtolower($this->htmlNode->name), ['script', 'style'], true)
-		) {
-			throw new CompileException("Unexpected $token, expecting </{$this->htmlNode->name}>");
-		}
-
-		$this->htmlNode = $this->htmlNode->parentNode;
-	}
 }

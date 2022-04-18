@@ -40,4 +40,10 @@ class ImportNode extends StatementNode
 			$this->position,
 		);
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		yield $this->file;
+	}
 }

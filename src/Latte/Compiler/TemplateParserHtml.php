@@ -318,18 +318,23 @@ final class TemplateParserHtml
 			$this->consumeIgnored();
 			if ($stream->tryConsume(Token::Quote)) {
 				$valueToken = $stream->tryConsume(Token::Text);
+				$pos = $stream->peek()->position;
 				$stream->consume(Token::Quote);
 			} else {
 				$valueToken = $stream->consume(Token::Html_Name);
 			}
+			if ($valueToken) {
+				$tokens = (new TagLexer)->tokenize($valueToken->text, $valueToken->position);
+			}
 		} else {
-			$valueToken = null;
 			$stream->seek($save);
+			$pos = $stream->peek()->position;
 		}
+		$tokens ??= [new Token(Token::End, '', $pos)];
 
 		$this->element->nAttributes[$name] = new Tag(
 			name: preg_replace('~(inner-|tag-|)~', '', $name),
-			args: $valueToken?->text ?? '',
+			tokens: $tokens,
 			position: $nameToken->position,
 			prefix: match (true) {
 				str_starts_with($name, 'inner-') => Tag::PrefixInner,
@@ -402,7 +407,7 @@ final class TemplateParserHtml
 	{
 		$stream = $this->parser->getStream();
 		return $stream->is(Token::Html_TagOpen)
-			&& $stream->peek(1)->is(Token::Slash)
+			&& $stream->peek(1)?->is(Token::Slash)
 			&& strcasecmp($name, $stream->peek(2)->text ?? '') === 0;
 	}
 
