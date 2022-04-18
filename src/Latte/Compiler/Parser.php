@@ -429,7 +429,7 @@ class Parser
 	{
 		if (!preg_match('~^
 			(?P<closing>/?)
-			(?P<name>=|_(?!_)|[a-z]\w*+(?:-\w+)*+(?![:(\\\\])|)   ## name, /name, but not function( or class:: or namespace\
+			(?P<name>=|_(?!_)|[a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\)|)   ## name, /name, but not function( or class:: or namespace\
 			(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
 			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
 			(?P<empty>/?$)
