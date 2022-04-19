@@ -37,11 +37,12 @@ if ($argc < 2) {
 	exit(1);
 }
 
-$ok = scanPath($argv[1]);
+$debug = in_array('--debug', $argv, true);
+$ok = scanPath($argv[1], $debug);
 exit($ok ? 0 : 1);
 
 
-function scanPath(string $path): bool
+function scanPath(string $path, bool $debug): bool
 {
 	echo "Scanning $path\n";
 
@@ -54,7 +55,7 @@ function scanPath(string $path): bool
 	$latte = createLatte();
 	foreach ($it as $file) {
 		echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
-		$success = lintLatte($latte, (string) $file) && $success;
+		$success = lintLatte($latte, (string) $file, $debug) && $success;
 	}
 
 	echo str_pad('', 40), "\x0D";
@@ -82,7 +83,7 @@ function createLatte(): Latte\Engine
 }
 
 
-function lintLatte(Latte\Engine $latte, string $file): bool
+function lintLatte(Latte\Engine $latte, string $file, bool $debug): bool
 {
 	set_error_handler(function (int $severity, string $message) use ($file) {
 		if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
@@ -93,6 +94,9 @@ function lintLatte(Latte\Engine $latte, string $file): bool
 		return false;
 	});
 
+	if ($debug) {
+		echo $file, "\n";
+	}
 	$s = file_get_contents($file);
 	if (substr($s, 0, 3) === "\xEF\xBB\xBF") {
 		fwrite(STDERR, "[WARNING]    $file    contains BOM\n");
@@ -103,6 +107,9 @@ function lintLatte(Latte\Engine $latte, string $file): bool
 		$code = $latte->compile($s);
 
 	} catch (Latte\CompileException $e) {
+		if ($debug) {
+			echo $e;
+		}
 		$pos = $e->sourceLine ? ':' . $e->sourceLine : '';
 		fwrite(STDERR, "[ERROR]      $file$pos    {$e->getMessage()}\n");
 		return false;
