@@ -52,16 +52,20 @@ final class Linter
 	{
 		$engine = new Latte\Engine;
 
-		if (class_exists(Nette\Bridges\CacheLatte\CacheMacro::class)) {
-			$engine->getCompiler()->addMacro('cache', new Nette\Bridges\CacheLatte\CacheMacro);
+		if (class_exists(Nette\Bridges\ApplicationLatte\UIExtension::class)) {
+			$engine->addExtension(new Nette\Bridges\ApplicationLatte\UIExtension(null));
 		}
 
-		if (class_exists(Nette\Bridges\ApplicationLatte\UIMacros::class)) {
-			Nette\Bridges\ApplicationLatte\UIMacros::install($engine->getCompiler());
+		if (class_exists(Nette\Bridges\ApplicationLatte\TranslatorExtension::class)) {
+			$engine->addExtension(new Nette\Bridges\ApplicationLatte\TranslatorExtension(null));
 		}
 
-		if (class_exists(Nette\Bridges\FormsLatte\FormMacros::class)) {
-			Nette\Bridges\FormsLatte\FormMacros::install($engine->getCompiler());
+		if (class_exists(Nette\Bridges\CacheLatte\CacheExtension::class)) {
+			$engine->addExtension(new Nette\Bridges\CacheLatte\CacheExtension(new Nette\Caching\Storages\DevNullStorage));
+		}
+
+		if (class_exists(Nette\Bridges\FormsLatte\FormsExtension::class)) {
+			$engine->addExtension(new Nette\Bridges\FormsLatte\FormsExtension);
 		}
 
 		return $engine;
