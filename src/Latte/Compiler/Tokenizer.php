@@ -73,9 +73,8 @@ class Tokenizer
 		}
 
 		if ($len !== strlen($input)) {
-			[$line, $col] = $this->getCoordinates($input, $len);
 			$token = str_replace("\n", '\n', substr($input, $len, 10));
-			throw new CompileException("Unexpected '$token' on line $line, column $col.");
+			throw new CompileException("Unexpected '$token'", $this->getCoordinates($input, $len));
 		}
 
 		return $tokens;
@@ -84,11 +83,10 @@ class Tokenizer
 
 	/**
 	 * Returns position of token in input string.
-	 * @return array{int, int} of [line, column]
 	 */
-	public static function getCoordinates(string $text, int $offset): array
+	public static function getCoordinates(string $text, int $offset): Position
 	{
 		$text = substr($text, 0, $offset);
-		return [substr_count($text, "\n") + 1, $offset - strrpos("\n" . $text, "\n") + 1];
+		return new Position(substr_count($text, "\n") + 1, $offset - strrpos("\n" . $text, "\n") + 1);
 	}
 }

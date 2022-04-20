@@ -34,8 +34,7 @@ class LegacyToken
 	/** original text content of the token */
 	public string $text;
 
-	/** line number */
-	public int $line;
+	public Position $position;
 
 	/** name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
 	public string $name = '';

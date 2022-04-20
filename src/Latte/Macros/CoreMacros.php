@@ -15,8 +15,6 @@ use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\Tag;
 use Latte\Helpers;
-use Latte\RuntimeException;
-use Nette;
 
 
 /**

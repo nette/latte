@@ -32,7 +32,7 @@ test('', function () use ($compiler) { // {var ... }
 	Assert::exception(
 		fn() => $compiler->expandMacro('var', '$var => "123', ''),
 		Latte\CompileException::class,
-		'Unexpected %a% on line 1, column 9.',
+		'Unexpected %a% (at column 9)',
 	);
 
 	Assert::exception(

@@ -272,7 +272,7 @@ class Compiler
 	public function getLine(): ?int
 	{
 		return isset($this->tokens[$this->position])
-			? $this->tokens[$this->position]->line
+			? $this->tokens[$this->position]->position->line
 			: null;
 	}
 

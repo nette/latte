@@ -11,33 +11,6 @@ namespace Latte;
 
 
 /**
- * The exception occured during Latte compilation.
- */
-class CompileException extends \Exception
-{
-	public string $sourceCode;
-	public string $sourceName;
-	public ?int $sourceLine = null;
-
-
-	public function setSource(string $code, ?int $line, ?string $name = null): self
-	{
-		$this->sourceCode = $code;
-		$this->sourceLine = $line;
-		$this->sourceName = $name;
-		if (@is_file($name)) { // @ - may trigger error
-			$this->message = rtrim($this->message, '.')
-				. ' in ' . str_replace(dirname($name, 2), '...', $name) . ($line ? ":$line" : '');
-		} elseif ($line > 1) {
-			$this->message = rtrim($this->message, '.') . ' (on line ' . $line . ')';
-		}
-
-		return $this;
-	}
-}
-
-
-/**
  * The exception that indicates error of the last Regexp execution.
  */
 class RegexpException extends \Exception
