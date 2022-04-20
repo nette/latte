@@ -23,7 +23,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{breakIf}'),
 	Latte\CompileException::class,
-	'Missing condition in {breakIf} (at column 1)',
+	'Missing arguments in {breakIf} (at column 1)',
 );
 
 Assert::noError(fn() => $latte->compile('{for ;;}{if true}{breakIf true}{/if}{/for}'));

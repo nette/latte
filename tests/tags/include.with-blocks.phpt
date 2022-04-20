@@ -42,10 +42,3 @@ Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.inc.phtml',
 	$latte->compile('inc'),
 );
-
-
-$latte->setLoader(new Latte\Loaders\StringLoader);
-Assert::exception(
-	fn() => $latte->renderToString('{include file "inc", with blocks}'),
-	ParseError::class,
-);

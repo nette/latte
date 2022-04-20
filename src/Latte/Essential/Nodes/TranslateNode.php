@@ -12,11 +12,11 @@ namespace Latte\Essential\Nodes;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\NopNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use Latte\Helpers;
 
 
 /**
@@ -25,18 +25,16 @@ use Latte\Helpers;
 class TranslateNode extends StatementNode
 {
 	public AreaNode $content;
-	public ?string $modifier;
+	public ModifierNode $modifier;
 
 
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|NopNode> */
 	public static function create(Tag $tag): \Generator
 	{
 		$tag->outputMode = $tag::OutputKeepIndentation;
-		$tag->extractModifier();
 
 		$node = new static;
-		$node->modifier = $tag->modifiers;
-
+		$node->modifier = $tag->parser->parseModifier();
 		if ($tag->void) {
 			return new NopNode;
 		}
@@ -48,13 +46,6 @@ class TranslateNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$modifier = $this->modifier;
-		if (Helpers::removeFilter($modifier, 'noescape')) {
-			$context->checkFilterIsAllowed('noescape');
-		} else {
-			$modifier .= '|escape';
-		}
-
 		if (
 			$this->content instanceof FragmentNode
 			&& count($this->content->children) === 1
@@ -65,7 +56,7 @@ class TranslateNode extends StatementNode
 					$ʟ_fi = new LR\FilterInfo(%dump);
 					echo %modifyContent($this->filters->filterContent('translate', $ʟ_fi, %dump)) %line;
 					XX,
-				$modifier,
+				(clone $this->modifier)->addEscape(),
 				implode('', $context->getEscapingContext()),
 				$this->content->children[0]->content,
 				$this->position,
@@ -82,7 +73,7 @@ class TranslateNode extends StatementNode
 					$ʟ_fi = new LR\FilterInfo(%dump);
 					echo %modifyContent($this->filters->filterContent('translate', $ʟ_fi, $ʟ_tmp)) %line;
 					XX,
-				$modifier,
+				(clone $this->modifier)->addEscape(),
 				$this->content,
 				implode('', $context->getEscapingContext()),
 				$this->position,
@@ -94,5 +85,6 @@ class TranslateNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->content;
+		yield $this->modifier;
 	}
 }

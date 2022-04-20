@@ -144,12 +144,10 @@ class Engine
 		try {
 			$node = $parser
 				->setContentType($this->contentType)
-				->setPolicy($this->sandboxed ? $this->policy : null)
+				->setPolicy($this->getPolicy(effective: true))
 				->parse($source, $lexer);
 
 			$context->setContentType($parser->getContentType());
-			$context->policy = $this->sandboxed ? $this->policy : null;
-			$context->functions = (array) $this->functions;
 
 			usort($passes, fn($a, $b) => $a[1] <=> $b[1]);
 			foreach ($passes as [$pass]) {
@@ -393,6 +391,12 @@ class Engine
 	}
 
 
+	public function getFunctions(): array
+	{
+		return (array) $this->functions;
+	}
+
+
 	/**
 	 * Adds new provider.
 	 */
@@ -421,6 +425,14 @@ class Engine
 	{
 		$this->policy = $policy;
 		return $this;
+	}
+
+
+	public function getPolicy(bool $effective = false): ?Policy
+	{
+		return !$effective || $this->sandboxed
+			? $this->policy
+			: null;
 	}
 
 

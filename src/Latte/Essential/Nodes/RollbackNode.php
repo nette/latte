@@ -26,7 +26,6 @@ class RollbackNode extends StatementNode
 			throw new CompileException('Tag {rollback} must be inside {try} ... {/try}.', $tag->position);
 		}
 
-		$tag->expectArguments(false);
 		return new static;
 	}
 

@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Nodes\LegacyExprNode;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use Latte\Helpers;
 
 
 /**
@@ -22,9 +23,9 @@ use Latte\Helpers;
  */
 class IncludeFileNode extends StatementNode
 {
-	public string $file;
-	public LegacyExprNode $args;
-	public string $modifier;
+	public ExpressionNode $file;
+	public ArrayNode $args;
+	public ModifierNode $modifier;
 	public string $mode;
 
 
@@ -32,40 +33,42 @@ class IncludeFileNode extends StatementNode
 	{
 		$tag->outputMode = $tag::OutputRemoveIndentation;
 
+		$tag->expectArguments();
 		$node = new static;
-		[$node->file] = $tag->tokenizer->fetchWordWithModifier('file');
+		$tag->parser->tryConsumeModifier('file');
+		$node->file = $tag->parser->parseUnquotedStringOrExpression();
 		$node->mode = 'include';
-		if ($tag->tokenizer->isNext('with') && !$tag->tokenizer->isPrev(',')) {
-			$tag->tokenizer->consumeValue('with');
-			$tag->tokenizer->consumeValue('blocks');
+
+		$stream = $tag->parser->stream;
+		if ($stream->tryConsume('with')) {
+			$stream->consume('blocks');
 			$node->mode = 'includeblock';
 		}
 
-		$node->args = $tag->getArgs();
-		$node->modifier = $tag->modifiers;
+		$stream->tryConsume(',');
+		$node->args = $tag->parser->parseArguments();
+		$node->modifier = $tag->parser->parseModifier();
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		$modifier = $this->modifier;
-		$noEscape = Helpers::removeFilter($modifier, 'noescape');
-		if ($modifier && !$noEscape) {
-			$modifier .= '|escape';
-		}
+		$modifier = $this->modifier->filters
+			? (clone $this->modifier)->addEscape()
+			: $this->modifier;
 
 		return $context->format(
-			'$this->createTemplate(%word, %array? + $this->params, %dump)->renderToContentType(%raw) %line;',
+			'$this->createTemplate(%raw, %raw? + $this->params, %dump)->renderToContentType(%raw) %line;',
 			$this->file,
 			$this->args,
 			$this->mode,
-			$modifier
+			$modifier->filters
 				? $context->format(
 					'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
 					$modifier,
 				)
-				: PhpHelpers::dump($noEscape ? null : implode('', $context->getEscapingContext())),
+				: PhpHelpers::dump($this->modifier->filters ? null : implode('', $context->getEscapingContext())),
 			$this->position,
 		);
 	}
@@ -73,6 +76,8 @@ class IncludeFileNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
+		yield $this->file;
 		yield $this->args;
+		yield $this->modifier;
 	}
 }

@@ -11,31 +11,18 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	<<<'XX'
-		%A%echo LR\Filters::escapeHtmlText(test(function () {
-					return 1;
-				}))%A%
-		XX,
+	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1 */;%A%',
 	$latte->compile('{test(function () { return 1;})}'),
 );
 
 Assert::match(
-	<<<'XX'
-		%A%echo LR\Filters::escapeHtmlText(test(function () use ($a) {
-					return 1;
-				}))%A%
-		XX,
+	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1 */;%A%',
 	$latte->compile('{test(function () use ($a) { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn () => 1))%A%',
+	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1 */;%A%',
 	$latte->compile('{test(fn () => 1)}'),
-);
-
-Assert::match(
-	"%A%('foo')/ **/('bar')%A%",
-	$latte->compile('{(foo)//**/**/(bar)}'),
 );
 
 Assert::match(
@@ -75,12 +62,12 @@ Assert::match(
 
 // tag name vs content
 Assert::contains(
-	'escapeHtmlText(trim("a"))',
+	"escapeHtmlText(trim('a'))",
 	$latte->compile('{trim("a")}'),
 );
 
 Assert::contains(
-	'escapeHtmlText(\trim("a"))',
+	"escapeHtmlText(\\trim('a'))",
 	$latte->compile('{\trim("a")}'),
 );
 

@@ -195,6 +195,7 @@ final class TemplateParser
 				throw new \LogicException("Incorrect behavior of {{$startTag->name}} parser, yield call is expected (on line {$startTag->position->line})");
 			}
 
+			$this->ensureIsConsumed($startTag);
 			if ($startTag->outputMode === $startTag::OutputKeepIndentation) {
 				$this->lastIndentation = null;
 			}
@@ -221,10 +222,12 @@ final class TemplateParser
 					if ($tag->closing) {
 						$this->checkEndTag($startTag, $endTag = $tag);
 						$res->send([$content, $tag]);
+						$this->ensureIsConsumed($tag);
 						break;
 					} else {
 						$this->pushTag($tag);
 						$res->send([$content, $tag]);
+						$this->ensureIsConsumed($tag);
 						$this->popTag();
 					}
 				}
@@ -240,6 +243,7 @@ final class TemplateParser
 			throw new CompileException('Unexpected /} in tag ' . substr($startTag->getNotation(true), 0, -1) . '/}', $startTag->position);
 
 		} else {
+			$this->ensureIsConsumed($startTag);
 			$node = $res;
 			if ($startTag->outputMode === $startTag::OutputKeepIndentation) {
 				$this->lastIndentation = null;
@@ -327,20 +331,25 @@ final class TemplateParser
 			($end->name !== $start->name && $end->name !== '')
 			|| !$end->closing
 			|| $end->void
-			|| $end->modifiers
-			|| ($end->args !== '' && $start->args !== '' && !str_starts_with($start->args . ' ', $end->args . ' '))
 		) {
-			$tag = $end->getNotation($end->args !== '');
-			throw new CompileException("Unexpected $tag, expecting {/$start->name}", $end->position);
+			throw new CompileException("Unexpected {$end->getNotation()}, expecting {/$start->name}", $end->position);
+		}
+	}
+
+
+	public function ensureIsConsumed(Tag $tag): void
+	{
+		if (!$tag->parser->isEnd()) {
+			$end = $tag->isNAttribute() ? ['end of attribute'] : ['end of tag'];
+			$tag->parser->stream->throwUnexpectedException($end, addendum: ' in ' . $tag->getNotation());
 		}
 	}
 
 
 	public function checkBlockIsUnique(Block $block): void
 	{
-		$name = $block->name;
-		if (!preg_match('#^[a-z]#iD', $name)) {
-			throw new CompileException(ucfirst($block->tag->name) . " name must start with letter a-z, '{$name}' given.", $block->tag->position);
+		if ($block->isDynamic() || !preg_match('#^[a-z]#iD', $name = (string) $block->name->value)) {
+			throw new CompileException(ucfirst($block->tag->name) . " name must start with letter a-z, '$name' given.", $block->tag->position);
 		}
 
 		if ($block->layer === Template::LayerSnippet

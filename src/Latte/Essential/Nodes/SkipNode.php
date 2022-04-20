@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Nodes\LegacyExprNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -24,20 +24,20 @@ use Latte\Compiler\Tag;
 class SkipNode extends StatementNode
 {
 	public string $type;
-	public LegacyExprNode $condition;
+	public ExpressionNode $condition;
 	public ?string $endTag = null;
 
 
 	public static function create(Tag $tag): static
 	{
-		$tag->expectArguments('condition');
+		$tag->expectArguments();
 		if (!$tag->closest($tag->name === 'skipIf' ? ['foreach'] : ['for', 'foreach', 'while'])) {
 			throw new CompileException("Tag {{$tag->name}} is unexpected here.", $tag->position);
 		}
 
 		$node = new static;
 		$node->type = $tag->name;
-		$node->condition = $tag->getArgs();
+		$node->condition = $tag->parser->parseExpression();
 		if (isset($tag->htmlElement->nAttributes['foreach'])) {
 			$node->endTag = $tag->htmlElement->name;
 		}

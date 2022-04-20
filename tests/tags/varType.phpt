@@ -23,19 +23,19 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{varType type}'),
 	Latte\CompileException::class,
-	'Unexpected content%a%',
+	'Unexpected end, expecting variable (at column 14)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{varType type var}'),
 	Latte\CompileException::class,
-	'Unexpected content%a%',
+	'Unexpected end, expecting variable (at column 18)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{varType $var type}'),
 	Latte\CompileException::class,
-	'Unexpected content%a%',
+	"Unexpected 'type', expecting end of tag in {varType} (at column 15)",
 );
 
 Assert::noError(fn() => $latte->compile('{varType type $var}'));

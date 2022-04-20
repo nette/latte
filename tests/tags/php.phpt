@@ -15,16 +15,6 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	'%A%$a = \'test\' ? ([]) : null%A%',
+	'%A%$a = \'test\' ? [] : null%A%',
 	$latte->compile('{php $a = test ? ([])}'),
-);
-
-Assert::match(
-	'%A%echo "test" /* line 2 */%A%',
-	$latte->compile('
-	{php
-
-	echo "test"
-
-}'),
 );

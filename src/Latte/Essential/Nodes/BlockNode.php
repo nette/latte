@@ -12,10 +12,15 @@ namespace Latte\Essential\Nodes;
 use Latte\CompileException;
 use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
+use Latte\Compiler\Token;
 use Latte\Context;
 use Latte\Runtime\Template;
 
@@ -26,7 +31,7 @@ use Latte\Runtime\Template;
 class BlockNode extends StatementNode
 {
 	public ?Block $block = null;
-	public string $modifier;
+	public ModifierNode $modifier;
 	public AreaNode $content;
 
 
@@ -34,17 +39,15 @@ class BlockNode extends StatementNode
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$tag->outputMode = $tag::OutputRemoveIndentation;
-		$tag->extractModifier();
-
-		[$name, $local] = $tag->tokenizer->fetchWordWithModifier('local');
-		if ($token = $tag->tokenizer->nextValue()) {
-			throw new CompileException("Unexpected arguments '$token' in " . $tag->getNotation(), $tag->position);
-		}
-		$name = ltrim((string) $name, '#');
+		$stream = $tag->parser->stream;
 		$node = new static;
 
-		if ($name !== '') {
-			$layer = $local ? Template::LayerLocal : $parser->blockLayer;
+		if (!$stream->is('|', Token::End)) {
+			$layer = $tag->parser->tryConsumeModifier('local')
+				? Template::LayerLocal
+				: $parser->blockLayer;
+			$stream->tryConsume('#');
+			$name = $tag->parser->parseUnquotedStringOrExpression();
 			$node->block = new Block($name, $layer, $tag);
 
 			if (!$node->block->isDynamic()) {
@@ -53,10 +56,18 @@ class BlockNode extends StatementNode
 			}
 		}
 
-		$node->modifier = $tag->modifiers;
-		[$node->content] = yield;
+		$node->modifier = $tag->parser->parseModifier();
+		if (count($node->modifier->filters) === 1 && $node->modifier->filters[0]->name->name === 'noescape') {
+			throw new CompileException('Filter |noescape is not expected here.', $tag->position);
+		}
 
-		if ($name === '' && $node->modifier === '') {
+		[$node->content, $endTag] = yield;
+
+		if ($node->block) {
+			if ($endTag && $name instanceof Scalar\StringNode) {
+				$endTag->parser->stream->tryConsume($name->value);
+			}
+		} elseif (!$node->modifier->filters) {
 			return $node->content;
 		}
 
@@ -90,7 +101,7 @@ class BlockNode extends StatementNode
 				}
 
 				XX,
-			$this->modifier . '|escape',
+			(clone $this->modifier)->addEscape(),
 			$this->position,
 			$this->content,
 			implode('', $context->getEscapingContext()),
@@ -100,15 +111,16 @@ class BlockNode extends StatementNode
 
 	private function printStatic(PrintContext $context): string
 	{
-		$context->addBlock($this->block, $this->adjustContext($context->getEscapingContext()));
+		[$escapingContext, $modifier] = $this->adjustContext($context->getEscapingContext());
+		$context->addBlock($this->block, $escapingContext);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
-			'$this->renderBlock(%dump, get_defined_vars()'
-			. ($this->modifier
+			'$this->renderBlock(%raw, get_defined_vars()'
+			. ($modifier->filters
 				? $context->format(
 					', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-					$this->modifier,
+					$modifier,
 				)
 				: '')
 			. ') %line;',
@@ -120,21 +132,21 @@ class BlockNode extends StatementNode
 
 	private function printDynamic(PrintContext $context): string
 	{
+		[$escapingContext, $modifier] = $this->adjustContext($context->getEscapingContext());
 		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
-		$escapingContext = $this->adjustContext($context->getEscapingContext());
 
 		return $context->format(
-			'$this->addBlock($ʟ_nm = %word, %dump, [[$this, %dump]], %dump);
+			'$this->addBlock(%raw, %dump, [[$this, %dump]], %dump);
 			$this->renderBlock($ʟ_nm, get_defined_vars()'
-			. ($this->modifier
+			. ($modifier->filters
 				? $context->format(
 					', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-					$this->modifier,
+					$modifier,
 				)
 				: '')
 			. ');',
-			$this->block->name,
+			new AssignNode(new VariableNode('ʟ_nm'), $this->block->name),
 			implode('', $escapingContext),
 			$this->block->method,
 			$this->block->layer,
@@ -144,18 +156,23 @@ class BlockNode extends StatementNode
 
 	private function adjustContext(array $context): array
 	{
+		$modifier = clone $this->modifier;
 		if (str_starts_with((string) $context[1], Context::HtmlAttribute)) {
 			$context[1] = null;
-			$this->modifier .= '|escape';
-		} elseif ($this->modifier) {
-			$this->modifier .= '|escape';
+			$modifier->addEscape();
+		} elseif ($this->modifier->filters) {
+			$modifier->addEscape();
 		}
-		return $context;
+		return [$context, $modifier];
 	}
 
 
 	public function &getIterator(): \Generator
 	{
+		if ($this->block) {
+			yield $this->block->name;
+		}
+		yield $this->modifier;
 		yield $this->content;
 	}
 }

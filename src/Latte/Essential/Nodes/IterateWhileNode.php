@@ -11,7 +11,7 @@ namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\LegacyExprNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -22,9 +22,10 @@ use Latte\Compiler\Tag;
  */
 class IterateWhileNode extends StatementNode
 {
-	public LegacyExprNode $condition;
+	public ExpressionNode $condition;
 	public AreaNode $content;
-	public string $args;
+	public ?ExpressionNode $key;
+	public ExpressionNode $value;
 	public bool $postTest;
 
 
@@ -37,16 +38,16 @@ class IterateWhileNode extends StatementNode
 		}
 
 		$node = new static;
-		$node->postTest = $tag->args === '';
+		$node->postTest = $tag->parser->isEnd();
 		if (!$node->postTest) {
-			$node->condition = $tag->getArgs();
+			$node->condition = $tag->parser->parseExpression();
 		}
 
-		$node->args = preg_replace('#^.+\s+as\s+(?:(.+)=>)?(.+)$#i', '$1, $2', $foreach->data->iterateWhile);
+		[$node->key, $node->value] = $foreach->data->iterateWhile;
 		[$node->content, $nextTag] = yield;
 		if ($node->postTest) {
 			$nextTag->expectArguments();
-			$node->condition = $nextTag->getArgs();
+			$node->condition = $nextTag->parser->parseExpression();
 		}
 
 		return $node;
@@ -57,14 +58,15 @@ class IterateWhileNode extends StatementNode
 	{
 		$stmt = $context->format(
 			<<<'XX'
-				if (!$iterator->hasNext() || !(%args)) {
+				if (!$iterator->hasNext() || !(%raw)) {
 					break;
 				}
 				$iterator->next();
-				[%raw] = [$iterator->key(), $iterator->current()];
+				[%raw, %raw] = [$iterator->key(), $iterator->current()];
 				XX,
 			$this->condition,
-			$this->args,
+			$this->key,
+			$this->value,
 		);
 
 		return $context->format(

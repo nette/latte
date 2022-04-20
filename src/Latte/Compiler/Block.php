@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte\Helpers;
+use Latte\Compiler\Nodes\Php\Expression;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 
 
 /** @internal */
@@ -19,12 +21,12 @@ final class Block
 	public string $content;
 	public string $context;
 
-	/** @var string[] */
+	/** @var Expression\AssignNode[] */
 	public array $parameters = [];
 
 
 	public function __construct(
-		public /*readonly*/ string $name,
+		public /*readonly*/ ExpressionNode $name,
 		public /*readonly*/ int|string $layer,
 		public /*readonly*/ Tag $tag,
 	) {
@@ -33,6 +35,7 @@ final class Block
 
 	public function isDynamic(): bool
 	{
-		return Helpers::isNameDynamic($this->name);
+		return !$this->name instanceof Scalar\StringNode
+			&& !$this->name instanceof Scalar\IntegerNode;
 	}
 }

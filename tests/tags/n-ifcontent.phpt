@@ -66,7 +66,7 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<div n:ifcontent=x></div>'),
 	Latte\CompileException::class,
-	'Arguments are not allowed in n:ifcontent (at column 6)',
+	"Unexpected 'x', expecting end of attribute in n:ifcontent (at column 18)",
 );
 
 

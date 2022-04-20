@@ -11,7 +11,7 @@ namespace Latte\Essential\Nodes;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Compiler\Nodes\LegacyExprNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -22,7 +22,7 @@ use Latte\Compiler\Tag;
  */
 final class NTagNode extends StatementNode
 {
-	public LegacyExprNode $name;
+	public ExpressionNode $name;
 	public string $origName;
 
 
@@ -34,7 +34,7 @@ final class NTagNode extends StatementNode
 
 		$tag->expectArguments();
 		$node = new static;
-		$node->name = $tag->getArgs();
+		$node->name = $tag->parser->parseExpression();
 		$node->origName = $tag->htmlElement->name;
 		$tag->htmlElement->customName = $node;
 	}

@@ -12,6 +12,7 @@ $test = <<<'XX'
 	[],
 	array(1, 2, 3),
 	['a' => 'b', 'c' => 'd'],
+	[a: 1, b: 2, [c :3, d:hello]]
 	XX;
 
 $node = parseCode($test);
@@ -25,4 +26,5 @@ Assert::same(
 __halt_compiler();
 [],
 [1, 2, 3],
-['a' => 'b', 'c' => 'd']
+['a' => 'b', 'c' => 'd'],
+['a' => 1, 'b' => 2, ['c' => 3, 'd' => 'hello']]
