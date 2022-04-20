@@ -39,7 +39,7 @@ test('strings', function () {
 	Assert::exception(
 		fn() => formatArgs("'\\\\'1, 2, symbol1, symbol2'"),
 		Latte\CompileException::class,
-		'Unexpected %a% on line 1, column 27.',
+		"Unexpected ''' (at column 27)",
 	);
 });
 

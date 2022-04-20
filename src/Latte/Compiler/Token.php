@@ -28,15 +28,6 @@ class Token
 		HTML_ATTRIBUTE_END = 'htmlAttributeEnd',
 		COMMENT = 'comment'; // latte comment
 
-	/** token type [TEXT | MACRO_TAG | HTML_TAG_BEGIN | HTML_TAG_END | HTML_ATTRIBUTE_BEGIN | HTML_ATTRIBUTE_END | COMMENT] */
-	public string $type;
-
-	/** original text content of the token */
-	public string $text;
-
-	/** line number */
-	public int $line;
-
 	/** name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
 	public string $name = '';
 
@@ -51,4 +42,12 @@ class Token
 
 	/** is tag empty {name/}? used for type MACRO_TAG */
 	public bool $empty = false;
+
+
+	public function __construct(
+		public /*readonly*/ string $type,
+		public /*readonly*/ string $text,
+		public /*readonly*/ ?Position $position = null,
+	) {
+	}
 }

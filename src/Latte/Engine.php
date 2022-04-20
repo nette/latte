@@ -145,13 +145,12 @@ class Engine
 
 		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException) {
-				$e = new CompileException($e instanceof SecurityViolationException ? $e->getMessage() : "Thrown exception '{$e->getMessage()}'", 0, $e);
+				$e = new CompileException($e instanceof SecurityViolationException
+					? $e->getMessage()
+					: "Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			$line = isset($tokens)
-				? $compiler->getLine()
-				: $lexer->getLine();
-			throw $e->setSource($source, $line, $name);
+			throw $e->setSource($source, $compiler->getLine(), $name);
 		}
 
 		return $code;

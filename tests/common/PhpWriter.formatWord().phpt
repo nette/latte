@@ -52,7 +52,7 @@ Assert::same('(fnc() ? (1+2) : [3,4])', $writer->formatWord('fnc() ? (1+2) : [3,
 Assert::exception(
 	fn() => $writer->formatWord("'var\""),
 	Latte\CompileException::class,
-	"Unexpected ''var\"' on line 1, column 1.",
+	"Unexpected ''var\"' (at column 1)",
 );
 
 Assert::error(

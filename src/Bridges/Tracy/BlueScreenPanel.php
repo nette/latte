@@ -46,11 +46,11 @@ class BlueScreenPanel
 						? ''
 						: '<p>'
 							. (@is_file($e->sourceName) // @ - may trigger error
-								? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->sourceLine)
-								: '<b>' . htmlspecialchars($e->sourceName . ($e->sourceLine ? ':' . $e->sourceLine : '')) . '</b>')
+								? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->position?->line)
+								: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
 							. '</p>')
 					. '<pre class="code tracy-code"><div>'
-					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->sourceLine)
+					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
 					. '</div></pre>',
 			];
 
@@ -83,7 +83,7 @@ class BlueScreenPanel
 				|| preg_match('#Unknown attribute (n:\w+), did you mean (n:\w+)\?#A', $e->getMessage(), $m))
 		) {
 			return [
-				'link' => Helpers::editorUri($e->sourceName, $e->sourceLine, 'fix', $m[1], $m[2]),
+				'link' => Helpers::editorUri($e->sourceName, $e->position?->line, 'fix', $m[1], $m[2]),
 				'label' => 'fix it',
 			];
 		}

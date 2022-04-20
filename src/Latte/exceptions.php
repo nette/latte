@@ -16,28 +16,22 @@ interface Exception
 
 
 /**
- * The exception occured during Latte compilation.
+ * The exception occurred during Latte compilation.
  */
 class CompileException extends \Exception implements Exception
 {
-	public string $sourceCode;
-	public string $sourceName;
-	public ?int $sourceLine = null;
+	use PositionAwareException;
+
+	/** @deprecated */
+	public ?int $sourceLine;
 
 
-	public function setSource(string $code, ?int $line, ?string $name = null): self
+	public function __construct(string $message, ?Compiler\Position $position = null, ?\Throwable $previous = null)
 	{
-		$this->sourceCode = $code;
-		$this->sourceLine = $line;
-		$this->sourceName = $name;
-		if (@is_file($name)) { // @ - may trigger error
-			$this->message = rtrim($this->message, '.')
-				. ' in ' . str_replace(dirname($name, 2), '...', $name) . ($line ? ":$line" : '');
-		} elseif ($line > 1) {
-			$this->message = rtrim($this->message, '.') . ' (on line ' . $line . ')';
-		}
-
-		return $this;
+		parent::__construct($message, 0, $previous);
+		$this->position = $position;
+		$this->sourceLine = $position?->line;
+		$this->generateMessage();
 	}
 }
 

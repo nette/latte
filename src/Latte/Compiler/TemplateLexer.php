@@ -60,7 +60,7 @@ final class TemplateLexer
 	/** position on source template */
 	private int $offset;
 
-	private int $line;
+	private Position $position;
 
 	/** @var array{string, mixed} */
 	private array $context = [self::CONTEXT_HTML_TEXT, null];
@@ -86,18 +86,16 @@ final class TemplateLexer
 		}
 
 		$this->input = $input = str_replace("\r\n", "\n", $input);
+		$this->position = new Position(1, 1, 0);
 		$this->offset = 0;
-		$this->line = 1;
 		$this->output = [];
 
 		if (!preg_match('##u', $input)) {
 			preg_match('#(?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})*+#A', $input, $m);
-			$this->line += substr_count($m[0], "\n");
-			throw new CompileException('Template is not valid UTF-8 stream.');
+			throw new CompileException('Template is not valid UTF-8 stream.', $this->position->advance($m[0]));
 
-		} elseif (preg_match('#[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]#', $input, $m, PREG_OFFSET_CAPTURE)) {
-			$this->line += substr_count($input, "\n", 0, $m[0][1]);
-			throw new CompileException('Template contains control character \x' . dechex(ord($m[0][0])));
+		} elseif (preg_match('#(.*?)([\x00-\x08\x0B\x0C\x0E-\x1F\x7F])#s', $input, $m)) {
+			throw new CompileException('Template contains control character \x' . dechex(ord($m[2])), $this->position->advance($m[1]));
 		}
 
 		$this->setSyntax($this->defaultSyntax);
@@ -115,7 +113,7 @@ final class TemplateLexer
 		}
 
 		if ($this->context[0] === self::CONTEXT_MACRO) {
-			throw new CompileException('Malformed tag.');
+			throw new CompileException('Malformed tag.', $this->position);
 		}
 
 		if ($this->offset < strlen($input)) {
@@ -307,7 +305,7 @@ final class TemplateLexer
 			return true;
 
 		} else {
-			throw new CompileException('Malformed tag contents.');
+			throw new CompileException('Malformed tag contents.', $this->position);
 		}
 	}
 
@@ -435,18 +433,9 @@ final class TemplateLexer
 
 	private function addToken(string $type, string $text): Token
 	{
-		$this->output[] = $token = new Token;
-		$token->type = $type;
-		$token->text = $text;
-		$token->line = $this->line;
-		$this->line += substr_count($text, "\n");
+		$this->output[] = $token = new Token($type, $text, $this->position);
+		$this->position = $this->position->advance($text);
 		return $token;
-	}
-
-
-	public function getLine(): int
-	{
-		return $this->line;
 	}
 
 

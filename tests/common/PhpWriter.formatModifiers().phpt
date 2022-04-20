@@ -31,7 +31,7 @@ test('special', function () {
 	Assert::exception(
 		fn() => formatModifiers('@', "mod:'\\\\':a:b:c':arg2"),
 		Latte\CompileException::class,
-		'Unexpected %a% on line 1, column 15.',
+		'Unexpected %a% (at column 15)',
 	);
 });
 
