@@ -9,7 +9,6 @@ declare(strict_types=1);
 use Latte\Macros\CoreMacros;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -34,13 +33,13 @@ Assert::same($prefix . '$array, $ʟ_it ?? null) as $value) { ?>', expandMacro($c
 Assert::same(
 	'<?php $iterations = 0; '
 	. 'foreach ($iterator = $ʟ_it = new LR\CachingIterator($array, $ʟ_it ?? null) as $key => $value) { ?>',
-	expandMacro($compiler, '$array as $key => $value')->openingCode
+	expandMacro($compiler, '$array as $key => $value')->openingCode,
 );
 
 Assert::same(
 	'<?php $iterations = 0; '
 	. 'foreach ($iterator = $ʟ_it = new LR\CachingIterator($array, $ʟ_it ?? null) as $key => $value) { ?>',
-	expandMacro($compiler, '$array as $key => $value', '|nocheck')->openingCode
+	expandMacro($compiler, '$array as $key => $value', '|nocheck')->openingCode,
 );
 
 Assert::same($prefix . '$obj->data("A as B"), $ʟ_it ?? null) as $value) { ?>', expandMacro($compiler, '$obj->data("A as B") as $value')->openingCode);
@@ -50,7 +49,7 @@ Assert::same($prefix . '$obj->data("X as Y, Z as W"), $ʟ_it ?? null) as $value)
 Assert::same(
 	'<?php $iterations = 0; '
 	. 'foreach ($array as $value) { ?>',
-	expandMacro($compiler, '$array as $value', '|noiterator')->openingCode
+	expandMacro($compiler, '$array as $value', '|noiterator')->openingCode,
 );
 
 Assert::exception(function () use ($compiler) {

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -38,34 +37,34 @@ Assert::exception(function () use ($latte) {
 
 $template = <<<'EOD'
 
-{switch 0}
-{case ''}string
-{case 0.0}flot
-{default}def
-{/switch}
+	{switch 0}
+	{case ''}string
+	{case 0.0}flot
+	{default}def
+	{/switch}
 
----
+	---
 
-{switch a}
-{case 1, 2, a}a
-{/switch}
+	{switch a}
+	{case 1, 2, a}a
+	{/switch}
 
----
+	---
 
-{switch a}
-{default}def
-{/switch}
+	{switch a}
+	{default}def
+	{/switch}
 
----
+	---
 
-{switch a}
-{/switch}
+	{switch a}
+	{/switch}
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/switch.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 Assert::match(
@@ -82,5 +81,5 @@ def
 
 ---
 ',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );

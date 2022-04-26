@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -26,7 +25,7 @@ Assert::same(
 	trim($latte->renderToString('
 		{include abc}
 		{block local abc}local{/block}
-	'))
+	')),
 );
 
 Assert::same(
@@ -34,7 +33,7 @@ Assert::same(
 	trim($latte->renderToString('
 		{var $i = 5}
 		{block local abc}{$i} {if $i}{include this i: $i - 1}{/if} {/block}
-	'))
+	')),
 );
 
 
@@ -43,13 +42,13 @@ Assert::same(
 	trim($latte->renderToString('
 		{include abc i: 5}
 		{define local abc}{$i} {if $i}{include this i: $i - 1}{/if} {/define}
-	'))
+	')),
 );
 
 
 Assert::same(
 	'5',
-	trim($latte->renderToString('{var $i = 5} {block local abc}{$i}{/block}'))
+	trim($latte->renderToString('{var $i = 5} {block local abc}{$i}{/block}')),
 );
 
 
@@ -59,7 +58,7 @@ Assert::same(
 		{var $i = 5}
 		{include abc}
 		{define local abc}{$i}{/define}
-	'))
+	')),
 );
 
 
@@ -69,7 +68,7 @@ Assert::same(
 		{define local abc}{$i}{/define}
 		{var $i = 5}
 		{include abc}
-	'))
+	')),
 );
 
 

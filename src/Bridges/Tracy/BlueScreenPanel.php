@@ -22,7 +22,7 @@ class BlueScreenPanel
 {
 	public static function initialize(?BlueScreen $blueScreen = null): void
 	{
-		$blueScreen = $blueScreen ?? Tracy\Debugger::getBlueScreen();
+		$blueScreen ??= Tracy\Debugger::getBlueScreen();
 		$blueScreen->addPanel([self::class, 'renderError']);
 		$blueScreen->addAction([self::class, 'renderUnknownMacro']);
 		if (
@@ -30,11 +30,9 @@ class BlueScreenPanel
 			&& version_compare(Tracy\Debugger::VERSION, '3.0', '<')
 		) {
 			Tracy\Debugger::addSourceMapper([self::class, 'mapLatteSourceCode']);
-			$blueScreen->addFileGenerator(function (string $file) {
-				return substr($file, -6) === '.latte'
+			$blueScreen->addFileGenerator(fn(string $file) => substr($file, -6) === '.latte'
 					? "{block content}\n\$END\$"
-					: null;
-			});
+					: null);
 		}
 	}
 

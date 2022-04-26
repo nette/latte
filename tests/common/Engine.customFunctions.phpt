@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -16,7 +15,7 @@ $latte->addFunction('fnc', 'trim');
 Assert::same('aa', $latte->invokeFunction('fnc', ['  aa  ']));
 Assert::same(
 	'abc',
-	$latte->renderToString('{fnc(" abc ")}')
+	$latte->renderToString('{fnc(" abc ")}'),
 );
 
 
@@ -24,7 +23,7 @@ Assert::same(
 $latte->addFunction('fnc', 'Latte\Runtime\Filters::reverse');
 Assert::same(
 	' cba ',
-	$latte->renderToString('{fnc(" abc ")}')
+	$latte->renderToString('{fnc(" abc ")}'),
 );
 
 
@@ -32,7 +31,7 @@ Assert::same(
 $latte->addFunction('fnc', [Latte\Runtime\Filters::class, 'reverse']);
 Assert::same(
 	' cba ',
-	$latte->renderToString('{fnc(" abc ")}')
+	$latte->renderToString('{fnc(" abc ")}'),
 );
 
 
@@ -48,17 +47,15 @@ class Test
 $latte->addFunction('fnc', [new Test, 'm']);
 Assert::same(
 	'246',
-	$latte->renderToString('{fnc(123)}')
+	$latte->renderToString('{fnc(123)}'),
 );
 
 
 // closure
-$latte->addFunction('fnc', function ($val) {
-	return $val * 2;
-});
+$latte->addFunction('fnc', fn($val) => $val * 2);
 Assert::same(
 	'246',
-	$latte->renderToString('{fnc(123)}')
+	$latte->renderToString('{fnc(123)}'),
 );
 
 
@@ -66,7 +63,7 @@ Assert::same(
 $latte->addFunction('CaSe', 'trim');
 Assert::same(
 	'abc',
-	$latte->renderToString('{CaSe(" abc ")}')
+	$latte->renderToString('{CaSe(" abc ")}'),
 );
 
 Assert::error(function () use ($latte) {
@@ -75,12 +72,10 @@ Assert::error(function () use ($latte) {
 
 
 // with inline modifier
-$latte->addFunction('fnc', function ($val) {
-	return strrev($val);
-});
+$latte->addFunction('fnc', fn($val) => strrev($val));
 Assert::same(
 	'CBA',
-	$latte->renderToString('{fnc(abc|upper)}')
+	$latte->renderToString('{fnc(abc|upper)}'),
 );
 
 

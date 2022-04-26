@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -25,7 +24,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'before  after',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );
 Assert::type(Latte\CompileException::class, $args[0]);
 Assert::type(Latte\Runtime\Template::class, $args[1]);
@@ -41,7 +40,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'before  after',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );
 Assert::type(Latte\SecurityViolationException::class, $args[0]);
 Assert::type(Latte\Runtime\Template::class, $args[1]);

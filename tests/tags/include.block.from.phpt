@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -27,27 +26,27 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'before <b>block 1</b> after',
-	$latte->renderToString('main1')
+	$latte->renderToString('main1'),
 );
 
 Assert::match(
 	'before <b>block 1</b> after',
-	$latte->renderToString('main2')
+	$latte->renderToString('main2'),
 );
 
 Assert::match(
 	'<div title="&lt;b&gt;block 1&lt;/b&gt;">',
-	$latte->renderToString('main3')
+	$latte->renderToString('main3'),
 );
 
 Assert::match(
 	'before local after',
-	$latte->renderToString('main4')
+	$latte->renderToString('main4'),
 );
 
 Assert::match(
 	'before *<b>block 1</b>* after',
-	$latte->renderToString('main5')
+	$latte->renderToString('main5'),
 );
 
 Assert::error(function () use ($latte) {
@@ -56,5 +55,5 @@ Assert::error(function () use ($latte) {
 
 Assert::matchFile(
 	__DIR__ . '/expected/include.block.from.phtml',
-	$latte->compile('main5')
+	$latte->compile('main5'),
 );

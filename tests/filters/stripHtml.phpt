@@ -11,7 +11,6 @@ use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Filters;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -19,7 +18,7 @@ $latte = new Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::same(
 	'"',
-	$latte->renderToString('{="<br>&quot;"|stripHtml}')
+	$latte->renderToString('{="<br>&quot;"|stripHtml}'),
 );
 
 

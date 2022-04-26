@@ -37,7 +37,7 @@ final class Linter
 		$it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::LEAVES_ONLY);
 		$it = new \RegexIterator($it, '~\.latte$~');
 
-		$this->engine = $this->engine ?? $this->createEngine();
+		$this->engine ??= $this->createEngine();
 		$this->engine->setLoader(new Latte\Loaders\StringLoader);
 
 		$counter = 0;
@@ -128,7 +128,7 @@ final class Linter
 			$pipes,
 			null,
 			null,
-			['bypass_shell' => true]
+			['bypass_shell' => true],
 		);
 		if (!is_resource($process)) {
 			return 'Unable to lint PHP code';

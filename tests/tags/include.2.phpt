@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -28,32 +27,32 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'before <b>included 1</b> after',
-	$latte->renderToString('main1')
+	$latte->renderToString('main1'),
 );
 
 Assert::match(
 	'before included 1 after',
-	$latte->renderToString('main2')
+	$latte->renderToString('main2'),
 );
 
 Assert::match(
 	'before included 1 after',
-	$latte->renderToString('main3')
+	$latte->renderToString('main3'),
 );
 
 Assert::match(
 	'before <b>included named</b> after',
-	$latte->renderToString('main4')
+	$latte->renderToString('main4'),
 );
 
 Assert::match(
 	'before <b>included 1</b> after',
-	$latte->renderToString('main5')
+	$latte->renderToString('main5'),
 );
 
 Assert::match(
 	'before <b>included 1</b> after',
-	$latte->renderToString('main6')
+	$latte->renderToString('main6'),
 );
 
 Assert::error(function () use ($latte) {

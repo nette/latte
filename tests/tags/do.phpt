@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,5 +16,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	'%A%$a = \'test\' ? ([]) : null%A%',
-	$latte->compile('{do $a = test ? ([])}')
+	$latte->compile('{do $a = test ? ([])}'),
 );

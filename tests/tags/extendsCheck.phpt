@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -24,5 +23,5 @@ content
 
 Assert::matchFile(
 	__DIR__ . '/expected/extendsCheck.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );

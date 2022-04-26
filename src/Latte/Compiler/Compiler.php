@@ -326,7 +326,7 @@ class Compiler
 		string $body,
 		string $arguments = '',
 		string $returns = '',
-		?string $comment = null
+		?string $comment = null,
 	): void {
 		$body = trim($body);
 		$this->methods[$name] = compact('body', 'arguments', 'returns', 'comment');
@@ -601,7 +601,7 @@ class Compiler
 		string $args = '',
 		string $modifiers = '',
 		bool $isRightmost = false,
-		?string $nPrefix = null
+		?string $nPrefix = null,
 	): MacroNode {
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -629,7 +629,7 @@ class Compiler
 		string $args = '',
 		string $modifiers = '',
 		bool $isRightmost = false,
-		?string $nPrefix = null
+		?string $nPrefix = null,
 	): MacroNode {
 		$node = $this->macroNode;
 
@@ -793,7 +793,7 @@ class Compiler
 			throw new CompileException(
 				'Unknown attribute ' . Parser::N_PREFIX
 				. implode(' and ' . Parser::N_PREFIX, array_keys($attrs))
-				. (($t = Helpers::getSuggestion(array_keys($this->macros), key($attrs))) ? ', did you mean ' . Parser::N_PREFIX . $t . '?' : '')
+				. (($t = Helpers::getSuggestion(array_keys($this->macros), key($attrs))) ? ', did you mean ' . Parser::N_PREFIX . $t . '?' : ''),
 			);
 		}
 

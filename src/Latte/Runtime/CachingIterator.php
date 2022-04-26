@@ -55,7 +55,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 				$iterator = new \IteratorIterator($iterator);
 			}
 		} else {
-			throw new \InvalidArgumentException(sprintf('Invalid argument passed to foreach; array or Traversable expected, %s given.', is_object($iterator) ? get_class($iterator) : gettype($iterator)));
+			throw new \InvalidArgumentException(sprintf('Invalid argument passed to foreach; array or Traversable expected, %s given.', is_object($iterator) ? $iterator::class : gettype($iterator)));
 		}
 
 		parent::__construct($iterator, 0);

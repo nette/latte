@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,37 +16,37 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-{foreach $people as $person}
-	{first}({/first} {$person}{sep}, {/sep} {last}){/last}
-{/foreach}
+	{foreach $people as $person}
+		{first}({/first} {$person}{sep}, {/sep} {last}){/last}
+	{/foreach}
 
 
-{foreach $people as $person}
-	{first}({else}[{/first} {$person}{sep}, {else};{/sep} {last}){else}]{/last}
-{/foreach}
+	{foreach $people as $person}
+		{first}({else}[{/first} {$person}{sep}, {else};{/sep} {last}){else}]{/last}
+	{/foreach}
 
 
-{foreach $people as $person}
-	{first 2}({/first} {$person}{sep 2}, {/sep} {last 2}){/last}
-{/foreach}
+	{foreach $people as $person}
+		{first 2}({/first} {$person}{sep 2}, {/sep} {last 2}){/last}
+	{/foreach}
 
 
-{foreach $people as $person}
-	{first 1}({/first} {$person}{sep 1}, {/sep} {last 1}){/last}
-{/foreach}
+	{foreach $people as $person}
+		{first 1}({/first} {$person}{sep 1}, {/sep} {last 1}){/last}
+	{/foreach}
 
 
-{foreach $people as $person}
-	<span n:first=0>(</span> {$person}<span n:sep>, </span> <span n:last>)</span>
-{/foreach}
+	{foreach $people as $person}
+		<span n:first=0>(</span> {$person}<span n:sep>, </span> <span n:last>)</span>
+	{/foreach}
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/first-sep-last.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/first-sep-last.html',
-	$latte->renderToString($template, ['people' => ['John', 'Mary', 'Paul']])
+	$latte->renderToString($template, ['people' => ['John', 'Mary', 'Paul']]),
 );

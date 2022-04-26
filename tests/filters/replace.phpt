@@ -11,7 +11,6 @@ use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Filters;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

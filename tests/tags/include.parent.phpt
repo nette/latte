@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -46,11 +45,11 @@ Assert::exception(function () use ($latte) {
 // with params
 Assert::match(
 	'  parent 10',
-	$latte->renderToString('main2')
+	$latte->renderToString('main2'),
 );
 
 // double
 Assert::match(
 	'  parent    parent',
-	$latte->renderToString('main3')
+	$latte->renderToString('main3'),
 );

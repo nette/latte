@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,52 +16,52 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-<p n:attr="title => hello, lang => isset($lang) ? $lang"> </p>
+	<p n:attr="title => hello, lang => isset($lang) ? $lang"> </p>
 
-<input n:attr="checked => true, disabled => false">
+	<input n:attr="checked => true, disabled => false">
 
-EOD;
+	EOD;
 
 Assert::match(
 	<<<'XX'
-%A%
-		echo '
-<p';
-		$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-		echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
-		echo '> </p>
+		%A%
+				echo '
+		<p';
+				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
+				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
+				echo '> </p>
 
-<input';
-		$ʟ_tmp = ['checked' => true, 'disabled' => false];
-		echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
-		echo '>
-';
-%A%
-XX
+		<input';
+				$ʟ_tmp = ['checked' => true, 'disabled' => false];
+				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
+				echo '>
+		';
+		%A%
+		XX
 ,
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 Assert::match(
 	<<<'XX'
 
-<p title="hello"> </p>
+		<p title="hello"> </p>
 
-<input checked>
-XX
+		<input checked>
+		XX
 ,
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );
 
 Assert::match(
 	<<<'XX'
 
-<p title="hello"> </p>
+		<p title="hello"> </p>
 
-<input checked="checked">
-XX
+		<input checked="checked">
+		XX
 ,
-	$latte->setContentType($latte::CONTENT_XML)->renderToString($template)
+	$latte->setContentType($latte::CONTENT_XML)->renderToString($template),
 );
 
 

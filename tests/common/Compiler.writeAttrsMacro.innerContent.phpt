@@ -6,7 +6,6 @@ use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -52,31 +51,31 @@ $latte->addMacro('two', new TestMacro('{}'));
 
 Assert::match(
 	'%A%<div>[]</div>%A%',
-	$latte->compile('<div n:one></div>')
+	$latte->compile('<div n:one></div>'),
 );
 
 Assert::match(
 	'%A%<div>
 [<br>
 ]</div>%A%',
-	$latte->compile("<div n:one>\n<br>\n</div>")
+	$latte->compile("<div n:one>\n<br>\n</div>"),
 );
 
 Assert::match(
 	'%A%<div>
 {[<br>
 ]}</div>%A%',
-	$latte->compile("<div n:one n:two>\n<br>\n</div>")
+	$latte->compile("<div n:one n:two>\n<br>\n</div>"),
 );
 
 // ignore innerContent
 Assert::match(
 	'%A%<div>@</div>%A%',
-	$latte->compile('<div n:inner-one>@</div>')
+	$latte->compile('<div n:inner-one>@</div>'),
 );
 
 // ignore innerContent
 Assert::match(
 	'%A%<div>@</div>%A%',
-	$latte->compile('<div n:tag-one>@</div>')
+	$latte->compile('<div n:tag-one>@</div>'),
 );

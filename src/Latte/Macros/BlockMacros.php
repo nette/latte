@@ -96,7 +96,7 @@ class BlockMacros extends MacroSet
 					'?>' . $compiler->expandTokens($block->code) . '<?php',
 					'array $ʟ_args',
 					'void',
-					$block->comment
+					$block->comment,
 				);
 				$meta[$layer][$name] = $block->contentType === $compiler->getContentType()
 					? $method
@@ -159,13 +159,13 @@ class BlockMacros extends MacroSet
 				$node->modifiers
 					? $writer->write('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
 					: PhpHelpers::dump($noEscape ? null : implode('', $node->context)),
-				$name
+				$name,
 			);
 		}
 
 		$parent = $name === 'parent';
 		if ($name === 'parent' || $name === 'this') {
-			$item = $node->closest(['block', 'define'], function ($node) { return $node->data->name !== ''; });
+			$item = $node->closest(['block', 'define'], fn($node) => $node->data->name !== '');
 			if (!$item) {
 				throw new CompileException("Cannot include $name block outside of any block.");
 			}
@@ -186,7 +186,7 @@ class BlockMacros extends MacroSet
 			. ($node->modifiers
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: ($noEscape || $parent ? '' : ', ' . PhpHelpers::dump(implode('', $node->context))))
-			. ') %node.line;'
+			. ') %node.line;',
 		);
 	}
 
@@ -252,7 +252,7 @@ class BlockMacros extends MacroSet
 			$node->modifiers .= '|escape';
 			$node->closingCode = $writer->write(
 				'<?php } finally { $ʟ_fi = new LR\FilterInfo(%var); echo %modifyContent(ob_get_clean()); } ?>',
-				implode('', $node->context)
+				implode('', $node->context),
 			);
 			return $writer->write('ob_start(function () {}) %node.line; try {');
 		}
@@ -266,7 +266,7 @@ class BlockMacros extends MacroSet
 
 		$renderArgs = $writer->write(
 			'get_defined_vars()'
-			. ($node->modifiers ? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : '')
+			. ($node->modifiers ? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }' : ''),
 		);
 
 		if ($this->isDynamic($data->name)) {
@@ -289,7 +289,7 @@ class BlockMacros extends MacroSet
 			($extendsCheck ? '' : 'if ($this->getParentName()) { return get_defined_vars(); } ')
 			. '$this->renderBlock(%var, %raw) %node.line;',
 			$data->name,
-			$renderArgs
+			$renderArgs,
 		);
 	}
 
@@ -336,7 +336,7 @@ class BlockMacros extends MacroSet
 				$param,
 				count($params),
 				substr($param, 1),
-				$default
+				$default,
 			);
 			if ($tokens->isNext(...$tokens::SIGNIFICANT)) {
 				$tokens->consumeValue(',');
@@ -371,7 +371,7 @@ class BlockMacros extends MacroSet
 				$this->getCompiler()->expandTokens("extract(\$ʟ_args); unset(\$ʟ_args);\n?>{$node->content}<?php"),
 				'array $ʟ_args',
 				'void',
-				"{{$node->name} {$node->args}} on line {$node->startLine}"
+				"{{$node->name} {$node->args}} on line {$node->startLine}",
 			);
 			$node->content = '';
 		};
@@ -381,7 +381,7 @@ class BlockMacros extends MacroSet
 			$data->name,
 			implode('', $node->context),
 			$func,
-			$layer
+			$layer,
 		);
 	}
 
@@ -425,7 +425,7 @@ class BlockMacros extends MacroSet
 				try { ?>%raw<?php } finally { $this->global->snippetDriver->leave(); } ?>',
 				$data->name,
 				SnippetDriver::TYPE_STATIC,
-				preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content)
+				preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content),
 			);
 
 			$this->extractMethod($node, $block);
@@ -443,7 +443,7 @@ class BlockMacros extends MacroSet
 
 			$node->attrCode = $writer->write(
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>",
-				$data->name
+				$data->name,
 			);
 			return $writer->write('$this->renderBlock(%var, [], null, %var)', $data->name, Template::LAYER_SNIPPET);
 		}
@@ -453,7 +453,7 @@ class BlockMacros extends MacroSet
 			. '<?php $this->renderBlock(%0_var, [], null, %1_var) %node.line; ?>'
 			. "\n</div><?php ",
 			$data->name,
-			Template::LAYER_SNIPPET
+			Template::LAYER_SNIPPET,
 		);
 	}
 
@@ -473,7 +473,7 @@ class BlockMacros extends MacroSet
 
 			$node->attrCode = $writer->write(
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(\$ʟ_nm = %word)) . '\"' ?>",
-				$data->name
+				$data->name,
 			);
 			return $writer->write('$this->global->snippetDriver->enter($ʟ_nm, %var) %node.line; try {', SnippetDriver::TYPE_DYNAMIC);
 		}
@@ -484,7 +484,7 @@ class BlockMacros extends MacroSet
 			. '<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = %word)) ?>"'
 			. '><?php $this->global->snippetDriver->enter($ʟ_nm, %var) %node.line; try {',
 			$data->name,
-			SnippetDriver::TYPE_DYNAMIC
+			SnippetDriver::TYPE_DYNAMIC,
 		);
 	}
 
@@ -507,7 +507,7 @@ class BlockMacros extends MacroSet
 				try { ?>%raw<?php } finally { $this->global->snippetDriver->leave(); } ?>',
 				$data->name,
 				SnippetDriver::TYPE_AREA,
-				preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content)
+				preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content),
 			);
 			$this->extractMethod($node, $block);
 		};
@@ -580,13 +580,13 @@ class BlockMacros extends MacroSet
 		if (!$mod && preg_match('~([\'"])[\w-]+\\1$~DA', $name)) {
 			trigger_error("Change {embed $name} to {embed file $name} for clarity (on line $node->startLine)", E_USER_NOTICE);
 		}
-		$mod = $mod ?? (preg_match('~^[\w-]+$~DA', $name) ? 'block' : 'file');
+		$mod ??= (preg_match('~^[\w-]+$~DA', $name) ? 'block' : 'file');
 
 		$node->openingCode = $writer->write(
 			'<?php
 			$this->enterBlockLayer(%0_var, get_defined_vars()) %node.line;
 			if (false) { ?>',
-			$this->index
+			$this->index,
 		);
 
 		if ($mod === 'file') {
@@ -595,7 +595,7 @@ class BlockMacros extends MacroSet
 				try { $this->createTemplate(%word, %node.array, "embed")->renderToContentType(%var) %node.line; }
 				finally { $this->leaveBlockLayer(); } ?>' . "\n",
 				$name,
-				implode('', $node->context)
+				implode('', $node->context),
 			);
 
 		} else {
@@ -605,7 +605,7 @@ class BlockMacros extends MacroSet
 				try { $this->renderBlock(%raw, %node.array, %var) %node.line; }
 				finally { $this->leaveBlockLayer(); } ?>' . "\n",
 				$this->isDynamic($name) ? $writer->formatWord($name) : PhpHelpers::dump($name),
-				implode('', $node->context)
+				implode('', $node->context),
 			);
 		}
 	}

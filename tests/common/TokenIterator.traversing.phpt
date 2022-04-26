@@ -10,7 +10,6 @@ use Latte\TokenIterator;
 use Latte\Tokenizer;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

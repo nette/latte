@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -30,7 +29,7 @@ Assert::match(
 		a
 		b
 		b',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );
 
 
@@ -51,5 +50,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	'',
-	$latte->renderToString('main')
+	$latte->renderToString('main'),
 );

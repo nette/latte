@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,22 +16,22 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-{foreach [a, b] as $item}
-	item
-{/foreach}
+	{foreach [a, b] as $item}
+		item
+	{/foreach}
 
----
+	---
 
-{foreach [a, b] as $item}
-	{$iterator->counter}
-{/foreach}
-{$iterator === null ? 'is null'}
+	{foreach [a, b] as $item}
+		{$iterator->counter}
+	{/foreach}
+	{$iterator === null ? 'is null'}
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/foreach2.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 Assert::match(
@@ -46,5 +45,5 @@ Assert::match(
 	2
 is null
 ',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );

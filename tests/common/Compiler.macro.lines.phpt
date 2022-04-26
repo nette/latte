@@ -6,7 +6,6 @@ use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -48,14 +47,14 @@ $latte->addMacro('one', $macro);
 
 Assert::match(
 	'%A%opening(1)%A%',
-	$latte->compile('{one}')
+	$latte->compile('{one}'),
 );
 
 Assert::match(
 	'%A%opening(2)%A%',
 	$latte->compile('
 		{one
-		}')
+		}'),
 );
 
 Assert::match(
@@ -64,7 +63,7 @@ Assert::match(
 	<div
 	n:one
 	></div>
-	')
+	'),
 );
 
 
@@ -72,7 +71,7 @@ $macro->empty = false;
 
 Assert::match(
 	'%A%opening(1)closing(1)%A%',
-	$latte->compile('{one /}')
+	$latte->compile('{one /}'),
 );
 
 Assert::match(
@@ -81,7 +80,7 @@ Assert::match(
 		{one}
 
 		{/
-		}')
+		}'),
 );
 
 Assert::match(
@@ -92,5 +91,5 @@ Assert::match(
 	>
 	</div
 	>
-	')
+	'),
 );

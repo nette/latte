@@ -10,7 +10,6 @@ use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

@@ -9,7 +9,6 @@ declare(strict_types=1);
 use Latte\Runtime\Html;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,57 +16,57 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
-{$el}
-{$el2}
+	{$el}
+	{$el2}
 
-<p val = {$xss} val2={$mxss}> </p>
-<p onclick = {$xss}> </p>
-<p ONCLICK ="{$xss}" {$xss}> </p>
-<p val = />{$xss}</p>
+	<p val = {$xss} val2={$mxss}> </p>
+	<p onclick = {$xss}> </p>
+	<p ONCLICK ="{$xss}" {$xss}> </p>
+	<p val = />{$xss}</p>
 
-<STYLE type="text/css">
-<!--
-#{$xss} {
-	background: blue;
-}
--->
-</style>
+	<STYLE type="text/css">
+	<!--
+	#{$xss} {
+		background: blue;
+	}
+	-->
+	</style>
 
-<script>
-<!--
-alert('</div>');
+	<script>
+	<!--
+	alert('</div>');
 
-var prop = {$people};
+	var prop = {$people};
 
-document.getElementById({$xss}).style.backgroundColor = 'red';
+	document.getElementById({$xss}).style.backgroundColor = 'red';
 
-var html = {$el} || {$el2};
--->
-</script>
+	var html = {$el} || {$el2};
+	-->
+	</script>
 
-<SCRIPT>
-/* <![CDATA[ */
+	<SCRIPT>
+	/* <![CDATA[ */
 
-var prop2 = {$people};
+	var prop2 = {$people};
 
-/* ]]> */
-</script>
+	/* ]]> */
+	</script>
 
-<p onclick =
-'alert({$xss});alert("hello");'
- title='{$xss}'
- STYLE =
- "color:{$xss};"
- rel="{$xss}"
- onblur="alert({$xss})"
- alt='{$el} {$el2}'
- onfocus="alert({$el})"
->click on me {$xss}</p>
-EOD;
+	<p onclick =
+	'alert({$xss});alert("hello");'
+	 title='{$xss}'
+	 STYLE =
+	 "color:{$xss};"
+	 rel="{$xss}"
+	 onblur="alert({$xss})"
+	 alt='{$el} {$el2}'
+	 onfocus="alert({$el})"
+	>click on me {$xss}</p>
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/print.xss.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 $params['people'] = ['John', 'Mary', 'Paul', ']]> <!--'];
@@ -79,5 +78,5 @@ $params['menu'] = ['about', ['product1', 'product2'], 'contact'];
 
 Assert::matchFile(
 	__DIR__ . '/expected/print.xss.html',
-	$latte->renderToString($template, $params)
+	$latte->renderToString($template, $params),
 );

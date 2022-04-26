@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -29,31 +28,31 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ',
 
 	'main1' => <<<'EOD'
-{layout "parent"}
-{var $varMain = "main"}
+		{layout "parent"}
+		{var $varMain = "main"}
 
-{block title}
-    block: {$varMain} {$varParent ?? undef}
-{/block}
+		{block title}
+		    block: {$varMain} {$varParent ?? undef}
+		{/block}
 
-{block content}
-    include: {$varMain} {$varParent ?? undef}
-{/block}
-EOD
+		{block content}
+		    include: {$varMain} {$varParent ?? undef}
+		{/block}
+		EOD
 	,
 
 	'main2' => <<<'EOD'
-{layout "inter"}
-{var $varMain = "main"}
+		{layout "inter"}
+		{var $varMain = "main"}
 
-{block title}
-    block: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
-{/block}
+		{block title}
+		    block: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
+		{/block}
 
-{block content}
-    include: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
-{/block}
-EOD
+		{block content}
+		    include: {$varMain} {$varInter ?? undef} {$varParent ?? undef}
+		{/block}
+		EOD,
 ]));
 
 
@@ -65,7 +64,7 @@ Assert::match(
 
     include: main undef
 ',
-	$latte->renderToString('main1')
+	$latte->renderToString('main1'),
 );
 
 
@@ -77,5 +76,5 @@ Assert::match(
 
     include: main undef undef
 ',
-	$latte->renderToString('main2')
+	$latte->renderToString('main2'),
 );

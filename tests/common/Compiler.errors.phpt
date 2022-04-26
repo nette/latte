@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -32,7 +31,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::match(
 	'<div c=comment -->',
-	$latte->renderToString('<div c=comment {="--"}>')
+	$latte->renderToString('<div c=comment {="--"}>'),
 );
 
 

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,22 +16,22 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	'',
-	$latte->renderToString('{capture $var}<html>{/capture}')
+	$latte->renderToString('{capture $var}<html>{/capture}'),
 );
 
 Assert::match(
 	'string',
-	$latte->renderToString('{capture $var}{/capture}{=gettype($var)}')
+	$latte->renderToString('{capture $var}{/capture}{=gettype($var)}'),
 );
 
 Assert::match(
 	Latte\Runtime\Html::class,
-	$latte->renderToString('{capture $var}<html>{/capture}{=get_class($var)}')
+	$latte->renderToString('{capture $var}<html>{/capture}{=get_class($var)}'),
 );
 
 Assert::match(
 	'TEST',
-	$latte->renderToString('{capture$var|stripHtml|upper}<b>Test</b>{/capture}{=$var}')
+	$latte->renderToString('{capture$var|stripHtml|upper}<b>Test</b>{/capture}{=$var}'),
 );
 
 Assert::noError(function () use ($latte) { // uses keyword new
@@ -43,10 +42,10 @@ Assert::noError(function () use ($latte) { // uses keyword new
 
 Assert::match( // bug #215
 	'',
-	$latte->renderToString('{capture $var|strip} <html> {/capture}')
+	$latte->renderToString('{capture $var|strip} <html> {/capture}'),
 );
 
 Assert::match(
 	'<!--  --> &lt;foo&gt;',
-	$latte->renderToString('<!-- {capture $x}<foo>{/capture} --> {$x}')
+	$latte->renderToString('<!-- {capture $x}<foo>{/capture} --> {$x}'),
 );

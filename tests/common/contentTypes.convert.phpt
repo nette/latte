@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -29,7 +28,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{block|striptags} <h1>title</h1> {/block}')
+	$latte->renderToString('{block|striptags} <h1>title</h1> {/block}'),
 );
 
 Assert::exception(function () use ($latte) {
@@ -38,62 +37,62 @@ Assert::exception(function () use ($latte) {
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{block|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{block|striphtml} <h1>title</h1> {/block}'),
 );
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{block name|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{block name|striphtml} <h1>title</h1> {/block}'),
 );
 
 Assert::same(
 	' TITLE ',
-	$latte->renderToString('{block|striphtml|upper} <h1>title</h1> {/block}')
+	$latte->renderToString('{block|striphtml|upper} <h1>title</h1> {/block}'),
 );
 
 Assert::same(
 	' ONE &lt; TWO ',
-	$latte->renderToString('{block|striphtml|upper} one < two {/block}')
+	$latte->renderToString('{block|striphtml|upper} one < two {/block}'),
 );
 
 Assert::same(
 	' one &amp; two ',
-	$latte->renderToString('{block|striptags} one &amp; two {/block}')
+	$latte->renderToString('{block|striptags} one &amp; two {/block}'),
 );
 
 Assert::same(
 	'<meta content="val">',
-	$latte->renderToString('<meta content="{block|stripHtml}val{/block}">')
+	$latte->renderToString('<meta content="{block|stripHtml}val{/block}">'),
 );
 
 Assert::same(
 	'<meta content="val">',
-	$latte->renderToString('<meta content="{block name|stripHtml}val{/block}">')
+	$latte->renderToString('<meta content="{block name|stripHtml}val{/block}">'),
 );
 
 
 
 Assert::same(
 	' one &amp; two ',
-	$latte->renderToString('{contentType xml}{block|striptags} one &amp; two {/block}')
+	$latte->renderToString('{contentType xml}{block|striptags} one &amp; two {/block}'),
 );
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{contentType xml}{block|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{contentType xml}{block|striphtml} <h1>title</h1> {/block}'),
 );
 
 Assert::same(
 	' title ',
-	$latte->renderToString('{contentType xml}{block name|striphtml} <h1>title</h1> {/block}')
+	$latte->renderToString('{contentType xml}{block name|striphtml} <h1>title</h1> {/block}'),
 );
 
 Assert::same(
 	'<meta content="val" />',
-	$latte->renderToString('{contentType xml}<meta content="{block|stripHtml}val{/block}" />')
+	$latte->renderToString('{contentType xml}<meta content="{block|stripHtml}val{/block}" />'),
 );
 
 Assert::same(
 	'<meta content="val" />',
-	$latte->renderToString('{contentType xml}<meta content="{block name|stripHtml}val{/block}" />')
+	$latte->renderToString('{contentType xml}<meta content="{block name|stripHtml}val{/block}" />'),
 );

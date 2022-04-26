@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,33 +16,33 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
 
-{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged $i} {$i} {/ifchanged} {ifchanged a, b} const {/ifchanged} {/foreach}
+	{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged $i} {$i} {/ifchanged} {ifchanged a, b} const {/ifchanged} {/foreach}
 
---
+	--
 
-{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged $i} {$i} {else} else {/ifchanged} {/foreach}
+	{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged $i} {$i} {else} else {/ifchanged} {/foreach}
 
---
+	--
 
-{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged} -{$i}- {/ifchanged} {/foreach}
+	{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged} -{$i}- {/ifchanged} {/foreach}
 
---
+	--
 
-{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged} -{$i}- {else} else {/ifchanged} {/foreach}
+	{foreach [1, 1, 2, 3, 3, 3] as $i} {ifchanged} -{$i}- {else} else {/ifchanged} {/foreach}
 
---
+	--
 
-{foreach [1, 1, 2, 3, 3, 3] as $i} <span n:ifchanged>{$i}</span> {/foreach}
+	{foreach [1, 1, 2, 3, 3, 3] as $i} <span n:ifchanged>{$i}</span> {/foreach}
 
---
+	--
 
-{foreach [1, 1, 2, 3, 3, 3] as $i} <span class="{$i}" n:ifchanged></span> {/foreach}
+	{foreach [1, 1, 2, 3, 3, 3] as $i} <span class="{$i}" n:ifchanged></span> {/foreach}
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/ifchanged.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 Assert::match(
@@ -69,5 +68,5 @@ Assert::match(
 
  <span class="1"></span>  <span class="2"></span> <span class="3"></span>
 ',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );

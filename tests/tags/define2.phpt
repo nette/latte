@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -27,7 +26,7 @@ Assert::match(
 two',
 	$latte->renderToString('one
 {define foo}Hello{/define}
-two')
+two'),
 );
 
 Assert::exception(function () use ($latte) {
