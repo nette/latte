@@ -54,7 +54,7 @@ Assert::match('
 <a href={$url7}></a>
 <a href={$url4|dataStream}></a>
 <a href={$url4|dataStream|noCheck}></a>
-<a href={$url4|dataStream|checkURL}></a>
+<a href={$url4|dataStream|checkUrl}></a>
 ',
 	$params
 ));

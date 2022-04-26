@@ -833,7 +833,10 @@ class PhpWriter
 					}
 
 					$tokens->nextToken('|');
-				} elseif (!strcasecmp($tokens->currentValue(), 'checkurl')) {
+				} elseif (!strcasecmp($tokens->currentValue(), 'checkUrl')) {
+					if ($tokens->currentValue() !== 'checkUrl') {
+						trigger_error("Case mismatch on filter name |{$tokens->currentValue()}, correct name is |checkUrl.", E_USER_WARNING);
+					}
 					$res->prepend('LR\Filters::safeUrl(');
 					$inside = true;
 				} elseif (

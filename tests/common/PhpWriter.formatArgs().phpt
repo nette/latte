@@ -123,7 +123,7 @@ test('inline modifiers', function () {
 	}, Latte\CompileException::class, 'Missing )');
 
 	Assert::same('($this->filters->escape)(@)', formatArgs('(@|escape)'));
-	Assert::same('LR\Filters::safeUrl(@)', formatArgs('(@|checkurl)'));
+	Assert::same('LR\Filters::safeUrl(@)', formatArgs('(@|checkUrl)'));
 });
 
 
