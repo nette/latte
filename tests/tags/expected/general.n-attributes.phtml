@@ -404,7 +404,75 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '</li>
 </ul>
+
+
 ';
+		ob_start(fn() => '');
+		try {
+			$ʟ_tag[8] = '';
+			echo '<';
+			echo $ʟ_tmp = (Latte\Essential\Nodes\NTagNode::check('div', 'span'));
+			$ʟ_tag[8] = '</' . $ʟ_tmp . '>' . $ʟ_tag[8];
+			echo '>';
+			ob_start();
+			try {
+				echo 'n:tag & n:ifcontent';
+
+			} finally {
+				$ʟ_ifc[0] = rtrim(ob_get_flush()) === '';
+			}
+			echo $ʟ_tag[8];
+			echo "\n";
+
+		} finally {
+			if ($ʟ_ifc[0] ?? null) {
+				ob_end_clean();
+			} else {
+				echo ob_get_clean();
+			}
+		}
+		ob_start(fn() => '');
+		try {
+			$ʟ_tag[9] = '';
+			echo '<';
+			echo $ʟ_tmp = (Latte\Essential\Nodes\NTagNode::check('div', 'span'));
+			$ʟ_tag[9] = '</' . $ʟ_tmp . '>' . $ʟ_tag[9];
+			echo '>';
+			ob_start();
+			try {
+
+			} finally {
+				$ʟ_ifc[1] = rtrim(ob_get_flush()) === '';
+			}
+			echo $ʟ_tag[9];
+			echo "\n";
+
+		} finally {
+			if ($ʟ_ifc[1] ?? null) {
+				ob_end_clean();
+			} else {
+				echo ob_get_clean();
+			}
+		}
+		echo "\n";
+		if (1) /* line %d% */ {
+			$ʟ_tag[10] = '';
+			echo '<';
+			echo $ʟ_tmp = (Latte\Essential\Nodes\NTagNode::check('div', 'span'));
+			$ʟ_tag[10] = '</' . $ʟ_tmp . '>' . $ʟ_tag[10];
+			echo '>n:tag & n:if=1';
+			echo $ʟ_tag[10];
+			echo "\n";
+		}
+		if (0) /* line %d% */ {
+			$ʟ_tag[11] = '';
+			echo '<';
+			echo $ʟ_tmp = (Latte\Essential\Nodes\NTagNode::check('div', 'span'));
+			$ʟ_tag[11] = '</' . $ʟ_tmp . '>' . $ʟ_tag[11];
+			echo '>n:tag & n:if=0';
+			echo $ʟ_tag[11];
+			echo "\n";
+		}
 	}
 
 
