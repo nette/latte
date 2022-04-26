@@ -16,13 +16,13 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	'<style>\<\>',
-	$latte->renderToString('<style>{="<>"}')
+	'<style>\<\></style>',
+	$latte->renderToString('<style>{="<>"}</style>')
 );
 
 Assert::match(
-	'<style>\<\/ \]\]\> \<\!',
-	$latte->renderToString('<style>{="</"} {="]]>"} {="<!"}')
+	'<style>\<\/ \]\]\> \<\! </style>',
+	$latte->renderToString('<style>{="</"} {="]]>"} {="<!"} </style>')
 );
 
 Assert::match(
@@ -31,28 +31,28 @@ Assert::match(
 );
 
 Assert::match(
-	'<style>123',
-	$latte->renderToString('<style>{=123}')
+	'<style>123</style>',
+	$latte->renderToString('<style>{=123}</style>')
 );
 
 Assert::match(
-	'<style id="&lt;&gt;">',
-	$latte->renderToString('<style id="{="<>"}">')
+	'<style id="&lt;&gt;"></style>',
+	$latte->renderToString('<style id="{="<>"}"></style>')
 );
 
 Assert::match(
-	'<style type="TEXT/CSS">\<\>',
-	$latte->renderToString('<style type="TEXT/CSS">{="<>"}')
+	'<style type="TEXT/CSS">\<\></style>',
+	$latte->renderToString('<style type="TEXT/CSS">{="<>"}</style>')
 );
 
 Assert::match(
-	'<style type="text/html">&lt;&gt;',
-	$latte->renderToString('<style type="text/html">{="<>"}')
+	'<style type="text/html">&lt;&gt;</style>',
+	$latte->renderToString('<style type="text/html">{="<>"}</style>')
 );
 
 Assert::match(
-	'<style type="text/html">&lt;&gt;',
-	$latte->renderToString('<style type="text/html">{="<>"}')
+	'<style type="text/html">&lt;&gt;</style>',
+	$latte->renderToString('<style type="text/html">{="<>"}</style>')
 );
 
 Assert::match(

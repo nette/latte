@@ -80,4 +80,4 @@ Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<input n:foo>');
-}, Latte\CompileException::class, 'Missing </input> for n:foo');
+}, Latte\CompileException::class, 'Unexpected end, expecting </input> for n:foo');
