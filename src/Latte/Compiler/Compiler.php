@@ -204,11 +204,7 @@ class Compiler
 		}
 
 		while ($this->htmlNode) {
-			if (!empty($this->htmlNode->macroAttrs)) {
-				throw new CompileException('Missing ' . self::printEndTag($this->htmlNode));
-			}
-
-			$this->htmlNode = $this->htmlNode->parentNode;
+			$this->closeHtmlTag('end');
 		}
 
 		while ($this->macroNode) {
@@ -470,11 +466,7 @@ class Compiler
 					break;
 				}
 
-				if ($this->htmlNode->macroAttrs) {
-					throw new CompileException("Unexpected </$token->name>, expecting " . self::printEndTag($this->htmlNode));
-				}
-
-				$this->htmlNode = $this->htmlNode->parentNode;
+				$this->closeHtmlTag("</$token->name>");
 			}
 
 			if (!$this->htmlNode) {
@@ -939,5 +931,19 @@ class Compiler
 		return $node instanceof HtmlNode
 			? "</{$node->name}> for " . Parser::N_PREFIX . implode(' and ' . Parser::N_PREFIX, array_keys($node->macroAttrs))
 			: "{/{$node->name}}";
+	}
+
+
+	private function closeHtmlTag($token): void
+	{
+		if ($this->htmlNode->macroAttrs) {
+			throw new CompileException("Unexpected $token, expecting " . self::printEndTag($this->htmlNode));
+		} elseif (in_array($this->contentType, [self::CONTENT_HTML, self::CONTENT_XHTML], true)
+			&& in_array(strtolower($this->htmlNode->name), ['script', 'style'], true)
+		) {
+			trigger_error("Unexpected $token, expecting </{$this->htmlNode->name}> (on line {$this->getLine()})", E_USER_DEPRECATED);
+		}
+
+		$this->htmlNode = $this->htmlNode->parentNode;
 	}
 }

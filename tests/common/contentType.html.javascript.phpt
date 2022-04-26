@@ -16,13 +16,13 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	'<script>"<>"',
-	$latte->renderToString('<script>{="<>"}')
+	'<script>"<>"</script>',
+	$latte->renderToString('<script>{="<>"}</script>')
 );
 
 Assert::match(
-	'<script>"<\/" "]]\u003E" "\u003C!"',
-	$latte->renderToString('<script>{="</"} {="]]>"} {="<!"}')
+	'<script>"<\/" "]]\u003E" "\u003C!" </script>',
+	$latte->renderToString('<script>{="</"} {="]]>"} {="<!"} </script>')
 );
 
 Assert::match(
@@ -31,23 +31,18 @@ Assert::match(
 );
 
 Assert::match(
-	'<script>123',
-	$latte->renderToString('<script>{=123}')
+	'<script>123</script>',
+	$latte->renderToString('<script>{=123}</script>')
 );
 
 Assert::match(
-	'<script>[1,2,3]',
-	$latte->renderToString('<script>{=[1,2,3]}')
+	'<script>[1,2,3]</script>',
+	$latte->renderToString('<script>{=[1,2,3]}</script>')
 );
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<script>"{=123|noescape}"');
 }, Latte\CompileException::class, 'Do not place {=123|noescape} inside quotes in JavaScript.');
-
-Assert::match(
-	'<script id="&lt;&gt;">',
-	$latte->renderToString('<script id="{="<>"}">')
-);
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<script> "{$var}" </script>');
@@ -58,28 +53,33 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Do not place {$var} inside quotes in JavaScript.');
 
 Assert::match(
-	'<script type="TEXT/X-JAVASCRIPT">"<>"',
-	$latte->renderToString('<script type="TEXT/X-JAVASCRIPT">{="<>"}')
+	'<script id="&lt;&gt;"></script>',
+	$latte->renderToString('<script id="{="<>"}"></script>')
 );
 
 Assert::match(
-	'<script type="module">"<>"',
-	$latte->renderToString('<script type="module">{="<>"}')
+	'<script type="TEXT/X-JAVASCRIPT">"<>"</script>',
+	$latte->renderToString('<script type="TEXT/X-JAVASCRIPT">{="<>"}</script>')
 );
 
 Assert::match(
-	'<script type="text/plain">"<>"',
-	$latte->renderToString('<script type="text/plain">{="<>"}')
+	'<script type="module">"<>"</script>',
+	$latte->renderToString('<script type="module">{="<>"}</script>')
 );
 
 Assert::match(
-	'<script type="application/json">{ foo:"<>" }',
-	$latte->renderToString('<script type="application/json">{ foo:{="<>"} }')
+	'<script type="text/plain">"<>"</script>',
+	$latte->renderToString('<script type="text/plain">{="<>"}</script>')
 );
 
 Assert::match(
-	'<script type="text/html">&lt;&gt;',
-	$latte->renderToString('<script type="text/html">{="<>"}')
+	'<script type="application/json">{ foo:"<>" }</script>',
+	$latte->renderToString('<script type="application/json">{ foo:{="<>"} }</script>')
+);
+
+Assert::match(
+	'<script type="text/html">&lt;&gt;</script>',
+	$latte->renderToString('<script type="text/html">{="<>"}</script>')
 );
 
 // content of <script> is RAWTEXT

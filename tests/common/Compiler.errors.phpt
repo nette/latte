@@ -121,7 +121,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1>');
-}, Latte\CompileException::class, 'Missing </span> for n:if');
+}, Latte\CompileException::class, 'Unexpected end, expecting </span> for n:if');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('<p n:foreach=1><span n:if=1></i>');
