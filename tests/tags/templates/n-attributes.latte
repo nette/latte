@@ -119,3 +119,10 @@
 <ul title="inner foreach continue">
 	<li n:inner-foreach="$people as $person">{$person}{continueIf true}</li>
 </ul>
+
+
+<div n:tag=span n:ifcontent>n:tag & n:ifcontent</div>
+<div n:tag=span n:ifcontent></div>
+
+<div n:tag=span n:if=1>n:tag & n:if=1</div>
+<div n:tag=span n:if=0>n:tag & n:if=0</div>
