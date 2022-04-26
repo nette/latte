@@ -905,7 +905,7 @@ class Compiler
 		} elseif ($this->contentType === self::CONTENT_HTML
 			&& in_array(strtolower($this->htmlNode->name), ['script', 'style'], true)
 		) {
-			trigger_error("Unexpected $token, expecting </{$this->htmlNode->name}> (on line {$this->getLine()})", E_USER_DEPRECATED);
+			throw new CompileException("Unexpected $token, expecting </{$this->htmlNode->name}>");
 		}
 
 		$this->htmlNode = $this->htmlNode->parentNode;

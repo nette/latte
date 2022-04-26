@@ -46,7 +46,25 @@ Assert::exception(function () use ($latte) {
 }, Latte\CompileException::class, 'Unexpected /} in tag {time() /}');
 
 
-// brackets balaning
+// <script> & <style> must be closed
+Assert::exception(
+	fn() => $latte->compile('<STYLE>'),
+	Latte\CompileException::class,
+	'Unexpected end, expecting </STYLE>',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<script>'),
+	Latte\CompileException::class,
+	'Unexpected end, expecting </script>',
+);
+
+Assert::noError(
+	fn() => $latte->compile('{contentType xml}<script>'),
+);
+
+
+// brackets balancing
 Assert::exception(function () use ($latte) {
 	$latte->compile('{=)}');
 }, Latte\CompileException::class, 'Unexpected )');
