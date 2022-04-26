@@ -19,9 +19,11 @@ test('', function () {
 	Assert::false($loader->isExpired('content', 0));
 	Assert::false($loader->isExpired('content', 1));
 
-	Assert::exception(function () use ($loader) {
-		$loader->getReferredName('inner', 'referrer');
-	}, LogicException::class, "Missing template 'inner'.");
+	Assert::exception(
+		fn() => $loader->getReferredName('inner', 'referrer'),
+		LogicException::class,
+		"Missing template 'inner'.",
+	);
 });
 
 test('', function () {

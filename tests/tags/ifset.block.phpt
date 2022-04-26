@@ -39,9 +39,11 @@ Assert::same(
 	$compiler->expandMacro('ifset', 'footer, header, main')->openingCode,
 );
 
-Assert::exception(function () use ($compiler) {
-	$compiler->expandMacro('ifset', '$var');
-}, Latte\CompileException::class, 'Unknown tag {ifset $var}');
+Assert::exception(
+	fn() => $compiler->expandMacro('ifset', '$var'),
+	Latte\CompileException::class,
+	'Unknown tag {ifset $var}',
+);
 
 
 // {elseifset ... }

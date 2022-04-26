@@ -19,6 +19,8 @@ Assert::match(
 	$latte->renderToString('{block}Block'),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block}{block}Block');
-}, Latte\CompileException::class, 'Missing {/block}');
+Assert::exception(
+	fn() => $latte->renderToString('{block}{block}Block'),
+	Latte\CompileException::class,
+	'Missing {/block}',
+);

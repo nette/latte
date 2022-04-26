@@ -28,6 +28,8 @@ Assert::contains('<div <? >', $latte->compile('<div <? >'));
 
 Assert::contains('<div a="<?">', $latte->compile('<div a="<?">'));
 
-Assert::exception(function () use ($latte) {
-	echo $latte->compile('{var ?> }');
-}, Latte\CompileException::class, 'Unexpected end in {var ?>}');
+Assert::exception(
+	fn() => $latte->compile('{var ?> }'),
+	Latte\CompileException::class,
+	'Unexpected end in {var ?>}',
+);

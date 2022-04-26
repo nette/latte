@@ -63,29 +63,39 @@ Assert::match(
 );
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:ifcontent=x></div>');
-}, Latte\CompileException::class, 'Arguments are not allowed in n:ifcontent');
+Assert::exception(
+	fn() => $latte->compile('<div n:ifcontent=x></div>'),
+	Latte\CompileException::class,
+	'Arguments are not allowed in n:ifcontent',
+);
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<html>{ifcontent}');
-}, Latte\CompileException::class, 'Unknown {ifcontent}, use n:ifcontent attribute.');
+Assert::exception(
+	fn() => $latte->compile('<html>{ifcontent}'),
+	Latte\CompileException::class,
+	'Unknown {ifcontent}, use n:ifcontent attribute.',
+);
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:inner-ifcontent>');
-}, Latte\CompileException::class, 'Unknown n:inner-ifcontent, use n:ifcontent attribute.');
+Assert::exception(
+	fn() => $latte->compile('<div n:inner-ifcontent>'),
+	Latte\CompileException::class,
+	'Unknown n:inner-ifcontent, use n:ifcontent attribute.',
+);
 
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('<br n:ifcontent>');
-}, Latte\CompileException::class, 'Unnecessary n:ifcontent on empty element <br>');
+Assert::exception(
+	fn() => $latte->renderToString('<br n:ifcontent>'),
+	Latte\CompileException::class,
+	'Unnecessary n:ifcontent on empty element <br>',
+);
 
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('<div n:ifcontent />');
-}, Latte\CompileException::class, 'Unnecessary n:ifcontent on empty element <div>');
+Assert::exception(
+	fn() => $latte->renderToString('<div n:ifcontent />'),
+	Latte\CompileException::class,
+	'Unnecessary n:ifcontent on empty element <div>',
+);
 
 
 Assert::match(

@@ -29,13 +29,17 @@ test('', function () use ($compiler) { // {var ... }
 	Assert::same('<?php  $var1 = 123;  $var2 = 456; ?>', $compiler->expandMacro('var', '\A\B $var1 = 123, ?\A\B $var2 = 456', '')->openingCode);
 
 	// errors
-	Assert::exception(function () use ($compiler) {
-		$compiler->expandMacro('var', '$var => "123', '');
-	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 9.');
+	Assert::exception(
+		fn() => $compiler->expandMacro('var', '$var => "123', ''),
+		Latte\CompileException::class,
+		'Unexpected %a% on line 1, column 9.',
+	);
 
-	Assert::exception(function () use ($compiler) {
-		$compiler->expandMacro('var', 'int var, string var2', '');
-	}, Latte\CompileException::class, 'Unexpected end %a%');
+	Assert::exception(
+		fn() => $compiler->expandMacro('var', 'int var, string var2', ''),
+		Latte\CompileException::class,
+		'Unexpected end %a%',
+	);
 
 	// preprocess
 	Assert::same("<?php \$temp->var1 = true ? 'a' : null; ?>", $compiler->expandMacro('var', '$temp->var1 = true ? a', '')->openingCode);
@@ -52,13 +56,17 @@ test('', function () use ($compiler) { // {default ...}
 	Assert::same("<?php extract([ 'var1' => 123,  'var2' => \"nette framework\"], EXTR_SKIP); ?>", $compiler->expandMacro('default', 'int|string[] $var1 = 123, ?class $var2 = "nette framework"', '')->openingCode);
 
 	// errors
-	Assert::exception(function () use ($compiler) {
-		$compiler->expandMacro('default', '$temp->var1 = 123', '');
-	}, Latte\CompileException::class, "Unexpected '->' in {default \$temp->var1 = 123}");
+	Assert::exception(
+		fn() => $compiler->expandMacro('default', '$temp->var1 = 123', ''),
+		Latte\CompileException::class,
+		"Unexpected '->' in {default \$temp->var1 = 123}",
+	);
 
-	Assert::exception(function () use ($compiler) {
-		$compiler->expandMacro('default', 'int var, string var2', '');
-	}, Latte\CompileException::class, 'Unexpected end %a%');
+	Assert::exception(
+		fn() => $compiler->expandMacro('default', 'int var, string var2', ''),
+		Latte\CompileException::class,
+		'Unexpected end %a%',
+	);
 
 	// preprocess
 	Assert::same("<?php extract(['var1' => true ? 'a' : null], EXTR_SKIP); ?>", $compiler->expandMacro('default', '$var1 = true ? a', '')->openingCode);

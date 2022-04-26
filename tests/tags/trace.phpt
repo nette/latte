@@ -42,9 +42,11 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 
-$e = Assert::exception(function () use ($latte) {
-	$latte->render('main');
-}, Latte\RuntimeException::class, 'Your location in Latte templates');
+$e = Assert::exception(
+	fn() => $latte->render('main'),
+	Latte\RuntimeException::class,
+	'Your location in Latte templates',
+);
 
 
 Assert::same([

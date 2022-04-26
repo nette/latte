@@ -62,10 +62,14 @@ Assert::match(
 	$latte->compile('<div n:one>@</div>'),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:inner-one>@</div>');
-}, Latte\CompileException::class, 'Unexpected prefix in n:inner-one.');
+Assert::exception(
+	fn() => $latte->compile('<div n:inner-one>@</div>'),
+	Latte\CompileException::class,
+	'Unexpected prefix in n:inner-one.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:tag-one>@</div>');
-}, Latte\CompileException::class, 'Unexpected prefix in n:tag-one.');
+Assert::exception(
+	fn() => $latte->compile('<div n:tag-one>@</div>'),
+	Latte\CompileException::class,
+	'Unexpected prefix in n:tag-one.',
+);

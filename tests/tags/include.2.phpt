@@ -55,6 +55,8 @@ Assert::match(
 	$latte->renderToString('main6'),
 );
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('main7');
-}, E_USER_NOTICE, 'The assignment in the {include inc.latte $a = ...} looks like an error.');
+Assert::error(
+	fn() => $latte->renderToString('main7'),
+	E_USER_NOTICE,
+	'The assignment in the {include inc.latte $a = ...} looks like an error.',
+);

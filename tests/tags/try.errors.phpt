@@ -15,18 +15,24 @@ require __DIR__ . '/../bootstrap.php';
 $compiler = new Latte\Compiler;
 CoreMacros::install($compiler);
 
-Assert::exception(function () use ($compiler) {
-	$compiler->expandMacro('try', '', '|filter');
-}, Latte\CompileException::class, 'Filters are not allowed in {try}');
+Assert::exception(
+	fn() => $compiler->expandMacro('try', '', '|filter'),
+	Latte\CompileException::class,
+	'Filters are not allowed in {try}',
+);
 
-Assert::exception(function () use ($compiler) {
-	$compiler->expandMacro('try', '$var', '');
-}, Latte\CompileException::class, 'Arguments are not allowed in {try}');
+Assert::exception(
+	fn() => $compiler->expandMacro('try', '$var', ''),
+	Latte\CompileException::class,
+	'Arguments are not allowed in {try}',
+);
 
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{rollback}');
-}, Latte\CompileException::class, 'Tag {rollback} must be inside {try} ... {/try}.');
+Assert::exception(
+	fn() => $latte->compile('{rollback}'),
+	Latte\CompileException::class,
+	'Tag {rollback} must be inside {try} ... {/try}.',
+);

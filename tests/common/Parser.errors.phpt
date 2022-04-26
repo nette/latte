@@ -19,50 +19,64 @@ test('', function () {
 	Assert::same(1, $parser->getLine());
 });
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse("\xA0\xA0");
-}, Latte\CompileException::class, 'Template is not valid UTF-8 stream.');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse("\xA0\xA0"),
+	Latte\CompileException::class,
+	'Template is not valid UTF-8 stream.',
+);
 Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse("žluťoučký\n\xA0\xA0");
-}, Latte\CompileException::class, 'Template is not valid UTF-8 stream.');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse("žluťoučký\n\xA0\xA0"),
+	Latte\CompileException::class,
+	'Template is not valid UTF-8 stream.',
+);
 Assert::same(2, $parser->getLine());
 
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse("{var \n'abc}");
-}, Latte\CompileException::class, 'Malformed tag contents.');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse("{var \n'abc}"),
+	Latte\CompileException::class,
+	'Malformed tag contents.',
+);
 Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse("\n{* \n'abc}");
-}, Latte\CompileException::class, 'Malformed tag contents.');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse("\n{* \n'abc}"),
+	Latte\CompileException::class,
+	'Malformed tag contents.',
+);
 Assert::same(2, $parser->getLine());
 
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse('{');
-}, Latte\CompileException::class, 'Malformed tag.');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse('{'),
+	Latte\CompileException::class,
+	'Malformed tag.',
+);
 Assert::same(1, $parser->getLine());
 
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse("\n{");
-}, Latte\CompileException::class, 'Malformed tag.');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse("\n{"),
+	Latte\CompileException::class,
+	'Malformed tag.',
+);
 Assert::same(2, $parser->getLine());
 
 
-Assert::exception(function () use (&$parser) {
-	$parser = new Parser;
-	$parser->parse("a\x00\x1F\x7Fb");
-}, Latte\CompileException::class, 'Template contains control character \x0');
+$parser = new Parser;
+Assert::exception(
+	fn() => $parser->parse("a\x00\x1F\x7Fb"),
+	Latte\CompileException::class,
+	'Template contains control character \x0',
+);
 Assert::same(1, $parser->getLine());

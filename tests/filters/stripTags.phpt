@@ -24,9 +24,11 @@ Assert::same(
 
 test('', function () {
 	$info = new FilterInfo(Engine::CONTENT_TEXT);
-	Assert::exception(function () use ($info) {
-		Filters::stripTags($info, '');
-	}, Latte\RuntimeException::class, 'Filter |stripTags used with incompatible type TEXT.');
+	Assert::exception(
+		fn() => Filters::stripTags($info, ''),
+		Latte\RuntimeException::class,
+		'Filter |stripTags used with incompatible type TEXT.',
+	);
 });
 
 

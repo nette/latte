@@ -20,9 +20,11 @@ test('', function () {
 		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar']),
 	);
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']);
-	}, Latte\RuntimeException::class, 'Including block foo with content type HTML into incompatible type HTMLTAG.');
+	Assert::exception(
+		fn() => $latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
+		Latte\RuntimeException::class,
+		'Including block foo with content type HTML into incompatible type HTMLTAG.',
+	);
 
 	Assert::same(
 		'<meta content=b"ar>b"ar',
@@ -120,27 +122,37 @@ test('', function () {
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context2', ['foo' => 'b"ar']));
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('context3', ['foo' => 'b"ar']);
-	}, Latte\RuntimeException::class, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
+	Assert::exception(
+		fn() => $latte->renderToString('context3', ['foo' => 'b"ar']),
+		Latte\RuntimeException::class,
+		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+	);
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('context4', ['foo' => 'b"ar']);
-	}, Latte\RuntimeException::class, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
+	Assert::exception(
+		fn() => $latte->renderToString('context4', ['foo' => 'b"ar']),
+		Latte\RuntimeException::class,
+		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+	);
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('context5', ['foo' => 'b"ar']);
-	}, Latte\RuntimeException::class, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
+	Assert::exception(
+		fn() => $latte->renderToString('context5', ['foo' => 'b"ar']),
+		Latte\RuntimeException::class,
+		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+	);
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('context6', ['foo' => 'b"ar']);
-	}, Latte\RuntimeException::class, 'Overridden block foo with content type HTMLTAG by incompatible type HTML.');
+	Assert::exception(
+		fn() => $latte->renderToString('context6', ['foo' => 'b"ar']),
+		Latte\RuntimeException::class,
+		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+	);
 
 	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('context8', ['foo' => 'b"ar']);
-	}, Latte\RuntimeException::class, 'Overridden block foo with content type HTMLTAG by incompatible type HTMLCOMMENT.');
+	Assert::exception(
+		fn() => $latte->renderToString('context8', ['foo' => 'b"ar']),
+		Latte\RuntimeException::class,
+		'Overridden block foo with content type HTMLTAG by incompatible type HTMLCOMMENT.',
+	);
 });
 
 
@@ -158,18 +170,22 @@ test('', function () {
 		$latte->renderToString('<div>{include style}</div> <style n:block=style>...</style>'),
 	);
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('<div>{include style}</div> <STYLE n:inner-block=style>...</STYLE>');
-	}, Latte\RuntimeException::class, 'Including block style with content type HTMLCSS into incompatible type HTML.');
+	Assert::exception(
+		fn() => $latte->renderToString('<div>{include style}</div> <STYLE n:inner-block=style>...</STYLE>'),
+		Latte\RuntimeException::class,
+		'Including block style with content type HTMLCSS into incompatible type HTML.',
+	);
 
 	Assert::match(
 		'<div><script>...</script></div> <script>...</script>',
 		$latte->renderToString('<div>{include script}</div> <script n:block=script>...</script>'),
 	);
 
-	Assert::exception(function () use ($latte) {
-		$latte->renderToString('<div>{include script}</div> <script n:inner-block=script>...</script>');
-	}, Latte\RuntimeException::class, 'Including block script with content type HTMLJS into incompatible type HTML.');
+	Assert::exception(
+		fn() => $latte->renderToString('<div>{include script}</div> <script n:inner-block=script>...</script>'),
+		Latte\RuntimeException::class,
+		'Including block script with content type HTMLJS into incompatible type HTML.',
+	);
 });
 
 
@@ -186,27 +202,35 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context7' => '<!--{include ical.latte}-->',
 ]));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1');
-}, Latte\RuntimeException::class, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
+Assert::exception(
+	fn() => $latte->renderToString('context1'),
+	Latte\RuntimeException::class,
+	"Including 'ical.latte' with content type ICAL into incompatible type HTML.",
+);
 
 Assert::same(' <>', $latte->renderToString('context2'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context3');
-}, Latte\RuntimeException::class, "Including 'ical.latte' with content type ICAL into incompatible type HTML.");
+Assert::exception(
+	fn() => $latte->renderToString('context3'),
+	Latte\RuntimeException::class,
+	"Including 'ical.latte' with content type ICAL into incompatible type HTML.",
+);
 
 Assert::same(' <>', $latte->renderToString('context4'));
 
 Assert::same('<p> <></p>', $latte->renderToString('context5'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context6');
-}, Latte\RuntimeException::class, "Including 'ical.latte' with content type ICAL into incompatible type JS.");
+Assert::exception(
+	fn() => $latte->renderToString('context6'),
+	Latte\RuntimeException::class,
+	"Including 'ical.latte' with content type ICAL into incompatible type JS.",
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context7');
-}, Latte\RuntimeException::class, "Including 'ical.latte' with content type ICAL into incompatible type HTMLCOMMENT.");
+Assert::exception(
+	fn() => $latte->renderToString('context7'),
+	Latte\RuntimeException::class,
+	"Including 'ical.latte' with content type ICAL into incompatible type HTMLCOMMENT.",
+);
 
 
 
@@ -226,15 +250,19 @@ Assert::same('<p> &lt;/script&gt;</p>', $latte->renderToString('context1'));
 
 Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context2'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context3');
-}, Latte\RuntimeException::class, "Including 'js.latte' with content type JS into incompatible type HTMLTAG.");
+Assert::exception(
+	fn() => $latte->renderToString('context3'),
+	Latte\RuntimeException::class,
+	"Including 'js.latte' with content type JS into incompatible type HTMLTAG.",
+);
 
 Assert::same('<script> <\/script></script>', $latte->renderToString('context4'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context5');
-}, Latte\RuntimeException::class, "Including 'js.latte' with content type JS into incompatible type HTMLCSS.");
+Assert::exception(
+	fn() => $latte->renderToString('context5'),
+	Latte\RuntimeException::class,
+	"Including 'js.latte' with content type JS into incompatible type HTMLCSS.",
+);
 
 Assert::same('<!-- </script>-->', $latte->renderToString('context6'));
 
@@ -270,17 +298,23 @@ Assert::same('<p title="<hr> " &quot; &lt;"></p>', $latte->renderToString('conte
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2b'));
 Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context3');
-}, Latte\RuntimeException::class, "Including 'html.latte' with content type HTML into incompatible type HTMLTAG.");
+Assert::exception(
+	fn() => $latte->renderToString('context3'),
+	Latte\RuntimeException::class,
+	"Including 'html.latte' with content type HTML into incompatible type HTMLTAG.",
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context4');
-}, Latte\RuntimeException::class, "Including 'html.latte' with content type HTML into incompatible type HTMLJS.");
+Assert::exception(
+	fn() => $latte->renderToString('context4'),
+	Latte\RuntimeException::class,
+	"Including 'html.latte' with content type HTML into incompatible type HTMLJS.",
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context5');
-}, Latte\RuntimeException::class, "Including 'html.latte' with content type HTML into incompatible type HTMLCSS.");
+Assert::exception(
+	fn() => $latte->renderToString('context5'),
+	Latte\RuntimeException::class,
+	"Including 'html.latte' with content type HTML into incompatible type HTMLCSS.",
+);
 
 Assert::same('<!--<hr> " &quot; &lt;-->', $latte->renderToString('context6'));
 
@@ -300,22 +334,28 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1a');
-}, Latte\CompileException::class, 'Filter |noescape is not expected here.');
+Assert::exception(
+	fn() => $latte->renderToString('context1a'),
+	Latte\CompileException::class,
+	'Filter |noescape is not expected here.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1b');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('context1b'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context6a');
-}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT.');
+Assert::exception(
+	fn() => $latte->renderToString('context6a'),
+	Latte\RuntimeException::class,
+	'Filter |stripHtml used with incompatible type HTMLCOMMENT.',
+);
 
 
 
@@ -333,22 +373,28 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1a');
-}, Latte\CompileException::class, 'Filter |noescape is not expected here.');
+Assert::exception(
+	fn() => $latte->renderToString('context1a'),
+	Latte\CompileException::class,
+	'Filter |noescape is not expected here.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1b');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('context1b'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context6a');
-}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT.');
+Assert::exception(
+	fn() => $latte->renderToString('context6a'),
+	Latte\RuntimeException::class,
+	'Filter |stripHtml used with incompatible type HTMLCOMMENT.',
+);
 
 
 
@@ -366,19 +412,25 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1a');
-}, Latte\CompileException::class, 'Filter |noescape is not expected here.');
+Assert::exception(
+	fn() => $latte->renderToString('context1a'),
+	Latte\CompileException::class,
+	'Filter |noescape is not expected here.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context1b');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('context1b'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
 Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('context6a');
-}, Latte\RuntimeException::class, 'Filter |stripHtml used with incompatible type HTMLCOMMENT.');
+Assert::exception(
+	fn() => $latte->renderToString('context6a'),
+	Latte\RuntimeException::class,
+	'Filter |stripHtml used with incompatible type HTMLCOMMENT.',
+);

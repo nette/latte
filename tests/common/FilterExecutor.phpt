@@ -49,9 +49,11 @@ test('', function () {
 	$filters->add('f4', new MyFilter);
 	Assert::same('AA', ($filters->f4)('aA'));
 
-	Assert::exception(function () use ($filters) {
-		($filters->F1)('');
-	}, LogicException::class, "Filter 'F1' is not defined, did you mean 'f1'?");
+	Assert::exception(
+		fn() => ($filters->F1)(''),
+		LogicException::class,
+		"Filter 'F1' is not defined, did you mean 'f1'?",
+	);
 });
 
 
@@ -79,9 +81,11 @@ test('', function () {
 	Assert::same('1,2', ($filters->dynamic)(1, 2));
 	Assert::same('1,2', ($filters->dynamic)(1, 2));
 
-	Assert::exception(function () use ($filters) {
-		($filters->unknown)('');
-	}, LogicException::class, "Filter 'unknown' is not defined.");
+	Assert::exception(
+		fn() => ($filters->unknown)(''),
+		LogicException::class,
+		"Filter 'unknown' is not defined.",
+	);
 });
 
 
@@ -97,9 +101,11 @@ test('', function () {
 
 	// classic called as FilterInfo aware
 	$filters->add('f2', fn($val) => strtolower($val));
-	Assert::exception(function () use ($filters) {
-		$filters->filterContent('f2', new FilterInfo('html'), 'aA<b>');
-	}, Latte\RuntimeException::class, 'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.');
+	Assert::exception(
+		fn() => $filters->filterContent('f2', new FilterInfo('html'), 'aA<b>'),
+		Latte\RuntimeException::class,
+		'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.',
+	);
 
 
 	// FilterInfo aware called as FilterInfo aware
@@ -132,9 +138,11 @@ test('', function () {
 
 	// classic called as FilterInfo aware with Latte\Runtime\Html
 	$filters->add('f5', fn($val) => new Html(strtolower($val)));
-	Assert::error(function () use ($filters) {
-		$filters->filterContent('f5', new FilterInfo('text'), 'aA');
-	}, E_USER_NOTICE, 'Filter |f5 should be changed to content-aware filter.');
+	Assert::error(
+		fn() => $filters->filterContent('f5', new FilterInfo('text'), 'aA'),
+		E_USER_NOTICE,
+		'Filter |f5 should be changed to content-aware filter.',
+	);
 
 	$info = new FilterInfo('text');
 	Assert::same('aa', @$filters->filterContent('f5', $info, 'aA')); // @ ignore E_USER_NOTICE
