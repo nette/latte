@@ -54,7 +54,8 @@ class ElementNode extends AreaNode
 	{
 		foreach ($this->attributes?->children as $child) {
 			if ($child instanceof AttributeNode
-				&& strcasecmp($name, $child->name) === 0
+				&& $child->name instanceof Nodes\TextNode
+				&& strcasecmp($name, $child->name->content) === 0
 			) {
 				return self::nodeToString($child->value) ?? $child->value ?? true;
 			}
@@ -103,9 +104,9 @@ class ElementNode extends AreaNode
 		}
 
 		foreach ($this->attributes?->children ?? [] as $attr) {
-			if ($attr instanceof AttributeNode) {
-				$this->setAttributeContext($context, $attr);
-			}
+			$attr instanceof AttributeNode
+				? $this->setAttributeContext($context, $attr)
+				: $context->setEscapingContext(Context::HtmlTag);
 			$res .= $attr->print($context);
 		}
 
@@ -137,7 +138,7 @@ class ElementNode extends AreaNode
 	private function setAttributeContext(PrintContext $context, AttributeNode $attr): void
 	{
 		$escapingContext = null;
-		$attrName = strtolower($attr->name);
+		$attrName = strtolower(self::nodeToString($attr->name) ?? '');
 
 		if ($context->getContentType() !== Context::Html) {
 		} elseif (str_starts_with($attrName, 'on')) {
@@ -151,13 +152,10 @@ class ElementNode extends AreaNode
 		}
 
 		if ($escapingContext) {
-			$flag = $attr->quote ? null : Context::HtmlAttributeUnquoted;
+			$context->setEscapingContext($escapingContext, Context::HtmlAttributeUnquoted);
 		} else {
-			$escapingContext = $attr->quote ? Context::HtmlAttribute : Context::HtmlTag;
-			$flag = null;
+			$context->setEscapingContext(Context::HtmlTag);
 		}
-
-		$context->setEscapingContext($escapingContext, $flag);
 	}
 
 
@@ -177,6 +175,7 @@ class ElementNode extends AreaNode
 
 		return match (true) {
 			$node instanceof Nodes\TextNode => $node->content,
+			$node instanceof QuotedValue => self::nodeToString($node->value),
 			default => null,
 		};
 	}

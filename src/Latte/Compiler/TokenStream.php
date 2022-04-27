@@ -21,7 +21,7 @@ final class TokenStream
 {
 	use Strict;
 
-	/** @var LegacyToken[] */
+	/** @var Token[] */
 	private array $tokens = [];
 	private \Iterator $source;
 	private int $index = 0;
@@ -45,7 +45,7 @@ final class TokenStream
 	/**
 	 * Gets the token at $offset from the current position.
 	 */
-	public function peek(int $offset = 0): ?LegacyToken
+	public function peek(int $offset = 0): ?Token
 	{
 		$pos = $this->index + $offset;
 		while ($pos >= 0 && !isset($this->tokens[$pos]) && $this->source->valid()) {
@@ -66,11 +66,11 @@ final class TokenStream
 	 * Consumes the current token (if is of given kind) or throws exception on end.
 	 * @throws CompileException
 	 */
-	public function consume(int|string ...$kind): LegacyToken
+	public function consume(int|string ...$kind): Token
 	{
 		$token = $this->peek();
 		if ($kind && !$token->is(...$kind)) {
-			$kind = array_map(fn($item) => is_string($item) ? "'$item'" : $item, $kind);
+			$kind = array_map(fn($item) => is_string($item) ? "'$item'" : Token::NAMES[$item], $kind);
 			$this->throwUnexpectedException($kind);
 		} elseif (!$token->isEnd()) {
 			$this->index++;
@@ -82,7 +82,7 @@ final class TokenStream
 	/**
 	 * Consumes the current token of given kind or returns null.
 	 */
-	public function tryConsume(int|string ...$kind): ?LegacyToken
+	public function tryConsume(int|string ...$kind): ?Token
 	{
 		$token = $this->peek();
 		if (!$token->is(...$kind)) {
@@ -143,7 +143,7 @@ final class TokenStream
 				? ', expecting ' . implode(', ', $expected)
 				: '')
 			. $addendum,
-			$this->peek()->position ?? null,
+			$this->peek()->position,
 		);
 	}
 }

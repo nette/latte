@@ -60,7 +60,6 @@ Assert::match(
 
 		    block: main parent
 
-
 		    include: main undef
 
 		XX,
@@ -72,7 +71,6 @@ Assert::match(
 	<<<'XX'
 
 		    block: main inter parent
-
 
 		    include: main undef undef
 

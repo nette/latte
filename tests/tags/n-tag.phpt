@@ -38,7 +38,7 @@ Assert::match(
 				<div
 			class="a" n:tag="h1" title="b">
 					<div n:tag="h2"></div
-					>
+				>
 				</div>
 			XX,
 	),

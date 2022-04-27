@@ -22,7 +22,6 @@ $template = <<<'EOD'
 	<p val = {$xss} val2={$mxss}> </p>
 	<p onclick = {$xss}> </p>
 	<p ONCLICK ="{$xss}" {$xss}> </p>
-	<p val = />{$xss}</p>
 
 	<STYLE type="text/css">
 	<!--

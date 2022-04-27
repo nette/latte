@@ -34,10 +34,9 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(array(true), $ʟ_it ?? null) as $foo) /* line %d% */ {
 			$iterations = 0;
-			foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
-				echo '	';
-				if ($iterator->isFirst()) /* line %d% */ {
-					echo '<ul>';
+			foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 15 */ {
+				if ($iterator->isFirst()) /* line 16 */ {
+					echo '	<ul>';
 				}
 				echo '
 	<li id="item-';

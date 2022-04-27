@@ -10,10 +10,10 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(array $ʟ_args): void
 	{
 %A%
+		echo "\n";
 		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
 		echo "\n";
 		$this->renderBlock('sidebar', get_defined_vars()) /* line %d% */;
-		echo "\n";
 	}
 
 

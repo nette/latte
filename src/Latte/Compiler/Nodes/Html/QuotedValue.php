@@ -12,13 +12,14 @@ namespace Latte\Compiler\Nodes\Html;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Context;
 
 
-class AttributeNode extends AreaNode
+class QuotedValue extends AreaNode
 {
 	public function __construct(
-		public AreaNode $name,
-		public ?AreaNode $value = null,
+		public AreaNode $value,
+		public string $quote,
 		public ?Position $position = null,
 	) {
 	}
@@ -26,20 +27,18 @@ class AttributeNode extends AreaNode
 
 	public function print(PrintContext $context): string
 	{
-		$res = $this->name->print($context);
-		if ($this->value) {
-			$res .= "echo '=';";
-			$res .= $this->value->print($context);
-		}
+		$res = 'echo ' . var_export($this->quote, true) . ';';
+		$escapingContext = $context->getEscapingContext();
+		$context->setEscapingContext($escapingContext[1] === Context::HtmlTag ? Context::HtmlAttribute : $escapingContext[1]);
+		$res .= $this->value->print($context);
+		$res .= 'echo ' . var_export($this->quote, true) . ';';
+		$context->setEscapingContext(Context::HtmlTag);
 		return $res;
 	}
 
 
 	public function &getIterator(): \Generator
 	{
-		yield $this->name;
-		if ($this->value) {
-			yield $this->value;
-		}
+		yield $this->value;
 	}
 }
