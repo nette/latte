@@ -44,10 +44,17 @@ final class TemplateGenerator
 		$code = self::buildParams($code, $context->paramsExtraction, '$this->params');
 		$this->addMethod('main', $code, '', 'array');
 
+		if ($context->initialization) {
+			$code = self::buildParams($context->initialization, $context->paramsExtraction, '$this->params');
+			$this->addMethod('prepare', $code, '', 'void');
+		}
+
 		$contentType = $context->getContentType();
 		if ($contentType !== Context::Html) {
 			$this->addConstant('ContentType', $contentType);
 		}
+
+		$this->generateBlocks($context->blocks, $context);
 
 		$members = [];
 		foreach ($this->constants as $name => $value) {
@@ -77,6 +84,37 @@ final class TemplateGenerator
 		$code = PhpHelpers::optimizeEcho($code);
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
+	}
+
+
+	/** @param  Block[]  $blocks */
+	private function generateBlocks(array $blocks, PrintContext $context): void
+	{
+		foreach ($blocks as $block) {
+			if (!$block->isDynamic()) {
+				$meta[$block->layer][$block->name] = $context->getContentType() === $block->context
+					? $block->method
+					: [$block->method, $block->context];
+			}
+
+			$body = $this->buildParams($block->content, $block->parameters, '$ʟ_args');
+			if (!$block->isDynamic() && str_contains($body, '$')) {
+				$embedded = $block->tag->name === 'block' && is_int($block->layer) && $block->layer;
+				$body = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');' . $body;
+			}
+
+			$this->addMethod(
+				$block->method,
+				$body,
+				'array $ʟ_args',
+				'void',
+				$block->tag->getNotation(true) . ' on line ' . $block->tag->position->line,
+			);
+		}
+
+		if (isset($meta)) {
+			$this->addConstant('Blocks', $meta);
+		}
 	}
 
 

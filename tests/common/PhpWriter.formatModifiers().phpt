@@ -15,8 +15,8 @@ require __DIR__ . '/../bootstrap.php';
 
 function formatModifiers($arg, $modifiers, $isContent = false)
 {
-	$writer = new PhpWriter(new MacroTokens(''), $modifiers, ['html', 'x']);
-	return $writer->formatModifiers($arg, $isContent);
+	$writer = new PhpWriter(new MacroTokens(''), ['html', 'x']);
+	return $writer->formatModifiers($modifiers, $arg, $isContent);
 }
 
 

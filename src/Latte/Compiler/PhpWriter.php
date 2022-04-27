@@ -11,6 +11,7 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\Nodes\LegacyExprNode;
 use Latte\Context;
 use Latte\Helpers;
 use Latte\Policy;
@@ -24,8 +25,8 @@ class PhpWriter
 {
 	use Latte\Strict;
 
-	private MacroTokens $tokens;
-	private ?string $modifiers;
+	private ?MacroTokens $tokens;
+	private ?PrintContext $printContext;
 
 	/** @var array{string, mixed}|null */
 	private ?array $context = null;
@@ -33,16 +34,16 @@ class PhpWriter
 
 	/** @var string[] */
 	private array $functions = [];
-	private ?int $line = null;
 
 
-	public static function using(Tag $tag, ?TemplateGenerator $compiler = null): self
+	public static function using(PrintContext $context): self
 	{
-		$me = new static($tag->tokenizer, null, $tag->context);
-		$me->modifiers = &$tag->modifiers;
-		$me->functions = $compiler ? $compiler->getFunctions() : [];
-		$me->policy = $compiler ? $compiler->getPolicy() : null;
-		$me->line = $tag->position?->line;
+		$me = new self(null);
+		$me->printContext = $context;
+		$me->context = $context->getEscapingContext();
+		$me->policy = $context->policy;
+		$names = array_keys($context->functions);
+		$me->functions = array_combine(array_map('strtolower', $names), $names);
 		return $me;
 	}
 
@@ -50,61 +51,68 @@ class PhpWriter
 	/**
 	 * @param  array{string, mixed}|null  $context
 	 */
-	public function __construct(MacroTokens $tokens, ?string $modifiers = null, ?array $context = null)
+	public function __construct(?MacroTokens $tokens, ?array $context = null)
 	{
 		$this->tokens = $tokens;
-		$this->modifiers = $modifiers;
 		$this->context = $context;
 	}
 
 
 	/**
-	 * Expands %node.word, %node.array, %node.args, %node.line, %escape(), %modify(), %var, %raw, %word in code.
+	 * Expands %word, %array, %args, %line, %dump, %raw and %modify() in code.
 	 */
 	public function write(string $mask, mixed ...$args): string
 	{
-		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
-		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', fn($m) => $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll(), $mask);
-		$mask = preg_replace_callback('#%modify(Content)?(\(([^()]*+|(?2))+\))#', fn($m) => $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]), $mask);
-
-		$pos = $this->tokens->position;
-		$word = null;
-		if (str_contains($mask, '%node_word')) {
-			$word = $this->tokens->fetchWord();
-			if ($word === null) {
-				throw new CompileException('Invalid content of tag');
-			}
+		if (str_contains($mask, '%modify')) {
+			$modifier = array_shift($args);
+			$mask = preg_replace_callback(
+				'#%modify(Content)?(\(([^()]*+|(?2))+\))#',
+				fn($m) => $this->formatModifiers($modifier, substr($m[2], 1, -1), (bool) $m[1]),
+				$mask,
+			);
 		}
 
-		$code = preg_replace_callback(
-			'#([,+]?\s*)?%(node_|\d+_|)(word|var|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
-			function ($m) use ($word, &$args) {
+		return preg_replace_callback(
+			'#([,+]?\s*)?%(\d+\.|)(word|dump|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
+			function ($m) use (&$args) {
 				[, $l, $source, $format, $cond, $r] = $m;
 
 				switch ($source) {
-					case 'node_':
-						$arg = $word; break;
 					case '':
-						$arg = current($args); next($args); break;
+						$arg = current($args);
+						next($args);
+						break;
 					default:
-						$arg = $args[(int) $source]; break;
+						$arg = $args[(int) $source];
 				}
 
 				switch ($format) {
 					case 'word':
+						if ($arg instanceof LegacyExprNode) {
+							$arg = $arg->text;
+						}
 						$code = $this->formatWord($arg); break;
 					case 'args':
-						$code = $this->formatArgs(); break;
+						if ($arg instanceof LegacyExprNode) {
+							$arg = new MacroTokens($arg->text);
+						}
+						$code = $this->formatArgs($arg); break;
 					case 'array':
-						$code = $this->formatArray();
+						if ($arg instanceof LegacyExprNode) {
+							$arg = new MacroTokens($arg->text);
+						}
+						$code = $this->formatArray($arg);
 						$code = $cond && $code === '[]' ? '' : $code; break;
-					case 'var':
+					case 'dump':
 						$code = PhpHelpers::dump($arg); break;
 					case 'raw':
-						$code = (string) $arg; break;
+						$code = $arg instanceof Node ? $arg->print($this->printContext) : $arg;
+						break;
 					case 'line':
 						$l = trim($l);
-						$code = $this->line ? " /* line $this->line */" : ''; break;
+						$line = (int) $arg->line;
+						$code = $line ? " /* line $line */" : '';
+						break;
 				}
 
 				if ($cond && $code === '') {
@@ -115,19 +123,16 @@ class PhpWriter
 			},
 			$mask,
 		);
-
-		$this->tokens->position = $pos;
-		return $code;
 	}
 
 
 	/**
 	 * Formats modifiers calling.
 	 */
-	public function formatModifiers(string $var, bool $isContent = false): string
+	public function formatModifiers(string $modifier, string $var, bool $isContent = false): string
 	{
 		static $uniq;
-		$modifier = $this->completeModifier($this->modifiers);
+		$modifier = $this->completeModifier($modifier);
 		$uniq ??= '$' . bin2hex(random_bytes(5));
 		$tokens = new MacroTokens(ltrim($modifier, '|'));
 		$tokens = $this->preprocess($tokens);

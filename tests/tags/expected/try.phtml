@@ -8,6 +8,7 @@
 			throw new Latte\Essential\RollbackException;
 			echo '	b
 ';
+
 		} catch (Throwable $ʟ_e) {
 			ob_end_clean();
 			if (!($ʟ_e instanceof Latte\Essential\RollbackException) && isset($this->global->coreExceptionHandler)) {
@@ -15,6 +16,7 @@
 			}
 			echo '	c
 ';
+
 			ob_start();
 		} finally {
 			echo ob_get_clean();

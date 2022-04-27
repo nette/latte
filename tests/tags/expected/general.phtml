@@ -13,6 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
+
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <input/> <input /> <input>
@@ -53,9 +54,11 @@ final class Template%a% extends Latte\Runtime\Template
 				$iterations++;
 			}
 			$iterator = $ʟ_it = $ʟ_it->getParent();
+
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo '
 
 ';
@@ -64,7 +67,6 @@ final class Template%a% extends Latte\Runtime\Template
 			return get_defined_vars();
 		}
 		$this->renderBlock('menu', get_defined_vars()) /* line %d% */;
-		echo "\n";
 		return get_defined_vars();
 	}
 
@@ -72,12 +74,12 @@ final class Template%a% extends Latte\Runtime\Template
 	public function prepare(): void
 	{
 		extract($this->params);
-		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
-			foreach (array_intersect_key(['person' => '15', 'foo' => '14', 'item' => '26'], $this->params) as $ʟ_v => $ʟ_l) {
+
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
+			foreach (array_intersect_key(['foo' => '14', 'person' => '15', 'item' => '26'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
-
 	}
 
 
@@ -87,6 +89,7 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '<ul>
 ';
 		$iterations = 0;
@@ -106,6 +109,7 @@ final class Template%a% extends Latte\Runtime\Template
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo '</ul>
 ';
 	}

@@ -19,7 +19,6 @@ Assert::match(<<<'EOD'
 			side
 		</div> <!-- /main -->
 
-
 	side
 		true
 	true

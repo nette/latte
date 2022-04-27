@@ -8,7 +8,8 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
-		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) {
+
+		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ['extends', null], true)) {
 			header('Content-Type: application/xml; charset=utf-8') /* line %d% */;
 		}
 		echo '<?xml version="1.0" encoding="utf-8"?>
@@ -102,6 +103,7 @@ var html = ';
 ';
 			$iterations++;
 		}
+
 		echo '</ul>
 
 ';
@@ -143,11 +145,11 @@ var html = ';
 	public function prepare(): void
 	{
 		extract($this->params);
-		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
+
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
 			foreach (array_intersect_key(['person' => '50'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
-
 	}
 }

@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{iterateWhile}'),
 	Latte\CompileException::class,
-	'Tag {iterateWhile} must be inside {foreach} ... {/foreach}.',
+	'Tag {iterateWhile} must be inside {foreach} ... {/foreach} (at column 1)',
 );
 
 

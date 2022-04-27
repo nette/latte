@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Test: BlockMacros and snippets
- */
-
 declare(strict_types=1);
 
 use Tester\Assert;
@@ -111,7 +107,7 @@ $dataSets = [
 ',
 		],
 		['bar-1' => '1', 'bar-2' => '2'],
-		"\n<div id=\"foo\">\t\t<div id=\"bar-1\">1</div>\n\t\t<div id=\"bar-2\">2</div>\n</div>",
+		"\n<div id=\"foo\">\n\t\t<div id=\"bar-1\">1</div>\n\t\t<div id=\"bar-2\">2</div>\n</div>",
 		['foo'],
 	],
 	//dynamic snippets with a snippetArea
@@ -181,12 +177,12 @@ $dataSets = [
 	//embed
 	[
 		[
-			'main' => '{embed file "embed"}{snippet foo}hello{/snippet}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
+			'main' => '{embed file "embed"}{block embed}{snippet bar}world{/snippet}{/block}{/embed}',
 			'embed' => '{block embed}{/block}',
 		],
-		['foo' => 'hello'],
+		['bar' => 'world'],
 		'<div id="bar">world</div>',
-		['foo'],
+		['bar'],
 	],
 ];
 

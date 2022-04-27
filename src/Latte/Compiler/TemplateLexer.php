@@ -106,7 +106,7 @@ final class TemplateLexer
 
 		if (!empty($m['macro'])) {
 			$token = $this->createToken(LegacyToken::MACRO_TAG, $indent . $delimiter . $m[0]);
-			[$token->name, $token->value, $token->modifiers, $token->empty, $token->closing] = $this->parseMacroTag($m['macro']);
+			[$token->name, $token->value, $token->empty, $token->closing] = $this->parseMacroTag($m['macro']);
 			$token->indentation = $indent;
 			$token->newline = isset($m['rmargin']);
 			$this->send($token);
@@ -350,8 +350,7 @@ final class TemplateLexer
 
 	/**
 	 * Parses macro tag to name, arguments a modifiers parts.
-	 * @param  string  $tag  {name arguments | modifiers}
-	 * @return array{string, string, string, bool, bool}|null
+	 * @return array{string, string, bool, bool}|null
 	 * @internal
 	 */
 	public function parseMacroTag(string $tag): ?array
@@ -360,7 +359,6 @@ final class TemplateLexer
 			(?P<closing>/?)
 			(?P<name>=|_(?!_)|[a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\)|)   ## name, /name, but not function( or class:: or namespace\
 			(?P<args>(?:' . self::ReString . '|[^\'"])*?)
-			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::ReString . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
 			(?P<empty>/?$)
 		()$~Disx', $tag, $match)) {
 			if (preg_last_error()) {
@@ -374,7 +372,7 @@ final class TemplateLexer
 			$match['name'] = $match['closing'] ? '' : '=';
 		}
 
-		return [$match['name'], trim($match['args']), $match['modifiers'], (bool) $match['empty'], (bool) $match['closing']];
+		return [$match['name'], trim($match['args']), (bool) $match['empty'], (bool) $match['closing']];
 	}
 
 

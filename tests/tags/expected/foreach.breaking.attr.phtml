@@ -10,11 +10,13 @@
 			if (true) /* line 3 */ {
 				echo "</li>\n";
 				break;
+				;
 			}
 			echo '</li>
 ';
 			$iterations++;
 		}
+
 		echo '</ul>
 
 <ul title="foreach continue">
@@ -26,11 +28,13 @@
 			if (true) /* line 7 */ {
 				echo "</li>\n";
 				continue;
+				;
 			}
 			echo '</li>
 ';
 			$iterations++;
 		}
+
 		echo '</ul>
 
 <ul title="foreach skip">
@@ -51,6 +55,7 @@
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo '</ul>
 
 
@@ -62,6 +67,7 @@
 			if (true) /* line 16 */ break;
 			$iterations++;
 		}
+
 		echo '</li>
 </ul>
 
@@ -73,6 +79,7 @@
 			if (true) /* line 20 */ continue;
 			$iterations++;
 		}
+
 		echo '</li>
 </ul>
 
@@ -84,10 +91,11 @@
 			if (true) /* line 24 */ {
 				$iterator->skipRound();
 				continue;
-			};
+			}
 			$iterations++;
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
 		echo '</li>
 </ul>
 ';

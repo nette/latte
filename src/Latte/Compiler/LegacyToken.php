@@ -43,9 +43,6 @@ class LegacyToken
 	/** value of macro tag or HTML attribute; used for types MACRO_TAG, HTML_ATTRIBUTE_BEGIN */
 	public string $value;
 
-	/** macro modifiers; used for type MACRO_TAG */
-	public string $modifiers = '';
-
 	/** is closing macro or HTML tag </tag>? used for types MACRO_TAG, HTML_TAG_BEGIN */
 	public bool $closing = false;
 

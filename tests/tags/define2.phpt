@@ -24,6 +24,7 @@ Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', ['foo' =
 Assert::match(
 	<<<'XX'
 		one
+
 		two
 		XX,
 	$latte->renderToString(
@@ -38,11 +39,11 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->renderToString('{define _foobar}Hello{/define}'),
 	Latte\CompileException::class,
-	"Block name must start with letter a-z, '_foobar' given.",
+	"Define name must start with letter a-z, '_foobar' given (at column 1)",
 );
 
 Assert::exception(
 	fn() => $latte->renderToString('{define 123}Hello{/define}'),
 	Latte\CompileException::class,
-	"Block name must start with letter a-z, '123' given.",
+	"Define name must start with letter a-z, '123' given (at column 1)",
 );

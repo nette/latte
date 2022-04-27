@@ -6,6 +6,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
+
 		$foo = 1 /* line %d% */;
 		echo 'This should be erased
 ';
@@ -16,7 +17,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function prepare(): void
 	{
 		extract($this->params);
-		$this->parentName = "parent";
 
+		$this->parentName = "parent";
 	}
 }

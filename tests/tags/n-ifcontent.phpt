@@ -66,35 +66,28 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<div n:ifcontent=x></div>'),
 	Latte\CompileException::class,
-	'Arguments are not allowed in n:ifcontent',
+	'Arguments are not allowed in n:ifcontent (at column 6)',
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<html>{ifcontent}'),
 	Latte\CompileException::class,
-	'Unknown {ifcontent}, use n:ifcontent attribute.',
+	'Unexpected tag {ifcontent} (at column 7)',
 );
 
 
 Assert::exception(
-	fn() => $latte->compile('<div n:inner-ifcontent>'),
+	fn() => $latte->compile('<div n:inner-ifcontent/>'),
 	Latte\CompileException::class,
-	'Unknown n:inner-ifcontent, use n:ifcontent attribute.',
+	'Unexpected attribute n:inner-ifcontent (at column 6)',
 );
 
 
 Assert::exception(
 	fn() => $latte->renderToString('<br n:ifcontent>'),
 	Latte\CompileException::class,
-	'Unnecessary n:ifcontent on empty element <br>',
-);
-
-
-Assert::exception(
-	fn() => $latte->renderToString('<div n:ifcontent />'),
-	Latte\CompileException::class,
-	'Unnecessary n:ifcontent on empty element <div>',
+	'Unnecessary n:ifcontent on empty element <br> (at column 5)',
 );
 
 
@@ -110,12 +103,13 @@ Assert::match(
 					echo '>';
 					ob_start();
 					try {
+
 					} finally {
-						$ʟ_ifc[1] = rtrim(ob_get_flush()) === '';
+						$ʟ_ifc[0] = rtrim(ob_get_flush()) === '';
 					}
 					echo '</div>';
 				} finally {
-					if ($ʟ_ifc[1] ?? null) {
+					if ($ʟ_ifc[0] ?? null) {
 						ob_end_clean();
 					} else {
 						echo ob_get_clean();

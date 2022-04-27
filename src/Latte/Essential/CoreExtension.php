@@ -10,12 +10,89 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Latte;
+use Latte\Compiler\Nodes\TextNode;
+use Latte\Compiler\Tag;
+use Latte\Compiler\TemplateParser;
 use Latte\RuntimeException;
 use Nette;
 
 
+/**
+ * Basic tags and filters for Latte.
+ */
 final class CoreExtension extends Latte\Extension
 {
+	public function beforeCompile(Latte\Engine $engine): void
+	{
+	}
+
+
+	public function getTags(): array
+	{
+		return [
+			'if' => [Nodes\IfNode::class, 'create'],
+			'ifset' => [Nodes\IfNode::class, 'create'],
+			'ifchanged' => [Nodes\IfChangedNode::class, 'create'],
+			'n:ifcontent' => [Nodes\IfContentNode::class, 'create'],
+
+			'switch' => [Nodes\SwitchNode::class, 'create'],
+
+			'foreach' => [Nodes\ForeachNode::class, 'create'],
+			'iterateWhile' => [Nodes\IterateWhileNode::class, 'create'],
+			'for' => [Nodes\ForNode::class, 'create'],
+			'while' => [Nodes\WhileNode::class, 'create'],
+			'continueIf' => [Nodes\SkipNode::class, 'create'],
+			'breakIf' => [Nodes\SkipNode::class, 'create'],
+			'skipIf' => [Nodes\SkipNode::class, 'create'],
+			'first' => [Nodes\FirstLastSepNode::class, 'create'],
+			'last' => [Nodes\FirstLastSepNode::class, 'create'],
+			'sep' => [Nodes\FirstLastSepNode::class, 'create'],
+
+			'try' => [Nodes\TryNode::class, 'create'],
+			'rollback' => [Nodes\RollbackNode::class, 'create'],
+
+			'var' => [Nodes\VarNode::class, 'create'],
+			'default' => [Nodes\VarNode::class, 'create'],
+			'dump' => [Nodes\DumpNode::class, 'create'],
+			'debugbreak' => [Nodes\DebugbreakNode::class, 'create'],
+			'trace' => [Nodes\TraceNode::class, 'create'],
+			'l' => fn(Tag $tag) => new TextNode('{', $tag->position),
+			'r' => fn(Tag $tag) => new TextNode('}', $tag->position),
+
+			'_' => [$this, 'parseTranslate'],
+			'translate' => [Nodes\TranslateNode::class, 'create'],
+
+			'=' => [Nodes\PrintNode::class, 'create'],
+
+			'capture' => [Nodes\CaptureNode::class, 'create'],
+			'spaceless' => [Nodes\SpacelessNode::class, 'create'],
+			'include' => \Closure::fromCallable([$this, 'includeSplitter']),
+			'contentType' => [Nodes\ContentTypeNode::class, 'create'],
+			'php' => [Nodes\DoNode::class, 'create'],
+			'do' => [Nodes\DoNode::class, 'create'],
+
+			'parameters' => [Nodes\ParametersNode::class, 'create'],
+			'varType' => [Nodes\VarTypeNode::class, 'create'],
+			'varPrint' => [Nodes\VarPrintNode::class, 'create'],
+			'templateType' => [Nodes\TemplateTypeNode::class, 'create'],
+			'templatePrint' => [Nodes\TemplatePrintNode::class, 'create'],
+
+			'n:class' => [Nodes\NClassNode::class, 'create'],
+			'n:attr' => [Nodes\NAttrNode::class, 'create'],
+			'n:tag' => [Nodes\NTagNode::class, 'create'],
+
+			'import' => [Nodes\ImportNode::class, 'create'],
+			'extends' => [Nodes\ExtendsNode::class, 'create'],
+			'layout' => [Nodes\ExtendsNode::class, 'create'],
+			'snippet' => [Nodes\SnippetNode::class, 'create'],
+			'block' => [Nodes\BlockNode::class, 'create'],
+			'define' => [Nodes\DefineNode::class, 'create'],
+			'embed' => [Nodes\EmbedNode::class, 'create'],
+			'snippetArea' => [Nodes\SnippetAreaNode::class, 'create'],
+		];
+	}
+
+
 	public function getFilters(): array
 	{
 		return [
@@ -97,5 +174,40 @@ final class CoreExtension extends Latte\Extension
 			'odd' => [Filters::class, 'odd'],
 			'slice' => [Filters::class, 'slice'],
 		];
+	}
+
+
+	public function getPasses(): array
+	{
+		return [
+			[Passes::class, 'overwrittenVariablesPass'],
+		];
+	}
+
+
+	/**
+	 * {include [file] "file" [with blocks] [,] [params]}
+	 * {include [block] name [,] [params]}
+	 */
+	private function includeSplitter(Tag $tag, TemplateParser $parser): Nodes\IncludeBlockNode|Nodes\IncludeFileNode
+	{
+		$tag->extractModifier();
+		$tag->expectArguments();
+		[$name, $mod] = $tag->tokenizer->fetchWordWithModifier(['block', 'file', '#']);
+		$tag->tokenizer->reset();
+		return $mod === 'file' || (!$mod && $name && !preg_match('~[\w-]+$~DA', $name))
+			? Nodes\IncludeFileNode::create($tag)
+			: Nodes\IncludeBlockNode::create($tag, $parser);
+	}
+
+
+	/**
+	 * {_ ...}
+	 */
+	public function parseTranslate(Tag $tag, TemplateParser $parser): Nodes\PrintNode
+	{
+		$node = Nodes\PrintNode::create($tag, $parser);
+		$node->modifier = '|translate' . $node->modifier;
+		return $node;
 	}
 }

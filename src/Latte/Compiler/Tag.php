@@ -11,6 +11,7 @@ namespace Latte\Compiler;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\Compiler\Nodes\LegacyExprNode;
 use Latte\Strict;
 
 
@@ -33,12 +34,12 @@ final class Tag
 
 	public MacroTokens $tokenizer;
 	public int $outputMode = self::OutputNone;
+	public ?string $modifiers = null;
 
 
 	public function __construct(
 		public /*readonly*/ string $name,
 		public /*readonly*/ string $args,
-		public /*readonly*/ string $modifiers = '',
 		public /*readonly*/ bool $void = false,
 		public /*readonly*/ bool $closing = false,
 		public /*readonly*/ int $location = 0,
@@ -71,7 +72,7 @@ final class Tag
 	}
 
 
-	public function setArgs(string $args): void
+	private function setArgs(string $args): void
 	{
 		$this->args = trim($args);
 		$this->tokenizer = new MacroTokens($this->args);
@@ -111,24 +112,44 @@ final class Tag
 
 
 	/**
-	 * @param  string[]  $parents
 	 * @throws CompileException
 	 */
-	public function validate(string|bool|null $arguments, array $parents = [], bool $modifiers = false): void
+	public function expectArguments(string|bool|null $arguments = true): void
 	{
-		if ($parents && (!$this->parent || !in_array($this->parent->name, $parents, true))) {
-			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.', $this->position);
-
-		} elseif ($this->modifiers !== '' && !$modifiers) {
-			throw new CompileException('Filters are not allowed in ' . $this->getNotation(), $this->position);
-
-		} elseif ($arguments && $this->args === '') {
+		if ($arguments && $this->args === '') {
 			$label = is_string($arguments) ? $arguments : 'arguments';
 			throw new CompileException('Missing ' . $label . ' in ' . $this->getNotation(), $this->position);
 
 		} elseif ($arguments === false && $this->args !== '') {
 			throw new CompileException('Arguments are not allowed in ' . $this->getNotation(), $this->position);
 		}
+	}
+
+
+	public function extractModifier(): void
+	{
+		if (preg_match('~^
+			(?<args>(?:' . TemplateLexer::ReString . '|[^\'"])*?)
+			(?<modifiers>(?<!\|)\|[a-z](?<modArgs>(?:' . TemplateLexer::ReString . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
+		$~Disx', $this->args, $match)) {
+			$this->setArgs(trim($match['args']));
+			$this->modifiers = $match['modifiers'] ?? '';
+		}
+	}
+
+
+	public function getArgs(): ?LegacyExprNode
+	{
+		if ($this->args === '') {
+			return null;
+		}
+		return new LegacyExprNode($this->tokenizer->joinAll());
+	}
+
+
+	public function getWord(): LegacyExprNode
+	{
+		return new LegacyExprNode($this->tokenizer->fetchWord());
 	}
 
 

@@ -54,9 +54,3 @@ Assert::match(
 	'before <b>included 1</b> after',
 	$latte->renderToString('main6'),
 );
-
-Assert::error(
-	fn() => $latte->renderToString('main7'),
-	E_USER_NOTICE,
-	'The assignment in the {include inc.latte $a = ...} looks like an error.',
-);

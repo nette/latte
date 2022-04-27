@@ -11,18 +11,15 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
+
 		echo "\n";
 		$this->enterBlockLayer(1, get_defined_vars()) /* line 2 */;
-		if (false) {
-			$this->renderBlock('a', get_defined_vars()) /* line 3 */;
-			echo "\n";
-		}
+		$this->createTemplate("import.latte", $this->params, "import")->render() /* line 8 */;
 		try {
 			$this->createTemplate("embed1.latte", [], "embed")->renderToContentType('html') /* line 2 */;
 		} finally {
 			$this->leaveBlockLayer();
 		}
-		echo "\n";
 		return get_defined_vars();
 	}
 
@@ -35,17 +32,11 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		$this->enterBlockLayer(2, get_defined_vars()) /* line 4 */;
-		if (false) {
-			echo '					';
-			$this->renderBlock('a', get_defined_vars()) /* line 5 */;
-			echo "\n";
-		}
 		try {
 			$this->createTemplate("embed2.latte", [], "embed")->renderToContentType('html') /* line 4 */;
 		} finally {
 			$this->leaveBlockLayer();
 		}
-		echo "\n";
 	}
 
 

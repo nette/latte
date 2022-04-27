@@ -62,7 +62,7 @@ Assert::match(
 				echo "\n";
 				echo LR\Filters::escapeHtmlText(($this->filters->lower)(($this->filters->truncate)($hello, "10"))) /* line 10 */;
 				echo "\n";
-				echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello" )) /* line 11 */;
+				echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello")) /* line 11 */;
 		%A%
 		XX
 ,

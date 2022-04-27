@@ -10,6 +10,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
+
 		$var = 10 /* line 1 */;
 		echo "\n";
 		if ($this->getParentName()) {
@@ -17,7 +18,9 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		echo "\n";
 		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html') /* line 7 */;
-		echo "\n";
+		echo '
+
+';
 		$this->renderBlock('true', get_defined_vars(), 'html') /* line 10 */;
 		return get_defined_vars();
 	}
@@ -29,6 +32,7 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '	This is definition #';
 		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
 		echo "\n";
