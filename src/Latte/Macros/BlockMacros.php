@@ -125,7 +125,7 @@ class BlockMacros extends MacroSet
 
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file', '#']);
 		if (!$mod && preg_match('~([\'"])[\w-]+\\1$~DA', $name)) {
-			trigger_error("Change {include $name} to {include file $name} for clarity (on line $node->startLine)", E_USER_NOTICE);
+			trigger_error("Change {include $name} to {include file $name} for clarity (on line {$node->position->line})", E_USER_NOTICE);
 		}
 		if ($mod !== 'block' && $mod !== '#'
 			&& ($mod === 'file' || !$name || !preg_match('~[\w-]+$~DA', $name))
@@ -155,7 +155,7 @@ class BlockMacros extends MacroSet
 
 		$parent = $name === 'parent';
 		if ($name === 'parent' || $name === 'this') {
-			$item = $node->closest(['block', 'define'], fn($node) => $node->data->name !== '');
+			$item = $node->closestTag(['block', 'define'], fn($node) => $node->data->name !== '');
 			if (!$item) {
 				throw new CompileException("Cannot include $name block outside of any block.");
 			}
@@ -193,7 +193,7 @@ class BlockMacros extends MacroSet
 		if ($this->getCompiler()->isInHead()) {
 			$this->imports[] = $code;
 			return '';
-		} elseif ($node->parentNode && $node->parentNode->name === 'embed') {
+		} elseif ($node->parent && $node->parent->name === 'embed') {
 			return "} $code if (false) {";
 		} else {
 			return $code;
@@ -207,7 +207,7 @@ class BlockMacros extends MacroSet
 	public function macroExtends(Tag $node, PhpWriter $writer): void
 	{
 		$node->validate(true);
-		if ($node->parentNode) {
+		if ($node->parent) {
 			throw new CompileException($node->getNotation() . ' must not be inside other tags.');
 		} elseif ($this->extends !== null) {
 			throw new CompileException('Multiple ' . $node->getNotation() . ' declarations are not allowed.');
@@ -268,7 +268,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Block name must start with letter a-z, '$data->name' given.");
 		}
 
-		$extendsCheck = $this->blocks[Template::LayerTop] || count($this->blocks) > 1 || $node->parentNode;
+		$extendsCheck = $this->blocks[Template::LayerTop] || count($this->blocks) > 1 || $node->parent;
 		$block = $this->addBlock($node, $layer);
 
 		$data->after = function () use ($node, $block) {
@@ -333,7 +333,7 @@ class BlockMacros extends MacroSet
 			}
 		}
 
-		$extendsCheck = $this->blocks[Template::LayerTop] || count($this->blocks) > 1 || $node->parentNode;
+		$extendsCheck = $this->blocks[Template::LayerTop] || count($this->blocks) > 1 || $node->parent;
 		$block = $this->addBlock($node, $layer);
 		$block->hasParameters = (bool) $params;
 
@@ -361,7 +361,7 @@ class BlockMacros extends MacroSet
 				$this->getCompiler()->expandTokens("extract(\$ʟ_args); unset(\$ʟ_args);\n?>{$node->content}<?php"),
 				'array $ʟ_args',
 				'void',
-				"{{$node->name} {$node->args}} on line {$node->startLine}",
+				"{{$node->name} {$node->args}} on line {$node->position->line}",
 			);
 			$node->content = '';
 		};
@@ -386,10 +386,10 @@ class BlockMacros extends MacroSet
 		$data->name = (string) $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
 
-		if ($node->prefix && isset($node->htmlNode->attrs[$this->snippetAttribute])) {
+		if ($node->isNAttribute() && isset($node->htmlElement->attrs[$this->snippetAttribute])) {
 			throw new CompileException("Cannot combine HTML attribute {$this->snippetAttribute} with n:snippet.");
 
-		} elseif ($node->prefix && isset($node->htmlNode->macroAttrs['ifcontent'])) {
+		} elseif ($node->isNAttribute() && isset($node->htmlElement->macroAttrs['ifcontent'])) {
 			throw new CompileException('Cannot combine n:ifcontent with n:snippet.');
 
 		} elseif ($this->isDynamic($data->name)) {
@@ -399,7 +399,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Snippet name must start with letter a-z, '$data->name' given.");
 		}
 
-		if ($node->prefix && $node->prefix !== $node::PrefixNone) {
+		if ($node->isNAttribute() && $node->prefix !== $node::PrefixNone) {
 			trigger_error("Use n:snippet instead of {$node->getNotation()}", E_USER_DEPRECATED);
 		}
 
@@ -426,8 +426,8 @@ class BlockMacros extends MacroSet
 			}
 		};
 
-		if ($node->prefix) {
-			if (isset($node->htmlNode->macroAttrs['foreach'])) {
+		if ($node->isNAttribute()) {
+			if (isset($node->htmlElement->macroAttrs['foreach'])) {
 				throw new CompileException('Combination of n:snippet with n:foreach is invalid, use n:inner-foreach.');
 			}
 
@@ -453,7 +453,7 @@ class BlockMacros extends MacroSet
 		$data = $node->data;
 		$node->closingCode = '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
 
-		if ($node->prefix) {
+		if ($node->isNAttribute()) {
 			if ($node->prefix === Tag::PrefixNone) { // n:snippet -> n:inner-snippet
 				$data->after = function () use ($node) {
 					$node->innerContent = $node->openingCode . $node->innerContent . $node->closingCode;
@@ -535,7 +535,7 @@ class BlockMacros extends MacroSet
 
 		$block = $this->blocks[$layer ?? $this->index][$data->name] = new Block;
 		$block->contentType = implode('', $node->context);
-		$block->comment = "{{$node->name} {$node->args}} on line {$node->startLine}";
+		$block->comment = "{{$node->name} {$node->args}} on line {$node->position->line}";
 		return $block;
 	}
 
@@ -543,7 +543,7 @@ class BlockMacros extends MacroSet
 	private function extractMethod(Tag $node, Block $block, ?string $params = null): void
 	{
 		if (preg_match('#\$|n:#', $node->content)) {
-			$node->content = '<?php extract(' . ($node->name === 'block' && $node->closest(['embed']) ? 'end($this->varStack)' : '$this->params') . ');'
+			$node->content = '<?php extract(' . ($node->name === 'block' && $node->closestTag(['embed']) ? 'end($this->varStack)' : '$this->params') . ');'
 				. ($params ?? 'extract($ʟ_args);')
 				. 'unset($ʟ_args);?>'
 				. $node->content;
@@ -568,7 +568,7 @@ class BlockMacros extends MacroSet
 
 		[$name, $mod] = $node->tokenizer->fetchWordWithModifier(['block', 'file']);
 		if (!$mod && preg_match('~([\'"])[\w-]+\\1$~DA', $name)) {
-			trigger_error("Change {embed $name} to {embed file $name} for clarity (on line $node->startLine)", E_USER_NOTICE);
+			trigger_error("Change {embed $name} to {embed file $name} for clarity (on line {$node->position->line})", E_USER_NOTICE);
 		}
 		$mod ??= (preg_match('~^[\w-]+$~DA', $name) ? 'block' : 'file');
 

@@ -42,7 +42,7 @@ class PhpWriter
 		$me->modifiers = &$tag->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
 		$me->policy = $compiler ? $compiler->getPolicy() : null;
-		$me->line = $tag->startLine;
+		$me->line = $tag->position?->line;
 		return $me;
 	}
 

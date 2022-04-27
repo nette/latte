@@ -72,7 +72,7 @@ class MacroSet extends Latte\Extension
 	public function nodeOpened(Tag $node)
 	{
 		[$begin, $end, $attr] = $this->macros[$node->name];
-		$node->empty = !$end;
+		$node->void = !$end;
 
 		if (
 			$node->modifiers
@@ -93,7 +93,7 @@ class MacroSet extends Latte\Extension
 		}
 
 		if ($attr && $node->prefix === $node::PrefixNone) {
-			$node->empty = true;
+			$node->void = true;
 			$node->context[1] = Latte\Compiler\Escaper::HtmlAttribute;
 			$res = $this->compile($node, $attr);
 			if ($res === false) {
@@ -104,7 +104,7 @@ class MacroSet extends Latte\Extension
 
 			$node->context[1] = Latte\Compiler\Escaper::HtmlText;
 
-		} elseif ($node->empty && $node->prefix) {
+		} elseif ($node->void && $node->isNAttribute()) {
 			return false;
 
 		} elseif ($begin) {
