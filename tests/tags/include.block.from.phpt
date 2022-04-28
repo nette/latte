@@ -24,31 +24,6 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'inc.ext' => '{extends inc} {define bl}*{include parent $var}*{/define}',
 ]));
 
-Assert::match(
-	'before <b>block 1</b> after',
-	$latte->renderToString('main1'),
-);
-
-Assert::match(
-	'before <b>block 1</b> after',
-	$latte->renderToString('main2'),
-);
-
-Assert::match(
-	'<div title="&lt;b&gt;block 1&lt;/b&gt;">',
-	$latte->renderToString('main3'),
-);
-
-Assert::match(
-	'before local after',
-	$latte->renderToString('main4'),
-);
-
-Assert::match(
-	'before *<b>block 1</b>* after',
-	$latte->renderToString('main5'),
-);
-
 Assert::error(
 	fn() => $latte->renderToString('main6'),
 	E_WARNING,

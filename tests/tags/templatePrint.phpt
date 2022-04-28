@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::match(
 	<<<'XX'
 		%A%
-			public function prepare(): void
+			public function prepare(): array
 			{
 				extract($this->params);
 
@@ -33,7 +33,7 @@ Assert::match(
 Assert::match(
 	<<<'XX'
 		%A%
-			public function prepare(): void
+			public function prepare(): array
 			{
 				extract($this->params);
 

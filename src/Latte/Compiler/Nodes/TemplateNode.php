@@ -15,6 +15,7 @@ use Latte\Compiler\PrintContext;
 
 final class TemplateNode extends Node
 {
+	public FragmentNode $head;
 	public FragmentNode $main;
 
 
@@ -26,6 +27,7 @@ final class TemplateNode extends Node
 
 	public function &getIterator(): \Generator
 	{
+		yield $this->head;
 		yield $this->main;
 	}
 }

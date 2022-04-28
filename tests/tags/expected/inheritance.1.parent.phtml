@@ -7,17 +7,14 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
 
-		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) /* line %d% */;
 		echo '<!DOCTYPE html>
 <head>
 	<title>';
-		if ($this->getParentName()) {
-			return get_defined_vars();
-		}
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
@@ -47,6 +44,14 @@ Parent: ';
 		echo '/';
 		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line %d% */;
 		echo "\n";
+	}
+
+
+	public function prepare(): array
+	{
+		extract($this->params);
+
+		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) /* line %d% */;
 		return get_defined_vars();
 	}
 

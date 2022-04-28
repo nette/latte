@@ -7,7 +7,7 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
 %A%
 		echo '
@@ -59,9 +59,6 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 ';
-		if ($this->getParentName()) {
-			return get_defined_vars();
-		}
 		$this->renderBlock('bl', get_defined_vars()) /* line %d% */;
 		echo '
 
@@ -409,13 +406,19 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '</li>
 </ul>
 ';
-%A%
 	}
 
 
-	public function prepare(): void
+	public function prepare(): array
 	{
-%A%
+		extract($this->params);
+
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
+			foreach (array_intersect_key(['foo' => '6, 10, 94, 94, 94', 'person' => '19, 27, 31, 37, 75, 79, 82, 107, 111, 116, 120'], $this->params) as $ʟ_v => $ʟ_l) {
+				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
+			}
+		}
+		return get_defined_vars();
 	}
 
 

@@ -5,13 +5,11 @@ final class Template%a% extends Latte\Runtime\Template
 	public const ContentType = 'xml';
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
 
-		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ['extends', null], true)) {
-			header('Content-Type: application/xml; charset=utf-8') /* line %d% */;
-		}
 		echo '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="';
 		echo LR\Filters::escapeXml($id) /* line %d% */;
@@ -138,11 +136,10 @@ var html = ';
 		echo LR\Filters::escapeXml($xss) /* line %d% */;
 		echo '</p>
 ';
-		return get_defined_vars();
 	}
 
 
-	public function prepare(): void
+	public function prepare(): array
 	{
 		extract($this->params);
 
@@ -151,5 +148,9 @@ var html = ';
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
+		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ['extends', null], true)) {
+			header('Content-Type: application/xml; charset=utf-8') /* line %d% */;
+		}
+		return get_defined_vars();
 	}
 }

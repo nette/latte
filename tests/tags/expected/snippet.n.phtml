@@ -7,7 +7,7 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
 %A%
 		echo '<div class="test"';
@@ -22,7 +22,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '">';
 		$this->renderBlock('gallery', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
-%A%
 	}
 
 

@@ -181,6 +181,7 @@ final class CoreExtension extends Latte\Extension
 	{
 		return [
 			[Passes::class, 'overwrittenVariablesPass'],
+			[Passes::class, 'moveTemplatePrintToHeadPass'],
 		];
 	}
 

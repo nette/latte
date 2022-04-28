@@ -7,17 +7,14 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
 
 		echo 'named arguments
 
-';
-		if ($this->getParentName()) {
-			return get_defined_vars();
-		}
-		echo '
+
 a) ';
 		$this->renderBlock('test', [1, 'var1' => 2] + [], 'html') /* line %d% */;
 		echo '
@@ -33,7 +30,6 @@ c) ';
 d) ';
 		$this->renderBlock('test', ['var2' => 1, 2] + [], 'html') /* line %d% */;
 		echo ' // invalid';
-		return get_defined_vars();
 	}
 
 

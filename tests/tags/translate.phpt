@@ -52,9 +52,8 @@ Assert::match(
 Assert::match(
 	<<<'XX'
 		%A%
-				extract($this->params);
-
-				return get_defined_vars();
+			{
+			}
 		%A%
 		XX,
 	$latte->compile('{translate /}'),
