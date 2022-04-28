@@ -5,20 +5,5 @@ parameters:
 		- src
 
 	ignoreErrors:
-		- "#^Unsafe usage of new static\\(\\)\\.$#"
-		- "#^.*\\:\\:__toString\\(\\) invoked with 1 parameter, 0 required\\.$#"
-
-		-
-			message: "#^Variable \\$code might not be defined\\.$#"
-			count: 2
-			path: src/Latte/Compiler/PhpWriter.php
-
-		-
-			message: "#^Binary operation \"\\+\" between string and 0 results in an error\\.$#"
-			count: 1
-			path: src/Latte/Runtime/Filters.php
-
-		-
-			message: "#^If condition is always false\\.$#"
-			count: 4
-			path: src/compatibility.php
+		- '#Unsafe usage of new static\(\)#'
+		- '#Match expression does not handle remaining value.*#'
