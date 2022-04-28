@@ -26,7 +26,7 @@ vars
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.vars.phtml',
+	__DIR__ . '/expected/code.vars.phtml',
 	$latte->compile($template)
 );
 
@@ -48,7 +48,7 @@ functions
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.functions.phtml',
+	__DIR__ . '/expected/code.functions.phtml',
 	$latte->compile($template)
 );
 
@@ -65,7 +65,7 @@ callbacks
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.callbacks.phtml',
+	__DIR__ . '/expected/code.callbacks.phtml',
 	$latte->compile($template)
 );
 
@@ -83,7 +83,7 @@ static methods
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.static.methods.phtml',
+	__DIR__ . '/expected/code.static.methods.phtml',
 	$latte->compile($template)
 );
 
@@ -100,7 +100,7 @@ static props
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.static.props.phtml',
+	__DIR__ . '/expected/code.static.props.phtml',
 	$latte->compile($template)
 );
 
@@ -119,7 +119,7 @@ consts
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.consts.phtml',
+	__DIR__ . '/expected/code.consts.phtml',
 	$latte->compile($template)
 );
 
@@ -139,7 +139,7 @@ object methods
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.object.methods.phtml',
+	__DIR__ . '/expected/code.object.methods.phtml',
 	$latte->compile($template)
 );
 
@@ -169,7 +169,7 @@ props
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.props.phtml',
+	__DIR__ . '/expected/code.props.phtml',
 	$latte->compile($template)
 );
 
@@ -184,7 +184,7 @@ read-write
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Policy.sandboxPass.read-write.phtml',
+	__DIR__ . '/expected/code.read-write.phtml',
 	$latte->compile($template)
 );
 
@@ -200,7 +200,7 @@ EOD;
 
 Assert::matchFile(
 	PHP_VERSION_ID >= 80000
-		? __DIR__ . '/expected/Policy.sandboxPass.optional-chaining.80.phtml'
-		: __DIR__ . '/expected/Policy.sandboxPass.optional-chaining.phtml',
+		? __DIR__ . '/expected/code.optional-chaining.80.phtml'
+		: __DIR__ . '/expected/code.optional-chaining.phtml',
 	$latte->compile($template)
 );

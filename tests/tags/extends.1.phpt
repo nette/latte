@@ -26,7 +26,7 @@ EOD
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/inheritance.6.phtml',
+	__DIR__ . '/expected/extends.1.phtml',
 	$latte->compile('main')
 );
 Assert::same(

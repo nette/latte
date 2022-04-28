@@ -57,24 +57,24 @@ Assert::noError(function () use ($latte) {
 
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{trim(123)}');
+	$latte->compile('{trim(abc)}');
 }, Latte\CompileException::class, 'Function trim() is not allowed.');
 
 $policy->allowFunctions(['tRim']);
 
 Assert::noError(function () use ($latte) {
-	$latte->compile('{trim(123)}');
-	$latte->renderToString('{="trim"(123)}');
+	$latte->compile('{trim(abc)}');
+	$latte->renderToString('{="trim"(abc)}');
 });
 
 Assert::exception(function () use ($latte) {
-	$latte->compile('{ltrim(123)}');
+	$latte->compile('{ltrim(abc)}');
 }, Latte\CompileException::class, 'Function ltrim() is not allowed.');
 
 $policy->allowFunctions($policy::ALL);
 
 Assert::noError(function () use ($latte) {
-	$latte->compile('{ltrim(123)}');
+	$latte->compile('{ltrim(abc)}');
 });
 
 

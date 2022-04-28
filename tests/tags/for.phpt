@@ -22,6 +22,16 @@ $template = <<<'EOD'
 {/for}
 
 
+{for ;;}
+	{$i}
+{/for}
+
+
+{for $i = 0, $a = 1; $i < 10; $i++, $a++}
+	{$i}
+{/for}
+
+
 {for $i = 0; $i < 10; $i++}
 	{breakIf true}
 	{continueIf true}
