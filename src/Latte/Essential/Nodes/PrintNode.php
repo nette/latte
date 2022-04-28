@@ -46,6 +46,7 @@ class PrintNode extends StatementNode
 		$node = new static;
 		$node->expression = $tag->parser->parseExpression();
 		$node->modifier = $tag->parser->parseModifier();
+		$node->modifier->escape = true;
 		return $node;
 	}
 
@@ -54,7 +55,7 @@ class PrintNode extends StatementNode
 	{
 		return $context->format(
 			"echo %modify(%raw) %line;\n",
-			(clone $this->modifier)->addEscape(),
+			$this->modifier,
 			$this->expression,
 			$this->position,
 		);

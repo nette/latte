@@ -88,7 +88,7 @@ test('inline modifiers', function () {
 	Assert::same("foo: (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1))", formatArgs('foo => ($val|mod:param,(1|mod2))'));
 	Assert::same("foo: (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1, round((\$this->filters->foo)(2))))", formatArgs('foo => ($val|mod:param,(1|mod2:round((2|foo))))'));
 	Assert::same('foo: foo($val)', formatArgs('foo => foo($val)'));
-	Assert::same('LR\Filters::escapeHtmlText(0)', formatArgs('(0|escape)'));
+	Assert::same('($this->filters->escape)(0)', formatArgs('(0|escape)'));
 	Assert::same('($this->filters->checkurl)(0)', formatArgs('(0|checkurl)'));
 });
 

@@ -21,19 +21,19 @@ class ModifierNode extends Node
 		/** @var FilterNode[] */
 		public array $filters,
 		public ?Position $position = null,
+		public bool $escape = false,
 	) {
 	}
 
 
-	public function addEscape(): static
+	public function hasFilter(string $name): bool
 	{
-		if ($this->filters && end($this->filters)->name->name === FilterNode::NoEscape) {
-			array_pop($this->filters);
-		} else {
-			$this->filters[] = new FilterNode(new IdentifierNode(FilterNode::Escape));
+		foreach ($this->filters as $filter) {
+			if ($filter->name->name === $name) {
+				return true;
+			}
 		}
-
-		return $this;
+		return false;
 	}
 
 
@@ -45,18 +45,32 @@ class ModifierNode extends Node
 
 	public function printSimple(PrintContext $context, string $expr): string
 	{
-		$filters = $this->filters;
-		if ($context->getEscapingContext()[1] === Context::HtmlAttributeUrl) {
-			$expr = $this->checkUrl($filters, $expr);
+		foreach ($this->filters as $filter) {
+			$name = $filter->name->name;
+			if (['nocheck' => 1, 'noCheck' => 1][$name] ?? null) {
+				$nocheck = true;
+			} elseif ($name === 'noescape') {
+				$noescape = true;
+			} else {
+				if (['datastream' => 1, 'dataStream' => 1][$name] ?? null) {
+					$nocheck = true;
+				}
+				$expr = $filter->printSimple($context, $expr);
+			}
 		}
 
-		foreach ($filters as $filter) {
-			$expr = $filter->printSimple($context, $expr);
+		if ($context->getEscapingContext()[1] === Context::HtmlAttributeUrl && empty($nocheck)) {
+			$expr = 'LR\Filters::safeUrl(' . $expr . ')';
+		}
+
+		if ($this->escape && empty($noescape)) {
+			$expr = $context->escape($expr);
 		}
 
 		if ($context->getEscapingContext()[2] === Context::HtmlAttributeUnquoted) {
 			$expr = "'\"' . $expr . '\"'";
 		}
+
 		return $expr;
 	}
 
@@ -64,26 +78,22 @@ class ModifierNode extends Node
 	public function printContentAware(PrintContext $context, string $expr): string
 	{
 		foreach ($this->filters as $filter) {
-			$expr = $filter->printContentAware($context, $expr);
-		}
-
-		return $expr;
-	}
-
-
-	private function checkUrl(array &$filters, string $expr): string
-	{
-		$check = true;
-		foreach ($filters as $i => $filter) {
-			if (['nocheck' => 1, 'noCheck' => 1][$filter->name->name] ?? null) {
-				unset($filters[$i]);
-				$check = false;
-			} elseif (['datastream' => 1, 'dataStream' => 1][$filter->name->name] ?? null) {
-				$check = false;
+			$name = $filter->name->name;
+			if ($name === 'noescape') {
+				$noescape = true;
+			} else {
+				$expr = $filter->printContentAware($context, $expr);
 			}
 		}
 
-		return $check ? 'LR\Filters::safeUrl(' . $expr . ')' : $expr;
+		if ($this->escape && empty($noescape)) {
+			$expr = 'LR\Filters::convertTo($ʟ_fi, '
+				. var_export(implode('', $context->getEscapingContext()), true) . ', '
+				. $expr
+				. ')';
+		}
+
+		return $expr;
 	}
 
 

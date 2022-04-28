@@ -214,9 +214,3 @@ Assert::exception(
 	Latte\CompileException::class,
 	"Unexpected '</li>', expecting </a> for element started on line 2 (on line 2 at column 37)",
 );
-
-Assert::exception(
-	fn() => $latte->compile("\n{=foo|noescape|trim}"),
-	Latte\CompileException::class,
-	'Filter |noescape is not expected at this place (on line 2 at column 6)',
-);

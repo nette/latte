@@ -58,6 +58,7 @@ class IncludeBlockNode extends StatementNode
 		$stream->tryConsume(',');
 		$node->args = $tag->parser->parseArguments();
 		$node->modifier = $tag->parser->parseModifier();
+		$node->modifier->escape = (bool) $node->modifier->filters;
 
 		$node->parent = $tokenName->is('parent');
 		if ($node->parent && $node->modifier->filters) {
@@ -80,15 +81,13 @@ class IncludeBlockNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$modifier = $this->modifier->filters
-			? (clone $this->modifier)->addEscape()
-			: $this->modifier;
-		$modArg = $modifier->filters
+		$noEscape = $this->modifier->hasFilter('noescape');
+		$modArg = count($this->modifier->filters) > (int) $noEscape
 			? $context->format(
 				'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-				$modifier,
+				$this->modifier,
 			)
-			: ($this->modifier->filters || $this->parent ? '' : PhpHelpers::dump(implode('', $context->getEscapingContext())));
+			: ($noEscape || $this->parent ? '' : PhpHelpers::dump(implode('', $context->getEscapingContext())));
 
 		return $this->from
 			? $this->printBlockFrom($context, $modArg)

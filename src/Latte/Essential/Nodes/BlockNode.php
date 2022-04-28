@@ -57,7 +57,7 @@ class BlockNode extends StatementNode
 		}
 
 		$node->modifier = $tag->parser->parseModifier();
-		if (count($node->modifier->filters) === 1 && $node->modifier->filters[0]->name->name === 'noescape') {
+		if ($node->modifier->hasFilter('noescape') && count($node->modifier->filters) === 1) {
 			throw new CompileException('Filter |noescape is not expected here.', $tag->position);
 		}
 
@@ -67,7 +67,9 @@ class BlockNode extends StatementNode
 			if ($endTag && $name instanceof Scalar\StringNode) {
 				$endTag->parser->stream->tryConsume($name->value);
 			}
-		} elseif (!$node->modifier->filters) {
+		} elseif ($node->modifier->filters) {
+			$node->modifier->escape = true;
+		} else {
 			return $node->content;
 		}
 
@@ -101,7 +103,7 @@ class BlockNode extends StatementNode
 				}
 
 				XX,
-			(clone $this->modifier)->addEscape(),
+			$this->modifier,
 			$this->position,
 			$this->content,
 			implode('', $context->getEscapingContext()),
@@ -111,16 +113,16 @@ class BlockNode extends StatementNode
 
 	private function printStatic(PrintContext $context): string
 	{
-		[$escapingContext, $modifier] = $this->adjustContext($context->getEscapingContext());
+		$escapingContext = $this->adjustContext($context->getEscapingContext());
 		$context->addBlock($this->block, $escapingContext);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
 			'$this->renderBlock(%raw, get_defined_vars()'
-			. ($modifier->filters
+			. ($this->modifier->filters || $this->modifier->escape
 				? $context->format(
 					', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-					$modifier,
+					$this->modifier,
 				)
 				: '')
 			. ') %line;',
@@ -132,17 +134,17 @@ class BlockNode extends StatementNode
 
 	private function printDynamic(PrintContext $context): string
 	{
-		[$escapingContext, $modifier] = $this->adjustContext($context->getEscapingContext());
+		$escapingContext = $this->adjustContext($context->getEscapingContext());
 		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
 			'$this->addBlock(%raw, %dump, [[$this, %dump]], %dump);
 			$this->renderBlock($ʟ_nm, get_defined_vars()'
-			. ($modifier->filters
+			. ($this->modifier->filters || $this->modifier->escape
 				? $context->format(
 					', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-					$modifier,
+					$this->modifier,
 				)
 				: '')
 			. ');',
@@ -156,14 +158,13 @@ class BlockNode extends StatementNode
 
 	private function adjustContext(array $context): array
 	{
-		$modifier = clone $this->modifier;
 		if (str_starts_with((string) $context[1], Context::HtmlAttribute)) {
 			$context[1] = null;
-			$modifier->addEscape();
+			$this->modifier->escape = true;
 		} elseif ($this->modifier->filters) {
-			$modifier->addEscape();
+			$this->modifier->escape = true;
 		}
-		return [$context, $modifier];
+		return $context;
 	}
 
 

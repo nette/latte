@@ -35,4 +35,4 @@ __halt_compiler();
 ($this->filters->trim)(($this->filters->truncate)($a, 10, ($this->filters->round)(20))),
 ($this->filters->truncate)($a, a: 10, b: true),
 ($this->filters->truncate)($a, a: 10, b: true),
-LR\Filters::escapeHtmlText($a)
+($this->filters->escape)($a)

@@ -40,12 +40,6 @@ class FilterNode extends Node
 
 	public function printSimple(PrintContext $context, string $expr): string
 	{
-		if ($this->name->name === self::Escape) {
-			return $context->escape($expr);
-		} elseif ($this->name->name === self::NoEscape) {
-			throw new CompileException('Filter |noescape is not expected at this place', $this->position);
-		}
-
 		return '($this->filters->' . $this->name . ')('
 			. $expr
 			. ($this->args ? ', ' . $context->implode($this->args) : '')
@@ -55,15 +49,6 @@ class FilterNode extends Node
 
 	public function printContentAware(PrintContext $context, string $expr): string
 	{
-		if ($this->name->name === self::Escape) {
-			return 'LR\Filters::convertTo($ʟ_fi, '
-				. var_export(implode('', $context->getEscapingContext()), true) . ', '
-				. $expr
-				. ')';
-		} elseif ($this->name->name === self::NoEscape) {
-			throw new CompileException('Filter |noescape is not expected at this place', $this->position);
-		}
-
 		return '$this->filters->filterContent('
 			. $context->encodeString($this->name->name)
 			. ', $ʟ_fi, '
