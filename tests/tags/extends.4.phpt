@@ -27,10 +27,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/inheritance.5.phtml',
+	__DIR__ . '/expected/extends.4.phtml',
 	$latte->compile('main')
 );
 Assert::matchFile(
-	__DIR__ . '/expected/inheritance.5.html',
+	__DIR__ . '/expected/extends.4.html',
 	$latte->renderToString('main', ['ext' => 'parent'])
 );
