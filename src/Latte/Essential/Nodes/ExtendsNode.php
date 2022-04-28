@@ -19,8 +19,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {extends none | "file"}
- * {layout none | "file"}
+ * {extends none | auto | "file"}
+ * {layout none | auto | "file"}
  */
 class ExtendsNode extends StatementNode
 {
@@ -35,6 +35,8 @@ class ExtendsNode extends StatementNode
 			throw new CompileException("{{$tag->name}} must be placed in template head.", $tag->position);
 		} elseif (isset($tag->data->extends)) {
 			throw new CompileException("Multiple {{$tag->name}} declarations are not allowed.", $tag->position);
+		} elseif ($tag->parser->stream->tryConsume('auto')) {
+			$node->extends = new NullNode;
 		} elseif ($tag->parser->stream->tryConsume('none')) {
 			$node->extends = new BooleanNode(false);
 		} else {
