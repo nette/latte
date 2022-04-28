@@ -51,7 +51,7 @@ class BlueScreenPanel
 								? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->sourceLine)
 								: '<b>' . htmlspecialchars($e->sourceName . ($e->sourceLine ? ':' . $e->sourceLine : '')) . '</b>')
 							. '</p>')
-					. '<pre class=code><div>'
+					. '<pre class="code tracy-code"><div>'
 					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->sourceLine)
 					. '</div></pre>',
 			];
