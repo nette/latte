@@ -17,7 +17,7 @@ use Latte\Compiler\PrintContext;
 class ArrayNode extends ExpressionNode
 {
 	public function __construct(
-		/** @var array<ArrayItemNode|null>> */
+		/** @var array<ArrayItemNode|null> */
 		public array $items = [],
 		public ?Position $position = null,
 	) {
