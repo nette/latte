@@ -138,9 +138,7 @@ test('in operator', function () {
 test('optionalChainingPass', function () {
 	Assert::same('$var->prop->elem[1]->call(2)->item', formatArgs('$var->prop->elem[1]->call(2)->item'));
 	Assert::same(
-		PHP_VERSION_ID >= 80000
-			? '$var?->prop?->elem[1]?->call(2)?->item'
-			: '(($ʟ_tmp = $var) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1]) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2)) === null ? null : $ʟ_tmp->item))))',
+		'$var?->prop?->elem[1]?->call(2)?->item',
 		formatArgs('$var?->prop?->elem[1]?->call(2)?->item')
 	);
 	Assert::same(

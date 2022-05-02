@@ -99,7 +99,7 @@ Assert::exception(function () use ($latte) {
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('{=$obj->$prop}', ['obj' => 1, 'prop' => 1]);
-}, PHP_VERSION_ID < 80000 ? E_NOTICE : E_WARNING, '%a% property %a%');
+}, E_WARNING, '%a% property %a%');
 
 Assert::exception(function () use ($latte) {
 	$latte->compile('{$this->filters}');

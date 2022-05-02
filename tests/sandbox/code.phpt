@@ -199,8 +199,6 @@ optional chaining
 EOD;
 
 Assert::matchFile(
-	PHP_VERSION_ID >= 80000
-		? __DIR__ . '/expected/code.optional-chaining.80.phtml'
-		: __DIR__ . '/expected/code.optional-chaining.phtml',
+	__DIR__ . '/expected/code.optional-chaining.phtml',
 	$latte->compile($template)
 );

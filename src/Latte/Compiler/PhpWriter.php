@@ -393,23 +393,8 @@ class PhpWriter
 
 			do {
 				if ($tokens->nextToken('?->')) {
-					if (PHP_VERSION_ID >= 80000) {
-						$expr->append($tokens->currentToken());
-						$expr->append($tokens->nextToken());
-						continue;
-					}
-
-					$expr->prepend('(($ʟ_tmp = ');
-					$expr->append(') === null ? null : ');
-					$res->tokens = array_merge($res->tokens, $expr->tokens);
-					$addBraces .= ')';
-					$expr = new MacroTokens('$ʟ_tmp->');
-					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
-						$expr->append($addBraces);
-						break;
-					}
-
 					$expr->append($tokens->currentToken());
+					$expr->append($tokens->nextToken());
 
 				} elseif ($tokens->nextToken('??->')) {
 					$expr->prepend('(($ʟ_tmp = ');

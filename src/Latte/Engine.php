@@ -534,13 +534,13 @@ class Engine
 
 		$methods = (new \ReflectionClass($params))->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {
-			if ((PHP_VERSION_ID >= 80000 && $method->getAttributes(Attributes\TemplateFilter::class))
+			if ($method->getAttributes(Attributes\TemplateFilter::class)
 				|| (strpos((string) $method->getDocComment(), '@filter'))
 			) {
 				$this->addFilter($method->name, [$params, $method->name]);
 			}
 
-			if ((PHP_VERSION_ID >= 80000 && $method->getAttributes(Attributes\TemplateFunction::class))
+			if ($method->getAttributes(Attributes\TemplateFunction::class)
 				|| (strpos((string) $method->getDocComment(), '@function'))
 			) {
 				$this->addFunction($method->name, [$params, $method->name]);

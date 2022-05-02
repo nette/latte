@@ -68,9 +68,7 @@ test('depth', function () {
 
 test('optionalChainingPass', function () {
 	Assert::same(
-		PHP_VERSION_ID >= 80000
-			? '($this->filters->mod)(@, $var?->prop?->elem[1]?->call(2)?->item)'
-			: '($this->filters->mod)(@, (($ʟ_tmp = $var) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1]) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2)) === null ? null : $ʟ_tmp->item)))))',
+		'($this->filters->mod)(@, $var?->prop?->elem[1]?->call(2)?->item)',
 		formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item')
 	);
 	Assert::same(

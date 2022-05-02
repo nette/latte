@@ -48,7 +48,7 @@ class Filters
 	public static function escapeHtmlText($s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
-			return $s->__toString(true);
+			return $s->__toString();
 		}
 
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -171,10 +171,10 @@ class Filters
 	public static function escapeJs($s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
-			$s = $s->__toString(true);
+			$s = $s->__toString();
 		}
 
-		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | (PHP_VERSION_ID >= 70200 ? JSON_INVALID_UTF8_SUBSTITUTE : 0));
+		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
 		if ($error = json_last_error()) {
 			throw new Latte\RuntimeException(json_last_error_msg(), $error);
 		}
