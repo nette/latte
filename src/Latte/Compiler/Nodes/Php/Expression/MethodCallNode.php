@@ -37,6 +37,10 @@ class MethodCallNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
+		if (PHP_VERSION_ID < 80100 && $this->isFirstClassCallable()) {
+			return '[' . $this->object->print($context) . ', ' . $context->memberAsString($this->name) . ']';
+		}
+
 		return $context->dereferenceExpr($this->object)
 			. '->'
 			. $context->objectProperty($this->name)

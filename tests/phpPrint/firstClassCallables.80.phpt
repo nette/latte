@@ -1,6 +1,6 @@
 <?php
 
-/** @phpversion 8.1 */
+/** @phpversion < 8.1 */
 // First-class callables
 
 declare(strict_types=1);
@@ -24,6 +24,6 @@ Assert::same(
 );
 
 __halt_compiler();
-foo(...),
-$this->foo(...),
-A::foo(...)
+'foo',
+[$this, 'foo'],
+[A, 'foo']

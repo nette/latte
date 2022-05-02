@@ -38,6 +38,10 @@ class StaticCallNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
+		if (PHP_VERSION_ID < 80100 && $this->isFirstClassCallable()) {
+			return '[' . $this->class->print($context) . ', ' . $context->memberAsString($this->name) . ']';
+		}
+
 		$name = match (true) {
 			$this->name instanceof VariableNode => $this->name->print($context),
 			$this->name instanceof ExpressionNode => '{' . $this->name->print($context) . '}',

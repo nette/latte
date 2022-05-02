@@ -36,6 +36,9 @@ class FunctionCallNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
+		if (PHP_VERSION_ID < 80100 && $this->isFirstClassCallable()) {
+			return $context->memberAsString($this->name);
+		}
 		return $context->callExpr($this->name)
 			. '(' . $context->implode($this->args) . ')';
 	}
