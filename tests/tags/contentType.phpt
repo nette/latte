@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -28,17 +27,17 @@ Assert::exception(function () use ($latte) {
 
 Assert::same(
 	'<script> <p n:if=0 /> </script>',
-	$latte->renderToString('{contentType html}<script> <p n:if=0 /> </script>')
+	$latte->renderToString('{contentType html}<script> <p n:if=0 /> </script>'),
 );
 
 Assert::same(
 	'<script>  </script>',
-	$latte->renderToString('{contentType xml}<script> <p n:if=0 /> </script>')
+	$latte->renderToString('{contentType xml}<script> <p n:if=0 /> </script>'),
 );
 
 Assert::same(
 	'<p n:if=0 />',
-	$latte->renderToString('{contentType text}<p n:if=0 />')
+	$latte->renderToString('{contentType text}<p n:if=0 />'),
 );
 
 // defined on $latte

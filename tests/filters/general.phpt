@@ -40,13 +40,11 @@ $latte = new Latte\Engine;
 $latte->addFilter('nl2br', 'nl2br');
 $latte->addFilter('h1', [new MyFilter, 'invoke']);
 $latte->addFilter('h2', 'strtoupper');
-$latte->addFilter('translate', function (FilterInfo $info, $s) { return strrev($s); });
+$latte->addFilter('translate', fn(FilterInfo $info, $s) => strrev($s));
 $latte->addFilter('types', 'types');
 $latte->addFilterLoader(function ($name) use ($latte) {
 	if ($name === 'dynamic') {
-		return function ($val) {
-			return "[dynamic $val]";
-		};
+		return fn($val) => "[dynamic $val]";
 	}
 });
 
@@ -71,12 +69,12 @@ $params['date'] = strtotime('2008-01-02');
 
 Assert::matchFile(
 	__DIR__ . '/expected/general.phtml',
-	$latte->compile(__DIR__ . '/templates/general.latte')
+	$latte->compile(__DIR__ . '/templates/general.latte'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/general.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/general.latte',
-		$params
-	)
+		$params,
+	),
 );

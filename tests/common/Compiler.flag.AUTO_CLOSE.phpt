@@ -40,5 +40,5 @@ $latte->getCompiler()->addMacro('test', new TestMacro, Macro::AUTO_CLOSE);
 
 Assert::match(
 	'%A%openingclosing%A%',
-	$latte->compile('{test}')
+	$latte->compile('{test}'),
 );

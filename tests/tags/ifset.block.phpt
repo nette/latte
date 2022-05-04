@@ -9,7 +9,6 @@ declare(strict_types=1);
 use Latte\Macros\BlockMacros;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -25,19 +24,19 @@ Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('if
 Assert::same('<?php if ($this->hasBlock(("f" . "oo"))) { ?>', $compiler->expandMacro('ifset', 'block "f" . "oo"')->openingCode);
 Assert::same(
 	'<?php if ($this->hasBlock("foo") && $this->hasBlock("block") && isset($item)) { ?>',
-	$compiler->expandMacro('ifset', 'block foo, block, $item')->openingCode
+	$compiler->expandMacro('ifset', 'block foo, block, $item')->openingCode,
 );
 Assert::same(
 	'<?php if ($this->hasBlock("block") && isset($item->var["#test"])) { ?>',
-	$compiler->expandMacro('ifset', '#block, $item->var["#test"]')->openingCode
+	$compiler->expandMacro('ifset', '#block, $item->var["#test"]')->openingCode,
 );
 Assert::same(
 	'<?php if ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) { ?>',
-	$compiler->expandMacro('ifset', '#block1, block2, $var3, item(abc)')->openingCode
+	$compiler->expandMacro('ifset', '#block1, block2, $var3, item(abc)')->openingCode,
 );
 Assert::same(
 	'<?php if ($this->hasBlock("footer") && $this->hasBlock("header") && $this->hasBlock("main")) { ?>',
-	$compiler->expandMacro('ifset', 'footer, header, main')->openingCode
+	$compiler->expandMacro('ifset', 'footer, header, main')->openingCode,
 );
 
 Assert::exception(function () use ($compiler) {
@@ -51,7 +50,7 @@ Assert::same('<?php } elseif ($this->hasBlock("block")) { ?>', $compiler->expand
 Assert::same('<?php } elseif ($this->hasBlock("block") && isset($item->var["#test"])) { ?>', $compiler->expandMacro('elseifset', '#block, $item->var["#test"]')->openingCode);
 Assert::same(
 	'<?php } elseif ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) { ?>',
-	$compiler->expandMacro('elseifset', '#block1, block2, $var3, item(abc)')->openingCode
+	$compiler->expandMacro('elseifset', '#block1, block2, $var3, item(abc)')->openingCode,
 );
 
 
@@ -60,5 +59,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	' test',
-	$latte->renderToString('{block test}{/block} {ifset test}test{/ifset} {ifset xxx}xxx{/ifset}')
+	$latte->renderToString('{block test}{/block} {ifset test}test{/ifset} {ifset xxx}xxx{/ifset}'),
 );

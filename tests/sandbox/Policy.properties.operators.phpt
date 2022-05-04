@@ -26,27 +26,27 @@ $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
 $template = <<<'EOD'
-{var $class = MyClass}
-{var $prop = bar}
-{var $staticProp = 'static'}
+	{var $class = MyClass}
+	{var $prop = bar}
+	{var $staticProp = 'static'}
 
-{=\MyClass::$static ?? null}
-{=\MyClass::$$staticProp ?? null}
-{=$obj->bar ?? null}
-{=$obj->$prop ?? null}
-{=$obj::$$staticProp ?? null}
+	{=\MyClass::$static ?? null}
+	{=\MyClass::$$staticProp ?? null}
+	{=$obj->bar ?? null}
+	{=$obj->$prop ?? null}
+	{=$obj::$$staticProp ?? null}
 
-{=$obj?->bar}
-{=$obj?->$prop}
-{=$obj??->bar}
-EOD;
+	{=$obj?->bar}
+	{=$obj?->$prop}
+	{=$obj??->bar}
+	EOD;
 
 $latte->compile($template);
 Assert::equal(
 	[
 		'macros' => Expect::type('array'),
 	],
-	$policy->log
+	$policy->log,
 );
 
 
@@ -65,5 +65,5 @@ Assert::equal(
 			['MyClass', 'bar'],
 		],
 	],
-	$policy->log
+	$policy->log,
 );

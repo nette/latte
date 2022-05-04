@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -29,37 +28,37 @@ $params['hello'] = '<i>Hello</i>';
 $params['people'] = ['John', 'Mary', 'Paul'];
 
 $result = $latte->renderToString(<<<'EOD'
-{contentType text}
-{block|lower|texy}
-{$hello}
----------
-- Escaped: {$hello}
-- Non-escaped: {$hello|noescape}
+	{contentType text}
+	{block|lower|texy}
+	{$hello}
+	---------
+	- Escaped: {$hello}
+	- Non-escaped: {$hello|noescape}
 
-- Escaped expression: {="<" . "b" . ">hello" . "</b>"}
+	- Escaped expression: {="<" . "b" . ">hello" . "</b>"}
 
-- Non-escaped expression: {="<" . "b" . ">hello" . "</b>"|noescape}
+	- Non-escaped expression: {="<" . "b" . ">hello" . "</b>"|noescape}
 
-- Array access: {$people[1]}
+	- Array access: {$people[1]}
 
-[* image.jpg *]
-{/block}
-EOD
+	[* image.jpg *]
+	{/block}
+	EOD
 , $params);
 
 Assert::match(<<<'EOD'
-<pre><i>hello</i>
----------
-- escaped: <i>hello</i>
-- non-escaped: <i>hello</i>
+	<pre><i>hello</i>
+	---------
+	- escaped: <i>hello</i>
+	- non-escaped: <i>hello</i>
 
-- escaped expression: <b>hello</b>
+	- escaped expression: <b>hello</b>
 
-- non-escaped expression: <b>hello</b>
+	- non-escaped expression: <b>hello</b>
 
-- array access: mary
+	- array access: mary
 
-[* image.jpg *]
-</pre>
-EOD
+	[* image.jpg *]
+	</pre>
+	EOD
 , $result);

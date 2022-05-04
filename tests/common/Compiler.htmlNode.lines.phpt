@@ -12,7 +12,6 @@ use Latte\MacroNode;
 use Latte\Parser;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

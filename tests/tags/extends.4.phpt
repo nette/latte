@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -28,9 +27,9 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/extends.4.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/extends.4.html',
-	$latte->renderToString('main', ['ext' => 'parent'])
+	$latte->renderToString('main', ['ext' => 'parent']),
 );

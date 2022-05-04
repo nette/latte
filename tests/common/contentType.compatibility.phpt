@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -18,7 +17,7 @@ test('', function () {
 
 	Assert::same(
 		'<meta content="b&quot;ar&quot;&lt;&gt;&amp;">b"ar"<>&amp;',
-		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar'])
+		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar']),
 	);
 
 	Assert::exception(function () use ($latte) {
@@ -27,42 +26,42 @@ test('', function () {
 
 	Assert::same(
 		'<meta content=b"ar>b"ar',
-		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar'])
+		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
 	);
 
 	Assert::same(
 		'<meta content="b&quot;ar&quot;"><meta content="b&quot;ar&quot;">',
-		$latte->renderToString('<meta content="{block foo}{$value}&quot;{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
+		$latte->renderToString('<meta content="{block foo}{$value}&quot;{/block}"><meta content="{include foo}">', ['value' => 'b"ar']),
 	);
 
 	Assert::same(
 		'<a href="b&quot;ar"><meta content="b&quot;ar">',
-		$latte->renderToString('<a href="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar'])
+		$latte->renderToString('<a href="{block foo}{$value}{/block}"><meta content="{include foo}">', ['value' => 'b"ar']),
 	);
 
 	Assert::same(
 		'<meta content="b&quot;ar"><meta content="b&quot;ar">',
-		$latte->renderToString('<meta content={block foo}{$value}{/block}><meta content={include foo}>', ['value' => 'b"ar'])
+		$latte->renderToString('<meta content={block foo}{$value}{/block}><meta content={include foo}>', ['value' => 'b"ar']),
 	);
 
 	Assert::same(
 		'foo<div>foo</div>',
-		$latte->renderToString('{block main}foo{/block}<div>{include main}</div>')
+		$latte->renderToString('{block main}foo{/block}<div>{include main}</div>'),
 	);
 
 	Assert::same(
 		'<div>foo</div><div>foo</div>',
-		$latte->renderToString('{include main}{block main}<div>foo</div>{/block}')
+		$latte->renderToString('{include main}{block main}<div>foo</div>{/block}'),
 	);
 
 	Assert::same(
 		'a"B<p title="a&quot;B"></p>',
-		$latte->renderToString('{block main}a"B{/block}{var $name = main}<p title="{block $name}xx{/block}"></p>')
+		$latte->renderToString('{block main}a"B{/block}{var $name = main}<p title="{block $name}xx{/block}"></p>'),
 	);
 
 	Assert::same(
 		'<!-- - - - -->---',
-		$latte->renderToString('<!--{include main}-->{block main}---{/block}')
+		$latte->renderToString('<!--{include main}-->{block main}---{/block}'),
 	);
 });
 
@@ -151,12 +150,12 @@ test('', function () {
 
 	Assert::match(
 		'<div><h1>title</h1></div> <h1>title</h1>',
-		$latte->renderToString('<div>{include title}</div> <h1 n:block=title>title</h1>')
+		$latte->renderToString('<div>{include title}</div> <h1 n:block=title>title</h1>'),
 	);
 
 	Assert::match(
 		'<div><style>...</style></div> <style>...</style>',
-		$latte->renderToString('<div>{include style}</div> <style n:block=style>...</style>')
+		$latte->renderToString('<div>{include style}</div> <style n:block=style>...</style>'),
 	);
 
 	Assert::exception(function () use ($latte) {
@@ -165,7 +164,7 @@ test('', function () {
 
 	Assert::match(
 		'<div><script>...</script></div> <script>...</script>',
-		$latte->renderToString('<div>{include script}</div> <script n:block=script>...</script>')
+		$latte->renderToString('<div>{include script}</div> <script n:block=script>...</script>'),
 	);
 
 	Assert::exception(function () use ($latte) {

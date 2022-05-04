@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,7 +16,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	'Block',
-	$latte->renderToString('{block}Block')
+	$latte->renderToString('{block}Block'),
 );
 
 Assert::exception(function () use ($latte) {

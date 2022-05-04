@@ -6,7 +6,6 @@ use Latte\MacroTokens;
 use Latte\PhpWriter;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

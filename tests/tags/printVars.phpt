@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,5 +16,5 @@ Assert::match(
 	'%A%{varType int $int}
 {varType mixed $unknown}
 %A%',
-	$res
+	$res,
 );

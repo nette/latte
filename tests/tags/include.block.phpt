@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -28,17 +27,17 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::match(
 	' before [block 1] after',
-	$latte->renderToString('main1')
+	$latte->renderToString('main1'),
 );
 
 Assert::match(
 	' before [block 1] after',
-	$latte->renderToString('main2')
+	$latte->renderToString('main2'),
 );
 
 Assert::match(
 	' before [block 1] after',
-	$latte->renderToString('main3')
+	$latte->renderToString('main3'),
 );
 
 Assert::exception(function () use ($latte) {
@@ -47,25 +46,25 @@ Assert::exception(function () use ($latte) {
 
 Assert::match(
 	' before [block 1] after',
-	$latte->renderToString('main5')
+	$latte->renderToString('main5'),
 );
 
 Assert::match(
 	' before [block 1] after',
-	$latte->renderToString('main6')
+	$latte->renderToString('main6'),
 );
 
 Assert::match(
 	'  before [block 1] after',
-	$latte->renderToString('main7')
+	$latte->renderToString('main7'),
 );
 
 Assert::match(
 	' before block 1 after',
-	$latte->renderToString('main8')
+	$latte->renderToString('main8'),
 );
 
 Assert::match(
 	' before block 2 after',
-	$latte->renderToString('main9')
+	$latte->renderToString('main9'),
 );

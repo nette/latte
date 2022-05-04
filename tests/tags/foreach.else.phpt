@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -24,7 +23,7 @@ Assert::matchFile(
 	{else}
 	empty
 {/foreach}
-')
+'),
 );
 
 
@@ -38,7 +37,7 @@ Assert::match(
 {else}
 	Empty
 {/foreach}
-')
+'),
 );
 
 
@@ -52,7 +51,7 @@ Assert::match(
 {else}
 	Empty
 {/foreach}
-')
+'),
 );
 
 
@@ -67,7 +66,7 @@ Assert::match(
 {else}
 	Empty
 {/foreach}
-')
+'),
 );
 
 
@@ -85,7 +84,7 @@ Assert::match(
 {else}
 	Empty Outer
 {/foreach}
-')
+'),
 );
 
 
@@ -103,5 +102,5 @@ Assert::match(
 {else}
 	Empty Outer
 {/foreach}
-')
+'),
 );

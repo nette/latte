@@ -227,7 +227,7 @@ class Filters
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
 	{
-		$info->contentType = $info->contentType ?? 'html';
+		$info->contentType ??= 'html';
 		$info->validate(['html', 'htmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
 		return strip_tags((string) $s);
 	}
@@ -252,7 +252,7 @@ class Filters
 
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
-		static $table = [
+		$table = [
 			Engine::CONTENT_TEXT => [
 				'html' => 'escapeHtmlText',
 				'htmlAttr' => 'escapeHtmlAttr',
@@ -334,7 +334,7 @@ class Filters
 					return $m[0];
 				}
 			},
-			$s
+			$s,
 		);
 	}
 
@@ -382,9 +382,7 @@ class Filters
 		if ($level < 1) {
 			// do nothing
 		} elseif ($info->contentType === Engine::CONTENT_HTML) {
-			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', function ($m) {
-				return strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A");
-			}, $s);
+			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', fn($m) => strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A"), $s);
 			if (preg_last_error()) {
 				throw new Latte\RegexpException(null, preg_last_error());
 			}
@@ -932,7 +930,7 @@ class Filters
 				. str_replace(
 					['&', $q, '<'],
 					['&amp;', $q === '"' ? '&quot;' : '&#39;', self::$xml ? '&lt;' : '<'],
-					$value
+					$value,
 				)
 				. (strpos($value, '`') !== false && strpbrk($value, ' <>"\'') === false ? ' ' : '')
 				. $q;

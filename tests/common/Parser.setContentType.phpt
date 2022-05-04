@@ -10,7 +10,6 @@ use Latte\Engine;
 use Latte\Token;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -18,9 +17,7 @@ function parse($s, $contentType = null)
 {
 	$parser = new Latte\Parser;
 	$parser->setContentType($contentType ?: Engine::CONTENT_HTML);
-	return array_map(function (Token $token) {
-		return [$token->type, $token->text];
-	}, $parser->parse($s));
+	return array_map(fn(Token $token) => [$token->type, $token->text], $parser->parse($s));
 }
 
 

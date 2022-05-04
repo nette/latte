@@ -10,7 +10,6 @@ use Latte\MacroTokens;
 use Latte\PhpWriter;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -69,11 +68,11 @@ test('depth', function () {
 test('optionalChainingPass', function () {
 	Assert::same(
 		'($this->filters->mod)(@, $var?->prop?->elem[1]?->call(2)?->item)',
-		formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item')
+		formatModifiers('@', 'mod:$var?->prop?->elem[1]?->call(2)?->item'),
 	);
 	Assert::same(
 		'($this->filters->mod)(@, (($ʟ_tmp = $var ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->prop ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->elem[1] ?? null) === null ? null : (($ʟ_tmp = $ʟ_tmp->call(2) ?? null) === null ? null : $ʟ_tmp->item)))))',
-		formatModifiers('@', 'mod:$var??->prop??->elem[1]??->call(2)??->item')
+		formatModifiers('@', 'mod:$var??->prop??->elem[1]??->call(2)??->item'),
 	);
 });
 

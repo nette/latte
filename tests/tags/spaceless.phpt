@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -21,19 +20,19 @@ Assert::match(
 	<hr>',
 	$latte->renderToString(
 		<<<'EOD'
-	<hr>
-	{spaceless}
-	<div id="main   space"
-	class = 1>
-		<p>
-			Text
-		</p>
-		{block sidebar}block{/block}
-	</div> <!-- /main -->
-	{/spaceless}
-	<hr>
-EOD
-	)
+				<hr>
+				{spaceless}
+				<div id="main   space"
+				class = 1>
+					<p>
+						Text
+					</p>
+					{block sidebar}block{/block}
+				</div> <!-- /main -->
+				{/spaceless}
+				<hr>
+			EOD,
+	),
 );
 
 
@@ -43,15 +42,15 @@ Assert::match(
 	<hr>',
 	$latte->renderToString(
 		<<<'EOD'
-	<hr>
-	<div n:spaceless   class =  a>
-		<p>
-			Text
-		</p>
-	</div>
-	<hr>
-EOD
-	)
+				<hr>
+				<div n:spaceless   class =  a>
+					<p>
+						Text
+					</p>
+				</div>
+				<hr>
+			EOD,
+	),
 );
 
 
@@ -65,6 +64,6 @@ Assert::match(
 		. str_repeat('x', 5000)
 		. '{if true}{/if}'
 		. str_repeat('x', 5000)
-		. "\n\n\n</pre> <p>\n\n\n</p>{/spaceless}"
-	)
+		. "\n\n\n</pre> <p>\n\n\n</p>{/spaceless}",
+	),
 );

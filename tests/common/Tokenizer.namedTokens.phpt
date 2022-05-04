@@ -9,7 +9,6 @@ declare(strict_types=1);
 use Latte\Tokenizer;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

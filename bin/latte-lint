@@ -39,6 +39,6 @@ if ($argc < 2) {
 
 $debug = in_array('--debug', $argv, true);
 $path = $argv[1];
-$linter = new Latte\Tools\Linter(null, $debug);
+$linter = new Latte\Tools\Linter(debug: $debug);
 $ok = $linter->scanDirectory($path);
 exit($ok ? 0 : 1);

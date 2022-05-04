@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -58,7 +57,7 @@ Assert::match('
 <a href={$url4|dataStream|noCheck}></a>
 <a href={$url4|dataStream|checkUrl}></a>
 ',
-	$params
+	$params,
 ));
 
 

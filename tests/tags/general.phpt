@@ -9,7 +9,6 @@ declare(strict_types=1);
 use Latte\Runtime\Html;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -27,12 +26,12 @@ $params['el2'] = Nette\Utils\Html::el('span', ['title' => '/"'])->setText('foo')
 
 Assert::matchFile(
 	__DIR__ . '/expected/general.phtml',
-	$latte->compile(__DIR__ . '/templates/general.latte')
+	$latte->compile(__DIR__ . '/templates/general.latte'),
 );
 Assert::matchFile(
 	__DIR__ . '/expected/general.html',
 	$latte->renderToString(
 		__DIR__ . '/templates/general.latte',
-		$params
-	)
+		$params,
+	),
 );

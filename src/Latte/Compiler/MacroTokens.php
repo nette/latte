@@ -79,7 +79,7 @@ class MacroTokens extends TokenIterator
 				$this->tokens,
 				$position ?? count($this->tokens),
 				0,
-				is_array($val) ? [$val] : $this->parse($val)
+				is_array($val) ? [$val] : $this->parse($val),
 			);
 		}
 

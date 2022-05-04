@@ -65,12 +65,8 @@ class PhpWriter
 	public function write(string $mask, ...$args): string
 	{
 		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
-		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', function ($m) {
-			return $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll();
-		}, $mask);
-		$mask = preg_replace_callback('#%modify(Content)?(\(([^()]*+|(?2))+\))#', function ($m) {
-			return $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]);
-		}, $mask);
+		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', fn($m) => $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll(), $mask);
+		$mask = preg_replace_callback('#%modify(Content)?(\(([^()]*+|(?2))+\))#', fn($m) => $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]), $mask);
 
 		$pos = $this->tokens->position;
 		$word = null;
@@ -118,7 +114,7 @@ class PhpWriter
 					return $l . $code . $r;
 				}
 			},
-			$mask
+			$mask,
 		);
 
 		$this->tokens->position = $pos;
@@ -132,7 +128,7 @@ class PhpWriter
 	public function formatModifiers(string $var, bool $isContent = false): string
 	{
 		static $uniq;
-		$uniq = $uniq ?? '$' . bin2hex(random_bytes(5));
+		$uniq ??= '$' . bin2hex(random_bytes(5));
 		$tokens = new MacroTokens(ltrim($this->modifiers, '|'));
 		$tokens = $this->preprocess($tokens);
 		$tokens = $this->modifierPass($tokens, $uniq, $isContent);
@@ -201,7 +197,7 @@ class PhpWriter
 	 */
 	public function preprocess(?MacroTokens $tokens = null): MacroTokens
 	{
-		$tokens = $tokens ?? $this->tokens;
+		$tokens ??= $this->tokens;
 		$this->validateTokens($tokens);
 		$tokens = $this->removeCommentsPass($tokens);
 		$tokens = $this->optionalChainingPass($tokens);
@@ -276,13 +272,13 @@ class PhpWriter
 					$tokens->isCurrent('__halt_compiler', 'declare', 'die', 'eval', 'exit', 'include', 'include_once', 'require', 'require_once')
 					|| ($this->policy && $tokens->isCurrent(
 						...['break', 'case', 'catch', 'continue', 'do', 'echo', 'else', 'elseif', 'endfor',
-							'endforeach', 'endswitch', 'endwhile', 'finally', 'for', 'foreach', 'if', 'new', 'print', 'switch', 'throw', 'try', 'while', ]
+							'endforeach', 'endswitch', 'endwhile', 'finally', 'for', 'foreach', 'if', 'new', 'print', 'switch', 'throw', 'try', 'while', ],
 					))
 					|| (($this->policy || !$tokens->depth) && $tokens->isCurrent('return', 'yield'))
 					|| (!$tokens->isNext('(') && $tokens->isCurrent('function', 'use'))
 					|| ($tokens->isCurrent(
 						...['abstract', 'class', 'const', 'enddeclare', 'extends', 'final', 'global', 'goto', 'implements',
-							'insteadof', 'interface', 'namespace', 'private', 'protected', 'public', 'static', 'trait', 'var', ]
+							'insteadof', 'interface', 'namespace', 'private', 'protected', 'public', 'static', 'trait', 'var', ],
 					))
 				)
 			) {
@@ -478,7 +474,7 @@ class PhpWriter
 				&& !preg_match('#^[A-Z_][A-Z0-9_]{2,}$#', $tokens->currentValue())
 				&& !($tokens->isCurrent('default') && $tokens->isNext('=>'))
 					? "'" . $tokens->currentValue() . "'"
-					: $tokens->currentToken()
+					: $tokens->currentToken(),
 			);
 		}
 
@@ -824,7 +820,7 @@ class PhpWriter
 					$res->prepend(
 						$isContent
 							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
-							: '($this->filters->' . $name . ')('
+							: '($this->filters->' . $name . ')(',
 					);
 					$inside = 1;
 				}

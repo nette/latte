@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -17,13 +16,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	'<span>Content</span>',
-	$latte->renderToString('<div n:tag="span">Content</div>')
+	$latte->renderToString('<div n:tag="span">Content</div>'),
 );
 
 
 Assert::match(
 	'<span></span>',
-	$latte->renderToString('<DIV n:tag="span"></DIV>')
+	$latte->renderToString('<DIV n:tag="span"></DIV>'),
 );
 
 
@@ -41,47 +40,47 @@ class="a" n:tag="h1" title="b">
 		<div n:tag="h2"></div
 		>
 	</div>
-')
+'),
 );
 
 
 Assert::match(
 	'<br class="a" title="b">',
-	$latte->renderToString('<img class="a" n:tag="br" title="b">')
+	$latte->renderToString('<img class="a" n:tag="br" title="b">'),
 );
 
 
 Assert::match(
 	'<br/>',
-	$latte->renderToString('<img n:tag="br"/>')
+	$latte->renderToString('<img n:tag="br"/>'),
 );
 
 
 // no change
 Assert::match(
 	'<img/>',
-	$latte->renderToString('<img n:tag="null"/>')
+	$latte->renderToString('<img n:tag="null"/>'),
 );
 
 
 Assert::match(
 	<<<'XX'
-%A%
-		$ʟ_tag[0] = ('h' . 1) ?? 'div';
-		Latte\Runtime\Filters::checkTagSwitch('div', $ʟ_tag[0]);
-		echo '<';
-		echo $ʟ_tag[0];
-		echo ' class="bar" ';
-		if (isset($id)) /* line 1 */ {
-			echo 'id="content"';
-		}
-		echo '></';
-		echo $ʟ_tag[0];
-		echo '>';
-%A%
-XX
+		%A%
+				$ʟ_tag[0] = ('h' . 1) ?? 'div';
+				Latte\Runtime\Filters::checkTagSwitch('div', $ʟ_tag[0]);
+				echo '<';
+				echo $ʟ_tag[0];
+				echo ' class="bar" ';
+				if (isset($id)) /* line 1 */ {
+					echo 'id="content"';
+				}
+				echo '></';
+				echo $ʟ_tag[0];
+				echo '>';
+		%A%
+		XX
 ,
-	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:tag="h . 1"></div>')
+	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:tag="h . 1"></div>'),
 );
 
 

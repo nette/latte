@@ -366,5 +366,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 Assert::matchFile(
 	__DIR__ . '/expected/embed.block.phtml',
-	$latte->compile('main')
+	$latte->compile('main'),
 );

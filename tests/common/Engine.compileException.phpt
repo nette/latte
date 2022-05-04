@@ -10,7 +10,6 @@ use Latte\CompileException;
 use Latte\Macros\MacroSet;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

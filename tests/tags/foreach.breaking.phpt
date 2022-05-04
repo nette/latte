@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -30,31 +29,31 @@ Assert::noError(function () use ($latte) {
 
 $template = <<<'EOD'
 
-{foreach [0, 1, 2, 3] as $item}
-	{continueIf $item % 2}
-	{$iterator->counter}. item
-{/foreach}
+	{foreach [0, 1, 2, 3] as $item}
+		{continueIf $item % 2}
+		{$iterator->counter}. item
+	{/foreach}
 
----
+	---
 
-{foreach [0, 1, 2, 3] as $item}
-	{skipIf $item % 2}
-	{$iterator->counter}. item
-{/foreach}
+	{foreach [0, 1, 2, 3] as $item}
+		{skipIf $item % 2}
+		{$iterator->counter}. item
+	{/foreach}
 
----
+	---
 
-{foreach [0, 1, 2, 3] as $item}
-	{breakIf $item % 2}
-	{$iterator->counter}. item
-{/foreach}
+	{foreach [0, 1, 2, 3] as $item}
+		{breakIf $item % 2}
+		{$iterator->counter}. item
+	{/foreach}
 
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/foreach.breaking.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 Assert::match(
@@ -71,42 +70,42 @@ Assert::match(
 
 	1. item
 ',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );
 
 
 $template = <<<'EOD'
 
-<ul title="foreach break">
-	<li n:foreach="[0, 1, 2, 3] as $i">{$i}{breakIf true}</li>
-</ul>
+	<ul title="foreach break">
+		<li n:foreach="[0, 1, 2, 3] as $i">{$i}{breakIf true}</li>
+	</ul>
 
-<ul title="foreach continue">
-	<li n:foreach="[0, 1, 2, 3] as $i">{$i}{continueIf true}</li>
-</ul>
+	<ul title="foreach continue">
+		<li n:foreach="[0, 1, 2, 3] as $i">{$i}{continueIf true}</li>
+	</ul>
 
-<ul title="foreach skip">
-	<li n:foreach="[0, 1, 2, 3] as $i">{$i}{skipIf true}</li>
-</ul>
+	<ul title="foreach skip">
+		<li n:foreach="[0, 1, 2, 3] as $i">{$i}{skipIf true}</li>
+	</ul>
 
 
-<ul title="inner foreach break">
-	<li n:inner-foreach="[0, 1, 2, 3] as $i">{$i}{breakIf true}</li>
-</ul>
+	<ul title="inner foreach break">
+		<li n:inner-foreach="[0, 1, 2, 3] as $i">{$i}{breakIf true}</li>
+	</ul>
 
-<ul title="inner foreach continue">
-	<li n:inner-foreach="[0, 1, 2, 3] as $i">{$i}{continueIf true}</li>
-</ul>
+	<ul title="inner foreach continue">
+		<li n:inner-foreach="[0, 1, 2, 3] as $i">{$i}{continueIf true}</li>
+	</ul>
 
-<ul title="inner foreach skip">
-	<li n:inner-foreach="[0, 1, 2, 3] as $i">{$i}{skipIf true}</li>
-</ul>
+	<ul title="inner foreach skip">
+		<li n:inner-foreach="[0, 1, 2, 3] as $i">{$i}{skipIf true}</li>
+	</ul>
 
-EOD;
+	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/foreach.breaking.attr.phtml',
-	$latte->compile($template)
+	$latte->compile($template),
 );
 
 Assert::match(
@@ -142,5 +141,5 @@ Assert::match(
 	<li>0123</li>
 </ul>
 ',
-	$latte->renderToString($template)
+	$latte->renderToString($template),
 );

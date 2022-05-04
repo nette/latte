@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/Policy.Logger.php';
 
@@ -26,12 +25,12 @@ $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
 $template = <<<'EOD'
-{var $var = 10}
-{$var}
-{foreach [] as $item}
-{/foreach}
+	{var $var = 10}
+	{$var}
+	{foreach [] as $item}
+	{/foreach}
 
-EOD;
+	EOD;
 
 // compile-time
 $latte->compile($template);
@@ -39,7 +38,7 @@ Assert::same(
 	[
 		'macros' => ['var', '=', 'foreach'],
 	],
-	$policy->log
+	$policy->log,
 );
 
 
@@ -49,5 +48,5 @@ $policy->log = [];
 $latte->renderToString($template);
 Assert::same(
 	[],
-	$policy->log
+	$policy->log,
 );

@@ -10,7 +10,6 @@ use Latte\Runtime\Filters;
 use Latte\Runtime\Html;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 

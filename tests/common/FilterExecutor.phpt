@@ -11,7 +11,6 @@ use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -59,9 +58,7 @@ test('', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name) use ($filters) {
 		if ($name === 'dynamic') {
-			return function (...$vals) use ($name) {
-				return $name . ',' . implode(',', $vals);
-			};
+			return fn(...$vals) => $name . ',' . implode(',', $vals);
 		}
 	});
 	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
@@ -77,18 +74,14 @@ test('', function () {
 	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic
-	$filters->add('f1', function (FilterInfo $info, $val) {
-		return gettype($info->contentType) . ',' . strtolower($val);
-	}, true);
+	$filters->add('f1', fn(FilterInfo $info, $val) => gettype($info->contentType) . ',' . strtolower($val), true);
 
 	Assert::same('NULL,aa', ($filters->f1)('aA'));
 	Assert::same('NULL,aa', ($filters->f1)('aA'));
 
 
 	// classic called as FilterInfo aware
-	$filters->add('f2', function ($val) {
-		return strtolower($val);
-	});
+	$filters->add('f2', fn($val) => strtolower($val));
 	Assert::exception(function () use ($filters) {
 		$filters->filterContent('f2', new FilterInfo('html'), 'aA<b>');
 	}, Latte\RuntimeException::class, 'Filter |f2 is called with incompatible content type HTML, try to prepend |stripHtml.');
@@ -123,9 +116,7 @@ test('', function () {
 
 
 	// classic called as FilterInfo aware with Latte\Runtime\Html
-	$filters->add('f5', function ($val) {
-		return new Html(strtolower($val));
-	});
+	$filters->add('f5', fn($val) => new Html(strtolower($val)));
 	Assert::error(function () use ($filters) {
 		$filters->filterContent('f5', new FilterInfo('text'), 'aA');
 	}, E_USER_NOTICE, 'Filter |f5 should be changed to content-aware filter.');

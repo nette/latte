@@ -127,7 +127,14 @@ class Engine
 		}
 
 		$this->providers['fn'] = $this->functions;
-		return new $class($this, $params, $this->filters, $this->providers, $name, $this->sandboxed ? $this->policy : null);
+		return new $class(
+			$this,
+			$params,
+			$this->filters,
+			$this->providers,
+			$name,
+			$this->sandboxed ? $this->policy : null,
+		);
 	}
 
 
@@ -547,6 +554,6 @@ class Engine
 			}
 		}
 
-		return array_filter((array) $params, function ($key) { return $key[0] !== "\0"; }, ARRAY_FILTER_USE_KEY);
+		return array_filter((array) $params, fn($key) => $key[0] !== "\0", ARRAY_FILTER_USE_KEY);
 	}
 }

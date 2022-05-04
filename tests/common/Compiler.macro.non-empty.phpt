@@ -6,7 +6,6 @@ use Latte\Macro;
 use Latte\MacroNode;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -50,35 +49,35 @@ $latte->addMacro('one', new TestMacro);
 
 Assert::match(
 	'%A%opening[]closing%A%',
-	$latte->compile('{one/}')
+	$latte->compile('{one/}'),
 );
 
 Assert::match(
 	'%A%opening[]closing%A%',
-	$latte->compile('{one}{/one}')
+	$latte->compile('{one}{/one}'),
 );
 
 Assert::match(
 	'%A%opening[@]closing%A%',
-	$latte->compile('{one}@{/one}')
+	$latte->compile('{one}@{/one}'),
 );
 
 Assert::match(
 	'%A%opening[<div attr></div>]closing%A%',
-	$latte->compile('<div n:one></div>')
+	$latte->compile('<div n:one></div>'),
 );
 
 Assert::match(
 	'%A%opening[<div attr>@</div>]closing%A%',
-	$latte->compile('<div n:one>@</div>')
+	$latte->compile('<div n:one>@</div>'),
 );
 
 Assert::match(
 	'%A%<div attr>opening[@]closing</div>%A%',
-	$latte->compile('<div n:inner-one>@</div>')
+	$latte->compile('<div n:inner-one>@</div>'),
 );
 
 Assert::match(
 	'%A%opening[<div>]closing@opening[</div>]closing%A%',
-	$latte->compile('<div n:tag-one>@</div>')
+	$latte->compile('<div n:tag-one>@</div>'),
 );
