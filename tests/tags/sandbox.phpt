@@ -25,23 +25,31 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('main1');
-}, E_WARNING, 'Undefined variable%a%var');
+Assert::error(
+	fn() => $latte->renderToString('main1'),
+	E_WARNING,
+	'Undefined variable%a%var',
+);
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('main1', ['var' => 123]);
-}, E_WARNING, 'Undefined variable%a%var');
+Assert::error(
+	fn() => $latte->renderToString('main1', ['var' => 123]),
+	E_WARNING,
+	'Undefined variable%a%var',
+);
 
 Assert::match(
 	'before <b>included 1</b> after',
 	$latte->renderToString('main2'),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('main3');
-}, Latte\CompileException::class, 'Tag {var} is not allowed.');
+Assert::exception(
+	fn() => $latte->renderToString('main3'),
+	Latte\CompileException::class,
+	'Tag {var} is not allowed.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('main4');
-}, Latte\SecurityViolationException::class, "Access to 'item' property on a stdClass object is not allowed.");
+Assert::exception(
+	fn() => $latte->renderToString('main4'),
+	Latte\SecurityViolationException::class,
+	"Access to 'item' property on a stdClass object is not allowed.",
+);

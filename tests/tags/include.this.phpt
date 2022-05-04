@@ -15,14 +15,18 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 // out of block
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{include this}');
-}, Latte\CompileException::class, 'Cannot include this block outside of any block.');
+Assert::exception(
+	fn() => $latte->renderToString('{include this}'),
+	Latte\CompileException::class,
+	'Cannot include this block outside of any block.',
+);
 
 // in anonymous block
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block} {include this} {/block}');
-}, Latte\CompileException::class, 'Cannot include this block outside of any block.');
+Assert::exception(
+	fn() => $latte->renderToString('{block} {include this} {/block}'),
+	Latte\CompileException::class,
+	'Cannot include this block outside of any block.',
+);
 
 Assert::match(
 	'  2   1',
@@ -30,9 +34,11 @@ Assert::match(
 );
 
 // in snippet block
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{snippet foo} {include this} {/snippet}');
-}, Latte\CompileException::class, 'Cannot include this block outside of any block.');
+Assert::exception(
+	fn() => $latte->renderToString('{snippet foo} {include this} {/snippet}'),
+	Latte\CompileException::class,
+	'Cannot include this block outside of any block.',
+);
 
 // with modifier
 Assert::match(

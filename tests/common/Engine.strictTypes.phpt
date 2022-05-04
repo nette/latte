@@ -14,6 +14,4 @@ Assert::notContains('declare(strict_types=1)', $latte->compile(''));
 $latte->setStrictTypes(true);
 Assert::contains('declare(strict_types=1)', $latte->compile(''));
 
-Assert::noError(function () use ($latte) {
-	$latte->render('');
-});
+Assert::noError(fn() => $latte->render(''));

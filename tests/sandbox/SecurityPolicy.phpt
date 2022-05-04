@@ -13,51 +13,53 @@ $policy = new Latte\Sandbox\SecurityPolicy;
 $latte->setPolicy($policy);
 $latte->setSandboxMode();
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{$abc}');
-}, Latte\CompileException::class, 'Tag {=} is not allowed.');
+Assert::exception(
+	fn() => $latte->compile('{$abc}'),
+	Latte\CompileException::class,
+	'Tag {=} is not allowed.',
+);
 
 $policy->allowTags(['=']);
 
-Assert::noError(function () use ($latte) {
-	$latte->compile('{$abc}');
-});
+Assert::noError(fn() => $latte->compile('{$abc}'));
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{var $abc}');
-}, Latte\CompileException::class, 'Tag {var} is not allowed.');
+Assert::exception(
+	fn() => $latte->compile('{var $abc}'),
+	Latte\CompileException::class,
+	'Tag {var} is not allowed.',
+);
 
 $policy->allowTags($policy::ALL);
 
-Assert::noError(function () use ($latte) {
-	$latte->compile('{var $abc}');
-});
+Assert::noError(fn() => $latte->compile('{var $abc}'));
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{$abc|upper}');
-}, Latte\CompileException::class, 'Filter |upper is not allowed.');
+Assert::exception(
+	fn() => $latte->compile('{$abc|upper}'),
+	Latte\CompileException::class,
+	'Filter |upper is not allowed.',
+);
 
 $policy->allowFilters(['UppeR']);
 
-Assert::noError(function () use ($latte) {
-	$latte->compile('{$abc|upper}');
-});
+Assert::noError(fn() => $latte->compile('{$abc|upper}'));
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{$abc|lower}');
-}, Latte\CompileException::class, 'Filter |lower is not allowed.');
+Assert::exception(
+	fn() => $latte->compile('{$abc|lower}'),
+	Latte\CompileException::class,
+	'Filter |lower is not allowed.',
+);
 
 $policy->allowFilters($policy::ALL);
 
-Assert::noError(function () use ($latte) {
-	$latte->compile('{$abc|lower}');
-});
+Assert::noError(fn() => $latte->compile('{$abc|lower}'));
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{trim(abc)}');
-}, Latte\CompileException::class, 'Function trim() is not allowed.');
+Assert::exception(
+	fn() => $latte->compile('{trim(abc)}'),
+	Latte\CompileException::class,
+	'Function trim() is not allowed.',
+);
 
 $policy->allowFunctions(['tRim']);
 
@@ -66,65 +68,65 @@ Assert::noError(function () use ($latte) {
 	$latte->renderToString('{="trim"(abc)}');
 });
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{ltrim(abc)}');
-}, Latte\CompileException::class, 'Function ltrim() is not allowed.');
+Assert::exception(
+	fn() => $latte->compile('{ltrim(abc)}'),
+	Latte\CompileException::class,
+	'Function ltrim() is not allowed.',
+);
 
 $policy->allowFunctions($policy::ALL);
 
-Assert::noError(function () use ($latte) {
-	$latte->compile('{ltrim(abc)}');
-});
+Assert::noError(fn() => $latte->compile('{ltrim(abc)}'));
 
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTime]);
-}, Latte\SecurityViolationException::class, 'Calling DateTime::format() is not allowed.');
+Assert::exception(
+	fn() => $latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTime]),
+	Latte\SecurityViolationException::class,
+	'Calling DateTime::format() is not allowed.',
+);
 
 $policy->allowMethods('dAtetime', ['fOrmat']);
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTime]);
-});
+Assert::noError(fn() => $latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTime]));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{=$obj->getTimestamp()}', ['obj' => new DateTime]);
-}, Latte\SecurityViolationException::class, 'Calling DateTime::getTimestamp() is not allowed.');
+Assert::exception(
+	fn() => $latte->renderToString('{=$obj->getTimestamp()}', ['obj' => new DateTime]),
+	Latte\SecurityViolationException::class,
+	'Calling DateTime::getTimestamp() is not allowed.',
+);
 
 $policy->allowMethods('dAtetime', $policy::ALL);
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('{=$obj->getTimestamp()}', ['obj' => new DateTime]);
-});
+Assert::noError(fn() => $latte->renderToString('{=$obj->getTimestamp()}', ['obj' => new DateTime]));
 
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTimeImmutable]);
-}, Latte\SecurityViolationException::class, 'Calling DateTimeImmutable::format() is not allowed.');
+Assert::exception(
+	fn() => $latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTimeImmutable]),
+	Latte\SecurityViolationException::class,
+	'Calling DateTimeImmutable::format() is not allowed.',
+);
 
 $policy->allowMethods('DateTimeInterface', ['fOrmat']);
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTimeImmutable]);
-});
+Assert::noError(fn() => $latte->renderToString('{=$obj->format("u")}', ['obj' => new DateTimeImmutable]));
 
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{=$obj->prop}', ['obj' => (object) ['prop' => 123]]);
-}, Latte\SecurityViolationException::class, "Access to 'prop' property on a stdClass object is not allowed.");
+Assert::exception(
+	fn() => $latte->renderToString('{=$obj->prop}', ['obj' => (object) ['prop' => 123]]),
+	Latte\SecurityViolationException::class,
+	"Access to 'prop' property on a stdClass object is not allowed.",
+);
 
 $policy->allowProperties('sTdClass', ['pRop']);
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('{=$obj->prop}', ['obj' => (object) ['prop' => 123]]);
-});
+Assert::noError(fn() => $latte->renderToString('{=$obj->prop}', ['obj' => (object) ['prop' => 123]]));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{=$obj->prop2}', ['obj' => (object) []]);
-}, Latte\SecurityViolationException::class, "Access to 'prop2' property on a stdClass object is not allowed.");
+Assert::exception(
+	fn() => $latte->renderToString('{=$obj->prop2}', ['obj' => (object) []]),
+	Latte\SecurityViolationException::class,
+	"Access to 'prop2' property on a stdClass object is not allowed.",
+);
 
 $policy->allowProperties('sTdClass', $policy::ALL);
 
-Assert::noError(function () use ($latte) {
-	$latte->renderToString('{=$obj->prop2}', ['obj' => (object) ['prop2' => 123]]);
-});
+Assert::noError(fn() => $latte->renderToString('{=$obj->prop2}', ['obj' => (object) ['prop2' => 123]]));

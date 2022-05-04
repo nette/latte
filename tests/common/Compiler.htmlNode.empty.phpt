@@ -65,6 +65,8 @@ Assert::match("%A%<textarea />\n %A%", $latte->compile("<textarea n:foo />\n "))
 $macro->empty = false;
 Assert::match('%A%<textarea></textarea>%A%', $latte->compile('<textarea n:foo></textarea>'));
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<input n:foo>');
-}, Latte\CompileException::class, 'Unexpected end, expecting </input> for n:foo');
+Assert::exception(
+	fn() => $latte->compile('<input n:foo>'),
+	Latte\CompileException::class,
+	'Unexpected end, expecting </input> for n:foo',
+);

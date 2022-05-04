@@ -36,9 +36,11 @@ test('strings', function () {
 	Assert::same('"\"1, 2, symbol1, symbol2"', formatArgs('"\"1, 2, symbol1, symbol2"')); // unable to parse "${'"'}" yet
 	Assert::same("'\\'1, 2, symbol1, symbol2'", formatArgs("'\\'1, 2, symbol1, symbol2'"));
 	Assert::same("('hello')", formatArgs('(hello)'));
-	Assert::exception(function () {
-		formatArgs("'\\\\'1, 2, symbol1, symbol2'");
-	}, Latte\CompileException::class, 'Unexpected %a% on line 1, column 27.');
+	Assert::exception(
+		fn() => formatArgs("'\\\\'1, 2, symbol1, symbol2'"),
+		Latte\CompileException::class,
+		'Unexpected %a% on line 1, column 27.',
+	);
 });
 
 
@@ -117,9 +119,11 @@ test('inline modifiers', function () {
 	Assert::same('foo(($this->filters->bar)($val),($this->filters->lorem)( $val))', formatArgs('foo($val|bar, $val|lorem)'));
 	Assert::same("'foo' => array((\$this->filters->bar)(\$val),)", formatArgs('foo => array($val|bar,)'));
 	Assert::same('[($this->filters->bar)($val),($this->filters->lorem)( $val)]', formatArgs('[$val|bar, $val|lorem]'));
-	Assert::exception(function () {
-		formatArgs('($val|mod:param:"param2"');
-	}, Latte\CompileException::class, 'Missing )');
+	Assert::exception(
+		fn() => formatArgs('($val|mod:param:"param2"'),
+		Latte\CompileException::class,
+		'Missing )',
+	);
 
 	Assert::same('($this->filters->escape)(@)', formatArgs('(@|escape)'));
 	Assert::same('LR\Filters::safeUrl(@)', formatArgs('(@|checkUrl)'));

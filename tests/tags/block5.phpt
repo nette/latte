@@ -20,10 +20,14 @@ Assert::match(
 	$latte->renderToString('{block test}<br n:class="$var">{/block}', ['var' => 123]),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block _foobar}Hello{/block}');
-}, Latte\CompileException::class, "Block name must start with letter a-z, '_foobar' given.");
+Assert::exception(
+	fn() => $latte->renderToString('{block _foobar}Hello{/block}'),
+	Latte\CompileException::class,
+	"Block name must start with letter a-z, '_foobar' given.",
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block 123}Hello{/block}');
-}, Latte\CompileException::class, "Block name must start with letter a-z, '123' given.");
+Assert::exception(
+	fn() => $latte->renderToString('{block 123}Hello{/block}'),
+	Latte\CompileException::class,
+	"Block name must start with letter a-z, '123' given.",
+);

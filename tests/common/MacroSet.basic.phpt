@@ -163,20 +163,26 @@ test('', function () use ($set) {
 	$set->addMacro('modifyOk12', '-', '-', '%modify');
 	$set->nodeOpened(new MacroNode($set, 'modifyOk12', '', '|filter'));
 
-	Assert::exception(function () use ($set) {
-		$set->addMacro('modifyError1', '-');
-		$set->nodeOpened(new MacroNode($set, 'modifyError1', '', '|filter'));
-	}, Latte\CompileException::class, 'Filters are not allowed in {modifyError1}');
+	$set->addMacro('modifyError1', '-');
+	Assert::exception(
+		fn() => $set->nodeOpened(new MacroNode($set, 'modifyError1', '', '|filter')),
+		Latte\CompileException::class,
+		'Filters are not allowed in {modifyError1}',
+	);
 
-	Assert::exception(function () use ($set) {
-		$set->addMacro('modifyError2', null, '-');
-		$set->nodeOpened(new MacroNode($set, 'modifyError2', '', '|filter'));
-	}, Latte\CompileException::class, 'Filters are not allowed in {modifyError2}');
+	$set->addMacro('modifyError2', null, '-');
+	Assert::exception(
+		fn() => $set->nodeOpened(new MacroNode($set, 'modifyError2', '', '|filter')),
+		Latte\CompileException::class,
+		'Filters are not allowed in {modifyError2}',
+	);
 
-	Assert::exception(function () use ($set) {
-		$set->addMacro('modifyError3', null, null, '-');
-		$set->nodeOpened(new MacroNode($set, 'modifyError3', '', '|filter'));
-	}, Latte\CompileException::class, 'Filters are not allowed in {modifyError3}');
+	$set->addMacro('modifyError3', null, null, '-');
+	Assert::exception(
+		fn() => $set->nodeOpened(new MacroNode($set, 'modifyError3', '', '|filter')),
+		Latte\CompileException::class,
+		'Filters are not allowed in {modifyError3}',
+	);
 });
 
 
@@ -217,18 +223,24 @@ test('', function () use ($set) {
 	$set->addMacro('paramsOk12', '-', '-', '%node');
 	$set->nodeOpened(new MacroNode($set, 'paramsOk12', 'params'));
 
-	Assert::exception(function () use ($set) {
-		$set->addMacro('paramsError1', '-');
-		$set->nodeOpened(new MacroNode($set, 'paramsError1', 'params'));
-	}, Latte\CompileException::class, 'Arguments are not allowed in {paramsError1}');
+	$set->addMacro('paramsError1', '-');
+	Assert::exception(
+		fn() => $set->nodeOpened(new MacroNode($set, 'paramsError1', 'params')),
+		Latte\CompileException::class,
+		'Arguments are not allowed in {paramsError1}',
+	);
 
-	Assert::exception(function () use ($set) {
-		$set->addMacro('paramsError2', null, '-');
-		$set->nodeOpened(new MacroNode($set, 'paramsError2', 'params'));
-	}, Latte\CompileException::class, 'Arguments are not allowed in {paramsError2}');
+	$set->addMacro('paramsError2', null, '-');
+	Assert::exception(
+		fn() => $set->nodeOpened(new MacroNode($set, 'paramsError2', 'params')),
+		Latte\CompileException::class,
+		'Arguments are not allowed in {paramsError2}',
+	);
 
-	Assert::exception(function () use ($set) {
-		$set->addMacro('paramsError3', null, null, '-');
-		$set->nodeOpened(new MacroNode($set, 'paramsError3', 'params'));
-	}, Latte\CompileException::class, 'Arguments are not allowed in {paramsError3}');
+	$set->addMacro('paramsError3', null, null, '-');
+	Assert::exception(
+		fn() => $set->nodeOpened(new MacroNode($set, 'paramsError3', 'params')),
+		Latte\CompileException::class,
+		'Arguments are not allowed in {paramsError3}',
+	);
 });

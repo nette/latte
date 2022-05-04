@@ -17,6 +17,8 @@ Assert::true(Filters::divisibleBy(10, 1));
 Assert::true(Filters::divisibleBy(-10, 10));
 Assert::false(Filters::divisibleBy(10, 20));
 
-Assert::exception(function () {
-	Assert::false(Filters::divisibleBy(10, 0));
-}, DivisionByZeroError::class, 'Modulo by zero');
+Assert::exception(
+	fn() => Filters::divisibleBy(10, 0),
+	DivisionByZeroError::class,
+	'Modulo by zero',
+);

@@ -66,9 +66,11 @@ Assert::same(
 	$latte->renderToString('{CaSe(" abc ")}'),
 );
 
-Assert::error(function () use ($latte) {
-	$latte->compile('{casE(123)}');
-}, E_USER_WARNING, "Case mismatch on function name 'casE', correct name is 'CaSe'.");
+Assert::error(
+	fn() => $latte->compile('{casE(123)}'),
+	E_USER_WARNING,
+	"Case mismatch on function name 'casE', correct name is 'CaSe'.",
+);
 
 
 // with inline modifier
@@ -80,6 +82,8 @@ Assert::same(
 
 
 // invoke function
-Assert::exception(function () use ($latte) {
-	$latte->invokeFunction('unknown', []);
-}, LogicException::class, "Function 'unknown' is not defined.");
+Assert::exception(
+	fn() => $latte->invokeFunction('unknown', []),
+	LogicException::class,
+	"Function 'unknown' is not defined.",
+);

@@ -136,22 +136,28 @@ test('', function () {
 	Assert::same(0, $traverser->position);
 
 	$traverser->position = -1;
-	Assert::exception(function () use ($traverser) {
-		$traverser->consumeValue(T_DNUMBER);
-	}, Latte\CompileException::class, "Unexpected token 'say'.");
+	Assert::exception(
+		fn() => $traverser->consumeValue(T_DNUMBER),
+		Latte\CompileException::class,
+		"Unexpected token 'say'.",
+	);
 	Assert::same(-1, $traverser->position);
 	Assert::same('say', $traverser->consumeValue(T_STRING));
 	Assert::same(0, $traverser->position);
 
 	$traverser->position = 3;
-	Assert::exception(function () use ($traverser) {
-		$traverser->consumeValue();
-	}, Latte\CompileException::class, 'Unexpected end.');
+	Assert::exception(
+		fn() => $traverser->consumeValue(),
+		Latte\CompileException::class,
+		'Unexpected end.',
+	);
 	Assert::same(3, $traverser->position);
 
 	$traverser->position = 3;
-	Assert::exception(function () use ($traverser) {
-		$traverser->consumeValue(T_STRING, T_DNUMBER, T_WHITESPACE);
-	}, Latte\CompileException::class, 'Unexpected end.');
+	Assert::exception(
+		fn() => $traverser->consumeValue(T_STRING, T_DNUMBER, T_WHITESPACE),
+		Latte\CompileException::class,
+		'Unexpected end.',
+	);
 	Assert::same(3, $traverser->position);
 });

@@ -15,19 +15,25 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 // out of block
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{include parent}');
-}, Latte\CompileException::class, 'Cannot include parent block outside of any block.');
+Assert::exception(
+	fn() => $latte->renderToString('{include parent}'),
+	Latte\CompileException::class,
+	'Cannot include parent block outside of any block.',
+);
 
 // in anonymous block
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block} {include parent} {/block}');
-}, Latte\CompileException::class, 'Cannot include parent block outside of any block.');
+Assert::exception(
+	fn() => $latte->renderToString('{block} {include parent} {/block}'),
+	Latte\CompileException::class,
+	'Cannot include parent block outside of any block.',
+);
 
 // in snippet block
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{snippet foo} {include parent} {/snippet}');
-}, Latte\CompileException::class, 'Cannot include parent block outside of any block.');
+Assert::exception(
+	fn() => $latte->renderToString('{snippet foo} {include parent} {/snippet}'),
+	Latte\CompileException::class,
+	'Cannot include parent block outside of any block.',
+);
 
 
 $latte->setLoader(new Latte\Loaders\StringLoader([
@@ -38,9 +44,11 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 // with modifier
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('main1');
-}, Latte\CompileException::class, 'Filters are not allowed in {include parent}');
+Assert::exception(
+	fn() => $latte->renderToString('main1'),
+	Latte\CompileException::class,
+	'Filters are not allowed in {include parent}',
+);
 
 // with params
 Assert::match(

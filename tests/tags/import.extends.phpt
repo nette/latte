@@ -28,6 +28,8 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	',
 ]));
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('main');
-}, Latte\RuntimeException::class, 'Imported template cannot use {extends} or {layout}, use {import}');
+Assert::exception(
+	fn() => $latte->renderToString('main'),
+	Latte\RuntimeException::class,
+	'Imported template cannot use {extends} or {layout}, use {import}',
+);

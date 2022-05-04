@@ -72,10 +72,14 @@ Assert::match('
 
 
 // former |safeurl & |nosafeurl
-Assert::error(function () use ($latte, $params) {
-	$latte->renderToString('<a href={$url1|nosafeurl}></a>', $params);
-}, LogicException::class, "Filter 'nosafeurl' is not defined.");
+Assert::exception(
+	fn() => $latte->renderToString('<a href={$url1|nosafeurl}></a>', $params),
+	LogicException::class,
+	"Filter 'nosafeurl' is not defined.",
+);
 
-Assert::error(function () use ($latte, $params) {
-	$latte->renderToString('<a href={$url4|dataStream|safeURL}></a>', $params);
-}, LogicException::class, "Filter 'safeURL' is not defined.");
+Assert::exception(
+	fn() => $latte->renderToString('<a href={$url4|dataStream|safeURL}></a>', $params),
+	LogicException::class,
+	"Filter 'safeURL' is not defined.",
+);

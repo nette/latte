@@ -29,10 +29,14 @@ two',
 two'),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{define _foobar}Hello{/define}');
-}, Latte\CompileException::class, "Block name must start with letter a-z, '_foobar' given.");
+Assert::exception(
+	fn() => $latte->renderToString('{define _foobar}Hello{/define}'),
+	Latte\CompileException::class,
+	"Block name must start with letter a-z, '_foobar' given.",
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{define 123}Hello{/define}');
-}, Latte\CompileException::class, "Block name must start with letter a-z, '123' given.");
+Assert::exception(
+	fn() => $latte->renderToString('{define 123}Hello{/define}'),
+	Latte\CompileException::class,
+	"Block name must start with letter a-z, '123' given.",
+);

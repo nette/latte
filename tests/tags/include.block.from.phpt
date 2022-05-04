@@ -49,9 +49,11 @@ Assert::match(
 	$latte->renderToString('main5'),
 );
 
-Assert::error(function () use ($latte) {
-	$latte->renderToString('main6');
-}, E_WARNING, 'Undefined variable%a%');
+Assert::error(
+	fn() => $latte->renderToString('main6'),
+	E_WARNING,
+	'Undefined variable%a%',
+);
 
 Assert::matchFile(
 	__DIR__ . '/expected/include.block.from.phtml',

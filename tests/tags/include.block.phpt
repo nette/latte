@@ -40,9 +40,11 @@ Assert::match(
 	$latte->renderToString('main3'),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('main4');
-}, Latte\RuntimeException::class, "Missing template 'block.2'.");
+Assert::exception(
+	fn() => $latte->renderToString('main4'),
+	Latte\RuntimeException::class,
+	"Missing template 'block.2'.",
+);
 
 Assert::match(
 	' before [block 1] after',

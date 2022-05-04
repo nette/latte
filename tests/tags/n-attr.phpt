@@ -65,11 +65,15 @@ Assert::match(
 );
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:attr/>');
-}, Latte\CompileException::class, 'Missing arguments in n:attr');
+Assert::exception(
+	fn() => $latte->compile('<div n:attr/>'),
+	Latte\CompileException::class,
+	'Missing arguments in n:attr',
+);
 
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('<div n:inner-attr/>');
-}, Latte\CompileException::class, 'Unknown attribute n:inner-attr');
+Assert::exception(
+	fn() => $latte->compile('<div n:inner-attr/>'),
+	Latte\CompileException::class,
+	'Unknown attribute n:inner-attr',
+);

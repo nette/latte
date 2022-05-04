@@ -49,14 +49,20 @@ Assert::same('(($expr ? (1+2) : [3,4]))', $writer->formatWord('($expr ? (1+2) : 
 Assert::same('($expr ? (1+2) : [3,4])', $writer->formatWord('$expr ? (1+2) : [3,4]'));
 Assert::same('(fnc() ? (1+2) : [3,4])', $writer->formatWord('fnc() ? (1+2) : [3,4]'));
 
-Assert::exception(function () use ($writer) {
-	$writer->formatWord("'var\"");
-}, Latte\CompileException::class, "Unexpected ''var\"' on line 1, column 1.");
+Assert::exception(
+	fn() => $writer->formatWord("'var\""),
+	Latte\CompileException::class,
+	"Unexpected ''var\"' on line 1, column 1.",
+);
 
-Assert::error(function () use ($writer) {
-	$writer->formatWord('a-$x-$y->x');
-}, E_USER_DEPRECATED, 'Put variables in curly brackets, replace \'a-$x-$y->x\' with \'a-{$x}-{$y->x}\' (or wrap whole expression in double quotes)');
+Assert::error(
+	fn() => $writer->formatWord('a-$x-$y->x'),
+	E_USER_DEPRECATED,
+	'Put variables in curly brackets, replace \'a-$x-$y->x\' with \'a-{$x}-{$y->x}\' (or wrap whole expression in double quotes)',
+);
 
-Assert::error(function () use ($writer) {
-	$writer->formatWord('a-\x');
-}, E_USER_DEPRECATED, 'Expression \'a-\x\' should be wrapped in double quotes.');
+Assert::error(
+	fn() => $writer->formatWord('a-\x'),
+	E_USER_DEPRECATED,
+	'Expression \'a-\x\' should be wrapped in double quotes.',
+);

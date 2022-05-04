@@ -14,9 +14,11 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{iterateWhile}');
-}, Latte\CompileException::class, 'Tag {iterateWhile} must be inside {foreach} ... {/foreach}.');
+Assert::exception(
+	fn() => $latte->compile('{iterateWhile}'),
+	Latte\CompileException::class,
+	'Tag {iterateWhile} must be inside {foreach} ... {/foreach}.',
+);
 
 
 $template = <<<'EOD'

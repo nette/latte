@@ -14,17 +14,19 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{breakIf}');
-}, Latte\CompileException::class, 'Tag {breakIf} is unexpected here.');
+Assert::exception(
+	fn() => $latte->compile('{breakIf}'),
+	Latte\CompileException::class,
+	'Tag {breakIf} is unexpected here.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->compile('{for}{breakIf}{/for}');
-}, Latte\CompileException::class, 'Missing condition in {breakIf}');
+Assert::exception(
+	fn() => $latte->compile('{for}{breakIf}{/for}'),
+	Latte\CompileException::class,
+	'Missing condition in {breakIf}',
+);
 
-Assert::noError(function () use ($latte) {
-	$latte->compile('{for}{if true}{breakIf true}{/if}{/for}');
-});
+Assert::noError(fn() => $latte->compile('{for}{if true}{breakIf true}{/if}{/for}'));
 
 
 $template = <<<'EOD'

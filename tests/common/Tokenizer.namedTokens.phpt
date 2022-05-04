@@ -24,6 +24,8 @@ Assert::same([
 	[Tokenizer::VALUE => '123', Tokenizer::OFFSET => 5, Tokenizer::TYPE => T_DNUMBER],
 ], $tokens);
 
-Assert::exception(function () use ($tokenizer) {
-	$tokenizer->tokenize('say 123;');
-}, Latte\CompileException::class, "Unexpected ';' on line 1, column 8.");
+Assert::exception(
+	fn() => $tokenizer->tokenize('say 123;'),
+	Latte\CompileException::class,
+	"Unexpected ';' on line 1, column 8.",
+);

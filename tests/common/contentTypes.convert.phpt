@@ -14,26 +14,34 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{define title} <h1>title</h1> {/define}  {include title|upper}');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('{define title} <h1>title</h1> {/define}  {include title|upper}'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block|upper} <h1>title</h1> {/block}');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('{block|upper} <h1>title</h1> {/block}'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{capture $var|upper} <h1>title</h1> {/capture}');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('{capture $var|upper} <h1>title</h1> {/capture}'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
 Assert::same(
 	' title ',
 	$latte->renderToString('{block|striptags} <h1>title</h1> {/block}'),
 );
 
-Assert::exception(function () use ($latte) {
-	$latte->renderToString('{block|striptags|upper} <h1>title</h1> {/block}');
-}, Latte\RuntimeException::class, 'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.');
+Assert::exception(
+	fn() => $latte->renderToString('{block|striptags|upper} <h1>title</h1> {/block}'),
+	Latte\RuntimeException::class,
+	'Filter |upper is called with incompatible content type HTML, try to prepend |stripHtml.',
+);
 
 Assert::same(
 	' title ',
