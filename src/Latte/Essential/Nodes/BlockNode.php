@@ -66,8 +66,6 @@ class BlockNode extends StatementNode
 
 		if ($node->block && $endTag && $name instanceof Scalar\StringNode) {
 			$endTag->parser->stream->tryConsume($name->value);
-		} elseif (!$node->block && !$node->modifier->filters) {
-			return $node->content;
 		}
 
 		return $node;
@@ -93,7 +91,9 @@ class BlockNode extends StatementNode
 			<<<'XX'
 				ob_start(fn() => '') %line;
 				try {
-					%node
+					(function () { extract(func_get_arg(0));
+						%node
+					})(get_defined_vars());
 				} finally {
 					$ʟ_fi = new LR\FilterInfo(%dump);
 					echo %modifyContent(ob_get_clean());

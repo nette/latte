@@ -14,10 +14,13 @@
 ';
 		ob_start(fn() => '') /* line %d% */;
 		try {
-			echo '	';
-			echo LR\Filters::escapeHtmlText($var) /* line %d% */;
-			echo "\n";
-			$var = 'blockmod' /* line %d% */;
+			(function () {
+				extract(func_get_arg(0));
+				echo '	';
+				echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+				echo "\n";
+				$var = 'blockmod' /* line %d% */;
+			})(get_defined_vars());
 		} finally {
 			$ʟ_fi = new LR\FilterInfo('html');
 			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
@@ -27,10 +30,20 @@
 		echo '
 
 
-	';
-		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
-		echo "\n";
-		$var = 'block' /* line %d% */;
+';
+		ob_start(fn() => '') /* line %d% */;
+		try {
+			(function () {
+				extract(func_get_arg(0));
+				echo '	';
+				echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+				echo "\n";
+				$var = 'block' /* line %d% */;
+			})(get_defined_vars());
+		} finally {
+			$ʟ_fi = new LR\FilterInfo('html');
+			echo ob_get_clean();
+		}
 		echo "\n";
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 	}
