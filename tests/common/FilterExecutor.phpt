@@ -35,8 +35,11 @@ test('', function () {
 
 	$filters->add('f1', 'strtoupper');
 	Assert::same('strtoupper', $filters->f1);
-	Assert::notSame('strtoupper', $filters->F1);
 	Assert::same('AA', ($filters->f1)('aa'));
+
+	Assert::exception(function () use ($filters) {
+		($filters->F1)('');
+	}, LogicException::class, "Filter 'F1' is not defined, did you mean 'f1'?");
 
 	$filters->add('f1', 'trim');
 	Assert::same('trim', $filters->f1);
@@ -49,42 +52,20 @@ test('', function () {
 
 	$filters->add('f4', new MyFilter);
 	Assert::same('AA', ($filters->f4)('aA'));
-
-	Assert::exception(function () use ($filters) {
-		($filters->F1)('');
-	}, LogicException::class, "Filter 'F1' is not defined, did you mean 'f1'?");
 });
 
 
 test('', function () {
 	$filters = new FilterExecutor;
-	$filters->add(null, function ($name, $val) {
-		return implode(',', func_get_args());
-	});
-	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
-	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
-	Assert::same('Dynamic,1,2', ($filters->Dynamic)(1, 2));
-	Assert::same('another,1,2', ($filters->another)(1, 2));
-
-	$filters2 = new FilterExecutor;
-	$filters2->add(null, function ($name, $val) {
-		return 'different';
-	});
-	Assert::same('different', ($filters2->dynamic)(1, 2));
-});
-
-
-test('', function () {
-	$filters = new FilterExecutor;
-	$filters->add(null, function ($name, $val) use ($filters) {
+	$filters->add(null, function ($name) use ($filters) {
 		if ($name === 'dynamic') {
-			$filters->add($name, function ($val) {
-				return implode(',', func_get_args());
-			});
+			return function (...$vals) use ($name) {
+				return $name . ',' . implode(',', $vals);
+			};
 		}
 	});
-	Assert::same('1,2', ($filters->dynamic)(1, 2));
-	Assert::same('1,2', ($filters->dynamic)(1, 2));
+	Assert::same('dynamic,1,2', ($filters->dynamic)(1, 2));
+	Assert::same('dynamic,1,3', ($filters->dynamic)(1, 3));
 
 	Assert::exception(function () use ($filters) {
 		($filters->unknown)('');

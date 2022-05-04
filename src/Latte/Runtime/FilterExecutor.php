@@ -79,23 +79,19 @@ class FilterExecutor
 			}
 		}
 
-		return $this->$name = function (...$args) use ($name) { // dynamic filter
-			array_unshift($args, $name);
-			foreach ($this->_dynamic as $filter) {
-				$res = $filter(...$args);
-				if ($res !== null) {
-					return $res;
-				} elseif (isset($this->_static[$name])) { // dynamic converted to classic
-					$this->$name = $this->_static[$name][0];
-					return ($this->$name)(...func_get_args());
-				}
+		// dynamic filter
+		foreach ($this->_dynamic as $loader) {
+			$callback = $loader($name);
+			if ($callback !== null) {
+				$this->_static[$name] = [$callback, null];
+				return $this->__get($name);
 			}
+		}
 
-			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name))
-				? ", did you mean '$t'?"
-				: '.';
-			throw new \LogicException("Filter '$name' is not defined$hint");
-		};
+		$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name))
+			? ", did you mean '$t'?"
+			: '.';
+		throw new \LogicException("Filter '$name' is not defined$hint");
 	}
 
 

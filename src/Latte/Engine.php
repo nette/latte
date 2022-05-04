@@ -296,11 +296,9 @@ class Engine
 	 * Registers run-time filter.
 	 * @return static
 	 */
-	public function addFilter(?string $name, callable $callback)
+	public function addFilter(string $name, callable $callback)
 	{
-		if ($name === null) {
-			trigger_error('For dynamic filters, use the addFilterLoader() where you pass a callback as a parameter that returns the filter callback.', E_USER_DEPRECATED);
-		} elseif (!preg_match('#^[a-z]\w*$#iD', $name)) {
+		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid filter name '$name'.");
 		}
 
@@ -315,11 +313,7 @@ class Engine
 	 */
 	public function addFilterLoader(callable $callback)
 	{
-		$this->filters->add(null, function ($name) use ($callback) {
-			if ($filter = $callback($name)) {
-				$this->filters->add($name, $filter);
-			}
-		});
+		$this->filters->add(null, $callback);
 		return $this;
 	}
 
