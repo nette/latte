@@ -10,10 +10,15 @@ declare(strict_types=1);
 namespace Latte;
 
 
+interface Exception
+{
+}
+
+
 /**
  * The exception occured during Latte compilation.
  */
-class CompileException extends \Exception
+class CompileException extends \Exception implements Exception
 {
 	public string $sourceCode;
 	public string $sourceName;
@@ -40,7 +45,7 @@ class CompileException extends \Exception
 /**
  * The exception that indicates error of the last Regexp execution.
  */
-class RegexpException extends \Exception
+class RegexpException extends \Exception implements Exception
 {
 	public function __construct()
 	{
@@ -52,11 +57,11 @@ class RegexpException extends \Exception
 /**
  * Exception thrown when a not allowed construction is used in a template.
  */
-class SecurityViolationException extends \Exception
+class SecurityViolationException extends \Exception implements Exception
 {
 }
 
 
-class RuntimeException extends \RuntimeException
+class RuntimeException extends \RuntimeException implements Exception
 {
 }
