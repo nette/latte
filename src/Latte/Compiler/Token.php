@@ -26,7 +26,8 @@ class Token
 		HTML_TAG_END = 'htmlTagEnd', // end of HTML tag or comment
 		HTML_ATTRIBUTE_BEGIN = 'htmlAttributeBegin',
 		HTML_ATTRIBUTE_END = 'htmlAttributeEnd',
-		COMMENT = 'comment'; // latte comment
+		COMMENT = 'comment', // latte comment
+		END = 'end';
 
 	/** name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
 	public string $name = '';
@@ -49,5 +50,18 @@ class Token
 		public /*readonly*/ string $text,
 		public /*readonly*/ ?Position $position = null,
 	) {
+	}
+
+
+	public function is(int|string ...$kind): bool
+	{
+		return in_array($this->type, $kind, true)
+			|| in_array($this->text, $kind, true);
+	}
+
+
+	public function isEnd(): bool
+	{
+		return $this->type === self::END;
 	}
 }
