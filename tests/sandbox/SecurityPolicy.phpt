@@ -18,7 +18,7 @@ Assert::exception(function () use ($latte) {
 	$latte->compile('{$abc}');
 }, Latte\CompileException::class, 'Tag {=} is not allowed.');
 
-$policy->allowMacros(['=']);
+$policy->allowTags(['=']);
 
 Assert::noError(function () use ($latte) {
 	$latte->compile('{$abc}');
@@ -28,7 +28,7 @@ Assert::exception(function () use ($latte) {
 	$latte->compile('{var $abc}');
 }, Latte\CompileException::class, 'Tag {var} is not allowed.');
 
-$policy->allowMacros($policy::ALL);
+$policy->allowTags($policy::ALL);
 
 Assert::noError(function () use ($latte) {
 	$latte->compile('{var $abc}');

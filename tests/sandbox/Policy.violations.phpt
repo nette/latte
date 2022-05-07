@@ -18,7 +18,7 @@ class Test
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=', 'do', 'var', 'parameters']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=', 'do', 'var', 'parameters']));
 $latte->setSandboxMode();
 
 Assert::exception(function () use ($latte) {

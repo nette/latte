@@ -17,7 +17,7 @@ $latte->setExceptionHandler(function () use (&$args) {
 
 // sandbox compile-time
 $args = null;
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=']));
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main' => 'before {sandbox inc.latte} after',
 	'inc.latte' => '{if}',
@@ -33,7 +33,7 @@ Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 // sandbox run-time
 $args = null;
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=']));
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main' => 'before {sandbox inc.latte} after',
 	'inc.latte' => '{="trim"()}',

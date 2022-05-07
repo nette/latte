@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowMacros(['=']));
+$latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=']));
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main1' => 'before {sandbox inc1.latte} after',
 	'main2' => 'before {sandbox inc1.latte, var => 1} after',
