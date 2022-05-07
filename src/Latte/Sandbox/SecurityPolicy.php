@@ -53,7 +53,7 @@ class SecurityPolicy implements Latte\Policy
 			'_', '=', 'attr', 'block', 'breakIf', 'capture', 'case', 'class', 'continueIf', 'default',
 			'define', 'do', 'else', 'elseif', 'elseifset', 'first', 'for', 'foreach', 'if', 'ifchanged',
 			'ifcontent', 'iterateWhile', 'ifset', 'l', 'last', 'r', 'rollback', 'sep', 'skipIf', 'spaceless',
-			'switch', 'templateType', 'try', 'var', 'varType', 'while',
+			'switch', 'templateType', 'translate', 'try', 'var', 'varType', 'while',
 		]);
 
 		// does not include: dataStream, noEscape, noCheck
