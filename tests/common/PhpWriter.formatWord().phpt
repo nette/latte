@@ -41,6 +41,7 @@ Assert::same('"Null"', $writer->formatWord('Null'));
 Assert::same('"True"', $writer->formatWord('True'));
 Assert::same('"False"', $writer->formatWord('False'));
 Assert::same('Class::CONST', $writer->formatWord('Class::CONST'));
+Assert::same('Class::Abc1', $writer->formatWord('Class::Abc1'));
 Assert::same('\Namespace0\Class_1::CONST_X', $writer->formatWord('\Namespace0\Class_1::CONST_X'));
 Assert::same("('symbol')", $writer->formatWord('(symbol)'));
 Assert::same('(M_PI)', $writer->formatWord('(M_PI)'));
