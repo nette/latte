@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Test: Latte\Parser::parse()
- */
-
 declare(strict_types=1);
 
 use Latte\Compiler\Token;
@@ -12,24 +8,24 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-function parse($s)
+function tokenize($s)
 {
-	$parser = new Latte\Compiler\Parser;
+	$lexer = new Latte\Compiler\TemplateLexer;
 	return array_map(
 		fn(Token $token) => array_filter([$token->type, $token->text, $token->name ?? null, $token->value ?? null]),
-		$parser->parse($s),
+		$lexer->tokenize($s),
 	);
 }
 
 
 Assert::same([
 	['text', '<0>'],
-], parse('<0>'));
+], tokenize('<0>'));
 
 Assert::same([
 	['htmlTagBegin', '<x:-._', 'x:-._'],
 	['htmlTagEnd', '>'],
-], parse('<x:-._>'));
+], tokenize('<x:-._>'));
 
 Assert::same([
 	['htmlTagBegin', '<?'],
@@ -38,62 +34,62 @@ Assert::same([
 	['text', '" ?'],
 	['htmlTagEnd', '>'],
 	['text', 'text'],
-], parse('<?xml encoding="{$enc}" ?>text'));
+], tokenize('<?xml encoding="{$enc}" ?>text'));
 
 Assert::same([
 	['htmlTagBegin', '<?'],
 	['text', 'php $abc ?'],
 	['htmlTagEnd', '>'],
 	['text', 'text'],
-], parse('<?php $abc ?>text'));
+], tokenize('<?php $abc ?>text'));
 
 Assert::same([
 	['htmlTagBegin', '<?'],
 	['text', '= $abc ?'],
 	['htmlTagEnd', '>'],
 	['text', 'text'],
-], parse('<?= $abc ?>text'));
+], tokenize('<?= $abc ?>text'));
 
 Assert::same([
 	['htmlTagBegin', '<?'],
 	['text', 'bogus'],
 	['htmlTagEnd', '>'],
 	['text', 'text'],
-], parse('<?bogus>text'));
+], tokenize('<?bogus>text'));
 
 Assert::same([
 	['macroTag', '{contentType xml}', 'contentType', 'xml'],
 	['htmlTagBegin', '<?'],
 	['text', 'bogus>text'],
-], parse('{contentType xml}<?bogus>text'));
+], tokenize('{contentType xml}<?bogus>text'));
 
 Assert::same([
 	['htmlTagBegin', '<!'],
 	['text', 'doctype html'],
 	['htmlTagEnd', '>'],
 	['text', 'text'],
-], parse('<!doctype html>text'));
+], tokenize('<!doctype html>text'));
 
 Assert::same([
 	['htmlTagBegin', '<!'],
 	['text', '--'],
 	['htmlTagEnd', '>'],
 	['text', ' text> --> text'],
-], parse('<!--> text> --> text'));
+], tokenize('<!--> text> --> text'));
 
 Assert::same([
 	['htmlTagBegin', '<!--'],
 	['text', ' text> '],
 	['htmlTagEnd', '-->'],
 	['text', ' text'],
-], parse('<!-- text> --> text'));
+], tokenize('<!-- text> --> text'));
 
 Assert::same([
 	['htmlTagBegin', '<!'],
 	['text', 'bogus'],
 	['htmlTagEnd', '>'],
 	['text', 'text'],
-], parse('<!bogus>text'));
+], tokenize('<!bogus>text'));
 
 Assert::same([
 	['htmlTagBegin', '<div', 'div'],
@@ -108,7 +104,7 @@ Assert::same([
 	['htmlTagBegin', '</div', 'div'],
 	['htmlTagEnd', '>'],
 	['macroTag', '{lorem}', 'lorem'],
-], parse('<div n:syntax="off"><div>{foo}</div>{bar}</div>{lorem}'));
+], tokenize('<div n:syntax="off"><div>{foo}</div>{bar}</div>{lorem}'));
 
 // html attributes
 Assert::same([
@@ -123,7 +119,7 @@ Assert::same([
 	['htmlTagEnd', '>'],
 	['htmlTagBegin', '</div', 'div'],
 	['htmlTagEnd', '>'],
-], parse('<div a b c = d e = "f" g></div>'));
+], tokenize('<div a b c = d e = "f" g></div>'));
 
 Assert::same([
 	['htmlTagBegin', '<div', 'div'],
@@ -144,7 +140,7 @@ Assert::same([
 	['htmlTagEnd', '>'],
 	['htmlTagBegin', '</div', 'div'],
 	['htmlTagEnd', '>'],
-], parse('<div a {b} c = {d} e = a{b}c f = "a{b}c"></div>'));
+], tokenize('<div a {b} c = {d} e = a{b}c f = "a{b}c"></div>'));
 
 // macro attributes
 Assert::same([
@@ -157,4 +153,4 @@ Assert::same([
 	['htmlTagEnd', '>'],
 	['htmlTagBegin', '</div', 'div'],
 	['htmlTagEnd', '>'],
-], parse('<div n:a n:b n:c = d n:e = "f" n:g></div>'));
+], tokenize('<div n:a n:b n:c = d n:e = "f" n:g></div>'));

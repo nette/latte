@@ -314,7 +314,7 @@ class Filters
 	{
 		if (
 			!is_string($new)
-			|| !preg_match('~' . Latte\Compiler\Parser::RE_TAG_NAME . '$~DA', $new)
+			|| !preg_match('~' . Latte\Compiler\TemplateLexer::RE_TAG_NAME . '$~DA', $new)
 		) {
 			throw new Latte\RuntimeException('Invalid tag name ' . var_export($new, true));
 		}
