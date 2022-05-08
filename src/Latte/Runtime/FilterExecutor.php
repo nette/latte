@@ -20,9 +20,6 @@ use Latte\Helpers;
  */
 class FilterExecutor
 {
-	/** @var string[] */
-	public $_origNames = [];
-
 	/** @var callable[] */
 	private $_dynamic = [];
 
@@ -39,10 +36,8 @@ class FilterExecutor
 		if ($name === null) {
 			array_unshift($this->_dynamic, $callback);
 		} else {
-			$lower = strtolower($name);
-			$this->_static[$lower] = [$callback, null, $name];
-			$this->_origNames[$name] = $lower;
-			unset($this->$lower);
+			$this->_static[$name] = [$callback, null];
+			unset($this->$name);
 		}
 
 		return $this;
@@ -64,14 +59,10 @@ class FilterExecutor
 	 */
 	public function __get(string $name): callable
 	{
-		$lname = strtolower($name);
-		if (isset($this->$lname)) { // case mismatch
-			return $this->$lname;
-
-		} elseif (isset($this->_static[$lname])) {
-			[$callback, $aware] = $this->prepareFilter($lname);
+		if (isset($this->_static[$name])) {
+			[$callback, $aware] = $this->prepareFilter($name);
 			if ($aware) { // FilterInfo aware filter
-				return $this->$lname = function (...$args) use ($callback) {
+				return $this->$name = function (...$args) use ($callback) {
 					array_unshift($args, $info = new FilterInfo);
 					if ($args[1] instanceof HtmlStringable) {
 						$args[1] = $args[1]->__toString();
@@ -84,18 +75,18 @@ class FilterExecutor
 						: $res;
 				};
 			} else { // classic filter
-				return $this->$lname = $callback;
+				return $this->$name = $callback;
 			}
 		}
 
-		return $this->$lname = function (...$args) use ($lname, $name) { // dynamic filter
-			array_unshift($args, $lname);
+		return $this->$name = function (...$args) use ($name) { // dynamic filter
+			array_unshift($args, $name);
 			foreach ($this->_dynamic as $filter) {
 				$res = $filter(...$args);
 				if ($res !== null) {
 					return $res;
-				} elseif (isset($this->_static[$lname])) { // dynamic converted to classic
-					$this->$name = $this->_static[$lname][0];
+				} elseif (isset($this->_static[$name])) { // dynamic converted to classic
+					$this->$name = $this->_static[$name][0];
 					return ($this->$name)(...func_get_args());
 				}
 			}
@@ -115,15 +106,14 @@ class FilterExecutor
 	 */
 	public function filterContent(string $name, FilterInfo $info, ...$args)
 	{
-		$lname = strtolower($name);
-		if (!isset($this->_static[$lname])) {
+		if (!isset($this->_static[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->_static), $name))
 				? ", did you mean '$t'?"
 				: '.';
 			throw new \LogicException("Filter |$name is not defined$hint");
 		}
 
-		[$callback, $aware] = $this->prepareFilter($lname);
+		[$callback, $aware] = $this->prepareFilter($name);
 
 		if ($info->contentType === Engine::CONTENT_HTML && $args[0] instanceof HtmlStringable) {
 			$args[0] = $args[0]->__toString();

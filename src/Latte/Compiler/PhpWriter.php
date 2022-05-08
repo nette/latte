@@ -32,9 +32,6 @@ class PhpWriter
 	/** @var string[] */
 	private $functions = [];
 
-	/** @var string[] */
-	private $filters = [];
-
 	/** @var int|null */
 	private $line;
 
@@ -44,7 +41,6 @@ class PhpWriter
 		$me = new static($node->tokenizer, null, $node->context);
 		$me->modifiers = &$node->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
-		$me->filters = $compiler ? $compiler->getFilters() : [];
 		$me->policy = $compiler ? $compiler->getPolicy() : null;
 		$me->line = $node->startLine;
 		return $me;
@@ -840,18 +836,10 @@ class PhpWriter
 						throw new SecurityViolationException("Filter |$name is not allowed.");
 					}
 
-					$lower = strtolower($name);
-					if (!isset($this->filters[$name])) {
-						$orig = array_search($lower, $this->filters, true);
-						if ($orig) {
-							trigger_error("Case mismatch on filter name |$name, correct name is |$orig.", E_USER_WARNING);
-						}
-					}
-
 					$res->prepend(
 						$isContent
-							? '$this->filters->filterContent(' . PhpHelpers::dump($lower) . ', $ʟ_fi, '
-							: '($this->filters->' . $lower . ')('
+							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
+							: '($this->filters->' . $name . ')('
 					);
 					$inside = 1;
 				}

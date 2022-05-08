@@ -79,4 +79,4 @@ Assert::error(function () use ($latte, $params) {
 
 Assert::error(function () use ($latte, $params) {
 	$latte->renderToString('<a href={$url4|dataStream|safeURL}></a>', $params);
-}, LogicException::class, "Filter 'safeurl' is not defined.");
+}, LogicException::class, "Filter 'safeURL' is not defined.");
