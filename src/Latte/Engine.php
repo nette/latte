@@ -31,9 +31,6 @@ class Engine
 		CONTENT_ICAL = ContentType::ICal,
 		CONTENT_TEXT = ContentType::Text;
 
-	/** @deprecated and unused */
-	public $onCompile = [];
-
 	/** @internal */
 	public $probe;
 
@@ -559,5 +556,17 @@ class Engine
 		}
 
 		return array_filter((array) $params, fn($key) => $key[0] !== "\0", ARRAY_FILTER_USE_KEY);
+	}
+
+
+	public function __get(string $name)
+	{
+		if ($name === 'onCompile') {
+			$trace = debug_backtrace(0)[0];
+			$loc = isset($trace['file'], $trace['line'])
+				? ' (in ' . $trace['file'] . ' on ' . $trace['line'] . ')'
+				: '';
+			throw new \LogicException('You use Latte 3 together with the code designed for Latte 2' . $loc);
+		}
 	}
 }
