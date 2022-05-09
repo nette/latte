@@ -255,6 +255,9 @@ class PhpWriter
 				|| ($this->policy && $tokens->isCurrent('$this'))
 			) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");
+
+			} elseif ($tokenValue === '$iterations') {
+				trigger_error("Variable \$iterations is deprecated (on line {$tokens->currentToken()[2]})", E_USER_DEPRECATED);
 			}
 		}
 
