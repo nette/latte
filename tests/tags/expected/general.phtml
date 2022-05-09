@@ -31,9 +31,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 ';
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator([true], $ʟ_it ?? null) as $foo) /* line %d% */ {
-			$iterations = 0;
 			foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 				if ($iterator->isFirst()) /* line %d% */ {
 					echo '	<ul>';
@@ -51,11 +49,11 @@ final class Template%a% extends Latte\Runtime\Template
 					echo '</ul>';
 				}
 				echo "\n";
-				$iterations++;
+
 			}
 			$iterator = $ʟ_it = $ʟ_it->getParent();
 
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
@@ -89,7 +87,6 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '<ul>
 ';
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($menu, $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($counter++) /* line %d% */;
@@ -103,7 +100,7 @@ final class Template%a% extends Latte\Runtime\Template
 			}
 			echo '</li>
 ';
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 

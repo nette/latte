@@ -8,13 +8,12 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo '<ul>
 ';
-		$iterations = 0;
 		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText(($this->filters->upper)($person)) /* line %d% */;
 			echo '</li>
 ';
-			$iterations++;
+
 		}
 
 		echo '{* comment latte *}

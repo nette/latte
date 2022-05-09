@@ -90,7 +90,6 @@ class ForeachNode extends StatementNode
 	{
 		$content = $this->content->print($context);
 		$iterator = $this->else || ($this->iterator ?? preg_match('#\$iterator\W|\Wget_defined_vars\W#', $content));
-		$content .= '$iterations++;';
 
 		if ($this->else) {
 			$content .= $context->format(
@@ -102,7 +101,6 @@ class ForeachNode extends StatementNode
 		if ($iterator) {
 			return $context->format(
 				<<<'XX'
-					$iterations = 0;
 					foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(%node, $ʟ_it ?? null) as %raw) %line {
 						%raw
 					}
@@ -119,7 +117,6 @@ class ForeachNode extends StatementNode
 		} else {
 			return $context->format(
 				<<<'XX'
-					$iterations = 0;
 					foreach (%node as %raw) %line {
 						%raw
 					}

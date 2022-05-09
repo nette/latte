@@ -7,7 +7,6 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		echo "\n";
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 2 */ {
 			echo '	';
 			if ($iterator->isFirst()) /* line 3 */ {
@@ -23,14 +22,13 @@ final class Template%a% extends Latte\Runtime\Template
 				echo ')';
 			}
 			echo "\n";
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
 		echo '
 
 ';
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 7 */ {
 			echo '	';
 			if ($iterator->isFirst()) /* line 8 */ {
@@ -52,14 +50,13 @@ final class Template%a% extends Latte\Runtime\Template
 				echo ']';
 			}
 			echo "\n";
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
 		echo '
 
 ';
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 12 */ {
 			echo '	';
 			if ($iterator->isFirst(2)) /* line 13 */ {
@@ -75,14 +72,13 @@ final class Template%a% extends Latte\Runtime\Template
 				echo ')';
 			}
 			echo "\n";
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
 		echo '
 
 ';
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 17 */ {
 			echo '	';
 			if ($iterator->isFirst(1)) /* line 18 */ {
@@ -98,14 +94,13 @@ final class Template%a% extends Latte\Runtime\Template
 				echo ')';
 			}
 			echo "\n";
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
 		echo '
 
 ';
-		$iterations = 0;
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 22 */ {
 			if ($iterator->isFirst(0)) /* line 23 */ {
 				echo '	<span>(</span>';
@@ -120,7 +115,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '<span>)</span>
 ';
 			}
-			$iterations++;
+
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 %A%

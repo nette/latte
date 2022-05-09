@@ -91,13 +91,12 @@ var html = ';
 
 <ul>
 ';
-		$iterations = 0;
 		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeXml($person) /* line %d% */;
 			echo '</li>
 ';
-			$iterations++;
+
 		}
 
 		echo '</ul>
