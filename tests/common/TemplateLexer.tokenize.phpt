@@ -13,7 +13,7 @@ function tokenize($s)
 	$lexer = new Latte\Compiler\TemplateLexer;
 	return array_map(
 		fn(Token $token) => [$token->type, $token->text, $token->position->line . ':' . $token->position->column],
-		$lexer->tokenize($s),
+		iterator_to_array($lexer->tokenize($s), false),
 	);
 }
 

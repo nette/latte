@@ -12,9 +12,10 @@ require __DIR__ . '/../bootstrap.php';
 function tokenize($s, $contentType = null)
 {
 	$lexer = new Latte\Compiler\TemplateLexer;
+	$tokens = $lexer->tokenize($s, $contentType ?: ContentType::Html);
 	return array_map(
 		fn(Token $token) => [$token->type, $token->text, $token->position->line . ':' . $token->position->column],
-		$lexer->tokenize($s, $contentType ?: ContentType::Html),
+		iterator_to_array($tokens, false),
 	);
 }
 
