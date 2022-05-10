@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Latte\Compiler\TemplateLexer;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
@@ -51,7 +50,7 @@ $lexer = new TemplateLexer;
 Assert::exception(
 	fn() => $lexer->tokenize('{'),
 	Latte\CompileException::class,
-	'Malformed tag (at column 1)',
+	'Malformed tag contents (at column 1)',
 );
 
 
@@ -59,7 +58,7 @@ $lexer = new TemplateLexer;
 Assert::exception(
 	fn() => $lexer->tokenize("\n{"),
 	Latte\CompileException::class,
-	'Malformed tag (on line 2 at column 1)',
+	'Malformed tag contents (on line 2 at column 1)',
 );
 
 
