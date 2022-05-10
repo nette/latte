@@ -20,13 +20,13 @@ final class TemplateLexer
 	use Latte\Strict;
 
 	/** @internal regular expression for single & double quoted PHP string */
-	public const RE_STRING = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
+	public const ReString = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
 
 	/** @internal HTML tag name for Latte needs (actually is [a-zA-Z][^\s/>]*) */
-	public const RE_TAG_NAME = '[a-zA-Z][a-zA-Z0-9:_.-]*';
+	public const ReTagName = '[a-zA-Z][a-zA-Z0-9:_.-]*';
 
 	/** @internal special HTML attribute prefix */
-	public const N_PREFIX = 'n:';
+	public const NPrefix = 'n:';
 
 	/** @internal states */
 	public const
@@ -130,7 +130,7 @@ final class TemplateLexer
 	private function contextHtmlText(): bool
 	{
 		$matches = $this->match('~
-			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>' . self::RE_TAG_NAME . ')|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
+			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>' . self::ReTagName . ')|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
 			<(?P<htmlcomment>!(?:--(?!>))?|\?)|     ##  begin of <!, <!--, <!DOCTYPE, <?
 			(?P<macro>' . $this->delimiters[0] . ')
 		~xsi');
@@ -204,7 +204,7 @@ final class TemplateLexer
 			$token->value = $matches['value'] ?? '';
 
 			if ($token->value === '"' || $token->value === "'") { // attribute = "'
-				if (str_starts_with($token->name, self::N_PREFIX)) {
+				if (str_starts_with($token->name, self::NPrefix)) {
 					$token->value = '';
 					if ($m = $this->match('~(.*?)' . $matches['value'] . '~xsi')) {
 						$token->value = $m[1];
@@ -285,8 +285,8 @@ final class TemplateLexer
 		$matches = $this->match('~
 			(?P<comment>\*.*?\*' . $this->delimiters[1] . '\n{0,2})|
 			(?P<macro>(?>
-				' . self::RE_STRING . '|
-				\{(?>' . self::RE_STRING . '|[^\'"{}])*+\}|
+				' . self::ReString . '|
+				\{(?>' . self::ReString . '|[^\'"{}])*+\}|
 				[^\'"{}]+
 			)++)
 			' . $this->delimiters[1] . '
@@ -412,8 +412,8 @@ final class TemplateLexer
 		if (!preg_match('~^
 			(?P<closing>/?)
 			(?P<name>=|_(?!_)|[a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\)|)   ## name, /name, but not function( or class:: or namespace\
-			(?P<args>(?:' . self::RE_STRING . '|[^\'"])*?)
-			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::RE_STRING . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
+			(?P<args>(?:' . self::ReString . '|[^\'"])*?)
+			(?P<modifiers>(?<!\|)\|[a-z](?P<modArgs>(?:' . self::ReString . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
 			(?P<empty>/?$)
 		()$~Disx', $tag, $match)) {
 			if (preg_last_error()) {

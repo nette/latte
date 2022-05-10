@@ -29,7 +29,7 @@ Assert::exception(
 	'Tag {var} is not allowed.',
 );
 
-$policy->allowTags($policy::ALL);
+$policy->allowTags($policy::All);
 
 Assert::noError(fn() => $latte->compile('{var $abc}'));
 
@@ -50,7 +50,7 @@ Assert::exception(
 	'Filter |lower is not allowed.',
 );
 
-$policy->allowFilters($policy::ALL);
+$policy->allowFilters($policy::All);
 
 Assert::noError(fn() => $latte->compile('{$abc|lower}'));
 
@@ -74,7 +74,7 @@ Assert::exception(
 	'Function ltrim() is not allowed.',
 );
 
-$policy->allowFunctions($policy::ALL);
+$policy->allowFunctions($policy::All);
 
 Assert::noError(fn() => $latte->compile('{ltrim(abc)}'));
 
@@ -95,7 +95,7 @@ Assert::exception(
 	'Calling DateTime::getTimestamp() is not allowed.',
 );
 
-$policy->allowMethods('dAtetime', $policy::ALL);
+$policy->allowMethods('dAtetime', $policy::All);
 
 Assert::noError(fn() => $latte->renderToString('{=$obj->getTimestamp()}', ['obj' => new DateTime]));
 
@@ -127,6 +127,6 @@ Assert::exception(
 	"Access to 'prop2' property on a stdClass object is not allowed.",
 );
 
-$policy->allowProperties('sTdClass', $policy::ALL);
+$policy->allowProperties('sTdClass', $policy::All);
 
 Assert::noError(fn() => $latte->renderToString('{=$obj->prop2}', ['obj' => (object) ['prop2' => 123]]));

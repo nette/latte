@@ -19,7 +19,8 @@ class SecurityPolicy implements Latte\Policy
 {
 	use Latte\Strict;
 
-	public const ALL = ['*'];
+	public const All = ['*'];
+	public const ALL = self::All;
 
 	/** @var string[] */
 	private array $tags = [];
@@ -68,8 +69,8 @@ class SecurityPolicy implements Latte\Policy
 
 		$policy->allowFunctions(['clamp', 'divisibleBy', 'even', 'first', 'last', 'odd', 'slice']);
 
-		$policy->allowMethods(Latte\Essential\CachingIterator::class, self::ALL);
-		$policy->allowProperties(Latte\Essential\CachingIterator::class, self::ALL);
+		$policy->allowMethods(Latte\Essential\CachingIterator::class, self::All);
+		$policy->allowProperties(Latte\Essential\CachingIterator::class, self::All);
 
 		return $policy;
 	}

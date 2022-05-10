@@ -92,7 +92,7 @@ class MacroSet extends Latte\Extension
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation());
 		}
 
-		if ($attr && $node->prefix === $node::PREFIX_NONE) {
+		if ($attr && $node->prefix === $node::PrefixNone) {
 			$node->empty = true;
 			$node->context[1] = Latte\Compiler\Escaper::HtmlAttribute;
 			$res = $this->compile($node, $attr);

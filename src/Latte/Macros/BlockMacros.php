@@ -62,7 +62,7 @@ class BlockMacros extends MacroSet
 	public function beforeCompile(): void
 	{
 		$this->blocks = [[]];
-		$this->index = Template::LAYER_TOP;
+		$this->index = Template::LayerTop;
 		$this->extends = null;
 		$this->imports = [];
 		$this->placeholders = [];
@@ -73,7 +73,7 @@ class BlockMacros extends MacroSet
 	{
 		$compiler = $this->getCompiler();
 		foreach ($this->placeholders as $key => [$index, $blockName]) {
-			$block = $this->blocks[$index][$blockName] ?? $this->blocks[Template::LAYER_LOCAL][$blockName] ?? null;
+			$block = $this->blocks[$index][$blockName] ?? $this->blocks[Template::LayerLocal][$blockName] ?? null;
 			$compiler->placeholders[$key] = $block && !$block->hasParameters
 				? 'get_defined_vars()'
 				: '[]';
@@ -96,7 +96,7 @@ class BlockMacros extends MacroSet
 		}
 
 		if ($meta) {
-			$compiler->addConstant('BLOCKS', $meta);
+			$compiler->addConstant('Blocks', $meta);
 		}
 
 		return [
@@ -229,7 +229,7 @@ class BlockMacros extends MacroSet
 	public function macroBlock(Tag $node, PhpWriter $writer): string
 	{
 		[$name, $local] = $node->tokenizer->fetchWordWithModifier('local');
-		$layer = $local ? Template::LAYER_LOCAL : null;
+		$layer = $local ? Template::LayerLocal : null;
 		$data = $node->data;
 		$data->name = ltrim((string) $name, '#');
 		$this->checkExtraArgs($node);
@@ -268,7 +268,7 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Block name must start with letter a-z, '$data->name' given.");
 		}
 
-		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode;
+		$extendsCheck = $this->blocks[Template::LayerTop] || count($this->blocks) > 1 || $node->parentNode;
 		$block = $this->addBlock($node, $layer);
 
 		$data->after = function () use ($node, $block) {
@@ -297,7 +297,7 @@ class BlockMacros extends MacroSet
 		$node->validate(true);
 
 		[$name, $local] = $node->tokenizer->fetchWordWithModifier('local');
-		$layer = $local ? Template::LAYER_LOCAL : null;
+		$layer = $local ? Template::LayerLocal : null;
 		$data = $node->data;
 		$data->name = ltrim((string) $name, '#');
 
@@ -333,7 +333,7 @@ class BlockMacros extends MacroSet
 			}
 		}
 
-		$extendsCheck = $this->blocks[Template::LAYER_TOP] || count($this->blocks) > 1 || $node->parentNode;
+		$extendsCheck = $this->blocks[Template::LayerTop] || count($this->blocks) > 1 || $node->parentNode;
 		$block = $this->addBlock($node, $layer);
 		$block->hasParameters = (bool) $params;
 
@@ -399,14 +399,14 @@ class BlockMacros extends MacroSet
 			throw new CompileException("Snippet name must start with letter a-z, '$data->name' given.");
 		}
 
-		if ($node->prefix && $node->prefix !== $node::PREFIX_NONE) {
+		if ($node->prefix && $node->prefix !== $node::PrefixNone) {
 			trigger_error("Use n:snippet instead of {$node->getNotation()}", E_USER_DEPRECATED);
 		}
 
-		$block = $this->addBlock($node, Template::LAYER_SNIPPET);
+		$block = $this->addBlock($node, Template::LayerSnippet);
 
 		$data->after = function () use ($node, $writer, $data, $block) {
-			if ($node->prefix === Tag::PREFIX_NONE) { // n:snippet -> n:inner-snippet
+			if ($node->prefix === Tag::PrefixNone) { // n:snippet -> n:inner-snippet
 				$node->content = $node->innerContent;
 			}
 
@@ -414,13 +414,13 @@ class BlockMacros extends MacroSet
 				'<?php $this->global->snippetDriver->enter(%word, %var);
 				try { ?>%raw<?php } finally { $this->global->snippetDriver->leave(); } ?>',
 				$data->name,
-				SnippetDriver::TYPE_STATIC,
+				SnippetDriver::TypeStatic,
 				preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content),
 			);
 
 			$this->extractMethod($node, $block);
 
-			if ($node->prefix === Tag::PREFIX_NONE) {
+			if ($node->prefix === Tag::PrefixNone) {
 				$node->innerContent = $node->openingCode . $node->content . $node->closingCode;
 				$node->closingCode = $node->openingCode = '<?php ?>';
 			}
@@ -435,7 +435,7 @@ class BlockMacros extends MacroSet
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(%var)) . '\"' ?>",
 				$data->name,
 			);
-			return $writer->write('$this->renderBlock(%var, [], null, %var)', $data->name, Template::LAYER_SNIPPET);
+			return $writer->write('$this->renderBlock(%var, [], null, %var)', $data->name, Template::LayerSnippet);
 		}
 
 		return $writer->write(
@@ -443,7 +443,7 @@ class BlockMacros extends MacroSet
 			. '<?php $this->renderBlock(%0_var, [], null, %1_var) %node.line; ?>'
 			. "\n</div><?php ",
 			$data->name,
-			Template::LAYER_SNIPPET,
+			Template::LayerSnippet,
 		);
 	}
 
@@ -454,7 +454,7 @@ class BlockMacros extends MacroSet
 		$node->closingCode = '<?php } finally { $this->global->snippetDriver->leave(); } ?>';
 
 		if ($node->prefix) {
-			if ($node->prefix === Tag::PREFIX_NONE) { // n:snippet -> n:inner-snippet
+			if ($node->prefix === Tag::PrefixNone) { // n:snippet -> n:inner-snippet
 				$data->after = function () use ($node) {
 					$node->innerContent = $node->openingCode . $node->innerContent . $node->closingCode;
 					$node->closingCode = $node->openingCode = '<?php ?>';
@@ -465,7 +465,7 @@ class BlockMacros extends MacroSet
 				"<?php echo ' {$this->snippetAttribute}=\"' . htmlspecialchars(\$this->global->snippetDriver->getHtmlId(\$ʟ_nm = %word)) . '\"' ?>",
 				$data->name,
 			);
-			return $writer->write('$this->global->snippetDriver->enter($ʟ_nm, %var) %node.line; try {', SnippetDriver::TYPE_DYNAMIC);
+			return $writer->write('$this->global->snippetDriver->enter($ʟ_nm, %var) %node.line; try {', SnippetDriver::TypeDynamic);
 		}
 
 		$node->closingCode .= "\n</div>";
@@ -474,7 +474,7 @@ class BlockMacros extends MacroSet
 			. '<?php echo htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = %word)) ?>"'
 			. '><?php $this->global->snippetDriver->enter($ʟ_nm, %var) %node.line; try {',
 			$data->name,
-			SnippetDriver::TYPE_DYNAMIC,
+			SnippetDriver::TypeDynamic,
 		);
 	}
 
@@ -489,19 +489,19 @@ class BlockMacros extends MacroSet
 		$data->name = (string) $node->tokenizer->fetchWord();
 		$this->checkExtraArgs($node);
 
-		$block = $this->addBlock($node, Template::LAYER_SNIPPET);
+		$block = $this->addBlock($node, Template::LayerSnippet);
 
 		$data->after = function () use ($node, $writer, $data, $block) {
 			$node->content = $writer->write(
 				'<?php $this->global->snippetDriver->enter(%var, %var);
 				try { ?>%raw<?php } finally { $this->global->snippetDriver->leave(); } ?>',
 				$data->name,
-				SnippetDriver::TYPE_AREA,
+				SnippetDriver::TypeArea,
 				preg_replace('#(?<=\n)[ \t]+$#D', '', $node->content),
 			);
 			$this->extractMethod($node, $block);
 		};
-		return $writer->write('$this->renderBlock(%var, [], null, %var) %node.line;', $data->name, Template::LAYER_SNIPPET);
+		return $writer->write('$this->renderBlock(%var, [], null, %var) %node.line;', $data->name, Template::LayerSnippet);
 	}
 
 
@@ -526,9 +526,9 @@ class BlockMacros extends MacroSet
 	private function addBlock(Tag $node, ?string $layer = null): Block
 	{
 		$data = $node->data;
-		if ($layer === Template::LAYER_SNIPPET
+		if ($layer === Template::LayerSnippet
 			? isset($this->blocks[$layer][$data->name])
-			: (isset($this->blocks[Template::LAYER_LOCAL][$data->name]) || isset($this->blocks[$this->index][$data->name]))
+			: (isset($this->blocks[Template::LayerLocal][$data->name]) || isset($this->blocks[$this->index][$data->name]))
 		) {
 			throw new CompileException("Cannot redeclare {$node->name} '{$data->name}'");
 		}

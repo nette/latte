@@ -191,7 +191,7 @@ class Compiler
 		}
 
 		if ($this->contentType !== ContentType::Html) {
-			$this->addConstant('CONTENT_TYPE', $this->contentType);
+			$this->addConstant('ContentType', $this->contentType);
 		}
 
 		$members = [];
@@ -484,8 +484,8 @@ class Compiler
 
 	private function processHtmlAttributeBegin(Token $token): void
 	{
-		if (str_starts_with($token->name, TemplateLexer::N_PREFIX)) {
-			$name = substr($token->name, strlen(TemplateLexer::N_PREFIX));
+		if (str_starts_with($token->name, TemplateLexer::NPrefix)) {
+			$name = substr($token->name, strlen(TemplateLexer::NPrefix));
 			if (isset($this->htmlNode->macroAttrs[$name])) {
 				throw new CompileException("Found multiple attributes {$token->name}.");
 
@@ -571,7 +571,7 @@ class Compiler
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
 			$this->writeCode((string) $node->openingCode, $node->replaced, $isRightmost);
-			if ($node->prefix && $node->prefix !== Tag::PREFIX_TAG) {
+			if ($node->prefix && $node->prefix !== Tag::PrefixTag) {
 				$this->htmlNode->attrCode .= $node->attrCode;
 			}
 		} else {
@@ -606,7 +606,7 @@ class Compiler
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix
-				? "</{$this->htmlNode->name}> for " . TemplateLexer::N_PREFIX . implode(' and ' . TemplateLexer::N_PREFIX, array_keys($this->htmlNode->macroAttrs))
+				? "</{$this->htmlNode->name}> for " . TemplateLexer::NPrefix . implode(' and ' . TemplateLexer::NPrefix, array_keys($this->htmlNode->macroAttrs))
 				: '{/' . $name . ($args ? ' ' . $args : '') . $modifiers . '}';
 			throw new CompileException("Unexpected $name" . ($node ? ', expecting ' . self::printEndTag($node->prefix ? $this->htmlNode : $node) : ''));
 		}
@@ -616,7 +616,7 @@ class Compiler
 			$node->setArgs($args);
 		}
 
-		if ($node->prefix === Tag::PREFIX_NONE) {
+		if ($node->prefix === Tag::PrefixNone) {
 			$parts = explode($node->htmlNode->innerMarker, $node->content);
 			if (count($parts) === 3) { // markers may be destroyed by inner macro
 				$node->innerContent = $parts[1];
@@ -631,7 +631,7 @@ class Compiler
 			$node->content = implode($node->htmlNode->innerMarker, [$parts[0], $node->innerContent, $parts[2]]);
 		}
 
-		if ($node->prefix && $node->prefix !== Tag::PREFIX_TAG) {
+		if ($node->prefix && $node->prefix !== Tag::PrefixTag) {
 			$this->htmlNode->attrCode .= $node->attrCode;
 		}
 
@@ -678,7 +678,7 @@ class Compiler
 		$left = $right = [];
 
 		foreach ($this->macros as $name => $foo) {
-			$attrName = Tag::PREFIX_INNER . "-$name";
+			$attrName = Tag::PrefixInner . "-$name";
 			if (!isset($attrs[$attrName])) {
 				continue;
 			}
@@ -688,11 +688,11 @@ class Compiler
 
 			if ($this->htmlNode->closing) {
 				$left[] = function () use ($name) {
-					$this->closeMacro($name, '', '', false, Tag::PREFIX_INNER);
+					$this->closeMacro($name, '', '', false, Tag::PrefixInner);
 				};
 			} else {
 				array_unshift($right, function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], '', false, Tag::PREFIX_INNER)->empty) {
+					if ($this->openMacro($name, $attrs[$attrName], '', false, Tag::PrefixInner)->empty) {
 						throw new CompileException("Unexpected prefix in n:$attrName.");
 					}
 				});
@@ -713,7 +713,7 @@ class Compiler
 		}
 
 		foreach (array_reverse($this->macros) as $name => $foo) {
-			$attrName = Tag::PREFIX_TAG . "-$name";
+			$attrName = Tag::PrefixTag . "-$name";
 			if (!isset($attrs[$attrName])) {
 				continue;
 			}
@@ -722,12 +722,12 @@ class Compiler
 			}
 
 			$left[] = function () use ($name, $attrs, $attrName) {
-				if ($this->openMacro($name, $attrs[$attrName], '', false, Tag::PREFIX_TAG)->empty) {
+				if ($this->openMacro($name, $attrs[$attrName], '', false, Tag::PrefixTag)->empty) {
 					throw new CompileException("Unexpected prefix in n:$attrName.");
 				}
 			};
 			array_unshift($right, function () use ($name) {
-				$this->closeMacro($name, '', '', false, Tag::PREFIX_TAG);
+				$this->closeMacro($name, '', '', false, Tag::PrefixTag);
 			});
 			unset($attrs[$attrName]);
 		}
@@ -736,11 +736,11 @@ class Compiler
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
 					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', '', false, Tag::PREFIX_NONE);
+						$this->closeMacro($name, '', '', false, Tag::PrefixNone);
 					};
 				} else {
 					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
-						$node = $this->openMacro($name, $attrs[$name], '', false, Tag::PREFIX_NONE);
+						$node = $this->openMacro($name, $attrs[$name], '', false, Tag::PrefixNone);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {
@@ -756,9 +756,9 @@ class Compiler
 
 		if ($attrs) {
 			throw new CompileException(
-				'Unknown attribute ' . TemplateLexer::N_PREFIX
-				. implode(' and ' . TemplateLexer::N_PREFIX, array_keys($attrs))
-				. (($t = Helpers::getSuggestion(array_keys($this->macros), key($attrs))) ? ', did you mean ' . TemplateLexer::N_PREFIX . $t . '?' : ''),
+				'Unknown attribute ' . TemplateLexer::NPrefix
+				. implode(' and ' . TemplateLexer::NPrefix, array_keys($attrs))
+				. (($t = Helpers::getSuggestion(array_keys($this->macros), key($attrs))) ? ', did you mean ' . TemplateLexer::NPrefix . $t . '?' : ''),
 			);
 		}
 
@@ -814,9 +814,9 @@ class Compiler
 			}
 		}
 
-		if ($nPrefix === Tag::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'script')) {
+		if ($nPrefix === Tag::PrefixInner && !strcasecmp($this->htmlNode->name, 'script')) {
 			$context = [$this->contentType, Escaper::HtmlJavaScript];
-		} elseif ($nPrefix === Tag::PREFIX_INNER && !strcasecmp($this->htmlNode->name, 'style')) {
+		} elseif ($nPrefix === Tag::PrefixInner && !strcasecmp($this->htmlNode->name, 'style')) {
 			$context = [$this->contentType, Escaper::HtmlCss];
 		} elseif ($nPrefix) {
 			$context = [$this->contentType, Escaper::HtmlText];
@@ -834,7 +834,7 @@ class Compiler
 		}
 
 		throw new CompileException('Unknown ' . ($nPrefix
-			? 'attribute ' . TemplateLexer::N_PREFIX . ($nPrefix === Tag::PREFIX_NONE ? '' : "$nPrefix-") . $name
+			? 'attribute ' . TemplateLexer::NPrefix . ($nPrefix === Tag::PrefixNone ? '' : "$nPrefix-") . $name
 			: 'tag {' . $name . ($args ? " $args" : '') . '}'
 		));
 	}
@@ -843,7 +843,7 @@ class Compiler
 	private static function printEndTag(HtmlNode|Tag $node): string
 	{
 		return $node instanceof HtmlNode
-			? "</{$node->name}> for " . TemplateLexer::N_PREFIX . implode(' and ' . TemplateLexer::N_PREFIX, array_keys($node->macroAttrs))
+			? "</{$node->name}> for " . TemplateLexer::NPrefix . implode(' and ' . TemplateLexer::NPrefix, array_keys($node->macroAttrs))
 			: "{/{$node->name}}";
 	}
 

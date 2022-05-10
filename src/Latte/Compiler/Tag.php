@@ -22,9 +22,9 @@ final class Tag
 	use Latte\Strict;
 
 	public const
-		PREFIX_INNER = 'inner',
-		PREFIX_TAG = 'tag',
-		PREFIX_NONE = 'none';
+		PrefixInner = 'inner',
+		PrefixTag = 'tag',
+		PrefixNone = 'none';
 
 	public Extension $macro;
 	public string $name;
@@ -91,7 +91,7 @@ final class Tag
 	public function getNotation(): string
 	{
 		return $this->prefix
-			? TemplateLexer::N_PREFIX . ($this->prefix === self::PREFIX_NONE ? '' : $this->prefix . '-') . $this->name
+			? TemplateLexer::NPrefix . ($this->prefix === self::PrefixNone ? '' : $this->prefix . '-') . $this->name
 			: '{' . $this->name . '}';
 	}
 
