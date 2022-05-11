@@ -51,6 +51,12 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<span title={if true}{$a}{$b}{/if}></span>'),
+	Latte\CompileException::class,
+	'Unexpected tag {=$b} (at column 26)',
+);
+
+Assert::exception(
 	fn() => $latte->compile('<a n:href n:href>'),
 	Latte\CompileException::class,
 	'Found multiple attributes n:href (at column 11)',

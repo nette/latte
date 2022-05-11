@@ -275,18 +275,25 @@ final class TemplateParserHtml
 			$this->consumeIgnored();
 			$value = match ($stream->peek()->type) {
 				Token::Quote => $this->parseAttributeQuote(),
-				Token::Html_Name, Token::Latte_TagOpen => $this->parser->parseFragment(
-					fn() => match ($stream->peek()->type) {
-						Token::Html_Name => $this->parser->parseText(),
-						Token::Quote => $this->parseAttributeQuote(),
-						Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
-						Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
-						default => null,
+				Token::Html_Name => $this->parser->parseText(),
+				Token::Latte_TagOpen => $this->parser->parseFragment(
+					function (FragmentNode $fragment) use ($stream) {
+						if ($fragment->children) {
+							return null;
+						}
+						return match ($stream->peek()->type) {
+							Token::Quote => $this->parseAttributeQuote(),
+							Token::Html_Name => $this->parser->parseText(),
+							Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
+							Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
+							default => null,
+						};
 					},
 				),
 				default => null,
 			}
 			?? $stream->throwUnexpectedException();
+
 		} else {
 			$stream->seek($save);
 			$value = null;

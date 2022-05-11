@@ -129,11 +129,8 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  name: Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  |  content: 'attr2'
 	   |  |  |  |  |  |  |  position: 2:1 (offset 11)
-	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  children: array (1)
-	   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
-	   |  |  |  |  |  |  |  |  |  content: 'val'
-	   |  |  |  |  |  |  |  |  |  position: 2:7 (offset 17)
+	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  content: 'val'
 	   |  |  |  |  |  |  |  position: 2:7 (offset 17)
 	   |  |  |  |  |  |  position: 2:1 (offset 11)
 	   |  |  |  |  |  4 => Latte\Compiler\Nodes\TextNode
@@ -185,7 +182,7 @@ Assert::match(<<<'XX'
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
 	   |  |  |  customName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  children: array (6)
+	   |  |  |  |  children: array (7)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  content: ' '
 	   |  |  |  |  |  |  position: 1:4 (offset 3)
@@ -221,18 +218,21 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  |  |  |  content: 'b'
 	   |  |  |  |  |  |  |  |  |  position: 1:69 (offset 68)
 	   |  |  |  |  |  |  |  position: 1:58 (offset 57)
-	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  children: array (3)
-	   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
-	   |  |  |  |  |  |  |  |  |  content: 'c'
-	   |  |  |  |  |  |  |  |  |  position: 1:71 (offset 70)
-	   |  |  |  |  |  |  |  |  1 => FooNode
-	   |  |  |  |  |  |  |  |  |  position: 1:72 (offset 71)
-	   |  |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\TextNode
-	   |  |  |  |  |  |  |  |  |  content: 'd'
-	   |  |  |  |  |  |  |  |  |  position: 1:78 (offset 77)
+	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  content: 'c'
 	   |  |  |  |  |  |  |  position: 1:71 (offset 70)
 	   |  |  |  |  |  |  position: 1:58 (offset 57)
+	   |  |  |  |  |  6 => Latte\Compiler\Nodes\Html\AttributeNode
+	   |  |  |  |  |  |  name: Latte\Compiler\Nodes\FragmentNode
+	   |  |  |  |  |  |  |  children: array (2)
+	   |  |  |  |  |  |  |  |  0 => FooNode
+	   |  |  |  |  |  |  |  |  |  position: 1:72 (offset 71)
+	   |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  |  |  content: 'd'
+	   |  |  |  |  |  |  |  |  |  position: 1:78 (offset 77)
+	   |  |  |  |  |  |  |  position: 1:72 (offset 71)
+	   |  |  |  |  |  |  value: null
+	   |  |  |  |  |  |  position: 1:72 (offset 71)
 	   |  |  |  |  position: 1:4 (offset 3)
 	   |  |  |  selfClosing: false
 	   |  |  |  content: null

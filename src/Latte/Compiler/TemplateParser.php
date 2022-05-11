@@ -87,7 +87,7 @@ final class TemplateParser
 		$this->lastResolver = $resolver;
 		try {
 			while (!$this->stream->peek()->isEnd()) {
-				if ($node = $resolver()) {
+				if ($node = $resolver($res)) {
 					$res->append($node);
 					$after && $after($res);
 				} else {
