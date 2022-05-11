@@ -26,6 +26,7 @@ $params['url7'] = 'sms:+420123456789';
 
 Assert::match('
 <a href="" src="" action="" formaction="" title="javascript:alert(1)"></a>
+<a href=""></a>
 <a href="javascript:alert(1)"></a>
 <a href="http://nette.org?val=ok"></a>
 <a data="javascript:alert(1)"></a>
@@ -42,6 +43,7 @@ Assert::match('
 ', $latte->renderToString(
 	'
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
+<a {if true}href={$url1}{/if}></a>
 <a href={$url1|nocheck}></a>
 <a href="http://nette.org?val={$url4}"></a>
 <a data={$url1}></a>
