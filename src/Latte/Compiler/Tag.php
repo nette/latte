@@ -33,11 +33,12 @@ final class Tag
 
 	public MacroTokens $parser;
 	public int $outputMode = self::OutputNone;
+	public string $args = '';
 
 
 	public function __construct(
 		public /*readonly*/ string $name,
-		public /*readonly*/ string $args,
+		array $tokens,
 		public /*readonly*/ bool $void = false,
 		public /*readonly*/ bool $closing = false,
 		public /*readonly*/ int $location = 0,
@@ -47,6 +48,11 @@ final class Tag
 		public /*readonly*/ ?Position $position = null,
 		public /*readonly*/ ?\stdClass $data = null,
 	) {
+		$args = '';
+		foreach ($tokens as $token) {
+			$args .= $token->text;
+		}
+
 		$this->setArgs($args);
 		$this->data ??= new \stdClass;
 	}

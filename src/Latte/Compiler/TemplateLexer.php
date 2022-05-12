@@ -42,6 +42,7 @@ final class TemplateLexer
 
 	/** @var string[] */
 	private array $delimiters;
+	private TagLexer $tagLexer;
 
 	/** @var array<array{name: string, args: mixed[]}> */
 	private array $states;
@@ -58,6 +59,7 @@ final class TemplateLexer
 		$this->states = [];
 		$this->setContentType($contentType);
 		$this->setSyntax(null);
+		$this->tagLexer = new TagLexer;
 
 		do {
 			$state = $this->states[0];
@@ -100,12 +102,12 @@ final class TemplateLexer
 		yield from $this->match('~
 			(?<Slash>/)?
 			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))?   # name, /name, but not function( or class:: or namespace\
-			(?<Latte_Args>(?>
-				' . self::ReString . '|
-				\{(?>' . self::ReString . '|[^\'"{}])*+\}|
-				[^\'"{}]+?
-			)+?(?<!/))?
-			(?<Slash_>/)?
+		~xsiAu');
+
+		yield from $this->tagLexer->tokenizePartially($this->input, $this->position);
+
+		yield from $this->match('~
+			(?<Slash>/)?
 			(?<Latte_TagClose>' . $this->delimiters[1] . ')
 			(?<Newline>[ \t]*\R)?
 		~xsiAu');
@@ -318,7 +320,6 @@ final class TemplateLexer
 
 		foreach ($matches as $k => $v) {
 			if ($v !== null && !\is_int($k)) {
-				$k = rtrim($k, '_');
 				yield new Token(\constant(Token::class . '::' . $k), $v, $this->position);
 				$this->position = $this->position->advance($v);
 			}

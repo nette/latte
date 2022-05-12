@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
+use Latte\CompileException;
+
 
 /**
  * PHP helpers.
  * @internal
  */
-class PhpHelpers
+final class PhpHelpers
 {
 	/**
 	 * Optimizes code readability.
@@ -187,5 +189,75 @@ class PhpHelpers
 		}
 
 		return $res;
+	}
+
+
+	public static function decodeNumber(string $str, &$base = null): int|float|null
+	{
+		$str = str_replace('_', '', $str);
+
+		if ($str[0] !== '0' || $str === '0') {
+			$base = 10;
+			return $str + 0;
+		} elseif ($str[1] === 'x' || $str[1] === 'X') {
+			$base = 16;
+			return hexdec($str);
+		} elseif ($str[1] === 'b' || $str[1] === 'B') {
+			$base = 2;
+			return bindec($str);
+		} elseif (strpbrk($str, '89')) {
+			return null;
+		} else {
+			$base = 8;
+			return octdec($str);
+		}
+	}
+
+
+	public static function decodeEscapeSequences(string $str, ?string $quote): string
+	{
+		if ($quote !== null) {
+			$str = str_replace('\\' . $quote, $quote, $str);
+		}
+
+		return preg_replace_callback(
+			'~\\\\([\\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u\{([0-9a-fA-F]+)\})~',
+			function ($matches) {
+				$ch = $matches[1];
+				$replacements = [
+					'\\' => '\\',
+					'$' => '$',
+					'n' => "\n",
+					'r' => "\r",
+					't' => "\t",
+					'f' => "\f",
+					'v' => "\v",
+					'e' => "\x1B",
+				];
+				if (isset($replacements[$ch])) {
+					return $replacements[$ch];
+				} elseif ($ch[0] === 'x' || $ch[0] === 'X') {
+					return chr(hexdec(substr($ch, 1)));
+				} elseif ($ch[0] === 'u') {
+					return self::codePointToUtf8(hexdec($matches[2]));
+				} else {
+					return chr(octdec($ch));
+				}
+			},
+			$str,
+		);
+	}
+
+
+	private static function codePointToUtf8(int $num): string
+	{
+		return match (true) {
+			$num <= 0x7F => chr($num),
+			$num <= 0x7FF => chr(($num >> 6) + 0xC0) . chr(($num & 0x3F) + 0x80),
+			$num <= 0xFFFF => chr(($num >> 12) + 0xE0) . chr((($num >> 6) & 0x3F) + 0x80) . chr(($num & 0x3F) + 0x80),
+			$num <= 0x1FFFFF => chr(($num >> 18) + 0xF0) . chr((($num >> 12) & 0x3F) + 0x80)
+				. chr((($num >> 6) & 0x3F) + 0x80) . chr(($num & 0x3F) + 0x80),
+			default => throw new CompileException('Invalid UTF-8 codepoint escape sequence: Codepoint too large'),
+		};
 	}
 }

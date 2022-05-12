@@ -134,6 +134,8 @@ final class TokenStream
 			}
 		} while (true);
 
+		$expected = array_map(fn($item) => is_int($item) ? Token::NAMES[$item] : $item, $expected);
+
 		throw new CompileException(
 			'Unexpected '
 			. ($s === null

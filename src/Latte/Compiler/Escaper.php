@@ -180,6 +180,15 @@ final class Escaper
 	}
 
 
+	public function sanitize(string $str): string
+	{
+		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
+			$str = 'LR\Filters::safeUrl(' . $str . ')';
+		}
+		return $str;
+	}
+
+
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
 		$table = [

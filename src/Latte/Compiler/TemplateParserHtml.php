@@ -305,6 +305,7 @@ final class TemplateParserHtml
 		$stream = $this->parser->getStream();
 		$nameToken = $stream->consume(Token::Html_Name);
 		$save = $stream->getIndex();
+		$pos = $stream->peek()->position;
 		$name = substr($nameToken->text, strlen(TemplateLexer::NPrefix));
 		if ($this->parser->peekTag() !== $this->element->data->tag) {
 			throw new CompileException("Attribute n:$name must not appear inside {tags}", $nameToken->position);
@@ -318,18 +319,22 @@ final class TemplateParserHtml
 			$this->consumeIgnored();
 			if ($stream->tryConsume(Token::Quote)) {
 				$valueToken = $stream->tryConsume(Token::Text);
+				$pos = $stream->peek()->position;
 				$stream->consume(Token::Quote);
 			} else {
 				$valueToken = $stream->consume(Token::Html_Name);
 			}
+			if ($valueToken) {
+				$tokens = (new TagLexer)->tokenize($valueToken->text, $valueToken->position);
+			}
 		} else {
-			$valueToken = null;
 			$stream->seek($save);
 		}
+		$tokens ??= [new Token(Token::End, '', $pos)];
 
 		$this->element->nAttributes[$name] = new Tag(
 			name: preg_replace('~(inner-|tag-|)~', '', $name),
-			args: $valueToken?->text ?? '',
+			tokens: $tokens,
 			position: $nameToken->position,
 			prefix: match (true) {
 				str_starts_with($name, 'inner-') => Tag::PrefixInner,

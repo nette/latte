@@ -35,7 +35,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile("{var \n'abc}"),
 	Latte\CompileException::class,
-	"Unexpected 'var \n'abc}', expecting '}' (at column 2)",
+	'Unterminated string (on line 2 at column 1)',
 );
 
 Assert::exception(
@@ -182,7 +182,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{=`whoami`}'),
 	Latte\CompileException::class,
-	'Backtick operator is forbidden in Latte.',
+	"Unexpected '`' (at column 3)",
 );
 
 Assert::exception(

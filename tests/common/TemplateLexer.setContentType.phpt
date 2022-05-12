@@ -35,7 +35,8 @@ Assert::same([
 Assert::same([
 	[Token::Latte_TagOpen, '{', '1:1'],
 	[Token::Latte_Name, 'contentType', '1:2'],
-	[Token::Latte_Args, ' html', '1:13'],
+	[Token::Php_Whitespace, ' ', '1:13'],
+	[Token::Php_Identifier, 'html', '1:14'],
 	[Token::Latte_TagClose, '}', '1:18'],
 	[Token::Html_TagOpen, '<', '1:19'],
 	[Token::Html_Name, 'script', '1:20'],
