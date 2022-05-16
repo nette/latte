@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
+use Latte\Compiler\Escaper;
 use Latte\Engine;
 use Latte\Policy;
 
@@ -350,7 +351,7 @@ class Template
 		} elseif ($mod instanceof \Closure) {
 			echo $mod($this->capture($function), $contentType);
 
-		} elseif ($filter = Filters::getConvertor($contentType, $mod)) {
+		} elseif ($filter = Escaper::getConvertor($contentType, $mod)) {
 			echo $filter($this->capture($function));
 
 		} else {

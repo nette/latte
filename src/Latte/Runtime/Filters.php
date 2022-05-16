@@ -192,53 +192,12 @@ class Filters
 		$source = $info->contentType ?: ContentType::Text;
 		if ($source === $dest) {
 			return $s;
-		} elseif ($conv = self::getConvertor($source, $dest)) {
+		} elseif ($conv = Latte\Compiler\Escaper::getConvertor($source, $dest)) {
 			$info->contentType = $dest;
 			return $conv($s);
 		} else {
 			throw new RuntimeException('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest));
 		}
-	}
-
-
-	public static function getConvertor(string $source, string $dest): ?callable
-	{
-		$table = [
-			ContentType::Text => [
-				'html' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrJs' => 'escapeHtmlAttr',
-				'htmlAttrCss' => 'escapeHtmlAttr',
-				'htmlAttrUrl' => 'escapeHtmlAttr',
-				'htmlComment' => 'escapeHtmlComment',
-				'xml' => 'escapeXml',
-				'xmlAttr' => 'escapeXml',
-			],
-			ContentType::JavaScript => [
-				'html' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrJs' => 'escapeHtmlAttr',
-				'htmlJs' => 'escapeHtmlRawText',
-				'htmlComment' => 'escapeHtmlComment',
-			],
-			ContentType::Css => [
-				'html' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrCss' => 'escapeHtmlAttr',
-				'htmlCss' => 'escapeHtmlRawText',
-				'htmlComment' => 'escapeHtmlComment',
-			],
-			ContentType::Html => [
-				'htmlAttr' => 'escapeHtmlAttrConv',
-				'htmlAttrJs' => 'escapeHtmlAttrConv',
-				'htmlAttrCss' => 'escapeHtmlAttrConv',
-				'htmlAttrUrl' => 'escapeHtmlAttrConv',
-				'htmlComment' => 'escapeHtmlComment',
-			],
-		];
-		return isset($table[$source][$dest])
-			? [self::class, $table[$source][$dest]]
-			: null;
 	}
 
 
