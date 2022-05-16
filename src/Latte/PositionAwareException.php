@@ -21,10 +21,9 @@ trait PositionAwareException
 	private string $origMessage;
 
 
-	public function setSource(string $code, ?int $line = null, ?string $name = null): self
+	public function setSource(string $code, ?string $name = null): self
 	{
 		$this->sourceCode = $code;
-		$this->position ??= new Position($line, 0);
 		$this->sourceName = $name;
 		$this->generateMessage();
 		return $this;

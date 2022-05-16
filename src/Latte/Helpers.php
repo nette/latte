@@ -79,4 +79,42 @@ class Helpers
 			return new \ReflectionFunction($callable);
 		}
 	}
+
+
+	public static function sortBeforeAfter(array $list): array
+	{
+		foreach ($list as $name => $info) {
+			if (!$info instanceof \stdClass || !($info->before ?? $info->after ?? null)) {
+				continue;
+			}
+
+			unset($list[$name]);
+			$names = array_keys($list);
+			$best = null;
+
+			foreach ((array) $info->before as $target) {
+				if ($target === '*') {
+					$best = 0;
+				} elseif (isset($list[$target])) {
+					$pos = array_search($target, $names, true);
+					$best = min($pos, $best ?? $pos);
+				}
+			}
+
+			foreach ((array) ($info->after ?? null) as $target) {
+				if ($target === '*') {
+					$best = count($names);
+				} elseif (isset($list[$target])) {
+					$pos = array_search($target, $names, true);
+					$best = max($pos + 1, $best);
+				}
+			}
+
+			$list = array_slice($list, 0, $best, true)
+				+ [$name => $info]
+				+ array_slice($list, $best, null, true);
+		}
+
+		return $list;
+	}
 }

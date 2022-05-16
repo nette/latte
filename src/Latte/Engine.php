@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Latte;
 
+use Latte\Compiler\Nodes\TemplateNode;
+
 
 /**
  * Templating engine Latte.
@@ -123,23 +125,11 @@ class Engine
 			throw new \LogicException('In sandboxed mode you need to set a security policy.');
 		}
 
-		$lexer = new Compiler\TemplateLexer;
-		$compiler = new Compiler\TemplateGenerator;
-
-		Macros\CoreMacros::install($compiler);
-		Macros\BlockMacros::install($compiler);
-
 		$source = $this->getLoader()->getContent($name);
-		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
 
 		try {
-			$tokens = $lexer->tokenize($source, $this->contentType);
-
-			$code = $compiler
-				->setContentType($this->contentType)
-				->setFunctions(array_keys((array) $this->functions))
-				->setPolicy($this->sandboxed ? $this->policy : null)
-				->compile($tokens, $this->getTemplateClass($name), $comment, $this->strictTypes);
+			$node = $this->parse($source);
+			$code = $this->generate($node, $name);
 
 		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException) {
@@ -148,10 +138,46 @@ class Engine
 					: "Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			throw $e->setSource($source, $compiler->getLine(), $name);
+			throw $e->setSource($source, $name);
 		}
 
 		return $code;
+	}
+
+
+	/**
+	 * Parses template to AST node.
+	 */
+	public function parse(string $source): TemplateNode
+	{
+		$lexer = new Compiler\TemplateLexer;
+		$parser = new Compiler\TemplateParser;
+
+		foreach ($this->extensions as $extension) {
+			$extension->beforeCompile();
+			$parser->addTags($extension->getTags());
+		}
+
+		return $parser
+			->setContentType($this->contentType)
+			->setPolicy($this->sandboxed ? $this->policy : null)
+			->parse($source, $lexer);
+	}
+
+
+	/**
+	 * Generates template PHP code.
+	 */
+	public function generate(TemplateNode $node, string $name): string
+	{
+		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
+		$generator = new Compiler\TemplateGenerator;
+		return $generator->generate(
+			$node,
+			$this->getTemplateClass($name),
+			$comment,
+			$this->strictTypes,
+		);
 	}
 
 
@@ -178,7 +204,7 @@ class Engine
 			$code = $this->compile($name);
 			if (@eval(substr($code, 5)) === false) { // @ is escalated to exception, substr removes <?php
 				throw (new CompileException('Error in template: ' . error_get_last()['message']))
-					->setSource($code, error_get_last()['line'], "$name (compiled)");
+					->setSource($code, "$name (compiled)");
 			}
 
 			return;

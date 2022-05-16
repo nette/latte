@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte;
+use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\ContentType;
 use Latte\Runtime\Filters;
 
 
@@ -47,6 +49,100 @@ final class Escaper
 		XmlBogusTag = 'Bogus',
 		XmlTag = 'Tag',
 		XmlAttribute = 'Attr';
+
+	private string $state = '';
+	private string $tag = '';
+
+
+	public function __construct(
+		private string $contentType,
+	) {
+	}
+
+
+	public function getContentType(): string
+	{
+		return $this->contentType;
+	}
+
+
+	public function export(): string
+	{
+		return $this->contentType . $this->state;
+	}
+
+
+	public function enterContentType(string $type): void
+	{
+		$this->contentType = $type;
+		$this->state = '';
+	}
+
+
+	public function enterHtmlText(?ElementNode $node): void
+	{
+		$this->state = self::HtmlText;
+		if ($this->contentType === ContentType::Html && $node) {
+			$name = strtolower($node->name);
+			if (
+				($name === 'script' || $name === 'style')
+				&& is_string($attr = $node->getAttribute('type') ?? 'css')
+				&& preg_match('#(java|j|ecma|live)script|module|json|css|plain#i', $attr)
+			) {
+				$this->state = $name === 'script'
+					? self::HtmlJavaScript
+					: self::HtmlCss;
+			}
+		}
+	}
+
+
+	public function enterHtmlTag(string $name): void
+	{
+		$this->state = self::HtmlTag;
+		$this->tag = strtolower($name);
+	}
+
+
+	public function enterHtmlAttribute(string $name, ?string $quote): void
+	{
+		if ($this->contentType !== ContentType::Html) {
+			$this->state = $quote ? self::XmlAttribute : self::XmlTag;
+			return;
+		}
+
+		$name = strtolower($name);
+		if ($quote) {
+			$this->state = self::HtmlAttribute;
+			if (str_starts_with($name, 'on')) {
+				$this->state = self::HtmlAttributeJavaScript;
+			} elseif ($name === 'style') {
+				$this->state = self::HtmlAttributeCss;
+			}
+		} else {
+			$this->state = self::HtmlTag;
+		}
+
+		if ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
+			|| ($name === 'data' && $this->tag === 'object'))
+		) {
+			$this->state = $this->state === self::HtmlTag
+				? self::HtmlAttributeUnquotedUrl
+				: self::HtmlAttributeUrl;
+		}
+	}
+
+
+	public function enterHtmlBogusTag(): void
+	{
+		$this->state = self::HtmlBogusTag;
+	}
+
+
+	public function enterHtmlComment(): void
+	{
+		$this->state = self::HtmlComment;
+	}
 
 
 	public static function getConvertor(string $source, string $dest): ?callable

@@ -11,7 +11,7 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Extension;
+use Latte\Compiler\Nodes\Html\ElementNode;
 
 
 /**
@@ -24,23 +24,15 @@ final class Tag
 	public const
 		PrefixInner = 'inner',
 		PrefixTag = 'tag',
-		PrefixNone = 'none';
+		PrefixNone = '';
 
-	public Extension $macro;
-	public ?bool $replaced = null;
+	public const
+		OutputNone = 0,
+		OutputKeepIndentation = 1,
+		OutputRemoveIndentation = 2;
+
 	public MacroTokens $tokenizer;
-	public ?string $openingCode = null;
-	public ?string $closingCode = null;
-	public ?string $attrCode = null;
-	public ?string $content = null;
-	public string $innerContent = '';
-	public \stdClass $data;
-
-	/** @var array{string, mixed} [contentType, context] */
-	public ?array $context = null;
-
-	/** @var array{string, bool}|null */
-	public ?array $saved = null;
+	public int $outputMode = self::OutputNone;
 
 
 	public function __construct(
@@ -50,13 +42,26 @@ final class Tag
 		public /*readonly*/ bool $void = false,
 		public /*readonly*/ bool $closing = false,
 		public /*readonly*/ int $location = 0,
-		public /*readonly*/ ?HtmlNode $htmlElement = null,
+		public /*readonly*/ ?ElementNode $htmlElement = null,
 		public ?self $parent = null,
 		public /*readonly*/ ?string $prefix = null,
 		public /*readonly*/ ?Position $position = null,
+		public /*readonly*/ ?\stdClass $data = null,
 	) {
-		$this->data = new \stdClass;
 		$this->setArgs($args);
+		$this->data ??= new \stdClass;
+	}
+
+
+	public function isInHead(): bool
+	{
+		return $this->location === TemplateParser::LocationHead && !$this->parent;
+	}
+
+
+	public function isInText(): bool
+	{
+		return $this->location <= TemplateParser::LocationText;
 	}
 
 
@@ -68,16 +73,23 @@ final class Tag
 
 	public function setArgs(string $args): void
 	{
-		$this->args = $args;
-		$this->tokenizer = new MacroTokens($args);
+		$this->args = trim($args);
+		$this->tokenizer = new MacroTokens($this->args);
 	}
 
 
-	public function getNotation(): string
+	public function getNotation(bool $withArgs = false): string
 	{
+		$args = $withArgs ? $this->args : '';
 		return $this->isNAttribute()
-			? TemplateLexer::NPrefix . ($this->prefix === self::PrefixNone ? '' : $this->prefix . '-') . $this->name
-			: '{' . $this->name . '}';
+			? TemplateLexer::NPrefix . ($this->prefix ? $this->prefix . '-' : '')
+				. $this->name
+				. ($args === '' ? '' : '="' . $args . '"')
+			: '{'
+				. ($this->closing ? '/' : '')
+				. rtrim($this->name
+				. ($args === '' ? '' : ' ' . $args))
+			. '}';
 	}
 
 
@@ -117,5 +129,12 @@ final class Tag
 		} elseif ($arguments === false && $this->args !== '') {
 			throw new CompileException('Arguments are not allowed in ' . $this->getNotation(), $this->position);
 		}
+	}
+
+
+	public function replaceNAttribute(Node $node): void
+	{
+		$index = array_search($this->data->node, $this->htmlElement->attributes->children, true);
+		$this->htmlElement->attributes->children[$index] = $node;
 	}
 }

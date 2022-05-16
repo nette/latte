@@ -13,74 +13,61 @@ function tokenize($s, $contentType = null)
 {
 	$lexer = new Latte\Compiler\TemplateLexer;
 	return array_map(
-		fn(Token $token) => [$token->type, $token->text],
+		fn(Token $token) => [$token->type, $token->text, $token->position->line . ':' . $token->position->column],
 		$lexer->tokenize($s, $contentType ?: ContentType::Html),
 	);
 }
 
 
 Assert::same([
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
-	['text', ' <div /> '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
+	['htmlTagBegin', '<script', '1:1'],
+	['htmlTagEnd', '>', '1:8'],
+	['text', ' <div /> ', '1:9'],
+	['htmlTagBegin', '</script', '1:18'],
+	['htmlTagEnd', '>', '1:26'],
+	['end', '', '1:27'],
 ], tokenize('<script> <div /> </script>', ContentType::Html));
 
 Assert::same([
-	['macroTag', '{contentType html}'],
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
-	['text', ' <div /> '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
+	['macroTag', '{contentType html}', '1:1'],
+	['htmlTagBegin', '<script', '1:19'],
+	['htmlTagEnd', '>', '1:26'],
+	['text', ' <div /> ', '1:27'],
+	['htmlTagBegin', '</script', '1:36'],
+	['htmlTagEnd', '>', '1:44'],
+	['end', '', '1:45'],
 ], tokenize('{contentType html}<script> <div /> </script>'));
 
 Assert::same([
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
-	['text', ' '],
-	['htmlTagBegin', '<div'],
-	['htmlTagEnd', ' />'],
-	['text', ' '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
+	['htmlTagBegin', '<script', '1:1'],
+	['htmlTagEnd', '>', '1:8'],
+	['text', ' ', '1:9'],
+	['htmlTagBegin', '<div', '1:10'],
+	['text', ' ', '1:14'],
+	['htmlTagEnd', '/>', '1:15'],
+	['text', ' ', '1:17'],
+	['htmlTagBegin', '</script', '1:18'],
+	['htmlTagEnd', '>', '1:26'],
+	['end', '', '1:27'],
 ], tokenize('<script> <div /> </script>', ContentType::Xml));
 
 Assert::same([
-	['macroTag', '{contentType xml}'],
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', '>'],
-	['text', ' '],
-	['htmlTagBegin', '<div'],
-	['htmlTagEnd', ' />'],
-	['text', ' '],
-	['htmlTagBegin', '</script'],
-	['htmlTagEnd', '>'],
-], tokenize('{contentType xml}<script> <div /> </script>'));
-
-Assert::same([
-	['text', '<script> <div /> </script>'],
+	['text', '<script> <div /> </script>', '1:1'],
+	['end', '', '1:27'],
 ], tokenize('<script> <div /> </script>', ContentType::Text));
 
 Assert::same([
-	['macroTag', '{contentType text}'],
-	['text', '<script> <div /> </script>'],
-], tokenize('{contentType text}<script> <div /> </script>'));
-
-Assert::same([
-	['text', '<script> <div /> </script>'],
+	['text', '<script> <div /> </script>', '1:1'],
+	['end', '', '1:27'],
 ], tokenize('<script> <div /> </script>', ContentType::ICal));
 
 Assert::same([
-	['macroTag', '{contentType ical}'],
-	['text', '<script> <div /> </script>'],
-], tokenize('{contentType ical}<script> <div /> </script>'));
-
-Assert::same([
-	['htmlTagBegin', '<script'],
-	['htmlTagEnd', ' />'],
-	['text', ' '],
-	['htmlTagBegin', '<div'],
-	['htmlTagEnd', ' />'],
+	['htmlTagBegin', '<script', '1:1'],
+	['text', ' ', '1:8'],
+	['htmlTagEnd', '/>', '1:9'],
+	['text', ' ', '1:11'],
+	['htmlTagBegin', '<div', '1:12'],
+	['text', ' ', '1:16'],
+	['htmlTagEnd', '/>', '1:17'],
+	['end', '', '1:19'],
 ], tokenize('<script /> <div />', ContentType::Html));

@@ -29,7 +29,7 @@ Assert::match('
 <a href="javascript:alert(1)"></a>
 <a href="http://nette.org?val=ok"></a>
 <a data="javascript:alert(1)"></a>
-<OBJECT DATA=""></object>
+<OBJECT DATA=""></OBJECT>
 <a HREF=""></a>
 <a href=""></a>
 <a href=ok>ok</a>

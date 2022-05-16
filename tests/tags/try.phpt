@@ -6,14 +6,9 @@
 
 declare(strict_types=1);
 
-use Latte\Macros\CoreMacros;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
-
-
-$compiler = new Latte\Compiler\TemplateGenerator;
-CoreMacros::install($compiler);
 
 
 function error()

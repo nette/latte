@@ -39,12 +39,6 @@ Assert::same(
 	$compiler->expandMacro('ifset', 'footer, header, main')->openingCode,
 );
 
-Assert::exception(
-	fn() => $compiler->expandMacro('ifset', '$var'),
-	Latte\CompileException::class,
-	'Unknown tag {ifset $var}',
-);
-
 
 // {elseifset ... }
 Assert::same('<?php } elseif ($this->hasBlock("block")) { ?>', $compiler->expandMacro('elseifset', '#block')->openingCode);
