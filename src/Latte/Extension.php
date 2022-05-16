@@ -74,6 +74,15 @@ abstract class Extension
 
 
 	/**
+	 * Returns a value to distinguish multiple versions of the template.
+	 */
+	public function getCacheKey(Engine $engine): mixed
+	{
+		return null;
+	}
+
+
+	/**
 	 * Initializes before template is rendered.
 	 */
 	public function beforeRender(Engine $engine): void

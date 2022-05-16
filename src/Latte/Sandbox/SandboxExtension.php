@@ -60,6 +60,12 @@ final class SandboxExtension extends Latte\Extension
 	}
 
 
+	public function getCacheKey(Engine $engine): mixed
+	{
+		return (bool) $engine->getPolicy(effective: true);
+	}
+
+
 	public function processPass(TemplateNode $node): void
 	{
 		(new NodeTraverser)->traverse($node, leave: \Closure::fromCallable([$this, 'sandboxVisitor']));

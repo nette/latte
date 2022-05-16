@@ -301,14 +301,17 @@ class Engine
 
 	public function getTemplateClass(string $name): string
 	{
-		$key = serialize([
+		$key = [
 			$this->getLoader()->getUniqueId($name),
 			self::VERSION,
 			array_keys((array) $this->functions),
-			$this->sandboxed,
 			$this->contentType,
-		]);
-		return 'Template' . substr(md5($key), 0, 10);
+		];
+		foreach ($this->extensions as $extension) {
+			$key[] = [$extension::class, $extension->getCacheKey($this)];
+		}
+
+		return 'Template' . substr(md5(serialize($key)), 0, 10);
 	}
 
 
