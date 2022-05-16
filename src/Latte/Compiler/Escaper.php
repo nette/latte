@@ -27,7 +27,8 @@ final class Escaper
 		Text = 'text',
 		JavaScript = 'js',
 		Css = 'css',
-		ICal = 'ical';
+		ICal = 'ical',
+		Url = 'url';
 
 	public const
 		Html = 'html',
@@ -37,11 +38,7 @@ final class Escaper
 		HtmlCss = 'Css',
 		HtmlJavaScript = 'Js',
 		HtmlTag = 'Tag',
-		HtmlAttribute = 'Attr',
-		HtmlAttributeJavaScript = 'AttrJs',
-		HtmlAttributeCss = 'AttrCss',
-		HtmlAttributeUrl = 'AttrUrl',
-		HtmlAttributeUnquotedUrl = 'AttrUnquotedUrl';
+		HtmlAttribute = 'Attr';
 
 	public const
 		Xml = 'xml',
@@ -53,6 +50,8 @@ final class Escaper
 
 	private string $state = '';
 	private string $tag = '';
+	private string $quote = '';
+	private string $subType = '';
 
 
 	public function __construct(
@@ -75,7 +74,7 @@ final class Escaper
 
 	public function export(): string
 	{
-		return $this->contentType . $this->state;
+		return $this->contentType . $this->state . ucfirst($this->subType);
 	}
 
 
@@ -111,31 +110,29 @@ final class Escaper
 	}
 
 
-	public function enterHtmlAttribute(string $name, ?string $quote): void
+	public function enterHtmlAttribute(?string $name, ?string $quote): void
 	{
-		if ($this->contentType !== ContentType::Html) {
-			$this->state = $quote ? self::XmlAttribute : self::XmlTag;
-			return;
+		$this->state = self::HtmlTag;
+
+		if ($this->contentType === ContentType::Html && is_string($name)) {
+			$name = strtolower($name);
+			if (str_starts_with($name, 'on')) {
+				$this->state = self::HtmlAttribute;
+				$this->subType = self::JavaScript;
+			} elseif ($name === 'style') {
+				$this->state = self::HtmlAttribute;
+				$this->subType = self::Css;
+			} elseif ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
+				|| ($name === 'data' && $this->tag === 'object'))
+			) {
+				$this->state = self::HtmlAttribute;
+				$this->subType = self::Url;
+			}
 		}
 
-		$name = strtolower($name);
 		if ($quote) {
 			$this->state = self::HtmlAttribute;
-			if (str_starts_with($name, 'on')) {
-				$this->state = self::HtmlAttributeJavaScript;
-			} elseif ($name === 'style') {
-				$this->state = self::HtmlAttributeCss;
-			}
-		} else {
-			$this->state = self::HtmlTag;
-		}
-
-		if ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
-			|| ($name === 'data' && $this->tag === 'object'))
-		) {
-			$this->state = $this->state === self::HtmlTag
-				? self::HtmlAttributeUnquotedUrl
-				: self::HtmlAttributeUrl;
+			$this->quote = $quote;
 		}
 	}
 
@@ -154,15 +151,17 @@ final class Escaper
 
 	public function escape(MacroTokens $tokens): MacroTokens
 	{
+		[$lq, $rq] = $this->state === self::HtmlAttribute && !$this->quote ? ["'\"' . ", " . '\"'"] : ['', ''];
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
 				self::HtmlText => $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')'),
-				self::HtmlTag,
-				self::HtmlAttributeUnquotedUrl => $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')'),
-				self::HtmlAttribute,
-				self::HtmlAttributeUrl => $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')'),
-				self::HtmlAttributeJavaScript => $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))'),
-				self::HtmlAttributeCss => $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))'),
+				self::HtmlTag => $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')'),
+				self::HtmlAttribute => match ($this->subType) {
+					'',
+					self::Url => $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(')->append(')' . $rq),
+					self::JavaScript => $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))' . $rq),
+					self::Css => $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))' . $rq),
+				},
 				self::HtmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
 				self::HtmlBogusTag => $tokens->prepend('LR\Filters::escapeHtml(')->append(')'),
 				self::HtmlJavaScript => $tokens->prepend('LR\Filters::escapeJs(')->append(')'),
@@ -171,8 +170,8 @@ final class Escaper
 			},
 			ContentType::Xml => match ($this->state) {
 				self::XmlText,
-				self::XmlAttribute,
 				self::XmlBogusTag => $tokens->prepend('LR\Filters::escapeXml(')->append(')'),
+				self::XmlAttribute => $tokens->prepend($lq . 'LR\Filters::escapeXml(')->append(')' . $rq),
 				self::XmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
 				self::XmlTag => $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')'),
 				default => throw new CompileException("Unknown context $this->contentType, $this->state."),

@@ -32,7 +32,7 @@ Assert::match('
 <OBJECT DATA=""></OBJECT>
 <a HREF=""></a>
 <a href=""></a>
-<a href=ok>ok</a>
+<a href="ok">ok</a>
 <a href=""></a>
 <a href="tel:+420123456789"></a>
 <a href="sms:+420123456789"></a>

@@ -147,7 +147,7 @@ class BlockNode extends StatementNode
 
 	private function adjustContext(Escaper $escaper): Escaper
 	{
-		if (in_array($escaper->getState(), [Escaper::HtmlAttribute, Escaper::HtmlAttributeUrl/*...*/], true)) {
+		if ($escaper->getState() === Escaper::HtmlAttribute) {
 			$escaper = new Escaper($escaper->getContentType());
 			$this->modifier .= '|escape';
 		}

@@ -766,7 +766,7 @@ class PhpWriter
 
 	private function completeModifier(string $modifier): string
 	{
-		if (in_array($this->escaper->getState(), [Escaper::HtmlAttributeUrl, Escaper::HtmlAttributeUnquotedUrl], true)) {
+		if ($this->escaper->export() === 'htmlAttrUrl') {
 			if (!Helpers::removeFilter($modifier, 'nocheck')) {
 				if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifier)) {
 					$modifier = '|checkUrl' . $modifier;
