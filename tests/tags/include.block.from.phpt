@@ -37,7 +37,7 @@ Assert::match(
 
 Assert::error(function () use ($latte) {
 	$latte->renderToString('main3');
-}, Latte\RuntimeException::class, "Including 'inc' with content type HTML into incompatible type HTMLTAG.");
+}, Latte\RuntimeException::class, "Including 'inc' with content type HTML into incompatible type HTML/TAG.");
 
 Assert::match(
 	'<div title="&lt;b&gt;block 1&lt;/b&gt;">',

@@ -23,7 +23,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Including block foo with content type HTML into incompatible type HTMLTAG.',
+		'Including block foo with content type HTML into incompatible type HTML/TAG.',
 	);
 
 	Assert::same(
@@ -141,25 +141,25 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('context3', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
 	);
 
 	Assert::exception(
 		fn() => $latte->renderToString('context4', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
 	);
 
 	Assert::exception(
 		fn() => $latte->renderToString('context5', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
 	);
 
 	Assert::exception(
 		fn() => $latte->renderToString('context6', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTMLTAG by incompatible type HTML.',
+		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
 	);
 
 	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
@@ -167,7 +167,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('context8', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTMLTAG by incompatible type HTMLCOMMENT.',
+		'Overridden block foo with content type HTML/TAG by incompatible type HTML/COMMENT.',
 	);
 });
 
@@ -189,7 +189,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('<div>{include style}</div> <STYLE n:inner-block=style>...</STYLE>'),
 		Latte\RuntimeException::class,
-		'Including block style with content type HTMLCSS into incompatible type HTML.',
+		'Including block style with content type HTML/CSS into incompatible type HTML.',
 	);
 
 	Assert::match(
@@ -200,7 +200,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('<div>{include script}</div> <script n:inner-block=script>...</script>'),
 		Latte\RuntimeException::class,
-		'Including block script with content type HTMLJS into incompatible type HTML.',
+		'Including block script with content type HTML/JS into incompatible type HTML.',
 	);
 });
 
@@ -245,7 +245,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->renderToString('context7'),
 	Latte\RuntimeException::class,
-	"Including 'ical.latte' with content type ICAL into incompatible type HTMLCOMMENT.",
+	"Including 'ical.latte' with content type ICAL into incompatible type HTML/COMMENT.",
 );
 
 
@@ -269,7 +269,7 @@ Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context
 Assert::exception(
 	fn() => $latte->renderToString('context3'),
 	Latte\RuntimeException::class,
-	"Including 'js.latte' with content type JS into incompatible type HTMLTAG.",
+	"Including 'js.latte' with content type JS into incompatible type HTML/TAG.",
 );
 
 Assert::same('<script> <\/script></script>', $latte->renderToString('context4'));
@@ -277,7 +277,7 @@ Assert::same('<script> <\/script></script>', $latte->renderToString('context4'))
 Assert::exception(
 	fn() => $latte->renderToString('context5'),
 	Latte\RuntimeException::class,
-	"Including 'js.latte' with content type JS into incompatible type HTMLCSS.",
+	"Including 'js.latte' with content type JS into incompatible type HTML/CSS.",
 );
 
 Assert::same('<!-- </script>-->', $latte->renderToString('context6'));
@@ -317,19 +317,19 @@ Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
 Assert::exception(
 	fn() => $latte->renderToString('context3'),
 	Latte\RuntimeException::class,
-	"Including 'html.latte' with content type HTML into incompatible type HTMLTAG.",
+	"Including 'html.latte' with content type HTML into incompatible type HTML/TAG.",
 );
 
 Assert::exception(
 	fn() => $latte->renderToString('context4'),
 	Latte\RuntimeException::class,
-	"Including 'html.latte' with content type HTML into incompatible type HTMLJS.",
+	"Including 'html.latte' with content type HTML into incompatible type HTML/JS.",
 );
 
 Assert::exception(
 	fn() => $latte->renderToString('context5'),
 	Latte\RuntimeException::class,
-	"Including 'html.latte' with content type HTML into incompatible type HTMLCSS.",
+	"Including 'html.latte' with content type HTML into incompatible type HTML/CSS.",
 );
 
 Assert::same('<!--<hr> " &quot; &lt;-->', $latte->renderToString('context6'));
@@ -370,7 +370,7 @@ Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 Assert::exception(
 	fn() => $latte->renderToString('context6a'),
 	Latte\RuntimeException::class,
-	'Filter |stripHtml used with incompatible type HTMLCOMMENT.',
+	'Filter |stripHtml used with incompatible type HTML/COMMENT.',
 );
 
 
@@ -409,7 +409,7 @@ Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 Assert::exception(
 	fn() => $latte->renderToString('context6a'),
 	Latte\RuntimeException::class,
-	'Filter |stripHtml used with incompatible type HTMLCOMMENT.',
+	'Filter |stripHtml used with incompatible type HTML/COMMENT.',
 );
 
 
@@ -448,5 +448,5 @@ Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 Assert::exception(
 	fn() => $latte->renderToString('context6a'),
 	Latte\RuntimeException::class,
-	'Filter |stripHtml used with incompatible type HTMLCOMMENT.',
+	'Filter |stripHtml used with incompatible type HTML/COMMENT.',
 );

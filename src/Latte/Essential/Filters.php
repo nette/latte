@@ -28,7 +28,7 @@ final class Filters
 	 */
 	public static function stripHtml(FilterInfo $info, $s): string
 	{
-		$info->validate([null, 'html', 'htmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
+		$info->validate([null, 'html', 'html/attr', 'xml', 'xml/attr'], __FUNCTION__);
 		$info->contentType = ContentType::Text;
 		return html_entity_decode(strip_tags((string) $s), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
@@ -40,7 +40,7 @@ final class Filters
 	public static function stripTags(FilterInfo $info, $s): string
 	{
 		$info->contentType ??= ContentType::Html;
-		$info->validate(['html', 'htmlAttr', 'xml', 'xmlAttr'], __FUNCTION__);
+		$info->validate(['html', 'html/attr', 'xml', 'xml/attr'], __FUNCTION__);
 		return strip_tags((string) $s);
 	}
 

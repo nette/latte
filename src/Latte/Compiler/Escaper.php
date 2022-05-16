@@ -31,12 +31,12 @@ final class Escaper
 
 	public const
 		HtmlText = 'html',
-		HtmlComment = 'htmlComment',
-		HtmlBogusTag = 'htmlBogus',
-		HtmlCss = 'htmlCss',
-		HtmlJavaScript = 'htmlJs',
-		HtmlTag = 'htmlTag',
-		HtmlAttribute = 'htmlAttr';
+		HtmlComment = 'html/comment',
+		HtmlBogusTag = 'html/bogus',
+		HtmlCss = 'html/css',
+		HtmlJavaScript = 'html/js',
+		HtmlTag = 'html/tag',
+		HtmlAttribute = 'html/attr';
 
 	private string $state = '';
 	private string $tag = '';
@@ -65,7 +65,7 @@ final class Escaper
 
 	public function export(): string
 	{
-		return $this->state . ucfirst($this->subType);
+		return $this->state . ($this->subType ? '/' . $this->subType : '');
 	}
 
 
@@ -192,34 +192,34 @@ final class Escaper
 		$table = [
 			self::Text => [
 				'html' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrJs' => 'escapeHtmlAttr',
-				'htmlAttrCss' => 'escapeHtmlAttr',
-				'htmlAttrUrl' => 'escapeHtmlAttr',
-				'htmlComment' => 'escapeHtmlComment',
+				'html/attr' => 'escapeHtmlAttr',
+				'html/attr/js' => 'escapeHtmlAttr',
+				'html/attr/css' => 'escapeHtmlAttr',
+				'html/attr/url' => 'escapeHtmlAttr',
+				'html/comment' => 'escapeHtmlComment',
 				'xml' => 'escapeXml',
-				'xmlAttr' => 'escapeXml',
+				'xml/attr' => 'escapeXml',
 			],
 			self::JavaScript => [
 				'html' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrJs' => 'escapeHtmlAttr',
-				'htmlJs' => 'escapeHtmlRawText',
-				'htmlComment' => 'escapeHtmlComment',
+				'html/attr' => 'escapeHtmlAttr',
+				'html/attr/js' => 'escapeHtmlAttr',
+				'html/js' => 'escapeHtmlRawText',
+				'html/comment' => 'escapeHtmlComment',
 			],
 			self::Css => [
 				'html' => 'escapeHtmlText',
-				'htmlAttr' => 'escapeHtmlAttr',
-				'htmlAttrCss' => 'escapeHtmlAttr',
-				'htmlCss' => 'escapeHtmlRawText',
-				'htmlComment' => 'escapeHtmlComment',
+				'html/attr' => 'escapeHtmlAttr',
+				'html/attr/css' => 'escapeHtmlAttr',
+				'html/css' => 'escapeHtmlRawText',
+				'html/comment' => 'escapeHtmlComment',
 			],
 			'html' => [
-				'htmlAttr' => 'convertHtmlToHtmlAttr',
-				'htmlAttrJs' => 'convertHtmlToHtmlAttr',
-				'htmlAttrCss' => 'convertHtmlToHtmlAttr',
-				'htmlAttrUrl' => 'convertHtmlToHtmlAttr',
-				'htmlComment' => 'escapeHtmlComment',
+				'html/attr' => 'convertHtmlToHtmlAttr',
+				'html/attr/js' => 'convertHtmlToHtmlAttr',
+				'html/attr/css' => 'convertHtmlToHtmlAttr',
+				'html/attr/url' => 'convertHtmlToHtmlAttr',
+				'html/comment' => 'escapeHtmlComment',
 			],
 		];
 		return isset($table[$source][$dest])
