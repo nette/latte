@@ -46,11 +46,11 @@ class FilterExecutor
 
 	/**
 	 * Returns all run-time filters.
-	 * @return string[]
+	 * @return callable[]
 	 */
 	public function getAll(): array
 	{
-		return array_combine($tmp = array_keys($this->_static), $tmp);
+		return array_combine(array_keys($this->_static), array_column($this->_static, 0));
 	}
 
 

@@ -320,7 +320,7 @@ class Engine
 
 	/**
 	 * Returns all run-time filters.
-	 * @return string[]
+	 * @return callable[]
 	 */
 	public function getFilters(): array
 	{

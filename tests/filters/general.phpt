@@ -51,6 +51,10 @@ $latte->addFilterLoader(function ($name) use ($latte) {
 });
 
 
+$filters = $latte->getFilters();
+Assert::same('strtoupper', $filters['h2']);
+
+
 Assert::same('AA', $latte->invokeFilter('h2', ['aa']));
 Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', ['aa']));
 Assert::exception(function () use ($latte) {
