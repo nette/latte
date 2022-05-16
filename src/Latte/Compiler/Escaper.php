@@ -31,22 +31,13 @@ final class Escaper
 		Url = 'url';
 
 	public const
-		Html = 'html',
-		HtmlText = '',
-		HtmlComment = 'Comment',
-		HtmlBogusTag = 'Bogus',
-		HtmlCss = 'Css',
-		HtmlJavaScript = 'Js',
-		HtmlTag = 'Tag',
-		HtmlAttribute = 'Attr';
-
-	public const
-		Xml = 'xml',
-		XmlText = '',
-		XmlComment = 'Comment',
-		XmlBogusTag = 'Bogus',
-		XmlTag = 'Tag',
-		XmlAttribute = 'Attr';
+		HtmlText = 'html',
+		HtmlComment = 'htmlComment',
+		HtmlBogusTag = 'htmlBogus',
+		HtmlCss = 'htmlCss',
+		HtmlJavaScript = 'htmlJs',
+		HtmlTag = 'htmlTag',
+		HtmlAttribute = 'htmlAttr';
 
 	private string $state = '';
 	private string $tag = '';
@@ -57,6 +48,7 @@ final class Escaper
 	public function __construct(
 		private string $contentType,
 	) {
+		$this->state = $this->contentType;
 	}
 
 
@@ -74,14 +66,13 @@ final class Escaper
 
 	public function export(): string
 	{
-		return $this->contentType . $this->state . ucfirst($this->subType);
+		return $this->state . ucfirst($this->subType);
 	}
 
 
 	public function enterContentType(string $type): void
 	{
-		$this->contentType = $type;
-		$this->state = '';
+		$this->contentType = $this->state = $type;
 	}
 
 
@@ -169,11 +160,11 @@ final class Escaper
 				default => throw new CompileException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::Xml => match ($this->state) {
-				self::XmlText,
-				self::XmlBogusTag => $tokens->prepend('LR\Filters::escapeXml(')->append(')'),
-				self::XmlAttribute => $tokens->prepend($lq . 'LR\Filters::escapeXml(')->append(')' . $rq),
-				self::XmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
-				self::XmlTag => $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')'),
+				self::HtmlText,
+				self::HtmlBogusTag => $tokens->prepend('LR\Filters::escapeXml(')->append(')'),
+				self::HtmlAttribute => $tokens->prepend($lq . 'LR\Filters::escapeXml(')->append(')' . $rq),
+				self::HtmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
+				self::HtmlTag => $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')'),
 				default => throw new CompileException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::JavaScript => $tokens->prepend('LR\Filters::escapeJs(')->append(')'),
@@ -213,7 +204,7 @@ final class Escaper
 				'htmlCss' => 'escapeHtmlRawText',
 				'htmlComment' => 'escapeHtmlComment',
 			],
-			self::Html => [
+			'html' => [
 				'htmlAttr' => 'convertHtmlToHtmlAttr',
 				'htmlAttrJs' => 'convertHtmlToHtmlAttr',
 				'htmlAttrCss' => 'convertHtmlToHtmlAttr',
