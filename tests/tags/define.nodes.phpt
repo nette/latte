@@ -18,6 +18,16 @@ Assert::match(<<<'XX'
 			Define:
 				String:
 					value: test
+				Assign:
+					Variable:
+						name: a
+					Null:
+				Assign:
+					Variable:
+						name: b
+					New:
+						Name:
+							parts: ['Foo']
 				Fragment:
 					Text:
 						content: '...'

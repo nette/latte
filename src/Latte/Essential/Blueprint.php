@@ -74,7 +74,6 @@ final class Blueprint
 	 */
 	public function addProperties(Php\ClassType $class, array $props): void
 	{
-		$printer = new Php\Printer;
 		foreach ($props as $name => $value) {
 			$type = Php\Type::getType($value);
 			$prop = $class->addProperty($name);
@@ -88,7 +87,6 @@ final class Blueprint
 	 */
 	public function addFunctions(Php\ClassType $class, array $funcs): void
 	{
-		$printer = new Php\Printer;
 		foreach ($funcs as $name => $func) {
 			$method = (new Php\Factory)->fromCallable($func);
 			$type = $this->printType($method->getReturnType(), $method->isReturnNullable(), $class->getNamespace()) ?: 'mixed';

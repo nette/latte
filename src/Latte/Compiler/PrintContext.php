@@ -106,6 +106,7 @@ final class PrintContext
 			function ($m) use ($args) {
 				[, $pos, $fn, $var] = $m;
 				$var = substr($var, 1, -1);
+				/** @var Nodes\ModifierNode[] $args */
 				return match ($fn) {
 					'modify' => $args[$pos]->printSimple($this, $var),
 					'modifyContent' => $args[$pos]->printContentAware($this, $var),
@@ -273,9 +274,9 @@ final class PrintContext
 
 	public function objectProperty(Node $node): string
 	{
-		return $node instanceof Nodes\ExpressionNode
-			? '{' . $node->print($this) . '}'
-			: (string) $node;
+		return $node instanceof Nodes\NameNode || $node instanceof Nodes\IdentifierNode
+			? (string) $node
+			: '{' . $node->print($this) . '}';
 	}
 
 

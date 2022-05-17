@@ -76,7 +76,7 @@ class ParametersNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->parameters as $param) {
+		foreach ($this->parameters as &$param) {
 			yield $param;
 		}
 	}

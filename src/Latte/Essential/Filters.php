@@ -489,7 +489,7 @@ final class Filters
 	{
 		return is_array($data)
 			? http_build_query($data, '', '&')
-			: urlencode((string) $data);
+			: urlencode($data);
 	}
 
 

@@ -13,7 +13,6 @@ use Latte;
 use Latte\ContentType;
 use Latte\RuntimeException;
 use Nette;
-use Stringable;
 
 
 /**

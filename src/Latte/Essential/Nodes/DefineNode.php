@@ -124,6 +124,10 @@ class DefineNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->block->name;
+		foreach ($this->block->parameters as &$param) {
+			yield $param;
+		}
+
 		yield $this->content;
 	}
 }

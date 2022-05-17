@@ -58,7 +58,7 @@ final class CoreExtension extends Latte\Extension
 
 			'=' => [Nodes\PrintNode::class, 'create'],
 			'do' => [Nodes\DoNode::class, 'create'],
-			'php' => [Nodes\DoNode::class, 'create'],
+			'php' => [Nodes\DoNode::class, 'create'], // obsolete
 			'contentType' => [Nodes\ContentTypeNode::class, 'create'],
 			'spaceless' => [Nodes\SpacelessNode::class, 'create'],
 			'capture' => [Nodes\CaptureNode::class, 'create'],
@@ -148,7 +148,7 @@ final class CoreExtension extends Latte\Extension
 			'sort' => [Filters::class, 'sort'],
 			'spaceless' => [Filters::class, 'strip'],
 			'split' => [Filters::class, 'explode'],
-			'strip' => [Filters::class, 'strip'],
+			'strip' => [Filters::class, 'strip'], // obsolete
 			'stripHtml' => [Filters::class, 'stripHtml'],
 			'striphtml' => [Filters::class, 'stripHtml'],
 			'stripTags' => [Filters::class, 'stripTags'],

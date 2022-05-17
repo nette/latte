@@ -22,7 +22,7 @@ class Html implements HtmlStringable
 	private string $value;
 
 
-	public function __construct(string|\Stringable|int|float|null $value)
+	public function __construct($value)
 	{
 		$this->value = (string) $value;
 	}

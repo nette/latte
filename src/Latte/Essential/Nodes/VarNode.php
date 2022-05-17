@@ -99,7 +99,7 @@ class VarNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->assignments as $assign) {
+		foreach ($this->assignments as &$assign) {
 			yield $assign;
 		}
 	}
