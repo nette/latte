@@ -11,12 +11,12 @@
 ';
 				if ($cond) /* line 5 */ continue;
 				echo '		after
-	';
+';
+
 			} finally {
 				$ʟ_fi = new LR\FilterInfo('html');
 				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, ob_get_clean())));
 			}
-			echo "\n";
 			$iterations++;
 		}
 %A%

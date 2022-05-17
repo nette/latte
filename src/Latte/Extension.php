@@ -18,7 +18,7 @@ abstract class Extension
 	/**
 	 * Initializes before template is compiler.
 	 */
-	public function beforeCompile(): void
+	public function beforeCompile(Engine $engine): void
 	{
 	}
 
@@ -28,6 +28,16 @@ abstract class Extension
 	 * @return array<string, callable(Compiler\Tag, Compiler\TemplateParser): (Compiler\Node|\Generator|void)|\stdClass>
 	 */
 	public function getTags(): array
+	{
+		return [];
+	}
+
+
+	/**
+	 * Returns a list of parsers for Latte tags.
+	 * @return array<string, callable(Compiler\Nodes\TemplateNode): void|\stdClass>
+	 */
+	public function getPasses(): array
 	{
 		return [];
 	}

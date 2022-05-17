@@ -60,6 +60,7 @@ class Engine
 		$this->functions = new \stdClass;
 		$this->probe = function () {};
 		$this->addExtension(new Essential\CoreExtension);
+		$this->addExtension(new Sandbox\SandboxExtension);
 	}
 
 
@@ -129,6 +130,7 @@ class Engine
 
 		try {
 			$node = $this->parse($source);
+			$this->applyPasses($node);
 			$code = $this->generate($node, $name);
 
 		} catch (\Throwable $e) {
@@ -154,7 +156,7 @@ class Engine
 		$parser = new Compiler\TemplateParser;
 
 		foreach ($this->extensions as $extension) {
-			$extension->beforeCompile();
+			$extension->beforeCompile($this);
 			$parser->addTags($extension->getTags());
 		}
 
@@ -162,6 +164,24 @@ class Engine
 			->setContentType($this->contentType)
 			->setPolicy($this->sandboxed ? $this->policy : null)
 			->parse($source, $lexer);
+	}
+
+
+	/**
+	 * Calls node visitors.
+	 */
+	public function applyPasses(TemplateNode &$node): void
+	{
+		$passes = [];
+		foreach ($this->extensions as $extension) {
+			$passes = array_merge($passes, $extension->getPasses());
+		}
+
+		$passes = Helpers::sortBeforeAfter($passes);
+		foreach ($passes as $pass) {
+			$pass = $pass instanceof \stdClass ? $pass->subject : $pass;
+			($pass)($node);
+		}
 	}
 
 
@@ -177,6 +197,8 @@ class Engine
 			$this->getTemplateClass($name),
 			$comment,
 			$this->strictTypes,
+			$this->sandboxed ? $this->policy : null,
+			(array) $this->functions,
 		);
 	}
 

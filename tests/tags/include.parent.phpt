@@ -18,21 +18,21 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->renderToString('{include parent}'),
 	Latte\CompileException::class,
-	'Cannot include parent block outside of any block.',
+	'Cannot include parent block outside of any block (at column 1)',
 );
 
 // in anonymous block
 Assert::exception(
 	fn() => $latte->renderToString('{block} {include parent} {/block}'),
 	Latte\CompileException::class,
-	'Cannot include parent block outside of any block.',
+	'Cannot include parent block outside of any block (at column 9)',
 );
 
 // in snippet block
 Assert::exception(
 	fn() => $latte->renderToString('{snippet foo} {include parent} {/snippet}'),
 	Latte\CompileException::class,
-	'Cannot include parent block outside of any block.',
+	'Cannot include parent block outside of any block (at column 15)',
 );
 
 
@@ -47,7 +47,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 Assert::exception(
 	fn() => $latte->renderToString('main1'),
 	Latte\CompileException::class,
-	'Filters are not allowed in {include parent}',
+	'Filters are not allowed in {include parent} (at column 32)',
 );
 
 // with params

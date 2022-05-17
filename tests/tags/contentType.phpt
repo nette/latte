@@ -21,13 +21,13 @@ Assert::same(ContentType::Xml, $template::ContentType);
 Assert::exception(
 	fn() => $latte->createTemplate('{block}{contentType xml}{/block}'),
 	Latte\CompileException::class,
-	'{contentType} is allowed only in template header.',
+	'{contentType} is allowed only in template header (at column 8)',
 );
 
 Assert::exception(
 	fn() => $latte->createTemplate('<div>{contentType xml}</div>'),
 	Latte\CompileException::class,
-	'{contentType} is allowed only in template header.',
+	'{contentType} is allowed only in template header (at column 6)',
 );
 
 Assert::same(

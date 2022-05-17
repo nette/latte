@@ -27,14 +27,14 @@ final class Template%a% extends Latte\Runtime\Template
 	public function prepare(): void
 	{
 		extract($this->params);
-		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
+
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
 			foreach (array_intersect_key(['person' => '11'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
 		$this->parentName = "parent";
 		$this->createTemplate("inc", $this->params, "import")->render() /* line %d% */;
-
 	}
 
 
@@ -44,10 +44,10 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo 'Homepage | ';
 		$this->renderBlockParent('title', get_defined_vars()) /* line %d% */;
 		$this->renderBlockParent('title', get_defined_vars()) /* line %d% */;
-
 	}
 
 
@@ -57,6 +57,7 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '	<ul>
 ';
 		$iterations = 0;
@@ -67,6 +68,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 			$iterations++;
 		}
+
 		echo '	</ul>
 	Parent: ';
 		echo LR\Filters::escapeHtmlText(gettype($this->getReferringTemplate())) /* line %d% */;

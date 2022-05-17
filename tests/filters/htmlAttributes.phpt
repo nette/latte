@@ -1,20 +1,16 @@
 <?php
 
-/**
- * Test: Latte\Runtime\Filters::htmlAttributes
- */
-
 declare(strict_types=1);
 
-use Latte\Runtime\Filters;
+use Latte\Essential\Nodes\NAttrNode;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
 
-Assert::same('', Filters::htmlAttributes(null));
+Assert::same('', NAttrNode::attrs(null, false));
 
-Assert::same(' style="float:left" class="three" a=\'<>"\' b="\'" title="0" checked', Filters::htmlAttributes([
+Assert::same(' style="float:left" class="three" a=\'<>"\' b="\'" title="0" checked', NAttrNode::attrs([
 	'style' => 'float:left',
 	'class' => 'three',
 	'a' => '<>"',
@@ -22,12 +18,11 @@ Assert::same(' style="float:left" class="three" a=\'<>"\' b="\'" title="0" check
 	'title' => '0',
 	'checked' => true,
 	'selected' => false,
-]));
+], false));
 
-Assert::same(' a="`test "', Filters::htmlAttributes(['a' => '`test'])); // mXSS
+Assert::same(' a="`test "', NAttrNode::attrs(['a' => '`test'], false)); // mXSS
 
-Filters::$xml = true;
-Assert::same(' style="float:left" class="three" a=\'&lt;>"\' b="\'" title="0" checked="checked"', Filters::htmlAttributes([
+Assert::same(' style="float:left" class="three" a=\'&lt;>"\' b="\'" title="0" checked="checked"', NAttrNode::attrs([
 	'style' => 'float:left',
 	'class' => 'three',
 	'a' => '<>"',
@@ -35,8 +30,8 @@ Assert::same(' style="float:left" class="three" a=\'&lt;>"\' b="\'" title="0" ch
 	'title' => '0',
 	'checked' => true,
 	'selected' => false,
-]));
+], true));
 
 // invalid UTF-8
-Assert::same(" a=\"foo \u{D800} bar\"", Filters::htmlAttributes(['a' => "foo \u{D800} bar"])); // invalid codepoint high surrogates
-Assert::same(" a='foo \xE3\x80\x22 bar'", Filters::htmlAttributes(['a' => "foo \xE3\x80\x22 bar"])); // stripped UTF
+Assert::same(" a=\"foo \u{D800} bar\"", NAttrNode::attrs(['a' => "foo \u{D800} bar"], false)); // invalid codepoint high surrogates
+Assert::same(" a='foo \xE3\x80\x22 bar'", NAttrNode::attrs(['a' => "foo \xE3\x80\x22 bar"], false)); // stripped UTF

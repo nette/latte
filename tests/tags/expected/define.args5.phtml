@@ -10,6 +10,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
+
 		echo 'default values
 
 ';
@@ -35,6 +36,7 @@ b) ';
 		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ??  [1, 2, 3];
 		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ??  10;
 		unset($ʟ_args);
+
 		echo '	Variables ';
 		echo LR\Filters::escapeHtmlText($var1) /* line %d% */;
 		echo ', ';

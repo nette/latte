@@ -29,7 +29,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<span n:class=""></span>'),
 	Latte\CompileException::class,
-	'Tag n:class is not allowed.',
+	'Attribute n:class is not allowed.',
 );
 
 Assert::exception(

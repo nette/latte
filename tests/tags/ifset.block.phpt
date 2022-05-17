@@ -1,52 +1,47 @@
 <?php
 
-/**
- * Test: Latte\Macros\BlockMacros {ifset block}
- */
-
 declare(strict_types=1);
 
-use Latte\Macros\BlockMacros;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
 
-$compiler = new Latte\Compiler\TemplateGenerator;
-BlockMacros::install($compiler);
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
 
 // {ifset ... }
-Assert::same('<?php if ($this->hasBlock("block")) { ?>', $compiler->expandMacro('ifset', '#block')->openingCode);
-Assert::same('<?php if ($this->hasBlock("block")) { ?>', $compiler->expandMacro('ifset', 'block')->openingCode);
-Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('ifset', '#$foo')->openingCode);
-Assert::same('<?php if ($this->hasBlock("foo")) { ?>', $compiler->expandMacro('ifset', 'block foo')->openingCode);
-Assert::same('<?php if ($this->hasBlock($foo)) { ?>', $compiler->expandMacro('ifset', 'block $foo')->openingCode);
-Assert::same('<?php if ($this->hasBlock(("f" . "oo"))) { ?>', $compiler->expandMacro('ifset', 'block "f" . "oo"')->openingCode);
-Assert::same(
-	'<?php if ($this->hasBlock("foo") && $this->hasBlock("block") && isset($item)) { ?>',
-	$compiler->expandMacro('ifset', 'block foo, block, $item')->openingCode,
+Assert::contains('if ($this->hasBlock("block")) ', $latte->compile('{ifset #block/}'));
+Assert::contains('if ($this->hasBlock("block")) ', $latte->compile('{ifset block/}'));
+Assert::contains('if ($this->hasBlock($foo)) ', $latte->compile('{ifset #$foo/}'));
+Assert::contains('if ($this->hasBlock("foo")) ', $latte->compile('{ifset block foo/}'));
+Assert::contains('if ($this->hasBlock($foo)) ', $latte->compile('{ifset block $foo/}'));
+Assert::contains('if ($this->hasBlock(("f" . "oo"))) ', $latte->compile('{ifset block "f" . "oo"/}'));
+Assert::contains(
+	'if ($this->hasBlock("foo") && $this->hasBlock("block") && isset($item)) ',
+	$latte->compile('{ifset block foo, block, $item/}'),
 );
-Assert::same(
-	'<?php if ($this->hasBlock("block") && isset($item->var["#test"])) { ?>',
-	$compiler->expandMacro('ifset', '#block, $item->var["#test"]')->openingCode,
+Assert::contains(
+	'if ($this->hasBlock("block") && isset($item->var["#test"])) ',
+	$latte->compile('{ifset #block, $item->var["#test"]/}'),
 );
-Assert::same(
-	'<?php if ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) { ?>',
-	$compiler->expandMacro('ifset', '#block1, block2, $var3, item(abc)')->openingCode,
+Assert::contains(
+	'if ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) ',
+	$latte->compile('{ifset #block1, block2, $var3, item(abc)/}'),
 );
-Assert::same(
-	'<?php if ($this->hasBlock("footer") && $this->hasBlock("header") && $this->hasBlock("main")) { ?>',
-	$compiler->expandMacro('ifset', 'footer, header, main')->openingCode,
+Assert::contains(
+	'if ($this->hasBlock("footer") && $this->hasBlock("header") && $this->hasBlock("main")) ',
+	$latte->compile('{ifset footer, header, main/}'),
 );
 
 
 // {elseifset ... }
-Assert::same('<?php } elseif ($this->hasBlock("block")) { ?>', $compiler->expandMacro('elseifset', '#block')->openingCode);
-Assert::same('<?php } elseif ($this->hasBlock("block")) { ?>', $compiler->expandMacro('elseifset', 'block')->openingCode);
-Assert::same('<?php } elseif ($this->hasBlock("block") && isset($item->var["#test"])) { ?>', $compiler->expandMacro('elseifset', '#block, $item->var["#test"]')->openingCode);
-Assert::same(
-	'<?php } elseif ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) { ?>',
-	$compiler->expandMacro('elseifset', '#block1, block2, $var3, item(abc)')->openingCode,
+Assert::contains('} elseif ($this->hasBlock("block")) ', $latte->compile('{if 1}{elseifset #block}{/if}'));
+Assert::contains('} elseif ($this->hasBlock("block")) ', $latte->compile('{if 1}{elseifset block}{/if}'));
+Assert::contains('} elseif ($this->hasBlock("block") && isset($item->var["#test"])) ', $latte->compile('{if 1}{elseifset #block, $item->var["#test"]}{/if}'));
+Assert::contains(
+	'} elseif ($this->hasBlock("block1") && $this->hasBlock("block2") && isset($var3) && isset(item(\'abc\'))) ',
+	$latte->compile('{if 1}{elseifset #block1, block2, $var3, item(abc)}{/if}'),
 );
 
 

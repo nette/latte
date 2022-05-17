@@ -24,19 +24,6 @@ class Helpers
 
 
 	/**
-	 * Checks callback.
-	 */
-	public static function checkCallback(mixed $callable): callable
-	{
-		if (!is_callable($callable, false, $text)) {
-			throw new \InvalidArgumentException("Callback '$text' is not callable.");
-		}
-
-		return $callable;
-	}
-
-
-	/**
 	 * Finds the best suggestion.
 	 * @param  string[]  $items
 	 */
@@ -78,6 +65,12 @@ class Helpers
 		} else {
 			return new \ReflectionFunction($callable);
 		}
+	}
+
+
+	public static function isNameDynamic($name): bool
+	{
+		return str_contains($name, '$') || str_contains($name, ' ');
 	}
 
 

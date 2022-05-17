@@ -17,19 +17,19 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('Block{/block}'),
 	Latte\CompileException::class,
-	'Unexpected {/block}',
+	"Unexpected '{/block}' (at column 6)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('<a {if}n:href>'),
 	Latte\CompileException::class,
-	'Attribute n:href must not appear inside {tags}',
+	'Attribute n:href must not appear inside {tags} (at column 8)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<a n:href n:href>'),
 	Latte\CompileException::class,
-	'Found multiple attributes n:href.',
+	'Found multiple attributes n:href (at column 10)',
 );
 
 Assert::match(
@@ -40,13 +40,13 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<a n:class class>'),
 	Latte\CompileException::class,
-	'It is not possible to combine class with n:class.',
+	'It is not possible to combine class with n:class (at column 4)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{time() /}'),
 	Latte\CompileException::class,
-	'Unexpected /} in tag {= time()/}',
+	'Unexpected /} in tag {= time()/} (at column 1)',
 );
 
 
@@ -54,13 +54,13 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<STYLE>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </STYLE> for element started on line 1',
+	'Unexpected end, expecting </STYLE> for element started on line 1 (at column 8)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<script>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </script> for element started on line 1',
+	'Unexpected end, expecting </script> for element started on line 1 (at column 9)',
 );
 
 Assert::noError(
@@ -160,65 +160,65 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{if 1}'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting {/if}',
+	'Unexpected end, expecting {/if} (at column 7)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<p n:foreach=1><span n:if=1>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </span> for element started on line 1',
+	'Unexpected end, expecting </span> for element started on line 1 (at column 29)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<p n:foreach=1><span n:if=1></i>'),
 	Latte\CompileException::class,
-	'Unexpected </i>, expecting </span> for element started on line 1',
+	"Unexpected '</i>', expecting </span> for element started on line 1 (at column 29)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{/if}'),
 	Latte\CompileException::class,
-	'Unexpected {/if}',
+	"Unexpected '{/if}' (at column 1)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{if 1}{/foreach}'),
 	Latte\CompileException::class,
-	'Unexpected {/foreach}, expecting {/if}',
+	'Unexpected {/foreach}, expecting {/if} (at column 7)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{if 1}{/if 2}'),
 	Latte\CompileException::class,
-	'Unexpected {/if 2}, expecting {/if}',
+	'Unexpected {/if 2}, expecting {/if} (at column 7)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<span n:if=1 n:foreach=2>{foreach x}</span>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting {/foreach}',
+	'Unexpected end, expecting {/foreach} (at column 44)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<span n:if=1 n:foreach=2>{/foreach}'),
 	Latte\CompileException::class,
-	'Unexpected {/foreach}, expecting </span> for element started on line 1',
+	"Unexpected '{/foreach}', expecting </span> for element started on line 1 (at column 26)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('<span n:if=1 n:foreach=2>{/if}'),
 	Latte\CompileException::class,
-	'Unexpected {/if}, expecting </span> for element started on line 1',
+	"Unexpected '{/if}', expecting </span> for element started on line 1 (at column 26)",
 );
 
 Assert::exception(
 	fn() => $latte->compile(<<<'XX'
-			{foreach [] as $item}
-				<li><a n:tag-if="$iterator->odd"></li>
-			{/foreach}
+				{foreach [] as $item}
+					<li><a n:tag-if="$iterator->odd"></li>
+				{/foreach}
 		XX),
 	Latte\CompileException::class,
-	"Unexpected '</li>', expecting </a> for element started on line 2 (on line 2)",
+	"Unexpected '</li>', expecting </a> for element started on line 2 (on line 2 at column 37)",
 );
 
 Assert::error(

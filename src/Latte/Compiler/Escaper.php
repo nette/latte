@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte;
+use Latte\CompileException;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Filters;
@@ -63,6 +64,12 @@ final class Escaper
 	public function getContentType(): string
 	{
 		return $this->contentType;
+	}
+
+
+	public function getState(): string
+	{
+		return $this->state;
 	}
 
 
@@ -142,6 +149,41 @@ final class Escaper
 	public function enterHtmlComment(): void
 	{
 		$this->state = self::HtmlComment;
+	}
+
+
+	public function escape(MacroTokens $tokens): MacroTokens
+	{
+		return match ($this->contentType) {
+			ContentType::Html => match ($this->state) {
+				self::HtmlText => $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')'),
+				self::HtmlTag,
+				self::HtmlAttributeUnquotedUrl => $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')'),
+				self::HtmlAttribute,
+				self::HtmlAttributeUrl => $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')'),
+				self::HtmlAttributeJavaScript => $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))'),
+				self::HtmlAttributeCss => $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))'),
+				self::HtmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
+				self::HtmlBogusTag => $tokens->prepend('LR\Filters::escapeHtml(')->append(')'),
+				self::HtmlJavaScript => $tokens->prepend('LR\Filters::escapeJs(')->append(')'),
+				self::HtmlCss => $tokens->prepend('LR\Filters::escapeCss(')->append(')'),
+				default => throw new CompileException("Unknown context $this->contentType, $this->state."),
+			},
+			ContentType::Xml => match ($this->state) {
+				self::XmlText,
+				self::XmlAttribute,
+				self::XmlBogusTag => $tokens->prepend('LR\Filters::escapeXml(')->append(')'),
+				self::XmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
+				self::XmlTag => $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')'),
+				default => throw new CompileException("Unknown context $this->contentType, $this->state."),
+			},
+			ContentType::JavaScript => $tokens->prepend('LR\Filters::escapeJs(')->append(')'),
+			ContentType::Css => $tokens->prepend('LR\Filters::escapeCss(')->append(')'),
+			ContentType::ICal => $tokens->prepend('LR\Filters::escapeIcal(')->append(')'),
+			ContentType::Text => $tokens,
+			'' => $tokens->prepend('($this->filters->escape)(')->append(')'),
+			default => throw new CompileException("Unknown content-type $this->contentType."),
+		};
 	}
 
 

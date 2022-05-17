@@ -6,8 +6,10 @@
 
 declare(strict_types=1);
 
+use Latte\Compiler\Escaper;
 use Latte\Compiler\MacroTokens;
 use Latte\Compiler\PhpWriter;
+use Latte\ContentType;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -15,8 +17,8 @@ require __DIR__ . '/../bootstrap.php';
 
 function formatModifiers($arg, $modifiers, $isContent = false)
 {
-	$writer = new PhpWriter(new MacroTokens(''), $modifiers, ['html', 'x']);
-	return $writer->formatModifiers($arg, $isContent);
+	$writer = new PhpWriter(new MacroTokens(''), new Escaper(ContentType::Html));
+	return $writer->formatModifiers($modifiers, $arg, $isContent);
 }
 
 
@@ -61,7 +63,7 @@ test('inline modifiers', function () {
 
 test('FilterInfo aware modifiers', function () {
 	Assert::same('$this->filters->filterContent(\'mod\', $ʟ_fi, @)', formatModifiers('@', 'mod', true));
-	Assert::same('LR\Filters::convertTo($ʟ_fi, \'htmlx\', $this->filters->filterContent(\'mod2\', $ʟ_fi, $this->filters->filterContent(\'mod1\', $ʟ_fi, @)))', formatModifiers('@', 'mod1|mod2|escape', true));
+	Assert::same('LR\Filters::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'mod2\', $ʟ_fi, $this->filters->filterContent(\'mod1\', $ʟ_fi, @)))', formatModifiers('@', 'mod1|mod2|escape', true));
 });
 
 test('depth', function () {

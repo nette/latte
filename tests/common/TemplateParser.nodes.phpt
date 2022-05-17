@@ -95,6 +95,7 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
+	   |  |  |  customName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (2)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\Html\AttributeNode
@@ -133,6 +134,7 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
+	   |  |  |  customName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (0)
 	   |  |  |  |  position: null

@@ -44,7 +44,6 @@ testTemplate(
 				embed start
 					main-A embed A
 				embed end
-
 				outer
 
 		XX,
@@ -84,7 +83,6 @@ testTemplate(
 					OUT1 IN2 IN3
 					embed C unset IN2 IN3
 				embed end
-
 				outer
 
 		XX,
@@ -99,7 +97,6 @@ testTemplate(
 					{var $a = "M"}
 					outer
 					{embed embed}
-						{$a}
 						{block a}main-A {$a}{/block}
 					{/embed}
 					outer
@@ -119,7 +116,6 @@ testTemplate(
 				embed start W
 					main-A W
 				embed end
-
 				outer
 
 		XX,
@@ -134,7 +130,6 @@ testTemplate(
 					{var $a = "M"}
 					outer
 					{embed embed, a => "P"}
-						{$a}
 						{block a}main-A {$a}{/block}
 					{/embed}
 					outer
@@ -154,7 +149,6 @@ testTemplate(
 				embed start P
 					main-A P
 				embed end
-
 				outer
 
 		XX,
@@ -185,7 +179,6 @@ testTemplate(
 				outer
 				embed start
 		main-A		embed end
-
 				outer
 
 		XX,
@@ -217,7 +210,6 @@ testTemplate(
 				outer
 				embed start
 		main-A		embed end
-
 				outer
 
 		XX,
@@ -250,7 +242,6 @@ testTemplate(
 				embed start
 					*outer-D*
 				embed end
-
 
 				outer-D
 
@@ -303,7 +294,6 @@ testTemplate(
 					embed A
 					*embed A*
 				embed end
-
 				outer
 
 		XX,
@@ -342,7 +332,6 @@ testTemplate(
 				embed2-start
 					embed1-A
 				embed2-end
-
 				embed1-end
 
 		XX,
@@ -431,36 +420,7 @@ testTemplate(
 					main-A
 					import-B
 
-
 		outer-A
 
 		XX,
-);
-
-
-// generated code
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader(templates: [
-	'main' => <<<'XX'
-
-				{embed embed1}
-					{block a}
-						{embed embed1}
-							{block a}nested embeds A{/block}
-						{/embed}
-					{/block}
-				{/embed}
-
-				{define embed1}
-				embed1-start
-					{block a}embed1-A{/block}
-				embed1-end
-				{/define}
-
-		XX,
-]));
-
-Assert::matchFile(
-	__DIR__ . '/expected/embed.block.phtml',
-	$latte->compile('main'),
 );

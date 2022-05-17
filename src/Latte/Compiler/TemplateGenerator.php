@@ -38,15 +38,28 @@ final class TemplateGenerator
 		string $className,
 		?string $comment = null,
 		bool $strictMode = false,
+		?Latte\Policy $policy = null,
+		array $functions = [],
 	): string {
 		$context = new PrintContext($node->contentType);
+		$context->policy = $policy;
+		$context->functions = $functions;
+		$context->initialization = &$node->initialization;
+
 		$code = $node->main->print($context) . ' return get_defined_vars();';
 		$code = self::buildParams($code, $context->paramsExtraction, '$this->params');
 		$this->addMethod('main', $code, '', 'array');
 
+		if ($node->initialization) {
+			$code = self::buildParams($node->initialization, $context->paramsExtraction, '$this->params');
+			$this->addMethod('prepare', $code, '', 'void');
+		}
+
 		if ($node->contentType !== ContentType::Html) {
 			$this->addConstant('ContentType', $node->contentType);
 		}
+
+		$this->generateBlocks($context->blocks, $context);
 
 		$members = [];
 		foreach ($this->constants as $name => $value) {
@@ -76,6 +89,38 @@ final class TemplateGenerator
 		$code = PhpHelpers::optimizeEcho($code);
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
+	}
+
+
+	/** @param  Block[]  $blocks */
+	private function generateBlocks(array $blocks, PrintContext $context): void
+	{
+		$contentType = $context->getEscaper()->getContentType();
+		foreach ($blocks as $block) {
+			if (!$block->isDynamic()) {
+				$meta[$block->layer][$block->name] = $contentType === $block->escaping
+					? $block->method
+					: [$block->method, $block->escaping];
+			}
+
+			$body = $this->buildParams($block->content, $block->parameters, '$ʟ_args');
+			if (!$block->isDynamic() && str_contains($body, '$')) {
+				$embedded = $block->tag->name === 'block' && is_int($block->layer) && $block->layer;
+				$body = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');' . $body;
+			}
+
+			$this->addMethod(
+				$block->method,
+				$body,
+				'array $ʟ_args',
+				'void',
+				$block->tag->getNotation(true) . ' on line ' . $block->tag->position->line,
+			);
+		}
+
+		if (isset($meta)) {
+			$this->addConstant('Blocks', $meta);
+		}
 	}
 
 

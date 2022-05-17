@@ -19,6 +19,13 @@ function testTemplate(string $title, array $templates, string $exp = '')
 }
 
 
+Assert::exception(function () {
+	testTemplate('unexpected content', [
+		'main' => '{embed "embed.latte"} {$a} {/embed}',
+	]);
+}, Latte\CompileException::class, 'Unexpected content inside {embed} tags (at column 23)');
+
+
 testTemplate('keyword file', [
 	'main' => '{embed file embed}{/embed}',
 	'embed' => 'embed',
@@ -53,6 +60,33 @@ testTemplate(
 
 				embed
 
+				outer
+
+		XX,
+);
+
+
+testTemplate(
+	'no blocks selfclosing',
+	[
+		'main' => <<<'XX'
+
+					outer
+					{embed "embed.latte"/}
+					outer
+
+			XX,
+		'embed.latte' => <<<'XX'
+
+					embed
+
+			XX,
+	],
+	<<<'XX'
+
+				outer
+
+				embed
 				outer
 
 		XX,
@@ -114,7 +148,6 @@ testTemplate(
 				outer
 
 				embed
-
 				outer
 
 		XX,
@@ -148,7 +181,6 @@ testTemplate(
 				embed start
 					main-A embed A
 				embed end
-
 				outer
 
 		XX,
@@ -163,7 +195,6 @@ testTemplate(
 					{var $a = "M"}
 					outer
 					{embed "embed.latte"}
-						{$a}
 						{block a}main-A {$a}{/block}
 					{/embed}
 					outer
@@ -185,7 +216,6 @@ testTemplate(
 				embed start W
 					main-A W
 				embed end
-
 				outer
 
 		XX,
@@ -227,7 +257,6 @@ testTemplate(
 					OUT1 IN2 IN3
 					embed C unset IN2 IN3
 				embed end
-
 				outer
 
 		XX,
@@ -242,7 +271,6 @@ testTemplate(
 					{var $a = "M"}
 					outer
 					{embed "embed.latte", a => "P"}
-						{$a}
 						{block a}main-A {$a}{/block}
 					{/embed}
 					outer
@@ -264,7 +292,6 @@ testTemplate(
 				embed start P
 					main-A P
 				embed end
-
 				outer
 
 		XX,
@@ -347,7 +374,6 @@ testTemplate(
 					main-A
 				embed end
 
-
 				outer-D
 
 		XX,
@@ -380,7 +406,6 @@ testTemplate(
 
 				embed start
 		main-A		embed end
-
 				outer
 
 		XX,
@@ -414,7 +439,6 @@ testTemplate(
 
 				embed start
 		main-A		embed end
-
 				outer
 
 		XX,
@@ -449,7 +473,6 @@ testTemplate(
 				embed start
 					*outer-D*
 				embed end
-
 
 				outer-D
 
@@ -529,7 +552,6 @@ testTemplate(
 					embed A
 					*embed A*
 				embed end
-
 				outer
 
 		XX,
@@ -613,7 +635,6 @@ testTemplate(
 				embed2-start
 					embed1-A
 				embed2-end
-
 				embed1-end
 
 		XX,
@@ -652,8 +673,7 @@ testTemplate(
 
 
 				embed1-start
-		main-A
-				embed1-end
+		main-A		embed1-end
 
 		XX,
 );
@@ -693,46 +713,7 @@ testTemplate(
 
 
 				embed1-start
-		main-A
-				embed1-end
-
-		XX,
-);
-
-
-testTemplate(
-	'embeds nested in extra space',
-	[
-		'main' => <<<'XX'
-
-					{embed "embed1.latte"}
-						{embed "embed2.latte"}
-							{block a}nested embeds A{/block}
-						{/embed}
-					{/embed}
-
-			XX,
-		'embed1.latte' => <<<'XX'
-
-					embed1-start
-						{block a}embed1-A{/block}
-					embed1-end
-
-			XX,
-		'embed2.latte' => <<<'XX'
-
-					embed2-start
-						{block a}embed2-A{/block}
-					embed2-end
-
-			XX,
-	],
-	<<<'XX'
-
-
-				embed1-start
-					embed1-A
-				embed1-end
+		main-A		embed1-end
 
 		XX,
 );
@@ -775,7 +756,6 @@ testTemplate(
 				embed2-start
 					nested embeds A
 				embed2-end
-
 
 				embed1-end
 
@@ -838,7 +818,8 @@ testTemplate(
 	],
 	<<<'XX'
 
-						outer top:
+
+				outer top:
 				outer block
 
 
@@ -856,17 +837,14 @@ testTemplate(
 								embed2 block
 
 
-
 						embed1 bottom:
 
 						embed1 block
 
 
 
-
 				outer bottom:
 				outer block
-
 		XX,
 );
 
@@ -959,40 +937,4 @@ testTemplate(
 				main C
 
 		XX,
-);
-
-
-// generated code
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => <<<'XX'
-
-				{embed "embed1.latte"}
-					{block a}
-						{embed "embed2.latte"}
-							{block a}nested embeds A{/block}
-						{/embed}
-					{/block}
-				{/embed}
-
-		XX,
-	'embed1.latte' => <<<'XX'
-
-				embed1-start
-					{block a}embed1-A{/block}
-				embed1-end
-
-		XX,
-	'embed2.latte' => <<<'XX'
-
-				embed2-start
-					{block a}embed2-A{/block}
-				embed2-end
-
-		XX,
-]));
-
-Assert::matchFile(
-	__DIR__ . '/expected/embed.file.phtml',
-	$latte->compile('main'),
 );

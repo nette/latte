@@ -17,6 +17,7 @@ final class TemplateNode extends Node
 {
 	public FragmentNode $main;
 	public string $contentType;
+	public string $initialization = '';
 
 
 	public function print(PrintContext $context): string

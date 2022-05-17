@@ -14,10 +14,9 @@ final class Template%a% extends Latte\Runtime\Template
 			return get_defined_vars();
 		}
 		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
-		echo '
-
-';
+		echo "\n";
 		$this->renderBlock('sidebar', get_defined_vars()) /* line %d% */;
+		echo "\n";
 %A%
 	}
 
@@ -25,13 +24,13 @@ final class Template%a% extends Latte\Runtime\Template
 	public function prepare(): void
 	{
 		extract($this->params);
-		if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") {
+
+		if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
 			foreach (array_intersect_key(['person' => '8'], $this->params) as $ʟ_v => $ʟ_l) {
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
 		$this->parentName = "parent";
-
 	}
 
 
@@ -41,6 +40,7 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
+
 		echo '	<h1>';
 		$this->renderBlock('title', get_defined_vars()) /* line %d% */;
 		echo '</h1>
@@ -55,6 +55,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 			$iterations++;
 		}
+
 		echo '	</ul>
 ';
 	}
@@ -70,6 +71,5 @@ final class Template%a% extends Latte\Runtime\Template
 	/** {block sidebar} on line %d% */
 	public function blockSidebar(array $ʟ_args): void
 	{
-
 	}
 }

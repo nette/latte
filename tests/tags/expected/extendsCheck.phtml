@@ -6,6 +6,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
+
 		echo '
 
 ';
@@ -14,11 +15,13 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '    ';
 			$this->renderBlock('bar', get_defined_vars()) /* line %d% */;
 			echo "\n";
+
 		} finally {
 			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
 		}
 		$ʟ_fi = new LR\FilterInfo('html');
 		$foo = $ʟ_tmp;
+
 		echo "\n";
 		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
 		return get_defined_vars();

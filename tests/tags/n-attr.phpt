@@ -28,12 +28,12 @@ Assert::match(
 				echo '
 		<p';
 				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 2 */;
+				echo Latte\Essential\Nodes\NAttrNode::attrs(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp, false) /* line 2 */;
 				echo '> </p>
 
 		<input';
 				$ʟ_tmp = ['checked' => true, 'disabled' => false];
-				echo LR\Filters::htmlAttributes(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp) /* line 4 */;
+				echo Latte\Essential\Nodes\NAttrNode::attrs(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp, false) /* line 4 */;
 				echo '>
 		';
 		%A%
@@ -65,12 +65,12 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<div n:attr/>'),
 	Latte\CompileException::class,
-	'Missing arguments in n:attr',
+	'Missing arguments in n:attr (at column 6)',
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<div n:inner-attr/>'),
 	Latte\CompileException::class,
-	'Unknown attribute n:inner-attr',
+	'Unexpected attribute n:inner-attr, did you mean n:inner-try? (at column 6)',
 );

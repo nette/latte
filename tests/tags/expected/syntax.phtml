@@ -16,6 +16,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 			$iterations++;
 		}
+
 		echo '{* comment latte *}
 </ul>
 
@@ -29,16 +30,9 @@ final class Template%a% extends Latte\Runtime\Template
 
 <p>Default: {$person}</p>
 
-
 {a}
 { {/ {/syntax
 ';
 		return get_defined_vars();
 	}
-
-
-	public function prepare(): void
-	{
 %A%
-	}
-}

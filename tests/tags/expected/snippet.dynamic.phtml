@@ -10,9 +10,8 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 %A%
-		echo '<div id="';
-		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
-		echo '">';
+		echo '	';
+		echo '<div id="', htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')), '">';
 		$this->renderBlock('outer', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
 %A%
@@ -31,29 +30,33 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
-		$this->global->snippetDriver->enter("outer", 'static');
+
+		$this->global->snippetDriver->enter("outer", 'static') /* line %d% */;
 		try {
+			echo "\n";
 			$iterations = 0;
 			foreach (array(1,2,3) as $id) /* line %d% */ {
-				echo '		<div id="';
-				echo htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-$id"));
-				echo '">';
+				echo '		';
+				echo '<div id="', htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-$id")), '">';
 				$this->global->snippetDriver->enter($ʟ_nm, 'dynamic') /* line %d% */;
 				try {
 					echo '
 				#';
 					echo LR\Filters::escapeHtmlText($id) /* line %d% */;
 					echo "\n";
+
 				} finally {
 					$this->global->snippetDriver->leave();
 				}
+
 				echo '</div>
 ';
 				$iterations++;
 			}
+
+
 		} finally {
 			$this->global->snippetDriver->leave();
 		}
-
 	}
 }

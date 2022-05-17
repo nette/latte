@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
+use Latte\Compiler\Nodes\ExpressionNode;
+
 
 /**
  * Macro tag tokenizer.
@@ -31,6 +33,7 @@ class MacroTokens extends TokenIterator
 		NON_SIGNIFICANT = [self::T_COMMENT, self::T_WHITESPACE];
 
 	public int $depth = 0;
+	public ?string $modifiers = null;
 	private static ?Tokenizer $tokenizer = null;
 
 
@@ -138,6 +141,14 @@ class MacroTokens extends TokenIterator
 		$this->nextToken(',');
 		$this->nextAll(self::T_WHITESPACE, self::T_COMMENT);
 		return $words === [''] ? [] : $words;
+	}
+
+
+	public function parseExpression(): ?ExpressionNode
+	{
+		return $this->tokens
+			? new ExpressionNode($this->joinAll())
+			: null;
 	}
 
 

@@ -17,13 +17,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{templateType}'),
 	Latte\CompileException::class,
-	'Missing class name in {templateType}',
+	'Missing class name in {templateType} (at column 1)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{if true}{templateType stdClass}{/if}'),
 	Latte\CompileException::class,
-	'{templateType} is allowed only in template header.',
+	'{templateType} is allowed only in template header (at column 10)',
 );
 
 Assert::noError(fn() => $latte->compile('{templateType stdClass}'));

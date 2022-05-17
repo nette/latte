@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{varType}'),
 	Latte\CompileException::class,
-	'Missing arguments in {varType}',
+	'Missing arguments in {varType} (at column 1)',
 );
 
 Assert::exception(

@@ -8,7 +8,8 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(): array
 	{
 		extract($this->params);
-		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) {
+
+		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ['extends', null], true)) {
 			header('Content-Type: text/calendar; charset=utf-8') /* line %d% */;
 		}
 		$start = '2011-06-06';

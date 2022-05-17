@@ -13,6 +13,8 @@
 			echo '	d
 ';
 		}
+
+
 		echo '
 --
 
@@ -29,7 +31,6 @@
 			echo $ʟ_ifA;
 		}
 		echo '
-
 --
 
 ';
@@ -37,6 +38,7 @@
 		try {
 			echo '	a
 ';
+
 			ob_start(fn() => '') /* line 22 */;
 			try {
 				echo '	d
@@ -49,8 +51,8 @@
 			$ʟ_ifA = ob_get_clean();
 		}
 		echo (true) ? $ʟ_ifA : $ʟ_ifB /* line 20 */;
-		echo '
 
+		echo '
 --
 
 ';

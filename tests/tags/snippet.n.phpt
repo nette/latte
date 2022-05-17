@@ -19,15 +19,11 @@ $template = <<<'EOD'
 		<p>Outer</p>
 		</div>
 
-		<div class="test" n:inner-snippet="inner">
-		<p>Inner</p>
-		</div>
-
 		<div n:snippet="gallery" class="{=class}"></div>
 
 	EOD;
 
 Assert::matchFile(
 	__DIR__ . '/expected/snippet.n.phtml',
-	@$latte->compile($template), // deprecated n:inner-snippet
+	$latte->compile($template),
 );

@@ -14,9 +14,8 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->renderBlock('block1', get_defined_vars()) /* line %d% */;
 		echo '
 
-<div id="';
-		echo htmlspecialchars($this->global->snippetDriver->getHtmlId('outer'));
-		echo '">';
+';
+		echo '<div id="', htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')), '">';
 		$this->renderBlock('outer', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
 %A%
@@ -29,54 +28,31 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
-		echo '<div';
-		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')) . '"';
-		echo '>
-';
-		$this->renderBlock('snippet', [], null, 'snippet');
-		echo '</div>
-';
 
+		echo '<div';
+		echo ' id="', htmlspecialchars($this->global->snippetDriver->getHtmlId('snippet')), '"';
+		echo '>';
+		$this->renderBlock('snippet', [], null, 'snippet') /* line %d% */;
+		echo '</div>';
 	}
 
 
-	/** {block block2} on line %d% */
-	public function blockBlock2(array $ʟ_args): void
-	{
-		extract($this->params);
-		extract($ʟ_args);
-		unset($ʟ_args);
-		echo '<div';
-		echo ' id="' . htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-{$id}")) . '"';
-		echo '>
-';
-		$this->global->snippetDriver->enter($ʟ_nm, 'dynamic') /* line %d% */;
-		try {
-			echo '		dynamic
-';
-		} finally {
-			$this->global->snippetDriver->leave();
-		}
-		echo '</div>
-';
-
-	}
-
-
-	/** {snippet snippet} on line %d% */
+	/** n:snippet="snippet" on line %d% */
 	public function blockSnippet(array $ʟ_args): void
 	{
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
-		$this->global->snippetDriver->enter("snippet", 'static');
+
+		$this->global->snippetDriver->enter("snippet", 'static') /* line %d% */;
 		try {
-			echo '		static
+			echo '
+		static
 ';
+
 		} finally {
 			$this->global->snippetDriver->leave();
 		}
-
 	}
 
 
@@ -86,16 +62,41 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($this->params);
 		extract($ʟ_args);
 		unset($ʟ_args);
-		$this->global->snippetDriver->enter("outer", 'static');
+
+		$this->global->snippetDriver->enter("outer", 'static') /* line %d% */;
 		try {
-			echo 'begin
+			echo '
+begin
 ';
 			$this->renderBlock('block2', get_defined_vars()) /* line %d% */;
 			echo 'end
 ';
+
 		} finally {
 			$this->global->snippetDriver->leave();
 		}
+	}
 
+
+	/** n:block="block2" on line %d% */
+	public function blockBlock2(array $ʟ_args): void
+	{
+		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
+
+		echo '<div';
+		echo ' id="', htmlspecialchars($this->global->snippetDriver->getHtmlId($ʟ_nm = "inner-{$id}")), '"';
+		echo '>';
+		$this->global->snippetDriver->enter($ʟ_nm, 'dynamic') /* line %d% */;
+		try {
+			echo '
+		dynamic
+';
+
+		} finally {
+			$this->global->snippetDriver->leave();
+		}
+		echo '</div>';
 	}
 }

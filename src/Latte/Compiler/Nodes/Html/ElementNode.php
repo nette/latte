@@ -24,6 +24,7 @@ use Latte\Compiler\Tag;
  */
 class ElementNode extends AreaNode
 {
+	public ?Node $customName = null;
 	public ?FragmentNode $attributes = null;
 	public bool $selfClosing = false;
 	public ?AreaNode $content = null;
@@ -65,7 +66,7 @@ class ElementNode extends AreaNode
 	public function print(PrintContext $context): string
 	{
 		$res = $this->endTagVar = null;
-		if ($this->captureTagName) {
+		if ($this->captureTagName || $this->customName) {
 			$endTag = $this->endTagVar = '$ʟ_tag[' . $context->generateId() . ']';
 			$res = "$this->endTagVar = '';";
 		} else {
@@ -92,7 +93,7 @@ class ElementNode extends AreaNode
 
 		$namePhp = var_export($this->name, true);
 		if ($this->endTagVar) {
-			$res .= 'echo $ʟ_tmp = ' . $namePhp . ';';
+			$res .= 'echo $ʟ_tmp = (' . ($this->customName ? $this->customName->print($context) : $namePhp) . ');';
 			$res .= $this->endTagVar . ' = '
 				. "'</' . \$ʟ_tmp . '>'"
 				. ' . ' . $this->endTagVar . ';';
@@ -116,6 +117,9 @@ class ElementNode extends AreaNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->tagNode;
+		if ($this->customName) {
+			yield $this->customName;
+		}
 		if ($this->attributes) {
 			yield $this->attributes;
 		}

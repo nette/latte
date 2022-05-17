@@ -15,18 +15,18 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(
-	fn() => $latte->compile('{breakIf}'),
+	fn() => $latte->compile('{breakIf true}'),
 	Latte\CompileException::class,
-	'Tag {breakIf} is unexpected here.',
+	'Tag {breakIf} is unexpected here (at column 1)',
 );
 
 Assert::exception(
-	fn() => $latte->compile('{for}{breakIf}{/for}'),
+	fn() => $latte->compile('{breakIf}'),
 	Latte\CompileException::class,
-	'Missing condition in {breakIf}',
+	'Missing condition in {breakIf} (at column 1)',
 );
 
-Assert::noError(fn() => $latte->compile('{for}{if true}{breakIf true}{/if}{/for}'));
+Assert::noError(fn() => $latte->compile('{for ;;}{if true}{breakIf true}{/if}{/for}'));
 
 
 $template = <<<'EOD'

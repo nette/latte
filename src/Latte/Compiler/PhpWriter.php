@@ -11,7 +11,6 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
-use Latte\ContentType;
 use Latte\Helpers;
 use Latte\Policy;
 use Latte\SecurityViolationException;
@@ -24,110 +23,38 @@ class PhpWriter
 {
 	use Latte\Strict;
 
-	private MacroTokens $tokens;
-	private ?string $modifiers;
-
-	/** @var array{string, mixed}|null */
-	private ?array $context = null;
+	private ?MacroTokens $tokens;
+	private Escaper $escaper;
 	private ?Policy $policy = null;
 
 	/** @var string[] */
 	private array $functions = [];
-	private ?int $line = null;
 
 
-	public static function using(Tag $tag, ?TemplateGenerator $compiler = null): self
+	public static function using(PrintContext $context): self
 	{
-		$me = new static($tag->tokenizer, null, $tag->context);
-		$me->modifiers = &$tag->modifiers;
-		$me->functions = $compiler ? $compiler->getFunctions() : [];
-		$me->policy = $compiler ? $compiler->getPolicy() : null;
-		$me->line = $tag->position?->line;
+		$me = new self(null, $context->getEscaper());
+		$me->policy = $context->policy;
+		$names = array_keys($context->functions);
+		$me->functions = array_combine(array_map('strtolower', $names), $names);
 		return $me;
 	}
 
 
-	/**
-	 * @param  array{string, mixed}|null  $context
-	 */
-	public function __construct(MacroTokens $tokens, ?string $modifiers = null, ?array $context = null)
+	public function __construct(?MacroTokens $tokens, ?Escaper $escaper = null)
 	{
 		$this->tokens = $tokens;
-		$this->modifiers = $modifiers;
-		$this->context = $context;
-	}
-
-
-	/**
-	 * Expands %node.word, %node.array, %node.args, %node.line, %escape(), %modify(), %var, %raw, %word in code.
-	 */
-	public function write(string $mask, mixed ...$args): string
-	{
-		$mask = preg_replace('#%(node|\d+)\.#', '%$1_', $mask);
-		$mask = preg_replace_callback('#%escape(\(([^()]*+|(?1))+\))#', fn($m) => $this->escapePass(new MacroTokens(substr($m[1], 1, -1)))->joinAll(), $mask);
-		$mask = preg_replace_callback('#%modify(Content)?(\(([^()]*+|(?2))+\))#', fn($m) => $this->formatModifiers(substr($m[2], 1, -1), (bool) $m[1]), $mask);
-
-		$pos = $this->tokens->position;
-		$word = null;
-		if (str_contains($mask, '%node_word')) {
-			$word = $this->tokens->fetchWord();
-			if ($word === null) {
-				throw new CompileException('Invalid content of tag');
-			}
-		}
-
-		$code = preg_replace_callback(
-			'#([,+]?\s*)?%(node_|\d+_|)(word|var|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
-			function ($m) use ($word, &$args) {
-				[, $l, $source, $format, $cond, $r] = $m;
-
-				switch ($source) {
-					case 'node_':
-						$arg = $word; break;
-					case '':
-						$arg = current($args); next($args); break;
-					default:
-						$arg = $args[(int) $source]; break;
-				}
-
-				switch ($format) {
-					case 'word':
-						$code = $this->formatWord($arg); break;
-					case 'args':
-						$code = $this->formatArgs(); break;
-					case 'array':
-						$code = $this->formatArray();
-						$code = $cond && $code === '[]' ? '' : $code; break;
-					case 'var':
-						$code = PhpHelpers::dump($arg); break;
-					case 'raw':
-						$code = (string) $arg; break;
-					case 'line':
-						$l = trim($l);
-						$code = $this->line ? " /* line $this->line */" : ''; break;
-				}
-
-				if ($cond && $code === '') {
-					return $r ? $l : $r;
-				} else {
-					return $l . $code . $r;
-				}
-			},
-			$mask,
-		);
-
-		$this->tokens->position = $pos;
-		return $code;
+		$this->escaper = $escaper ?? new Escaper('');
 	}
 
 
 	/**
 	 * Formats modifiers calling.
 	 */
-	public function formatModifiers(string $var, bool $isContent = false): string
+	public function formatModifiers(string $modifier, string $var, bool $isContent = false): string
 	{
 		static $uniq;
-		$modifier = $this->completeModifier($this->modifiers);
+		$modifier = $this->completeModifier($modifier);
 		$uniq ??= '$' . bin2hex(random_bytes(5));
 		$tokens = new MacroTokens(ltrim($modifier, '|'));
 		$tokens = $this->preprocess($tokens);
@@ -793,10 +720,10 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump(implode('', $this->context)) . ', ')
+						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump($this->escaper->export()) . ', ')
 							->append(')');
 					} else {
-						$res = $this->escapePass($res);
+						$res = $this->escaper->escape(clone $res);
 					}
 
 					$tokens->nextToken('|');
@@ -839,11 +766,7 @@ class PhpWriter
 
 	private function completeModifier(string $modifier): string
 	{
-		[$contentType, $context] = $this->context;
-		if (
-			$contentType === ContentType::Html
-			&& in_array($context, [Escaper::HtmlAttributeUrl, Escaper::HtmlAttributeUnquotedUrl], true)
-		) {
+		if (in_array($this->escaper->getState(), [Escaper::HtmlAttributeUrl, Escaper::HtmlAttributeUnquotedUrl], true)) {
 			if (!Helpers::removeFilter($modifier, 'nocheck')) {
 				if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifier)) {
 					$modifier = '|checkUrl' . $modifier;
@@ -853,66 +776,5 @@ class PhpWriter
 			}
 		}
 		return $modifier;
-	}
-
-
-	/**
-	 * Escapes expression in tokens.
-	 */
-	public function escapePass(MacroTokens $tokens): MacroTokens
-	{
-		$tokens = clone $tokens;
-		[$contentType, $context] = $this->context;
-		switch ($contentType) {
-			case ContentType::Html:
-				switch ($context) {
-					case Escaper::HtmlText:
-						return $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')');
-					case Escaper::HtmlTag:
-					case Escaper::HtmlAttributeUnquotedUrl:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')');
-					case Escaper::HtmlAttribute:
-					case Escaper::HtmlAttributeUrl:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttr(')->append(')');
-					case Escaper::HtmlAttributeJavaScript:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))');
-					case Escaper::HtmlAttributeCss:
-						return $tokens->prepend('LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))');
-					case Escaper::HtmlComment:
-						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
-					case Escaper::HtmlBogusTag:
-						return $tokens->prepend('LR\Filters::escapeHtml(')->append(')');
-					case Escaper::HtmlJavaScript:
-					case Escaper::HtmlCss:
-						return $tokens->prepend('LR\Filters::escape' . ucfirst($context) . '(')->append(')');
-					default:
-						throw new CompileException("Unknown context $contentType, $context.");
-				}
-				// break omitted
-			case ContentType::Xml:
-				switch ($context) {
-					case Escaper::XmlText:
-					case Escaper::XmlAttribute:
-					case Escaper::XmlBogusTag:
-						return $tokens->prepend('LR\Filters::escapeXml(')->append(')');
-					case Escaper::XmlComment:
-						return $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')');
-					case Escaper::XmlTag:
-						return $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')');
-					default:
-						throw new CompileException("Unknown context $contentType, $context.");
-				}
-				// break omitted
-			case ContentType::JavaScript:
-			case ContentType::Css:
-			case ContentType::ICal:
-				return $tokens->prepend('LR\Filters::escape' . ucfirst($contentType) . '(')->append(')');
-			case ContentType::Text:
-				return $tokens;
-			case null:
-				return $tokens->prepend('($this->filters->escape)(')->append(')');
-			default:
-				throw new CompileException("Unknown context $contentType.");
-		}
 	}
 }

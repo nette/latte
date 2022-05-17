@@ -31,14 +31,13 @@ final class Tag
 		OutputKeepIndentation = 1,
 		OutputRemoveIndentation = 2;
 
-	public MacroTokens $tokenizer;
+	public MacroTokens $parser;
 	public int $outputMode = self::OutputNone;
 
 
 	public function __construct(
 		public /*readonly*/ string $name,
 		public /*readonly*/ string $args,
-		public /*readonly*/ string $modifiers = '',
 		public /*readonly*/ bool $void = false,
 		public /*readonly*/ bool $closing = false,
 		public /*readonly*/ int $location = 0,
@@ -74,7 +73,7 @@ final class Tag
 	public function setArgs(string $args): void
 	{
 		$this->args = trim($args);
-		$this->tokenizer = new MacroTokens($this->args);
+		$this->parser = new MacroTokens($this->args);
 	}
 
 
@@ -111,23 +110,28 @@ final class Tag
 
 
 	/**
-	 * @param  string[]  $parents
 	 * @throws CompileException
 	 */
-	public function validate(string|bool|null $arguments, array $parents = [], bool $modifiers = false): void
+	public function expectArguments(string|bool|null $arguments = true): void
 	{
-		if ($parents && (!$this->parent || !in_array($this->parent->name, $parents, true))) {
-			throw new CompileException('Tag ' . $this->getNotation() . ' is unexpected here.', $this->position);
-
-		} elseif ($this->modifiers !== '' && !$modifiers) {
-			throw new CompileException('Filters are not allowed in ' . $this->getNotation(), $this->position);
-
-		} elseif ($arguments && $this->args === '') {
+		if ($arguments && $this->args === '') {
 			$label = is_string($arguments) ? $arguments : 'arguments';
 			throw new CompileException('Missing ' . $label . ' in ' . $this->getNotation(), $this->position);
 
 		} elseif ($arguments === false && $this->args !== '') {
 			throw new CompileException('Arguments are not allowed in ' . $this->getNotation(), $this->position);
+		}
+	}
+
+
+	public function extractModifier(): void
+	{
+		if (preg_match('~^
+			(?<args>(?:' . TemplateLexer::ReString . '|[^\'"])*?)
+			(?<modifiers>(?<!\|)\|[a-z](?<modArgs>(?:' . TemplateLexer::ReString . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
+		$~Disx', $this->args, $match)) {
+			$this->setArgs(trim($match['args']));
+			$this->parser->modifiers = $match['modifiers'] ?? '';
 		}
 	}
 
