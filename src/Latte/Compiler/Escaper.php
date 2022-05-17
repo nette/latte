@@ -77,10 +77,10 @@ final class Escaper
 				'htmlComment' => 'escapeHtmlComment',
 			],
 			self::Html => [
-				'htmlAttr' => 'escapeHtmlAttrConv',
-				'htmlAttrJs' => 'escapeHtmlAttrConv',
-				'htmlAttrCss' => 'escapeHtmlAttrConv',
-				'htmlAttrUrl' => 'escapeHtmlAttrConv',
+				'htmlAttr' => 'convertHtmlToHtmlAttr',
+				'htmlAttrJs' => 'convertHtmlToHtmlAttr',
+				'htmlAttrCss' => 'convertHtmlToHtmlAttr',
+				'htmlAttrUrl' => 'convertHtmlToHtmlAttr',
 				'htmlComment' => 'escapeHtmlComment',
 			],
 		];

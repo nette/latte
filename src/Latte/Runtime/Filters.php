@@ -71,15 +71,6 @@ class Filters
 
 
 	/**
-	 * Escapes HTML for use inside HTML attribute.
-	 */
-	public static function escapeHtmlAttrConv($s): string
-	{
-		return self::escapeHtmlAttr($s, false);
-	}
-
-
-	/**
 	 * Escapes string for use inside HTML attribute name.
 	 */
 	public static function escapeHtmlAttrUnquoted($s): string
@@ -198,6 +189,15 @@ class Filters
 		} else {
 			throw new RuntimeException('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest));
 		}
+	}
+
+
+	/**
+	 * Converts HTML text to attribute. The quotation marks need to be escaped.
+	 */
+	public static function convertHtmlToHtmlAttr(string $s): string
+	{
+		return self::escapeHtmlAttr($s, false);
 	}
 
 
