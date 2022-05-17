@@ -21,8 +21,6 @@ $template = <<<'EOD'
 
 	<span title={if true}{$x}{else}"item"{/if}></span>
 
-	<span title={if true}{$x} {$x}{else}"item"{/if}></span>
-
 	<span {='title'}={$x}></span>
 
 	<span attr{$x}b=c{$x}d></span> {* not supported *}

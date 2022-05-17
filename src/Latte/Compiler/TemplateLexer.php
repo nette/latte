@@ -27,6 +27,10 @@ final class TemplateLexer
 
 	/** special HTML attribute prefix */
 	public const NPrefix = 'n:';
+
+	/** HTML attribute name/value (\p{C} means \x00-\x1F except space) */
+	private const ReHtmlName = '[^\p{C} "\'<>=`/{}]+';
+	private const ReHtmlValue = '[^\p{C} "\'<>=`{}]+';
 	private const StateEnd = 'end';
 
 	/** @var array<string, array{string, string}> */
@@ -42,7 +46,6 @@ final class TemplateLexer
 	/** @var array<array{name: string, args: mixed[]}> */
 	private array $states;
 	private string $input;
-	private int $offset;
 	private Position $position;
 	private bool $xmlMode;
 
@@ -52,7 +55,6 @@ final class TemplateLexer
 	{
 		$this->position = new Position(1, 1, 0);
 		$this->input = $this->normalize($template);
-		$this->offset = 0;
 		$this->states = [];
 		$this->setContentType($contentType);
 		$this->setSyntax(null);
@@ -62,154 +64,171 @@ final class TemplateLexer
 			yield from $this->{$state['name']}(...$state['args']);
 		} while ($this->states[0]['name'] !== self::StateEnd);
 
-		if ($this->offset < strlen($this->input)) {
-			yield $this->addToken(new Token(Token::TEXT, substr($this->input, $this->offset)));
+		if ($this->position->offset < strlen($this->input)) {
+			throw new CompileException("Unexpected '" . substr($this->input, $this->position->offset, 10) . "'", $this->position);
 		}
 
-		yield $this->addToken(new Token(Token::END, ''));
+		yield new Token(Token::End, '', $this->position);
 	}
 
 
 	private function statePlain(): \Generator
 	{
 		$m = yield from $this->match('~
-			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
-		~xsi');
+			(?<Text>.+?)??
+			(?<Indentation>(?<=\n|^)[ \t]+)?
+			(
+				(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|      # {tag
+				(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)|      # {* comment
+				$
+			)
+		~xsiAuD');
 
-		if (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro'], $m['indent']);
-
+		if (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
 		} else {
 			$this->setState(self::StateEnd);
 		}
 	}
 
 
-	private function stateLatte(string $delimiter, ?string $indent = null): \Generator
+	private function stateLatteTag(): \Generator
 	{
 		$this->popState();
-		$m = yield from $this->match('~
-			(?P<comment>\*.*?\*' . $this->delimiters[1] . ')(?P<newline>\n{0,2})|
-			(?P<macro>(?>
+		yield from $this->match('~
+			(?<Slash>/)?
+			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))?   # name, /name, but not function( or class:: or namespace\
+			(?<Latte_Args>(?>
 				' . self::ReString . '|
 				\{(?>' . self::ReString . '|[^\'"{}])*+\}|
-				[^\'"{}]+
-			)++)
-			' . $this->delimiters[1] . '
-			(?P<rmargin>[ \t]*\n)?
-		~xsiA');
+				[^\'"{}]+?
+			)+?(?<!/))?
+			(?<Slash_>/)?
+			(?<Latte_TagClose>' . $this->delimiters[1] . ')
+			(?<Newline>[ \t]*\R)?
+		~xsiAu');
+	}
 
-		if (!empty($m['macro'])) {
-			$token = new Token(Token::MACRO_TAG, $indent . $delimiter . $m[0]);
-			[$token->name, $token->value, $token->empty, $token->closing] = $this->parseMacroTag($m['macro']);
-			$token->indentation = $indent;
-			$token->newline = isset($m['rmargin']);
-			yield $this->addToken($token);
 
-		} elseif (!empty($m['comment'])) {
-			$token = new Token(Token::COMMENT, $indent . $delimiter . $m[0]);
-			$token->indentation = $indent;
-			$token->newline = (bool) $m['newline'];
-			yield $this->addToken($token);
-
-		} else {
-			throw new CompileException('Malformed tag contents.', $this->position);
-		}
+	private function stateLatteComment(): \Generator
+	{
+		$this->popState();
+		yield from $this->match('~
+			(?<Text>.+?)??
+			(?<Latte_CommentClose>\*' . $this->delimiters[1] . ')
+			(?<Newline>[ \t]*\R{1,2})?
+		~xsiAu');
 	}
 
 
 	private function stateHtmlText(): \Generator
 	{
-		$m = yield from $this->match('~
-			(?:(?<=\n|^)[ \t]*)?<(?P<closing>/?)(?P<tag>' . self::ReTagName . ')|  ##  begin of HTML tag <tag </tag - ignores <!DOCTYPE
-			<(?P<htmlcomment>!(?:--(?!>))?|\?)|     ##  begin of <!, <!--, <!DOCTYPE, <?
-			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
-		~xsi');
+		$m = yield from $this->match('~(?J)
+			(?<Text>.+?)??
+			(
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Html_TagOpen><)(?<Slash>/)?(?<Html_Name>' . self::ReTagName . ')|  # <tag </tag
+				(?<Html_CommentOpen><!--(?!>|->))|                                                      # <!-- comment
+				(?<Html_BogusOpen><[/?!])|                                                              # <!doctype <?xml or error
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|   # {tag
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)|   # {* comment
+				$
+			)
+		~xsiAuD');
 
-		if (!empty($m['htmlcomment'])) { // <! <?
-			yield $this->addToken(new Token(Token::HTML_TAG_BEGIN, $m[0]));
-			$ending = $m['htmlcomment'] === '!--'
-				? '--'
-				: ($m['htmlcomment'] === '?' && $this->xmlMode ? '\?' : '');
-			$this->setState('stateHtmlComment', $ending);
-
-		} elseif (!empty($m['tag'])) { // <tag or </tag
-			$token = new Token(Token::HTML_TAG_BEGIN, $m[0]);
-			$token->name = $m['tag'];
-			$token->closing = (bool) $m['closing'];
-			yield $this->addToken($token);
-			$this->setState('stateHtmlTag', $m['closing'] . strtolower($m['tag']));
-
-		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro'], $m['indent']);
-
+		if (isset($m['Html_TagOpen'])) {
+			$tagName = isset($m['Slash']) ? null : strtolower($m['Html_Name']);
+			$this->setState('stateHtmlTag', $tagName);
+		} elseif (isset($m['Html_CommentOpen'])) {
+			$this->setState('stateHtmlComment');
+		} elseif (isset($m['Html_BogusOpen'])) {
+			$this->setState('stateHtmlBogus');
+		} elseif (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
 		} else {
 			$this->setState(self::StateEnd);
 		}
 	}
 
 
-	private function stateHtmlTag(?string $tagName = null): \Generator
+	private function stateHtmlTag(?string $tagName = null, ?string $attrName = null): \Generator
 	{
 		$m = yield from $this->match('~
-			(?P<end>/?>)([ \t]*\n)?|  ##  end of HTML tag
-			(?P<macro>' . $this->delimiters[0] . ')|
-			\s*(?P<attr>[^\s"\'>/={]+)(?:\s*=\s*(?P<value>["\']|[^\s"\'=<>`{]+))? ## beginning of HTML attribute
-		~xsi');
+			(?<Whitespace>\s+)|                                        # whitespace
+			(?<Equals>=)|
+			(?<Quote>["\'])|
+			(?<Slash>/)?(?<Html_TagClose>>)(?<Newline>[ \t]*\R)?|      # > />
+			(?<Html_Name>' . self::ReHtmlName . ')|                    # HTML attribute name/value
+			(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|      # {tag
+			(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)       # {* comment
+		~xsiAu');
 
-		if (!empty($m[self::StateEnd])) { // end of HTML tag />
-			$token = new Token(Token::HTML_TAG_END, $m[0]);
-			$empty = str_contains($m[0], '/');
-			yield $this->addToken($token);
-			if (!$this->xmlMode && !$empty && in_array($tagName, ['script', 'style'], true)) {
-				$this->setState('stateHtmlRCData', $tagName);
-			} else {
-				$this->setState('stateHtmlText');
-			}
-
-		} elseif (isset($m['attr']) && $m['attr'] !== '') { // HTML attribute
-			$token = new Token(Token::HTML_ATTRIBUTE_BEGIN, $m[0]);
-			$token->name = $m['attr'];
-			$token->value = $m['value'] ?? '';
-
-			if ($token->value === '"' || $token->value === "'") { // attribute = "'
-				if (str_starts_with($token->name, self::NPrefix)) {
-					$token->value = '';
-					if ($m2 = yield from $this->match('~(.*?)' . $m['value'] . '~xsi')) {
-						$token->value = $m2[1];
-						$token->text .= $m2[0];
-					}
-				} else {
-					yield $this->addToken($token);
-					$this->pushState('stateHtmlAttribute', $m['value']);
-					return;
-				}
-			}
-			yield $this->addToken($token);
-			$this->setState('stateHtmlTag');
-
-		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro']);
-
+		if (isset($m['Html_Name'])) {
+			$this->states[0]['args'][1] = $m['Html_Name'];
+		} elseif (isset($m['Equals'])) {
+			yield from $this->match('~
+				(?<Whitespace>\s+)?                                    # whitespace
+				(?<Html_Name>' . self::ReHtmlValue . ')                # HTML attribute name/value
+			~xsiAu');
+		} elseif (isset($m['Whitespace'])) {
+		} elseif (isset($m['Quote'])) {
+			$this->pushState(str_starts_with($attrName, self::NPrefix)
+				? 'stateHtmlQuotedNAttrValue'
+				: 'stateHtmlQuotedValue', $m['Quote']);
+		} elseif (
+			isset($m['Html_TagClose'])
+			&& !$this->xmlMode
+			&& !isset($m['Slash'])
+			&& in_array($tagName, ['script', 'style'], true)
+		) {
+			$this->setState('stateHtmlRCData', $tagName);
+		} elseif (isset($m['Html_TagClose'])) {
+			$this->setState('stateHtmlText');
+		} elseif (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
 		} else {
 			$this->setState(self::StateEnd);
 		}
 	}
 
 
-	private function stateHtmlAttribute(string $quote): \Generator
+	private function stateHtmlQuotedValue(string $quote): \Generator
 	{
 		$m = yield from $this->match('~
-			(?P<quote>' . $quote . ')|  ##  end of HTML attribute
-			(?P<macro>' . $this->delimiters[0] . ')
-		~xsi');
+			(?<Text>.+?)??(
+				(?<Quote>' . $quote . ')|
+				(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|      # {tag
+				(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)       # {* comment
+			)
+		~xsiAu');
 
-		if (!empty($m['quote'])) {
-			yield $this->addToken(new Token(Token::HTML_ATTRIBUTE_END, $m[0]));
+		if (isset($m['Quote'])) {
 			$this->popState();
+		} elseif (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
+		} else {
+			$this->setState(self::StateEnd);
+		}
+	}
 
-		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro']);
+
+	private function stateHtmlQuotedNAttrValue(string $quote): \Generator
+	{
+		$m = yield from $this->match('~
+			(?<Text>.+?)??(?<Quote>' . $quote . ')|
+		~xsiAu');
+
+		if (isset($m['Quote'])) {
+			$this->popState();
+		} else {
+			$this->setState(self::StateEnd);
 		}
 	}
 
@@ -217,40 +236,67 @@ final class TemplateLexer
 	private function stateHtmlRCData(string $tagName): \Generator
 	{
 		$m = yield from $this->match('~
-			</(?P<tag>' . $tagName . ')(?=[\s/>])| ##  end HTML tag </tag
-			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
-		~xsi');
+			(?<Text>.+?)??
+			(?<Indentation>(?<=\n|^)[ \t]+)?
+			(
+				(?<Html_TagOpen><)(?<Slash>/)(?<Html_Name>' . preg_quote($tagName, '~') . ')|  # </tag
+				(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|                          # {tag
+				(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)|                          # {* comment
+				$
+			)
+		~xsiAu');
 
-		if (!empty($m['tag'])) { // </tag
-			$token = new Token(Token::HTML_TAG_BEGIN, $m[0]);
-			$token->name = $m['tag'];
-			$token->closing = true;
-			yield $this->addToken($token);
+		if (isset($m['Html_TagOpen'])) {
 			$this->setState('stateHtmlTag');
-
-		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro'], $m['indent']);
-
+		} elseif (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
 		} else {
 			$this->setState(self::StateEnd);
 		}
 	}
 
 
-	private function stateHtmlComment(string $ending): \Generator
+	private function stateHtmlComment(): \Generator
+	{
+		$m = yield from $this->match('~(?J)
+			(?<Text>.+?)??
+			(
+				(?<Html_CommentClose>-->)|                                                              # -->
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|   # {tag
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)    # {* comment
+			)
+		~xsiAu');
+
+		if (isset($m['Html_CommentClose'])) {
+			$this->setState('stateHtmlText');
+		} elseif (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
+		} else {
+			$this->setState(self::StateEnd);
+		}
+	}
+
+
+	private function stateHtmlBogus(): \Generator
 	{
 		$m = yield from $this->match('~
-			(?P<htmlcomment>' . $ending . '>)|   ##  end of HTML comment
-			(?P<indent>(?<=\n|^)[ \t]*)?(?P<macro>' . $this->delimiters[0] . ')
-		~xsi');
+			(?<Text>.+?)??(
+				(?<Html_TagClose>>)|                                       # >
+				(?<Latte_TagOpen>' . $this->delimiters[0] . '(?!\*))|      # {tag
+				(?<Latte_CommentOpen>' . $this->delimiters[0] . '\*)       # {* comment
+			)
+		~xsiAu');
 
-		if (!empty($m['htmlcomment'])) { // -->
-			yield $this->addToken(new Token(Token::HTML_TAG_END, $m[0]));
+		if (isset($m['Html_TagClose'])) {
 			$this->setState('stateHtmlText');
-
-		} elseif (!empty($m['macro'])) {
-			$this->pushState('stateLatte', $m['macro'], $m['indent']);
-
+		} elseif (isset($m['Latte_TagOpen'])) {
+			$this->pushState('stateLatteTag');
+		} elseif (isset($m['Latte_CommentOpen'])) {
+			$this->pushState('stateLatteComment');
 		} else {
 			$this->setState(self::StateEnd);
 		}
@@ -262,7 +308,7 @@ final class TemplateLexer
 	 */
 	private function match(string $re): \Generator
 	{
-		if (!preg_match($re, $this->input, $matches, PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL, $this->offset)) {
+		if (!preg_match($re, $this->input, $matches, PREG_UNMATCHED_AS_NULL, $this->position->offset)) {
 			if (preg_last_error()) {
 				throw new RegexpException;
 			}
@@ -270,14 +316,12 @@ final class TemplateLexer
 			return [];
 		}
 
-		$value = substr($this->input, $this->offset, $matches[0][1] - $this->offset);
-		if ($value !== '') {
-			yield $this->addToken(new Token(Token::TEXT, $value));
-		}
-
-		$this->offset = $matches[0][1] + strlen($matches[0][0]);
 		foreach ($matches as $k => $v) {
-			$matches[$k] = $v[0];
+			if ($v !== null && !\is_int($k)) {
+				$k = rtrim($k, '_');
+				yield new Token(\constant(Token::class . '::' . $k), $v, $this->position);
+				$this->position = $this->position->advance($v);
+			}
 		}
 
 		return $matches;
@@ -297,7 +341,7 @@ final class TemplateLexer
 	}
 
 
-	private function setState(string $state, ...$args)
+	private function setState(string $state, ...$args): void
 	{
 		$this->states[0] = ['name' => $state, 'args' => $args];
 	}
@@ -338,42 +382,6 @@ final class TemplateLexer
 	{
 		$this->delimiters = [$left, $right];
 		return $this;
-	}
-
-
-	/**
-	 * Parses macro tag to name, arguments a modifiers parts.
-	 * @return array{string, string, bool, bool}|null
-	 * @internal
-	 */
-	public function parseMacroTag(string $tag): ?array
-	{
-		if (!preg_match('~^
-			(?P<closing>/?)
-			(?P<name>=|_(?!_)|[a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\)|)   ## name, /name, but not function( or class:: or namespace\
-			(?P<args>(?:' . self::ReString . '|[^\'"])*?)
-			(?P<empty>/?$)
-		()$~Disx', $tag, $match)) {
-			if (preg_last_error()) {
-				throw new RegexpException;
-			}
-
-			return null;
-		}
-
-		if ($match['name'] === '') {
-			$match['name'] = $match['closing'] ? '' : '=';
-		}
-
-		return [$match['name'], trim($match['args']), (bool) $match['empty'], (bool) $match['closing']];
-	}
-
-
-	private function addToken(Token $token): Token
-	{
-		$token->position = $this->position;
-		$this->position = $this->position->advance($token->text);
-		return $token;
 	}
 
 

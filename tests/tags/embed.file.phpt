@@ -59,7 +59,6 @@ testTemplate(
 				outer
 
 				embed
-
 				outer
 
 		XX,
@@ -588,7 +587,6 @@ testTemplate(
 				embed2-start
 					embed2-A
 				embed2-end
-
 					main-A
 				embed1-end
 
@@ -816,31 +814,19 @@ testTemplate(
 
 
 				outer top:
-				outer block
-
-
-
+		outer block
 
 								embed1 top:
-
-						embed1 block
-
-
+		embed1 block
 
 										embed2:
-
-
-								embed2 block
-
+		embed2 block
 
 						embed1 bottom:
-
-						embed1 block
-
-
+		embed1 block
 
 				outer bottom:
-				outer block
+		outer block
 		XX,
 );
 

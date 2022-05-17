@@ -12,42 +12,64 @@ namespace Latte\Compiler;
 use Latte;
 
 
-/**
- * Latte parser token.
- */
-class Token
+final class Token
 {
 	use Latte\Strict;
 
 	public const
-		TEXT = 'text',
-		MACRO_TAG = 'macroTag', // latte macro tag
-		HTML_TAG_BEGIN = 'htmlTagBegin', // begin of HTML tag or comment
-		HTML_TAG_END = 'htmlTagEnd', // end of HTML tag or comment
-		HTML_ATTRIBUTE_BEGIN = 'htmlAttributeBegin',
-		HTML_ATTRIBUTE_END = 'htmlAttributeEnd',
-		COMMENT = 'comment', // latte comment
-		END = 'end';
+		End = 0,
+		Text = 10000,
+		Whitespace = 10002,
+		Newline = 10003,
+		Indentation = 10004,
+		Slash = 10005,
+		Equals = 10006,
+		Quote = 10007; // single or double quote
 
-	/** name of macro tag, HTML tag or attribute; used for types MACRO_TAG, HTML_TAG_BEGIN, HTML_ATTRIBUTE_BEGIN */
-	public string $name = '';
+	public const
+		Latte_TagOpen = 10010,
+		Latte_TagClose = 10011,
+		Latte_Name = 10012,
+		Latte_Args = 10013,
+		Latte_CommentOpen = 10014,
+		Latte_CommentClose = 10015;
 
-	/** value of macro tag or HTML attribute; used for types MACRO_TAG, HTML_ATTRIBUTE_BEGIN */
-	public string $value;
+	public const
+		Html_TagOpen = 10020,
+		Html_TagClose = 10021,
+		Html_CommentOpen = 10022,
+		Html_CommentClose = 10023,
+		Html_BogusOpen = 10024,
+		Html_Name = 10025;
 
-	/** is closing macro or HTML tag </tag>? used for types MACRO_TAG, HTML_TAG_BEGIN */
-	public bool $closing = false;
+	public const NAMES = [
+		self::End => '[EOF]',
+		self::Text => 'text',
+		self::Whitespace => 'whitespace',
+		self::Newline => 'newline',
+		self::Indentation => 'indentation',
+		self::Slash => "'/'",
+		self::Equals => "'='",
+		self::Quote => 'quote',
 
-	/** is tag empty {name/}? used for type MACRO_TAG */
-	public bool $empty = false;
+		self::Latte_TagOpen => "'{'",
+		self::Latte_TagClose => "'}'",
+		self::Latte_Name => 'tag name',
+		self::Latte_Args => 'arguments',
+		self::Latte_CommentOpen => "'{*'",
+		self::Latte_CommentClose => "'*}'",
 
-	public ?string $indentation = null;
-
-	public bool $newline = false;
+		self::Html_TagOpen => 'HTML tag',
+		self::Html_TagClose => 'end of HTML tag',
+		self::Html_CommentOpen => 'HTML comment',
+		self::Html_CommentClose => 'end of HTML comment',
+		self::Html_BogusOpen => 'HTML bogus tag',
+		self::Html_Name => 'HTML name',
+	];
 
 
 	public function __construct(
-		public /*readonly*/ string $type,
+		public /*readonly*/ int $type,
 		public /*readonly*/ string $text,
 		public /*readonly*/ ?Position $position = null,
 	) {
@@ -63,6 +85,6 @@ class Token
 
 	public function isEnd(): bool
 	{
-		return $this->type === self::END;
+		return $this->type === self::End;
 	}
 }

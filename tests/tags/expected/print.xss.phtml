@@ -4,22 +4,19 @@
 		echo LR\Filters::escapeHtmlText($el2) /* line %d% */;
 		echo '
 
-<p val = ';
+<p val=';
 		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
 		echo ' val2=';
 		echo LR\Filters::escapeHtmlAttrUnquoted($mxss) /* line %d% */;
 		echo '> </p>
-<p onclick = ';
+<p onclick=';
 		echo '"' . LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) . '"' /* line %d% */;
 		echo '> </p>
-<p ONCLICK ="';
+<p ONCLICK="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo '" ';
 		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
 		echo '> </p>
-<p val = />';
-		echo LR\Filters::escapeHtmlText($xss) /* line %d% */;
-		echo '</p>
 
 <STYLE type="text/css">
 <!--
@@ -61,15 +58,13 @@ var prop2 = ';
 /* ]]> */
 </SCRIPT>
 
-<p onclick =
-\'alert(';
+<p onclick=\'alert(';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo ');alert("hello");\'
  title=\'';
 		echo LR\Filters::escapeHtmlAttr($xss) /* line %d% */;
 		echo '\'
- STYLE =
- "color:';
+ STYLE="color:';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss($xss)) /* line %d% */;
 		echo ';"
  rel="';

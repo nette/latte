@@ -11,7 +11,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 test('end', function () {
-	$eof = new Token(Token::END, '');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$eof]));
 	Assert::false($stream->is());
 	Assert::same($eof, $stream->peek());
@@ -23,15 +23,15 @@ test('end', function () {
 
 
 test('is()', function () {
-	$token = new Token(Token::TEXT, 'foo');
-	$eof = new Token(Token::END, '');
+	$token = new Token(Token::Text, 'foo');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token, $eof]));
 
 	Assert::false($stream->is());
 	Assert::true($stream->is('foo'));
 	Assert::false($stream->is(''));
 	Assert::true($stream->is('', 'foo'));
-	Assert::true($stream->is(Token::TEXT));
+	Assert::true($stream->is(Token::Text));
 
 	Assert::same($token, $stream->consume());
 	Assert::false($stream->is('foo'));
@@ -39,9 +39,9 @@ test('is()', function () {
 
 
 test('peek()', function () {
-	$token1 = new Token('', '');
-	$token2 = new Token('', '');
-	$eof = new Token(Token::END, '');
+	$token1 = new Token(1, '');
+	$token2 = new Token(2, '');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token1, $token2, $eof]));
 
 	Assert::null($stream->peek(-1));
@@ -69,10 +69,10 @@ test('peek()', function () {
 
 
 test('peek() jump forward', function () {
-	$token1 = new Token('', '');
-	$token2 = new Token('', '');
-	$token3 = new Token('', '');
-	$eof = new Token(Token::END, '');
+	$token1 = new Token(1, '');
+	$token2 = new Token(2, '');
+	$token3 = new Token(3, '');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token1, $token2, $token3, $eof]));
 
 	Assert::same($token3, $stream->peek(2));
@@ -80,8 +80,8 @@ test('peek() jump forward', function () {
 
 
 test('consume() any token', function () {
-	$token = new Token('', '');
-	$eof = new Token(Token::END, '');
+	$token = new Token(1, '');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token, $eof]));
 
 	Assert::same($token, $stream->consume());
@@ -92,8 +92,8 @@ test('consume() any token', function () {
 
 
 test('consume() kind of token', function () {
-	$token = new Token(Token::TEXT, 'foo');
-	$eof = new Token(Token::END, '');
+	$token = new Token(Token::Text, 'foo');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token, $eof]));
 
 	Assert::exception(
@@ -108,8 +108,8 @@ test('consume() kind of token', function () {
 
 
 test('tryConsume() kind of token', function () {
-	$token = new Token(Token::TEXT, 'foo');
-	$eof = new Token(Token::END, '');
+	$token = new Token(Token::Text, 'foo');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token, $eof]));
 
 	Assert::null($stream->tryConsume('bar'));
@@ -120,8 +120,8 @@ test('tryConsume() kind of token', function () {
 
 
 test('seek()', function () {
-	$token = new Token('', '');
-	$eof = new Token(Token::END, '');
+	$token = new Token(1, '');
+	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token, $eof]));
 
 	Assert::exception(
@@ -155,7 +155,7 @@ test('generator is read on the first usage', function () {
 
 test('generator is read continually', function () {
 	$generator = function () {
-		yield new Token('', '');
+		yield new Token(1, '');
 		throw new Exception('Generator');
 	};
 	$stream = new TokenStream($generator());

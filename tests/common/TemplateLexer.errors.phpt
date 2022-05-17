@@ -32,38 +32,6 @@ Assert::exception(
 
 $lexer = new TemplateLexer;
 Assert::exception(
-	fn() => iterator_to_array($lexer->tokenize("{var \n'abc}"), false),
-	Latte\CompileException::class,
-	'Malformed tag contents (at column 1)',
-);
-
-
-$lexer = new TemplateLexer;
-Assert::exception(
-	fn() => iterator_to_array($lexer->tokenize("\n{* \n'abc}"), false),
-	Latte\CompileException::class,
-	'Malformed tag contents (on line 2 at column 1)',
-);
-
-
-$lexer = new TemplateLexer;
-Assert::exception(
-	fn() => iterator_to_array($lexer->tokenize('{'), false),
-	Latte\CompileException::class,
-	'Malformed tag contents (at column 1)',
-);
-
-
-$lexer = new TemplateLexer;
-Assert::exception(
-	fn() => iterator_to_array($lexer->tokenize("\n{"), false),
-	Latte\CompileException::class,
-	'Malformed tag contents (on line 2 at column 1)',
-);
-
-
-$lexer = new TemplateLexer;
-Assert::exception(
 	fn() => iterator_to_array($lexer->tokenize("a\x00\x1F\x7Fb"), false),
 	Latte\CompileException::class,
 	'Template contains control character \x0 (at column 2)',

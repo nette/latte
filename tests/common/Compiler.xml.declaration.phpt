@@ -29,6 +29,5 @@ Assert::match(<<<'XX'
 	%A%
 	XX, $latte->compile('<?xml version="{$var}"?>'));
 Assert::contains('<?xml ?>', $latte->compile('<div title="<?xml ?>">'));
-Assert::contains('<?xml ?>', $latte->compile('<div <?xml ?> >'));
 Assert::contains('<?xml ?>', $latte->compile('<!-- <?xml ?> -->'));
 Assert::contains('<?xml ?>', $latte->compile('<script> <?xml ?> </script>'));

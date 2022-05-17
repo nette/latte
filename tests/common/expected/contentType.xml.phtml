@@ -63,15 +63,13 @@ var html = ';
 </script>
 
 
-<p onclick =
-\'alert(';
+<p onclick=\'alert(';
 		echo LR\Filters::escapeXml($id) /* line %d% */;
 		echo ');alert("hello");\'
  title=\'';
 		echo LR\Filters::escapeXml($id) /* line %d% */;
 		echo '"\'
- style =
- "color:';
+ style="color:';
 		echo LR\Filters::escapeXml($id) /* line %d% */;
 		echo ';\'"
  alt=\'';
@@ -114,7 +112,7 @@ var html = ';
 		echo '
 <input/> <input />
 
-<p val = ';
+<p val=';
 		if (true) /* line %d% */ {
 			echo '"a"';
 		} else /* line %d% */ {
@@ -122,19 +120,15 @@ var html = ';
 		}
 		echo '> </p>
 
-<p val = ';
+<p val=';
 		echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line %d% */;
 		echo ' val2=';
 		echo LR\Filters::escapeXmlAttrUnquoted($mxss) /* line %d% */;
 		echo '> </p>
 
-<p onclick = ';
+<p onclick=';
 		echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line %d% */;
 		echo '> </p>
-
-<p val = />';
-		echo LR\Filters::escapeXml($xss) /* line %d% */;
-		echo '</p>
 ';
 	}
 

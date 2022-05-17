@@ -101,9 +101,10 @@ final class Escaper
 	}
 
 
-	public function enterHtmlAttribute(?string $name, ?string $quote): void
+	public function enterHtmlAttribute(?string $name = null, string $quote = ''): void
 	{
 		$this->state = self::HtmlTag;
+		$this->quote = $quote;
 
 		if ($this->contentType === ContentType::Html && is_string($name)) {
 			$name = strtolower($name);
@@ -120,11 +121,13 @@ final class Escaper
 				$this->subType = self::Url;
 			}
 		}
+	}
 
-		if ($quote) {
-			$this->state = self::HtmlAttribute;
-			$this->quote = $quote;
-		}
+
+	public function enterHtmlAttributeQuote(string $quote = '"'): void
+	{
+		$this->state = self::HtmlAttribute;
+		$this->quote = $quote;
 	}
 
 

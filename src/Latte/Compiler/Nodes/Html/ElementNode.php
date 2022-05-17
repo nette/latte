@@ -11,6 +11,7 @@ namespace Latte\Compiler\Nodes\Html;
 
 use Latte\Compiler\Node;
 use Latte\Compiler\NodeHelpers;
+use Latte\Compiler\Nodes;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\AuxiliaryNode;
 use Latte\Compiler\Nodes\FragmentNode;
@@ -53,7 +54,8 @@ class ElementNode extends AreaNode
 	{
 		foreach ($this->attributes?->children as $child) {
 			if ($child instanceof AttributeNode
-				&& strcasecmp($name, $child->name) === 0
+				&& $child->name instanceof Nodes\TextNode
+				&& strcasecmp($name, $child->name->content) === 0
 			) {
 				return NodeHelpers::toText($child->value) ?? $child->value ?? true;
 			}
@@ -101,12 +103,9 @@ class ElementNode extends AreaNode
 			$res .= 'echo ' . $namePhp . ';';
 		}
 
-		$context->beginEscape();
 		foreach ($this->attributes?->children ?? [] as $attr) {
 			$res .= $attr->print($context);
 		}
-
-		$context->restoreEscape();
 
 		$res .= "echo '" . ($this->selfClosing ? '/>' : '>') . "';";
 		$context->restoreEscape();

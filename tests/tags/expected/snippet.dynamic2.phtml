@@ -42,7 +42,8 @@ final class Template%a% extends Latte\Runtime\Template
 					echo '
 				#';
 					echo LR\Filters::escapeHtmlText($id) /* line %d% */;
-					echo "\n";
+					echo '
+		';
 
 				} finally {
 					$this->global->snippetDriver->leave();
@@ -53,6 +54,7 @@ final class Template%a% extends Latte\Runtime\Template
 				$iterations++;
 			}
 
+			echo '	';
 
 		} finally {
 			$this->global->snippetDriver->leave();

@@ -24,8 +24,6 @@ Assert::contains('<?= $a ?>', $latte->compile('<?= $a ?>'));
 
 Assert::contains('<!-- <? -->', $latte->compile('<!-- <? -->'));
 
-Assert::contains('<div <? >', $latte->compile('<div <? >'));
-
 Assert::contains('<div a="<?">', $latte->compile('<div a="<?">'));
 
 Assert::exception(

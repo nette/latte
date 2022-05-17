@@ -15,9 +15,27 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(
+	fn() => $latte->compile('{'),
+	Latte\CompileException::class,
+	"Unexpected end, expecting '}' (at column 2)",
+);
+
+Assert::exception(
+	fn() => $latte->compile("{* \n'abc}"),
+	Latte\CompileException::class,
+	"Unexpected end, expecting '*}' (on line 2 at column 6)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('Block{/block}'),
 	Latte\CompileException::class,
-	"Unexpected '{/block}' (at column 6)",
+	"Unexpected '{/block' (at column 6)",
+);
+
+Assert::exception(
+	fn() => $latte->compile("{var \n'abc}"),
+	Latte\CompileException::class,
+	"Unexpected 'var \n'abc}', expecting '}' (at column 2)",
 );
 
 Assert::exception(
@@ -27,9 +45,15 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<span title={if true}a b{/if}></span>'),
+	Latte\CompileException::class,
+	"Unexpected ' b{/if', expecting {/if} (at column 23)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('<a n:href n:href>'),
 	Latte\CompileException::class,
-	'Found multiple attributes n:href (at column 10)',
+	'Found multiple attributes n:href (at column 11)',
 );
 
 Assert::match(
@@ -41,6 +65,18 @@ Assert::exception(
 	fn() => $latte->compile('<a n:class class>'),
 	Latte\CompileException::class,
 	'It is not possible to combine class with n:class (at column 4)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<p title=""</p>'),
+	'Latte\CompileException',
+	"Unexpected '</p>' (at column 12)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('<p title=>'),
+	'Latte\CompileException',
+	"Unexpected '>' (at column 10)",
 );
 
 Assert::exception(
@@ -202,7 +238,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<span n:if=1 n:foreach=2>{/foreach}'),
 	Latte\CompileException::class,
-	"Unexpected '{/foreach}', expecting </span> for element started on line 1 (at column 26)",
+	"Unexpected '{/foreach', expecting </span> for element started on line 1 (at column 26)",
 );
 
 Assert::exception(

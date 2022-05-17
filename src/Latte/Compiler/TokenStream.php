@@ -70,7 +70,7 @@ final class TokenStream
 	{
 		$token = $this->peek();
 		if ($kind && !$token->is(...$kind)) {
-			$kind = array_map(fn($item) => is_string($item) ? "'$item'" : $item, $kind);
+			$kind = array_map(fn($item) => is_string($item) ? "'$item'" : Token::NAMES[$item], $kind);
 			$this->throwUnexpectedException($kind);
 		} elseif (!$token->isEnd()) {
 			$this->index++;
@@ -143,7 +143,7 @@ final class TokenStream
 				? ', expecting ' . implode(', ', $expected)
 				: '')
 			. $addendum,
-			$this->peek()->position ?? null,
+			$this->peek()->position,
 		);
 	}
 }
