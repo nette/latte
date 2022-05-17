@@ -3,7 +3,7 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
 %A%
 		echo '<p>Included file #1</p>
@@ -22,6 +22,5 @@ Parent: ';
 		echo '/';
 		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line %d% */;
 		echo "\n";
-%A%
 	}
 }

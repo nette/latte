@@ -33,7 +33,6 @@ class TemplatePrintNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$context->initialization .= '(new Latte\Essential\Blueprint)->printClass($this, ' . PhpHelpers::dump($this->template) . '); exit;';
-		return '';
+		return '(new Latte\Essential\Blueprint)->printClass($this, ' . PhpHelpers::dump($this->template) . '); exit;';
 	}
 }

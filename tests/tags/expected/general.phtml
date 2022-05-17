@@ -10,9 +10,10 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
 
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -63,15 +64,11 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$counter = 0 /* line %d% */;
-		if ($this->getParentName()) {
-			return get_defined_vars();
-		}
 		$this->renderBlock('menu', get_defined_vars()) /* line %d% */;
-		return get_defined_vars();
 	}
 
 
-	public function prepare(): void
+	public function prepare(): array
 	{
 		extract($this->params);
 
@@ -80,6 +77,7 @@ final class Template%a% extends Latte\Runtime\Template
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
+		return get_defined_vars();
 	}
 
 

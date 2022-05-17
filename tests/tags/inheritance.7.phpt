@@ -58,7 +58,6 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 Assert::match(
 	<<<'XX'
 
-
 		    block: main parent
 
 
@@ -71,7 +70,6 @@ Assert::match(
 
 Assert::match(
 	<<<'XX'
-
 
 		    block: main inter parent
 

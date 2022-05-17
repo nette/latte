@@ -3,21 +3,19 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
-
-		$foo = 1 /* line %d% */;
 		echo 'This should be erased
 ';
-		return get_defined_vars();
 	}
 
 
-	public function prepare(): void
+	public function prepare(): array
 	{
 		extract($this->params);
 
 		$this->parentName = "parent";
+		$foo = 1 /* line %d% */;
+		return get_defined_vars();
 	}
 }

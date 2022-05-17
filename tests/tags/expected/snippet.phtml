@@ -7,7 +7,7 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
 %A%
 		echo '	';
@@ -39,7 +39,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="', htmlspecialchars($this->global->snippetDriver->getHtmlId('title2')), '">';
 		$this->renderBlock('title2', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
-		return get_defined_vars();
 	}
 
 

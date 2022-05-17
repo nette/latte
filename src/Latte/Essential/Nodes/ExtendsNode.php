@@ -45,8 +45,7 @@ class ExtendsNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$context->initialization .= $context->format('$this->parentName = %word;', $this->extends);
-		return '';
+		return $context->format('$this->parentName = %word;', $this->extends);
 	}
 
 

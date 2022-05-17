@@ -21,7 +21,6 @@ use Latte\Compiler\Tag;
 class ImportNode extends StatementNode
 {
 	public ExpressionNode $file;
-	public bool $global = false;
 
 
 	public static function create(Tag $tag): static
@@ -29,23 +28,17 @@ class ImportNode extends StatementNode
 		$tag->expectArguments();
 		$node = new static;
 		$node->file = new ExpressionNode($tag->parser->fetchWord());
-		$node->global = $tag->isInHead();
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		$code = $context->format(
+		return $context->format(
 			'$this->createTemplate(%word, $this->params, "import")->render() %line;',
 			$this->file,
 			$this->position,
 		);
-		if ($this->global) {
-			$context->initialization .= $code;
-			return '';
-		}
-		return $code;
 	}
 
 

@@ -57,8 +57,16 @@ final class TemplateParser
 		$this->html = new TemplateParserHtml($this, $this->completeAttrParsers());
 		$this->stream = new TokenStream($lexer->tokenize($template, $this->contentType));
 
+		$headLength = 0;
+		$findLength = function (FragmentNode $fragment) use (&$headLength) {
+			if ($this->location === self::LocationHead && !end($fragment->children) instanceof Nodes\TextNode) {
+				$headLength = count($fragment->children);
+			}
+		};
+
 		$node = new Nodes\TemplateNode;
-		$node->main = $this->parseFragment([$this->html, 'inTextResolve']);
+		$node->main = $this->parseFragment([$this->html, 'inTextResolve'], $findLength);
+		$node->head = new FragmentNode(array_splice($node->main->children, 0, $headLength));
 		$node->contentType = $this->contentType;
 
 		if (!$this->stream->peek()->isEnd()) {
@@ -69,7 +77,7 @@ final class TemplateParser
 	}
 
 
-	public function parseFragment(callable $resolver): FragmentNode
+	public function parseFragment(callable $resolver, callable $after = null): FragmentNode
 	{
 		$res = new FragmentNode;
 		$save = [$this->lastResolver, $this->tag];
@@ -78,6 +86,7 @@ final class TemplateParser
 			while (!$this->stream->peek()->isEnd()) {
 				if ($node = $resolver()) {
 					$res->append($node);
+					$after && $after($res);
 				} else {
 					break;
 				}

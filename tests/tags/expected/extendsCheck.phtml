@@ -3,13 +3,12 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 %A%
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
 
-		echo '
-
-';
+		echo "\n";
 		ob_start(fn() => '') /* line %d% */;
 		try {
 			echo '    ';
@@ -24,6 +23,14 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo "\n";
 		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
+	}
+
+
+	public function prepare(): array
+	{
+		extract($this->params);
+
+		$this->parentName = "layout.latte";
 		return get_defined_vars();
 	}
 %A%

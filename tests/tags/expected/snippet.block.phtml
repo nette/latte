@@ -8,7 +8,7 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
 %A%
 		$this->renderBlock('block1', get_defined_vars()) /* line %d% */;
@@ -18,7 +18,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<div id="', htmlspecialchars($this->global->snippetDriver->getHtmlId('outer')), '">';
 		$this->renderBlock('outer', [], null, 'snippet') /* line %d% */;
 		echo '</div>';
-%A%
 	}
 
 

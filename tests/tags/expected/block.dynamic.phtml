@@ -7,15 +7,12 @@ final class Template%a% extends Latte\Runtime\Template
 	];
 
 
-	public function main(): array
+	public function main(array $ʟ_args): void
 	{
-		extract($this->params);
+		extract($ʟ_args);
+		unset($ʟ_args);
 
-		$var = 10 /* line %d% */;
 		echo "\n";
-		if ($this->getParentName()) {
-			return get_defined_vars();
-		}
 		$this->renderBlock('static', get_defined_vars()) /* line %d% */;
 		echo '
 
@@ -50,11 +47,10 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		$this->addBlock($ʟ_nm = (rand() < 5 ? 'a' : 'b'), 'html', [[$this, 'blockRand_5_a_b']], 0);
 		$this->renderBlock($ʟ_nm, get_defined_vars());
-		return get_defined_vars();
 	}
 
 
-	public function prepare(): void
+	public function prepare(): array
 	{
 		extract($this->params);
 
@@ -63,6 +59,8 @@ final class Template%a% extends Latte\Runtime\Template
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
+		$var = 10 /* line %d% */;
+		return get_defined_vars();
 	}
 
 

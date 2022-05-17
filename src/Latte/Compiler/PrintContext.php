@@ -26,7 +26,6 @@ final class PrintContext
 	public ?Policy $policy;
 	public array $functions;
 	public array $paramsExtraction = [];
-	public string $initialization = '';
 	public array $blocks = [];
 	private int $counter = 0;
 	private Escaper $escaper;

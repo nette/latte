@@ -25,7 +25,6 @@ class DefineNode extends StatementNode
 {
 	public Block $block;
 	public AreaNode $content;
-	public bool $extendsCheck;
 
 
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
@@ -40,7 +39,6 @@ class DefineNode extends StatementNode
 		$node->block = new Block($name, $layer, $tag);
 
 		if (!$node->block->isDynamic()) {
-			$node->extendsCheck = $parser->blocks[Template::LayerTop] || count($parser->blocks) > 1 || $tag->parent;
 			$parser->checkBlockIsUnique($node->block);
 			$tag->data->block = $node->block; // for {include}
 			$node->block->parameters = self::parseParameters($tag->parser);
@@ -92,10 +90,7 @@ class DefineNode extends StatementNode
 	{
 		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
-
-		return $this->extendsCheck
-			? ''
-			: 'if ($this->getParentName()) { return get_defined_vars();} ';
+		return '';
 	}
 
 

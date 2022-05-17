@@ -28,7 +28,6 @@ class BlockNode extends StatementNode
 	public ?Block $block = null;
 	public string $modifier;
 	public AreaNode $content;
-	public bool $extendsCheck;
 
 
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|AreaNode> */
@@ -49,7 +48,6 @@ class BlockNode extends StatementNode
 			$node->block = new Block($name, $layer, $tag);
 
 			if (!$node->block->isDynamic()) {
-				$node->extendsCheck = $parser->blocks[Template::LayerTop] || count($parser->blocks) > 1 || $tag->parent;
 				$parser->checkBlockIsUnique($node->block);
 				$tag->data->block = $node->block; // for {include}
 			}
@@ -110,8 +108,7 @@ class BlockNode extends StatementNode
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
-			($this->extendsCheck ? '' : 'if ($this->getParentName()) { return get_defined_vars(); } ')
-			. '$this->renderBlock(%dump, get_defined_vars()'
+			'$this->renderBlock(%dump, get_defined_vars()'
 			. ($this->modifier
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: '')

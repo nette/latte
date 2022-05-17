@@ -1,11 +1,5 @@
 <?php
 %A%
-		$var = 'a' /* line %d% */;
-		echo "\n";
-		if ($this->getParentName()) {
-			return get_defined_vars();
-		}
-		echo "\n";
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
 		echo '
 
@@ -41,6 +35,14 @@
 
 ';
 		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+	}
+
+
+	public function prepare(): array
+	{
+		extract($this->params);
+
+		$var = 'a' /* line %d% */;
 		return get_defined_vars();
 	}
 

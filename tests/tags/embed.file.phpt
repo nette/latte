@@ -210,9 +210,7 @@ testTemplate(
 			XX,
 	],
 	<<<'XX'
-
 				outer
-
 				embed start W
 					main-A W
 				embed end
@@ -286,9 +284,7 @@ testTemplate(
 			XX,
 	],
 	<<<'XX'
-
 				outer
-
 				embed start P
 					main-A P
 				embed end
@@ -926,7 +922,6 @@ testTemplate(
 			XX,
 	],
 	<<<'XX'
-
 
 				import1-A
 				import1-B

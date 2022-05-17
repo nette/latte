@@ -61,14 +61,16 @@ Assert::match('
 ));
 
 
-Assert::match('
-<a href="javascript:alert(1)" src="javascript:alert(1)" action="javascript:alert(1)" formaction="javascript:alert(1)" title="javascript:alert(1)"></a>
+Assert::match(
+	'<a href="javascript:alert(1)" src="javascript:alert(1)" action="javascript:alert(1)" formaction="javascript:alert(1)" title="javascript:alert(1)"></a>
 <object data="javascript:alert(1)"></object>
-', $latte->renderToString('
+',
+	$latte->renderToString('
 {contentType xml}
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <object data={$url1}></object>
-', $params));
+', $params),
+);
 
 
 // former |safeurl & |nosafeurl

@@ -44,15 +44,17 @@ final class TemplateGenerator
 		$context = new PrintContext($node->contentType);
 		$context->policy = $policy;
 		$context->functions = $functions;
-		$context->initialization = &$node->initialization;
 
-		$code = $node->main->print($context) . ' return get_defined_vars();';
-		$code = self::buildParams($code, $context->paramsExtraction, '$this->params');
-		$this->addMethod('main', $code, '', 'array');
+		$code = $node->main->print($context);
+		$code = self::buildParams($code, [], '$ʟ_args');
+		$this->addMethod('main', $code, 'array $ʟ_args');
 
-		if ($node->initialization) {
-			$code = self::buildParams($node->initialization, $context->paramsExtraction, '$this->params');
-			$this->addMethod('prepare', $code, '', 'void');
+		$head = (new NodeTraverser)->traverse($node->head, fn(Node $node) => $node instanceof Nodes\TextNode ? new Nodes\NopNode : $node);
+		$code = $head->print($context);
+		if ($code || $context->paramsExtraction) {
+			$code .= 'return get_defined_vars();';
+			$code = self::buildParams($code, $context->paramsExtraction, '$this->params');
+			$this->addMethod('prepare', $code, '', 'array');
 		}
 
 		if ($node->contentType !== ContentType::Html) {
