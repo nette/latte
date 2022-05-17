@@ -5,9 +5,9 @@
 		echo '
 
 <p val=';
-		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
+		echo '"' . LR\Filters::escapeHtmlAttr($xss) . '"' /* line %d% */;
 		echo ' val2=';
-		echo LR\Filters::escapeHtmlAttrUnquoted($mxss) /* line %d% */;
+		echo '"' . LR\Filters::escapeHtmlAttr($mxss) . '"' /* line %d% */;
 		echo '> </p>
 <p onclick=';
 		echo '"' . LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) . '"' /* line %d% */;
@@ -15,7 +15,7 @@
 <p ONCLICK="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo '" ';
-		echo LR\Filters::escapeHtmlAttrUnquoted($xss) /* line %d% */;
+		echo LR\Filters::escapeHtmlTag($xss) /* line %d% */;
 		echo '> </p>
 
 <STYLE type="text/css">

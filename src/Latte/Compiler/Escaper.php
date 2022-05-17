@@ -65,7 +65,8 @@ final class Escaper
 
 	public function export(): string
 	{
-		return $this->state . ($this->subType ? '/' . $this->subType : '');
+		return ($this->state === self::HtmlAttribute && $this->quote === '' ? 'html/unquoted-attr' : $this->state)
+			. ($this->subType ? '/' . $this->subType : '');
 	}
 
 
@@ -102,21 +103,18 @@ final class Escaper
 
 	public function enterHtmlAttribute(?string $name = null, string $quote = ''): void
 	{
-		$this->state = self::HtmlTag;
+		$this->state = self::HtmlAttribute;
 		$this->quote = $quote;
 
 		if ($this->contentType === ContentType::Html && is_string($name)) {
 			$name = strtolower($name);
 			if (str_starts_with($name, 'on')) {
-				$this->state = self::HtmlAttribute;
 				$this->subType = self::JavaScript;
 			} elseif ($name === 'style') {
-				$this->state = self::HtmlAttribute;
 				$this->subType = self::Css;
 			} elseif ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
 				|| ($name === 'data' && $this->tag === 'object'))
 			) {
-				$this->state = self::HtmlAttribute;
 				$this->subType = self::Url;
 			}
 		}
@@ -125,7 +123,6 @@ final class Escaper
 
 	public function enterHtmlAttributeQuote(string $quote = '"'): void
 	{
-		$this->state = self::HtmlAttribute;
 		$this->quote = $quote;
 	}
 
@@ -148,7 +145,7 @@ final class Escaper
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
 				self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
-				self::HtmlTag => 'LR\Filters::escapeHtmlAttrUnquoted(' . $str . ')',
+				self::HtmlTag => 'LR\Filters::escapeHtmlTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
 					'',
 					self::Url => $lq . 'LR\Filters::escapeHtmlAttr(' . $str . ')' . $rq,
@@ -220,8 +217,25 @@ final class Escaper
 				'html/attr/css' => 'convertHtmlToHtmlAttr',
 				'html/attr/url' => 'convertHtmlToHtmlAttr',
 				'html/comment' => 'escapeHtmlComment',
+				'html/unquoted-attr' => 'convertHtmlToUnquotedAttr',
+			],
+			'html/attr' => [
+				'html' => 'convertHtmlToHtmlAttr',
+				'html/unquoted-attr' => 'convertHtmlAttrToUnquotedAttr',
+			],
+			'html/attr/url' => [
+				'html' => 'convertHtmlToHtmlAttr',
+				'html/attr' => 'nop',
+			],
+			'html/unquoted-attr' => [
+				'html' => 'convertHtmlToHtmlAttr',
 			],
 		];
+
+		if ($source === $dest) {
+			return [Filters::class, 'nop'];
+		}
+
 		return isset($table[$source][$dest])
 			? [Filters::class, $table[$source][$dest]]
 			: null;

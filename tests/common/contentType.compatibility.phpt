@@ -20,10 +20,9 @@ test('', function () {
 		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar']),
 	);
 
-	Assert::exception(
-		fn() => $latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
-		Latte\RuntimeException::class,
-		'Including block foo with content type HTML into incompatible type HTML/TAG.',
+	Assert::same(
+		'<meta content="b&quot;ar">b"ar',
+		$latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
 	);
 
 	Assert::same(
@@ -138,28 +137,20 @@ test('', function () {
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context2', ['foo' => 'b"ar']));
 
-	Assert::exception(
-		fn() => $latte->renderToString('context3', ['foo' => 'b"ar']),
-		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
-	);
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context3', ['foo' => 'b"ar']));
 
-	Assert::exception(
-		fn() => $latte->renderToString('context4', ['foo' => 'b"ar']),
-		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
-	);
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context4', ['foo' => 'b"ar']));
 
 	Assert::exception(
 		fn() => $latte->renderToString('context5', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
+		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/ATTR.',
 	);
 
 	Assert::exception(
 		fn() => $latte->renderToString('context6', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/TAG by incompatible type HTML.',
+		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/ATTR.',
 	);
 
 	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
@@ -167,7 +158,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('context8', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/TAG by incompatible type HTML/COMMENT.',
+		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/COMMENT.',
 	);
 });
 
@@ -269,7 +260,7 @@ Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context
 Assert::exception(
 	fn() => $latte->renderToString('context3'),
 	Latte\RuntimeException::class,
-	"Including 'js.latte' with content type JS into incompatible type HTML/TAG.",
+	"Including 'js.latte' with content type JS into incompatible type HTML/UNQUOTED-ATTR.",
 );
 
 Assert::same('<script> <\/script></script>', $latte->renderToString('context4'));
@@ -314,11 +305,7 @@ Assert::same('<p title="<hr> " &quot; &lt;"></p>', $latte->renderToString('conte
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2b'));
 Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
 
-Assert::exception(
-	fn() => $latte->renderToString('context3'),
-	Latte\RuntimeException::class,
-	"Including 'html.latte' with content type HTML into incompatible type HTML/TAG.",
-);
+Assert::same('<p title="&lt;hr&gt; &quot; &quot; &lt;"></p>', $latte->renderToString('context3'));
 
 Assert::exception(
 	fn() => $latte->renderToString('context4'),
@@ -363,7 +350,7 @@ Assert::exception(
 );
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
-Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
+Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
@@ -402,7 +389,7 @@ Assert::exception(
 );
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
-Assert::same('<p title="&lt;hr&gt; &quot;"></p>', $latte->renderToString('context2'));
+Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 

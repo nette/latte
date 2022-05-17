@@ -120,13 +120,13 @@ var html = ';
 		echo '> </p>
 
 <p val=';
-		echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line %d% */;
+		echo '"' . LR\Filters::escapeXml($xss) . '"' /* line %d% */;
 		echo ' val2=';
-		echo LR\Filters::escapeXmlAttrUnquoted($mxss) /* line %d% */;
+		echo '"' . LR\Filters::escapeXml($mxss) . '"' /* line %d% */;
 		echo '> </p>
 
 <p onclick=';
-		echo LR\Filters::escapeXmlAttrUnquoted($xss) /* line %d% */;
+		echo '"' . LR\Filters::escapeXml($xss) . '"' /* line %d% */;
 		echo '> </p>
 ';
 	}

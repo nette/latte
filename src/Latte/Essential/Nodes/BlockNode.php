@@ -110,7 +110,8 @@ class BlockNode extends StatementNode
 
 	private function printStatic(PrintContext $context): string
 	{
-		$context->addBlock($this->block, $this->adjustContext($context->getEscaper()));
+		$this->modifier->escape = $this->modifier->escape || $context->getEscaper()->getState() === Escaper::HtmlAttribute;
+		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
@@ -130,7 +131,8 @@ class BlockNode extends StatementNode
 	{
 		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
-		$escaper = $this->adjustContext($context->getEscaper());
+		$escaper = $context->getEscaper();
+		$this->modifier->escape = $this->modifier->escape || $escaper->getState() === Escaper::HtmlAttribute;
 
 		return $context->format(
 			'$this->addBlock(%node, %dump, [[$this, %dump]], %dump);
@@ -145,16 +147,6 @@ class BlockNode extends StatementNode
 			$this->block->layer,
 			$this->modifier,
 		);
-	}
-
-
-	private function adjustContext(Escaper $escaper): Escaper
-	{
-		if ($escaper->getState() === Escaper::HtmlAttribute) {
-			$escaper = new Escaper($escaper->getContentType());
-			$this->modifier->escape = true;
-		}
-		return $escaper;
 	}
 
 

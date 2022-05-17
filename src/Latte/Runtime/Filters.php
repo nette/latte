@@ -71,9 +71,9 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside HTML attribute name.
+	 * Escapes string for use inside HTML tag.
 	 */
-	public static function escapeHtmlAttrUnquoted($s): string
+	public static function escapeHtmlTag($s): string
 	{
 		$s = (string) $s;
 		return preg_match('#^[a-z0-9:-]+$#i', $s)
@@ -192,12 +192,36 @@ class Filters
 	}
 
 
+	public static function nop(string $s): string
+	{
+		return $s;
+	}
+
+
 	/**
-	 * Converts HTML text to attribute. The quotation marks need to be escaped.
+	 * Converts HTML text to quoted attribute. The quotation marks need to be escaped.
 	 */
 	public static function convertHtmlToHtmlAttr(string $s): string
 	{
 		return self::escapeHtmlAttr($s, false);
+	}
+
+
+	/**
+	 * Converts HTML text to unquoted attribute. The quotation marks need to be escaped.
+	 */
+	public static function convertHtmlToUnquotedAttr(string $s): string
+	{
+		return '"' . self::escapeHtmlAttr($s, false) . '"';
+	}
+
+
+	/**
+	 * Converts HTML quoted attribute to unquoted.
+	 */
+	public static function convertHtmlAttrToUnquotedAttr(string $s): string
+	{
+		return '"' . $s . '"';
 	}
 
 
