@@ -21,7 +21,7 @@ Assert::match(
 			public function prepare(): void
 			{
 				extract($this->params);
-				(new Latte\Runtime\Blueprint)->printClass($this, null);
+				(new Latte\Essential\Blueprint)->printClass($this, null);
 				exit;
 		%A%
 		XX,
@@ -35,7 +35,7 @@ Assert::match(
 			public function prepare(): void
 			{
 				extract($this->params);
-				(new Latte\Runtime\Blueprint)->printClass($this, 'Foo');
+				(new Latte\Essential\Blueprint)->printClass($this, 'Foo');
 				exit;
 		%A%
 		XX,

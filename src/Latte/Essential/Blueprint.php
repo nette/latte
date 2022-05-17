@@ -7,9 +7,10 @@
 
 declare(strict_types=1);
 
-namespace Latte\Runtime;
+namespace Latte\Essential;
 
 use Latte;
+use Latte\Runtime\Template;
 use Nette\PhpGenerator as Php;
 
 
@@ -17,7 +18,7 @@ use Nette\PhpGenerator as Php;
  * Generates blueprint of template class.
  * @internal
  */
-class Blueprint
+final class Blueprint
 {
 	use Latte\Strict;
 

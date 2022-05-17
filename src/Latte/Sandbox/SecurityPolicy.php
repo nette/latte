@@ -68,8 +68,8 @@ class SecurityPolicy implements Latte\Policy
 
 		$policy->allowFunctions(['clamp', 'divisibleBy', 'even', 'first', 'last', 'odd', 'slice']);
 
-		$policy->allowMethods(Latte\Runtime\CachingIterator::class, self::ALL);
-		$policy->allowProperties(Latte\Runtime\CachingIterator::class, self::ALL);
+		$policy->allowMethods(Latte\Essential\CachingIterator::class, self::ALL);
+		$policy->allowProperties(Latte\Essential\CachingIterator::class, self::ALL);
 
 		return $policy;
 	}

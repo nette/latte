@@ -23,7 +23,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([1,2,3], $ʟ_it ?? null) as $foo) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator([1,2,3], $ʟ_it ?? null) as $foo) /* line %d% */ {
 			echo '	<b';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* line %d% */;
 			echo '>item</b>
@@ -33,7 +33,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 		echo "\n";
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator([1, 2, 3], $ʟ_it ?? null) as $foo) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator([1, 2, 3], $ʟ_it ?? null) as $foo) /* line %d% */ {
 			echo '<p';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* line %d% */;
 			echo '>';
@@ -300,7 +300,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '	<span>
 ';
 			}
-			throw new LR\RollbackException;
+			throw new Latte\Essential\RollbackException;
 			if ($ʟ_if[1]) /* line %d% */ {
 				echo '	</span>
 ';
@@ -308,7 +308,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		} catch (Throwable $ʟ_e) {
 			ob_end_clean();
-			if (!($ʟ_e instanceof LR\RollbackException) && isset($this->global->coreExceptionHandler)) {
+			if (!($ʟ_e instanceof Latte\Essential\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			}
 

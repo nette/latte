@@ -16,7 +16,7 @@ $compiler = new Latte\Compiler\Compiler;
 CoreMacros::install($compiler);
 
 $prefix = '<?php $iterations = 0; '
-	. 'foreach ($iterator = $ʟ_it = new LR\CachingIterator(';
+	. 'foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(';
 
 
 function expandMacro($compiler, $args, $modifiers = '')
@@ -32,13 +32,13 @@ function expandMacro($compiler, $args, $modifiers = '')
 Assert::same($prefix . '$array, $ʟ_it ?? null) as $value) { ?>', expandMacro($compiler, '$array as $value')->openingCode);
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'foreach ($iterator = $ʟ_it = new LR\CachingIterator($array, $ʟ_it ?? null) as $key => $value) { ?>',
+	. 'foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($array, $ʟ_it ?? null) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value')->openingCode,
 );
 
 Assert::same(
 	'<?php $iterations = 0; '
-	. 'foreach ($iterator = $ʟ_it = new LR\CachingIterator($array, $ʟ_it ?? null) as $key => $value) { ?>',
+	. 'foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($array, $ʟ_it ?? null) as $key => $value) { ?>',
 	expandMacro($compiler, '$array as $key => $value', '|nocheck')->openingCode,
 );
 

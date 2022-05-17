@@ -11,11 +11,11 @@ namespace Latte\Macros;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\Block;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PhpWriter;
 use Latte\Compiler\Tag;
 use Latte\Helpers;
-use Latte\Runtime\Block;
 use Latte\Runtime\SnippetDriver;
 use Latte\Runtime\Template;
 

@@ -7,18 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Latte\Runtime;
-
-use Latte;
+namespace Latte\Compiler;
 
 
 /** @internal */
 final class Block
 {
-	use Latte\Strict;
-
 	public ?string $contentType = null;
-
-	/** @var callable[] */
-	public array $functions = [];
+	public ?string $code = null;
+	public bool $hasParameters = false;
+	public ?string $comment = null;
 }

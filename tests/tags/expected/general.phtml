@@ -30,9 +30,9 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator(array(true), $ʟ_it ?? null) as $foo) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(array(true), $ʟ_it ?? null) as $foo) /* line %d% */ {
 			$iterations = 0;
-			foreach ($iterator = $ʟ_it = new LR\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
+			foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line %d% */ {
 				echo '	';
 				if ($iterator->isFirst()) /* line %d% */ {
 					echo '<ul>';
@@ -90,7 +90,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<ul>
 ';
 		$iterations = 0;
-		foreach ($iterator = $ʟ_it = new LR\CachingIterator($menu, $ʟ_it ?? null) as $item) /* line %d% */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($menu, $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	<li>';
 			echo LR\Filters::escapeHtmlText($counter++) /* line %d% */;
 			echo ' ';
