@@ -10,14 +10,16 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\MacroTokens;
+use Latte\Compiler\ExpressionBuilder;
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Expression;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PhpWriter;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Compiler\TagParser;
 use Latte\Compiler\TemplateParser;
 
 
@@ -42,21 +44,20 @@ class IfNode extends StatementNode
 	{
 		$node = new static;
 		$node->ifset = in_array($tag->name, ['ifset', 'elseifset'], true);
-		$node->capture = !$tag->isNAttribute() && $tag->name === 'if' && $tag->args === '';
+		$node->capture = !$tag->isNAttribute() && $tag->name === 'if' && $tag->parser->isEnd();
 		$node->position = $tag->position;
 		if (!$node->capture) {
 			$node->condition = $node->ifset
-				? new ExpressionNode(self::buildCondition($tag))
+				? self::buildCondition($tag->parser)
 				: $tag->parser->parseExpression();
 		}
 
 		[$node->then, $nextTag] = yield $node->capture ? ['else'] : ['else', 'elseif', 'elseifset'];
 
 		if ($nextTag?->name === 'else') {
-			if ($nextTag->args !== '' && str_starts_with($nextTag->args, 'if')) {
+			if ($nextTag->parser->stream->is('if')) {
 				throw new CompileException('Arguments are not allowed in {else}, did you mean {elseif}?', $nextTag->position);
 			}
-			$nextTag->expectArguments(false);
 			$node->elseLine = $nextTag->position;
 			[$node->else, $nextTag] = yield;
 
@@ -75,16 +76,18 @@ class IfNode extends StatementNode
 	}
 
 
-	private static function buildCondition(Tag $tag): string
+	private static function buildCondition(TagParser $parser): ExpressionNode
 	{
-		$writer = new PhpWriter(null);
-		while ([$name, $block] = $tag->parser->fetchWordWithModifier(['block', '#'])) {
-			$list[] = $block || preg_match('~\w[\w-]*$~DA', $name)
-				? '$this->hasBlock(' . $writer->formatWord($name) . ')'
-				: 'isset(' . $writer->formatArgs(new MacroTokens($name)) . ')';
-		}
+		$list = [];
+		do {
+			$block = $parser->tryConsumeModifier('block') ?? $parser->stream->tryConsume('#');
+			$name = $parser->parseUnquotedStringOrExpression();
+			$list[] = $block || $name instanceof StringNode
+				? ExpressionBuilder::variable('$this')->method('hasBlock', [$name])->build()
+				: new Expression\IssetNode([$name]);
+		} while ($parser->stream->tryConsume(','));
 
-		return implode(' && ', $list);
+		return Expression\BinaryOpNode::nest('&&', ...$list);
 	}
 
 

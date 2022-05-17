@@ -11,6 +11,7 @@ namespace Latte\Essential\Nodes;
 
 use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -32,10 +33,13 @@ class SnippetAreaNode extends StatementNode
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$node = new static;
-		$name = (string) $tag->parser->fetchWord();
+		$name = $tag->parser->parseUnquotedStringOrExpression();
 		$node->block = new Block($name, Template::LayerSnippet, $tag);
 		$parser->checkBlockIsUnique($node->block);
-		[$node->content] = yield;
+		[$node->content, $endTag] = yield;
+		if ($endTag && $name instanceof Scalar\StringNode) {
+			$endTag->parser->stream->tryConsume($name->value);
+		}
 		return $node;
 	}
 
@@ -45,7 +49,7 @@ class SnippetAreaNode extends StatementNode
 		$context->addBlock($this->block);
 		$this->block->content = $context->format(
 			<<<'XX'
-				$this->global->snippetDriver->enter(%dump, %dump);
+				$this->global->snippetDriver->enter(%node, %dump);
 				try {
 					%node
 				} finally {
@@ -59,7 +63,7 @@ class SnippetAreaNode extends StatementNode
 		);
 
 		return $context->format(
-			'$this->renderBlock(%dump, [], null, %dump) %line;',
+			'$this->renderBlock(%node, [], null, %dump) %line;',
 			$this->block->name,
 			Template::LayerSnippet,
 			$this->position,
@@ -69,6 +73,7 @@ class SnippetAreaNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
+		yield $this->block->name;
 		yield $this->content;
 	}
 }

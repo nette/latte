@@ -38,22 +38,17 @@ final class TemplateGenerator
 		string $className,
 		?string $comment = null,
 		bool $strictMode = false,
-		?Latte\Policy $policy = null,
-		array $functions = [],
 	): string {
 		$context = new PrintContext($node->contentType);
-		$context->policy = $policy;
-		$context->functions = $functions;
-
 		$code = $node->main->print($context);
-		$code = self::buildParams($code, [], '$ʟ_args');
+		$code = self::buildParams($code, [], '$ʟ_args', $context);
 		$this->addMethod('main', $code, 'array $ʟ_args');
 
 		$head = (new NodeTraverser)->traverse($node->head, fn(Node $node) => $node instanceof Nodes\TextNode ? new Nodes\NopNode : $node);
 		$code = $head->print($context);
 		if ($code || $context->paramsExtraction) {
 			$code .= 'return get_defined_vars();';
-			$code = self::buildParams($code, $context->paramsExtraction, '$this->params');
+			$code = self::buildParams($code, $context->paramsExtraction, '$this->params', $context);
 			$this->addMethod('prepare', $code, '', 'array');
 		}
 
@@ -100,12 +95,12 @@ final class TemplateGenerator
 		$contentType = $context->getEscaper()->getContentType();
 		foreach ($blocks as $block) {
 			if (!$block->isDynamic()) {
-				$meta[$block->layer][$block->name] = $contentType === $block->escaping
+				$meta[$block->layer][$block->name->value] = $contentType === $block->escaping
 					? $block->method
 					: [$block->method, $block->escaping];
 			}
 
-			$body = $this->buildParams($block->content, $block->parameters, '$ʟ_args');
+			$body = $this->buildParams($block->content, $block->parameters, '$ʟ_args', $context);
 			if (!$block->isDynamic() && str_contains($body, '$')) {
 				$embedded = $block->tag->name === 'block' && is_int($block->layer) && $block->layer;
 				$body = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');' . $body;
@@ -126,10 +121,22 @@ final class TemplateGenerator
 	}
 
 
-	private function buildParams(string $body, array $params, string $cont): string
+	private function buildParams(string $body, array $params, string $cont, PrintContext $context): string
 	{
 		if (!str_contains($body, '$') && !str_contains($body, 'get_defined_vars()')) {
 			return $body;
+		}
+
+		foreach ($params as $i => &$param) {
+			$param = $context->format(
+				'%node = %raw[%dump] ?? %raw[%dump] ?? %node;',
+				$param->var,
+				$cont,
+				$i,
+				$cont,
+				$param->var->name,
+				$param->expr,
+			);
 		}
 
 		$extract = $params

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;

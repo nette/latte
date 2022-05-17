@@ -26,6 +26,7 @@ class TemplateTypeNode extends StatementNode
 			throw new CompileException('{templateType} is allowed only in template header.', $tag->position);
 		}
 		$tag->expectArguments('class name');
+		$tag->parser->parseExpression();
 		return new static;
 	}
 

@@ -11,12 +11,13 @@ namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\ExpressionNode;
 use Latte\Compiler\Nodes\NopNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
+use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use Latte\Helpers;
+use Latte\Compiler\TagParser;
 
 
 /**
@@ -24,37 +25,42 @@ use Latte\Helpers;
  */
 class ForeachNode extends StatementNode
 {
-	public ExpressionNode $args;
+	public ExpressionNode $expression;
+	public ?ExpressionNode $key = null;
+	public bool $byRef = false;
+	public ExpressionNode $value;
 	public AreaNode $content;
 	public ?AreaNode $else = null;
+	public ?Position $elseLine = null;
 	public ?bool $iterator = null;
 	public bool $checkArgs = true;
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|NopNode> */
 	public static function create(Tag $tag): \Generator
 	{
-		$tag->extractModifier();
 		$tag->expectArguments();
-
 		$node = new static;
-		$node->args = $tag->parser->parseExpression();
-		$tag->data->iterateWhile = $tag->args;
+		self::parseArguments($tag->parser, $node);
+		$tag->data->iterateWhile = [$node->key, $node->value];
 
-		$modifier = $tag->parser->modifiers;
-		$node->checkArgs = !Helpers::removeFilter($modifier, 'nocheck');
-		$noIterator = Helpers::removeFilter($modifier, 'noiterator');
-		if ($modifier) {
-			throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.', $tag->position);
-		} elseif ($tag->void) {
+		$modifier = $tag->parser->parseModifier();
+		foreach ($modifier->filters as $filter) {
+			match ($filter->name->name) {
+				'nocheck', 'noCheck' => $node->checkArgs = false,
+				'noiterator', 'noIterator' => $node->iterator = false,
+				default => throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.', $tag->position),
+			};
+		}
+
+		if ($tag->void) {
 			$node->content = new NopNode;
 			return $node;
 		}
 
-		$node->iterator = $noIterator ? false : null;
 		[$node->content, $nextTag] = yield ['else'];
 		if ($nextTag?->name === 'else') {
-			$nextTag->expectArguments(false);
+			$node->elseLine = $nextTag->position;
 			[$node->else] = yield;
 		}
 
@@ -62,9 +68,26 @@ class ForeachNode extends StatementNode
 	}
 
 
+	private static function parseArguments(TagParser $parser, self $node): void
+	{
+		$stream = $parser->stream;
+		$node->expression = $parser->parseExpression();
+		$stream->consume('as');
+		if (!$stream->is('&')) {
+			$node->value = $parser->parseExpression();
+			if (!$stream->tryConsume('=>')) {
+				return;
+			}
+			$node->key = $node->value;
+		}
+
+		$node->byRef = (bool) $stream->tryConsume('&');
+		$node->value = $parser->parseExpression();
+	}
+
+
 	public function print(PrintContext $context): string
 	{
-		$args = $this->args->print($context);
 		$content = $this->content->print($context);
 		$iterator = $this->else || ($this->iterator ?? preg_match('#\$iterator\W|\Wget_defined_vars\W#', $content));
 		$content .= '$iterations++;';
@@ -72,23 +95,23 @@ class ForeachNode extends StatementNode
 		if ($this->else) {
 			$content .= $context->format(
 				'} if ($iterator->isEmpty()) %line { ',
-				$this->else->position,
+				$this->elseLine,
 			) . $this->else->print($context);
 		}
 
 		if ($iterator) {
-			$args = preg_replace('#(.*)\s+as\s+#i', '$1, $ʟ_it ?? null) as ', $args, 1);
 			return $context->format(
 				<<<'XX'
 					$iterations = 0;
-					foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(%raw) %line {
+					foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(%node, $ʟ_it ?? null) as %raw) %line {
 						%raw
 					}
 					$iterator = $ʟ_it = $ʟ_it->getParent();
 
 
 					XX,
-				$args,
+				$this->expression,
+				$this->printArgs($context),
 				$this->position,
 				$content,
 			);
@@ -97,13 +120,14 @@ class ForeachNode extends StatementNode
 			return $context->format(
 				<<<'XX'
 					$iterations = 0;
-					foreach (%raw) %line {
+					foreach (%node as %raw) %line {
 						%raw
 					}
 
 
 					XX,
-				$args,
+				$this->expression,
+				$this->printArgs($context),
 				$this->position,
 				$content,
 			);
@@ -111,9 +135,21 @@ class ForeachNode extends StatementNode
 	}
 
 
+	private function printArgs(PrintContext $context): string
+	{
+		return ($this->key ? $this->key->print($context) . ' => ' : '')
+			. ($this->byRef ? '&' : '')
+			. $this->value->print($context);
+	}
+
+
 	public function &getIterator(): \Generator
 	{
-		yield $this->args;
+		yield $this->expression;
+		if ($this->key) {
+			yield $this->key;
+		}
+		yield $this->value;
 		yield $this->content;
 		if ($this->else) {
 			yield $this->else;

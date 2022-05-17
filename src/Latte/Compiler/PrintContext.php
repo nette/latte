@@ -10,13 +10,10 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte;
-use Latte\Compiler\Nodes\ExpressionNode;
 use Latte\Compiler\Nodes\Php as Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\ContentType;
-use Latte\Policy;
-use Latte\SecurityViolationException;
 
 
 /**
@@ -27,8 +24,6 @@ final class PrintContext
 {
 	use Latte\Strict;
 
-	public ?Policy $policy;
-	public array $functions;
 	public array $paramsExtraction = [];
 	public array $blocks = [];
 
@@ -95,66 +90,52 @@ final class PrintContext
 	 */
 	public function format(string $mask, mixed ...$args): string
 	{
-		$writer = PhpWriter::using($this);
-		$pos = 0;
+		$pos = 0; // enumerate arguments except for %escape
 		$mask = preg_replace_callback(
-			'#%([a-z])#',
-			function ($m) use (&$pos) { return '%' . ($pos++) . '.' . $m[1]; },
+			'#%([a-z]{3,})#i',
+			function ($m) use (&$pos) {
+				return $m[1] === 'escape'
+					? '%0.escape'
+					: '%' . ($pos++) . '.' . $m[1];
+			},
 			$mask,
 		);
 
 		$mask = preg_replace_callback(
-			'#%(\d+)\.modify(Content)?(\(([^()]*+|(?-2))+\))#',
-			function ($m) use ($writer, $args) {
-				[, $pos, $content, $var] = $m;
-				return $writer->formatModifiers($args[$pos], substr($var, 1, -1), (bool) $content);
+			'#% (\d+) \. (escape|modify(?:Content)?) ( \( ([^()]*+|(?-2))+ \) )#xi',
+			function ($m) use ($args) {
+				[, $pos, $fn, $var] = $m;
+				$var = substr($var, 1, -1);
+				return match ($fn) {
+					'modify' => $args[$pos]->printSimple($this, $var),
+					'modifyContent' => $args[$pos]->printContentAware($this, $var),
+					'escape' => $this->escaper->escape($var),
+				};
 			},
 			$mask,
 		);
 
 		return preg_replace_callback(
-			'#([,+]?\s*)?%(\d+)\.(node|word|dump|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
-			function ($m) use ($writer, $args) {
+			'#([,+]?\s*)? % (\d+) \. ([a-z]{3,}) (\?)? (\s*\+\s*)? ()#xi',
+			function ($m) use ($args) {
 				[, $l, $pos, $format, $cond, $r] = $m;
 				$arg = $args[$pos];
 
-				switch ($format) {
-					case 'node':
-						$code = $arg ? $arg->print($this) : '';
-						break;
-					case 'word':
-						if ($arg instanceof ExpressionNode) {
-							$arg = $arg->text;
-						}
-						$code = $writer->formatWord($arg); break;
-					case 'args':
-						if ($arg instanceof ExpressionNode) {
-							$arg = new MacroTokens($arg->text);
-						}
-						$code = $writer->formatArgs($arg); break;
-					case 'array':
-						if ($arg instanceof ExpressionNode) {
-							$arg = new MacroTokens($arg->text);
-						}
-						$code = $writer->formatArray($arg);
-						$code = $cond && $code === '[]' ? '' : $code; break;
-					case 'dump':
-						$code = PhpHelpers::dump($arg); break;
-					case 'raw':
-						$code = (string) $arg;
-						break;
-					case 'line':
-						$l = trim($l);
-						$line = (int) $arg->line;
-						$code = $line ? " /* line $line */" : '';
-						break;
+				$code = match ($format) {
+					'dump' => PhpHelpers::dump($arg),
+					'node' => $arg ? $arg->print($this) : '',
+					'raw' => (string) $arg,
+					'args' => $this->implode($arg instanceof Expression\ArrayNode ? $arg->toArguments() : $arg),
+					'line' => $arg?->line ? "/* line $arg->line */" : '',
+				};
+
+				if ($cond && ($code === '[]' || $code === '')) {
+					return $r ? $l : $r;
 				}
 
-				if ($cond && $code === '') {
-					return $r ? $l : $r;
-				} else {
-					return $l . $code . $r;
-				}
+				return $code === ''
+					? trim($l) . $r
+					: $l . $code . $r;
 			},
 			$mask,
 		);
@@ -183,7 +164,7 @@ final class PrintContext
 	public function addBlock(Block $block, ?Escaper $escaper = null): void
 	{
 		$block->escaping = ($escaper ?? $this->getEscaper())->export();
-		$block->method = 'block' . ucfirst(trim(preg_replace('#\W+#', '_', $block->name), '_'));
+		$block->method = 'block' . ucfirst(trim(preg_replace('#\W+#', '_', $block->name->print($this)), '_'));
 		$lower = strtolower($block->method);
 		$used = $this->blocks + ['block' => 1];
 		$counter = null;
@@ -199,14 +180,6 @@ final class PrintContext
 	public function generateId(): int
 	{
 		return $this->counter++;
-	}
-
-
-	public function checkFilterIsAllowed(string $name): void
-	{
-		if ($this->policy && !$this->policy->isFilterAllowed($name)) {
-			throw new SecurityViolationException("Filter |$name is not allowed.");
-		}
 	}
 
 

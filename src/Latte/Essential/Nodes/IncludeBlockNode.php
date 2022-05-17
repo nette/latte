@@ -11,13 +11,15 @@ namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Block;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
-use Latte\Helpers;
 use Latte\Runtime\Template;
 
 
@@ -26,10 +28,10 @@ use Latte\Runtime\Template;
  */
 class IncludeBlockNode extends StatementNode
 {
-	public string $name;
+	public ExpressionNode $name;
 	public ?ExpressionNode $from = null;
-	public ?ExpressionNode $args = null;
-	public string $modifier;
+	public ArrayNode $args;
+	public ModifierNode $modifier;
 	public int|string|null $layer;
 	public bool $parent = false;
 
@@ -41,25 +43,31 @@ class IncludeBlockNode extends StatementNode
 	{
 		$tag->outputMode = $tag::OutputRemoveIndentation;
 
+		$tag->expectArguments();
 		$node = new static;
-		[$node->name] = $tag->parser->fetchWordWithModifier(['block', '#']);
+		$tag->parser->tryConsumeModifier('block') ?? $tag->parser->stream->tryConsume('#');
+		$node->name = $tag->parser->parseUnquotedStringOrExpression();
+		$tokenName = $tag->parser->stream->peek(-1);
 
-		if ($tag->parser->nextValue('from')) {
-			$tag->parser->nextValue($tag->parser::T_WHITESPACE);
-			$node->from = new ExpressionNode($tag->parser->fetchWord());
+		$stream = $tag->parser->stream;
+		if ($stream->tryConsume('from')) {
+			$node->from = $tag->parser->parseUnquotedStringOrExpression();
+			$tag->parser->stream->tryConsume(',');
 		}
 
-		$node->args = $tag->parser->parseExpression();
-		$node->modifier = $tag->parser->modifiers;
+		$stream->tryConsume(',');
+		$node->args = $tag->parser->parseArguments();
+		$node->modifier = $tag->parser->parseModifier();
+		$node->modifier->escape = (bool) $node->modifier->filters;
 
-		$node->parent = $node->name === 'parent';
-		if ($node->parent && $tag->parser->modifiers !== '') {
+		$node->parent = $tokenName->is('parent');
+		if ($node->parent && $node->modifier->filters) {
 			throw new CompileException('Filters are not allowed in {include parent}', $tag->position);
 
-		} elseif ($node->parent || $node->name === 'this') {
+		} elseif ($node->parent || $tokenName->is('this')) {
 			$item = $tag->closestTag(['block', 'define'], fn($item) => isset($item->data->block) && $item->data->block->name !== '');
 			if (!$item) {
-				throw new CompileException("Cannot include $node->name block outside of any block.", $tag->position);
+				throw new CompileException("Cannot include $tokenName->text block outside of any block.", $tag->position);
 			}
 
 			$node->name = $item->data->block->name;
@@ -73,17 +81,13 @@ class IncludeBlockNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$modifier = $this->modifier;
-		$noEscape = Helpers::removeFilter($modifier, 'noescape');
-		if ($modifier && !$noEscape) {
-			$modifier .= '|escape';
-		}
-		$modArg = $modifier
+		$noEscape = $this->modifier->hasFilter('noescape');
+		$modArg = count($this->modifier->filters) > (int) $noEscape
 			? $context->format(
 				'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-				$modifier,
+				$this->modifier,
 			)
-			: PhpHelpers::dump($noEscape || $this->parent ? null : $context->getEscaper()->export());
+			: ($noEscape || $this->parent ? '' : PhpHelpers::dump($context->getEscaper()->export()));
 
 		return $this->from
 			? $this->printBlockFrom($context, $modArg)
@@ -93,16 +97,19 @@ class IncludeBlockNode extends StatementNode
 
 	private function printBlock(PrintContext $context, string $modArg): string
 	{
-		$block = $this->blocks[$this->layer][$this->name] ?? $this->blocks[Template::LayerLocal][$this->name] ?? null;
+		if ($this->name instanceof Scalar\StringNode || $this->name instanceof Scalar\IntegerNode) {
+			$staticName = (string) $this->name->value;
+			$block = $this->blocks[$this->layer][$staticName] ?? $this->blocks[Template::LayerLocal][$staticName] ?? null;
+		}
+
 		return $context->format(
 			'$this->renderBlock' . ($this->parent ? 'Parent' : '')
-			. '(' . (Helpers::isNameDynamic($this->name) ? '%word' : '%dump') . ', '
-			. '%array? + '
-			. ($block && !$block->parameters ? 'get_defined_vars()' : '[]')
+			. '(%node, %node? + '
+			. (isset($block) && !$block->parameters ? 'get_defined_vars()' : '[]')
 			. '%raw) %line;',
 			$this->name,
 			$this->args,
-			$modArg === 'null' ? '' : ", $modArg",
+			$modArg ? ", $modArg" : '',
 			$this->position,
 		);
 	}
@@ -111,7 +118,7 @@ class IncludeBlockNode extends StatementNode
 	private function printBlockFrom(PrintContext $context, string $modArg): string
 	{
 		return $context->format(
-			'$this->createTemplate(%word, %array? + $this->params, "include")->renderToContentType(%raw, %word) %line;',
+			'$this->createTemplate(%node, %node? + $this->params, "include")->renderToContentType(%raw, %node) %line;',
 			$this->from,
 			$this->args,
 			$modArg,
@@ -123,11 +130,11 @@ class IncludeBlockNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
+		yield $this->name;
 		if ($this->from) {
 			yield $this->from;
 		}
-		if ($this->args) {
-			yield $this->args;
-		}
+		yield $this->args;
+		yield $this->modifier;
 	}
 }

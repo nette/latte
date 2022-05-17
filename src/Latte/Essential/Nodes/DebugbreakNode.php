@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -26,7 +26,7 @@ class DebugbreakNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$node = new static;
-		$node->condition = $tag->parser->parseExpression();
+		$node->condition = $tag->parser->isEnd() ? null : $tag->parser->parseExpression();
 		return $node;
 	}
 

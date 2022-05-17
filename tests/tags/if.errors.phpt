@@ -19,7 +19,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{if 1}{else a}{/if}'),
 	Latte\CompileException::class,
-	'Arguments are not allowed in {else} (at column 7)',
+	"Unexpected 'a', expecting end of tag in {else} (at column 13)",
 );
 
 Assert::exception(

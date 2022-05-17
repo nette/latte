@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\CompileException;
-use Latte\Compiler\MacroTokens;
+use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PhpWriter;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Compiler\Token;
 
 
 /**
@@ -24,13 +26,14 @@ use Latte\Compiler\Tag;
 class VarNode extends StatementNode
 {
 	public bool $default;
-	public MacroTokens $assignments;
+
+	/** @var AssignNode[] */
+	public array $assignments = [];
 
 
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
-
 		$node = new static;
 		$node->default = $tag->name === 'default';
 		$node->assignments = self::parseAssignments($tag, $node->default);
@@ -38,54 +41,24 @@ class VarNode extends StatementNode
 	}
 
 
-	private static function parseAssignments(Tag $tag, bool $default): MacroTokens
+	private static function parseAssignments(Tag $tag, bool $default): array
 	{
-		$var = true;
-		$hasType = false;
-		$tokens = $tag->parser;
-		$res = new MacroTokens;
+		$stream = $tag->parser->stream;
+		$res = [];
+		do {
+			$tag->parser->parseType();
 
-		while ($tokens->nextToken()) {
-			if ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
-				$tokens->nextToken();
-				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
-				$hasType = true;
-
-			} elseif ($var && $tokens->isCurrent($tokens::T_VARIABLE)) {
-				if ($default) {
-					$res->append("'" . ltrim($tokens->currentValue(), '$') . "'");
-				} else {
-					$res->append('$' . ltrim($tokens->currentValue(), '$'));
-				}
-
-				$var = null;
-
-			} elseif ($var === null && $tokens->isCurrent('=')) {
-				$res->append($default ? '=>' : '=');
-				$var = false;
-
-			} elseif (!$var && $tokens->isCurrent(',') && $tokens->depth === 0) {
-				if ($var === null) {
-					$res->append($default ? '=>null' : '=null');
-				}
-
-				$res->append($default ? ',' : ';');
-				$var = true;
-				$hasType = false;
-
-			} elseif ($var === null && $default && !$tokens->isCurrent($tokens::T_WHITESPACE)) {
-				throw new CompileException("Unexpected '{$tokens->currentValue()}' in {default $tag->args}", $tag->position);
-
+			$save = $stream->getIndex();
+			$expr = $stream->is(Token::Php_Variable) ? $tag->parser->parseExpression() : null;
+			if ($expr instanceof VariableNode) {
+				$res[] = new AssignNode($expr, new NullNode);
+			} elseif ($expr instanceof AssignNode && (!$default || $expr->var instanceof VariableNode)) {
+				$res[] = $expr;
 			} else {
-				$res->append($tokens->currentValue());
+				$stream->seek($save);
+				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());
 			}
-		}
-
-		if ($var === null) {
-			$res->append($default ? '=>null' : '=null');
-		} elseif ($var === true) {
-			throw new CompileException("Unexpected end in {{$tag->name} {$tag->args}}", $tag->position);
-		}
+		} while ($stream->tryConsume(','));
 
 		return $res;
 	}
@@ -93,15 +66,41 @@ class VarNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$writer = PhpWriter::using($context);
-		$res = $writer->preprocess($this->assignments);
-		$out = $writer->quotingPass($res)->joinAll();
+		$res = [];
+		if ($this->default) {
+			foreach ($this->assignments as $assign) {
+				assert($assign->var instanceof VariableNode);
+				if ($assign->var->name instanceof ExpressionNode) {
+					$var = $assign->var->name->print($context);
+				} else {
+					$var = $context->encodeString($assign->var->name);
+				}
+				$res[] = $var . ' => ' . $assign->expr->print($context);
+			}
+
+			return $context->format(
+				'extract([%raw], EXTR_SKIP) %line;',
+				implode(', ', $res),
+				$this->position,
+			);
+		}
+
+		foreach ($this->assignments as $assign) {
+			$res[] = $assign->print($context);
+		}
+
 		return $context->format(
-			$this->default
-				? 'extract([%raw], EXTR_SKIP) %line;'
-				: '%raw %line;',
-			$out,
+			'%raw %line;',
+			implode('; ', $res),
 			$this->position,
 		);
+	}
+
+
+	public function &getIterator(): \Generator
+	{
+		foreach ($this->assignments as $assign) {
+			yield $assign;
+		}
 	}
 }

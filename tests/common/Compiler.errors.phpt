@@ -82,7 +82,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{time() /}'),
 	Latte\CompileException::class,
-	'Unexpected /} in tag {= time()/} (at column 1)',
+	'Unexpected /} in tag {=time() /} (at column 1)',
 );
 
 
@@ -108,19 +108,13 @@ Assert::noError(
 Assert::exception(
 	fn() => $latte->compile('{=)}'),
 	Latte\CompileException::class,
-	'Unexpected )',
+	"Unexpected ')' (at column 3)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{=[(])}'),
 	Latte\CompileException::class,
-	'Unexpected ]',
-);
-
-Assert::exception(
-	fn() => $latte->compile('{=[}'),
-	Latte\CompileException::class,
-	'Missing ]',
+	"Unexpected ']' (at column 5)",
 );
 
 
@@ -128,55 +122,25 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{php function test() }'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'function' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{php function /*comment*/ test() }'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'function' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{php function &test() }'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'function' inside tag.",
+	"Unexpected 'test()', expecting end of tag in {php} (at column 15)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{php class test }'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'class' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{php interface test }'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'interface' inside tag.",
+	"Unexpected 'test', expecting end of tag in {php} (at column 12)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{php return}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'return' inside tag.",
+	"Unexpected 'return' (at column 6)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{php yield $x}'),
 	Latte\CompileException::class,
-	"Forbidden keyword 'yield' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{php die() }'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'die' inside tag.",
-);
-
-Assert::exception(
-	fn() => $latte->compile('{php include "file" }'),
-	Latte\CompileException::class,
-	"Forbidden keyword 'include' inside tag.",
+	"Keyword 'yield' is forbidden in Latte (at column 6)",
 );
 
 Assert::exception(
@@ -188,7 +152,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{$ʟ_tmp}'),
 	Latte\CompileException::class,
-	'Forbidden variable $ʟ_tmp.',
+	'Forbidden variable $ʟ_tmp (at column 2)',
 );
 
 
@@ -200,15 +164,15 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $latte->compile('<p n:foreach=1><span n:if=1>'),
+	fn() => $latte->compile('<p n:if=1><span n:if=1>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </span> for element started on line 1 (at column 29)',
+	'Unexpected end, expecting </span> for element started on line 1 (at column 24)',
 );
 
 Assert::exception(
-	fn() => $latte->compile('<p n:foreach=1><span n:if=1></i>'),
+	fn() => $latte->compile('<p n:if=1><span n:if=1></i>'),
 	Latte\CompileException::class,
-	"Unexpected '</i>', expecting </span> for element started on line 1 (at column 29)",
+	"Unexpected '</i>', expecting </span> for element started on line 1 (at column 24)",
 );
 
 Assert::exception(
@@ -226,25 +190,19 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{if 1}{/if 2}'),
 	Latte\CompileException::class,
-	'Unexpected {/if 2}, expecting {/if} (at column 7)',
+	"Unexpected '2', expecting end of tag in {/if} (at column 12)",
 );
 
 Assert::exception(
-	fn() => $latte->compile('<span n:if=1 n:foreach=2>{foreach x}</span>'),
+	fn() => $latte->compile('<span n:if=1>{foreach $a as $b}</span>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting {/foreach} (at column 44)',
+	'Unexpected end, expecting {/foreach} (at column 39)',
 );
 
 Assert::exception(
-	fn() => $latte->compile('<span n:if=1 n:foreach=2>{/foreach}'),
+	fn() => $latte->compile('<span n:if=1>{/if}'),
 	Latte\CompileException::class,
-	"Unexpected '{/foreach', expecting </span> for element started on line 1 (at column 26)",
-);
-
-Assert::exception(
-	fn() => $latte->compile('<span n:if=1 n:foreach=2>{/if}'),
-	Latte\CompileException::class,
-	"Unexpected '{/if}', expecting </span> for element started on line 1 (at column 26)",
+	"Unexpected '{/if}', expecting </span> for element started on line 1 (at column 14)",
 );
 
 Assert::exception(
@@ -255,10 +213,4 @@ Assert::exception(
 		XX),
 	Latte\CompileException::class,
 	"Unexpected '</li>', expecting </a> for element started on line 2 (on line 2 at column 37)",
-);
-
-Assert::error(
-	fn() => $latte->compile('{=foo|noescape|trim}'),
-	E_USER_DEPRECATED,
-	"Filter |noescape should be placed at the very end in '|noescape|trim'",
 );

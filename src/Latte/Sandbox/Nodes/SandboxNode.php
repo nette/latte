@@ -9,7 +9,8 @@ declare(strict_types=1);
 
 namespace Latte\Sandbox\Nodes;
 
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -21,7 +22,7 @@ use Latte\Compiler\Tag;
 class SandboxNode extends StatementNode
 {
 	public ExpressionNode $file;
-	public ExpressionNode $args;
+	public ArrayNode $args;
 
 
 	public static function create(Tag $tag): static
@@ -29,8 +30,9 @@ class SandboxNode extends StatementNode
 		$tag->outputMode = $tag::OutputRemoveIndentation;
 		$tag->expectArguments();
 		$node = new static;
-		$node->file = new ExpressionNode($tag->parser->fetchWord());
-		$node->args = $tag->parser->parseExpression();
+		$node->file = $tag->parser->parseUnquotedStringOrExpression();
+		$tag->parser->stream->tryConsume(',');
+		$node->args = $tag->parser->parseArguments();
 		return $node;
 	}
 
@@ -41,7 +43,7 @@ class SandboxNode extends StatementNode
 			<<<'XX'
 				ob_start(fn() => '');
 				try {
-					$this->createTemplate(%word, %array, 'sandbox')->renderToContentType(%dump) %line;
+					$this->createTemplate(%node, %node, 'sandbox')->renderToContentType(%dump) %line;
 					echo ob_get_clean();
 				} catch (\Throwable $ʟ_e) {
 					if (isset($this->global->coreExceptionHandler)) {

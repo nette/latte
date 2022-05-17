@@ -73,14 +73,6 @@ Assert::error(
 );
 
 
-// with inline modifier
-$latte->addFunction('fnc', fn($val) => strrev($val));
-Assert::same(
-	'CBA',
-	$latte->renderToString('{fnc(abc|upper)}'),
-);
-
-
 // invoke function
 Assert::exception(
 	fn() => $latte->invokeFunction('unknown', []),

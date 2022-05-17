@@ -10,10 +10,13 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\MacroTokens;
+use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Compiler\Token;
 
 
 /**
@@ -21,7 +24,7 @@ use Latte\Compiler\Tag;
  */
 class ParametersNode extends StatementNode
 {
-	/** @var string[] */
+	/** @var AssignNode[] */
 	public array $parameters = [];
 
 
@@ -32,35 +35,33 @@ class ParametersNode extends StatementNode
 		}
 		$tag->expectArguments();
 		$node = new static;
-		$node->parameters = self::parseParameters($tag->parser);
+		$node->parameters = self::parseParameters($tag);
 		return $node;
 	}
 
 
-	private static function parseParameters(MacroTokens $tokens): array
+	private static function parseParameters(Tag $tag): array
 	{
+		$stream = $tag->parser->stream;
 		$params = [];
-		while ($tokens->isNext(...$tokens::SIGNIFICANT)) {
-			if ($tokens->nextValue($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
-				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
-			}
+		do {
+			$tag->parser->parseType();
 
-			$param = $tokens->consumeValue($tokens::T_VARIABLE);
-			$default = $tokens->nextValue('=')
-				? $tokens->joinUntilSameDepth(',')
-				: 'null';
-			$params[] = sprintf(
-				'%s = $this->params[%s] ?? $this->params[%s] ?? %s;',
-				$param,
-				count($params),
-				var_export(substr($param, 1), true),
-				$default,
-			);
-
-			if ($tokens->isNext(...$tokens::SIGNIFICANT)) {
-				$tokens->consumeValue(',');
+			$save = $stream->getIndex();
+			$expr = $stream->is(Token::Php_Variable) ? $tag->parser->parseExpression() : null;
+			if ($expr instanceof VariableNode && is_string($expr->name)) {
+				$params[] = new AssignNode($expr, new NullNode);
+			} elseif (
+				$expr instanceof AssignNode
+				&& $expr->var instanceof VariableNode
+				&& is_string($expr->var->name)
+			) {
+				$params[] = $expr;
+			} else {
+				$stream->seek($save);
+				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());
 			}
-		}
+		} while ($stream->tryConsume(','));
 
 		return $params;
 	}
@@ -70,5 +71,13 @@ class ParametersNode extends StatementNode
 	{
 		$context->paramsExtraction = $this->parameters;
 		return '';
+	}
+
+
+	public function &getIterator(): \Generator
+	{
+		foreach ($this->parameters as $param) {
+			yield $param;
+		}
 	}
 }

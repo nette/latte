@@ -10,8 +10,9 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\FragmentNode;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
@@ -24,14 +25,22 @@ use Latte\Compiler\Tag;
 class SwitchNode extends StatementNode
 {
 	public ?ExpressionNode $expression;
+
+	/** @var array<array{?ArrayNode, int, FragmentNode}> */
 	public array $cases = [];
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+	/** @return \Generator<int, ?array, array{FragmentNode, Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
+		if ($tag->isNAttribute()) {
+			throw new CompileException('Attribute n:switch is not supported.', $tag->position);
+		}
+
 		$node = new static;
-		$node->expression = $tag->parser->parseExpression();
+		$node->expression = $tag->parser->isEnd()
+			? null
+			: $tag->parser->parseExpression();
 
 		[$content, $nextTag] = yield ['case', 'default'];
 		foreach ($content->children as $child) {
@@ -42,17 +51,16 @@ class SwitchNode extends StatementNode
 
 		$default = 0;
 		while (true) {
-			if ($nextTag?->name === 'case') {
+			if ($nextTag->name === 'case') {
 				$nextTag->expectArguments();
-				[$case, $line] = [$nextTag->parser->parseExpression(), $nextTag->position];
+				[$case, $line] = [$nextTag->parser->parseArguments(), $nextTag->position];
 				[$content, $nextTag] = yield ['case', 'default'];
 				$node->cases[] = [$case, $line, $content];
 
-			} elseif ($nextTag?->name === 'default') {
+			} elseif ($nextTag->name === 'default') {
 				if ($default++) {
 					throw new CompileException('Tag {switch} may only contain one {default} clause.', $nextTag->position);
 				}
-				$nextTag->expectArguments(false);
 				$line = $nextTag->position;
 				[$content, $nextTag] = yield ['case', 'default'];
 				$node->cases[] = [null, $line, $content];
@@ -83,7 +91,7 @@ class SwitchNode extends StatementNode
 
 			$first = false;
 			$res .= $context->format(
-				'if (in_array($ʟ_switch, %array, true)) %line { %node } ',
+				'if (in_array($ʟ_switch, %node, true)) %line { %node } ',
 				$case,
 				$line,
 				$content,

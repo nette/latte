@@ -12,11 +12,11 @@ namespace Latte\Essential\Nodes;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\NopNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use Latte\Helpers;
 
 
 /**
@@ -25,18 +25,17 @@ use Latte\Helpers;
 class TranslateNode extends StatementNode
 {
 	public AreaNode $content;
-	public ?string $modifier;
+	public ModifierNode $modifier;
 
 
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|NopNode> */
 	public static function create(Tag $tag): \Generator
 	{
 		$tag->outputMode = $tag::OutputKeepIndentation;
-		$tag->extractModifier();
 
 		$node = new static;
-		$node->modifier = $tag->parser->modifiers;
-
+		$node->modifier = $tag->parser->parseModifier();
+		$node->modifier->escape = true;
 		if ($tag->void) {
 			return new NopNode;
 		}
@@ -48,13 +47,6 @@ class TranslateNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$modifier = $this->modifier;
-		if (Helpers::removeFilter($modifier, 'noescape')) {
-			$context->checkFilterIsAllowed('noescape');
-		} else {
-			$modifier .= '|escape';
-		}
-
 		if (
 			$this->content instanceof FragmentNode
 			&& count($this->content->children) === 1
@@ -66,7 +58,7 @@ class TranslateNode extends StatementNode
 					echo %modifyContent($this->filters->filterContent('translate', $ʟ_fi, %dump)) %line;
 					XX,
 				$context->getEscaper()->export(),
-				$modifier,
+				$this->modifier,
 				$this->content->children[0]->content,
 				$this->position,
 			);
@@ -84,7 +76,7 @@ class TranslateNode extends StatementNode
 					XX,
 				$this->content,
 				$context->getEscaper()->export(),
-				$modifier,
+				$this->modifier,
 				$this->position,
 			);
 		}
@@ -94,5 +86,6 @@ class TranslateNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->content;
+		yield $this->modifier;
 	}
 }

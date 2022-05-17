@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -21,7 +21,12 @@ use Latte\Compiler\Tag;
  */
 class ForNode extends StatementNode
 {
-	public ExpressionNode $args;
+	/** @var ExpressionNode[]  */
+	public array $init = [];
+	public ?ExpressionNode $condition;
+
+	/** @var ExpressionNode[]  */
+	public array $next = [];
 	public AreaNode $content;
 
 
@@ -29,8 +34,21 @@ class ForNode extends StatementNode
 	public static function create(Tag $tag): \Generator
 	{
 		$tag->expectArguments();
+		$stream = $tag->parser->stream;
 		$node = new static;
-		$node->args = $tag->parser->parseExpression();
+		while (!$stream->is(';')) {
+			$node->init[] = $tag->parser->parseExpression();
+			$stream->tryConsume(',');
+		}
+
+		$stream->consume(';');
+		$node->condition = $stream->is(';') ? null : $tag->parser->parseExpression();
+		$stream->consume(';');
+		while (!$tag->parser->isEnd()) {
+			$node->next[] = $tag->parser->parseExpression();
+			$stream->tryConsume(',');
+		}
+
 		[$node->content] = yield;
 		return $node;
 	}
@@ -40,12 +58,14 @@ class ForNode extends StatementNode
 	{
 		return $context->format(
 			<<<'XX'
-				for (%node) %line {
+				for (%args; %node; %args) %line {
 					%node
 				}
 
 				XX,
-			$this->args,
+			$this->init,
+			$this->condition,
+			$this->next,
 			$this->position,
 			$this->content,
 		);
@@ -54,7 +74,18 @@ class ForNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		yield $this->args;
+		foreach ($this->init as $item) {
+			yield $item;
+		}
+
+		if ($this->condition) {
+			yield $this->condition;
+		}
+
+		foreach ($this->next as $item) {
+			yield $item;
+		}
+
 		yield $this->content;
 	}
 }

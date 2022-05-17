@@ -11,10 +11,14 @@ namespace Latte\Essential\Nodes;
 
 use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
+use Latte\Compiler\Token;
 use Latte\Runtime\Template;
 
 
@@ -31,46 +35,54 @@ class DefineNode extends StatementNode
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$tag->expectArguments();
-		[$name, $local] = $tag->parser->fetchWordWithModifier('local');
-		$name = ltrim((string) $name, '#');
-		$layer = $local ? Template::LayerLocal : $parser->blockLayer;
+		$layer = $tag->parser->tryConsumeModifier('local')
+			? Template::LayerLocal
+			: $parser->blockLayer;
+		$tag->parser->stream->tryConsume('#');
+		$name = $tag->parser->parseUnquotedStringOrExpression();
 
 		$node = new static;
 		$node->block = new Block($name, $layer, $tag);
-
 		if (!$node->block->isDynamic()) {
 			$parser->checkBlockIsUnique($node->block);
 			$tag->data->block = $node->block; // for {include}
-			$node->block->parameters = self::parseParameters($tag->parser);
+			$tag->parser->stream->tryConsume(',');
+			$node->block->parameters = self::parseParameters($tag);
 		}
 
-		[$node->content] = yield;
+		[$node->content, $endTag] = yield;
+		if ($endTag && $name instanceof Scalar\StringNode) {
+			$endTag->parser->stream->tryConsume($name->value);
+		}
 
 		return $node;
 	}
 
 
-	private static function parseParameters($tokens): array
+	private static function parseParameters(Tag $tag): array
 	{
+		$stream = $tag->parser->stream;
 		$params = [];
-		while ($tokens->isNext(...$tokens::SIGNIFICANT)) {
-			if ($tokens->nextValue($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
-				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
+		while (!$stream->is(Token::End)) {
+			$tag->parser->parseType();
+
+			$save = $stream->getIndex();
+			$expr = $stream->is(Token::Php_Variable) ? $tag->parser->parseExpression() : null;
+			if ($expr instanceof VariableNode && is_string($expr->name)) {
+				$params[] = new AssignNode($expr, new Scalar\NullNode);
+			} elseif (
+				$expr instanceof AssignNode
+				&& $expr->var instanceof VariableNode
+				&& is_string($expr->var->name)
+			) {
+				$params[] = $expr;
+			} else {
+				$stream->seek($save);
+				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());
 			}
 
-			$param = $tokens->consumeValue($tokens::T_VARIABLE);
-			$default = $tokens->nextValue('=')
-				? $tokens->joinUntilSameDepth(',')
-				: 'null';
-			$params[] = sprintf(
-				'%s = $ʟ_args[%s] ?? $ʟ_args[%s] ?? %s;',
-				$param,
-				count($params),
-				var_export(substr($param, 1), true),
-				$default,
-			);
-			if ($tokens->isNext(...$tokens::SIGNIFICANT)) {
-				$tokens->consumeValue(',');
+			if (!$stream->tryConsume(',')) {
+				break;
 			}
 		}
 
@@ -100,8 +112,8 @@ class DefineNode extends StatementNode
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
-			'$this->addBlock($ʟ_nm = %word, %dump, [[$this, %dump]], %dump);',
-			$this->block->name,
+			'$this->addBlock(%node, %dump, [[$this, %dump]], %dump);',
+			new AssignNode(new VariableNode('ʟ_nm'), $this->block->name),
 			$context->getEscaper()->export(),
 			$this->block->method,
 			$this->block->layer,
@@ -111,6 +123,7 @@ class DefineNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
+		yield $this->block->name;
 		yield $this->content;
 	}
 }

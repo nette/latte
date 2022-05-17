@@ -11,8 +11,11 @@ namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Escaper;
+use Latte\Compiler\Node;
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Expression;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -24,21 +27,27 @@ use Latte\Compiler\Tag;
 class CaptureNode extends StatementNode
 {
 	public ExpressionNode $variable;
-	public string $modifier;
+	public ModifierNode $modifier;
 	public AreaNode $content;
 
 
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
-		$tag->extractModifier();
 		$tag->expectArguments();
-		if (!str_starts_with($tag->args, '$')) {
-			throw new CompileException("Invalid capture block variable '$tag->args'", $tag->position);
+		$variable = $tag->parser->parseExpression();
+		if (!self::canBeAssignedTo($variable)) {
+			$text = '';
+			$i = 0;
+			while ($token = $tag->parser->stream->peek(--$i)) {
+				$text = $token->text . $text;
+			}
+
+			throw new CompileException("It is not possible to write into '$text' in " . $tag->getNotation(), $tag->position);
 		}
 		$node = new static;
-		$node->variable = $tag->parser->parseExpression();
-		$node->modifier = $tag->parser->modifiers;
+		$node->variable = $variable;
+		$node->modifier = $tag->parser->parseModifier();
 		[$node->content] = yield;
 		return $node;
 	}
@@ -55,7 +64,7 @@ class CaptureNode extends StatementNode
 				} finally {
 					$ʟ_tmp = %raw;
 				}
-				$ʟ_fi = new LR\FilterInfo(%dump); %args = %modifyContent($ʟ_tmp);
+				$ʟ_fi = new LR\FilterInfo(%dump); %node = %modifyContent($ʟ_tmp);
 
 
 				XX,
@@ -71,9 +80,19 @@ class CaptureNode extends StatementNode
 	}
 
 
+	private static function canBeAssignedTo(Node $node): bool
+	{
+		return $node instanceof Expression\VariableNode
+			|| $node instanceof Expression\ArrayAccessNode
+			|| $node instanceof Expression\PropertyFetchNode
+			|| $node instanceof Expression\StaticPropertyFetchNode;
+	}
+
+
 	public function &getIterator(): \Generator
 	{
 		yield $this->variable;
+		yield $this->modifier;
 		yield $this->content;
 	}
 }

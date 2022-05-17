@@ -197,8 +197,6 @@ class Engine
 			$this->getTemplateClass($name),
 			$comment,
 			$this->strictTypes,
-			$this->sandboxed ? $this->policy : null,
-			(array) $this->functions,
 		);
 	}
 
@@ -411,6 +409,15 @@ class Engine
 		}
 
 		return ($this->functions->$name)(...$args);
+	}
+
+
+	/**
+	 * @return callable[]
+	 */
+	public function getFunctions(): array
+	{
+		return (array) $this->functions;
 	}
 
 

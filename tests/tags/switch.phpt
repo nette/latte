@@ -29,7 +29,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{switch}{default 123}{/switch}'),
 	Latte\CompileException::class,
-	'Arguments are not allowed in {default} (at column 9)',
+	"Unexpected '123', expecting end of tag in {default} (at column 18)",
 );
 
 Assert::exception(

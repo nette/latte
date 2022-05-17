@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\CompileException;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Compiler\Token;
 
 
 /**
@@ -23,13 +23,8 @@ class VarTypeNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
-
-		$type = trim($tag->parser->joinUntil($tag->parser::T_VARIABLE));
-		$variable = $tag->parser->nextValue($tag->parser::T_VARIABLE);
-		if (!$type || !$variable) {
-			throw new CompileException('Unexpected content, expecting {varType type $var}.', $tag->position);
-		}
-
+		$tag->parser->parseType();
+		$tag->parser->stream->consume(Token::Php_Variable);
 		return new static;
 	}
 

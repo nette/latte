@@ -49,3 +49,27 @@ Assert::match(
 	'<!--  --> &lt;foo&gt;',
 	$latte->renderToString('<!-- {capture $x}<foo>{/capture} --> {$x}'),
 );
+
+Assert::exception(
+	fn() => $latte->renderToString('{capture $x->x() |foo}{/capture}'),
+	Latte\CompileException::class,
+	"It is not possible to write into '\$x->x()' in {capture} (at column 1)",
+);
+
+$latte->addExtension($extension = new DumpExtension);
+$latte->compile('{capture $var|strip}...{/capture}');
+Assert::match(<<<'XX'
+	Template:
+		Fragment:
+		Fragment:
+			Capture:
+				Variable:
+					name: var
+				Modifier:
+					Filter:
+						Identifier:
+							name: strip
+				Fragment:
+					Text:
+						content: '...'
+	XX, $extension->export());

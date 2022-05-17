@@ -29,7 +29,8 @@ class ContentTypeNode extends StatementNode
 	public static function create(Tag $tag, TemplateParser $parser): static
 	{
 		$tag->expectArguments();
-		$type = $tag->args;
+		while (!$tag->parser->stream->consume()->isEnd());
+		$type = trim($tag->parser->text);
 
 		if (!$tag->isInHead() && !($tag->htmlElement?->name === 'script' && str_contains($type, 'html'))) {
 			throw new CompileException('{contentType} is allowed only in template header.', $tag->position);

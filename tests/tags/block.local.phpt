@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->renderToString('{block local, a}'),
 	Latte\CompileException::class,
-	"Unexpected arguments 'a' in {block} (at column 1)",
+	"Unexpected ',' (at column 13)",
 );
 
 

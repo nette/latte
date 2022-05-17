@@ -30,14 +30,14 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		$this->renderBlock('static', ['var' => 30] + get_defined_vars(), 'html') /* line %d% */;
 		echo "\n";
-		$this->renderBlock(($name . ''), ['var' => 40] + [], 'html') /* line %d% */;
+		$this->renderBlock($name . '', ['var' => 40] + [], 'html') /* line %d% */;
 		echo "\n";
-		$this->addBlock($ʟ_nm = "word$name", 'html', [[$this, 'blockWord_name']], 'local');
+		$this->addBlock($ʟ_nm = "word{$name}", 'html', [[$this, 'blockWord_name']], 'local');
 		$this->renderBlock($ʟ_nm, get_defined_vars());
 		echo '
 
 ';
-		$this->addBlock($ʟ_nm = "strip$name", 'html', [[$this, 'blockStrip_name']], 'local');
+		$this->addBlock($ʟ_nm = "strip{$name}", 'html', [[$this, 'blockStrip_name']], 'local');
 		$this->renderBlock($ʟ_nm, get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('striptags', $ʟ_fi, $s));
@@ -94,7 +94,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	/** {block local "strip$name"} on line %d% */
+	/** {block local "strip$name"|striptags} on line %d% */
 	public function blockStrip_name(array $ʟ_args): void
 	{
 		echo '<span>hello</span>';

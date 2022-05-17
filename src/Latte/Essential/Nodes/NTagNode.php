@@ -11,7 +11,7 @@ namespace Latte\Essential\Nodes;
 
 use Latte;
 use Latte\CompileException;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;

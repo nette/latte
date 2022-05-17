@@ -14,6 +14,9 @@ use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\AuxiliaryNode;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -41,10 +44,15 @@ class SnippetNode extends StatementNode
 		$node = new static;
 		$node->htmlElement = $tag->isNAttribute() ? $tag->htmlElement : null;
 
-		$name = (string) $tag->parser->fetchWord();
-		$node->block = new Block($name, Template::LayerSnippet, $tag);
-		if ($name !== '' && !$node->block->isDynamic()) {
-			$parser->checkBlockIsUnique($node->block);
+		if ($tag->parser->isEnd()) {
+			$name = null;
+			$node->block = new Block(new Scalar\StringNode(''), Template::LayerSnippet, $tag);
+		} else {
+			$name = $tag->parser->parseUnquotedStringOrExpression();
+			$node->block = new Block($name, Template::LayerSnippet, $tag);
+			if (!$node->block->isDynamic()) {
+				$parser->checkBlockIsUnique($node->block);
+			}
 		}
 
 		if ($tag->isNAttribute()) {
@@ -66,7 +74,11 @@ class SnippetNode extends StatementNode
 			));
 		}
 
-		[$node->content] = yield;
+		[$node->content, $endTag] = yield;
+		if ($endTag && $name instanceof Scalar\StringNode) {
+			$endTag->parser->stream->tryConsume($name->value);
+		}
+
 		return $node;
 	}
 
@@ -80,7 +92,7 @@ class SnippetNode extends StatementNode
 
 		$snippetContent = $context->format(
 			<<<'XX'
-				$this->global->snippetDriver->enter(%raw, %dump) %line;
+				$this->global->snippetDriver->enter(%node, %dump) %line;
 				try {
 					%node
 				} finally {
@@ -88,7 +100,7 @@ class SnippetNode extends StatementNode
 				}
 
 				XX,
-			$dynamic ? '$ʟ_nm' : $context->format('%word', $this->block->name),
+			$dynamic ? new AuxiliaryNode(fn() => '$ʟ_nm') : $this->block->name,
 			$dynamic ? SnippetDriver::TypeDynamic : SnippetDriver::TypeStatic,
 			$this->position,
 			$this->htmlElement->content ?? $this->content,
@@ -97,7 +109,7 @@ class SnippetNode extends StatementNode
 		if (!$dynamic) {
 			$this->block->content = $snippetContent;
 			$snippetContent = $context->format(
-				'$this->renderBlock(%dump, [], null, %dump) %line;',
+				'$this->renderBlock(%node, [], null, %dump) %line;',
 				$this->block->name,
 				Template::LayerSnippet,
 				$this->position,
@@ -108,7 +120,7 @@ class SnippetNode extends StatementNode
 			try {
 				$saved = $this->htmlElement->content;
 				$this->htmlElement->content = new AuxiliaryNode(fn() => $snippetContent);
-				return $this->htmlElement->print($context);
+				return $this->content->print($context);
 			} finally {
 				$this->htmlElement->content = $saved;
 			}
@@ -126,18 +138,19 @@ class SnippetNode extends StatementNode
 	{
 		return $context->format(
 			<<<'XX'
-				%raw="', htmlspecialchars($this->global->snippetDriver->getHtmlId(%raw)), '"
+				%raw="', htmlspecialchars($this->global->snippetDriver->getHtmlId(%node)), '"
 				XX,
 			self::$snippetAttribute,
 			$this->block->isDynamic()
-				? $context->format('$ʟ_nm = %word', $this->block->name)
-				: var_export($this->block->name, true),
+				? new AssignNode(new VariableNode('ʟ_nm'), $this->block->name)
+				: $this->block->name,
 		);
 	}
 
 
 	public function &getIterator(): \Generator
 	{
+		yield $this->block->name;
 		yield $this->content;
 	}
 }

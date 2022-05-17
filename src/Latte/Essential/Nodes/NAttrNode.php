@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -21,14 +21,14 @@ use Latte\Compiler\Tag;
  */
 final class NAttrNode extends StatementNode
 {
-	public ExpressionNode $args;
+	public ArrayNode $args;
 
 
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
 		$node = new static;
-		$node->args = $tag->parser->parseExpression();
+		$node->args = $tag->parser->parseArguments();
 		return $node;
 	}
 
@@ -36,7 +36,7 @@ final class NAttrNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		return $context->format(
-			'$ʟ_tmp = %array;
+			'$ʟ_tmp = %node;
 			echo %raw::attrs(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp, %dump) %line;',
 			$this->args,
 			self::class,

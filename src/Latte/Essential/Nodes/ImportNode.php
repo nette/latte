@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -27,7 +27,7 @@ class ImportNode extends StatementNode
 	{
 		$tag->expectArguments();
 		$node = new static;
-		$node->file = new ExpressionNode($tag->parser->fetchWord());
+		$node->file = $tag->parser->parseUnquotedStringOrExpression();
 		return $node;
 	}
 
@@ -35,7 +35,7 @@ class ImportNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		return $context->format(
-			'$this->createTemplate(%word, $this->params, "import")->render() %line;',
+			'$this->createTemplate(%node, $this->params, "import")->render() %line;',
 			$this->file,
 			$this->position,
 		);

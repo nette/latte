@@ -31,30 +31,24 @@ final class Tag
 		OutputKeepIndentation = 1,
 		OutputRemoveIndentation = 2;
 
-	public MacroTokens $parser;
+	public TagParser $parser;
 	public int $outputMode = self::OutputNone;
-	public string $args = '';
 
 
 	public function __construct(
 		public /*readonly*/ string $name,
 		array $tokens,
+		public /*readonly*/ Position $position,
 		public /*readonly*/ bool $void = false,
 		public /*readonly*/ bool $closing = false,
 		public /*readonly*/ int $location = 0,
 		public /*readonly*/ ?ElementNode $htmlElement = null,
 		public ?self $parent = null,
 		public /*readonly*/ ?string $prefix = null,
-		public /*readonly*/ ?Position $position = null,
-		public /*readonly*/ ?\stdClass $data = null,
+		public ?\stdClass $data = null,
 	) {
-		$args = '';
-		foreach ($tokens as $token) {
-			$args .= $token->text;
-		}
-
-		$this->setArgs($args);
 		$this->data ??= new \stdClass;
+		$this->parser = new TagParser($tokens);
 	}
 
 
@@ -76,24 +70,16 @@ final class Tag
 	}
 
 
-	public function setArgs(string $args): void
-	{
-		$this->args = trim($args);
-		$this->parser = new MacroTokens($this->args);
-	}
-
-
 	public function getNotation(bool $withArgs = false): string
 	{
-		$args = $withArgs ? $this->args : '';
 		return $this->isNAttribute()
 			? TemplateLexer::NPrefix . ($this->prefix ? $this->prefix . '-' : '')
 				. $this->name
-				. ($args === '' ? '' : '="' . $args . '"')
+				. ($withArgs ? '="' . $this->parser->text . '"' : '')
 			: '{'
 				. ($this->closing ? '/' : '')
-				. rtrim($this->name
-				. ($args === '' ? '' : ' ' . $args))
+				. $this->name
+				. ($withArgs ? $this->parser->text : '')
 			. '}';
 	}
 
@@ -115,29 +101,10 @@ final class Tag
 	}
 
 
-	/**
-	 * @throws CompileException
-	 */
-	public function expectArguments(string|bool|null $arguments = true): void
+	public function expectArguments(string $what = 'arguments'): void
 	{
-		if ($arguments && $this->args === '') {
-			$label = is_string($arguments) ? $arguments : 'arguments';
-			throw new CompileException('Missing ' . $label . ' in ' . $this->getNotation(), $this->position);
-
-		} elseif ($arguments === false && $this->args !== '') {
-			throw new CompileException('Arguments are not allowed in ' . $this->getNotation(), $this->position);
-		}
-	}
-
-
-	public function extractModifier(): void
-	{
-		if (preg_match('~^
-			(?<args>(?:' . TemplateLexer::ReString . '|[^\'"])*?)
-			(?<modifiers>(?<!\|)\|[a-z](?<modArgs>(?:' . TemplateLexer::ReString . '|(?:\((?P>modArgs)\))|[^\'"/()]|/(?=.))*+))?
-		$~Disx', $this->args, $match)) {
-			$this->setArgs(trim($match['args']));
-			$this->parser->modifiers = $match['modifiers'] ?? '';
+		if ($this->parser->isEnd()) {
+			throw new CompileException("Missing $what in " . $this->getNotation(), $this->position);
 		}
 	}
 

@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte;
-use Latte\CompileException;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Filters;
@@ -143,39 +142,38 @@ final class Escaper
 	}
 
 
-	public function escape(MacroTokens $tokens): MacroTokens
+	public function escape(string $str): string
 	{
 		[$lq, $rq] = $this->state === self::HtmlAttribute && !$this->quote ? ["'\"' . ", " . '\"'"] : ['', ''];
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
-				self::HtmlText => $tokens->prepend('LR\Filters::escapeHtmlText(')->append(')'),
-				self::HtmlTag => $tokens->prepend('LR\Filters::escapeHtmlAttrUnquoted(')->append(')'),
+				self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
+				self::HtmlTag => 'LR\Filters::escapeHtmlAttrUnquoted(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
 					'',
-					self::Url => $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(')->append(')' . $rq),
-					self::JavaScript => $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(')->append('))' . $rq),
-					self::Css => $tokens->prepend($lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(')->append('))' . $rq),
+					self::Url => $lq . 'LR\Filters::escapeHtmlAttr(' . $str . ')' . $rq,
+					self::JavaScript => $lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(' . $str . '))' . $rq,
+					self::Css => $lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(' . $str . '))' . $rq,
 				},
-				self::HtmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
-				self::HtmlBogusTag => $tokens->prepend('LR\Filters::escapeHtml(')->append(')'),
-				self::HtmlJavaScript => $tokens->prepend('LR\Filters::escapeJs(')->append(')'),
-				self::HtmlCss => $tokens->prepend('LR\Filters::escapeCss(')->append(')'),
-				default => throw new CompileException("Unknown context $this->contentType, $this->state."),
+				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
+				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
+				self::HtmlJavaScript => 'LR\Filters::escapeJs(' . $str . ')',
+				self::HtmlCss => 'LR\Filters::escapeCss(' . $str . ')',
+				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::Xml => match ($this->state) {
 				self::HtmlText,
-				self::HtmlBogusTag => $tokens->prepend('LR\Filters::escapeXml(')->append(')'),
-				self::HtmlAttribute => $tokens->prepend($lq . 'LR\Filters::escapeXml(')->append(')' . $rq),
-				self::HtmlComment => $tokens->prepend('LR\Filters::escapeHtmlComment(')->append(')'),
-				self::HtmlTag => $tokens->prepend('LR\Filters::escapeXmlAttrUnquoted(')->append(')'),
-				default => throw new CompileException("Unknown context $this->contentType, $this->state."),
+				self::HtmlBogusTag => 'LR\Filters::escapeXml(' . $str . ')',
+				self::HtmlAttribute => $lq . 'LR\Filters::escapeXml(' . $str . ')' . $rq,
+				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
+				self::HtmlTag => 'LR\Filters::escapeXmlAttrUnquoted(' . $str . ')',
+				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
-			ContentType::JavaScript => $tokens->prepend('LR\Filters::escapeJs(')->append(')'),
-			ContentType::Css => $tokens->prepend('LR\Filters::escapeCss(')->append(')'),
-			ContentType::ICal => $tokens->prepend('LR\Filters::escapeIcal(')->append(')'),
-			ContentType::Text => $tokens,
-			'' => $tokens->prepend('($this->filters->escape)(')->append(')'),
-			default => throw new CompileException("Unknown content-type $this->contentType."),
+			ContentType::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
+			ContentType::Css => 'LR\Filters::escapeCss(' . $str . ')',
+			ContentType::ICal => 'LR\Filters::escapeIcal(' . $str . ')',
+			ContentType::Text => $str,
+			default => throw new \LogicException("Unknown content-type $this->contentType."),
 		};
 	}
 

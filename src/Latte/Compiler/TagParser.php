@@ -101,6 +101,22 @@ final class TagParser extends TagParserData
 	}
 
 
+	public function parseType(): ?string
+	{
+		$kind = [
+			Token::Php_Identifier, Token::Php_Constant, Token::Php_Ellipsis, Token::Php_Array, Token::Php_Integer,
+			Token::Php_NameFullyQualified, Token::Php_NameQualified, Token::Php_Null, Token::Php_False,
+			'(', ')', '<', '>', '[', ']', '|', '&', '{', '}', ':', ',', '=', '?',
+		];
+		$res = null;
+		while ($token = $this->stream->tryConsume(...$kind)) {
+			$res .= $token->text;
+		}
+
+		return $res;
+	}
+
+
 	/** @throws Latte\CompileException */
 	private function parse(string $schema, bool $recovery = false): mixed
 	{

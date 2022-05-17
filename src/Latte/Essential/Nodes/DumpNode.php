@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -26,7 +26,7 @@ class DumpNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$node = new static;
-		$node->expression = $tag->args === ''
+		$node->expression = $tag->parser->isEnd()
 			? null
 			: $tag->parser->parseExpression();
 		return $node;
@@ -35,14 +35,17 @@ class DumpNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		return $context->format(
-			$this->expression
-				? 'Tracy\Debugger::barDump((%node), %dump) %line;'
-				: 'Tracy\Debugger::barDump(get_defined_vars(), \'variables\') %2.line;',
-			$this->expression,
-			$this->expression?->text,
-			$this->position,
-		);
+		return $this->expression
+			? $context->format(
+				'Tracy\Debugger::barDump(%node, %dump) %line;',
+				$this->expression,
+				$this->expression->print($context),
+				$this->position,
+			)
+			: $context->format(
+				"Tracy\\Debugger::barDump(get_defined_vars(), 'variables') %line;",
+				$this->position,
+			);
 	}
 
 

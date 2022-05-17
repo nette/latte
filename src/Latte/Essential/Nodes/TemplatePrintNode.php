@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Compiler\Token;
 
 
 /**
@@ -26,7 +27,7 @@ class TemplatePrintNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$node = new static;
-		$node->template = $tag->parser->fetchWord() ?: null;
+		$node->template = $tag->parser->stream->tryConsume(Token::Php_Identifier, Token::Php_NameFullyQualified, Token::Php_NameQualified)?->text;
 		return $node;
 	}
 

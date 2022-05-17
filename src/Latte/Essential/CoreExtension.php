@@ -10,6 +10,10 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Latte;
+use Latte\Compiler\Nodes\Php\FilterNode;
+use Latte\Compiler\Nodes\Php\IdentifierNode;
+use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
@@ -24,8 +28,12 @@ final class CoreExtension extends Latte\Extension
 {
 	use Latte\Strict;
 
+	private array $functions;
+
+
 	public function beforeCompile(Latte\Engine $engine): void
 	{
+		$this->functions = $engine->getFunctions();
 	}
 
 
@@ -181,7 +189,9 @@ final class CoreExtension extends Latte\Extension
 	public function getPasses(): array
 	{
 		return [
+			'internalVariables' => [Passes::class, 'internalVariablesPass'],
 			'overwrittenVariables' => [Passes::class, 'overwrittenVariablesPass'],
+			'customFunctions' => fn(TemplateNode $node) => Passes::customFunctionsPass($node, $this->functions),
 			'moveTemplatePrintToHead' => [Passes::class, 'moveTemplatePrintToHeadPass'],
 		];
 	}
@@ -193,13 +203,21 @@ final class CoreExtension extends Latte\Extension
 	 */
 	private function includeSplitter(Tag $tag, TemplateParser $parser): Nodes\IncludeBlockNode|Nodes\IncludeFileNode
 	{
-		$tag->extractModifier();
 		$tag->expectArguments();
-		[$name, $mod] = $tag->parser->fetchWordWithModifier(['block', 'file', '#']);
-		$tag->parser->reset();
-		return $mod === 'file' || (!$mod && $name && !preg_match('~[\w-]+$~DA', $name))
-			? Nodes\IncludeFileNode::create($tag)
-			: Nodes\IncludeBlockNode::create($tag, $parser);
+		$mod = $tag->parser->tryConsumeModifier('block', 'file');
+		if ($mod) {
+			$block = $mod->text === 'block';
+		} elseif ($tag->parser->stream->tryConsume('#')) {
+			$block = true;
+		} else {
+			$name = $tag->parser->parseUnquotedStringOrExpression();
+			$block = $name instanceof Scalar\StringNode && preg_match('~[\w-]+$~DA', $name->value);
+		}
+		$tag->parser->stream->seek(0);
+
+		return $block
+			? Nodes\IncludeBlockNode::create($tag, $parser)
+			: Nodes\IncludeFileNode::create($tag);
 	}
 
 
@@ -209,7 +227,8 @@ final class CoreExtension extends Latte\Extension
 	private function parseSyntax(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$tag->expectArguments();
-		$parser->getLexer()->setSyntax($tag->args);
+		$token = $tag->parser->stream->consume();
+		$parser->getLexer()->setSyntax($token->text);
 		[$inner] = yield;
 		$parser->getLexer()->setSyntax(null);
 		return $inner;
@@ -219,10 +238,19 @@ final class CoreExtension extends Latte\Extension
 	/**
 	 * {_ ...}
 	 */
-	public function parseTranslate(Tag $tag, TemplateParser $parser): Nodes\PrintNode
+	public function parseTranslate(Tag $tag): Nodes\PrintNode
 	{
-		$node = Nodes\PrintNode::create($tag, $parser);
-		$node->modifier = '|translate' . $node->modifier;
+		$tag->outputMode = $tag::OutputKeepIndentation;
+		$tag->expectArguments();
+		$node = new Nodes\PrintNode;
+		$node->expression = $tag->parser->parseExpression();
+		$args = [];
+		if ($tag->parser->stream->tryConsume(',')) {
+			$args = $tag->parser->parseArguments()->toArguments();
+		}
+		$node->modifier = $tag->parser->parseModifier();
+		array_unshift($node->modifier->filters, new FilterNode(new IdentifierNode('translate'), $args));
+		$node->modifier->escape = true;
 		return $node;
 	}
 }

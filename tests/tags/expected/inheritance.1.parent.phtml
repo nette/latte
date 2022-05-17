@@ -51,12 +51,12 @@ Parent: ';
 	{
 		extract($this->params);
 
-		extract(['class' => NULL, 'namespace' => NULL, 'top' => TRUE], EXTR_SKIP) /* line %d% */;
+		extract(['class' => null, 'namespace' => null, 'top' => true], EXTR_SKIP) /* line %d% */;
 		return get_defined_vars();
 	}
 
 
-	/** {block title} on line %d% */
+	/** {block title|stripHtml|upper} on line %d% */
 	public function blockTitle(array $ʟ_args): void
 	{
 		echo 'My website';

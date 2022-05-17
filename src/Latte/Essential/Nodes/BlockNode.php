@@ -13,10 +13,15 @@ use Latte\CompileException;
 use Latte\Compiler\Block;
 use Latte\Compiler\Escaper;
 use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
+use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
+use Latte\Compiler\Token;
 use Latte\Runtime\Template;
 
 
@@ -26,7 +31,7 @@ use Latte\Runtime\Template;
 class BlockNode extends StatementNode
 {
 	public ?Block $block = null;
-	public string $modifier;
+	public ModifierNode $modifier;
 	public AreaNode $content;
 
 
@@ -34,17 +39,15 @@ class BlockNode extends StatementNode
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$tag->outputMode = $tag::OutputRemoveIndentation;
-		$tag->extractModifier();
-
-		[$name, $local] = $tag->parser->fetchWordWithModifier('local');
-		if ($token = $tag->parser->nextValue()) {
-			throw new CompileException("Unexpected arguments '$token' in " . $tag->getNotation(), $tag->position);
-		}
-		$name = ltrim((string) $name, '#');
+		$stream = $tag->parser->stream;
 		$node = new static;
 
-		if ($name !== '') {
-			$layer = $local ? Template::LayerLocal : $parser->blockLayer;
+		if (!$stream->is('|', Token::End)) {
+			$layer = $tag->parser->tryConsumeModifier('local')
+				? Template::LayerLocal
+				: $parser->blockLayer;
+			$stream->tryConsume('#');
+			$name = $tag->parser->parseUnquotedStringOrExpression();
 			$node->block = new Block($name, $layer, $tag);
 
 			if (!$node->block->isDynamic()) {
@@ -53,14 +56,17 @@ class BlockNode extends StatementNode
 			}
 		}
 
-		$node->modifier = $tag->parser->modifiers;
-		if ($node->modifier) {
-			$node->modifier .= '|escape';
+		$node->modifier = $tag->parser->parseModifier();
+		$node->modifier->escape = (bool) $node->modifier->filters;
+		if ($node->modifier->hasFilter('noescape') && count($node->modifier->filters) === 1) {
+			throw new CompileException('Filter |noescape is not expected here.', $tag->position);
 		}
 
-		[$node->content] = yield;
+		[$node->content, $endTag] = yield;
 
-		if ($name === '' && $node->modifier === '') {
+		if ($node->block && $endTag && $name instanceof Scalar\StringNode) {
+			$endTag->parser->stream->tryConsume($name->value);
+		} elseif (!$node->block && !$node->modifier->filters) {
 			return $node->content;
 		}
 
@@ -108,8 +114,8 @@ class BlockNode extends StatementNode
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
-			'$this->renderBlock(%dump, get_defined_vars()'
-			. ($this->modifier
+			'$this->renderBlock(%node, get_defined_vars()'
+			. ($this->modifier->filters || $this->modifier->escape
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: '')
 			. ') %2.line;',
@@ -127,13 +133,13 @@ class BlockNode extends StatementNode
 		$escaper = $this->adjustContext($context->getEscaper());
 
 		return $context->format(
-			'$this->addBlock($ʟ_nm = %word, %dump, [[$this, %dump]], %dump);
+			'$this->addBlock(%node, %dump, [[$this, %dump]], %dump);
 			$this->renderBlock($ʟ_nm, get_defined_vars()'
-			. ($this->modifier
+			. ($this->modifier->filters || $this->modifier->escape
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: '')
 			. ');',
-			$this->block->name,
+			new AssignNode(new VariableNode('ʟ_nm'), $this->block->name),
 			$escaper->export(),
 			$this->block->method,
 			$this->block->layer,
@@ -146,7 +152,7 @@ class BlockNode extends StatementNode
 	{
 		if ($escaper->getState() === Escaper::HtmlAttribute) {
 			$escaper = new Escaper($escaper->getContentType());
-			$this->modifier .= '|escape';
+			$this->modifier->escape = true;
 		}
 		return $escaper;
 	}
@@ -154,6 +160,10 @@ class BlockNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
+		if ($this->block) {
+			yield $this->block->name;
+		}
+		yield $this->modifier;
 		yield $this->content;
 	}
 }

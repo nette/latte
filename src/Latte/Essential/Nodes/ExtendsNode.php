@@ -10,7 +10,8 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Nodes\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\Scalar\BooleanNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -33,10 +34,10 @@ class ExtendsNode extends StatementNode
 			throw new CompileException("{{$tag->name}} must be placed in template head.", $tag->position);
 		} elseif (isset($tag->data->extends)) {
 			throw new CompileException("Multiple {{$tag->name}} declarations are not allowed.", $tag->position);
-		} elseif ($tag->args === 'none') {
-			$node->extends = new ExpressionNode('false');
+		} elseif ($tag->parser->stream->tryConsume('none')) {
+			$node->extends = new BooleanNode(false);
 		} else {
-			$node->extends = new ExpressionNode($tag->parser->fetchWord());
+			$node->extends = $tag->parser->parseUnquotedStringOrExpression();
 		}
 		$tag->data->extends = true;
 		return $node;
@@ -45,7 +46,7 @@ class ExtendsNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		return $context->format('$this->parentName = %word;', $this->extends);
+		return $context->format('$this->parentName = %node;', $this->extends);
 	}
 
 

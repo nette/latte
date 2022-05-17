@@ -19,9 +19,6 @@ final class TemplateLexer
 {
 	use Latte\Strict;
 
-	/** regular expression for single & double quoted PHP string */
-	public const ReString = '\'(?:\\\\.|[^\'\\\\])*+\'|"(?:\\\\.|[^"\\\\])*+"';
-
 	/** HTML tag name for Latte needs (actually is [a-zA-Z][^\s/>]*) */
 	public const ReTagName = '[a-zA-Z][a-zA-Z0-9:_.-]*';
 
