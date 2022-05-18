@@ -11,6 +11,8 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\ContentType;
+use Latte\Essential\Blueprint;
+use Nette\PhpGenerator as Php;
 
 
 /**
@@ -38,6 +40,7 @@ final class TemplateGenerator
 		string $className,
 		?string $comment = null,
 		bool $strictMode = false,
+		array $filters = [],
 	): string {
 		$context = new PrintContext($node->contentType);
 		$scope = $context->getVariableScope();
@@ -78,13 +81,18 @@ final class TemplateGenerator
 				. ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
+		$comment .= "\n@property Filters$className \$filters";
+		$comment = str_replace('*/', '* /', $comment);
+		$comment = str_replace("\n", "\n * ", "/**\n" . trim($comment)) . "\n */\n";
+
 		$code = "<?php\n\n"
 			. ($strictMode ? "declare(strict_types=1);\n\n" : '')
 			. "use Latte\\Runtime as LR;\n\n"
-			. ($comment === null ? '' : '/** ' . str_replace('*/', '* /', $comment) . " */\n")
+			. $comment
 			. "final class $className extends Latte\\Runtime\\Template\n{\n"
 			. implode("\n\n", $members)
-			. "\n}\n";
+			. "\n}\n\n\n"
+			. $this->generateStub($node, 'Filters' . $className, $filters);
 
 		$code = PhpHelpers::optimizeEcho($code);
 		$code = PhpHelpers::reformatCode($code);
@@ -121,6 +129,39 @@ final class TemplateGenerator
 		if (isset($meta)) {
 			$this->addConstant('Blocks', $meta);
 		}
+	}
+
+
+	private function generateStub(Node $node, string $className, $filters): string
+	{
+		if (!class_exists(Php\ClassType::class)) {
+			return '';
+		}
+
+		$used = [];
+		(new NodeTraverser)->traverse($node, function (Node $node) use (&$used) {
+			if ($node instanceof Nodes\Php\FilterNode) {
+				$used[$node->name->name] = true;
+			}
+		});
+
+		$class = new Php\ClassType($className);
+		$filters = array_intersect_key($filters, $used);
+		foreach ($filters as $name => $callback) {
+			$func = (new Php\Factory)->fromCallable($callback);
+			$type = Blueprint::printType($func->getReturnType(), $func->isReturnNullable(), null) ?: 'mixed';
+			$params = [];
+			$list = $func->getParameters();
+			foreach ($list as $param) {
+				$variadic = $func->isVariadic() && $param === end($list);
+				$params[] = (Blueprint::printType($param->getType(), $param->isNullable(), null) ?: 'mixed')
+					. ($variadic ? '...' : '');
+			}
+
+			$class->addComment('@property callable(' . implode(', ', $params) . "): $type \$$name");
+		}
+
+		return (string) $class;
 	}
 
 
