@@ -18,11 +18,13 @@ Assert::match(<<<'XX'
 			Define:
 				String:
 					value: test
-				Assign:
+				Parameter:
+					SuperiorType:
+						'int'
 					Variable:
 						name: a
 					Null:
-				Assign:
+				Parameter:
 					Variable:
 						name: b
 					New:
@@ -31,4 +33,4 @@ Assert::match(<<<'XX'
 				Fragment:
 					Text:
 						content: '...'
-	XX, exportTraversing('{define test, $a, $b = new Foo}...{/define}'));
+	XX, exportTraversing('{define test, int $a, $b = new Foo}...{/define}'));

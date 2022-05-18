@@ -127,20 +127,21 @@ final class TemplateGenerator
 			return $body;
 		}
 
-		foreach ($params as $i => &$param) {
-			$param = $context->format(
+		$res = [];
+		foreach ($params as $i => $param) {
+			$res[] = $context->format(
 				'%node = %raw[%dump] ?? %raw[%dump] ?? %node;',
 				$param->var,
 				$cont,
 				$i,
 				$cont,
 				$param->var->name,
-				$param->expr,
+				$param->default,
 			);
 		}
 
 		$extract = $params
-			? implode('', $params) . 'unset($ʟ_args);'
+			? implode('', $res) . 'unset($ʟ_args);'
 			: "extract($cont);" . (str_contains($cont, '$this') ? '' : "unset($cont);");
 		return $extract . "\n\n" . $body;
 	}

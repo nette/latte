@@ -127,6 +127,7 @@ class DumpExtension extends Latte\Extension
 			$node instanceof Nodes\Html\ElementNode,
 				$node instanceof Nodes\Php\IdentifierNode => 'name: ' . $node->name,
 			$node instanceof Nodes\Php\NameNode => 'parts: ' . PhpHelpers::dump($node->parts),
+			$node instanceof Nodes\Php\SuperiorTypeNode => PhpHelpers::dump($node->type),
 			$node instanceof Nodes\Php\Scalar\FloatNode,
 				$node instanceof Nodes\Php\Scalar\EncapsedStringPartNode,
 				$node instanceof Nodes\Php\Scalar\IntegerNode,

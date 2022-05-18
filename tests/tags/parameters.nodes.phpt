@@ -15,11 +15,13 @@ Assert::match(<<<'XX'
 	Template:
 		Fragment:
 			Parameters:
-				Assign:
+				Parameter:
 					Variable:
 						name: b
 					Null:
-				Assign:
+				Parameter:
+					SuperiorType:
+						'int'
 					Variable:
 						name: a
 					Integer:

@@ -13,6 +13,7 @@ use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\Php\Expression\AssignNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\ParameterNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
@@ -64,18 +65,18 @@ class DefineNode extends StatementNode
 		$stream = $tag->parser->stream;
 		$params = [];
 		while (!$stream->is(Token::End)) {
-			$tag->parser->parseType();
+			$type = $tag->parser->parseType();
 
 			$save = $stream->getIndex();
 			$expr = $stream->is(Token::Php_Variable) ? $tag->parser->parseExpression() : null;
 			if ($expr instanceof VariableNode && is_string($expr->name)) {
-				$params[] = new AssignNode($expr, new Scalar\NullNode);
+				$params[] = new ParameterNode($expr, new Scalar\NullNode, $type);
 			} elseif (
 				$expr instanceof AssignNode
 				&& $expr->var instanceof VariableNode
 				&& is_string($expr->var->name)
 			) {
-				$params[] = $expr;
+				$params[] = new ParameterNode($expr->var, $expr->expr, $type);
 			} else {
 				$stream->seek($save);
 				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());

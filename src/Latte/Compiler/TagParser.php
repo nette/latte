@@ -101,7 +101,7 @@ final class TagParser extends TagParserData
 	}
 
 
-	public function parseType(): ?string
+	public function parseType(): ?Node\SuperiorTypeNode
 	{
 		$kind = [
 			Token::Php_Identifier, Token::Php_Constant, Token::Php_Ellipsis, Token::Php_Array, Token::Php_Integer,
@@ -113,7 +113,7 @@ final class TagParser extends TagParserData
 			$res .= $token->text;
 		}
 
-		return $res;
+		return $res ? new Node\SuperiorTypeNode($res) : null;
 	}
 
 

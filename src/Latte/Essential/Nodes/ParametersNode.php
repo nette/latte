@@ -12,6 +12,7 @@ namespace Latte\Essential\Nodes;
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\Expression\AssignNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\ParameterNode;
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
@@ -24,7 +25,7 @@ use Latte\Compiler\Token;
  */
 class ParametersNode extends StatementNode
 {
-	/** @var AssignNode[] */
+	/** @var ParameterNode[] */
 	public array $parameters = [];
 
 
@@ -45,18 +46,18 @@ class ParametersNode extends StatementNode
 		$stream = $tag->parser->stream;
 		$params = [];
 		do {
-			$tag->parser->parseType();
+			$type = $tag->parser->parseType();
 
 			$save = $stream->getIndex();
 			$expr = $stream->is(Token::Php_Variable) ? $tag->parser->parseExpression() : null;
 			if ($expr instanceof VariableNode && is_string($expr->name)) {
-				$params[] = new AssignNode($expr, new NullNode);
+				$params[] = new ParameterNode($expr, new NullNode, $type);
 			} elseif (
 				$expr instanceof AssignNode
 				&& $expr->var instanceof VariableNode
 				&& is_string($expr->var->name)
 			) {
-				$params[] = $expr;
+				$params[] = new ParameterNode($expr->var, $expr->expr, $type);
 			} else {
 				$stream->seek($save);
 				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());
