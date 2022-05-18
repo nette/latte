@@ -175,7 +175,7 @@ final class Escaper
 	}
 
 
-	public function sanitize(string $str): string
+	public function check(string $str): string
 	{
 		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
 			$str = 'LR\Filters::safeUrl(' . $str . ')';
