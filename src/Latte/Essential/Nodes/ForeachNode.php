@@ -88,6 +88,12 @@ class ForeachNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
+		$scope = $context->getVariableScope();
+		if ($this->key) {
+			$scope->addExpression($this->key, null);
+		}
+		$scope->addExpression($this->value, null);
+
 		$content = $this->content->print($context);
 		$iterator = $this->else || ($this->iterator ?? preg_match('#\$iterator\W|\Wget_defined_vars\W#', $content));
 

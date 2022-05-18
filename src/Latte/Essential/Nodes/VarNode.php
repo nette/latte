@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php\Expression\AssignNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
+use Latte\Compiler\Nodes\Php\SuperiorTypeNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -27,7 +28,7 @@ class VarNode extends StatementNode
 {
 	public bool $default;
 
-	/** @var AssignNode[] */
+	/** @var array{AssignNode, ?SuperiorTypeNode}[] */
 	public array $assignments = [];
 
 
@@ -46,14 +47,14 @@ class VarNode extends StatementNode
 		$stream = $tag->parser->stream;
 		$res = [];
 		do {
-			$tag->parser->parseType();
+			$type = $tag->parser->parseType();
 
 			$save = $stream->getIndex();
 			$expr = $stream->is(Token::Php_Variable) ? $tag->parser->parseExpression() : null;
 			if ($expr instanceof VariableNode) {
-				$res[] = new AssignNode($expr, new NullNode);
+				$res[] = [new AssignNode($expr, new NullNode), $type];
 			} elseif ($expr instanceof AssignNode && (!$default || $expr->var instanceof VariableNode)) {
-				$res[] = $expr;
+				$res[] = [$expr, $type];
 			} else {
 				$stream->seek($save);
 				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());
@@ -66,27 +67,29 @@ class VarNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$res = [];
+		$scope = $context->getVariableScope();
+		$res = $types = [];
+
 		if ($this->default) {
-			foreach ($this->assignments as $assign) {
-				assert($assign->var instanceof VariableNode);
-				if ($assign->var->name instanceof ExpressionNode) {
-					$var = $assign->var->name->print($context);
-				} else {
-					$var = $context->encodeString($assign->var->name);
-				}
+			foreach ($this->assignments as [$assign, $type]) {
+				$var = $assign->var->name instanceof ExpressionNode
+					? $assign->var->name->print($context)
+					: $context->encodeString($assign->var->name);
 				$res[] = $var . ' => ' . $assign->expr->print($context);
+				$types[] = $scope->addExpression($var, $type);
 			}
 
 			return $context->format(
-				'extract([%raw], EXTR_SKIP) %line;',
+				'extract([%raw], EXTR_SKIP) %line;%raw ',
 				implode(', ', $res),
 				$this->position,
+				implode('', $types),
 			);
 		}
 
-		foreach ($this->assignments as $assign) {
-			$res[] = $assign->print($context);
+		foreach ($this->assignments as [$assign, $type]) {
+			$comment = $scope->addExpression($assign->var, $type);
+			$res[] = $comment . $assign->print($context);
 		}
 
 		return $context->format(
@@ -99,8 +102,11 @@ class VarNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->assignments as &$assign) {
+		foreach ($this->assignments as [&$assign, &$type]) {
 			yield $assign;
+			if ($type) {
+				yield $type;
+			}
 		}
 	}
 }

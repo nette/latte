@@ -26,6 +26,7 @@ final class Block
 
 	/** @var ParameterNode[] */
 	public array $parameters = [];
+	public VariableScope $variables;
 
 
 	public function __construct(
