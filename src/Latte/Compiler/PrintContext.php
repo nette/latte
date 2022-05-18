@@ -73,7 +73,6 @@ final class PrintContext
 		'or'  => [190, -1],
 	];
 	private int $counter = 0;
-	private Escaper $escaper;
 
 	/** @var Escaper[] */
 	private array $escaperStack = [];
@@ -81,7 +80,7 @@ final class PrintContext
 
 	public function __construct(string $contentType = ContentType::Html)
 	{
-		$this->escaper = new Escaper($contentType);
+		$this->escaperStack[] = new Escaper($contentType);
 	}
 
 
@@ -110,7 +109,7 @@ final class PrintContext
 				return match ($fn) {
 					'modify' => $args[$pos]->printSimple($this, $var),
 					'modifyContent' => $args[$pos]->printContentAware($this, $var),
-					'escape' => $this->escaper->escape($var),
+					'escape' => end($this->escaperStack)->escape($var),
 				};
 			},
 			$mask,
@@ -145,20 +144,19 @@ final class PrintContext
 
 	public function beginEscape(): Escaper
 	{
-		$this->escaperStack[] = $this->escaper;
-		return $this->escaper = clone $this->escaper;
+		return $this->escaperStack[] = $this->getEscaper();
 	}
 
 
 	public function restoreEscape(): void
 	{
-		$this->escaper = array_pop($this->escaperStack);
+		array_pop($this->escaperStack);
 	}
 
 
 	public function getEscaper(): Escaper
 	{
-		return clone $this->escaper;
+		return clone end($this->escaperStack);
 	}
 
 
