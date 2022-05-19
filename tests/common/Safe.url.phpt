@@ -27,7 +27,7 @@ Assert::match('
 <a href="" src="" action="" formaction="" title="javascript:alert(1)"></a>
 <a href=""></a>
 <a href="javascript:alert(1)"></a>
-<a href="http://nette.org?val=ok"></a>
+<a href="http://nette.org?val=javascript:alert(1)"></a>
 <a data="javascript:alert(1)"></a>
 <OBJECT DATA=""></OBJECT>
 <a HREF=""></a>
@@ -44,7 +44,7 @@ Assert::match('
 <a href={$url1} src="{$url1}" action={$url1} formaction={$url1} title={$url1}></a>
 <a {if true}href={$url1}{/if}></a>
 <a href={$url1|nocheck}></a>
-<a href="http://nette.org?val={$url4}"></a>
+<a href="http://nette.org?val={$url1}"></a>
 <a data={$url1}></a>
 <OBJECT DATA={$url1}></object>
 <a HREF={$url2}></a>
@@ -76,18 +76,4 @@ Assert::match(
 Assert::contains(
 	'LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl(($this->filters->upper)($url1)))',
 	$latte->compile('<a href="{$url1|upper}"></a>'),
-);
-
-
-// former |safeurl & |nosafeurl
-Assert::exception(
-	fn() => $latte->renderToString('<a href={$url1|nosafeurl}></a>', $params),
-	LogicException::class,
-	"Filter 'nosafeurl' is not defined.",
-);
-
-Assert::exception(
-	fn() => $latte->renderToString('<a href={$url4|dataStream|safeURL}></a>', $params),
-	LogicException::class,
-	"Filter 'safeURL' is not defined.",
 );

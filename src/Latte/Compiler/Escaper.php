@@ -105,6 +105,7 @@ final class Escaper
 	{
 		$this->state = self::HtmlAttribute;
 		$this->quote = $quote;
+		$this->subType = '';
 
 		if ($this->contentType === ContentType::Html && is_string($name)) {
 			$name = strtolower($name);
