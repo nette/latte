@@ -26,6 +26,8 @@ final class Linter
 
 	public function scanDirectory(string $dir): bool
 	{
+		$this->initialize();
+
 		echo "Scanning $dir\n";
 
 		$it = new \RecursiveDirectoryIterator($dir);
@@ -138,5 +140,24 @@ final class Linter
 			return strip_tags(explode("\n", $error)[1]);
 		}
 		return null;
+	}
+
+
+	private function initialize(): void
+	{
+		if (function_exists('pcntl_signal')) {
+			pcntl_signal(SIGINT, function (): void {
+				pcntl_signal(SIGINT, SIG_DFL);
+				echo "Terminated\n";
+				exit(1);
+			});
+		} elseif (function_exists('sapi_windows_set_ctrl_handler')) {
+			sapi_windows_set_ctrl_handler(function () {
+				echo "Terminated\n";
+				exit(1);
+			});
+		}
+
+		set_time_limit(0);
 	}
 }
