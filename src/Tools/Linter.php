@@ -36,15 +36,15 @@ final class Linter
 		$this->engine->setLoader(new Latte\Loaders\StringLoader);
 
 		$counter = 0;
-		$success = true;
+		$errors = 0;
 		foreach ($it as $file) {
 			echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
-			$success = $this->lintLatte((string) $file) && $success;
+			$errors += $this->lintLatte((string) $file) ? 0 : 1;
 		}
 
 		echo str_pad('', 40), "\x0D";
-		echo "Done.\n";
-		return $success;
+		echo "Done (checked $counter files, found errors in $errors)\n";
+		return !$errors;
 	}
 
 
