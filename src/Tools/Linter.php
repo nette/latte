@@ -24,22 +24,20 @@ final class Linter
 	}
 
 
-	public function scanDirectory(string $dir): bool
+	public function scanDirectory(string $path): bool
 	{
 		$this->initialize();
 
-		echo "Scanning $dir\n";
+		echo "Scanning $path\n";
 
-		$it = new \RecursiveDirectoryIterator($dir);
-		$it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::LEAVES_ONLY);
-		$it = new \RegexIterator($it, '~\.latte$~');
+		$files = $this->getFiles($path);
 
 		$this->engine ??= $this->createEngine();
 		$this->engine->setLoader(new Latte\Loaders\StringLoader);
 
 		$counter = 0;
 		$errors = 0;
-		foreach ($it as $file) {
+		foreach ($files as $file) {
 			echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
 			$errors += $this->lintLatte((string) $file) ? 0 : 1;
 		}
@@ -159,5 +157,22 @@ final class Linter
 		}
 
 		set_time_limit(0);
+	}
+
+
+	private function getFiles(string $path): \Iterator
+	{
+		if (is_file($path)) {
+			return new \ArrayIterator([$path]);
+
+		} elseif (preg_match('~[*?]~', $path)) {
+			return new \GlobIterator($path);
+
+		} else {
+			$it = new \RecursiveDirectoryIterator($path);
+			$it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::LEAVES_ONLY);
+			$it = new \RegexIterator($it, '~\.latte$~');
+			return $it;
+		}
 	}
 }
