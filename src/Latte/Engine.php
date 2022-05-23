@@ -285,7 +285,23 @@ class Engine
 
 	private function isExpired(string $file, string $name): bool
 	{
-		return $this->autoRefresh && $this->getLoader()->isExpired($name, (int) @filemtime($file)); // @ - file may not exist
+		if (!$this->autoRefresh) {
+			return false;
+		}
+
+		$time = @filemtime($file); // @ - file may not exist
+		if ($time === false) {
+			return true;
+		}
+
+		foreach ($this->extensions as $extension) {
+			$r = new \ReflectionObject($extension);
+			if (is_file($r->getFileName()) && filemtime($r->getFileName()) > $time) {
+				return true;
+			}
+		}
+
+		return $this->getLoader()->isExpired($name, $time);
 	}
 
 
