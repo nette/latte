@@ -56,8 +56,7 @@ Assert::exception(
 	"It is not possible to write into '\$x->x()' in {capture} (at column 1)",
 );
 
-$latte->addExtension($extension = new DumpExtension);
-$latte->compile('{capture $var|strip}...{/capture}');
+$node = $latte->parse('{capture $var|strip}...{/capture}');
 Assert::match(<<<'XX'
 	Template:
 		Fragment:
@@ -72,4 +71,4 @@ Assert::match(<<<'XX'
 				Fragment:
 					Text:
 						content: '...'
-	XX, $extension->export());
+	XX, exportAST($node));

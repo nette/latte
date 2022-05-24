@@ -44,8 +44,7 @@ Assert::match(<<<'EOD'
 ));
 
 
-$latte->addExtension($extension = new DumpExtension);
-$latte->compile('{block main |trim}...{/block}');
+$node = $latte->parse('{block main |trim}...{/block}');
 
 Assert::match(<<<'XX'
 	Template:
@@ -61,4 +60,4 @@ Assert::match(<<<'XX'
 				Fragment:
 					Text:
 						content: '...'
-	XX, $extension->export());
+	XX, exportAST($node));

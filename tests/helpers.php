@@ -106,48 +106,33 @@ function loadContent(string $file, int $offset): string
 }
 
 
-class DumpExtension extends Latte\Extension
+function exportAST(Node $node)
 {
-	public Node $node;
-
-
-	public function getPasses(): array
-	{
-		return [
-			fn(Node $node) => $this->node = $node,
-		];
+	$prop = match (true) {
+		$node instanceof Nodes\TextNode => 'content: ' . var_export($node->content, true),
+		$node instanceof Nodes\Html\ElementNode,
+			$node instanceof Nodes\Php\IdentifierNode => 'name: ' . $node->name,
+		$node instanceof Nodes\Php\NameNode => 'parts: ' . PhpHelpers::dump($node->parts),
+		$node instanceof Nodes\Php\SuperiorTypeNode => PhpHelpers::dump($node->type),
+		$node instanceof Nodes\Php\Scalar\FloatNode,
+			$node instanceof Nodes\Php\Scalar\EncapsedStringPartNode,
+			$node instanceof Nodes\Php\Scalar\IntegerNode,
+			$node instanceof Nodes\Php\Scalar\StringNode => 'value: ' . $node->value,
+		$node instanceof Nodes\Php\Expression\AssignOpNode,
+			$node instanceof Nodes\Php\Expression\BinaryOpNode => 'operator: ' . $node->operator,
+		$node instanceof Nodes\Php\Expression\CastNode => 'type: ' . $node->type,
+		$node instanceof Nodes\Php\Expression\VariableNode && is_string($node->name) => 'name: ' . $node->name,
+		default => '',
+	};
+	$res = $prop ? $prop . "\n" : '';
+	foreach ($node as $sub) {
+		$res .= rtrim(exportAST($sub), "\n") . "\n";
 	}
 
-
-	public function export(?Node $node = null)
-	{
-		$node ??= $this->node;
-		$prop = match (true) {
-			$node instanceof Nodes\TextNode => 'content: ' . var_export($node->content, true),
-			$node instanceof Nodes\Html\ElementNode,
-				$node instanceof Nodes\Php\IdentifierNode => 'name: ' . $node->name,
-			$node instanceof Nodes\Php\NameNode => 'parts: ' . PhpHelpers::dump($node->parts),
-			$node instanceof Nodes\Php\SuperiorTypeNode => PhpHelpers::dump($node->type),
-			$node instanceof Nodes\Php\Scalar\FloatNode,
-				$node instanceof Nodes\Php\Scalar\EncapsedStringPartNode,
-				$node instanceof Nodes\Php\Scalar\IntegerNode,
-				$node instanceof Nodes\Php\Scalar\StringNode => 'value: ' . $node->value,
-			$node instanceof Nodes\Php\Expression\AssignOpNode,
-				$node instanceof Nodes\Php\Expression\BinaryOpNode => 'operator: ' . $node->operator,
-			$node instanceof Nodes\Php\Expression\CastNode => 'type: ' . $node->type,
-			$node instanceof Nodes\Php\Expression\VariableNode && is_string($node->name) => 'name: ' . $node->name,
-			default => '',
-		};
-		$res = $prop ? $prop . "\n" : '';
-		foreach ($node as $sub) {
-			$res .= rtrim($this->export($sub), "\n") . "\n";
-		}
-
-		return substr($node::class, strrpos($node::class, '\\') + 1, -4)
-			. ':'
-			. ($res ? "\n" . preg_replace('#^(?=.)#m', "\t", $res) : '')
-			. "\n";
-	}
+	return substr($node::class, strrpos($node::class, '\\') + 1, -4)
+		. ':'
+		. ($res ? "\n" . preg_replace('#^(?=.)#m', "\t", $res) : '')
+		. "\n";
 }
 
 
@@ -155,7 +140,6 @@ function exportTraversing(string $template, ?Latte\Engine $latte = null): string
 {
 	$latte ??= new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
-	$latte->addExtension($extension = new DumpExtension);
-	$latte->compile($template);
-	return $extension->export();
+	$node = $latte->parse($template);
+	return exportAST($node);
 }

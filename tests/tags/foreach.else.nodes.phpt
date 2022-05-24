@@ -14,7 +14,6 @@ require __DIR__ . '/../bootstrap.php';
 Assert::match(<<<'XX'
 	Template:
 		Fragment:
-			Auxiliary:
 		Fragment:
 			Foreach:
 				Variable:
