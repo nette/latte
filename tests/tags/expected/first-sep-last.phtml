@@ -118,4 +118,18 @@ final class Template%a% extends Latte\Runtime\Template
 
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
+
+		echo '
+
+';
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($people, $ʟ_it ?? null) as $person) /* line 27 */ {
+			echo '<p class="';
+			if ($iterator->isFirst()) /* line 27 */ {
+				echo '$person';
+			}
+			echo '"></p>
+';
+
+		}
+		$iterator = $ʟ_it = $ʟ_it->getParent();
 %A%

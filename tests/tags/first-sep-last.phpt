@@ -40,6 +40,9 @@ $template = <<<'EOD'
 		<span n:first=0>(</span> {$person}<span n:sep>, </span> <span n:last>)</span>
 	{/foreach}
 
+
+	<p n:foreach="$people as $person" class="{first}$person{/first}"></p>
+
 	EOD;
 
 Assert::matchFile(
