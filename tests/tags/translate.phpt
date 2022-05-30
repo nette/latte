@@ -21,6 +21,11 @@ Assert::match(
 	$latte->compile('{translate}abc{/translate}'),
 );
 
+Assert::contains(
+	'echo LR\Filters::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'translate\', $ʟ_fi, \'abc\', 10, 20)) /* line 1 */;',
+	$latte->compile('{translate 10, 20}abc{/translate}'),
+);
+
 Assert::match(
 	<<<'XX'
 		%A%

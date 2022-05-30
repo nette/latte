@@ -34,6 +34,7 @@ class TranslateNode extends StatementNode
 		$tag->outputMode = $tag::OutputKeepIndentation;
 
 		$node = new static;
+		$args = $tag->parser->parseArguments();
 		$node->modifier = $tag->parser->parseModifier();
 		$node->modifier->escape = true;
 		if ($tag->void) {
@@ -41,7 +42,7 @@ class TranslateNode extends StatementNode
 		}
 
 		[$node->content] = yield;
-		array_unshift($node->modifier->filters, new Php\FilterNode(new Php\IdentifierNode('translate')));
+		array_unshift($node->modifier->filters, new Php\FilterNode(new Php\IdentifierNode('translate'), $args->toArguments()));
 		return $node;
 	}
 
