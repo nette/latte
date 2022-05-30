@@ -14,9 +14,8 @@ Assert::match(<<<'XX'
 		Fragment:
 		Fragment:
 			Translate:
-				Fragment:
-					Text:
-						content: '...'
+				Text:
+					content: '...'
 				Modifier:
 					Filter:
 						Identifier:

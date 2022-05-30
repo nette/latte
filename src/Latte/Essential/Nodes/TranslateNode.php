@@ -15,8 +15,10 @@ use Latte\Compiler\Nodes\NopNode;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\StatementNode;
+use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Essential\TranslatorExtension;
 
 
 /**
@@ -29,7 +31,7 @@ class TranslateNode extends StatementNode
 
 
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|NopNode> */
-	public static function create(Tag $tag): \Generator
+	public static function create(Tag $tag, ?callable $translator): \Generator
 	{
 		$tag->outputMode = $tag::OutputKeepIndentation;
 
@@ -42,14 +44,27 @@ class TranslateNode extends StatementNode
 		}
 
 		[$node->content] = yield;
+
+		if ($text = NodeHelpers::toText($node->content)) {
+			if ($translator
+				&& is_array($values = TranslatorExtension::toValue($args))
+				&& is_string($translation = $translator($text, ...$values))
+			) {
+				$node->content = new TextNode($translation);
+				return $node;
+			}
+			$node->content = new TextNode($text);
+		}
+
 		array_unshift($node->modifier->filters, new Php\FilterNode(new Php\IdentifierNode('translate'), $args->toArguments()));
+
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		if ($text = NodeHelpers::toText($this->content)) {
+		if ($this->content instanceof TextNode) {
 			return $context->format(
 				<<<'XX'
 					$ʟ_fi = new LR\FilterInfo(%dump);
@@ -57,7 +72,7 @@ class TranslateNode extends StatementNode
 					XX,
 				$context->getEscaper()->export(),
 				$this->modifier,
-				$text,
+				$this->content->content,
 				$this->position,
 			);
 
