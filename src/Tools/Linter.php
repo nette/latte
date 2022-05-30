@@ -51,13 +51,10 @@ final class Linter
 	private function createEngine(): Latte\Engine
 	{
 		$engine = new Latte\Engine;
+		$engine->addExtension(new Latte\Essential\TranslatorExtension(null));
 
 		if (class_exists(Nette\Bridges\ApplicationLatte\UIExtension::class)) {
 			$engine->addExtension(new Nette\Bridges\ApplicationLatte\UIExtension(null));
-		}
-
-		if (class_exists(Nette\Bridges\ApplicationLatte\TranslatorExtension::class)) {
-			$engine->addExtension(new Nette\Bridges\ApplicationLatte\TranslatorExtension(null));
 		}
 
 		if (class_exists(Nette\Bridges\CacheLatte\CacheExtension::class)) {

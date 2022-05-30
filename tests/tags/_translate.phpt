@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+use Tester\Assert;
+
+require __DIR__ . '/../bootstrap.php';
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte->addExtension(new Latte\Essential\TranslatorExtension(null));
+
+Assert::contains(
+	'echo LR\Filters::escapeHtmlText(($this->filters->translate)(\'var\')) /*',
+	$latte->compile('{_var}'),
+);
+
+Assert::contains(
+	'echo LR\Filters::escapeHtmlText(($this->filters->filter)(($this->filters->translate)(\'var\'))) /*',
+	$latte->compile('{_var|filter}'),
+);
+
+Assert::contains(
+	'echo LR\Filters::escapeHtmlText(($this->filters->translate)($var, 10, 20)) /* line 1 */;',
+	$latte->compile('{_$var, 10, 20}'),
+);
