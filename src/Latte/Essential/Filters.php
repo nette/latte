@@ -269,7 +269,7 @@ final class Filters
 	}
 
 
-	public static function breaklines(string|Stringable $s): Html
+	public static function breaklines(string|Stringable|null $s): Html
 	{
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
 		return new Html(nl2br($s, Latte\Runtime\Filters::$xml));
@@ -279,7 +279,7 @@ final class Filters
 	/**
 	 * Returns a part of string.
 	 */
-	public static function substring(string|Stringable $s, int $start, ?int $length = null): string
+	public static function substring(string|Stringable|null $s, int $start, ?int $length = null): string
 	{
 		$s = (string) $s;
 		if ($length === null) {
@@ -297,7 +297,7 @@ final class Filters
 	/**
 	 * Truncates string to maximal length.
 	 */
-	public static function truncate(string|Stringable $s, int $length, string $append = "\u{2026}"): string
+	public static function truncate(string|Stringable|null $s, int $length, string $append = "\u{2026}"): string
 	{
 		$s = (string) $s;
 		if (self::strLength($s) > $length) {
