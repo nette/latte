@@ -775,7 +775,11 @@ class CoreMacros extends MacroSet
 				$res->append($node->name === 'default' ? '=>' : '=');
 				$var = false;
 
-			} elseif ($tokens->isCurrent(',') && $tokens->depth === 0) {
+			} elseif ($tokens->isCurrent(',', ';') && $tokens->depth === 0) {
+				if ($tokens->isCurrent(';')) {
+					trigger_error("Inside tag {{$node->name} {$node->args}} should be ';' replaced with ',' (on line $node->startLine)", E_USER_DEPRECATED);
+				}
+
 				if ($var === null) {
 					$res->append($node->name === 'default' ? '=>null' : '=null');
 				}
@@ -813,6 +817,18 @@ class CoreMacros extends MacroSet
 	public function macroExpr(MacroNode $node, PhpWriter $writer): string
 	{
 		$node->validate(true, [], $node->name === '=');
+		if ($node->name !== 'php') {
+			$tokens = $node->tokenizer;
+			while ($tokens->nextToken()) {
+				if ($tokens->isCurrent(';') && $tokens->depth === 0) {
+					trigger_error("The use of character ';' is deprecated in tag {{$node->name}}, try to use {php} (on line $node->startLine)", E_USER_DEPRECATED);
+					break;
+				}
+			}
+
+			$tokens->reset();
+		}
+
 		return $writer->write(
 			$node->name === '='
 				? 'echo %modify(%node.args) %node.line;'
