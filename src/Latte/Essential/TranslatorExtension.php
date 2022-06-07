@@ -37,7 +37,7 @@ final class TranslatorExtension extends Latte\Extension
 	{
 		return [
 			'_' => [$this, 'parseTranslate'],
-			'translate' => fn(Tag $tag): \Generator => Nodes\TranslateNode::create($tag, $this->key ? $this->translator : null),
+			'translate' => fn(Tag $tag) => yield from Nodes\TranslateNode::create($tag, $this->key ? $this->translator : null),
 		];
 	}
 
