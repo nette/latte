@@ -16,59 +16,56 @@ use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\ContentType;
 
-
 /**
  * {contentType ...}
  */
 class ContentTypeNode extends StatementNode
 {
-	public string $contentType;
-	public ?string $mimeType = null;
+    public string $contentType;
+    public ?string $mimeType = null;
 
+    public static function create(Tag $tag, TemplateParser $parser): static
+    {
+        $tag->expectArguments();
+        while (!$tag->parser->stream->consume()->isEnd());
+        $type = trim($tag->parser->text);
 
-	public static function create(Tag $tag, TemplateParser $parser): static
-	{
-		$tag->expectArguments();
-		while (!$tag->parser->stream->consume()->isEnd());
-		$type = trim($tag->parser->text);
+        if (!$tag->isInHead() && !($tag->htmlElement?->name === 'script' && str_contains($type, 'html'))) {
+            throw new CompileException('{contentType} is allowed only in template header.', $tag->position);
+        }
 
-		if (!$tag->isInHead() && !($tag->htmlElement?->name === 'script' && str_contains($type, 'html'))) {
-			throw new CompileException('{contentType} is allowed only in template header.', $tag->position);
-		}
+        $node = new static;
+        $node->contentType = match (true) {
+            str_contains($type, 'html') => ContentType::Html,
+            str_contains($type, 'xml') => ContentType::Xml,
+            str_contains($type, 'javascript') => ContentType::JavaScript,
+            str_contains($type, 'css') => ContentType::Css,
+            str_contains($type, 'calendar') => ContentType::ICal,
+            default => ContentType::Text
+        };
+        $parser->setContentType($node->contentType);
 
-		$node = new static;
-		$node->contentType = match (true) {
-			str_contains($type, 'html') => ContentType::Html,
-			str_contains($type, 'xml') => ContentType::Xml,
-			str_contains($type, 'javascript') => ContentType::JavaScript,
-			str_contains($type, 'css') => ContentType::Css,
-			str_contains($type, 'calendar') => ContentType::ICal,
-			default => ContentType::Text
-		};
-		$parser->setContentType($node->contentType);
+        if (strpos($type, '/') && !$tag->htmlElement) {
+            $node->mimeType = $type;
+        }
+        return $node;
+    }
 
-		if (strpos($type, '/') && !$tag->htmlElement) {
-			$node->mimeType = $type;
-		}
-		return $node;
-	}
+    public function print(PrintContext $context): string
+    {
+        $context->beginEscape()->enterContentType($this->contentType);
 
-
-	public function print(PrintContext $context): string
-	{
-		$context->beginEscape()->enterContentType($this->contentType);
-
-		return $this->mimeType
-			? $context->format(
-				<<<'XX'
+        return $this->mimeType
+            ? $context->format(
+                <<<'XX'
 					if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ['extends', null], true)) {
 						header(%dump) %line;
 					}
 
 					XX,
-				'Content-Type: ' . $this->mimeType,
-				$this->position,
-			)
-			: '';
-	}
+                'Content-Type: ' . $this->mimeType,
+                $this->position,
+            )
+            : '';
+    }
 }

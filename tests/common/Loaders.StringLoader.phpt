@@ -11,7 +11,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('', function () {
 	$loader = new StringLoader;
 	Assert::same('content', $loader->getContent('content'));

@@ -12,24 +12,22 @@ namespace Latte\Sandbox\Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
-
 class FunctionCallNode extends Expression\FunctionCallNode
 {
-	public function __construct(Expression\FunctionCallNode $from)
-	{
-		parent::__construct($from->name, $from->args, $from->position);
-	}
+    public function __construct(Expression\FunctionCallNode $from)
+    {
+        parent::__construct($from->name, $from->args, $from->position);
+    }
 
+    public function print(PrintContext $context): string
+    {
+        if ($this->isFirstClassCallable()) {
+            return '$this->global->sandbox->closure('
+                . $context->memberAsString($this->name) . ')';
+        }
 
-	public function print(PrintContext $context): string
-	{
-		if ($this->isFirstClassCallable()) {
-			return '$this->global->sandbox->closure('
-				. $context->memberAsString($this->name) . ')';
-		}
-
-		return '$this->global->sandbox->call('
-			. $context->memberAsString($this->name) . ', '
-			. Expression\ArrayNode::fromArguments($this->args)->print($context) . ')';
-	}
+        return '$this->global->sandbox->call('
+            . $context->memberAsString($this->name) . ', '
+            . Expression\ArrayNode::fromArguments($this->args)->print($context) . ')';
+    }
 }

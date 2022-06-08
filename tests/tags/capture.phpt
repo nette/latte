@@ -57,6 +57,7 @@ Assert::exception(
 );
 
 $node = $latte->parse('{capture $var|strip}...{/capture}');
+
 Assert::match(<<<'XX'
 	Template:
 		Fragment:

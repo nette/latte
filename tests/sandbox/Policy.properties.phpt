@@ -36,6 +36,7 @@ $template = <<<'EOD'
 	EOD;
 
 $latte->compile($template);
+
 Assert::equal(
 	[
 		'tags' => Expect::type('array'),
@@ -45,6 +46,7 @@ Assert::equal(
 
 
 $latte->renderToString($template, ['obj' => new MyClass]);
+
 Assert::equal(
 	[
 		'tags' => Expect::type('array'),

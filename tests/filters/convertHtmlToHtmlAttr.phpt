@@ -13,13 +13,18 @@ require __DIR__ . '/../bootstrap.php';
 
 
 Assert::same('', Filters::convertHtmlToHtmlAttr(''));
+
 Assert::same('string', Filters::convertHtmlToHtmlAttr('string'));
+
 Assert::same('&lt; &amp; &apos; &quot; &gt;', Filters::convertHtmlToHtmlAttr('< & \' " >'));
+
 Assert::same('&quot;', Filters::convertHtmlToHtmlAttr('&quot;'));
 
 // mXSS
 Assert::same('`hello ', Filters::convertHtmlToHtmlAttr('`hello'));
+
 Assert::same('`hello&quot;', Filters::convertHtmlToHtmlAttr('`hello"'));
+
 Assert::same('`hello&apos;', Filters::convertHtmlToHtmlAttr("`hello'"));
 
 // invalid UTF-8

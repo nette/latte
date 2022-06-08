@@ -31,6 +31,7 @@ Assert::exception(
 );
 
 $latte->setPolicy(null);
+
 Assert::exception(
 	fn() => $latte->compile(''),
 	LogicException::class,

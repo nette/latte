@@ -11,14 +11,13 @@ namespace Latte\Runtime;
 
 use Latte;
 
-
 /** @internal */
 final class Block
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	public ?string $contentType = null;
+    public ?string $contentType = null;
 
-	/** @var callable[] */
-	public array $functions = [];
+    /** @var callable[] */
+    public array $functions = [];
 }

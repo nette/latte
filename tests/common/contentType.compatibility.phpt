@@ -10,7 +10,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
@@ -65,7 +64,6 @@ test('', function () {
 		$latte->renderToString('<!--{include main}-->{block main}---{/block}'),
 	);
 });
-
 
 test('', function () {
 	$latte = new Latte\Engine;
@@ -161,7 +159,6 @@ test('', function () {
 		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/COMMENT.',
 	);
 });
-
 
 test('', function () {
 	$latte = new Latte\Engine;
@@ -296,13 +293,17 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 Assert::same('<p><hr> " &quot; &lt;</p>', $latte->renderToString('context1'));
 
 Assert::same('<p><hr> " &quot; &lt;</p>', $latte->renderToString('context1a'));
+
 Assert::same('<p> " " &lt;</p>', $latte->renderToString('context1b'));
+
 Assert::same('<p> " " <</p>', $latte->renderToString('context1c'));
 
 Assert::same('<p title="&lt;hr&gt; &quot; &quot; &lt;"></p>', $latte->renderToString('context2'));
 
 Assert::same('<p title="<hr> " &quot; &lt;"></p>', $latte->renderToString('context2a'));
+
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2b'));
+
 Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
 
 Assert::same('<p title="&lt;hr&gt; &quot; &quot; &lt;"></p>', $latte->renderToString('context3'));
@@ -350,8 +351,11 @@ Assert::exception(
 );
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
+
 Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
+
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
+
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
 Assert::exception(
@@ -389,8 +393,11 @@ Assert::exception(
 );
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
+
 Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
+
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
+
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
 Assert::exception(
@@ -428,8 +435,11 @@ Assert::exception(
 );
 
 Assert::same('<p> " &lt;</p>', $latte->renderToString('context1c'));
+
 Assert::same('<p title="<hr> &quot;"></p>', $latte->renderToString('context2'));
+
 Assert::same('<p title=" &quot;"></p>', $latte->renderToString('context2a'));
+
 Assert::same('<!--<hr> &lt;-->', $latte->renderToString('context6'));
 
 Assert::exception(

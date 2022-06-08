@@ -9,14 +9,13 @@ declare(strict_types=1);
 
 namespace Latte;
 
-
 /*enum*/ final class ContentType
 {
-	public const
-		Text = 'text',
-		Html = 'html',
-		Xml = 'xml',
-		JavaScript = 'js',
-		Css = 'css',
-		ICal = 'ical';
+    public const
+        Text = 'text',
+        Html = 'html',
+        Xml = 'xml',
+        JavaScript = 'js',
+        Css = 'css',
+        ICal = 'ical';
 }

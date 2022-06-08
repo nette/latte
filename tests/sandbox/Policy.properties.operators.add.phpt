@@ -36,4 +36,5 @@ $obj = new MyClass;
 $latte->renderToString($template, ['obj' => $obj]);
 
 Assert::same(3, $obj->bar);
+
 Assert::same(2, MyClass::$static);

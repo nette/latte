@@ -15,77 +15,73 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
-
 /**
  * {for $init; $cond; $next}
  */
 class ForNode extends StatementNode
 {
-	/** @var ExpressionNode[]  */
-	public array $init = [];
-	public ?ExpressionNode $condition;
+    /** @var ExpressionNode[]  */
+    public array $init = [];
+    public ?ExpressionNode $condition;
 
-	/** @var ExpressionNode[]  */
-	public array $next = [];
-	public AreaNode $content;
+    /** @var ExpressionNode[]  */
+    public array $next = [];
+    public AreaNode $content;
 
+    /** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+    public static function create(Tag $tag): \Generator
+    {
+        $tag->expectArguments();
+        $stream = $tag->parser->stream;
+        $node = new static;
+        while (!$stream->is(';')) {
+            $node->init[] = $tag->parser->parseExpression();
+            $stream->tryConsume(',');
+        }
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
-	public static function create(Tag $tag): \Generator
-	{
-		$tag->expectArguments();
-		$stream = $tag->parser->stream;
-		$node = new static;
-		while (!$stream->is(';')) {
-			$node->init[] = $tag->parser->parseExpression();
-			$stream->tryConsume(',');
-		}
+        $stream->consume(';');
+        $node->condition = $stream->is(';') ? null : $tag->parser->parseExpression();
+        $stream->consume(';');
+        while (!$tag->parser->isEnd()) {
+            $node->next[] = $tag->parser->parseExpression();
+            $stream->tryConsume(',');
+        }
 
-		$stream->consume(';');
-		$node->condition = $stream->is(';') ? null : $tag->parser->parseExpression();
-		$stream->consume(';');
-		while (!$tag->parser->isEnd()) {
-			$node->next[] = $tag->parser->parseExpression();
-			$stream->tryConsume(',');
-		}
+        [$node->content] = yield;
+        return $node;
+    }
 
-		[$node->content] = yield;
-		return $node;
-	}
-
-
-	public function print(PrintContext $context): string
-	{
-		return $context->format(
-			<<<'XX'
+    public function print(PrintContext $context): string
+    {
+        return $context->format(
+            <<<'XX'
 				for (%args; %node; %args) %line {
 					%node
 				}
 
 				XX,
-			$this->init,
-			$this->condition,
-			$this->next,
-			$this->position,
-			$this->content,
-		);
-	}
+            $this->init,
+            $this->condition,
+            $this->next,
+            $this->position,
+            $this->content,
+        );
+    }
 
+    public function &getIterator(): \Generator
+    {
+        foreach ($this->init as &$item) {
+            yield $item;
+        }
 
-	public function &getIterator(): \Generator
-	{
-		foreach ($this->init as &$item) {
-			yield $item;
-		}
+        if ($this->condition) {
+            yield $this->condition;
+        }
 
-		if ($this->condition) {
-			yield $this->condition;
-		}
+        foreach ($this->next as &$item) {
+            yield $item;
+        }
 
-		foreach ($this->next as &$item) {
-			yield $item;
-		}
-
-		yield $this->content;
-	}
+        yield $this->content;
+    }
 }

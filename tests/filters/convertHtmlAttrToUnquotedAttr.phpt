@@ -13,7 +13,9 @@ require __DIR__ . '/../bootstrap.php';
 
 
 Assert::same('""', Filters::convertHtmlAttrToUnquotedAttr(''));
+
 Assert::same('"string"', Filters::convertHtmlAttrToUnquotedAttr('string'));
+
 Assert::same('"< & \' >"', Filters::convertHtmlAttrToUnquotedAttr('< & \' >'));
 
 Assert::same('"""', Filters::convertHtmlAttrToUnquotedAttr('"')); // should not occur

@@ -15,32 +15,29 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
-
 /**
  * {sandbox "file" [,] [params]}
  */
 class SandboxNode extends StatementNode
 {
-	public ExpressionNode $file;
-	public ArrayNode $args;
+    public ExpressionNode $file;
+    public ArrayNode $args;
 
+    public static function create(Tag $tag): static
+    {
+        $tag->outputMode = $tag::OutputRemoveIndentation;
+        $tag->expectArguments();
+        $node = new static;
+        $node->file = $tag->parser->parseUnquotedStringOrExpression();
+        $tag->parser->stream->tryConsume(',');
+        $node->args = $tag->parser->parseArguments();
+        return $node;
+    }
 
-	public static function create(Tag $tag): static
-	{
-		$tag->outputMode = $tag::OutputRemoveIndentation;
-		$tag->expectArguments();
-		$node = new static;
-		$node->file = $tag->parser->parseUnquotedStringOrExpression();
-		$tag->parser->stream->tryConsume(',');
-		$node->args = $tag->parser->parseArguments();
-		return $node;
-	}
-
-
-	public function print(PrintContext $context): string
-	{
-		return $context->format(
-			<<<'XX'
+    public function print(PrintContext $context): string
+    {
+        return $context->format(
+            <<<'XX'
 				ob_start(fn() => '');
 				try {
 					$this->createTemplate(%node, %node, 'sandbox')->renderToContentType(%dump) %line;
@@ -55,19 +52,17 @@ class SandboxNode extends StatementNode
 					}
 				}
 
-
 				XX,
-			$this->file,
-			$this->args,
-			$context->getEscaper()->export(),
-			$this->position,
-		);
-	}
+            $this->file,
+            $this->args,
+            $context->getEscaper()->export(),
+            $this->position,
+        );
+    }
 
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->file;
-		yield $this->args;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->file;
+        yield $this->args;
+    }
 }

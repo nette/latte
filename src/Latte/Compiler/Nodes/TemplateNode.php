@@ -12,23 +12,20 @@ namespace Latte\Compiler\Nodes;
 use Latte\Compiler\Node;
 use Latte\Compiler\PrintContext;
 
-
 final class TemplateNode extends Node
 {
-	public FragmentNode $head;
-	public FragmentNode $main;
-	public string $contentType;
+    public FragmentNode $head;
+    public FragmentNode $main;
+    public string $contentType;
 
+    public function print(PrintContext $context): string
+    {
+        throw new \LogicException('Cannot directly print TemplateNode');
+    }
 
-	public function print(PrintContext $context): string
-	{
-		throw new \LogicException('Cannot directly print TemplateNode');
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->head;
-		yield $this->main;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->head;
+        yield $this->main;
+    }
 }

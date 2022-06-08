@@ -11,7 +11,6 @@ namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\Node;
 
-
 abstract class AreaNode extends Node
 {
 }

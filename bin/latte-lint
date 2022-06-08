@@ -11,7 +11,6 @@ if (
 	exit(1);
 }
 
-
 echo '
 Latte linter
 ------------

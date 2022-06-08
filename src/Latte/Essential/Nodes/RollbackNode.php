@@ -14,24 +14,22 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
-
 /**
  * {rollback}
  */
 class RollbackNode extends StatementNode
 {
-	public static function create(Tag $tag): static
-	{
-		if (!$tag->closestTag(['try'])) {
-			throw new CompileException('Tag {rollback} must be inside {try} ... {/try}.', $tag->position);
-		}
+    public static function create(Tag $tag): static
+    {
+        if (!$tag->closestTag(['try'])) {
+            throw new CompileException('Tag {rollback} must be inside {try} ... {/try}.', $tag->position);
+        }
 
-		return new static;
-	}
+        return new static;
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return 'throw new Latte\Essential\RollbackException;';
-	}
+    public function print(PrintContext $context): string
+    {
+        return 'throw new Latte\Essential\RollbackException;';
+    }
 }

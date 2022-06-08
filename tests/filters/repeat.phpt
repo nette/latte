@@ -13,7 +13,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('', Filters::repeat($info, '', 1));
@@ -21,7 +20,6 @@ test('', function () {
 	Assert::same('', Filters::repeat($info, 'ab', 0));
 	Assert::same('ababababab', Filters::repeat($info, 'ab', 5));
 });
-
 
 test('', function () {
 	$info = new FilterInfo(ContentType::Html);

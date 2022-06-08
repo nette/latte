@@ -21,6 +21,7 @@ $res = (new NodeTraverser)->traverse(
 );
 
 Assert::equal($arrayNode, $res);
+
 Assert::equal([
 	['enter', $arrayNode],
 	['enter', $leafNode1],
@@ -47,6 +48,7 @@ $res = (new NodeTraverser)->traverse(
 );
 
 Assert::equal($arrayNode, $res);
+
 Assert::equal([
 	['enter', $arrayNode],
 	['enter', $leafNode1],
@@ -71,6 +73,7 @@ $res = (new NodeTraverser)->traverse(
 );
 
 Assert::equal($arrayNode, $res);
+
 Assert::equal([
 	['enter', $arrayNode],
 	['enter', $leafNode1],
@@ -93,6 +96,7 @@ $res = (new NodeTraverser)->traverse(
 );
 
 Assert::equal($arrayNode, $res);
+
 Assert::equal([
 	['enter', $arrayNode],
 	['enter', $leafNode1],

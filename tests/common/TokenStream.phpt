@@ -9,7 +9,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('end', function () {
 	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$eof]));
@@ -20,7 +19,6 @@ test('end', function () {
 	Assert::same($eof, $stream->consume());
 	Assert::same(0, $stream->getIndex());
 });
-
 
 test('is()', function () {
 	$token = new Token(Token::Text, 'foo');
@@ -36,7 +34,6 @@ test('is()', function () {
 	Assert::same($token, $stream->consume());
 	Assert::false($stream->is('foo'));
 });
-
 
 test('peek()', function () {
 	$token1 = new Token(1, '');
@@ -67,7 +64,6 @@ test('peek()', function () {
 	Assert::null($stream->peek(1));
 });
 
-
 test('peek() jump forward', function () {
 	$token1 = new Token(1, '');
 	$token2 = new Token(2, '');
@@ -77,7 +73,6 @@ test('peek() jump forward', function () {
 
 	Assert::same($token3, $stream->peek(2));
 });
-
 
 test('consume() any token', function () {
 	$token = new Token(1, '');
@@ -89,7 +84,6 @@ test('consume() any token', function () {
 	Assert::same($eof, $stream->consume());
 	Assert::same(1, $stream->getIndex());
 });
-
 
 test('consume() kind of token', function () {
 	$token = new Token(Token::Text, 'foo');
@@ -106,7 +100,6 @@ test('consume() kind of token', function () {
 	Assert::same(1, $stream->getIndex());
 });
 
-
 test('tryConsume() kind of token', function () {
 	$token = new Token(Token::Text, 'foo');
 	$eof = new Token(Token::End, '');
@@ -117,7 +110,6 @@ test('tryConsume() kind of token', function () {
 	Assert::same($token, $stream->tryConsume('foo'));
 	Assert::same(1, $stream->getIndex());
 });
-
 
 test('seek()', function () {
 	$token = new Token(1, '');
@@ -138,7 +130,6 @@ test('seek()', function () {
 	);
 });
 
-
 test('generator is read on the first usage', function () {
 	$generator = function () {
 		throw new Exception('Generator');
@@ -151,7 +142,6 @@ test('generator is read on the first usage', function () {
 		'Generator',
 	);
 });
-
 
 test('generator is read continually', function () {
 	$generator = function () {

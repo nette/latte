@@ -53,6 +53,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/block.vars.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/block.vars.html',
 	$latte->renderToString($template),

@@ -13,7 +13,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('', Filters::indent($info, ''));
@@ -26,7 +25,6 @@ test('', function () {
 	Assert::same("\r\n\t\tword\r\n", Filters::indent($info, "\r\nword\r\n", 2));
 	Assert::same("\r\n      word\r\n", Filters::indent($info, "\r\nword\r\n", 2, '   '));
 });
-
 
 test('', function () {
 	$info = new FilterInfo(ContentType::Html);

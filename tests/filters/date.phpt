@@ -40,4 +40,5 @@ Assert::same('30:10:10', Filters::date(new DateInterval('PT30H10M10S'), '%H:%I:%
 
 
 date_default_timezone_set('America/Los_Angeles');
+
 Assert::same('07:09', Filters::date(1_408_284_571, 'H:i'));

@@ -21,6 +21,7 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::contains('<?xml version="3.0"?>', $latte->compile('<?xml version="3.0"?>'));
+
 Assert::match(<<<'XX'
 	%A%
 			echo '<?xml version="';
@@ -28,6 +29,9 @@ Assert::match(<<<'XX'
 			echo '"?>';
 	%A%
 	XX, $latte->compile('<?xml version="{$var}"?>'));
+
 Assert::contains('<?xml ?>', $latte->compile('<div title="<?xml ?>">'));
+
 Assert::contains('<?xml ?>', $latte->compile('<!-- <?xml ?> -->'));
+
 Assert::contains('<?xml ?>', $latte->compile('<script> <?xml ?> </script>'));

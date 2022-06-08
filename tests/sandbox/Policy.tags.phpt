@@ -34,6 +34,7 @@ $template = <<<'EOD'
 
 // compile-time
 $latte->compile($template);
+
 Assert::same(
 	[
 		'tags' => ['var', '=', 'foreach'],
@@ -46,6 +47,7 @@ Assert::same(
 $latte->warmupCache($template);
 $policy->log = [];
 $latte->renderToString($template);
+
 Assert::same(
 	[],
 	$policy->log,

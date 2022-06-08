@@ -13,8 +13,11 @@ require __DIR__ . '/../bootstrap.php';
 
 
 Assert::same('""', Filters::convertHtmlToUnquotedAttr(''));
+
 Assert::same('"string"', Filters::convertHtmlToUnquotedAttr('string'));
+
 Assert::same('"&lt; &amp; &apos; &quot; &gt;"', Filters::convertHtmlToUnquotedAttr('< & \' " >'));
+
 Assert::same('"&quot;"', Filters::convertHtmlToUnquotedAttr('&quot;'));
 
 // invalid UTF-8

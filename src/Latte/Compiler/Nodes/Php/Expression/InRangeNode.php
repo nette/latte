@@ -13,30 +13,27 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class InRangeNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $needle,
-		public ExpressionNode $haystack,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $needle,
+        public ExpressionNode $haystack,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return 'in_array('
+            . $this->needle->print($context)
+            . ', '
+            . $this->haystack->print($context)
+            . ', true)';
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return 'in_array('
-			. $this->needle->print($context)
-			. ', '
-			. $this->haystack->print($context)
-			. ', true)';
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->needle;
-		yield $this->haystack;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->needle;
+        yield $this->haystack;
+    }
 }

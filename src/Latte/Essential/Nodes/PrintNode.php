@@ -18,53 +18,49 @@ use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\ContentType;
 
-
 /**
  * {= ...}
  */
 class PrintNode extends StatementNode
 {
-	public ExpressionNode $expression;
-	public ModifierNode $modifier;
+    public ExpressionNode $expression;
+    public ModifierNode $modifier;
 
+    public static function create(Tag $tag, TemplateParser $parser): static
+    {
+        $tag->outputMode = $tag::OutputKeepIndentation;
 
-	public static function create(Tag $tag, TemplateParser $parser): static
-	{
-		$tag->outputMode = $tag::OutputKeepIndentation;
+        $stream = $parser->getStream();
+        if (
+            $tag->isInText()
+            && $parser->getContentType() === ContentType::Html
+            && $tag->htmlElement?->name === 'script'
+            && preg_match('#["\']#A', $stream->peek()->text)
+        ) {
+            throw new CompileException("Do not place {$tag->getNotation(true)} inside quotes in JavaScript.", $tag->position);
+        }
 
-		$stream = $parser->getStream();
-		if (
-			$tag->isInText()
-			&& $parser->getContentType() === ContentType::Html
-			&& $tag->htmlElement?->name === 'script'
-			&& preg_match('#["\']#A', $stream->peek()->text)
-		) {
-			throw new CompileException("Do not place {$tag->getNotation(true)} inside quotes in JavaScript.", $tag->position);
-		}
+        $tag->expectArguments();
+        $node = new static;
+        $node->expression = $tag->parser->parseExpression();
+        $node->modifier = $tag->parser->parseModifier();
+        $node->modifier->escape = true;
+        return $node;
+    }
 
-		$tag->expectArguments();
-		$node = new static;
-		$node->expression = $tag->parser->parseExpression();
-		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = true;
-		return $node;
-	}
+    public function print(PrintContext $context): string
+    {
+        return $context->format(
+            "echo %modify(%node) %line;\n",
+            $this->modifier,
+            $this->expression,
+            $this->position,
+        );
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return $context->format(
-			"echo %modify(%node) %line;\n",
-			$this->modifier,
-			$this->expression,
-			$this->position,
-		);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expression;
-		yield $this->modifier;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expression;
+        yield $this->modifier;
+    }
 }

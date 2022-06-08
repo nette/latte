@@ -14,28 +14,25 @@ use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class PropertyFetchNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $object,
-		public IdentifierNode|ExpressionNode $name,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $object,
+        public IdentifierNode|ExpressionNode $name,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $context->dereferenceExpr($this->object)
+            . '->'
+            . $context->objectProperty($this->name);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $context->dereferenceExpr($this->object)
-			. '->'
-			. $context->objectProperty($this->name);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->object;
-		yield $this->name;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->object;
+        yield $this->name;
+    }
 }

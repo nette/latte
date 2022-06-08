@@ -14,36 +14,32 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
-
 /**
  * {do expression}
  */
 class DoNode extends StatementNode
 {
-	public ExpressionNode $expression;
+    public ExpressionNode $expression;
 
+    public static function create(Tag $tag): static
+    {
+        $tag->expectArguments();
+        $node = new static;
+        $node->expression = $tag->parser->parseExpression();
+        return $node;
+    }
 
-	public static function create(Tag $tag): static
-	{
-		$tag->expectArguments();
-		$node = new static;
-		$node->expression = $tag->parser->parseExpression();
-		return $node;
-	}
+    public function print(PrintContext $context): string
+    {
+        return $context->format(
+            '%node %line;',
+            $this->expression,
+            $this->position,
+        );
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return $context->format(
-			'%node %line;',
-			$this->expression,
-			$this->position,
-		);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expression;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expression;
+    }
 }

@@ -15,28 +15,25 @@ use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class ClassConstantFetchNode extends ExpressionNode
 {
-	public function __construct(
-		public NameNode|ExpressionNode $class,
-		public IdentifierNode $name,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public NameNode|ExpressionNode $class,
+        public IdentifierNode $name,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $context->dereferenceExpr($this->class)
+            . '::'
+            . $this->name->print($context);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $context->dereferenceExpr($this->class)
-			. '::'
-			. $this->name->print($context);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->class;
-		yield $this->name;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->class;
+        yield $this->name;
+    }
 }

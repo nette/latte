@@ -15,9 +15,13 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $info = new FilterInfo(ContentType::Text);
+
 Assert::same('x', Filters::trim($info, " \t\n\r\x00\x0B\u{A0}x"));
+
 Assert::same('a b', Filters::trim($info, ' a b '));
+
 Assert::same(' a b ', Filters::trim($info, ' a b ', ''));
+
 Assert::same('e', Filters::trim($info, "\u{158}e-", "\u{158}-")); // Ře-
 
 Assert::exception(

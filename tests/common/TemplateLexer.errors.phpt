@@ -7,7 +7,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('', function () {
 	$lexer = new TemplateLexer;
 	iterator_to_array($lexer->tokenize("\n{a}"));
@@ -21,14 +20,12 @@ Assert::exception(
 	'Template is not valid UTF-8 stream (at column 1)',
 );
 
-
 $lexer = new TemplateLexer;
 Assert::exception(
 	fn() => iterator_to_array($lexer->tokenize("žluťoučký\n\xA0\xA0"), false),
 	Latte\CompileException::class,
 	'Template is not valid UTF-8 stream (on line 2 at column 1)',
 );
-
 
 $lexer = new TemplateLexer;
 Assert::exception(

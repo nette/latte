@@ -26,6 +26,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/extends.1.phtml',
 	$latte->compile('main'),
 );
+
 Assert::same(
 	'1',
 	$latte->renderToString('main'),

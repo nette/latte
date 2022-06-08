@@ -13,24 +13,21 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class EmptyNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $expr,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $expr,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return 'empty(' . $this->expr->print($context) . ')';
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return 'empty(' . $this->expr->print($context) . ')';
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expr;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expr;
+    }
 }

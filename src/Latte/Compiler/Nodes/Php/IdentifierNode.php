@@ -13,24 +13,21 @@ use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class IdentifierNode extends Node
 {
-	public function __construct(
-		public string $name,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public string $name,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 
-	public function __toString(): string
-	{
-		return $this->name;
-	}
-
-
-	public function print(PrintContext $context): string
-	{
-		return $this->name;
-	}
+    public function print(PrintContext $context): string
+    {
+        return $this->name;
+    }
 }

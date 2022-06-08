@@ -15,45 +15,42 @@ use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class MethodCallNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $object,
-		public IdentifierNode|ExpressionNode $name,
-		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode> */
-		public array $args = [],
-		public ?Position $position = null,
-	) {
-		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {})(...$args);
-	}
+    public function __construct(
+        public ExpressionNode $object,
+        public IdentifierNode|ExpressionNode $name,
+        /** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode> */
+        public array $args = [],
+        public ?Position $position = null,
+    ) {
+        (function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {
+        })(...$args);
+    }
 
+    public function isFirstClassCallable(): bool
+    {
+        return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
+    }
 
-	public function isFirstClassCallable(): bool
-	{
-		return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
-	}
+    public function print(PrintContext $context): string
+    {
+        if (PHP_VERSION_ID < 80100 && $this->isFirstClassCallable()) {
+            return '[' . $this->object->print($context) . ', ' . $context->memberAsString($this->name) . ']';
+        }
 
+        return $context->dereferenceExpr($this->object)
+            . '->'
+            . $context->objectProperty($this->name)
+            . '(' . $context->implode($this->args) . ')';
+    }
 
-	public function print(PrintContext $context): string
-	{
-		if (PHP_VERSION_ID < 80100 && $this->isFirstClassCallable()) {
-			return '[' . $this->object->print($context) . ', ' . $context->memberAsString($this->name) . ']';
-		}
-
-		return $context->dereferenceExpr($this->object)
-			. '->'
-			. $context->objectProperty($this->name)
-			. '(' . $context->implode($this->args) . ')';
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->object;
-		yield $this->name;
-		foreach ($this->args as &$item) {
-			yield $item;
-		}
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->object;
+        yield $this->name;
+        foreach ($this->args as &$item) {
+            yield $item;
+        }
+    }
 }

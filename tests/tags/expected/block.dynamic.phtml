@@ -61,7 +61,6 @@ final class Template%a% extends Latte\Runtime\Template
 		return get_defined_vars();
 	}
 
-
 	/** {block static} on line %d% */
 	public function blockStatic(array $ʟ_args): void
 	{
@@ -74,7 +73,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 	}
 
-
 	/** {block $name} on line %d% */
 	public function blockName(array $ʟ_args): void
 	{
@@ -86,7 +84,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 	}
 
-
 	/** {block "word$name"} on line %d% */
 	public function blockWord_name(array $ʟ_args): void
 	{
@@ -95,13 +92,11 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 	}
 
-
 	/** {block "strip$name"|striptags} on line %d% */
 	public function blockStrip_name(array $ʟ_args): void
 	{
 		echo '<span>hello</span>';
 	}
-
 
 	/** {block rand() < 5 ? a : b} on line %d% */
 	public function blockRand_5_a_b(array $ʟ_args): void

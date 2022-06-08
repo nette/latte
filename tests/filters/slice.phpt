@@ -11,7 +11,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('arrays', function () {
 	$arr = ['a', 'b', 10 => 'd', 'e'];
 
@@ -26,7 +25,6 @@ test('arrays', function () {
 	Assert::same(['a', 'b'], Filters::slice($arr, 0, -2));
 });
 
-
 test('arrays & preserveKeys', function () {
 	$arr = ['a', 'b', 10 => 'd', 'e'];
 
@@ -40,7 +38,6 @@ test('arrays & preserveKeys', function () {
 	Assert::same([], Filters::slice($arr, 4, 1, true));
 	Assert::same(['a', 'b'], Filters::slice($arr, 0, -2, true));
 });
-
 
 test('strings', function () {
 	$s = "\u{158}ekn\u{11B}te, jak se (dnes) m\u{E1}te?"; // Řekněte, jak se (dnes) máte?

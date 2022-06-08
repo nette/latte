@@ -16,7 +16,6 @@ jobs:
             - run: composer create-project nette/code-checker temp/code-checker ^3 --no-progress
             - run: php temp/code-checker/code-checker --strict-types --no-progress --ignore tests/phpParser
 
-
     nette_cs:
         name: Nette Coding Standard
         runs-on: ubuntu-latest

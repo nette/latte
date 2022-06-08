@@ -11,11 +11,10 @@ namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\PrintContext;
 
-
 class VarLikeIdentifierNode extends IdentifierNode
 {
-	public function print(PrintContext $context): string
-	{
-		return '$' . $this->name;
-	}
+    public function print(PrintContext $context): string
+    {
+        return '$' . $this->name;
+    }
 }

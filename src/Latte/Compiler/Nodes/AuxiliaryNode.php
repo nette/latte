@@ -11,17 +11,15 @@ namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\PrintContext;
 
-
 class AuxiliaryNode extends AreaNode
 {
-	public function __construct(
-		public /*readonly*/ \Closure $callable,
-	) {
-	}
+    public function __construct(
+        public readonly \Closure $callable,
+    ) {
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return ($this->callable)($context);
-	}
+    public function print(PrintContext $context): string
+    {
+        return ($this->callable)($context);
+    }
 }

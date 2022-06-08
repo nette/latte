@@ -12,26 +12,24 @@ namespace Latte\Sandbox\Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
-
 class MethodCallNode extends Expression\MethodCallNode
 {
-	public function __construct(Expression\MethodCallNode $from)
-	{
-		parent::__construct($from->object, $from->name, $from->args, $from->position);
-	}
+    public function __construct(Expression\MethodCallNode $from)
+    {
+        parent::__construct($from->object, $from->name, $from->args, $from->position);
+    }
 
+    public function print(PrintContext $context): string
+    {
+        if ($this->isFirstClassCallable()) {
+            return '$this->global->sandbox->closure(['
+                . $this->object->print($context) . ', '
+                . $context->memberAsString($this->name) . '])';
+        }
 
-	public function print(PrintContext $context): string
-	{
-		if ($this->isFirstClassCallable()) {
-			return '$this->global->sandbox->closure(['
-				. $this->object->print($context) . ', '
-				. $context->memberAsString($this->name) . '])';
-		}
-
-		return '$this->global->sandbox->callMethod('
-			. $this->object->print($context) . ', '
-			. $context->memberAsString($this->name) . ', '
-			. Expression\ArrayNode::fromArguments($this->args)->print($context) . ')';
-	}
+        return '$this->global->sandbox->callMethod('
+            . $this->object->print($context) . ', '
+            . $context->memberAsString($this->name) . ', '
+            . Expression\ArrayNode::fromArguments($this->args)->print($context) . ')';
+    }
 }

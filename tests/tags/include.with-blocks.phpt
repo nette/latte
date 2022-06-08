@@ -34,10 +34,12 @@ Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.phtml',
 	$latte->compile('main'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.html',
 	$latte->renderToString('main'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/include.with-blocks.inc.phtml',
 	$latte->compile('inc'),

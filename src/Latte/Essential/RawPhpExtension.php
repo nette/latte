@@ -11,18 +11,17 @@ namespace Latte\Essential;
 
 use Latte;
 
-
 /**
  * Raw PHP in {php ...}
  */
 final class RawPhpExtension extends Latte\Extension
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	public function getTags(): array
-	{
-		return [
-			'php' => [Nodes\RawPhpNode::class, 'create'],
-		];
-	}
+    public function getTags(): array
+    {
+        return [
+            'php' => [Nodes\RawPhpNode::class, 'create'],
+        ];
+    }
 }

@@ -19,116 +19,103 @@ use Latte\Compiler\NodeTraverser;
 use Latte\Engine;
 use Latte\SecurityViolationException;
 
-
 /**
  * Security protection for the sandbox.
  */
 final class SandboxExtension extends Latte\Extension
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	private ?Latte\Policy $policy;
+    private ?Latte\Policy $policy;
 
+    public function beforeCompile(Engine $engine): void
+    {
+        $this->policy = $engine->getPolicy(effective: true);
+    }
 
-	public function beforeCompile(Engine $engine): void
-	{
-		$this->policy = $engine->getPolicy(effective: true);
-	}
+    public function getTags(): array
+    {
+        return [
+            'sandbox' => [Nodes\SandboxNode::class, 'create'],
+        ];
+    }
 
+    public function getPasses(): array
+    {
+        return $this->policy
+            ? ['sandbox' => self::order([$this, 'processPass'], before: '*')]
+            : [];
+    }
 
-	public function getTags(): array
-	{
-		return [
-			'sandbox' => [Nodes\SandboxNode::class, 'create'],
-		];
-	}
+    public function beforeRender(Engine $engine): void
+    {
+        if ($policy = $engine->getPolicy()) {
+            $engine->addProvider('sandbox', new RuntimeChecker($policy));
+        }
+    }
 
+    public function getCacheKey(Engine $engine): mixed
+    {
+        return (bool) $engine->getPolicy(effective: true);
+    }
 
-	public function getPasses(): array
-	{
-		return $this->policy
-			? ['sandbox' => self::order([$this, 'processPass'], before: '*')]
-			: [];
-	}
+    public function processPass(TemplateNode $node): void
+    {
+        (new NodeTraverser)->traverse($node, leave: \Closure::fromCallable([$this, 'sandboxVisitor']));
+    }
 
+    private function sandboxVisitor(Node $node): Node
+    {
+        if ($node instanceof Expression\VariableNode) {
+            if ($node->name === 'this') {
+                throw new SecurityViolationException("Forbidden variable \${$node->name}.", $node->position);
+            } elseif (!is_string($node->name)) {
+                throw new SecurityViolationException('Forbidden variable variables.', $node->position);
+            }
 
-	public function beforeRender(Engine $engine): void
-	{
-		if ($policy = $engine->getPolicy()) {
-			$engine->addProvider('sandbox', new RuntimeChecker($policy));
-		}
-	}
+            return $node;
+        } elseif ($node instanceof Expression\NewNode) {
+            throw new SecurityViolationException("Forbidden keyword 'new'", $node->position);
+        } elseif (
+            $node instanceof Expression\FunctionCallNode
+            && $node->name instanceof Php\NameNode
+            && !$node->isFirstClassCallable()
+        ) {
+            if (!$this->policy->isFunctionAllowed((string) $node->name)) {
+                throw new SecurityViolationException("Function $node->name() is not allowed.", $node->position);
+            } elseif ($node->args) {
+                $arg = ExpressionBuilder::variable('$this')->property('global')->property('sandbox')->method('args', $node->args)
+                    ->build();
+                $node->args = [new Php\ArgumentNode($arg, unpack: true)];
+            }
 
+            return $node;
+        } elseif ($node instanceof Php\FilterNode) {
+            $name = (string) $node->name;
+            if (!$this->policy->isFilterAllowed($name)) {
+                throw new SecurityViolationException("Filter |$name is not allowed.", $node->position);
+            } elseif ($node->args) {
+                $arg = ExpressionBuilder::variable('$this')->property('global')->property('sandbox')->method('args', $node->args)
+                    ->build();
+                $node->args = [new Php\ArgumentNode($arg, unpack: true)];
+            }
 
-	public function getCacheKey(Engine $engine): mixed
-	{
-		return (bool) $engine->getPolicy(effective: true);
-	}
-
-
-	public function processPass(TemplateNode $node): void
-	{
-		(new NodeTraverser)->traverse($node, leave: \Closure::fromCallable([$this, 'sandboxVisitor']));
-	}
-
-
-	private function sandboxVisitor(Node $node): Node
-	{
-		if ($node instanceof Expression\VariableNode) {
-			if ($node->name === 'this') {
-				throw new SecurityViolationException("Forbidden variable \${$node->name}.", $node->position);
-			} elseif (!is_string($node->name)) {
-				throw new SecurityViolationException('Forbidden variable variables.', $node->position);
-			}
-
-			return $node;
-
-		} elseif ($node instanceof Expression\NewNode) {
-			throw new SecurityViolationException("Forbidden keyword 'new'", $node->position);
-
-		} elseif ($node instanceof Expression\FunctionCallNode
-			&& $node->name instanceof Php\NameNode
-			&& !$node->isFirstClassCallable()
-		) {
-			if (!$this->policy->isFunctionAllowed((string) $node->name)) {
-				throw new SecurityViolationException("Function $node->name() is not allowed.", $node->position);
-
-			} elseif ($node->args) {
-				$arg = ExpressionBuilder::variable('$this')->property('global')->property('sandbox')->method('args', $node->args)
-					->build();
-				$node->args = [new Php\ArgumentNode($arg, unpack: true)];
-			}
-
-			return $node;
-
-		} elseif ($node instanceof Php\FilterNode) {
-			$name = (string) $node->name;
-			if (!$this->policy->isFilterAllowed($name)) {
-				throw new SecurityViolationException("Filter |$name is not allowed.", $node->position);
-
-			} elseif ($node->args) {
-				$arg = ExpressionBuilder::variable('$this')->property('global')->property('sandbox')->method('args', $node->args)
-					->build();
-				$node->args = [new Php\ArgumentNode($arg, unpack: true)];
-			}
-
-			return $node;
-
-		} elseif ($node instanceof Expression\PropertyFetchNode
-			|| $node instanceof Expression\StaticPropertyFetchNode
-			|| $node instanceof Expression\NullsafePropertyFetchNode
-			|| $node instanceof Expression\UndefinedsafePropertyFetchNode
-			|| $node instanceof Expression\FunctionCallNode
-			|| $node instanceof Expression\MethodCallNode
-			|| $node instanceof Expression\StaticCallNode
-			|| $node instanceof Expression\NullsafeMethodCallNode
-			|| $node instanceof Expression\UndefinedsafeMethodCallNode
-		) {
-			$class = namespace\Nodes::class . strrchr($node::class, '\\');
-			return new $class($node);
-
-		} else {
-			return $node;
-		}
-	}
+            return $node;
+        } elseif (
+            $node instanceof Expression\PropertyFetchNode
+            || $node instanceof Expression\StaticPropertyFetchNode
+            || $node instanceof Expression\NullsafePropertyFetchNode
+            || $node instanceof Expression\UndefinedsafePropertyFetchNode
+            || $node instanceof Expression\FunctionCallNode
+            || $node instanceof Expression\MethodCallNode
+            || $node instanceof Expression\StaticCallNode
+            || $node instanceof Expression\NullsafeMethodCallNode
+            || $node instanceof Expression\UndefinedsafeMethodCallNode
+        ) {
+            $class = namespace\Nodes::class . strrchr($node::class, '\\');
+            return new $class($node);
+        } else {
+            return $node;
+        }
+    }
 }

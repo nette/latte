@@ -13,7 +13,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('text', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('', Filters::replace($info, '', ''));
@@ -21,7 +20,6 @@ test('text', function () {
 	Assert::same('b', Filters::replace($info, 'ab', 'a'));
 	Assert::same('xb', Filters::replace($info, 'ab', 'a', 'x'));
 });
-
 
 test('html', function () {
 	$info = new FilterInfo(ContentType::Html);
@@ -31,7 +29,6 @@ test('html', function () {
 	Assert::same('xb', Filters::replace($info, 'ab', 'a', 'x'));
 });
 
-
 test('array', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('abc', Filters::replace($info, 'abc', []));
@@ -39,7 +36,6 @@ test('array', function () {
 	Assert::same('xxc', Filters::replace($info, 'abc', ['a', 'b'], 'x'));
 	Assert::same('bac', Filters::replace($info, 'abc', ['a', 'b'], ['b', 'a']));
 });
-
 
 test('assoc', function () {
 	$info = new FilterInfo(ContentType::Text);

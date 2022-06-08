@@ -13,95 +13,90 @@ use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class ModifierNode extends Node
 {
-	public function __construct(
-		/** @var FilterNode[] */
-		public array $filters,
-		public bool $escape = false,
-		public bool $check = true,
-		public ?Position $position = null,
-	) {
-		(function (FilterNode ...$args) {})(...$filters);
-	}
+    public function __construct(
+        /** @var FilterNode[] */
+        public array $filters,
+        public bool $escape = false,
+        public bool $check = true,
+        public ?Position $position = null,
+    ) {
+        (function (FilterNode ...$args) {
+        })(...$filters);
+    }
 
+    public function hasFilter(string $name): bool
+    {
+        foreach ($this->filters as $filter) {
+            if ($filter->name->name === $name) {
+                return true;
+            }
+        }
 
-	public function hasFilter(string $name): bool
-	{
-		foreach ($this->filters as $filter) {
-			if ($filter->name->name === $name) {
-				return true;
-			}
-		}
+        return false;
+    }
 
-		return false;
-	}
+    public function print(PrintContext $context): string
+    {
+        throw new \LogicException('Cannot directly print ModifierNode');
+    }
 
+    public function printSimple(PrintContext $context, string $expr): string
+    {
+        $escape = $this->escape;
+        $check = $this->check;
+        foreach ($this->filters as $filter) {
+            $name = $filter->name->name;
+            if (['nocheck' => 1, 'noCheck' => 1][$name] ?? null) {
+                $check = false;
+            } elseif ($name === 'noescape') {
+                $escape = false;
+            } else {
+                if (['datastream' => 1, 'dataStream' => 1][$name] ?? null) {
+                    $check = false;
+                }
+                $expr = $filter->printSimple($context, $expr);
+            }
+        }
 
-	public function print(PrintContext $context): string
-	{
-		throw new \LogicException('Cannot directly print ModifierNode');
-	}
+        $escaper = $context->getEscaper();
+        if ($check) {
+            $expr = $escaper->check($expr);
+        }
 
+        if ($escape) {
+            $expr = $escaper->escape($expr);
+        }
 
-	public function printSimple(PrintContext $context, string $expr): string
-	{
-		$escape = $this->escape;
-		$check = $this->check;
-		foreach ($this->filters as $filter) {
-			$name = $filter->name->name;
-			if (['nocheck' => 1, 'noCheck' => 1][$name] ?? null) {
-				$check = false;
-			} elseif ($name === 'noescape') {
-				$escape = false;
-			} else {
-				if (['datastream' => 1, 'dataStream' => 1][$name] ?? null) {
-					$check = false;
-				}
-				$expr = $filter->printSimple($context, $expr);
-			}
-		}
+        return $expr;
+    }
 
-		$escaper = $context->getEscaper();
-		if ($check) {
-			$expr = $escaper->check($expr);
-		}
+    public function printContentAware(PrintContext $context, string $expr): string
+    {
+        foreach ($this->filters as $filter) {
+            $name = $filter->name->name;
+            if ($name === 'noescape') {
+                $noescape = true;
+            } else {
+                $expr = $filter->printContentAware($context, $expr);
+            }
+        }
 
-		if ($escape) {
-			$expr = $escaper->escape($expr);
-		}
+        if ($this->escape && empty($noescape)) {
+            $expr = 'LR\Filters::convertTo($ʟ_fi, '
+                . var_export($context->getEscaper()->export(), true) . ', '
+                . $expr
+                . ')';
+        }
 
-		return $expr;
-	}
+        return $expr;
+    }
 
-
-	public function printContentAware(PrintContext $context, string $expr): string
-	{
-		foreach ($this->filters as $filter) {
-			$name = $filter->name->name;
-			if ($name === 'noescape') {
-				$noescape = true;
-			} else {
-				$expr = $filter->printContentAware($context, $expr);
-			}
-		}
-
-		if ($this->escape && empty($noescape)) {
-			$expr = 'LR\Filters::convertTo($ʟ_fi, '
-				. var_export($context->getEscaper()->export(), true) . ', '
-				. $expr
-				. ')';
-		}
-
-		return $expr;
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		foreach ($this->filters as &$filter) {
-			yield $filter;
-		}
-	}
+    public function &getIterator(): \Generator
+    {
+        foreach ($this->filters as &$filter) {
+            yield $filter;
+        }
+    }
 }

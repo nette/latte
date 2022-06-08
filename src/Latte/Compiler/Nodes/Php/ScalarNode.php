@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Compiler\Nodes\Php;
 
-
 abstract class ScalarNode extends ExpressionNode
 {
 }

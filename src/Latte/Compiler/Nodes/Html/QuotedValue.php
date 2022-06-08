@@ -14,40 +14,37 @@ use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class QuotedValue extends AreaNode
 {
-	public function __construct(
-		public AreaNode $value,
-		public string $quote,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public AreaNode $value,
+        public string $quote,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        $res = 'echo ' . var_export($this->quote, true) . ';';
+        $escaper = $context->beginEscape();
+        $escaper->enterHtmlAttributeQuote($this->quote);
 
-	public function print(PrintContext $context): string
-	{
-		$res = 'echo ' . var_export($this->quote, true) . ';';
-		$escaper = $context->beginEscape();
-		$escaper->enterHtmlAttributeQuote($this->quote);
+        if ($this->value instanceof FragmentNode && $escaper->export() === 'html/attr/url') {
+            foreach ($this->value->children as $child) {
+                $res .= $child->print($context);
+                $escaper->enterHtmlAttribute(null, $this->quote);
+            }
+        } else {
+            $res .= $this->value->print($context);
+        }
 
-		if ($this->value instanceof FragmentNode && $escaper->export() === 'html/attr/url') {
-			foreach ($this->value->children as $child) {
-				$res .= $child->print($context);
-				$escaper->enterHtmlAttribute(null, $this->quote);
-			}
-		} else {
-			$res .= $this->value->print($context);
-		}
+        $res .= 'echo ' . var_export($this->quote, true) . ';';
+        $context->restoreEscape();
+        return $res;
+    }
 
-		$res .= 'echo ' . var_export($this->quote, true) . ';';
-		$context->restoreEscape();
-		return $res;
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->value;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->value;
+    }
 }

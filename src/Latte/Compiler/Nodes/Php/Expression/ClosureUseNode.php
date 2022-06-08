@@ -13,25 +13,22 @@ use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class ClosureUseNode extends Node
 {
-	public function __construct(
-		public VariableNode $var,
-		public bool $byRef = false,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public VariableNode $var,
+        public bool $byRef = false,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return ($this->byRef ? '&' : '') . $this->var->print($context);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return ($this->byRef ? '&' : '') . $this->var->print($context);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->var;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->var;
+    }
 }

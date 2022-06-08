@@ -14,27 +14,24 @@ use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class InstanceofNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $expr,
-		public NameNode|ExpressionNode $class,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $expr,
+        public NameNode|ExpressionNode $class,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $context->postfixOp($this, $this->expr, ' instanceof ')
+            . $context->dereferenceExpr($this->class);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $context->postfixOp($this, $this->expr, ' instanceof ')
-			. $context->dereferenceExpr($this->class);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expr;
-		yield $this->class;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expr;
+        yield $this->class;
+    }
 }

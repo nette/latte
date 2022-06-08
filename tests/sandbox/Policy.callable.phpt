@@ -41,6 +41,7 @@ $template = <<<'EOD'
 	EOD;
 
 $latte->compile($template);
+
 Assert::equal(
 	[
 		'tags' => ['var', '=', '=', '=', '=', '='],
@@ -54,6 +55,7 @@ Assert::equal(
 $latte->warmupCache($template);
 $policy->log = [];
 $latte->renderToString($template, ['obj' => new MyClass]);
+
 Assert::equal(
 	[
 		'methods' => [

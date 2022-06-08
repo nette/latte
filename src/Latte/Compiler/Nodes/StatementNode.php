@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Compiler\Nodes;
 
-
 abstract class StatementNode extends AreaNode
 {
 }

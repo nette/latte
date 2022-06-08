@@ -62,6 +62,7 @@ Assert::equal(
 
 // property() & immutability
 $var = ExpressionBuilder::variable('$this');
+
 Assert::equal(
 	new PropertyFetchNode(new VariableNode('this'), new IdentifierNode('foo')),
 	$var->property('foo')->build(),
@@ -74,6 +75,7 @@ Assert::equal(
 
 // method() & immutability
 $var = ExpressionBuilder::variable('$this');
+
 Assert::equal(
 	new MethodCallNode(new VariableNode('this'), new IdentifierNode('foo')),
 	$var->method('foo')->build(),
@@ -86,6 +88,7 @@ Assert::equal(
 
 // staticMethod() & immutability
 $var = ExpressionBuilder::variable('$this');
+
 Assert::equal(
 	new StaticCallNode(new VariableNode('this'), new IdentifierNode('foo')),
 	$var->staticMethod('foo')->build(),

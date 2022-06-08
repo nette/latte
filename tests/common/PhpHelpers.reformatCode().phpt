@@ -14,6 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $input = file_get_contents(__DIR__ . '/templates/PhpHelpers.reformatCode().phtml');
 $expected = file_get_contents(__DIR__ . '/expected/PhpHelpers.reformatCode().phtml');
+
 Assert::match($expected, PhpHelpers::reformatCode($input));
 
 Assert::match('<?php

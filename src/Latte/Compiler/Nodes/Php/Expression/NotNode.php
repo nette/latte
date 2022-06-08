@@ -13,24 +13,21 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class NotNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $expr,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $expr,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $context->prefixOp($this, '!', $this->expr);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $context->prefixOp($this, '!', $this->expr);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expr;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expr;
+    }
 }

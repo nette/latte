@@ -18,36 +18,33 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 
-
 /**
  * n:ifcontent
  */
 class IfContentNode extends StatementNode
 {
-	public AreaNode $content;
-	public int $id;
-	public ElementNode $htmlElement;
+    public AreaNode $content;
+    public int $id;
+    public ElementNode $htmlElement;
 
+    /** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+    public static function create(Tag $tag, TemplateParser $parser): \Generator
+    {
+        $node = new static;
+        $node->id = $parser->generateId();
+        [$node->content] = yield;
+        $node->htmlElement = $tag->htmlElement;
+        if (!$node->htmlElement->content) {
+            throw new CompileException("Unnecessary n:ifcontent on empty element <{$node->htmlElement->name}>", $tag->position);
+        }
+        return $node;
+    }
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
-	public static function create(Tag $tag, TemplateParser $parser): \Generator
-	{
-		$node = new static;
-		$node->id = $parser->generateId();
-		[$node->content] = yield;
-		$node->htmlElement = $tag->htmlElement;
-		if (!$node->htmlElement->content) {
-			throw new CompileException("Unnecessary n:ifcontent on empty element <{$node->htmlElement->name}>", $tag->position);
-		}
-		return $node;
-	}
-
-
-	public function print(PrintContext $context): string
-	{
-		try {
-			$saved = $this->htmlElement->content;
-			$this->htmlElement->content = new AuxiliaryNode(fn() => <<<XX
+    public function print(PrintContext $context): string
+    {
+        try {
+            $saved = $this->htmlElement->content;
+            $this->htmlElement->content = new AuxiliaryNode(fn () => <<<XX
 				ob_start();
 				try {
 					{$saved->print($context)}
@@ -56,7 +53,7 @@ class IfContentNode extends StatementNode
 				}
 
 				XX);
-			return <<<XX
+            return <<<XX
 				ob_start(fn() => '');
 				try {
 					{$this->content->print($context)}
@@ -69,14 +66,13 @@ class IfContentNode extends StatementNode
 				}
 
 				XX;
-		} finally {
-			$this->htmlElement->content = $saved;
-		}
-	}
+        } finally {
+            $this->htmlElement->content = $saved;
+        }
+    }
 
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->content;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->content;
+    }
 }

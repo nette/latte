@@ -17,11 +17,11 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
+
 Assert::same(
 	'"',
 	$latte->renderToString('{="<br>&quot;"|stripHtml}'),
 );
-
 
 test('', function () {
 	$info = new FilterInfo(ContentType::Text);
@@ -32,13 +32,11 @@ test('', function () {
 	);
 });
 
-
 test('', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::stripHtml($info, ''));
 	Assert::same(ContentType::Text, $info->contentType);
 });
-
 
 test('', function () {
 	$info = new FilterInfo(ContentType::Html);
@@ -47,14 +45,12 @@ test('', function () {
 	Assert::same("<  c '", @Filters::stripHtml(clone $info, '&lt; <b> c &apos;'));
 });
 
-
 test('', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
 	Assert::same("<  c '", Filters::stripHtml(clone $info, '&lt; <b> c &apos;'));
 });
-
 
 test('', function () {
 	$info = new FilterInfo(ContentType::Xml);

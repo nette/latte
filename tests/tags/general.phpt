@@ -28,6 +28,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/general.phtml',
 	$latte->compile(__DIR__ . '/templates/general.latte'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/general.html',
 	$latte->renderToString(

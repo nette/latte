@@ -13,18 +13,16 @@ use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class EncapsedStringPartNode extends ScalarNode
 {
-	public function __construct(
-		public string $value,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public string $value,
+        public ?Position $position = null,
+    ) {
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		throw new \LogicException('Cannot directly print EncapsedStringPart');
-	}
+    public function print(PrintContext $context): string
+    {
+        throw new \LogicException('Cannot directly print EncapsedStringPart');
+    }
 }

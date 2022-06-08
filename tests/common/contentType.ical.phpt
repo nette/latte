@@ -37,6 +37,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/contentType.ical.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/contentType.ical.html',
 	$latte->renderToString($template),

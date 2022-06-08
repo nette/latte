@@ -14,23 +14,21 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
 
-
 /**
  * {varType type $var}
  */
 class VarTypeNode extends StatementNode
 {
-	public static function create(Tag $tag): static
-	{
-		$tag->expectArguments();
-		$tag->parser->parseType();
-		$tag->parser->stream->consume(Token::Php_Variable);
-		return new static;
-	}
+    public static function create(Tag $tag): static
+    {
+        $tag->expectArguments();
+        $tag->parser->parseType();
+        $tag->parser->stream->consume(Token::Php_Variable);
+        return new static;
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return '';
-	}
+    public function print(PrintContext $context): string
+    {
+        return '';
+    }
 }

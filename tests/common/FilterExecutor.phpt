@@ -29,7 +29,6 @@ class MyFilter
 	}
 }
 
-
 test('', function () {
 	$filters = new FilterExecutor;
 
@@ -56,7 +55,6 @@ test('', function () {
 	Assert::same('AA', ($filters->f4)('aA'));
 });
 
-
 test('', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name) use ($filters) {
@@ -73,7 +71,6 @@ test('', function () {
 		"Filter 'unknown' is not defined.",
 	);
 });
-
 
 test('', function () {
 	$filters = new FilterExecutor;
@@ -105,7 +102,6 @@ test('', function () {
 	Assert::same('html,aa', $filters->filterContent('f3', $info, 'aA'));
 	Assert::same(ContentType::Css, $info->contentType);
 });
-
 
 test('', function () {
 	$filters = new FilterExecutor;

@@ -12,18 +12,16 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class SuperiorTypeNode extends ComplexTypeNode
 {
-	public function __construct(
-		public string $type,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public string $type,
+        public ?Position $position = null,
+    ) {
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		throw new \LogicException('Cannot directly print SuperiorTypeNode');
-	}
+    public function print(PrintContext $context): string
+    {
+        throw new \LogicException('Cannot directly print SuperiorTypeNode');
+    }
 }

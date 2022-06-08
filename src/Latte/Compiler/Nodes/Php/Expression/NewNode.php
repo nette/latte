@@ -15,31 +15,29 @@ use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class NewNode extends ExpressionNode
 {
-	public function __construct(
-		public NameNode|ExpressionNode $class,
-		/** @var Php\ArgumentNode[] */
-		public array $args = [],
-		public ?Position $position = null,
-	) {
-		(function (Php\ArgumentNode ...$args) {})(...$args);
-	}
+    public function __construct(
+        public NameNode|ExpressionNode $class,
+        /** @var Php\ArgumentNode[] */
+        public array $args = [],
+        public ?Position $position = null,
+    ) {
+        (function (Php\ArgumentNode ...$args) {
+        })(...$args);
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return 'new ' . $context->dereferenceExpr($this->class)
+            . ($this->args ? '(' . $context->implode($this->args) . ')' : '');
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return 'new ' . $context->dereferenceExpr($this->class)
-			. ($this->args ? '(' . $context->implode($this->args) . ')' : '');
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->class;
-		foreach ($this->args as &$item) {
-			yield $item;
-		}
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->class;
+        foreach ($this->args as &$item) {
+            yield $item;
+        }
+    }
 }

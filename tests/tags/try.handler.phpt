@@ -30,16 +30,21 @@ $latte->setExceptionHandler(function () use (&$args) {
 
 $args = null;
 $latte->renderToString('{try}{=error()}{/try}');
+
 Assert::type(CustomException::class, $args[0]);
+
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 
 $args = null;
 $latte->renderToString('{try}{=error()}{else}{/try}');
+
 Assert::type(CustomException::class, $args[0]);
+
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 
 $args = null;
 $latte->renderToString('{try}{rollback}{/try}');
+
 Assert::null($args);

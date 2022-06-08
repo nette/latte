@@ -11,7 +11,6 @@ namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\Node;
 
-
 abstract class ComplexTypeNode extends Node
 {
 }

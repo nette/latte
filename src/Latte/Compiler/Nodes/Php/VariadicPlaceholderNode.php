@@ -13,17 +13,15 @@ use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class VariadicPlaceholderNode extends Node
 {
-	public function __construct(
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ?Position $position = null,
+    ) {
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return '...';
-	}
+    public function print(PrintContext $context): string
+    {
+        return '...';
+    }
 }

@@ -14,26 +14,23 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class FilterCallNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $expr,
-		public Php\FilterNode $filter,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $expr,
+        public Php\FilterNode $filter,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $this->filter->printSimple($context, $this->expr->print($context));
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $this->filter->printSimple($context, $this->expr->print($context));
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expr;
-		yield $this->filter;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expr;
+        yield $this->filter;
+    }
 }

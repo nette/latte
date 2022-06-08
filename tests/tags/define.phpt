@@ -31,6 +31,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/define.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/define.html',
 	$latte->renderToString($template),

@@ -13,29 +13,26 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class ArrayAccessNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $expr,
-		public ?ExpressionNode $index = null,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $expr,
+        public ?ExpressionNode $index = null,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $context->dereferenceExpr($this->expr)
+            . '[' . ($this->index !== null ? $this->index->print($context) : '') . ']';
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $context->dereferenceExpr($this->expr)
-			. '[' . ($this->index !== null ? $this->index->print($context) : '') . ']';
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->expr;
-		if ($this->index) {
-			yield $this->index;
-		}
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->expr;
+        if ($this->index) {
+            yield $this->index;
+        }
+    }
 }

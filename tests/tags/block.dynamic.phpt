@@ -45,6 +45,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/block.dynamic.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/block.dynamic.html',
 	$latte->renderToString($template),

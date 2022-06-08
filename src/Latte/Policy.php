@@ -9,16 +9,15 @@ declare(strict_types=1);
 
 namespace Latte;
 
-
 interface Policy
 {
-	function isTagAllowed(string $tag): bool;
+    public function isTagAllowed(string $tag): bool;
 
-	function isFilterAllowed(string $filter): bool;
+    public function isFilterAllowed(string $filter): bool;
 
-	function isFunctionAllowed(string $function): bool;
+    public function isFunctionAllowed(string $function): bool;
 
-	function isMethodAllowed(string $class, string $method): bool;
+    public function isMethodAllowed(string $class, string $method): bool;
 
-	function isPropertyAllowed(string $class, string $property): bool;
+    public function isPropertyAllowed(string $class, string $property): bool;
 }

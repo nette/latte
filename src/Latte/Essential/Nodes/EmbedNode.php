@@ -20,66 +20,63 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 
-
 /**
  * {embed [block|file] name [,] [params]}
  */
 class EmbedNode extends StatementNode
 {
-	public ExpressionNode $name;
-	public string $mode;
-	public ArrayNode $args;
-	public FragmentNode $blocks;
-	public int|string|null $layer;
+    public ExpressionNode $name;
+    public string $mode;
+    public ArrayNode $args;
+    public FragmentNode $blocks;
+    public int|string|null $layer;
 
+    /** @return \Generator<int, ?array, array{FragmentNode, ?Tag}, static> */
+    public static function create(Tag $tag, TemplateParser $parser): \Generator
+    {
+        if ($tag->isNAttribute()) {
+            throw new CompileException('Attribute n:embed is not supported.', $tag->position);
+        }
 
-	/** @return \Generator<int, ?array, array{FragmentNode, ?Tag}, static> */
-	public static function create(Tag $tag, TemplateParser $parser): \Generator
-	{
-		if ($tag->isNAttribute()) {
-			throw new CompileException('Attribute n:embed is not supported.', $tag->position);
-		}
+        $tag->outputMode = $tag::OutputRemoveIndentation;
+        $tag->expectArguments();
 
-		$tag->outputMode = $tag::OutputRemoveIndentation;
-		$tag->expectArguments();
+        $node = new static;
+        $mode = $tag->parser->tryConsumeModifier('block', 'file')?->text;
+        $node->name = $tag->parser->parseUnquotedStringOrExpression();
+        $node->mode = $mode ?? ($node->name instanceof StringNode && preg_match('~[\w-]+$~DA', $node->name->value) ? 'block' : 'file');
+        $tag->parser->stream->tryConsume(',');
+        $node->args = $tag->parser->parseArguments();
 
-		$node = new static;
-		$mode = $tag->parser->tryConsumeModifier('block', 'file')?->text;
-		$node->name = $tag->parser->parseUnquotedStringOrExpression();
-		$node->mode = $mode ?? ($node->name instanceof StringNode && preg_match('~[\w-]+$~DA', $node->name->value) ? 'block' : 'file');
-		$tag->parser->stream->tryConsume(',');
-		$node->args = $tag->parser->parseArguments();
+        $prevIndex = $parser->blockLayer;
+        $parser->blockLayer = $node->layer = count($parser->blocks);
+        $parser->blocks[$parser->blockLayer] = [];
+        [$node->blocks] = yield;
 
-		$prevIndex = $parser->blockLayer;
-		$parser->blockLayer = $node->layer = count($parser->blocks);
-		$parser->blocks[$parser->blockLayer] = [];
-		[$node->blocks] = yield;
+        foreach ($node->blocks->children as $child) {
+            if (!$child instanceof ImportNode && !$child instanceof BlockNode && !$child instanceof TextNode) {
+                throw new CompileException('Unexpected content inside {embed} tags.', $child->position);
+            }
+        }
 
-		foreach ($node->blocks->children as $child) {
-			if (!$child instanceof ImportNode && !$child instanceof BlockNode && !$child instanceof TextNode) {
-				throw new CompileException('Unexpected content inside {embed} tags.', $child->position);
-			}
-		}
+        $parser->blockLayer = $prevIndex;
+        return $node;
+    }
 
-		$parser->blockLayer = $prevIndex;
-		return $node;
-	}
+    public function print(PrintContext $context): string
+    {
+        $imports = '';
+        foreach ($this->blocks->children as $child) {
+            if ($child instanceof ImportNode) {
+                $imports .= $child->print($context);
+            } else {
+                $child->print($context);
+            }
+        }
 
-
-	public function print(PrintContext $context): string
-	{
-		$imports = '';
-		foreach ($this->blocks->children as $child) {
-			if ($child instanceof ImportNode) {
-				$imports .= $child->print($context);
-			} else {
-				$child->print($context);
-			}
-		}
-
-		return $this->mode === 'file'
-			? $context->format(
-				<<<'XX'
+        return $this->mode === 'file'
+            ? $context->format(
+                <<<'XX'
 					$this->enterBlockLayer(%dump, get_defined_vars()) %line; %raw
 					try {
 						$this->createTemplate(%node, %node, "embed")->renderToContentType(%dump) %1.line;
@@ -88,15 +85,15 @@ class EmbedNode extends StatementNode
 					}
 
 					XX,
-				$this->layer,
-				$this->position,
-				$imports,
-				$this->name,
-				$this->args,
-				$context->getEscaper()->export(),
-			)
-			: $context->format(
-				<<<'XX'
+                $this->layer,
+                $this->position,
+                $imports,
+                $this->name,
+                $this->args,
+                $context->getEscaper()->export(),
+            )
+            : $context->format(
+                <<<'XX'
 					$this->enterBlockLayer(%dump, get_defined_vars()) %line; %raw
 					$this->copyBlockLayer();
 					try {
@@ -106,20 +103,19 @@ class EmbedNode extends StatementNode
 					}
 
 					XX,
-				$this->layer,
-				$this->position,
-				$imports,
-				$this->name,
-				$this->args,
-				$context->getEscaper()->export(),
-			);
-	}
+                $this->layer,
+                $this->position,
+                $imports,
+                $this->name,
+                $this->args,
+                $context->getEscaper()->export(),
+            );
+    }
 
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->name;
-		yield $this->args;
-		yield $this->blocks;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->name;
+        yield $this->args;
+        yield $this->blocks;
+    }
 }

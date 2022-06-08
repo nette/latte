@@ -57,7 +57,6 @@ final class Template%a% extends Latte\Runtime\Template
 		return get_defined_vars();
 	}
 
-
 	/** {block local static} on line %d% */
 	public function blockStatic(array $ʟ_args): void
 	{
@@ -70,7 +69,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 	}
 
-
 	/** {block local $name} on line %d% */
 	public function blockName(array $ʟ_args): void
 	{
@@ -82,7 +80,6 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 	}
 
-
 	/** {block local "word$name"} on line %d% */
 	public function blockWord_name(array $ʟ_args): void
 	{
@@ -90,7 +87,6 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '<div></div>';
 		}
 	}
-
 
 	/** {block local "strip$name"|striptags} on line %d% */
 	public function blockStrip_name(array $ʟ_args): void

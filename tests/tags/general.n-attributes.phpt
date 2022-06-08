@@ -19,6 +19,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/general.n-attributes.phtml',
 	$latte->compile(__DIR__ . '/templates/n-attributes.latte'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/general.n-attributes.html',
 	$latte->renderToString(

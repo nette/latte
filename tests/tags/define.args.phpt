@@ -37,6 +37,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/define.args1.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/define.args1.html',
 	$latte->renderToString($template, ['hello' => 'world']),
@@ -78,6 +79,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/define.args2.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/define.args2.html',
 	$latte->renderToString($template, ['var3' => 'outer']),
@@ -132,6 +134,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/define.args4.phtml',
 	$latte->compile('main'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/define.args4.html',
 	$latte->renderToString('main', ['var3' => 'outer']),
@@ -156,6 +159,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/define.args5.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/define.args5.html',
 	$latte->renderToString($template),

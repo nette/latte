@@ -11,7 +11,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('Two items in array', function () {
 	$arr = ['Nette', 'Framework'];
 
@@ -42,7 +41,6 @@ test('Two items in array', function () {
 	Assert::false($iterator->isEmpty());
 });
 
-
 test('', function () {
 	$arr = ['Nette'];
 
@@ -65,7 +63,6 @@ test('', function () {
 	Assert::false($iterator->isEmpty());
 });
 
-
 test('', function () {
 	$arr = [];
 
@@ -87,23 +84,19 @@ test('Check if next position is valid', function () {
 			throw new RuntimeException('Invalid state');
 		}
 
-
 		public function next(): void
 		{
 		}
-
 
 		public function key(): mixed
 		{
 			throw new RuntimeException('Invalid state');
 		}
 
-
 		public function valid(): bool
 		{
 			return false;
 		}
-
 
 		public function rewind(): void
 		{

@@ -11,11 +11,10 @@ namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\PrintContext;
 
-
 class NopNode extends AreaNode
 {
-	public function print(PrintContext $context): string
-	{
-		return '';
-	}
+    public function print(PrintContext $context): string
+    {
+        return '';
+    }
 }

@@ -39,6 +39,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/syntax.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/syntax.html',
 	$latte->renderToString($template, ['people' => ['John', 'Mary', 'Paul']]),

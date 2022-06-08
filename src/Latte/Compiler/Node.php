@@ -6,23 +6,21 @@ namespace Latte\Compiler;
 
 use Latte;
 
-
 /**
  * @implements \IteratorAggregate<Node>
  */
 abstract class Node implements \IteratorAggregate
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	public ?Position $position = null;
-
-
-	abstract public function print(PrintContext $context): string;
+    public ?Position $position = null;
 
 
-	public function &getIterator(): \Generator
-	{
-		return;
-		yield;
-	}
+    abstract public function print(PrintContext $context): string;
+
+    public function &getIterator(): \Generator
+    {
+        return;
+        yield;
+    }
 }

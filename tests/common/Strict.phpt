@@ -17,7 +17,7 @@ class TestClass
 
 	public $public;
 
-	public static $publicStatic;
+	public static $public static;
 
 	protected $protected;
 
@@ -104,9 +104,9 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $obj->publicStaticX = 'value',
+	fn() => $obj->public staticX = 'value',
 	LogicException::class,
-	'Attempt to write to undeclared property TestClass::$publicStaticX.',
+	'Attempt to write to undeclared property TestClass::$public staticX.',
 );
 
 Assert::exception(
@@ -130,9 +130,9 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $obj->publicStaticX,
+	fn() => $obj->public staticX,
 	LogicException::class,
-	'Attempt to read undeclared property TestClass::$publicStaticX.',
+	'Attempt to read undeclared property TestClass::$public staticX.',
 );
 
 Assert::exception(

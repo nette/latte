@@ -12,7 +12,9 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 // global function
 $latte->addFunction('fnc', 'trim');
+
 Assert::same('aa', $latte->invokeFunction('fnc', ['  aa  ']));
+
 Assert::same(
 	'abc',
 	$latte->renderToString('{fnc(" abc ")}'),
@@ -21,6 +23,7 @@ Assert::same(
 
 // static method
 $latte->addFunction('fnc', 'Latte\Essential\Filters::reverse');
+
 Assert::same(
 	' cba ',
 	$latte->renderToString('{fnc(" abc ")}'),
@@ -29,6 +32,7 @@ Assert::same(
 
 // static method 2
 $latte->addFunction('fnc', [Latte\Essential\Filters::class, 'reverse']);
+
 Assert::same(
 	' cba ',
 	$latte->renderToString('{fnc(" abc ")}'),
@@ -45,6 +49,7 @@ class Test
 }
 
 $latte->addFunction('fnc', [new Test, 'm']);
+
 Assert::same(
 	'246',
 	$latte->renderToString('{fnc(123)}'),
@@ -53,6 +58,7 @@ Assert::same(
 
 // closure
 $latte->addFunction('fnc', fn($val) => $val * 2);
+
 Assert::same(
 	'246',
 	$latte->renderToString('{fnc(123)}'),
@@ -61,6 +67,7 @@ Assert::same(
 
 // case insensitive
 $latte->addFunction('CaSe', 'trim');
+
 Assert::same(
 	'abc',
 	$latte->renderToString('{CaSe(" abc ")}'),

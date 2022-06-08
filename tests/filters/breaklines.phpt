@@ -13,7 +13,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 $input = "Hello\nmy\r\nfriend\n\r";
 
 Runtime\Filters::$xml = true;

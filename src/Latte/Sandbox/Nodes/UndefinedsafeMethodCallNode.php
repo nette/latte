@@ -12,20 +12,18 @@ namespace Latte\Sandbox\Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
-
 class UndefinedsafeMethodCallNode extends Expression\UndefinedsafeMethodCallNode
 {
-	public function __construct(Expression\UndefinedsafeMethodCallNode $from)
-	{
-		parent::__construct($from->object, $from->name, $from->args, $from->position);
-	}
+    public function __construct(Expression\UndefinedsafeMethodCallNode $from)
+    {
+        parent::__construct($from->object, $from->name, $from->args, $from->position);
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return '$this->global->sandbox->callMethod('
-			. $this->object->print($context) . ' ?? null, '
-			. $context->memberAsString($this->name) . ', '
-			. Expression\ArrayNode::fromArguments($this->args)->print($context) . ', true)';
-	}
+    public function print(PrintContext $context): string
+    {
+        return '$this->global->sandbox->callMethod('
+            . $this->object->print($context) . ' ?? null, '
+            . $context->memberAsString($this->name) . ', '
+            . Expression\ArrayNode::fromArguments($this->args)->print($context) . ', true)';
+    }
 }

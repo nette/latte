@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Essential;
 
-
 /** @internal */
 class RollbackException extends \Exception
 {

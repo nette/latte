@@ -13,8 +13,11 @@ require __DIR__ . '/../bootstrap.php';
 
 
 Assert::true(Filters::divisibleBy(0, 1));
+
 Assert::true(Filters::divisibleBy(10, 1));
+
 Assert::true(Filters::divisibleBy(-10, 10));
+
 Assert::false(Filters::divisibleBy(10, 20));
 
 Assert::exception(

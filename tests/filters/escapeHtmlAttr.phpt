@@ -13,16 +13,24 @@ require __DIR__ . '/../bootstrap.php';
 
 
 Assert::same('', Filters::escapeHtmlAttr(null));
+
 Assert::same('', Filters::escapeHtmlAttr(''));
+
 Assert::same('1', Filters::escapeHtmlAttr(1));
+
 Assert::same('string', Filters::escapeHtmlAttr('string'));
+
 Assert::same('&lt; &amp; &apos; &quot; &gt;', Filters::escapeHtmlAttr('< & \' " >'));
+
 Assert::same('&amp;quot;', Filters::escapeHtmlAttr('&quot;'));
+
 Assert::same('&lt;br&gt; &quot;', Filters::escapeHtmlAttr(new Latte\Runtime\Html('<br> &quot;')));
 
 // mXSS
 Assert::same('`hello ', Filters::escapeHtmlAttr('`hello'));
+
 Assert::same('`hello&quot;', Filters::escapeHtmlAttr('`hello"'));
+
 Assert::same('`hello&apos;', Filters::escapeHtmlAttr("`hello'"));
 
 // invalid UTF-8

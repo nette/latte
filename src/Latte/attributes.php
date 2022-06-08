@@ -11,7 +11,6 @@ namespace Latte\Attributes;
 
 use Attribute;
 
-
 #[Attribute(Attribute::TARGET_METHOD)]
 class TemplateFunction
 {

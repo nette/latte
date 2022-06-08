@@ -14,25 +14,23 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
-
 /**
  * {templateType ClassName}
  */
 class TemplateTypeNode extends StatementNode
 {
-	public static function create(Tag $tag): static
-	{
-		if (!$tag->isInHead()) {
-			throw new CompileException('{templateType} is allowed only in template header.', $tag->position);
-		}
-		$tag->expectArguments('class name');
-		$tag->parser->parseExpression();
-		return new static;
-	}
+    public static function create(Tag $tag): static
+    {
+        if (!$tag->isInHead()) {
+            throw new CompileException('{templateType} is allowed only in template header.', $tag->position);
+        }
+        $tag->expectArguments('class name');
+        $tag->parser->parseExpression();
+        return new static;
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return '';
-	}
+    public function print(PrintContext $context): string
+    {
+        return '';
+    }
 }

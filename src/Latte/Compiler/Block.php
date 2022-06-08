@@ -14,31 +14,28 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\ParameterNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 
-
 /** @internal */
 final class Block
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	public string $method;
-	public string $content;
-	public string $escaping;
+    public string $method;
+    public string $content;
+    public string $escaping;
 
-	/** @var ParameterNode[] */
-	public array $parameters = [];
+    /** @var ParameterNode[] */
+    public array $parameters = [];
 
+    public function __construct(
+        public readonly ExpressionNode $name,
+        public readonly int|string $layer,
+        public readonly Tag $tag,
+    ) {
+    }
 
-	public function __construct(
-		public /*readonly*/ ExpressionNode $name,
-		public /*readonly*/ int|string $layer,
-		public /*readonly*/ Tag $tag,
-	) {
-	}
-
-
-	public function isDynamic(): bool
-	{
-		return !$this->name instanceof Scalar\StringNode
-			&& !$this->name instanceof Scalar\IntegerNode;
-	}
+    public function isDynamic(): bool
+    {
+        return !$this->name instanceof Scalar\StringNode
+            && !$this->name instanceof Scalar\IntegerNode;
+    }
 }

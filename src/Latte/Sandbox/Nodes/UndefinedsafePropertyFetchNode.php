@@ -12,21 +12,19 @@ namespace Latte\Sandbox\Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
-
 class UndefinedsafePropertyFetchNode extends Expression\UndefinedsafePropertyFetchNode
 {
-	public function __construct(Expression\UndefinedsafePropertyFetchNode $from)
-	{
-		parent::__construct($from->object, $from->name, $from->position);
-	}
+    public function __construct(Expression\UndefinedsafePropertyFetchNode $from)
+    {
+        parent::__construct($from->object, $from->name, $from->position);
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return '$this->global->sandbox->prop('
-			. $context->dereferenceExpr($this->object) . ' ?? null, '
-			. $context->memberAsString($this->name) . ')'
-			. '?->'
-			. $context->objectProperty($this->name);
-	}
+    public function print(PrintContext $context): string
+    {
+        return '$this->global->sandbox->prop('
+            . $context->dereferenceExpr($this->object) . ' ?? null, '
+            . $context->memberAsString($this->name) . ')'
+            . '?->'
+            . $context->objectProperty($this->name);
+    }
 }

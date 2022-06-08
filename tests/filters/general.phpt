@@ -50,11 +50,14 @@ $latte->addFilterLoader(function ($name) use ($latte) {
 
 
 $filters = $latte->getFilters();
+
 Assert::same('strtoupper', $filters['h2']);
 
 
 Assert::same('AA', $latte->invokeFilter('h2', ['aa']));
+
 Assert::same('[dynamic aa]', $latte->invokeFilter('dynamic', ['aa']));
+
 Assert::exception(
 	fn() => $latte->invokeFilter('unknown', ['']),
 	LogicException::class,
@@ -75,6 +78,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/general.phtml',
 	$latte->compile(__DIR__ . '/templates/general.latte'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/general.html',
 	$latte->renderToString(

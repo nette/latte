@@ -12,24 +12,21 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class NullableTypeNode extends ComplexTypeNode
 {
-	public function __construct(
-		public IdentifierNode|NameNode $type,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public IdentifierNode|NameNode $type,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return '?' . $this->type->print($context);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return '?' . $this->type->print($context);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->type;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->type;
+    }
 }

@@ -14,36 +14,32 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
-
 /**
  * {import "file"}
  */
 class ImportNode extends StatementNode
 {
-	public ExpressionNode $file;
+    public ExpressionNode $file;
 
+    public static function create(Tag $tag): static
+    {
+        $tag->expectArguments();
+        $node = new static;
+        $node->file = $tag->parser->parseUnquotedStringOrExpression();
+        return $node;
+    }
 
-	public static function create(Tag $tag): static
-	{
-		$tag->expectArguments();
-		$node = new static;
-		$node->file = $tag->parser->parseUnquotedStringOrExpression();
-		return $node;
-	}
+    public function print(PrintContext $context): string
+    {
+        return $context->format(
+            '$this->createTemplate(%node, $this->params, "import")->render() %line;',
+            $this->file,
+            $this->position,
+        );
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return $context->format(
-			'$this->createTemplate(%node, $this->params, "import")->render() %line;',
-			$this->file,
-			$this->position,
-		);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->file;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->file;
+    }
 }

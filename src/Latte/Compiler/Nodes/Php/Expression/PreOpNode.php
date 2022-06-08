@@ -13,31 +13,27 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class PreOpNode extends ExpressionNode
 {
-	private const Ops = ['++' => 1, '--' => 1];
+    private const Ops = ['++' => 1, '--' => 1];
 
+    public function __construct(
+        public ExpressionNode $var,
+        public readonly string $operator,
+        public ?Position $position = null,
+    ) {
+        if (!isset(self::Ops[$this->operator])) {
+            throw new \InvalidArgumentException("Unexpected operator '$this->operator'");
+        }
+    }
 
-	public function __construct(
-		public ExpressionNode $var,
-		public /*readonly*/ string $operator,
-		public ?Position $position = null,
-	) {
-		if (!isset(self::Ops[$this->operator])) {
-			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");
-		}
-	}
+    public function print(PrintContext $context): string
+    {
+        return $context->prefixOp($this, $this->operator, $this->var);
+    }
 
-
-	public function print(PrintContext $context): string
-	{
-		return $context->prefixOp($this, $this->operator, $this->var);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->var;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->var;
+    }
 }

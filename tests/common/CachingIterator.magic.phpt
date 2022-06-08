@@ -11,7 +11,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('Two items in array', function () {
 	$arr = ['Nette', 'Framework'];
 
@@ -27,6 +26,7 @@ test('Two items in array', function () {
 });
 
 $iterator = new CachingIterator([]);
+
 Assert::exception(
 	fn() => $iterator->undeclared(),
 	LogicException::class,

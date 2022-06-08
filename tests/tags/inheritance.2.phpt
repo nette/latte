@@ -38,6 +38,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/inheritance.2.phtml',
 	$latte->compile('main'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/inheritance.2.html',
 	$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']]),

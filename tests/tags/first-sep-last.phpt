@@ -49,6 +49,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/first-sep-last.phtml',
 	$latte->compile($template),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/first-sep-last.html',
 	$latte->renderToString($template, ['people' => ['John', 'Mary', 'Paul']]),

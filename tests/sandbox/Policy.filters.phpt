@@ -36,6 +36,7 @@ $template = <<<'EOD'
 
 // compile-time
 $latte->compile($template);
+
 Assert::equal(
 	[
 		'tags' => Expect::type('array'),
@@ -49,6 +50,7 @@ Assert::equal(
 $latte->warmupCache($template);
 $policy->log = [];
 $latte->renderToString($template);
+
 Assert::same(
 	[
 		'methods' => [['MyClass', 'foo']],

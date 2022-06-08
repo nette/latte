@@ -11,7 +11,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('arrays', function () {
 	Assert::same(null, Filters::first([]));
 	Assert::same('a', Filters::first(['a']));

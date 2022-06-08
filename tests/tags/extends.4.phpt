@@ -31,6 +31,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/extends.4.phtml',
 	$latte->compile('main'),
 );
+
 Assert::matchFile(
 	__DIR__ . '/expected/extends.4.html',
 	$latte->renderToString('main', ['ext' => 'parent']),

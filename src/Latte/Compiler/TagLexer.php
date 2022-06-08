@@ -13,95 +13,90 @@ use Latte;
 use Latte\CompileException;
 use Latte\RegexpException;
 
-
 /**
  * Lexer for PHP-like expression language used in tags.
  */
 final class TagLexer
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	private const Keywords = [
-		'and' => Token::Php_LogicalAnd,
-		'array' => Token::Php_Array,
-		'clone' => Token::Php_Clone,
-		'default' => Token::Php_Default,
-		'in' => Token::Php_In,
-		'instanceof' => Token::Php_Instanceof,
-		'new' => Token::Php_New,
-		'or' => Token::Php_LogicalOr,
-		'return' => Token::Php_Return,
-		'xor' => Token::Php_LogicalXor,
-		'null' => Token::Php_Null,
-		'true' => Token::Php_True,
-		'false' => Token::Php_False,
-	];
+    private const Keywords = [
+        'and' => Token::Php_LogicalAnd,
+        'array' => Token::Php_Array,
+        'clone' => Token::Php_Clone,
+        'default' => Token::Php_Default,
+        'in' => Token::Php_In,
+        'instanceof' => Token::Php_Instanceof,
+        'new' => Token::Php_New,
+        'or' => Token::Php_LogicalOr,
+        'return' => Token::Php_Return,
+        'xor' => Token::Php_LogicalXor,
+        'null' => Token::Php_Null,
+        'true' => Token::Php_True,
+        'false' => Token::Php_False,
+    ];
 
-	private const KeywordsFollowed = [ // must follows ( & =
-		'empty' => Token::Php_Empty,
-		'fn' => Token::Php_Fn,
-		'function' => Token::Php_Function,
-		'isset' => Token::Php_Isset,
-		'list' => Token::Php_List,
-		'match' => Token::Php_Match,
-		'use' => Token::Php_Use,
-	];
+    private const KeywordsFollowed = [ // must follows ( & =
+        'empty' => Token::Php_Empty,
+        'fn' => Token::Php_Fn,
+        'function' => Token::Php_Function,
+        'isset' => Token::Php_Isset,
+        'list' => Token::Php_List,
+        'match' => Token::Php_Match,
+        'use' => Token::Php_Use,
+    ];
 
-	/** @var Token[] */
-	private array $tokens;
-	private string $input;
-	private int $offset;
-	private Position $position;
+    /** @var Token[] */
+    private array $tokens;
+    private string $input;
+    private int $offset;
+    private Position $position;
 
+    /** @return Token[] */
+    public function tokenize(string $input, ?Position $position = null): array
+    {
+        $position ??= new Position(1, 1, 0);
+        $this->tokens = $this->tokenizePartially($input, $position, 0);
+        if ($this->offset !== strlen($input)) {
+            $token = str_replace("\n", '\n', substr($input, $this->offset, 10));
+            throw new CompileException("Unexpected '$token'", $position);
+        }
 
-	/** @return Token[] */
-	public function tokenize(string $input, ?Position $position = null): array
-	{
-		$position ??= new Position(1, 1, 0);
-		$this->tokens = $this->tokenizePartially($input, $position, 0);
-		if ($this->offset !== strlen($input)) {
-			$token = str_replace("\n", '\n', substr($input, $this->offset, 10));
-			throw new CompileException("Unexpected '$token'", $position);
-		}
+        $this->tokens[] = new Token(Token::End, '', $position);
+        return $this->tokens;
+    }
 
-		$this->tokens[] = new Token(Token::End, '', $position);
-		return $this->tokens;
-	}
+    /** @return Token[] */
+    public function tokenizePartially(string $input, Position &$position, int $ofs = null): array
+    {
+        $this->input = $input;
+        $this->offset = $ofs ?? $position->offset;
+        $this->position = &$position;
+        $this->tokens = [];
+        $this->tokenizeCode();
+        return $this->tokens;
+    }
 
+    /** @return Token[]|null */
+    public function tokenizeUnquotedString(string $input, Position $position, bool $colon, int $offsetDelta): ?array
+    {
+        preg_match(
+            $colon
+                ? '~ ( [./@_a-z0-9#!-] | :(?!:) | \{\$ [_a-z0-9\[\]()>-]+ })++  (?=\s+[!"\'$(\[{,\\|\~\w-] | [,|]  | \s*$) ~xAi'
+                : '~ ( [./@_a-z0-9#!-]          | \{\$ [_a-z0-9\[\]()>-]+ })++  (?=\s+[!"\'$(\[{,\\|\~\w-] | [,:|] | \s*$) ~xAi',
+            $input,
+            $match,
+            offset: $position->offset - $offsetDelta,
+        );
+        $position = new Position($position->line, $position->column - 1, $position->offset - 1);
+        return $match && !is_numeric($match[0])
+            ? $this->tokenize('"' . $match[0] . '"', $position)
+            : null;
+    }
 
-	/** @return Token[] */
-	public function tokenizePartially(string $input, Position &$position, int $ofs = null): array
-	{
-		$this->input = $input;
-		$this->offset = $ofs ?? $position->offset;
-		$this->position = &$position;
-		$this->tokens = [];
-		$this->tokenizeCode();
-		return $this->tokens;
-	}
-
-
-	/** @return Token[]|null */
-	public function tokenizeUnquotedString(string $input, Position $position, bool $colon, int $offsetDelta): ?array
-	{
-		preg_match(
-			$colon
-				? '~ ( [./@_a-z0-9#!-] | :(?!:) | \{\$ [_a-z0-9\[\]()>-]+ })++  (?=\s+[!"\'$(\[{,\\|\~\w-] | [,|]  | \s*$) ~xAi'
-				: '~ ( [./@_a-z0-9#!-]          | \{\$ [_a-z0-9\[\]()>-]+ })++  (?=\s+[!"\'$(\[{,\\|\~\w-] | [,:|] | \s*$) ~xAi',
-			$input,
-			$match,
-			offset: $position->offset - $offsetDelta,
-		);
-		$position = new Position($position->line, $position->column - 1, $position->offset - 1);
-		return $match && !is_numeric($match[0])
-			? $this->tokenize('"' . $match[0] . '"', $position)
-			: null;
-	}
-
-
-	private function tokenizeCode(): void
-	{
-		$re = <<<'XX'
+    private function tokenizeCode(): void
+    {
+        $re = <<<'XX'
 			~(?J)(?n)   # allow duplicate named groups, no auto capture
 			(?(DEFINE) (?<label>  [a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*  ) )
 
@@ -182,98 +177,88 @@ final class TagLexer
 			~xsA
 			XX;
 
-		$depth = 0;
-		matchRE:
-		preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);
-		if (preg_last_error()) {
-			throw new RegexpException;
-		}
+        $depth = 0;
+        matchRE:
+        preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);
+        if (preg_last_error()) {
+            throw new RegexpException;
+        }
 
-		foreach ($matches as $m) {
-			if (isset($m['char'])) {
-				if ($m['char'] === '{') {
-					$depth++;
-				}
-				$this->addToken(null, $m['char']);
+        foreach ($matches as $m) {
+            if (isset($m['char'])) {
+                if ($m['char'] === '{') {
+                    $depth++;
+                }
+                $this->addToken(null, $m['char']);
+            } elseif (isset($m['end'])) {
+                $depth--;
+                if ($depth < 0) {
+                    return;
+                }
+                foreach (str_split($m['end']) as $ch) {
+                    $this->addToken(null, $ch);
+                }
 
-			} elseif (isset($m['end'])) {
-				$depth--;
-				if ($depth < 0) {
-					return;
-				}
-				foreach (str_split($m['end']) as $ch) {
-					$this->addToken(null, $ch);
-				}
+                goto matchRE;
+            } elseif (
+                isset($m[$type = 'Php_ObjectOperator'])
+                || isset($m[$type = 'Php_NullsafeObjectOperator'])
+                || isset($m[$type = 'Php_UndefinedsafeObjectOperator'])
+            ) {
+                $this->addToken(constant(Token::class . '::' . $type), $m[$type]);
+                if (isset($m['Php_Whitespace'])) {
+                    $this->addToken(Token::Php_Whitespace, $m['Php_Whitespace']);
+                }
+                if (isset($m['Php_Identifier'])) {
+                    $this->addToken(Token::Php_Identifier, $m['Php_Identifier']);
+                }
+            } elseif (isset($m['Php_Identifier'])) {
+                $lower = strtolower($m['Php_Identifier']);
+                $this->addToken(self::Keywords[$lower] ?? Token::Php_Identifier, $m['Php_Identifier']);
+            } elseif (isset($m['Php_IdentifierFollowed'])) {
+                $lower = strtolower($m['Php_IdentifierFollowed']);
+                $this->addToken(self::KeywordsFollowed[$lower] ?? self::Keywords[$lower] ?? Token::Php_Identifier, $m['Php_IdentifierFollowed']);
+            } elseif (isset($m['Php_ConstantEncapsedString'])) {
+                isset($m['rest'])
+                    ? $this->addToken(Token::Php_ConstantEncapsedString, "'" . $m['rest'])
+                    : throw new CompileException('Unterminated string.', $this->position);
+            } elseif (isset($m['string'])) {
+                $pos = $this->position;
+                $this->addToken(null, '"');
+                $count = count($this->tokens);
+                $this->tokenizeString();
+                $token = $this->tokens[$count] ?? null;
+                $this->addToken(null, '"');
+                if (
+                    count($this->tokens) <= $count + 2
+                    && (!$token || $token->type === Token::Php_EncapsedAndWhitespace)
+                ) {
+                    array_splice($this->tokens, $count - 1, null, [new Token(Token::Php_ConstantEncapsedString, '"' . $token?->text . '"', $pos)]);
+                }
+                goto matchRE;
+            } elseif (isset($m['Php_Integer'])) {
+                $num = PhpHelpers::decodeNumber($m['Php_Integer']);
+                $this->addToken(is_float($num) ? Token::Php_Float : Token::Php_Integer, $m['Php_Integer']);
+            } elseif (isset($m['Php_Comment'])) {
+                isset($m['rest'])
+                    ? $this->addToken(Token::Php_Comment, '/*' . $m['rest'])
+                    : throw new CompileException('Unterminated comment.', $this->position);
+            } elseif (isset($m['badchar'])) {
+                throw new CompileException("Unexpected '$m[badchar]'", $this->position);
+            } else {
+                foreach ($m as $type => $text) {
+                    if ($text !== null && !is_int($type)) {
+                        $this->addToken(constant(Token::class . '::' . $type), $text);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-				goto matchRE;
-
-			} elseif (isset($m[$type = 'Php_ObjectOperator'])
-				|| isset($m[$type = 'Php_NullsafeObjectOperator'])
-				|| isset($m[$type = 'Php_UndefinedsafeObjectOperator'])
-			) {
-				$this->addToken(constant(Token::class . '::' . $type), $m[$type]);
-				if (isset($m['Php_Whitespace'])) {
-					$this->addToken(Token::Php_Whitespace, $m['Php_Whitespace']);
-				}
-				if (isset($m['Php_Identifier'])) {
-					$this->addToken(Token::Php_Identifier, $m['Php_Identifier']);
-				}
-
-			} elseif (isset($m['Php_Identifier'])) {
-				$lower = strtolower($m['Php_Identifier']);
-				$this->addToken(self::Keywords[$lower] ?? Token::Php_Identifier, $m['Php_Identifier']);
-
-			} elseif (isset($m['Php_IdentifierFollowed'])) {
-				$lower = strtolower($m['Php_IdentifierFollowed']);
-				$this->addToken(self::KeywordsFollowed[$lower] ?? self::Keywords[$lower] ?? Token::Php_Identifier, $m['Php_IdentifierFollowed']);
-
-			} elseif (isset($m['Php_ConstantEncapsedString'])) {
-				isset($m['rest'])
-					? $this->addToken(Token::Php_ConstantEncapsedString, "'" . $m['rest'])
-					: throw new CompileException('Unterminated string.', $this->position);
-
-			} elseif (isset($m['string'])) {
-				$pos = $this->position;
-				$this->addToken(null, '"');
-				$count = count($this->tokens);
-				$this->tokenizeString();
-				$token = $this->tokens[$count] ?? null;
-				$this->addToken(null, '"');
-				if (
-					count($this->tokens) <= $count + 2
-					&& (!$token || $token->type === Token::Php_EncapsedAndWhitespace)
-				) {
-					array_splice($this->tokens, $count - 1, null, [new Token(Token::Php_ConstantEncapsedString, '"' . $token?->text . '"', $pos)]);
-				}
-				goto matchRE;
-
-			} elseif (isset($m['Php_Integer'])) {
-				$num = PhpHelpers::decodeNumber($m['Php_Integer']);
-				$this->addToken(is_float($num) ? Token::Php_Float : Token::Php_Integer, $m['Php_Integer']);
-
-			} elseif (isset($m['Php_Comment'])) {
-				isset($m['rest'])
-					? $this->addToken(Token::Php_Comment, '/*' . $m['rest'])
-					: throw new CompileException('Unterminated comment.', $this->position);
-
-			} elseif (isset($m['badchar'])) {
-				throw new CompileException("Unexpected '$m[badchar]'", $this->position);
-
-			} else {
-				foreach ($m as $type => $text) {
-					if ($text !== null && !is_int($type)) {
-						$this->addToken(constant(Token::class . '::' . $type), $text);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-
-	private function tokenizeString(): string
-	{
-		$re = <<<'XX'
+    private function tokenizeString(): string
+    {
+        $re = <<<'XX'
 			~(?J)(?n)   # allow duplicate named groups, no auto capture
 			(?(DEFINE) (?<label>  [a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*  ) )
 
@@ -309,74 +294,70 @@ final class TagLexer
 			~xsA
 			XX;
 
-		matchRE:
-		preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);
-		if (preg_last_error()) {
-			throw new RegexpException;
-		}
+        matchRE:
+        preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);
+        if (preg_last_error()) {
+            throw new RegexpException;
+        }
 
-		$buffer = '';
-		foreach ($matches as $m) {
-			if (isset($m['char'])) {
-				$buffer .= $m['char'];
-				continue;
-			} elseif ($buffer !== '') {
-				$this->addToken(Token::Php_EncapsedAndWhitespace, $buffer);
-				$buffer = '';
-			}
+        $buffer = '';
+        foreach ($matches as $m) {
+            if (isset($m['char'])) {
+                $buffer .= $m['char'];
+                continue;
+            } elseif ($buffer !== '') {
+                $this->addToken(Token::Php_EncapsedAndWhitespace, $buffer);
+                $buffer = '';
+            }
 
-			if (isset($m['Php_CurlyOpen'])) {
-				$this->addToken(Token::Php_CurlyOpen, '{');
-				$this->tokenizeCode();
-				if (($this->input[$this->offset] ?? null) === '}') {
-					$this->addToken(null, '}');
-				}
-				goto matchRE;
+            if (isset($m['Php_CurlyOpen'])) {
+                $this->addToken(Token::Php_CurlyOpen, '{');
+                $this->tokenizeCode();
+                if (($this->input[$this->offset] ?? null) === '}') {
+                    $this->addToken(null, '}');
+                }
+                goto matchRE;
+            } elseif (isset($m['Php_DollarOpenCurlyBraces'])) {
+                throw new CompileException('Syntax ${...} is not supported.', $this->position);
+            } elseif (isset($m['Php_Variable'])) {
+                $this->addToken(Token::Php_Variable, $m['Php_Variable']);
+                if (
+                    isset($m[$type = 'Php_ObjectOperator'])
+                    || isset($m[$type = 'Php_NullsafeObjectOperator'])
+                    || isset($m[$type = 'Php_UndefinedsafeObjectOperator'])
+                ) {
+                    $this->addToken(constant(Token::class . '::' . $type), $m[$type]);
+                    $this->addToken(Token::Php_Identifier, $m['Php_Identifier']);
+                } elseif (isset($m['offset'])) {
+                    $this->addToken(null, '[');
+                    if (!isset($m['offsetEnd'])) {
+                        throw new CompileException("Missing ']'", $this->position);
+                    } elseif (isset($m['offsetVar'])) {
+                        $this->addToken(Token::Php_Variable, $m['offsetVar']);
+                    } elseif (isset($m['offsetString'])) {
+                        $this->addToken(Token::Php_Identifier, $m['offsetString']);
+                    } elseif (isset($m['Php_NumString'])) {
+                        if (isset($m['offsetMinus'])) {
+                            $this->addToken(null, '-');
+                        }
+                        $this->addToken(Token::Php_NumString, $m['Php_NumString']);
+                    } else {
+                        throw new CompileException("Unexpected '" . substr($this->input, $this->offset - 1, 5) . "'", $this->position);
+                    }
+                    $this->addToken(null, ']');
+                }
+            } elseif (isset($m['end'])) {
+                return $m['end'];
+            }
+        }
 
-			} elseif (isset($m['Php_DollarOpenCurlyBraces'])) {
-				throw new CompileException('Syntax ${...} is not supported.', $this->position);
+        throw new CompileException('Unterminated string.', $this->position->advance($buffer));
+    }
 
-			} elseif (isset($m['Php_Variable'])) {
-				$this->addToken(Token::Php_Variable, $m['Php_Variable']);
-				if (isset($m[$type = 'Php_ObjectOperator'])
-					|| isset($m[$type = 'Php_NullsafeObjectOperator'])
-					|| isset($m[$type = 'Php_UndefinedsafeObjectOperator'])
-				) {
-					$this->addToken(constant(Token::class . '::' . $type), $m[$type]);
-					$this->addToken(Token::Php_Identifier, $m['Php_Identifier']);
-
-				} elseif (isset($m['offset'])) {
-					$this->addToken(null, '[');
-					if (!isset($m['offsetEnd'])) {
-						throw new CompileException("Missing ']'", $this->position);
-					} elseif (isset($m['offsetVar'])) {
-						$this->addToken(Token::Php_Variable, $m['offsetVar']);
-					} elseif (isset($m['offsetString'])) {
-						$this->addToken(Token::Php_Identifier, $m['offsetString']);
-					} elseif (isset($m['Php_NumString'])) {
-						if (isset($m['offsetMinus'])) {
-							$this->addToken(null, '-');
-						}
-						$this->addToken(Token::Php_NumString, $m['Php_NumString']);
-					} else {
-						throw new CompileException("Unexpected '" . substr($this->input, $this->offset - 1, 5) . "'", $this->position);
-					}
-					$this->addToken(null, ']');
-				}
-
-			} elseif (isset($m['end'])) {
-				return $m['end'];
-			}
-		}
-
-		throw new CompileException('Unterminated string.', $this->position->advance($buffer));
-	}
-
-
-	private function addToken(?int $type, string $text): void
-	{
-		$this->tokens[] = new Token($type ?? ord($text), $text, $this->position);
-		$this->position = $this->position->advance($text);
-		$this->offset += strlen($text);
-	}
+    private function addToken(?int $type, string $text): void
+    {
+        $this->tokens[] = new Token($type ?? ord($text), $text, $this->position);
+        $this->position = $this->position->advance($text);
+        $this->offset += strlen($text);
+    }
 }

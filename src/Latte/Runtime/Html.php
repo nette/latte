@@ -11,25 +11,22 @@ namespace Latte\Runtime;
 
 use Latte;
 
-
 /**
  * HTML literal.
  */
 class Html implements HtmlStringable
 {
-	use Latte\Strict;
+    use Latte\Strict;
 
-	private string $value;
+    private string $value;
 
+    public function __construct($value)
+    {
+        $this->value = (string) $value;
+    }
 
-	public function __construct($value)
-	{
-		$this->value = (string) $value;
-	}
-
-
-	public function __toString(): string
-	{
-		return $this->value;
-	}
+    public function __toString(): string
+    {
+        return $this->value;
+    }
 }

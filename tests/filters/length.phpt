@@ -13,6 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 Assert::same(0, Filters::length(''));
+
 Assert::same(20, Filters::length("I\u{F1}t\u{EB}rn\u{E2}ti\u{F4}n\u{E0}liz\u{E6}ti\u{F8}n")); // Iñtërnâtiônàlizætiøn
 Assert::same(2, Filters::length(['one', 'two']));
 

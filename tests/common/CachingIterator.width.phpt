@@ -11,7 +11,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
-
 test('', function () {
 	$arr = ['The', 'Nette', 'Framework'];
 
@@ -48,7 +47,6 @@ test('', function () {
 	$iterator->next();
 	Assert::false($iterator->valid());
 });
-
 
 test('', function () {
 	$iterator = new CachingIterator([]);

@@ -39,6 +39,7 @@ Assert::matchFile(
 	__DIR__ . '/expected/import.phtml',
 	$latte->compile('main'),
 );
+
 Assert::match(
 	'Test block',
 	trim($latte->renderToString('main')),

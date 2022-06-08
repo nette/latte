@@ -12,26 +12,23 @@ namespace Latte\Compiler\Nodes;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class TextNode extends AreaNode
 {
-	public function __construct(
-		public string $content,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public string $content,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $this->content === ''
+            ? ''
+            : 'echo ' . var_export($this->content, true) . ";\n";
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $this->content === ''
-			? ''
-			: 'echo ' . var_export($this->content, true) . ";\n";
-	}
-
-
-	public function isWhitespace(): bool
-	{
-		return trim($this->content) === '';
-	}
+    public function isWhitespace(): bool
+    {
+        return trim($this->content) === '';
+    }
 }

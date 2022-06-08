@@ -15,28 +15,25 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\ContentType;
 
-
 /**
  * {spaceless}
  */
 class SpacelessNode extends StatementNode
 {
-	public AreaNode $content;
+    public AreaNode $content;
 
+    /** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+    public static function create(Tag $tag): \Generator
+    {
+        $node = new static;
+        [$node->content] = yield;
+        return $node;
+    }
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
-	public static function create(Tag $tag): \Generator
-	{
-		$node = new static;
-		[$node->content] = yield;
-		return $node;
-	}
-
-
-	public function print(PrintContext $context): string
-	{
-		return $context->format(
-			<<<'XX'
+    public function print(PrintContext $context): string
+    {
+        return $context->format(
+            <<<'XX'
 				ob_start('Latte\Essential\Filters::%raw', 4096) %line;
 				try {
 					%node
@@ -44,19 +41,17 @@ class SpacelessNode extends StatementNode
 					ob_end_flush();
 				}
 
-
 				XX,
-			$context->getEscaper()->getContentType() === ContentType::Html
-				? 'spacelessHtmlHandler'
-				: 'spacelessText',
-			$this->position,
-			$this->content,
-		);
-	}
+            $context->getEscaper()->getContentType() === ContentType::Html
+                ? 'spacelessHtmlHandler'
+                : 'spacelessText',
+            $this->position,
+            $this->content,
+        );
+    }
 
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->content;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->content;
+    }
 }

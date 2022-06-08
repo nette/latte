@@ -13,27 +13,24 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
-
 class AssignNode extends ExpressionNode
 {
-	public function __construct(
-		public ExpressionNode $var,
-		public ExpressionNode $expr,
-		public bool $byRef = false,
-		public ?Position $position = null,
-	) {
-	}
+    public function __construct(
+        public ExpressionNode $var,
+        public ExpressionNode $expr,
+        public bool $byRef = false,
+        public ?Position $position = null,
+    ) {
+    }
 
+    public function print(PrintContext $context): string
+    {
+        return $context->infixOp($this, $this->var, $this->byRef ? ' = &' : ' = ', $this->expr);
+    }
 
-	public function print(PrintContext $context): string
-	{
-		return $context->infixOp($this, $this->var, $this->byRef ? ' = &' : ' = ', $this->expr);
-	}
-
-
-	public function &getIterator(): \Generator
-	{
-		yield $this->var;
-		yield $this->expr;
-	}
+    public function &getIterator(): \Generator
+    {
+        yield $this->var;
+        yield $this->expr;
+    }
 }
