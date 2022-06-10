@@ -222,9 +222,11 @@ final class CoreExtension extends Latte\Extension
 	{
 		$tag->expectArguments();
 		$token = $tag->parser->stream->consume();
-		$parser->getLexer()->setSyntax($token->text);
+		$lexer = $parser->getLexer();
+		$saved = [$lexer->openDelimiter, $lexer->closeDelimiter];
+		$lexer->setSyntax($token->text, $tag->isNAttribute() ? null : $tag->name);
 		[$inner] = yield;
-		$parser->getLexer()->setSyntax(null);
+		[$lexer->openDelimiter, $lexer->closeDelimiter] = $saved;
 		return $inner;
 	}
 }

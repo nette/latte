@@ -30,12 +30,6 @@ final class TemplateLexer
 	private const ReHtmlValue = '[^\p{C} "\'<>=`{}]+';
 	private const StateEnd = 'end';
 
-	/** @var array<string, array{string, string}> */
-	public array $syntaxes = [
-		'latte' => ['\{(?![\s\'"{}])', '\}'], // {...}
-		'double' => ['\{\{(?![\s\'"{}])', '\}\}'], // {{...}}
-		'off' => ['\{(?=/syntax\})', '\}'], // {/syntax}
-	];
 	public string $openDelimiter;
 	public string $closeDelimiter;
 	private TagLexer $tagLexer;
@@ -360,14 +354,19 @@ final class TemplateLexer
 	/**
 	 * Changes tag delimiters.
 	 */
-	public function setSyntax(?string $type): static
+	public function setSyntax(?string $type, ?string $endTag = null): static
 	{
-		$type ??= 'latte';
-		if (!isset($this->syntaxes[$type])) {
-			throw new \InvalidArgumentException("Unknown syntax '$type'");
-		}
+		$left = '\{(?![\s\'"{}])';
+		$end = $endTag ? '\{/' . preg_quote($endTag, '~') . '\}' : null;
 
-		[$this->openDelimiter, $this->closeDelimiter] = $this->syntaxes[$type];
+		[$this->openDelimiter, $this->closeDelimiter] = match ($type) {
+			null => [$left, '\}'], // {...}
+			'off' => [$endTag ? '(?=' . $end . ')\{' : '(?!x)x', '\}'],
+			'double' => $endTag // {{...}}
+				? ['(?:\{' . $left . '|(?=' . $end . ')\{)', '\}(?:\}|(?<=' . $end . '))']
+				: ['\{' . $left, '\}\}'],
+			default => throw new \InvalidArgumentException("Unknown syntax '$type'"),
+		};
 		return $this;
 	}
 

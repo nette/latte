@@ -14,32 +14,134 @@ require __DIR__ . '/../bootstrap.php';
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
+// double
 $template = <<<'EOD'
-	<ul n:syntax="double">
-	{{foreach $people as $person}}
-		<li>{{$person |upper}}</li>
-	{{/foreach}}
-	{* comment latte *}
-	{{* comment double *}}
-	</ul>
-
-	<p>Default: {$person}</p>
-
-	<p n:syntax="latte">Default: {$person}</p>
-
-	<p n:syntax="off">Default: {$person}</p>
-
-	{syntax off}
-	{a}
-	{ {/ {/syntax
+	{syntax double}
+		{if $var} {$var} {/if}
+		{{if $var}} {{$var}} {{/if}}
+		{* comment single *}
+		{{* comment double *}}
 	{/syntax}
+
+	{$after}
 	EOD;
 
-Assert::matchFile(
-	__DIR__ . '/expected/syntax.phtml',
-	$latte->compile($template),
+Assert::match(
+	<<<'XX'
+			{if $var} {$var} {/if}
+			 var
+			{* comment single *}
+
+		after
+		XX,
+	$latte->renderToString($template, ['var' => 'var', 'after' => 'after']),
 );
-Assert::matchFile(
-	__DIR__ . '/expected/syntax.html',
-	$latte->renderToString($template, ['people' => ['John', 'Mary', 'Paul']]),
+
+
+// double n:attribute
+$template = <<<'EOD'
+	<ul n:syntax="double">
+		{if $var} {$var} {/if}
+		{{if $var}} {{$var}} {{/if}}
+		{/syntax}
+		{* comment single *}
+		{{* comment double *}}
+	</ul>
+
+	{$after}
+	EOD;
+
+Assert::match(
+	<<<'XX'
+		<ul>
+			{if $var} {$var} {/if}
+			 var
+			{/syntax}
+			{* comment single *}
+		</ul>
+
+		after
+		XX,
+	$latte->renderToString($template, ['var' => 'var', 'after' => 'after']),
+);
+
+
+// off
+$template = <<<'EOD'
+	{syntax off}
+		{if $var} {$var} {/if}
+		{ {/ {/syntax
+		{* comment single *}
+	{/syntax}
+
+	{$after}
+	EOD;
+
+Assert::match(
+	<<<'XX'
+			{if $var} {$var} {/if}
+			{ {/ {/syntax
+			{* comment single *}
+
+		after
+		XX,
+	$latte->renderToString($template, ['var' => 'var', 'after' => 'after']),
+);
+
+
+// off n:attribute
+$template = <<<'EOD'
+	<ul n:syntax="off">
+		{if $var} {$var} {/if}
+		{/syntax}
+		{* comment single *}
+	</ul>
+
+	{$after}
+	EOD;
+
+Assert::match(
+	<<<'XX'
+		<ul>
+			{if $var} {$var} {/if}
+			{/syntax}
+			{* comment single *}
+		</ul>
+
+		after
+		XX,
+	$latte->renderToString($template, ['var' => 'var', 'after' => 'after']),
+);
+
+
+// nested
+$template = <<<'EOD'
+	<ul n:syntax="double">
+		{if $var} {$var} {/if}
+		{{if $var}} {{$var}} {{/if}}
+		<div n:syntax=off>
+			{$inner}
+		</div>
+		{$after}
+		{{$after}}
+	</ul>
+
+	{$after}
+	EOD;
+
+Assert::match(
+	<<<'XX'
+		<ul>
+			{if $var} {$var} {/if}
+			 var
+			<div>
+				{$inner}
+			</div>
+			{$after}
+			after
+		</ul>
+
+		after
+		XX,
+	$latte->renderToString($template, ['var' => 'var', 'after' => 'after']),
 );
