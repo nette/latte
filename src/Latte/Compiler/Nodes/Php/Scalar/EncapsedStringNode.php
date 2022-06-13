@@ -47,18 +47,22 @@ class EncapsedStringNode extends ScalarNode
 		foreach ($this->parts as $part) {
 			if ($part instanceof EncapsedStringPartNode) {
 				$s .= substr($context->encodeString($part->value, '"'), 1, -1);
+				continue;
+			}
 
-			} elseif ($part instanceof Expression\VariableNode
+			$partStr = $part->print($context);
+			if ($partStr[0] === '$' &&
+				($part instanceof Expression\VariableNode
 				|| $part instanceof Expression\PropertyFetchNode
 				|| $part instanceof Expression\NullsafePropertyFetchNode
 				|| $part instanceof Expression\MethodCallNode
 				|| $part instanceof Expression\NullsafeMethodCallNode
 				|| $part instanceof Expression\ArrayAccessNode
-			) {
-				$s .= '{' . $part->print($context) . '}';
+			)) {
+				$s .= '{' . $partStr . '}';
 
 			} else {
-				$s .= '" . (' . $part->print($context) . ') . "';
+				$s .= '" . (' . $partStr . ') . "';
 				$expr = true;
 			}
 		}
