@@ -115,14 +115,12 @@ final class SandboxExtension extends Latte\Extension
 
 		} elseif ($node instanceof Expression\PropertyFetchNode
 			|| $node instanceof Expression\StaticPropertyFetchNode
-			|| $node instanceof Expression\UndefinedsafePropertyFetchNode
 			|| $node instanceof Expression\FunctionCallNode
 			|| $node instanceof Expression\FunctionCallableNode
 			|| $node instanceof Expression\MethodCallNode
 			|| $node instanceof Expression\MethodCallableNode
 			|| $node instanceof Expression\StaticCallNode
 			|| $node instanceof Expression\StaticCallableNode
-			|| $node instanceof Expression\UndefinedsafeMethodCallNode
 		) {
 			$class = namespace\Nodes::class . strrchr($node::class, '\\');
 			return new $class($node);

@@ -540,10 +540,10 @@ abstract class TagParserData
 			221 => fn() => $this->semValue = new Expression\MethodCallNode($this->semStack[$pos - 3], $this->semStack[$pos - 1], $this->semStack[$pos], false, $this->startTokenStack[$pos - 3]->position),
 			222 => fn() => $this->semValue = new Expression\MethodCallableNode($this->semStack[$pos - 5], $this->semStack[$pos - 3], $this->startTokenStack[$pos - 5]->position),
 			223 => fn() => $this->semValue = new Expression\MethodCallNode($this->semStack[$pos - 3], $this->semStack[$pos - 1], $this->semStack[$pos], true, $this->startTokenStack[$pos - 3]->position),
-			224 => fn() => $this->semValue = new Expression\UndefinedsafeMethodCallNode($this->semStack[$pos - 3], $this->semStack[$pos - 1], $this->semStack[$pos], $this->startTokenStack[$pos - 3]->position),
+			224 => fn() => $this->semValue = new Expression\MethodCallNode(new Expression\BinaryOpNode($this->semStack[$pos - 3], '??', new Scalar\NullNode($this->startTokenStack[$pos - 3]->position), $this->startTokenStack[$pos - 3]->position), $this->semStack[$pos - 1], $this->semStack[$pos], true, $this->startTokenStack[$pos - 3]->position),
 			227, 236, 271 => fn() => $this->semValue = new Expression\PropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], false, $this->startTokenStack[$pos - 2]->position),
 			228, 237, 272 => fn() => $this->semValue = new Expression\PropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], true, $this->startTokenStack[$pos - 2]->position),
-			229, 238, 273 => fn() => $this->semValue = new Expression\UndefinedsafePropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], $this->startTokenStack[$pos - 2]->position),
+			229, 238, 273 => fn() => $this->semValue = new Expression\PropertyFetchNode(new Expression\BinaryOpNode($this->semStack[$pos - 2], '??', new Scalar\NullNode($this->startTokenStack[$pos - 2]->position), $this->startTokenStack[$pos - 2]->position), $this->semStack[$pos], true, $this->startTokenStack[$pos - 2]->position),
 			231 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
 			232 => function () use ($pos) {
 				$var = $this->semStack[$pos]->name;
