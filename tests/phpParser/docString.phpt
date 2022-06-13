@@ -107,6 +107,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'c'
    |  |  |  |  |  |  position: 20:17 (offset 201)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 20:13 (offset 197)
    |  |  |  |  4 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
    |  |  |  |  |  value: ' test'

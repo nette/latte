@@ -85,6 +85,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'a'
    |  |  |  |  |  |  position: 2:21 (offset 45)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 2:7 (offset 31)
    |  |  |  position: 2:1 (offset 25)
    |  |  key: null
@@ -101,6 +102,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'a'
    |  |  |  |  |  |  position: 3:14 (offset 62)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 3:7 (offset 55)
    |  |  |  position: 3:1 (offset 49)
    |  |  key: null

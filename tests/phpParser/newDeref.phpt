@@ -38,6 +38,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'b'
    |  |  |  |  position: 1:10 (offset 9)
+   |  |  |  nullsafe: false
    |  |  |  position: 1:1 (offset 0)
    |  |  key: null
    |  |  byRef: false
@@ -57,6 +58,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'b'
    |  |  |  |  position: 2:10 (offset 21)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 2:1 (offset 12)
    |  |  key: null
    |  |  byRef: false

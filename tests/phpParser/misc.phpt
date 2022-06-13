@@ -35,6 +35,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 1:11 (offset 10)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 1:1 (offset 0)
    |  |  key: null
    |  |  byRef: false
@@ -75,6 +76,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 3:12 (offset 45)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 3:1 (offset 34)
    |  |  key: null
    |  |  byRef: false
@@ -92,6 +94,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 4:15 (offset 69)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 4:1 (offset 55)
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 0

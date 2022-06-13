@@ -131,6 +131,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'b'
    |  |  |  |  |  position: 9:9 (offset 118)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 9:5 (offset 114)
    |  |  |  args: array (0)
    |  |  |  position: 9:1 (offset 110)
@@ -148,10 +149,12 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 10:9 (offset 131)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 10:5 (offset 127)
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'c'
    |  |  |  |  |  position: 10:12 (offset 134)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 10:5 (offset 127)
    |  |  |  args: array (0)
    |  |  |  position: 10:1 (offset 123)
@@ -169,6 +172,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 11:9 (offset 147)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 11:5 (offset 143)
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'c'
@@ -216,6 +220,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'className'
    |  |  |  |  |  position: 16:11 (offset 235)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 16:5 (offset 229)
    |  |  |  args: array (0)
    |  |  |  position: 16:1 (offset 225)
@@ -273,6 +278,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'foo'
    |  |  |  |  |  |  position: 19:16 (offset 306)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 19:5 (offset 295)
    |  |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
    |  |  |  |  |  name: 'className'

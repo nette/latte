@@ -41,6 +41,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'b'
    |  |  |  |  position: 2:5 (offset 36)
+   |  |  |  nullsafe: false
    |  |  |  position: 2:1 (offset 32)
    |  |  key: null
    |  |  byRef: false
@@ -55,6 +56,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'b'
    |  |  |  |  |  position: 3:5 (offset 43)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 3:1 (offset 39)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'c'
@@ -73,6 +75,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'b'
    |  |  |  |  position: 6:5 (offset 85)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 6:1 (offset 81)
    |  |  key: null
    |  |  byRef: false
@@ -87,6 +90,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  value: 'b'
    |  |  |  |  position: 7:6 (offset 95)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 7:1 (offset 90)
    |  |  key: null
    |  |  byRef: false
@@ -101,6 +105,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'b'
    |  |  |  |  position: 8:5 (offset 107)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 8:1 (offset 103)
    |  |  key: null
    |  |  byRef: false
@@ -116,6 +121,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 9:5 (offset 117)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 9:1 (offset 113)
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'c'
@@ -137,6 +143,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'b'
    |  |  |  |  |  position: 12:5 (offset 159)
    |  |  |  |  args: array (0)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 12:1 (offset 155)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'c'

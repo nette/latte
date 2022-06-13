@@ -20,6 +20,7 @@ class PropertyFetchNode extends ExpressionNode
 	public function __construct(
 		public ExpressionNode $object,
 		public IdentifierNode|ExpressionNode $name,
+		public bool $nullsafe = false,
 		public ?Position $position = null,
 	) {
 	}
@@ -28,7 +29,7 @@ class PropertyFetchNode extends ExpressionNode
 	public function print(PrintContext $context): string
 	{
 		return $context->dereferenceExpr($this->object)
-			. '->'
+			. ($this->nullsafe ? '?->' : '->')
 			. $context->objectProperty($this->name);
 	}
 

@@ -23,6 +23,7 @@ class MethodCallNode extends ExpressionNode
 		public IdentifierNode|ExpressionNode $name,
 		/** @var array<Php\ArgumentNode> */
 		public array $args = [],
+		public bool $nullsafe = false,
 		public ?Position $position = null,
 	) {
 		(function (Php\ArgumentNode ...$args) {})(...$args);
@@ -32,7 +33,7 @@ class MethodCallNode extends ExpressionNode
 	public function print(PrintContext $context): string
 	{
 		return $context->dereferenceExpr($this->object)
-			. '->'
+			. ($this->nullsafe ? '?->' : '->')
 			. $context->objectProperty($this->name)
 			. '(' . $context->implode($this->args) . ')';
 	}

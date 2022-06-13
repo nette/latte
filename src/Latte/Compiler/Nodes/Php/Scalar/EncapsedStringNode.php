@@ -54,9 +54,7 @@ class EncapsedStringNode extends ScalarNode
 			if ($partStr[0] === '$' &&
 				($part instanceof Expression\VariableNode
 				|| $part instanceof Expression\PropertyFetchNode
-				|| $part instanceof Expression\NullsafePropertyFetchNode
 				|| $part instanceof Expression\MethodCallNode
-				|| $part instanceof Expression\NullsafeMethodCallNode
 				|| $part instanceof Expression\ArrayAccessNode
 			)) {
 				$s .= '{' . $partStr . '}';

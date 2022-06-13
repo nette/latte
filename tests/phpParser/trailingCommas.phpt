@@ -81,6 +81,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  unpack: false
    |  |  |  |  |  name: null
    |  |  |  |  |  position: 2:15 (offset 29)
+   |  |  |  nullsafe: false
    |  |  |  position: 2:1 (offset 15)
    |  |  key: null
    |  |  byRef: false

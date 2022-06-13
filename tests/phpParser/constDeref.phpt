@@ -49,6 +49,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 1:4 (offset 3)
+   |  |  |  nullsafe: false
    |  |  |  position: 1:1 (offset 0)
    |  |  key: null
    |  |  byRef: false
@@ -67,6 +68,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 2:4 (offset 14)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 2:1 (offset 11)
    |  |  key: null
    |  |  byRef: false
@@ -189,6 +191,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 8:7 (offset 73)
+   |  |  |  nullsafe: false
    |  |  |  position: 8:1 (offset 67)
    |  |  key: null
    |  |  byRef: false
@@ -210,6 +213,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 9:7 (offset 87)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 9:1 (offset 81)
    |  |  key: null
    |  |  byRef: false
@@ -306,6 +310,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 15:15 (offset 159)
+   |  |  |  nullsafe: false
    |  |  |  position: 15:1 (offset 145)
    |  |  key: null
    |  |  byRef: false
@@ -324,6 +329,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'length'
    |  |  |  |  position: 16:15 (offset 181)
    |  |  |  args: array (0)
+   |  |  |  nullsafe: false
    |  |  |  position: 16:1 (offset 167)
    |  |  key: null
    |  |  byRef: false

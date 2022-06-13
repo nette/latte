@@ -60,6 +60,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'B'
    |  |  |  |  |  |  position: 2:6 (offset 11)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 2:2 (offset 7)
    |  |  |  position: 2:1 (offset 6)
    |  |  key: null

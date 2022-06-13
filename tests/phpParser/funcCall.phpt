@@ -93,6 +93,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 6:5 (offset 67)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 6:1 (offset 63)
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'c'
