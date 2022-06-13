@@ -108,6 +108,7 @@ final class TagLexer
 			(?<Php_Whitespace>  [ \t\r\n]+  )|
 			( (?<Php_ConstantEncapsedString>  '  )  (?<rest>  ( \\. | [^'\\] )*  '  )?  )|
 			( (?<string>  "  )  .*  )|
+			( (?<Php_StartHeredoc>  <<< [ \t]* (?: (?&label) | ' (?&label) ' | " (?&label) " ) \r?\n  ) .*  )|
 			( (?<Php_Comment>  /\*  )   (?<rest>  .*?\*/  )?  )|
 			(?<Php_Variable>  \$  (?&label)  )|
 			(?<Php_Float>
@@ -236,7 +237,7 @@ final class TagLexer
 				$pos = $this->position;
 				$this->addToken(null, '"');
 				$count = count($this->tokens);
-				$this->tokenizeString();
+				$this->tokenizeString('"');
 				$token = $this->tokens[$count] ?? null;
 				$this->addToken(null, '"');
 				if (
@@ -250,6 +251,22 @@ final class TagLexer
 			} elseif (isset($m['Php_Integer'])) {
 				$num = PhpHelpers::decodeNumber($m['Php_Integer']);
 				$this->addToken(is_float($num) ? Token::Php_Float : Token::Php_Integer, $m['Php_Integer']);
+
+			} elseif (isset($m['Php_StartHeredoc'])) {
+				$this->addToken(Token::Php_StartHeredoc, $m['Php_StartHeredoc']);
+				$endRe = '(?<=\n)[ \t]*' . trim($m['Php_StartHeredoc'], "< \t\r\n'\"") . '\b';
+				if (str_contains($m['Php_StartHeredoc'], "'")) { // nowdoc
+					if (!preg_match('~(.*?)(' . $endRe . ')~sA', $this->input, $m, 0, $this->offset)) {
+						throw new CompileException('Unterminated NOWDOC.', $this->position);
+					} elseif ($m[1] !== '') {
+						$this->addToken(Token::Php_EncapsedAndWhitespace, $m[1]);
+					}
+					$this->addToken(Token::Php_EndHeredoc, $m[2]);
+				} else {
+					$end = $this->tokenizeString($endRe);
+					$this->addToken(Token::Php_EndHeredoc, $end);
+				}
+				goto matchRE;
 
 			} elseif (isset($m['Php_Comment'])) {
 				isset($m['rest'])
@@ -271,7 +288,7 @@ final class TagLexer
 	}
 
 
-	private function tokenizeString(): string
+	private function tokenizeString(string $endRe): string
 	{
 		$re = <<<'XX'
 			~(?J)(?n)   # allow duplicate named groups, no auto capture
@@ -304,10 +321,10 @@ final class TagLexer
 					|
 				)
 			)|
-			((?<end>  "  )  .*  )|
-			(?<char>  ( \\. | [^\\] )  )
-			~xsA
-			XX;
+			XX . "
+			((?<end>  $endRe  )  .*  )|
+			(?<char>  ( \\\\. | [^\\\\] )  )
+			~xsA";
 
 		matchRE:
 		preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);

@@ -64,6 +64,18 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => tokenize("<<<DOC\n"),
+	Latte\CompileException::class,
+	'Unterminated string (on line 2 at column 1)',
+);
+
+Assert::exception(
+	fn() => tokenize("<<<'DOC'\n"),
+	Latte\CompileException::class,
+	'Unterminated NOWDOC (on line 2 at column 1)',
+);
+
+Assert::exception(
 	fn() => tokenize('/*'),
 	Latte\CompileException::class,
 	'Unterminated comment (at column 1)',

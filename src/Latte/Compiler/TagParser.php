@@ -284,6 +284,93 @@ final class TagParser extends TagParserData
 	}
 
 
+	/** @param ExpressionNode[] $parts */
+	protected function parseDocString(
+		string $startToken,
+		array $parts,
+		string $endToken,
+		Position $startPos,
+		Position $endPos,
+	): Scalar\StringNode|Scalar\EncapsedStringNode {
+		$hereDoc = !str_contains($startToken, "'");
+		preg_match('/\A[ \t]*/', $endToken, $matches);
+		$indentation = $matches[0];
+		if (str_contains($indentation, ' ') && str_contains($indentation, "\t")) {
+			throw new CompileException('Invalid indentation - tabs and spaces cannot be mixed', $endPos);
+
+		} elseif (!$parts) {
+			return new Scalar\StringNode('', $startPos);
+
+		} elseif (!$parts[0] instanceof Scalar\EncapsedStringPartNode) {
+			// If there is no leading encapsed string part, pretend there is an empty one
+			$this->stripIndentation('', $indentation, true, false, $parts[0]->position);
+		}
+
+		$newParts = [];
+		foreach ($parts as $i => $part) {
+			if ($part instanceof Scalar\EncapsedStringPartNode) {
+				$isLast = $i === \count($parts) - 1;
+				$part->value = $this->stripIndentation(
+					$part->value,
+					$indentation,
+					$i === 0,
+					$isLast,
+					$part->position,
+				);
+				if ($isLast) {
+					$part->value = preg_replace('~(\r\n|\n|\r)\z~', '', $part->value);
+				}
+				if ($hereDoc) {
+					$part->value = PhpHelpers::decodeEscapeSequences($part->value, null);
+				}
+				if ($i === 0 && $isLast) {
+					return new Scalar\StringNode($part->value, $startPos);
+				}
+				if ($part->value === '') {
+					continue;
+				}
+			}
+			$newParts[] = $part;
+		}
+
+		return new Scalar\EncapsedStringNode($newParts, $startPos);
+	}
+
+
+	private function stripIndentation(
+		string $str,
+		string $indentation,
+		bool $atStart,
+		bool $atEnd,
+		Position $position,
+	): string {
+		if ($indentation === '') {
+			return $str;
+		}
+		$start = $atStart ? '(?:(?<=\n)|\A)' : '(?<=\n)';
+		$end = $atEnd ? '(?:(?=[\r\n])|\z)' : '(?=[\r\n])';
+		$regex = '/' . $start . '([ \t]*)(' . $end . ')?/D';
+		return preg_replace_callback(
+			$regex,
+			function ($matches) use ($indentation, $position) {
+				$indentLen = \strlen($indentation);
+				$prefix = substr($matches[1], 0, $indentLen);
+				if (str_contains($prefix, $indentation[0] === ' ' ? "\t" : ' ')) {
+					throw new CompileException('Invalid indentation - tabs and spaces cannot be mixed', $position);
+				} elseif (strlen($prefix) < $indentLen && !isset($matches[2])) {
+					throw new CompileException(
+						'Invalid body indentation level ' .
+						'(expecting an indentation level of at least ' . $indentLen . ')',
+						$position,
+					);
+				}
+				return substr($matches[0], strlen($prefix));
+			},
+			$str,
+		);
+	}
+
+
 	/** @param  Token[]  $tokens */
 	private function filterTokens(array $tokens): array
 	{
