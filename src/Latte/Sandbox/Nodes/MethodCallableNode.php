@@ -13,19 +13,18 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
 
-class MethodCallNode extends Expression\MethodCallNode
+class MethodCallableNode extends Expression\MethodCallableNode
 {
-	public function __construct(Expression\MethodCallNode $from)
+	public function __construct(Expression\MethodCallableNode $from)
 	{
-		parent::__construct($from->object, $from->name, $from->args, $from->position);
+		parent::__construct($from->object, $from->name, $from->position);
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		return '$this->global->sandbox->callMethod('
+		return '$this->global->sandbox->closure(['
 			. $this->object->print($context) . ', '
-			. $context->memberAsString($this->name) . ', '
-			. Expression\ArrayNode::fromArguments($this->args)->print($context) . ')';
+			. $context->memberAsString($this->name) . '])';
 	}
 }

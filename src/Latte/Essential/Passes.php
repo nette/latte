@@ -81,7 +81,7 @@ final class Passes
 		$names = array_combine(array_map('strtolower', $names), $names);
 
 		(new NodeTraverser)->traverse($node, function (Node $node) use ($names) {
-			if ($node instanceof FunctionCallNode
+			if (($node instanceof FunctionCallNode || $node instanceof FunctionCallableNode)
 				&& $node->name instanceof NameNode
 				&& ($orig = $names[strtolower((string) $node->name)] ?? null)
 			) {

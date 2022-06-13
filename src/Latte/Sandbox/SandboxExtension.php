@@ -88,7 +88,6 @@ final class SandboxExtension extends Latte\Extension
 
 		} elseif ($node instanceof Expression\FunctionCallNode
 			&& $node->name instanceof Php\NameNode
-			&& !$node->isFirstClassCallable()
 		) {
 			if (!$this->policy->isFunctionAllowed((string) $node->name)) {
 				throw new SecurityViolationException("Function $node->name() is not allowed.", $node->position);
@@ -119,8 +118,11 @@ final class SandboxExtension extends Latte\Extension
 			|| $node instanceof Expression\NullsafePropertyFetchNode
 			|| $node instanceof Expression\UndefinedsafePropertyFetchNode
 			|| $node instanceof Expression\FunctionCallNode
+			|| $node instanceof Expression\FunctionCallableNode
 			|| $node instanceof Expression\MethodCallNode
+			|| $node instanceof Expression\MethodCallableNode
 			|| $node instanceof Expression\StaticCallNode
+			|| $node instanceof Expression\StaticCallableNode
 			|| $node instanceof Expression\NullsafeMethodCallNode
 			|| $node instanceof Expression\UndefinedsafeMethodCallNode
 		) {

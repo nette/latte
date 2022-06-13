@@ -152,10 +152,12 @@ Assert::exception(
 // invalid firstclass callables
 Assert::exception(
 	fn() => parseCode('new Foo(...)'),
-	TypeError::class,
+	Latte\CompileException::class,
+	"Unexpected ')' (at column 12)",
 );
 
 Assert::exception(
 	fn() => parseCode('$this?->foo(...)'),
-	TypeError::class,
+	Latte\CompileException::class,
+	"Unexpected ')' (at column 16)",
 );
