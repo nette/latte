@@ -22,8 +22,8 @@ Assert::contains(
 );
 
 Assert::contains(
-	'echo LR\Filters::escapeHtmlText(($this->filters->translate)($var, 10, 20)) /* line 1 */;',
-	$latte->compile('{_$var, 10, 20}'),
+	'echo LR\Filters::escapeHtmlText(($this->filters->translate)(\'messages.hello\', 10, 20)) /* line 1 */;',
+	$latte->compile('{_messages.hello, 10, 20}'),
 );
 
 
