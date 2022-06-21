@@ -36,6 +36,12 @@ Assert::match(
 	$latte->renderToString('{define a}<script></script>{/define} <script type="text/html">{include a}</script>'),
 );
 
+// no escape
+Assert::match(
+	'<script type="text/html">&lt;/script></script>',
+	$latte->renderToString('<script type="text/html">{="</script>"|noescape}</script>'),
+);
+
 // content of <script> is RAWTEXT
 Assert::match(
 	<<<'XX'

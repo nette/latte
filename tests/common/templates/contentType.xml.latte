@@ -61,3 +61,6 @@ var html = {$el};
 <p val = {$xss} val2={$mxss}> </p>
 
 <p onclick = {$xss}> </p>
+
+<p title="{="foo a='a' b=\"b\">"|noescape}"></p>
+<p {="foo a='a' b=\"b\">"|noescape}></p>

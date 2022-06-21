@@ -111,3 +111,9 @@ Assert::match(
 		['foo' => new Html("<div title='</script>'></div>")],
 	),
 );
+
+// no escape
+Assert::match(
+	'<script><\/script></script>',
+	$latte->renderToString('<script>{="</script>"|noescape}</script>'),
+);
