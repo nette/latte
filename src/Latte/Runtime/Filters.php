@@ -101,6 +101,19 @@ class Filters
 
 
 	/**
+	 * Escapes a certain character.
+	 */
+	public static function escapeHtmlChar($s, string $quote): string
+	{
+		return str_replace(
+			$quote,
+			htmlspecialchars($quote, ENT_QUOTES | ENT_HTML5),
+			(string) $s,
+		);
+	}
+
+
+	/**
 	 * Escapes string for use everywhere inside XML (except for comments).
 	 */
 	public static function escapeXml($s): string

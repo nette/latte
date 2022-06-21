@@ -176,6 +176,24 @@ final class Escaper
 	}
 
 
+	public function escapeRequisite(string $str): string
+	{
+		return match ($this->contentType) {
+			ContentType::Html => match ($this->state) {
+				self::HtmlAttribute => $this->quote ? 'LR\Filters::escapeHtmlChar(' . $str . ', ' . var_export($this->quote, true) . ')' : $str,
+				self::HtmlJavaScript => 'LR\Filters::escapeHtmlRawText(' . $str . ')',
+				self::HtmlCss => 'LR\Filters::escapeHtmlRawText(' . $str . ')',
+				default => $str,
+			},
+			ContentType::Xml => match ($this->state) {
+				self::HtmlAttribute => $this->quote ? 'LR\Filters::escapeHtmlChar(' . $str . ', ' . var_export($this->quote, true) . ')' : $str,
+				default => $str,
+			},
+			default => $str,
+		};
+	}
+
+
 	public function check(string $str): string
 	{
 		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
