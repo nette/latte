@@ -16,11 +16,6 @@ use Latte\Compiler\PrintContext;
 
 class FilterNode extends Node
 {
-	public const
-		Escape = 'escape',
-		NoEscape = 'noescape';
-
-
 	public function __construct(
 		public IdentifierNode $name,
 		/** @var ArgumentNode[] */
