@@ -176,7 +176,7 @@ final class TemplateLexer
 			&& !isset($m['Slash'])
 			&& in_array($tagName, ['script', 'style'], true)
 		) {
-			$this->setState('stateHtmlRCData', $tagName);
+			$this->setState('stateHtmlRawText', $tagName);
 		} elseif (isset($m['Html_TagClose'])) {
 			$this->setState('stateHtmlText');
 		} elseif (isset($m['Latte_TagOpen'])) {
@@ -225,7 +225,7 @@ final class TemplateLexer
 	}
 
 
-	private function stateHtmlRCData(string $tagName): \Generator
+	private function stateHtmlRawText(string $tagName): \Generator
 	{
 		$m = yield from $this->match('~
 			(?<Text>.+?)??
