@@ -114,9 +114,9 @@ class Filters
 
 
 	/**
-	 * Escapes string for use inside XML attribute name.
+	 * Escapes string for use inside XML tag.
 	 */
-	public static function escapeXmlAttrUnquoted($s): string
+	public static function escapeXmlTag($s): string
 	{
 		$s = (string) $s;
 		return preg_match('#^[a-z0-9:-]+$#i', $s)

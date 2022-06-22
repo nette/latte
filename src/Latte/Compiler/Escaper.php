@@ -164,7 +164,7 @@ final class Escaper
 				self::HtmlBogusTag => 'LR\Filters::escapeXml(' . $str . ')',
 				self::HtmlAttribute => $lq . 'LR\Filters::escapeXml(' . $str . ')' . $rq,
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
-				self::HtmlTag => 'LR\Filters::escapeXmlAttrUnquoted(' . $str . ')',
+				self::HtmlTag => 'LR\Filters::escapeXmlTag(' . $str . ')',
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
