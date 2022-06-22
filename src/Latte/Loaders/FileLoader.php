@@ -49,6 +49,23 @@ class FileLoader implements Latte\Loader
 		return file_get_contents($file);
 	}
 
+	/**
+	 * Returns whether the template exists in the filesystem.
+	 */
+	public function fileExists(string $fileName): bool
+	{
+		$file = $this->baseDir . $fileName;
+		if ($this->baseDir && !str_starts_with($this->normalizePath($file), $this->baseDir)) {
+			return false;
+
+		} elseif (!is_file($file)) {
+			return false;
+
+		}
+
+		return true;
+	}
+
 
 	public function isExpired(string $file, int $time): bool
 	{
