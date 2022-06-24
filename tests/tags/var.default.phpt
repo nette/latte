@@ -25,7 +25,7 @@ test('{var ...}', function () use ($latte) {
 	// types
 	Assert::contains('$temp->var1 = 123 /*', $latte->compile('{var int $temp->var1 = 123}'));
 	Assert::contains('$temp->var1 = 123 /*', $latte->compile('{var null|int|string[] $temp->var1 = 123}'));
-	Assert::contains('$var1 = 123; $var2 = \'nette framework\' /*', ws($latte->compile('{var int|string[] $var1 = 123, ?class $var2 = "nette framework"}')));
+	Assert::contains('/** @var int|string[] $var1 */ $var1 = 123; /** @var ?class $var2 */ $var2 = \'nette framework\' /* line 1 */;', ws($latte->compile('{var int|string[] $var1 = 123, ?class $var2 = "nette framework"}')));
 	Assert::contains('$var1 = 123; $var2 = 456 /*', ws($latte->compile('{var A\B $var1 = 123, ?A\B $var2 = 456}')));
 	Assert::contains('$var1 = 123; $var2 = 456 /*', ws($latte->compile('{var \A\B $var1 = 123, ?\A\B $var2 = 456}')));
 

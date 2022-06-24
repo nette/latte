@@ -35,13 +35,25 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{varType $var type}'),
 	Latte\CompileException::class,
-	"Unexpected 'type', expecting end of tag in {varType} (at column 15)",
+	"Unexpected '\$vartype' (at column 10)",
 );
 
-Assert::noError(fn() => $latte->compile('{varType type $var}'));
+Assert::contains(
+	'/** @var type $var */',
+	$latte->compile('{varType type $var}'),
+);
 
-Assert::noError(fn() => $latte->compile('{varType ?\Nm\Class $var}'));
+Assert::contains(
+	'/** @var ?\Nm\Class $var */',
+	$latte->compile('{varType ?\Nm\Class $var}'),
+);
 
-Assert::noError(fn() => $latte->compile('{varType int|null $var}'));
+Assert::contains(
+	'/** @var int|null $var */',
+	$latte->compile('{varType int|null $var}'),
+);
 
-Assert::noError(fn() => $latte->compile('{varType array{0: int, 1: int} $var}'));
+Assert::contains(
+	'/** @var array{0:int,1:int} $var */',
+	$latte->compile('{varType array{0: int, 1: int} $var}'),
+);

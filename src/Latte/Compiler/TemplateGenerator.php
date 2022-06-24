@@ -11,6 +11,8 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\ContentType;
+use Latte\Essential\Blueprint;
+use Nette\PhpGenerator as Php;
 
 
 /**
@@ -38,19 +40,23 @@ final class TemplateGenerator
 		string $className,
 		?string $comment = null,
 		bool $strictMode = false,
+		array $filters = [],
 	): string {
 		$context = new PrintContext($node->contentType);
-		$code = $node->main->print($context);
-		$code = self::buildParams($code, [], '$ʟ_args', $context);
-		$this->addMethod('main', $code, 'array $ʟ_args');
+		$scope = $context->getVariableScope();
+		$this->addMethod('main', '');
 
 		$head = (new NodeTraverser)->traverse($node->head, fn(Node $node) => $node instanceof Nodes\TextNode ? new Nodes\NopNode : $node);
 		$code = $head->print($context);
 		if ($code || $context->paramsExtraction) {
 			$code .= 'return get_defined_vars();';
-			$code = self::buildParams($code, $context->paramsExtraction, '$this->params', $context);
+			$code = self::buildParams($code, $context->paramsExtraction, '$this->params', $context, $scope);
 			$this->addMethod('prepare', $code, '', 'array');
 		}
+
+		$code = $node->main->print($context);
+		$code = self::buildParams($code, [], '$ʟ_args', $context, $context->getVariableScope());
+		$this->addMethod('main', $code, 'array $ʟ_args');
 
 		if ($node->contentType !== ContentType::Html) {
 			$this->addConstant('ContentType', $node->contentType);
@@ -75,13 +81,18 @@ final class TemplateGenerator
 				. ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
+		$comment .= "\n@property Filters$className \$filters";
+		$comment = str_replace('*/', '* /', $comment);
+		$comment = str_replace("\n", "\n * ", "/**\n" . trim($comment)) . "\n */\n";
+
 		$code = "<?php\n\n"
 			. ($strictMode ? "declare(strict_types=1);\n\n" : '')
 			. "use Latte\\Runtime as LR;\n\n"
-			. ($comment === null ? '' : '/** ' . str_replace('*/', '* /', $comment) . " */\n")
+			. $comment
 			. "final class $className extends Latte\\Runtime\\Template\n{\n"
 			. implode("\n\n", $members)
-			. "\n}\n";
+			. "\n}\n\n\n"
+			. $this->generateStub($node, 'Filters' . $className, $filters);
 
 		$code = PhpHelpers::optimizeEcho($code);
 		$code = PhpHelpers::reformatCode($code);
@@ -100,7 +111,7 @@ final class TemplateGenerator
 					: [$block->method, $block->escaping];
 			}
 
-			$body = $this->buildParams($block->content, $block->parameters, '$ʟ_args', $context);
+			$body = self::buildParams($block->content, $block->parameters, '$ʟ_args', $context, $block->variables);
 			if (!$block->isDynamic() && str_contains($body, '$')) {
 				$embedded = $block->tag->name === 'block' && is_int($block->layer) && $block->layer;
 				$body = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');' . $body;
@@ -121,8 +132,49 @@ final class TemplateGenerator
 	}
 
 
-	private function buildParams(string $body, array $params, string $cont, PrintContext $context): string
+	private function generateStub(Node $node, string $className, $filters): string
 	{
+		if (!class_exists(Php\ClassType::class)) {
+			return '';
+		}
+
+		$used = [];
+		(new NodeTraverser)->traverse($node, function (Node $node) use (&$used) {
+			if ($node instanceof Nodes\Php\FilterNode) {
+				$used[$node->name->name] = true;
+			}
+		});
+
+		$class = new Php\ClassType($className);
+		$filters = array_intersect_key($filters, $used);
+		foreach ($filters as $name => $callback) {
+			$func = (new Php\Factory)->fromCallable($callback);
+			$type = Blueprint::printType($func->getReturnType(), $func->isReturnNullable(), null) ?: 'mixed';
+			$params = [];
+			$list = $func->getParameters();
+			foreach ($list as $param) {
+				$variadic = $func->isVariadic() && $param === end($list);
+				$params[] = (Blueprint::printType($param->getType(), $param->isNullable(), null) ?: 'mixed')
+					. ($variadic ? '...' : '');
+			}
+
+			$class->addComment('@property callable(' . implode(', ', $params) . "): $type \$$name");
+		}
+
+		return (string) $class;
+	}
+
+
+	/**
+	 * @param Nodes\Php\ParameterNode[] $params
+	 */
+	private static function buildParams(
+		string $body,
+		array $params,
+		string $cont,
+		PrintContext $context,
+		VariableScope $scope,
+	): string {
 		if (!str_contains($body, '$') && !str_contains($body, 'get_defined_vars()')) {
 			return $body;
 		}
@@ -130,7 +182,8 @@ final class TemplateGenerator
 		$res = [];
 		foreach ($params as $i => $param) {
 			$res[] = $context->format(
-				'%node = %raw[%dump] ?? %raw[%dump] ?? %node;',
+				'%raw%node = %raw[%dump] ?? %raw[%dump] ?? %node;',
+				$param->type ? VariableScope::printComment($param->var->name, $param->type->type) . ' ' : '',
 				$param->var,
 				$cont,
 				$i,
@@ -143,7 +196,10 @@ final class TemplateGenerator
 		$extract = $params
 			? implode('', $res) . 'unset($ʟ_args);'
 			: "extract($cont);" . (str_contains($cont, '$this') ? '' : "unset($cont);");
-		return $extract . "\n\n" . $body;
+
+		return $extract . "\n"
+			. $scope->extractTypes() . "\n\n"
+			. $body;
 	}
 
 

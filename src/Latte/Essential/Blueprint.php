@@ -95,7 +95,7 @@ final class Blueprint
 	}
 
 
-	private function printType(?string $type, bool $nullable, ?Php\PhpNamespace $namespace): string
+	public static function printType(?string $type, bool $nullable, ?Php\PhpNamespace $namespace): string
 	{
 		if ($type === null) {
 			return '';
@@ -123,7 +123,7 @@ final class Blueprint
 		$list = $function->getParameters();
 		foreach ($list as $param) {
 			$variadic = $function->isVariadic() && $param === end($list);
-			$params[] = ltrim($this->printType($param->getType(), $param->isNullable(), $namespace) . ' ')
+			$params[] = ltrim(self::printType($param->getType(), $param->isNullable(), $namespace) . ' ')
 				. ($param->isReference() ? '&' : '')
 				. ($variadic ? '...' : '')
 				. '$' . $param->getName()

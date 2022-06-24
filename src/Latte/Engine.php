@@ -191,6 +191,7 @@ class Engine
 			$this->getTemplateClass($name),
 			$comment,
 			$this->strictTypes,
+			$this->getFilters(),
 		);
 	}
 

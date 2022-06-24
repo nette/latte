@@ -77,10 +77,14 @@ final class PrintContext
 	/** @var Escaper[] */
 	private array $escaperStack = [];
 
+	/** @var VariableScope[] */
+	private array $scopeStack = [];
+
 
 	public function __construct(string $contentType = ContentType::Html)
 	{
 		$this->escaperStack[] = new Escaper($contentType);
+		$this->scopeStack[] = new VariableScope;
 	}
 
 
@@ -160,9 +164,28 @@ final class PrintContext
 	}
 
 
+	public function beginVariableScope(): VariableScope
+	{
+		return $this->scopeStack[] = clone end($this->scopeStack);
+	}
+
+
+	public function restoreVariableScope(): void
+	{
+		array_pop($this->scopeStack);
+	}
+
+
+	public function getVariableScope(): VariableScope
+	{
+		return end($this->scopeStack);
+	}
+
+
 	public function addBlock(Block $block): void
 	{
 		$block->escaping = $this->getEscaper()->export();
+		$block->variables = clone $this->getVariableScope();
 		$block->method = 'block' . ucfirst(trim(preg_replace('#\W+#', '_', $block->name->print($this)), '_'));
 		$lower = strtolower($block->method);
 		$used = $this->blocks + ['block' => 1];

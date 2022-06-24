@@ -74,14 +74,20 @@ class BlockNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		if (!$this->block) {
-			return $this->printFilter($context);
+		$context->beginVariableScope();
+		try {
+			if (!$this->block) {
+				return $this->printFilter($context);
 
-		} elseif ($this->block->isDynamic()) {
-			return $this->printDynamic($context);
+			} elseif ($this->block->isDynamic()) {
+				return $this->printDynamic($context);
+
+			} else {
+				return $this->printStatic($context);
+			}
+		} finally {
+			$context->restoreVariableScope();
 		}
-
-		return $this->printStatic($context);
 	}
 
 
@@ -91,7 +97,9 @@ class BlockNode extends StatementNode
 			<<<'XX'
 				ob_start(fn() => '') %line;
 				try {
-					(function () { extract(func_get_arg(0));
+					(function () {
+						extract(func_get_arg(0));
+						%raw
 						%node
 					})(get_defined_vars());
 				} finally {
@@ -101,6 +109,7 @@ class BlockNode extends StatementNode
 
 				XX,
 			$this->position,
+			$context->getVariableScope()->extractTypes(),
 			$this->content,
 			$context->getEscaper()->export(),
 			$this->modifier,
