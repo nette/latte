@@ -334,7 +334,7 @@ class Template
 			$function();
 			return ob_get_clean();
 		} catch (\Throwable $e) {
-			ob_end_clean();
+			@ob_end_clean();
 			throw $e;
 		}
 	}
