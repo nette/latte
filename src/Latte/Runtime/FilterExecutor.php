@@ -89,7 +89,7 @@ class FilterExecutor
 		}
 
 		return $this->$lname = function (...$args) use ($lname, $name) { // dynamic filter
-			array_unshift($args, $lname);
+			array_unshift($args, $name);
 			foreach ($this->_dynamic as $filter) {
 				$res = $filter(...$args);
 				if ($res !== null) {

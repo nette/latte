@@ -863,8 +863,8 @@ class PhpWriter
 
 					$res->prepend(
 						$isContent
-							? '$this->filters->filterContent(' . PhpHelpers::dump($lower) . ', $ʟ_fi, '
-							: '($this->filters->' . $lower . ')('
+							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
+							: '($this->filters->' . $name . ')('
 					);
 					$inside = true;
 				}

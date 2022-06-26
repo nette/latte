@@ -19,8 +19,8 @@ final class Template%a% extends Latte\Runtime\Template
 		}
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
-		}) /* line %d% */;
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+		}) /* line 4 */;
 		echo '</title>
 </head>
 
@@ -37,8 +37,8 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		$this->renderBlock('content', [], function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, $s)));
-		}) /* line %d% */;
+			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+		}) /* line 19 */;
 		echo '	</div>
 </body>
 </html>
