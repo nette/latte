@@ -88,7 +88,9 @@ final class TemplateLexer
 
 	private function stateLatteTag(): \Generator
 	{
+		$pos = $this->states[0]['pos'];
 		$this->popState();
+
 		yield from $this->match('~
 			(?<Slash>/)?
 			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))?   # name, /name, but not function( or class:: or namespace\
@@ -101,19 +103,19 @@ final class TemplateLexer
 			(?<Latte_TagClose>' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R)?
 		~xsiAu')
-		or $this->setState(self::StateEnd);
+		or throw new CompileException('Unterminated Latte tag', $pos);
 	}
 
 
 	private function stateLatteComment(): \Generator
 	{
-		$this->popState();
 		yield from $this->match('~
 			(?<Text>.+?)??
 			(?<Latte_CommentClose>\*' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R{1,2})?
 		~xsiAu')
-		or $this->setState(self::StateEnd);
+		or throw new CompileException('Unterminated Latte comment', $this->states[0]['pos']);
+		$this->popState();
 	}
 
 
@@ -208,7 +210,7 @@ final class TemplateLexer
 		} elseif (isset($m['Latte_CommentOpen'])) {
 			$this->pushState('stateLatteComment');
 		} else {
-			$this->setState(self::StateEnd);
+			throw new CompileException('Unterminated HTML attribute value', $this->states[0]['pos']);
 		}
 	}
 
@@ -222,7 +224,7 @@ final class TemplateLexer
 		if (isset($m['Quote'])) {
 			$this->popState();
 		} else {
-			$this->setState(self::StateEnd);
+			throw new CompileException('Unterminated n:attribute value', $this->states[0]['pos']);
 		}
 	}
 
@@ -270,7 +272,7 @@ final class TemplateLexer
 		} elseif (isset($m['Latte_CommentOpen'])) {
 			$this->pushState('stateLatteComment');
 		} else {
-			$this->setState(self::StateEnd);
+			throw new CompileException('Unterminated HTML comment', $this->states[0]['pos']);
 		}
 	}
 
@@ -292,7 +294,7 @@ final class TemplateLexer
 		} elseif (isset($m['Latte_CommentOpen'])) {
 			$this->pushState('stateLatteComment');
 		} else {
-			$this->setState(self::StateEnd);
+			throw new CompileException('Unterminated HTML tag', $this->states[0]['pos']);
 		}
 	}
 
@@ -302,12 +304,9 @@ final class TemplateLexer
 	 */
 	private function match(string $re): \Generator
 	{
-		if (!preg_match($re, $this->input, $matches, PREG_UNMATCHED_AS_NULL, $this->position->offset)) {
-			if (preg_last_error()) {
-				throw new RegexpException;
-			}
-
-			return [];
+		preg_match($re, $this->input, $matches, PREG_UNMATCHED_AS_NULL, $this->position->offset);
+		if (preg_last_error()) {
+			throw new RegexpException;
 		}
 
 		foreach ($matches as $k => $v) {
@@ -336,7 +335,7 @@ final class TemplateLexer
 
 	private function setState(string $state, ...$args): void
 	{
-		$this->states[0] = ['name' => $state, 'args' => $args];
+		$this->states[0] = ['name' => $state, 'args' => $args, 'pos' => $this->position];
 	}
 
 

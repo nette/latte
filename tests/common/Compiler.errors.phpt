@@ -17,13 +17,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{'),
 	Latte\CompileException::class,
-	"Unexpected end, expecting '}' (on line 1 at column 2)",
+	'Unterminated Latte tag (on line 1 at column 2)',
 );
 
 Assert::exception(
 	fn() => $latte->compile("{* \n'abc}"),
 	Latte\CompileException::class,
-	"Unexpected ' \n'abc}' (on line 1 at column 3)",
+	'Unterminated Latte comment (on line 1 at column 3)',
 );
 
 Assert::exception(
