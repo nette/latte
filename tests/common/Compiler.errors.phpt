@@ -23,7 +23,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile("{* \n'abc}"),
 	Latte\CompileException::class,
-	"Unexpected end, expecting '*}' (on line 2 at column 6)",
+	"Unexpected ' \n'abc}' (on line 1 at column 3)",
 );
 
 Assert::exception(

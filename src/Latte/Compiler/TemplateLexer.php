@@ -100,7 +100,8 @@ final class TemplateLexer
 			(?<Slash>/)?
 			(?<Latte_TagClose>' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R)?
-		~xsiAu');
+		~xsiAu')
+		or $this->setState(self::StateEnd);
 	}
 
 
@@ -111,7 +112,8 @@ final class TemplateLexer
 			(?<Text>.+?)??
 			(?<Latte_CommentClose>\*' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R{1,2})?
-		~xsiAu');
+		~xsiAu')
+		or $this->setState(self::StateEnd);
 	}
 
 
