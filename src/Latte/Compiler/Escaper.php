@@ -33,10 +33,9 @@ final class Escaper
 		HtmlText = 'html',
 		HtmlComment = 'html/comment',
 		HtmlBogusTag = 'html/bogus',
-		HtmlCss = 'html/css',
-		HtmlJavaScript = 'html/js',
 		HtmlTag = 'html/tag',
-		HtmlAttribute = 'html/attr';
+		HtmlAttribute = 'html/attr',
+		HtmlRawText = 'html/rawtext';
 
 	private string $state = '';
 	private string $tag = '';
@@ -78,18 +77,19 @@ final class Escaper
 
 	public function enterHtmlText(?ElementNode $node): void
 	{
-		$this->state = self::HtmlText;
-		if ($this->contentType === ContentType::Html && $node) {
-			$name = strtolower($node->name);
-			if (
-				($name === 'script' || $name === 'style')
-				&& is_string($attr = $node->getAttribute('type') ?? 'css')
-				&& preg_match('#(java|j|ecma|live)script|module|json|css|plain#i', $attr)
-			) {
-				$this->state = $name === 'script'
-					? self::HtmlJavaScript
-					: self::HtmlCss;
-			}
+		$name = strtolower($node->name ?? '');
+		if ($this->contentType === ContentType::Html && in_array($name, ['script', 'style'], true)) {
+			$attr = $node->getAttribute('type');
+			$this->state = self::HtmlRawText;
+			$this->subType = match (true) {
+				$name === 'style' => self::Css,
+				!is_string($attr) || preg_match('#(java|j|ecma|live)script|module|json|plain#i', $attr) => self::JavaScript,
+				$attr === 'text/html' => self::HtmlText,
+				default => '',
+			};
+		} else {
+			$this->state = self::HtmlText;
+			$this->subType = '';
 		}
 	}
 
@@ -155,8 +155,12 @@ final class Escaper
 				},
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
-				self::HtmlJavaScript => 'LR\Filters::escapeJs(' . $str . ')',
-				self::HtmlCss => 'LR\Filters::escapeCss(' . $str . ')',
+				self::HtmlRawText => match ($this->subType) {
+					'' => 'LR\Filters::escapeHtmlRawText(' . $str . ')',
+					self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
+					self::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
+					self::Css => 'LR\Filters::escapeCss(' . $str . ')',
+				},
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::Xml => match ($this->state) {
@@ -202,14 +206,14 @@ final class Escaper
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
 				'html/attr/js' => 'escapeHtmlAttr',
-				'html/js' => 'escapeHtmlRawText',
+				'html/rawtext/js' => 'escapeHtmlRawText',
 				'html/comment' => 'escapeHtmlComment',
 			],
 			self::Css => [
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
 				'html/attr/css' => 'escapeHtmlAttr',
-				'html/css' => 'escapeHtmlRawText',
+				'html/rawtext/css' => 'escapeHtmlRawText',
 				'html/comment' => 'escapeHtmlComment',
 			],
 			'html' => [
