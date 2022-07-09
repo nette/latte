@@ -96,13 +96,13 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<STYLE>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </STYLE> for element started on line 1 (on line 1 at column 8)',
+	'Unexpected end, expecting </STYLE> for element started on line 1 at column 1 (on line 1 at column 8)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<script>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </script> for element started on line 1 (on line 1 at column 9)',
+	'Unexpected end, expecting </script> for element started on line 1 at column 1 (on line 1 at column 9)',
 );
 
 Assert::noError(
@@ -172,13 +172,13 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<p n:if=1><span n:if=1>'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting </span> for element started on line 1 (on line 1 at column 24)',
+	'Unexpected end, expecting </span> for element started on line 1 at column 11 (on line 1 at column 24)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<p n:if=1><span n:if=1></i>'),
 	Latte\CompileException::class,
-	"Unexpected '</i>', expecting </span> for element started on line 1 (on line 1 at column 24)",
+	"Unexpected '</i>', expecting </span> for element started on line 1 at column 11 (on line 1 at column 24)",
 );
 
 Assert::exception(
@@ -208,7 +208,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<span n:if=1>{/if}'),
 	Latte\CompileException::class,
-	"Unexpected '{/if}', expecting </span> for element started on line 1 (on line 1 at column 14)",
+	"Unexpected '{/if}', expecting </span> for element started on line 1 at column 1 (on line 1 at column 14)",
 );
 
 Assert::exception(
@@ -218,5 +218,5 @@ Assert::exception(
 				{/foreach}
 		XX),
 	Latte\CompileException::class,
-	"Unexpected '</li>', expecting </a> for element started on line 2 (on line 2 at column 37)",
+	"Unexpected '</li>', expecting </a> for element started on line 2 at column 8 (on line 2 at column 37)",
 );

@@ -111,7 +111,7 @@ final class TemplateParserHtml
 				|| ($this->parser->getContentType() === ContentType::Html && in_array(strtolower($elem->name), ['script', 'style'], true))
 			) {
 				$stream->throwUnexpectedException(
-					addendum: ", expecting </{$elem->name}> for element started on line {$elem->position->line}",
+					addendum: ", expecting </{$elem->name}> for element started " . $elem->position->toWords(),
 				);
 			} else { // element collapsed to tags
 				$res->append($content);
