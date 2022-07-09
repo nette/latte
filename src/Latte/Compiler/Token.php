@@ -24,7 +24,8 @@ final class Token
 		Indentation = 10004,
 		Slash = 10005,
 		Equals = 10006,
-		Quote = 10007; // single or double quote
+		Quote = 10007, // single or double quote
+		Question = 10008;
 
 	public const
 		Latte_TagOpen = 10010,

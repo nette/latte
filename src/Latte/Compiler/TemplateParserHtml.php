@@ -14,6 +14,7 @@ use Latte\CompileException;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\Html;
+use Latte\Compiler\Nodes\UrlNode;
 use Latte\ContentType;
 use Latte\Helpers;
 use Latte\SecurityViolationException;
@@ -273,16 +274,17 @@ final class TemplateParserHtml
 		$this->consumeIgnored();
 		if ($stream->tryConsume(Token::Equals)) {
 			$this->consumeIgnored();
+			$isUrl = $this->isUrlAttribute(NodeHelpers::toText($name), $this->element);
 			$value = match ($stream->peek()->type) {
-				Token::Quote => $this->parseAttributeQuote(),
+				Token::Quote => $this->parseAttributeQuote($isUrl),
 				Token::Html_Name => $this->parser->parseText(),
-				Token::Latte_TagOpen => $this->parser->parseFragment(
-					function (FragmentNode $fragment) use ($stream) {
+				Token::Latte_TagOpen => $this->parser->parseFragment( // todo
+					function (FragmentNode $fragment) use ($stream, $isUrl) {
 						if ($fragment->children) {
 							return null;
 						}
 						return match ($stream->peek()->type) {
-							Token::Quote => $this->parseAttributeQuote(),
+							Token::Quote => $this->parseAttributeQuote($isUrl),
 							Token::Html_Name => $this->parser->parseText(),
 							Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
 							Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
@@ -356,14 +358,33 @@ final class TemplateParserHtml
 	}
 
 
-	private function parseAttributeQuote(): Html\QuotedValue
+	private function parseAttributeQuote(bool $isUrl): Html\QuotedValue
 	{
 		$stream = $this->parser->getStream();
 		$quoteToken = $stream->consume(Token::Quote);
-		$value = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
-			Token::Quote => null,
-			default => $this->parser->inTextResolve(),
-		});
+
+		if ($isUrl) {
+			$value = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
+				Token::Quote, Token::Question => null,
+				default => $this->parser->inTextResolve(),
+			});
+			$value = new UrlNode($value);
+
+			if ($stream->is(Token::Question)) {
+				$value->value->append($this->parser->parseText());
+				$value->query = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
+					Token::Quote => null,
+					default => $this->parser->inTextResolve(),
+				});
+			}
+		} else {
+			$value = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
+				Token::Quote => null,
+				Token::Question => $this->parser->parseText(),
+				default => $this->parser->inTextResolve(),
+			});
+		}
+
 		$node = new Html\QuotedValue(
 			value: $value,
 			quote: $quoteToken->text,
@@ -502,5 +523,15 @@ final class TemplateParserHtml
 			throw new SecurityViolationException("Attribute n:$name is not allowed", $pos);
 		}
 		return $this->attrParsers[$name];
+	}
+
+
+	private function isUrlAttribute(?string $name, Html\ElementNode $elem): bool
+	{
+		$name = strtolower($name ?? '');
+		return $this->parser->getContentType() === ContentType::Html
+			&& ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
+				|| ($name === 'data' && strtolower($elem->name) === 'object'))
+			);
 	}
 }

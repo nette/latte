@@ -198,6 +198,7 @@ final class TemplateLexer
 		$m = yield from $this->match('~
 			(?<Text>.+?)??(
 				(?<Quote>' . $quote . ')|
+				(?<Question>\?)|
 				(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|      # {tag
 				(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)       # {* comment
 			)
@@ -209,6 +210,7 @@ final class TemplateLexer
 			$this->pushState('stateLatteTag');
 		} elseif (isset($m['Latte_CommentOpen'])) {
 			$this->pushState('stateLatteComment');
+		} elseif (isset($m['Question'])) {
 		} else {
 			throw new CompileException('Unterminated HTML attribute value', $this->states[0]['pos']);
 		}

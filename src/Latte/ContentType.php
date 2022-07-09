@@ -18,5 +18,6 @@ namespace Latte;
 		Xml = 'xml',
 		JavaScript = 'js',
 		Css = 'css',
-		ICal = 'ical';
+		ICal = 'ical',
+		Url = 'url';
 }

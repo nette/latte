@@ -118,7 +118,7 @@ final class TemplateParser
 
 	public function parseText(): Nodes\TextNode
 	{
-		$token = $this->stream->consume(Token::Text, Token::Html_Name);
+		$token = $this->stream->consume(Token::Text, Token::Html_Name, Token::Question);
 		if ($this->location === self::LocationHead && trim($token->text) !== '') {
 			$this->location = self::LocationText;
 		}

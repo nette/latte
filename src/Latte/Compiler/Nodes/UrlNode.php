@@ -7,28 +7,29 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes\Html;
+namespace Latte\Compiler\Nodes;
 
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class QuotedValue extends AreaNode
+class UrlNode extends AreaNode
 {
 	public function __construct(
 		public AreaNode $value,
-		public string $quote,
-		public ?Position $position = null,
+		public ?AreaNode $query = null,
+		public ?AreaNode $fragment = null,
 	) {
+		$this->position = $value->position;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		$quote = 'echo ' . var_export($this->quote, true) . ';';
-		$context->beginEscape()->enterHtmlAttributeQuote($this->quote);
-		$res = $quote . $this->value->print($context) . $quote;
+		$escaper = $context->beginEscape();
+		$escaper->enterContentType($escaper::Url);
+		$res = $this->value->print($context);
+		$escaper->enterContentType($escaper::UrlQuery);
+		$res .= $this->query?->print($context);
 		$context->restoreEscape();
 		return $res;
 	}
@@ -37,5 +38,8 @@ class QuotedValue extends AreaNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->value;
+		if ($this->query) {
+			yield $this->query;
+		}
 	}
 }

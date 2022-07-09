@@ -26,8 +26,7 @@ final class Escaper
 		Text = 'text',
 		JavaScript = 'js',
 		Css = 'css',
-		ICal = 'ical',
-		Url = 'url';
+		ICal = 'ical';
 
 	public const
 		HtmlText = 'html',
@@ -36,6 +35,10 @@ final class Escaper
 		HtmlTag = 'html/tag',
 		HtmlAttribute = 'html/attr',
 		HtmlRawText = 'html/rawtext';
+
+	public const
+		Url = 'url',
+		UrlQuery = 'url/query';
 
 	private string $state = '';
 	private string $tag = '';
@@ -71,7 +74,7 @@ final class Escaper
 
 	public function enterContentType(string $type): void
 	{
-		$this->contentType = $this->state = $type;
+		$this->subType = $type;
 	}
 
 
@@ -109,15 +112,11 @@ final class Escaper
 
 		if ($this->contentType === ContentType::Html && is_string($name)) {
 			$name = strtolower($name);
-			if (str_starts_with($name, 'on')) {
-				$this->subType = self::JavaScript;
-			} elseif ($name === 'style') {
-				$this->subType = self::Css;
-			} elseif ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
-				|| ($name === 'data' && $this->tag === 'object'))
-			) {
-				$this->subType = self::Url;
-			}
+			$this->subType = match (true) {
+				str_starts_with($name, 'on') => self::JavaScript,
+				$name === 'style' => self::Css,
+				default => '',
+			};
 		}
 	}
 
@@ -150,6 +149,7 @@ final class Escaper
 				self::HtmlAttribute => match ($this->subType) {
 					'',
 					self::Url => $lq . 'LR\Filters::escapeHtmlAttr(' . $str . ')' . $rq,
+					self::UrlQuery => $lq . 'LR\Filters::escapeHtmlAttr(rawurlencode(' . $str . '))' . $rq,
 					self::JavaScript => $lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(' . $str . '))' . $rq,
 					self::Css => $lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(' . $str . '))' . $rq,
 				},
@@ -199,7 +199,7 @@ final class Escaper
 
 	public function check(string $str): string
 	{
-		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
+		if ($this->subType === self::Url) {
 			$str = 'LR\Filters::safeUrl(' . $str . ')';
 		}
 		return $str;
