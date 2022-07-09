@@ -17,13 +17,13 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{breakIf true}'),
 	Latte\CompileException::class,
-	'Tag {breakIf} is unexpected here (at column 1)',
+	'Tag {breakIf} is unexpected here (on line 1 at column 1)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('{breakIf}'),
 	Latte\CompileException::class,
-	'Missing arguments in {breakIf} (at column 1)',
+	'Missing arguments in {breakIf} (on line 1 at column 1)',
 );
 
 Assert::noError(fn() => $latte->compile('{for ;;}{if true}{breakIf true}{/if}{/for}'));

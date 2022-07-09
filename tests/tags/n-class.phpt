@@ -59,12 +59,12 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<div n:class/>'),
 	Latte\CompileException::class,
-	'Missing arguments in n:class (at column 6)',
+	'Missing arguments in n:class (on line 1 at column 6)',
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<div n:inner-class/>'),
 	Latte\CompileException::class,
-	'Unexpected attribute n:inner-class, did you mean n:inner-last? (at column 6)',
+	'Unexpected attribute n:inner-class, did you mean n:inner-last? (on line 1 at column 6)',
 );

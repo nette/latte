@@ -18,14 +18,14 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->renderToString('{include this}'),
 	Latte\CompileException::class,
-	'Cannot include this block outside of any block (at column 1)',
+	'Cannot include this block outside of any block (on line 1 at column 1)',
 );
 
 // in anonymous block
 Assert::exception(
 	fn() => $latte->renderToString('{block} {include this} {/block}'),
 	Latte\CompileException::class,
-	'Cannot include this block outside of any block (at column 9)',
+	'Cannot include this block outside of any block (on line 1 at column 9)',
 );
 
 Assert::match(

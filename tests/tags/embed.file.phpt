@@ -23,7 +23,7 @@ Assert::exception(function () {
 	testTemplate('unexpected content', [
 		'main' => '{embed "embed.latte"} {$a} {/embed}',
 	]);
-}, Latte\CompileException::class, 'Unexpected content inside {embed} tags (at column 23)');
+}, Latte\CompileException::class, 'Unexpected content inside {embed} tags (on line 1 at column 23)');
 
 
 testTemplate('keyword file', [

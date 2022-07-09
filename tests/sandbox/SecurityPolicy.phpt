@@ -16,7 +16,7 @@ $latte->setSandboxMode();
 Assert::exception(
 	fn() => $latte->compile('{$abc}'),
 	Latte\SecurityViolationException::class,
-	'Tag {=} is not allowed (at column 1)',
+	'Tag {=} is not allowed (on line 1 at column 1)',
 );
 
 $policy->allowTags(['=']);
@@ -26,7 +26,7 @@ Assert::noError(fn() => $latte->compile('{$abc}'));
 Assert::exception(
 	fn() => $latte->compile('{var $abc}'),
 	Latte\SecurityViolationException::class,
-	'Tag {var} is not allowed (at column 1)',
+	'Tag {var} is not allowed (on line 1 at column 1)',
 );
 
 $policy->allowTags($policy::All);
@@ -37,7 +37,7 @@ Assert::noError(fn() => $latte->compile('{var $abc}'));
 Assert::exception(
 	fn() => $latte->compile('{$abc|upper}'),
 	Latte\SecurityViolationException::class,
-	'Filter |upper is not allowed (at column 6)',
+	'Filter |upper is not allowed (on line 1 at column 6)',
 );
 
 $policy->allowFilters(['UppeR']);
@@ -47,7 +47,7 @@ Assert::noError(fn() => $latte->compile('{$abc|upper}'));
 Assert::exception(
 	fn() => $latte->compile('{$abc|lower}'),
 	Latte\SecurityViolationException::class,
-	'Filter |lower is not allowed (at column 6)',
+	'Filter |lower is not allowed (on line 1 at column 6)',
 );
 
 $policy->allowFilters($policy::All);
@@ -58,7 +58,7 @@ Assert::noError(fn() => $latte->compile('{$abc|lower}'));
 Assert::exception(
 	fn() => $latte->compile('{trim(abc)}'),
 	Latte\SecurityViolationException::class,
-	'Function trim() is not allowed (at column 2)',
+	'Function trim() is not allowed (on line 1 at column 2)',
 );
 
 $policy->allowFunctions(['tRim']);
@@ -71,7 +71,7 @@ Assert::noError(function () use ($latte) {
 Assert::exception(
 	fn() => $latte->compile('{ltrim(abc)}'),
 	Latte\SecurityViolationException::class,
-	'Function ltrim() is not allowed (at column 2)',
+	'Function ltrim() is not allowed (on line 1 at column 2)',
 );
 
 $policy->allowFunctions($policy::All);

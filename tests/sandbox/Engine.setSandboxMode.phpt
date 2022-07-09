@@ -21,7 +21,7 @@ $latte->setSandboxMode();
 Assert::exception(
 	fn() => $latte->compile('{var $abc}'),
 	Latte\SecurityViolationException::class,
-	'Tag {var} is not allowed (at column 1)',
+	'Tag {var} is not allowed (on line 1 at column 1)',
 );
 
 Assert::exception(

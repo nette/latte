@@ -340,7 +340,7 @@ Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 Assert::exception(
 	fn() => $latte->renderToString('context1a'),
 	Latte\CompileException::class,
-	'Filter |noescape is not expected here (at column 4)',
+	'Filter |noescape is not expected here (on line 1 at column 4)',
 );
 
 Assert::exception(
@@ -379,7 +379,7 @@ Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 Assert::exception(
 	fn() => $latte->renderToString('context1a'),
 	Latte\CompileException::class,
-	'Filter |noescape is not expected here (at column 17)',
+	'Filter |noescape is not expected here (on line 1 at column 17)',
 );
 
 Assert::exception(
@@ -418,7 +418,7 @@ Assert::same('<p><hr> " &lt;</p>', $latte->renderToString('context1'));
 Assert::exception(
 	fn() => $latte->renderToString('context1a'),
 	Latte\CompileException::class,
-	'Filter |noescape is not expected here (at column 4)',
+	'Filter |noescape is not expected here (on line 1 at column 4)',
 );
 
 Assert::exception(

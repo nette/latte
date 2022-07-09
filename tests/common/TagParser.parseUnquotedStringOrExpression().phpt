@@ -22,7 +22,7 @@ function format(string $str, bool $acceptColon = true)
 Assert::exception(
 	fn() => format(''),
 	Latte\CompileException::class,
-	'Unexpected end (at column 1)',
+	'Unexpected end (on line 1 at column 1)',
 );
 
 // non-unquoted strings

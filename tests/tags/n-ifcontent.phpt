@@ -66,28 +66,28 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<div n:ifcontent=x></div>'),
 	Latte\CompileException::class,
-	"Unexpected 'x', expecting end of attribute in n:ifcontent (at column 18)",
+	"Unexpected 'x', expecting end of attribute in n:ifcontent (on line 1 at column 18)",
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<html>{ifcontent}'),
 	Latte\CompileException::class,
-	'Unexpected tag {ifcontent} (at column 7)',
+	'Unexpected tag {ifcontent} (on line 1 at column 7)',
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<div n:inner-ifcontent/>'),
 	Latte\CompileException::class,
-	'Unexpected attribute n:inner-ifcontent (at column 6)',
+	'Unexpected attribute n:inner-ifcontent (on line 1 at column 6)',
 );
 
 
 Assert::exception(
 	fn() => $latte->renderToString('<br n:ifcontent>'),
 	Latte\CompileException::class,
-	'Unnecessary n:ifcontent on empty element <br> (at column 5)',
+	'Unnecessary n:ifcontent on empty element <br> (on line 1 at column 5)',
 );
 
 

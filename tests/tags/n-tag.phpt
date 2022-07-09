@@ -86,14 +86,14 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<div n:tag/>'),
 	Latte\CompileException::class,
-	'Missing arguments in n:tag (at column 6)',
+	'Missing arguments in n:tag (on line 1 at column 6)',
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<div n:inner-tag/>'),
 	Latte\CompileException::class,
-	'Unexpected attribute n:inner-tag, did you mean n:inner-try? (at column 6)',
+	'Unexpected attribute n:inner-tag, did you mean n:inner-try? (on line 1 at column 6)',
 );
 
 
@@ -107,14 +107,14 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<script n:tag="foo"></script>'),
 	Latte\CompileException::class,
-	'Attribute n:tag is not allowed in <script> or <style> (at column 9)',
+	'Attribute n:tag is not allowed in <script> or <style> (on line 1 at column 9)',
 );
 
 
 Assert::exception(
 	fn() => $latte->compile('<STYLE n:tag="foo"></STYLE>'),
 	Latte\CompileException::class,
-	'Attribute n:tag is not allowed in <script> or <style> (at column 8)',
+	'Attribute n:tag is not allowed in <script> or <style> (on line 1 at column 8)',
 );
 
 

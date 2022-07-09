@@ -22,11 +22,11 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->renderToString('{block _foobar}Hello{/block}'),
 	Latte\CompileException::class,
-	"Block name must start with letter a-z, '_foobar' given (at column 1)",
+	"Block name must start with letter a-z, '_foobar' given (on line 1 at column 1)",
 );
 
 Assert::exception(
 	fn() => $latte->renderToString('{block 123}Hello{/block}'),
 	Latte\CompileException::class,
-	"Block name must start with letter a-z, '123' given (at column 1)",
+	"Block name must start with letter a-z, '123' given (on line 1 at column 1)",
 );

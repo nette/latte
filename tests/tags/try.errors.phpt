@@ -17,5 +17,5 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{rollback}'),
 	Latte\CompileException::class,
-	'Tag {rollback} must be inside {try} ... {/try} (at column 1)',
+	'Tag {rollback} must be inside {try} ... {/try} (on line 1 at column 1)',
 );

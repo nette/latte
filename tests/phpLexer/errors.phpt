@@ -18,49 +18,49 @@ function tokenize(string $code): array
 Assert::exception(
 	fn() => tokenize("\0 foo"),
 	Latte\CompileException::class,
-	"Unexpected '\x00' (at column 1)",
+	"Unexpected '\x00' (on line 1 at column 1)",
 );
 
 Assert::exception(
 	fn() => tokenize('"$a[]"'),
 	Latte\CompileException::class,
-	"Unexpected '[]\"' (at column 5)",
+	"Unexpected '[]\"' (on line 1 at column 5)",
 );
 
 Assert::exception(
 	fn() => tokenize('"aa'),
 	Latte\CompileException::class,
-	'Unterminated string (at column 4)',
+	'Unterminated string (on line 1 at column 4)',
 );
 
 Assert::exception(
 	fn() => tokenize("'aa"),
 	Latte\CompileException::class,
-	'Unterminated string (at column 1)',
+	'Unterminated string (on line 1 at column 1)',
 );
 
 Assert::exception(
 	fn() => tokenize('"aa $a'),
 	Latte\CompileException::class,
-	'Unterminated string (at column 7)',
+	'Unterminated string (on line 1 at column 7)',
 );
 
 Assert::exception(
 	fn() => tokenize('"aa {$a "'),
 	Latte\CompileException::class,
-	'Unterminated string (at column 10)',
+	'Unterminated string (on line 1 at column 10)',
 );
 
 Assert::exception(
 	fn() => tokenize('"aa $a["'),
 	Latte\CompileException::class,
-	"Missing ']' (at column 8)",
+	"Missing ']' (on line 1 at column 8)",
 );
 
 Assert::exception(
 	fn() => tokenize('"aa ${a}"'),
 	Latte\CompileException::class,
-	'Syntax ${...} is not supported (at column 5)',
+	'Syntax ${...} is not supported (on line 1 at column 5)',
 );
 
 Assert::exception(
@@ -78,5 +78,5 @@ Assert::exception(
 Assert::exception(
 	fn() => tokenize('/*'),
 	Latte\CompileException::class,
-	'Unterminated comment (at column 1)',
+	'Unterminated comment (on line 1 at column 1)',
 );

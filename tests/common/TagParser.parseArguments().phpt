@@ -43,7 +43,7 @@ test('strings', function () {
 	Assert::exception(
 		fn() => formatArgs("'\\\\'1, 2, symbol1, symbol2'"),
 		Latte\CompileException::class,
-		'Unterminated string (at column 27)',
+		'Unterminated string (on line 1 at column 27)',
 	);
 });
 

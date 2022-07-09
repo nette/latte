@@ -22,5 +22,5 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->renderToString('{block}{block}Block'),
 	Latte\CompileException::class,
-	'Unexpected end, expecting {/block} (at column 20)',
+	'Unexpected end, expecting {/block} (on line 1 at column 20)',
 );

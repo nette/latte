@@ -37,11 +37,8 @@ trait PositionAwareException
 		if ($this->sourceName && @is_file($this->sourceName)) { // @ - may trigger error
 			$info[] = "in '" . str_replace(dirname($this->sourceName, 2), '...', $this->sourceName) . "'";
 		}
-		if ($this->position?->line > 1) {
-			$info[] = 'on line ' . $this->position->line;
-		}
-		if ($this->position?->column) {
-			$info[] = 'at column ' . $this->position->column;
+		if ($this->position) {
+			$info[] = 'on line ' . $this->position->line . ' at column ' . $this->position->column;
 		}
 		$this->message = $info
 			? rtrim($this->origMessage, '.') . ' (' . implode(' ', $info) . ')'

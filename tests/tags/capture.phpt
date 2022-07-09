@@ -53,7 +53,7 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->renderToString('{capture $x->x() |foo}{/capture}'),
 	Latte\CompileException::class,
-	"It is not possible to write into '\$x->x()' in {capture} (at column 1)",
+	"It is not possible to write into '\$x->x()' in {capture} (on line 1 at column 1)",
 );
 
 $node = $latte->parse('{capture $var|strip}...{/capture}');

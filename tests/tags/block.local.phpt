@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->renderToString('{block local, a}'),
 	Latte\CompileException::class,
-	"Unexpected ',' (at column 13)",
+	"Unexpected ',' (on line 1 at column 13)",
 );
 
 
@@ -97,7 +97,7 @@ Assert::same(
 Assert::exception(
 	fn() => $latte->renderToString('{block local a}local{/block} {block a}classic{/block}'),
 	Latte\CompileException::class,
-	"Cannot redeclare block 'a' (at column 30)",
+	"Cannot redeclare block 'a' (on line 1 at column 30)",
 );
 
 
@@ -111,7 +111,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->renderToString('{block a}local{/block} {block local a}classic{/block}'),
 	Latte\CompileException::class,
-	"Cannot redeclare block 'a' (at column 24)",
+	"Cannot redeclare block 'a' (on line 1 at column 24)",
 );
 
 
