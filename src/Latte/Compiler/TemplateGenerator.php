@@ -114,7 +114,18 @@ final class TemplateGenerator
 			$body = self::buildParams($block->content, $block->parameters, '$ʟ_args', $context, $block->variables);
 			if (!$block->isDynamic() && str_contains($body, '$')) {
 				$embedded = $block->tag->name === 'block' && is_int($block->layer) && $block->layer;
-				$body = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');' . $body;
+				if($context->paramsExtraction) {
+					$paramTypes = '';
+					foreach ($context->paramsExtraction as $param) {
+						$paramTypes .= $param->type ?
+							VariableScope::printComment($param->var->name, $param->type->type) . "\n" :
+							'';
+					}
+					$body = 'extract($this->prepare());' . "\n" . $paramTypes . $body;
+				} else {
+					$body = 'extract(' . ($embedded ? 'end($this->varStack)' : '$this->params') . ');' . $body;
+				}
+
 			}
 
 			$this->addMethod(
@@ -193,11 +204,10 @@ final class TemplateGenerator
 			);
 		}
 
-		$extract = $params
-			? implode('', $res) . 'unset($ʟ_args);'
-			: "extract($cont);" . (str_contains($cont, '$this') ? '' : "unset($cont);");
+		$extract = $params ? implode('', $res) : "extract($cont);";
+		$extract .= (str_contains($cont, '$this') ? '' : "unset($cont);");
 
-		return $extract . "\n"
+		return $extract
 			. $scope->extractTypes() . "\n\n"
 			. $body;
 	}

@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
+use Latte\Compiler\VariableScope;
 
 
 /**
@@ -24,6 +25,7 @@ class VarTypeNode extends StatementNode
 {
 	public VariableNode $variable;
 	public SuperiorTypeNode $type;
+	public bool $isParameterType = false;
 
 
 	public static function create(Tag $tag): static
@@ -38,14 +40,21 @@ class VarTypeNode extends StatementNode
 		$node = new static;
 		$node->type = $type;
 		$node->variable = new VariableNode(substr($token->text, 1));
+		$node->isParameterType = $tag->isInHead();
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		$scope = $context->getVariableScope();
-		return $scope->addExpression($this->variable, $this->type) . "\n";
+		if ($this->isParameterType) {
+			$scope = $context->getVariableScope();
+			return $scope->addExpression($this->variable, $this->type) . "\n";
+		} elseif (is_string($this->variable->name)) {
+			return VariableScope::printComment($this->variable->name, $this->type?->type) . "\n";
+		} else {
+			return '';
+		}
 	}
 
 

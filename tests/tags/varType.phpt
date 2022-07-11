@@ -57,3 +57,27 @@ Assert::contains(
 	'/** @var array{0:int,1:int} $var */',
 	$latte->compile('{varType array{0: int, 1: int} $var}'),
 );
+
+$template = <<<'XX'
+
+{varType string $a}
+
+{$a}
+
+{varType string $c}
+{var $c = 10}
+
+{include test}
+
+{define test}
+  {varType int $b}
+  {var $b = 5}
+  {$a}{$b}
+{/define}
+
+XX;
+
+Assert::matchFile(
+	__DIR__ . '/expected/varType.phtml',
+	$latte->compile($template),
+);

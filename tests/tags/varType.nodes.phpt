@@ -15,5 +15,9 @@ Assert::match(<<<'XX'
 	Template:
 		Fragment:
 			VarType:
+				Variable:
+					name: int
+				SuperiorType:
+					'int'
 		Fragment:
 	XX, exportTraversing('{varType int $int}'));

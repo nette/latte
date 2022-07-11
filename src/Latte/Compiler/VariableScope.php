@@ -46,6 +46,6 @@ final class VariableScope
 
 	public function extractTypes(): string
 	{
-		return implode('', $this->types) . "\n";
+		return implode("\n", array_filter($this->types));
 	}
 }

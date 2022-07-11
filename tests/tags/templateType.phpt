@@ -34,7 +34,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('{templateType AA\BBB}'),
 	Latte\CompileException::class,
-	"Class 'AA\BBB' used in {templateType} doesn't exist (at column 15)",
+	"Class 'AA\\BBB' used in {templateType} doesn't exist (at column 15)",
 );
 
 Assert::exception(
@@ -44,6 +44,13 @@ Assert::exception(
 );
 
 Assert::contains(
-	'/** @var int $intType *//** @var int|bool $intBoolType *//** @var array<int, string> $arrayType */',
-	$latte->compile('{templateType TemplateClass}'),
+	'/** @var int $intType */' . "\n\t\t" .
+	'/** @var int|bool $intBoolType */'. "\n\t\t" .
+	'/** @var array<int, string> $arrayType */'. "\n\n",
+	$latte->compile('{templateType TemplateClass}{$intBoolType}'),
+);
+
+Assert::matchFile(
+	__DIR__ . '/expected/templateType.phtml',
+	$latte->compile('{templateType TemplateClass}{$intBoolType}{define test}{$intBoolType}{/define}')
 );

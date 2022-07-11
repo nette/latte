@@ -1,0 +1,16 @@
+%A%
+	public function main(array $ʟ_args): void
+	{
+		extract($ʟ_args);
+		unset($ʟ_args);
+
+%A%
+	}
+%A%
+	public function prepare(): array
+	{
+		/** @var int $a */ $a = $this->params[0] ?? $this->params['a'] ?? 5;
+
+		return get_defined_vars();
+	}
+%A%

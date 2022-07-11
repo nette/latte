@@ -24,13 +24,13 @@ b) ';
 	}
 
 
-	/** {define test $var1 = 0, $var2 = [1, 2, 3], $var3 = 10} on line %d% */
+	/** {define test $var1 = 0, array $var2 = [1, 2, 3], int $var3 = 10} on line %d% */
 	public function blockTest(array $ʟ_args): void
 	{
 		extract($this->params);
 		$var1 = $ʟ_args[0] ?? $ʟ_args['var1'] ?? 0;
-		$var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ?? [1, 2, 3];
-		$var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ?? 10;
+		/** @var array $var2 */ $var2 = $ʟ_args[1] ?? $ʟ_args['var2'] ?? [1, 2, 3];
+		/** @var int $var3 */ $var3 = $ʟ_args[2] ?? $ʟ_args['var3'] ?? 10;
 		unset($ʟ_args);
 
 		echo '	Variables ';

@@ -18,6 +18,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
+use Latte\Compiler\VariableScope;
 
 
 /**
@@ -76,7 +77,7 @@ class VarNode extends StatementNode
 					? $assign->var->name->print($context)
 					: $context->encodeString($assign->var->name);
 				$res[] = $var . ' => ' . $assign->expr->print($context);
-				$types[] = $scope->addExpression($var, $type);
+				$types[] = VariableScope::printComment($var, $type?->type);
 			}
 
 			return $context->format(

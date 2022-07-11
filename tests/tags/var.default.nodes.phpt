@@ -20,5 +20,7 @@ Assert::match(<<<'XX'
 						name: var2
 					Integer:
 						value: 3
+				SuperiorType:
+					'int|array'
 		Fragment:
 	XX, exportTraversing('{var $var, int|array $var2 = 3}'));
