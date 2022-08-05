@@ -56,7 +56,7 @@ class EmbedNode extends StatementNode
 		[$node->blocks] = yield;
 
 		foreach ($node->blocks->children as $child) {
-			if (!$child instanceof ImportNode && !$child instanceof BlockNode && !$child instanceof TextNode) {
+			if (!$child instanceof ImportNode && !$child instanceof DefineNode && !$child instanceof BlockNode && !$child instanceof TextNode) {
 				throw new CompileException('Unexpected content inside {embed} tags.', $child->position);
 			}
 		}
