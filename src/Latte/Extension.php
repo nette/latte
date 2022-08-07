@@ -25,7 +25,7 @@ abstract class Extension
 
 	/**
 	 * Returns a list of parsers for Latte tags.
-	 * @return array<string, callable(Compiler\Tag, Compiler\TemplateParser): (Compiler\Node|\Generator|void)|\stdClass>
+	 * @return array<string, callable(Compiler\Tag, Compiler\TemplateParser): (Compiler\Node|\Generator|null|void)|\stdClass>
 	 */
 	public function getTags(): array
 	{
