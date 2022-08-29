@@ -18,6 +18,7 @@ use Latte\Helpers;
  * Filter executor.
  * @internal
  */
+#[\AllowDynamicProperties]
 class FilterExecutor
 {
 	/** @var callable[] */

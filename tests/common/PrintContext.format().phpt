@@ -59,7 +59,7 @@ test('%dump', function () {
 	);
 
 	Assert::match(
-		'test(Latte\Compiler\Nodes\Php\Scalar\StringNode::__set_state(%A%))',
+		'test(%a?%Latte\Compiler\Nodes\Php\Scalar\StringNode::__set_state(%A%))',
 		format('test(%dump)', new StringNode('PHP')),
 	);
 });
