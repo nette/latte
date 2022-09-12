@@ -58,7 +58,7 @@ final class Blueprint
 				continue;
 			}
 
-			$type = Php\Type::getType($value) ?: 'mixed';
+			$type = $this->getType($value);
 			$res .= "{varType $type $$name}\n";
 		}
 
@@ -75,7 +75,8 @@ final class Blueprint
 	public function addProperties(Php\ClassType $class, array $props): void
 	{
 		foreach ($props as $name => $value) {
-			$type = Php\Type::getType($value);
+			$class->removeProperty($name);
+			$type = $this->getType($value);
 			$prop = $class->addProperty($name);
 			$prop->setType($type);
 		}
@@ -102,7 +103,7 @@ final class Blueprint
 		}
 
 		if ($namespace) {
-			$type = $namespace->unresolveName($type);
+			$type = $namespace->simplifyName($type);
 		}
 
 		if ($nullable && strcasecmp($type, 'mixed')) {
@@ -156,5 +157,11 @@ final class Blueprint
 		echo '<pre><code class="language-', htmlspecialchars($lang), '">',
 			htmlspecialchars($code),
 			"</code></pre>\n";
+	}
+
+
+	private function getType($value): string
+	{
+		return $value === null ? 'mixed' : get_debug_type($value);
 	}
 }

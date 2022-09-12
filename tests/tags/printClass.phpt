@@ -27,7 +27,7 @@ Assert::match(
 		class Template
 		{
 			public int $int;
-			public $unknown;
+			public mixed $unknown;
 		}
 		%A%
 		XX,

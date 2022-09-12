@@ -24,7 +24,7 @@
 		"tracy/tracy": "^2.3",
 		"nette/utils": "^3.0",
 		"phpstan/phpstan": "^1",
-		"nette/php-generator": "^3.3.4"
+		"nette/php-generator": "^3.6 || ^4.0"
 	},
 	"suggest": {
 		"ext-iconv": "to use filters |reverse, |substring",
