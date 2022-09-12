@@ -62,7 +62,7 @@ class Blueprint
 				continue;
 			}
 
-			$type = Php\Type::getType($value) ?: 'mixed';
+			$type = $this->getType($value);
 			$res .= "{varType $type $$name}\n";
 		}
 
@@ -81,7 +81,8 @@ class Blueprint
 		$printer = new Php\Printer;
 		$native = $native ?? (PHP_VERSION_ID >= 70400);
 		foreach ($props as $name => $value) {
-			$type = Php\Type::getType($value);
+			$class->removeProperty($name);
+			$type = $this->getType($value);
 			$prop = $class->addProperty($name);
 			if ($native) {
 				$prop->setType($type);
@@ -114,7 +115,7 @@ class Blueprint
 		}
 
 		if ($namespace) {
-			$type = $namespace->unresolveName($type);
+			$type = @$namespace->unresolveName($type); // simplifyName() in v4
 		}
 
 		if ($nullable && strcasecmp($type, 'mixed')) {
@@ -169,5 +170,25 @@ class Blueprint
 		echo '<pre><code class="language-', htmlspecialchars($lang), '">',
 			htmlspecialchars($code),
 			"</code></pre>\n";
+	}
+
+
+	private function getType($value): string
+	{
+		if (is_object($value)) {
+			return get_class($value);
+		} elseif (is_int($value)) {
+			return 'int';
+		} elseif (is_float($value)) {
+			return 'float';
+		} elseif (is_string($value)) {
+			return 'string';
+		} elseif (is_bool($value)) {
+			return 'bool';
+		} elseif (is_array($value)) {
+			return 'array';
+		} else {
+			return 'mixed';
+		}
 	}
 }
