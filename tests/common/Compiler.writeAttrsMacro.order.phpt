@@ -89,7 +89,7 @@ Assert::match(<<<'DOC'
 		echo ' ';
 %A%
 DOC
-, $latte->compile('<div n:one></div> '));
+	, $latte->compile('<div n:one></div> '));
 
 
 Assert::match(<<<'DOC'
@@ -112,7 +112,7 @@ Assert::match(<<<'DOC'
 		echo ' ';
 %A%
 DOC
-, $latte->compile('<div n:two n:three n:one>@</div> '));
+	, $latte->compile('<div n:two n:three n:one>@</div> '));
 
 
 Assert::match(<<<'DOC'
@@ -135,7 +135,7 @@ Assert::match(<<<'DOC'
 		echo ' ';
 %A%
 DOC
-, $latte->compile('<div n:tag-two n:tag-one>@</div> '));
+	, $latte->compile('<div n:tag-two n:tag-one>@</div> '));
 
 
 Assert::match(<<<'DOC'
@@ -154,7 +154,7 @@ Assert::match(<<<'DOC'
 		echo '</div> ';
 %A%
 DOC
-, $latte->compile('<div n:inner-two n:inner-one>@</div> '));
+	, $latte->compile('<div n:inner-two n:inner-one>@</div> '));
 
 
 Assert::match(<<<'DOC'
@@ -178,4 +178,4 @@ Assert::match(<<<'DOC'
 		echo ' ';
 %A%
 DOC
-, $latte->compile('<div n:one n:tag-two n:inner-three>@</div> '));
+	, $latte->compile('<div n:one n:tag-two n:inner-three>@</div> '));

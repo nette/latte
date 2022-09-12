@@ -39,7 +39,7 @@ Assert::match(
 ';
 %A%
 XX
-,
+	,
 	$latte->compile($template)
 );
 
@@ -50,7 +50,7 @@ Assert::match(
 
 <input checked>
 XX
-,
+	,
 	$latte->renderToString($template)
 );
 
@@ -61,7 +61,7 @@ Assert::match(
 
 <input checked="checked">
 XX
-,
+	,
 	$latte->setContentType($latte::CONTENT_XML)->renderToString($template)
 );
 

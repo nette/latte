@@ -43,10 +43,14 @@ $latte->addFilter('h2', 'strtoupper');
 $latte->addFilter('translate', function (FilterInfo $info, $s) { return strrev($s); });
 $latte->addFilter('types', 'types');
 @$latte->addFilter(null, function ($name, $val) { // deprecated
-	return $name === 'dynamic' ? "<$name $val>" : null;
+	return $name === 'dynamic'
+		? "<$name $val>"
+		: null;
 });
 @$latte->addFilter(null, function ($name, $val) { // deprecated
-	return $name === 'dynamic' ? "[$name $val]" : null;
+	return $name === 'dynamic'
+		? "[$name $val]"
+		: null;
 });
 $latte->addFilterLoader(function ($name) use ($latte) {
 	if ($name === 'dynamic2') {

@@ -66,6 +66,6 @@ filter: ';
 		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello , '' , "" , "$hello" )) /* line 11 */;
 %A%
 XX
-,
+	,
 	$latte->compile($template)
 );

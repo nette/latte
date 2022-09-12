@@ -40,7 +40,7 @@ Assert::match(
 
 is null
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 {foreach [a, b] as $a}
@@ -77,6 +77,6 @@ Assert::match(
 		test
 test
 XX
-,
+	,
 	$latte->renderToString('main')
 );

@@ -347,7 +347,8 @@ class Compiler
 		string $arguments = '',
 		string $returns = '',
 		?string $comment = null
-	): void {
+	): void
+	{
 		$body = trim($body);
 		$this->methods[$name] = compact('body', 'arguments', 'returns', 'comment');
 	}
@@ -638,7 +639,8 @@ class Compiler
 		string $modifiers = '',
 		bool $isRightmost = false,
 		?string $nPrefix = null
-	): MacroNode {
+	): MacroNode
+	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
 			$this->writeCode((string) $node->openingCode, $node->replaced, $isRightmost);
@@ -666,7 +668,8 @@ class Compiler
 		string $modifiers = '',
 		bool $isRightmost = false,
 		?string $nPrefix = null
-	): MacroNode {
+	): MacroNode
+	{
 		$node = $this->macroNode;
 
 		if (

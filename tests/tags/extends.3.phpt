@@ -27,4 +27,4 @@ Assert::match(<<<'EOD'
 
 	Content
 EOD
-, $latte->renderToString($template));
+	, $latte->renderToString($template));

@@ -53,7 +53,7 @@ Assert::match(
 
 <p class="bem--modifier">n:class with BEM</p>
 XX
-,
+	,
 	$latte->renderToString($template)
 );
 

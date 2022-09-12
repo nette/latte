@@ -20,13 +20,13 @@ qwerty
 
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 {contentType text}
 qwerty
 
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -34,13 +34,13 @@ Assert::match(<<<'EOD'
 asdfgh
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 
 {contentType text}
 asdfgh
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -48,14 +48,14 @@ qwerty
 
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 {* comment
 *}
 qwerty
 
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -63,15 +63,15 @@ qwerty
 
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 {* comment
 *}
 
 qwerty
 
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -80,8 +80,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 {* comment
 *}
 
@@ -89,7 +89,7 @@ EOD
 qwerty
 
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -97,8 +97,8 @@ qwerty
 
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 {* comment
 *}
 
@@ -106,7 +106,7 @@ EOD
 qwerty
 
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -114,15 +114,15 @@ qwerty
 
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 {* comment
 *}
 {contentType text}
 qwerty
 
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -130,23 +130,23 @@ line 1
 line 2
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 line 1 {* comment *}
 line 2
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
 word 1  word 2
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 word 1 {* comment *} word 2
 EOD
-));
+	));
 
 
 Assert::match(<<<'EOD'
@@ -154,10 +154,10 @@ Assert::match(<<<'EOD'
 	<link>
 EOD
 
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 	<link>
 	{* comment *}
 	<link>
 EOD
-));
+	));

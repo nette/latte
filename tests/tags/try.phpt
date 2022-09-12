@@ -33,7 +33,7 @@ top begin
 	in1 in2
 top end
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 top begin
@@ -52,7 +52,7 @@ Assert::match(
 top begin
 top end
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 top begin
@@ -72,7 +72,7 @@ top begin
 	in1 in2
 top end
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 top begin
@@ -94,7 +94,7 @@ top begin
 	error
 top end
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 top begin
@@ -115,7 +115,7 @@ Assert::match(
 top begin
 top end
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 top begin
@@ -135,7 +135,7 @@ top begin
 	error
 top end
 XX
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 top begin

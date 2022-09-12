@@ -80,7 +80,7 @@ Assert::match(
 		echo '>';
 %A%
 XX
-,
+	,
 	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:tag="h . 1"></div>')
 );
 

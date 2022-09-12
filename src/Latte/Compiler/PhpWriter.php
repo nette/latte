@@ -92,28 +92,38 @@ class PhpWriter
 
 				switch ($source) {
 					case 'node_':
-						$arg = $word; break;
+						$arg = $word;
+						break;
 					case '':
-						$arg = current($args); next($args); break;
+						$arg = current($args);
+						next($args);
+						break;
 					default:
-						$arg = $args[(int) $source]; break;
+						$arg = $args[(int) $source];
+						break;
 				}
 
 				switch ($format) {
 					case 'word':
-						$code = $this->formatWord($arg); break;
+						$code = $this->formatWord($arg);
+						break;
 					case 'args':
-						$code = $this->formatArgs(); break;
+						$code = $this->formatArgs();
+						break;
 					case 'array':
 						$code = $this->formatArray();
-						$code = $cond && $code === '[]' ? '' : $code; break;
+						$code = $cond && $code === '[]' ? '' : $code;
+						break;
 					case 'var':
-						$code = PhpHelpers::dump($arg); break;
+						$code = PhpHelpers::dump($arg);
+						break;
 					case 'raw':
-						$code = (string) $arg; break;
+						$code = (string) $arg;
+						break;
 					case 'line':
 						$l = trim($l);
-						$code = $this->line ? " /* line $this->line */" : ''; break;
+						$code = $this->line ? " /* line $this->line */" : '';
+						break;
 				}
 
 				if ($cond && $code === '') {

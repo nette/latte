@@ -28,8 +28,8 @@ true
 		side
 	</div> <!-- /main -->
 EOD
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 	{block main}
 	<div id="main">
 		{block sidebar}side{/block}
@@ -43,4 +43,4 @@ EOD
 
 {include main}
 EOD
-));
+	));

@@ -45,7 +45,7 @@ $result = $latte->renderToString(<<<'EOD'
 [* image.jpg *]
 {/block}
 EOD
-, $params);
+	, $params);
 
 Assert::match(<<<'EOD'
 <pre><i>hello</i>
@@ -62,4 +62,4 @@ Assert::match(<<<'EOD'
 [* image.jpg *]
 </pre>
 EOD
-, $result);
+	, $result);

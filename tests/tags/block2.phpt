@@ -20,10 +20,10 @@ Assert::match(<<<'EOD'
 
 </head>
 EOD
-, $latte->renderToString(
-	<<<'EOD'
+	, $latte->renderToString(
+		<<<'EOD'
 <head>
 	{block head}{/block}
 </head>
 EOD
-));
+	));
