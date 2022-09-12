@@ -6,4 +6,29 @@
 	<rule ref="SlevomatCodingStandard.PHP.RequireNowdoc.RequiredNowdoc">
 		<severity>0</severity>
 	</rule>
+
+	<!-- used in tests/Tracy/Dumper.toText().specials.generator.phpt -->
+	<rule ref="Squiz.PHP.NonExecutableCode.Unreachable">
+		<severity>0</severity>
+	</rule>
+
+	<!-- used in Node.php and some tests -->
+	<rule ref="Squiz.PHP.NonExecutableCode.Unreachable">
+		<severity>0</severity>
+	</rule>
+
+	<!-- public foo /*readonly*/ $foo -->
+	<rule ref="Squiz.Commenting.VariableComment.WrongStyle">
+		<severity>0</severity>
+	</rule>
+
+	<!-- used in TemplateLexer.php -->
+	<rule ref="Squiz.Operators.ValidLogicalOperators.NotAllowed">
+		<severity>0</severity>
+	</rule>
+
+	<!-- use function in Filters.php -->
+	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine.MultipleUsesPerLine">
+		<severity>0</severity>
+	</rule>
 </ruleset>
