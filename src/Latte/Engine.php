@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
+use RuntimeException;
 
 
 /**
