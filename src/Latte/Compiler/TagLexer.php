@@ -35,6 +35,7 @@ final class TagLexer
 		'null' => Token::Php_Null,
 		'true' => Token::Php_True,
 		'false' => Token::Php_False,
+		'not' => Token::Php_Not,
 	];
 
 	private const KeywordsFollowed = [ // must follows ( & =

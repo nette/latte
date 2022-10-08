@@ -56,7 +56,7 @@ __halt_compiler();
 #10:8  Php_Whitespace  '\n'
 #11:1  Php_Identifier  'aaa--bbb'
 #11:9  Php_Whitespace  '\n'
-#12:1  Php_Identifier  'not'
+#12:1  Php_Not         'not'
 #12:4  Php_Dec         '--'
 #12:6  '-'
 #12:7  Php_Identifier  'name'

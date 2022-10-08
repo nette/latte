@@ -26,6 +26,8 @@ $test = <<<'XX'
 
 	$a = $b || $c,
 	$a = $b or $c,
+
+	not $a > $b && $c == $d,
 	XX;
 
 $node = parseCode($test);
@@ -37,7 +39,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (11)
+   items: array (12)
    |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  left: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -222,4 +224,32 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 17:1 (offset 180)
+   |  11 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
+   |  |  |  left: Latte\Compiler\Nodes\Php\Expression\NotNode
+   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
+   |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  |  |  name: 'a'
+   |  |  |  |  |  |  position: 19:5 (offset 200)
+   |  |  |  |  |  operator: '>'
+   |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  |  |  name: 'b'
+   |  |  |  |  |  |  position: 19:10 (offset 205)
+   |  |  |  |  |  position: 19:5 (offset 200)
+   |  |  |  |  position: 19:1 (offset 196)
+   |  |  |  operator: '&&'
+   |  |  |  right: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
+   |  |  |  |  left: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  |  name: 'c'
+   |  |  |  |  |  position: 19:16 (offset 211)
+   |  |  |  |  operator: '=='
+   |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  |  name: 'd'
+   |  |  |  |  |  position: 19:22 (offset 217)
+   |  |  |  |  position: 19:16 (offset 211)
+   |  |  |  position: 19:1 (offset 196)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 19:1 (offset 196)
    position: null

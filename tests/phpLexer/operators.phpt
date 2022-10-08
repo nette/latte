@@ -44,6 +44,9 @@ $test = <<<'XX'
 	$a xor $b;
 	$b && 2;
 	$b || 1;
+
+	!$a;
+	not $a;
 	XX;
 
 $tokens = (new TagLexer)->tokenize($test);
@@ -268,4 +271,13 @@ __halt_compiler();
 #34:6  Php_Whitespace  ' '
 #34:7  Php_Integer     '1'
 #34:8  ';'
-#34:9  End             ''
+#34:9  Php_Whitespace  '\n\n'
+#36:1  '!'
+#36:2  Php_Variable    '$a'
+#36:4  ';'
+#36:5  Php_Whitespace  '\n'
+#37:1  Php_Not         'not'
+#37:4  Php_Whitespace  ' '
+#37:5  Php_Variable    '$a'
+#37:7  ';'
+#37:8  End             ''

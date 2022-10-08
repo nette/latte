@@ -78,6 +78,10 @@ $test = <<<'XX'
 	$a instanceof $b,
 
 	$a in $b,
+	!$a in $b && not $a + 2 in $b,
+
+	not $a,
+	not $a > $b && not $c == not $d,
 	XX;
 
 $node = parseCode($test);
@@ -150,4 +154,7 @@ $a xor $b,
 $a or $b,
 $a instanceof Foo,
 $a instanceof $b,
-in_array($a, $b, true)
+in_array($a, $b, true),
+in_array(!$a, $b, true) && !in_array($a + 2, $b, true),
+!$a,
+!($a > $b) && !($c == !$d)
