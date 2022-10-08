@@ -13,7 +13,7 @@ $test = <<<'XX'
 
 	/* precedence */
 	$a in $b || $c in $d,
-	$a = $b in $c,
+	$a = not 10 + 20 in $c,
 	XX;
 
 $node = parseCode($test);
@@ -68,13 +68,23 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
    |  |  |  |  position: 5:1 (offset 50)
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\InRangeNode
-   |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
-   |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 5:6 (offset 55)
-   |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
-   |  |  |  |  |  name: 'c'
-   |  |  |  |  |  position: 5:12 (offset 61)
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NotNode
+   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\InRangeNode
+   |  |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
+   |  |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  |  |  |  value: 10
+   |  |  |  |  |  |  |  kind: 10
+   |  |  |  |  |  |  |  position: 5:10 (offset 59)
+   |  |  |  |  |  |  operator: '+'
+   |  |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  |  |  |  value: 20
+   |  |  |  |  |  |  |  kind: 10
+   |  |  |  |  |  |  |  position: 5:15 (offset 64)
+   |  |  |  |  |  |  position: 5:10 (offset 59)
+   |  |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  |  |  name: 'c'
+   |  |  |  |  |  |  position: 5:21 (offset 70)
+   |  |  |  |  |  position: 5:10 (offset 59)
    |  |  |  |  position: 5:6 (offset 55)
    |  |  |  byRef: false
    |  |  |  position: 5:1 (offset 50)
