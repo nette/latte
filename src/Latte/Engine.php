@@ -83,7 +83,7 @@ class Engine
 		$template = $this->createTemplate($name, $this->processParams($params));
 		$template->global->coreCaptured = true;
 		($this->probe)($template);
-		return $template->capture(function () use ($template, $block) { $template->render($block); });
+		return $template->capture(fn() => $template->render($block));
 	}
 
 

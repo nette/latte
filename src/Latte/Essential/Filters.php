@@ -226,7 +226,8 @@ final class Filters
 		string|array $subject,
 		string|array $search,
 		string|array|null $replace = null,
-	): string {
+	): string
+	{
 		$subject = (string) $subject;
 		if (is_array($search)) {
 			if (is_array($replace)) {
@@ -550,7 +551,8 @@ final class Filters
 		int $start,
 		?int $length = null,
 		bool $preserveKeys = false,
-	): string|array {
+	): string|array
+	{
 		return is_array($value)
 			? array_slice($value, $start, $length, $preserveKeys)
 			: self::substring($value, $start, $length);

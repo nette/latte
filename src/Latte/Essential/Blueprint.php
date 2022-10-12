@@ -119,7 +119,8 @@ final class Blueprint
 	public function printParameters(
 		Php\Closure|Php\GlobalFunction|Php\Method $function,
 		?Php\PhpNamespace $namespace = null,
-	): string {
+	): string
+	{
 		$params = [];
 		$list = $function->getParameters();
 		foreach ($list as $param) {

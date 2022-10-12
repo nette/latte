@@ -56,7 +56,7 @@ class EncapsedStringNode extends ScalarNode
 				|| $part instanceof Expression\PropertyFetchNode
 				|| $part instanceof Expression\MethodCallNode
 				|| $part instanceof Expression\ArrayAccessNode
-			)) {
+				)) {
 				$s .= '{' . $partStr . '}';
 
 			} else {

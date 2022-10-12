@@ -198,7 +198,7 @@ class Template
 	public function renderToContentType(string|\Closure|null $mod, ?string $block = null): void
 	{
 		$this->filter(
-			function () use ($block) { $this->render($block); },
+			fn() => $this->render($block),
 			$mod,
 			static::ContentType,
 			"'$this->name'",
@@ -233,7 +233,8 @@ class Template
 		array $params,
 		string|\Closure|null $mod = null,
 		int|string|null $layer = null,
-	): void {
+	): void
+	{
 		$block = $layer
 			? ($this->blocks[$layer][$name] ?? null)
 			: ($this->blocks[self::LayerLocal][$name] ?? $this->blocks[self::LayerTop][$name] ?? null);
@@ -247,7 +248,7 @@ class Template
 		}
 
 		$this->filter(
-			function () use ($block, $params): void { reset($block->functions)($params); },
+			fn() => reset($block->functions)($params),
 			$mod,
 			$block->contentType,
 			"block $name",
@@ -281,7 +282,8 @@ class Template
 		string $contentType,
 		array $functions,
 		int|string|null $layer = null,
-	): void {
+	): void
+	{
 		$block = &$this->blocks[$layer ?? self::LayerTop][$name];
 		$block ??= new Block;
 		if ($block->contentType === null) {

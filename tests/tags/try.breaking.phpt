@@ -22,7 +22,7 @@ Assert::match(
 				inner 2
 				inner 3
 		X
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 			{foreach [1,2,3] as $n}
@@ -42,7 +42,7 @@ Assert::match(
 				inner 2
 				inner 3
 		X
-,
+	,
 	$latte->renderToString(
 		<<<'XX'
 			{foreach [1,2,3] as $n}

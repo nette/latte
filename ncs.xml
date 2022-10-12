@@ -2,33 +2,30 @@
 <ruleset name="Custom" namespace="Nette">
 	<rule ref="$presets/php80.xml"/>
 
-	<!-- tests/phpPrint/stringEscaping.phpt -->
 	<rule ref="SlevomatCodingStandard.PHP.RequireNowdoc.RequiredNowdoc">
-		<severity>0</severity>
+		<exclude-pattern>./tests/phpPrint/stringEscaping.phpt</exclude-pattern>
 	</rule>
 
-	<!-- used in tests/Tracy/Dumper.toText().specials.generator.phpt -->
 	<rule ref="Squiz.PHP.NonExecutableCode.Unreachable">
-		<severity>0</severity>
-	</rule>
-
-	<!-- used in Node.php and some tests -->
-	<rule ref="Squiz.PHP.NonExecutableCode.Unreachable">
-		<severity>0</severity>
+		<exclude-pattern>./src/Latte/Compiler/Node.php</exclude-pattern>
+		<exclude-pattern>*.phpt</exclude-pattern>
 	</rule>
 
 	<!-- public foo /*readonly*/ $foo -->
 	<rule ref="Squiz.Commenting.VariableComment.WrongStyle">
-		<severity>0</severity>
+		<exclude-pattern>*.php</exclude-pattern>
 	</rule>
 
-	<!-- used in TemplateLexer.php -->
 	<rule ref="Squiz.Operators.ValidLogicalOperators.NotAllowed">
-		<severity>0</severity>
+		<exclude-pattern>./src/Latte/Compiler/TemplateLexer.php</exclude-pattern>
 	</rule>
 
-	<!-- use function in Filters.php -->
 	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine.MultipleUsesPerLine">
-		<severity>0</severity>
+		<exclude-pattern>./src/Latte/Essential/Filters.php</exclude-pattern>
+	</rule>
+
+	<!-- strfime() -->
+	<rule ref="Generic.PHP.DeprecatedFunctions.Deprecated">
+		<exclude-pattern>./src/Latte/Essential/Filters.php</exclude-pattern>
 	</rule>
 </ruleset>

@@ -17,8 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::match(<<<'EOD'
 	<head>
 	</head>
-	EOD
-, $latte->renderToString(
+	EOD, $latte->renderToString(
 	<<<'EOD'
 		<head>
 			{block head}{/block}

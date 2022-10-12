@@ -38,7 +38,8 @@ final class TemplateGenerator
 		string $className,
 		?string $comment = null,
 		bool $strictMode = false,
-	): string {
+	): string
+	{
 		$context = new PrintContext($node->contentType);
 		$code = $node->main->print($context);
 		$code = self::buildParams($code, [], '$ʟ_args', $context);
@@ -157,7 +158,8 @@ final class TemplateGenerator
 		string $arguments = '',
 		string $returns = 'void',
 		?string $comment = null,
-	): void {
+	): void
+	{
 		$body = trim($body);
 		$this->methods[$name] = compact('body', 'arguments', 'returns', 'comment');
 	}

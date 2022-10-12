@@ -291,7 +291,8 @@ final class TagParser extends TagParserData
 		string $endToken,
 		Position $startPos,
 		Position $endPos,
-	): Scalar\StringNode|Scalar\EncapsedStringNode {
+	): Scalar\StringNode|Scalar\EncapsedStringNode
+	{
 		$hereDoc = !str_contains($startToken, "'");
 		preg_match('/\A[ \t]*/', $endToken, $matches);
 		$indentation = $matches[0];
@@ -343,7 +344,8 @@ final class TagParser extends TagParserData
 		bool $atStart,
 		bool $atEnd,
 		Position $position,
-	): string {
+	): string
+	{
 		if ($indentation === '') {
 			return $str;
 		}

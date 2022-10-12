@@ -64,7 +64,6 @@ Assert::match(
 				echo "\n";
 				echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, '', '', "{$hello}")) /* line 11 */;
 		%A%
-		XX
-,
+		XX,
 	$latte->compile($template),
 );

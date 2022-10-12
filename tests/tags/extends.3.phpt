@@ -25,5 +25,4 @@ $template = <<<'EOD'
 Assert::match(<<<'EOD'
 
 		Content
-	EOD
-, $latte->renderToString($template));
+	EOD, $latte->renderToString($template));

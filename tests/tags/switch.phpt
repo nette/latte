@@ -87,6 +87,6 @@ Assert::match(
 		---
 
 		X
-,
+	,
 	$latte->renderToString($template),
 );

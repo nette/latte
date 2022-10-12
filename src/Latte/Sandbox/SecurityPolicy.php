@@ -149,8 +149,8 @@ class SecurityPolicy implements Latte\Policy
 	public function isMethodAllowed(string $class, string $method): bool
 	{
 		$method = strtolower($method);
-		/** @var bool|null $res */
 		$res = &$this->methodCache[$class][$method];
+		assert(is_bool($res) || $res === null);
 		if (isset($res)) {
 			return $res;
 		}
@@ -168,8 +168,8 @@ class SecurityPolicy implements Latte\Policy
 	public function isPropertyAllowed(string $class, string $property): bool
 	{
 		$property = strtolower($property);
-		/** @var bool|null $res */
 		$res = &$this->propertyCache[$class][$property];
+		assert(is_bool($res) || $res === null);
 		if (isset($res)) {
 			return $res;
 		}
