@@ -31,9 +31,6 @@ class Engine
 		CONTENT_ICAL = ContentType::ICal,
 		CONTENT_TEXT = ContentType::Text;
 
-	/** @internal */
-	public $probe;
-
 	private ?Loader $loader = null;
 	private Runtime\FilterExecutor $filters;
 	private \stdClass $functions;
@@ -54,7 +51,6 @@ class Engine
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new \stdClass;
 		$this->providers = new \stdClass;
-		$this->probe = function () {};
 		$this->addExtension(new Essential\CoreExtension);
 		$this->addExtension(new Sandbox\SandboxExtension);
 	}
@@ -68,7 +64,6 @@ class Engine
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
 		$template->global->coreCaptured = false;
-		($this->probe)($template);
 		$template->render($block);
 	}
 
@@ -81,7 +76,6 @@ class Engine
 	{
 		$template = $this->createTemplate($name, $this->processParams($params));
 		$template->global->coreCaptured = true;
-		($this->probe)($template);
 		return $template->capture(fn() => $template->render($block));
 	}
 

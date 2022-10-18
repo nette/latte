@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Bridges\Tracy;
 
 use Latte\Engine;
+use Latte\Extension;
 use Latte\Runtime\Template;
 use Tracy;
 
@@ -37,9 +38,18 @@ class LattePanel implements Tracy\IBarPanel
 	public function __construct(Engine $latte, ?string $name = null)
 	{
 		$this->name = $name;
-		$latte->probe = function (Template $template): void {
-			$this->templates[] = $template;
-		};
+		$latte->addExtension(new class ($this->templates) extends Extension {
+			public function __construct(
+				private array &$templates,
+			) {
+			}
+
+
+			public function beforeRender(Template $template): void
+			{
+				$this->templates[] = $template;
+			}
+		});
 	}
 
 

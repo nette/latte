@@ -189,7 +189,6 @@ class Template
 			$referred->blocks[self::LayerSnippet] = &$this->blocks[self::LayerSnippet];
 		}
 
-		($this->engine->probe)($referred);
 		return $referred;
 	}
 
