@@ -37,9 +37,7 @@ class Engine
 	private ?Loader $loader = null;
 	private Runtime\FilterExecutor $filters;
 	private \stdClass $functions;
-
-	/** @var mixed[] */
-	private array $providers = [];
+	private \stdClass $providers;
 
 	/** @var Extension[] */
 	private array $extensions = [];
@@ -55,6 +53,7 @@ class Engine
 	{
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new \stdClass;
+		$this->providers = new \stdClass;
 		$this->probe = function () {};
 		$this->addExtension(new Essential\CoreExtension);
 		$this->addExtension(new Sandbox\SandboxExtension);
@@ -102,7 +101,7 @@ class Engine
 			$extension->beforeRender($this);
 		}
 
-		$this->providers['fn'] = $this->functions;
+		$this->providers->fn = $this->functions;
 		return new $class(
 			$this,
 			$params,
@@ -381,15 +380,17 @@ class Engine
 	public function addExtension(Extension $extension): static
 	{
 		$this->extensions[] = $extension;
-		foreach ($extension->getFilters() as $name => $callback) {
-			$this->filters->add($name, $callback);
+		foreach ($extension->getFilters() as $name => $value) {
+			$this->filters->add($name, $value);
 		}
 
-		foreach ($extension->getFunctions() as $name => $callback) {
-			$this->functions->$name = $callback;
+		foreach ($extension->getFunctions() as $name => $value) {
+			$this->functions->$name = $value;
 		}
 
-		$this->providers = array_merge($this->providers, $extension->getProviders());
+		foreach ($extension->getProviders() as $name => $value) {
+			$this->providers->$name = $value;
+		}
 		return $this;
 	}
 
@@ -443,7 +444,7 @@ class Engine
 			throw new \LogicException("Invalid provider name '$name'.");
 		}
 
-		$this->providers[$name] = $value;
+		$this->providers->$name = $value;
 		return $this;
 	}
 
@@ -454,7 +455,7 @@ class Engine
 	 */
 	public function getProviders(): array
 	{
-		return $this->providers;
+		return (array) $this->providers;
 	}
 
 
@@ -475,7 +476,7 @@ class Engine
 
 	public function setExceptionHandler(callable $callback): static
 	{
-		$this->providers['coreExceptionHandler'] = $callback;
+		$this->providers->coreExceptionHandler = $callback;
 		return $this;
 	}
 

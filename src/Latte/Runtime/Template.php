@@ -58,20 +58,19 @@ class Template
 
 	/**
 	 * @param  mixed[]  $params
-	 * @param  mixed[]  $providers
 	 */
 	public function __construct(
 		Engine $engine,
 		array $params,
 		FilterExecutor $filters,
-		array $providers,
+		\stdClass $providers,
 		string $name,
 	) {
 		$this->engine = $engine;
 		$this->params = $params;
 		$this->filters = $filters;
 		$this->name = $name;
-		$this->global = (object) $providers;
+		$this->global = $providers;
 		$this->initBlockLayer(self::LayerTop);
 		$this->initBlockLayer(self::LayerLocal);
 		$this->initBlockLayer(self::LayerSnippet);
