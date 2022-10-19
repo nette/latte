@@ -17,6 +17,7 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\Engine;
+use Latte\Runtime\Template;
 use Latte\SecurityViolationException;
 
 
@@ -52,8 +53,9 @@ final class SandboxExtension extends Latte\Extension
 	}
 
 
-	public function beforeRender(Engine $engine): void
+	public function beforeRender(Template $template): void
 	{
+		$engine = $template->getEngine();
 		if ($policy = $engine->getPolicy()) {
 			$engine->addProvider('sandbox', new RuntimeChecker($policy));
 		}

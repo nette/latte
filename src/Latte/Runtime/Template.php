@@ -133,7 +133,7 @@ class Template
 	public function render(?string $block = null): void
 	{
 		foreach ($this->engine->getExtensions() as $extension) {
-			$extension->beforeRender($this->engine);
+			$extension->beforeRender($this);
 		}
 
 		$params = $this->prepare();

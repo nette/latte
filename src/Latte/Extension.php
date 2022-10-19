@@ -85,7 +85,7 @@ abstract class Extension
 	/**
 	 * Initializes before template is rendered.
 	 */
-	public function beforeRender(Engine $engine): void
+	public function beforeRender(Runtime\Template $template): void
 	{
 	}
 
