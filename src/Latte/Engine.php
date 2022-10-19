@@ -97,10 +97,6 @@ class Engine
 			$this->loadTemplate($name);
 		}
 
-		foreach ($this->extensions as $extension) {
-			$extension->beforeRender($this);
-		}
-
 		$this->providers->fn = $this->functions;
 		return new $class(
 			$this,
@@ -392,6 +388,13 @@ class Engine
 			$this->providers->$name = $value;
 		}
 		return $this;
+	}
+
+
+	/** @return Extension[] */
+	public function getExtensions(): array
+	{
+		return $this->extensions;
 	}
 
 

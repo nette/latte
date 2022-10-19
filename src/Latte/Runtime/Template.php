@@ -132,6 +132,10 @@ class Template
 	 */
 	public function render(?string $block = null): void
 	{
+		foreach ($this->engine->getExtensions() as $extension) {
+			$extension->beforeRender($this->engine);
+		}
+
 		$params = $this->prepare();
 
 		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
