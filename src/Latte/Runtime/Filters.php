@@ -175,6 +175,17 @@ class Filters
 
 
 	/**
+	 * Determine if a string or array contains a given needle.
+	 */
+	public static function contains(mixed $needle, array|string $haystack): bool
+	{
+		return is_array($haystack)
+			? in_array($needle, $haystack, true)
+			: str_contains($haystack, (string) $needle);
+	}
+
+
+	/**
 	 * Converts ... to ...
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, string $s): string

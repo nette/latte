@@ -27,7 +27,7 @@ __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (3)
    |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\InRangeNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
    |  |  |  |  position: 1:1 (offset 0)
@@ -41,7 +41,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
-   |  |  |  left: Latte\Compiler\Nodes\Php\Expression\InRangeNode
+   |  |  |  left: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
    |  |  |  |  |  position: 4:1 (offset 28)
@@ -50,7 +50,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  position: 4:7 (offset 34)
    |  |  |  |  position: 4:1 (offset 28)
    |  |  |  operator: '||'
-   |  |  |  right: Latte\Compiler\Nodes\Php\Expression\InRangeNode
+   |  |  |  right: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'c'
    |  |  |  |  |  position: 4:13 (offset 40)
@@ -69,7 +69,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'a'
    |  |  |  |  position: 5:1 (offset 50)
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NotNode
-   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\InRangeNode
+   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 10
