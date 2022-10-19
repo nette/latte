@@ -14,7 +14,7 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class InRangeNode extends ExpressionNode
+class InNode extends ExpressionNode
 {
 	public function __construct(
 		public ExpressionNode $needle,
@@ -26,11 +26,11 @@ class InRangeNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		return 'in_array('
+		return 'LR\Filters::contains('
 			. $this->needle->print($context)
 			. ', '
 			. $this->haystack->print($context)
-			. ', true)';
+			. ')';
 	}
 
 
