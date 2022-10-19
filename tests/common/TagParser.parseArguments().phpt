@@ -94,10 +94,10 @@ test('inline modifiers', function () {
 
 
 test('in operator', function () {
-	Assert::same("in_array(\$a, ['a', 'b'], true), 1", formatArgs('$a in [a, b], 1'));
-	Assert::same('$a, in_array($b->func(), [1, 2], true)', formatArgs('$a, $b->func() in [1, 2]'));
-	Assert::same('$a, in_array($b[1], [1, 2], true)', formatArgs('$a, $b[1] in [1, 2]'));
-	Assert::same('in_array($b, [1, [2], 3], true)', formatArgs('$b in [1, [2], 3]'));
+	Assert::same("LR\\Filters::contains(\$a, ['a', 'b']), 1", formatArgs('$a in [a, b], 1'));
+	Assert::same('$a, LR\Filters::contains($b->func(), [1, 2])', formatArgs('$a, $b->func() in [1, 2]'));
+	Assert::same('$a, LR\Filters::contains($b[1], [1, 2])', formatArgs('$a, $b[1] in [1, 2]'));
+	Assert::same('LR\Filters::contains($b, [1, [2], 3])', formatArgs('$b in [1, [2], 3]'));
 });
 
 
