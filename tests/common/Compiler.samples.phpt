@@ -60,6 +60,14 @@ Assert::match(
 );
 
 
+// latte tag in html tag
+Assert::match(
+	'<a><br {foo}></a>',
+	$latte->renderToString('<a n:syntax="double"><br {foo}></a>'),
+);
+
+
+
 // tag name vs content
 Assert::contains(
 	"escapeHtmlText(trim('a'))",

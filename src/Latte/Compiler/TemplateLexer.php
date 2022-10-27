@@ -26,8 +26,7 @@ final class TemplateLexer
 	public const NPrefix = 'n:';
 
 	/** HTML attribute name/value (\p{C} means \x00-\x1F except space) */
-	private const ReHtmlName = '[^\p{C} "\'<>=`/{}]+';
-	private const ReHtmlValue = '[^\p{C} "\'<>=`{}]+';
+	private const ReAttrName = '[^\p{C} "\'<>=`/]';
 	private const StateEnd = 'end';
 
 	public string $openDelimiter;
@@ -157,17 +156,17 @@ final class TemplateLexer
 			(?<Equals>=)|
 			(?<Quote>["\'])|
 			(?<Slash>/)?(?<Html_TagClose>>)(?<Newline>[ \t]*\R)?|      # > />
-			(?<Html_Name>' . self::ReHtmlName . ')|                    # HTML attribute name/value
+			(?<Html_Name>(?:(?!' . $this->openDelimiter . ')' . self::ReAttrName . ')+)|  # HTML attribute name/value
 			(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|      # {tag
 			(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)       # {* comment
 		~xsiAu');
 
 		if (isset($m['Html_Name'])) {
-			$this->states[0]['args'][1] = $m['Html_Name'];
+			$this->states[0]['args'][1] = $m['Html_Name']; // sets $attrName
 		} elseif (isset($m['Equals'])) {
 			yield from $this->match('~
 				(?<Whitespace>\s+)?                                    # whitespace
-				(?<Html_Name>' . self::ReHtmlValue . ')                # HTML attribute name/value
+				(?<Html_Name>(?:(?!' . $this->openDelimiter . ')' . self::ReAttrName . '|/)+)  # HTML attribute value can contain /
 			~xsiAu');
 		} elseif (isset($m['Whitespace'])) {
 		} elseif (isset($m['Quote'])) {
