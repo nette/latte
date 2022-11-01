@@ -17,71 +17,71 @@ use Latte;
  */
 class NamespaceLoader implements Latte\Loader
 {
-    /**
-     * @var Latte\Loader[]
-     */
-    private array $loaders;
+	/**
+	 * @var Latte\Loader[]
+	 */
+	private array $loaders;
 
-    public function __construct(array $loaders)
-    {
-        $this->loaders = $loaders;
-    }
+	public function __construct(array $loaders)
+	{
+		$this->loaders = $loaders;
+	}
 
-    /**
-     * Returns template source code.
-     */
-    public function getContent(string $name): string
-    {
-        [$loader, $name] = $this->extractLoaderAndName($name);
+	/**
+	 * Returns template source code.
+	 */
+	public function getContent(string $name): string
+	{
+		[$loader, $name] = $this->extractLoaderAndName($name);
 
-        return $loader->getContent($name);
-    }
-
-
-    public function isExpired(string $file, int $time): bool
-    {
-        [$loader, $name] = $this->extractLoaderAndName($file);
-
-        return $loader->isExpired($name, $time);
-    }
+		return $loader->getContent($name);
+	}
 
 
-    /**
-     * Returns referred template name.
-     */
-    public function getReferredName(string $name, string $referringName): string
-    {
-        [$loader, $name] = $this->extractLoaderAndName($name);
+	public function isExpired(string $file, int $time): bool
+	{
+		[$loader, $name] = $this->extractLoaderAndName($file);
 
-        return $loader->getReferredName($name, $referringName);
-    }
+		return $loader->isExpired($name, $time);
+	}
 
 
-    /**
-     * Returns unique identifier for caching.
-     */
-    public function getUniqueId(string $name): string
-    {
-        [$loader, $name] = $this->extractLoaderAndName($name);
+	/**
+	 * Returns referred template name.
+	 */
+	public function getReferredName(string $name, string $referringName): string
+	{
+		[$loader, $name] = $this->extractLoaderAndName($name);
 
-        return $loader->getUniqueId($name);
-    }
+		return $loader->getReferredName($name, $referringName);
+	}
 
 
-    private function extractLoaderAndName(string $name): array
-    {
-        $namespaceParts = \explode('::', $name, 2);
+	/**
+	 * Returns unique identifier for caching.
+	 */
+	public function getUniqueId(string $name): string
+	{
+		[$loader, $name] = $this->extractLoaderAndName($name);
 
-        if (count($namespaceParts) === 2) {
-            return [
-                $this->loaders[$namespaceParts[0]],
-                $namespaceParts[1],
-            ];
-        }
+		return $loader->getUniqueId($name);
+	}
 
-        return [
-            $this->loaders[''],
-            $name,
-        ];
-    }
+
+	private function extractLoaderAndName(string $name): array
+	{
+		$namespaceParts = \explode('::', $name, 2);
+
+		if (count($namespaceParts) === 2) {
+			return [
+				$this->loaders[$namespaceParts[0]],
+				$namespaceParts[1],
+			];
+		}
+
+		return [
+			$this->loaders[''],
+			$name,
+		];
+	}
 }

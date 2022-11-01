@@ -14,17 +14,17 @@ require __DIR__ . '/../bootstrap.php';
 
 
 test('', function () {
-    $defaultLoader = new StringLoader(['main' => 'defaultcontent']);
-    $appLoader = new StringLoader(['main' => 'appcontent']);
-    $otherLoader = new StringLoader(['main' => 'othercontent']);
+	$defaultLoader = new StringLoader(['main' => 'defaultcontent']);
+	$appLoader = new StringLoader(['main' => 'appcontent']);
+	$otherLoader = new StringLoader(['main' => 'othercontent']);
 
-    $loader = new NamespaceLoader([
-        '' => $defaultLoader,
-        'app' => $appLoader,
-        'other' => $otherLoader,
-    ]);
+	$loader = new NamespaceLoader([
+		'' => $defaultLoader,
+		'app' => $appLoader,
+		'other' => $otherLoader,
+	]);
 
-    Assert::same('defaultcontent', $loader->getContent('main'));
-    Assert::same('appcontent', $loader->getContent('app::main'));
-    Assert::same('othercontent', $loader->getContent('other::main'));
+	Assert::same('defaultcontent', $loader->getContent('main'));
+	Assert::same('appcontent', $loader->getContent('app::main'));
+	Assert::same('othercontent', $loader->getContent('other::main'));
 });
