@@ -35,7 +35,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/inheritance.2.phtml',
+	__DIR__ . '/expected/inheritance.2.php',
 	$latte->compile('main'),
 );
 Assert::matchFile(

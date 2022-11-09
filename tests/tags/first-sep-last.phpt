@@ -46,7 +46,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/first-sep-last.phtml',
+	__DIR__ . '/expected/first-sep-last.php',
 	$latte->compile($template),
 );
 Assert::matchFile(

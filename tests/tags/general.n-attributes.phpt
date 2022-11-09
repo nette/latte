@@ -16,7 +16,7 @@ $latte = new Latte\Engine;
 $params['people'] = ['John', 'Mary', 'Paul'];
 
 Assert::matchFile(
-	__DIR__ . '/expected/general.n-attributes.phtml',
+	__DIR__ . '/expected/general.n-attributes.php',
 	$latte->compile(__DIR__ . '/templates/n-attributes.latte'),
 );
 Assert::matchFile(

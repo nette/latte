@@ -72,7 +72,7 @@ $params['hello'] = 'Hello World';
 $params['date'] = strtotime('2008-01-02');
 
 Assert::matchFile(
-	__DIR__ . '/expected/general.phtml',
+	__DIR__ . '/expected/general.php',
 	$latte->compile(__DIR__ . '/templates/general.latte'),
 );
 Assert::matchFile(

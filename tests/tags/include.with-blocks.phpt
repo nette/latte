@@ -31,7 +31,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/include.with-blocks.phtml',
+	__DIR__ . '/expected/include.with-blocks.php',
 	$latte->compile('main'),
 );
 Assert::matchFile(
@@ -39,6 +39,6 @@ Assert::matchFile(
 	$latte->renderToString('main'),
 );
 Assert::matchFile(
-	__DIR__ . '/expected/include.with-blocks.inc.phtml',
+	__DIR__ . '/expected/include.with-blocks.inc.php',
 	$latte->compile('inc'),
 );

@@ -36,7 +36,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/import.phtml',
+	__DIR__ . '/expected/import.php',
 	$latte->compile('main'),
 );
 Assert::match(

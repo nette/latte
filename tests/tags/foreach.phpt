@@ -30,7 +30,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/foreach.phtml',
+	__DIR__ . '/expected/foreach.php',
 	$latte->compile($template),
 );
 

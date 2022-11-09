@@ -31,7 +31,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/n-class.phtml',
+	__DIR__ . '/expected/n-class.php',
 	$latte->compile($template),
 );
 

@@ -25,7 +25,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.vars.phtml',
+	__DIR__ . '/expected/code.vars.php',
 	$latte->compile($template),
 );
 
@@ -47,7 +47,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.functions.phtml',
+	__DIR__ . '/expected/code.functions.php',
 	$latte->compile($template),
 );
 
@@ -64,7 +64,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.callbacks.phtml',
+	__DIR__ . '/expected/code.callbacks.php',
 	$latte->compile($template),
 );
 
@@ -82,7 +82,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.static.methods.phtml',
+	__DIR__ . '/expected/code.static.methods.php',
 	$latte->compile($template),
 );
 
@@ -99,7 +99,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.static.props.phtml',
+	__DIR__ . '/expected/code.static.props.php',
 	$latte->compile($template),
 );
 
@@ -118,7 +118,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.consts.phtml',
+	__DIR__ . '/expected/code.consts.php',
 	$latte->compile($template),
 );
 
@@ -138,7 +138,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.object.methods.phtml',
+	__DIR__ . '/expected/code.object.methods.php',
 	$latte->compile($template),
 );
 
@@ -166,7 +166,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.props.phtml',
+	__DIR__ . '/expected/code.props.php',
 	$latte->compile($template),
 );
 
@@ -181,7 +181,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.read-write.phtml',
+	__DIR__ . '/expected/code.read-write.php',
 	$latte->compile($template),
 );
 
@@ -198,7 +198,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.optional-chaining.phtml',
+	__DIR__ . '/expected/code.optional-chaining.php',
 	$latte->compile($template),
 );
 
@@ -214,6 +214,6 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.callable.phtml',
+	__DIR__ . '/expected/code.callable.php',
 	$latte->compile($template),
 );
