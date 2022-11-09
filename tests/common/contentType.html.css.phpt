@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine and CSS in HTML.
+ * Test: CSS in HTML
  */
 
 declare(strict_types=1);
@@ -43,11 +43,6 @@ Assert::match(
 Assert::match(
 	'<style type="TEXT/CSS">\<\></style>',
 	$latte->renderToString('<style type="TEXT/CSS">{="<>"}</style>'),
-);
-
-Assert::match(
-	'<style type="text/html">&lt;&gt;</style>',
-	$latte->renderToString('<style type="text/html">{="<>"}</style>'),
 );
 
 Assert::match(

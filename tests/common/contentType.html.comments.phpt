@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: comments HTML test.
+ * Test: comments HTML test
  */
 
 declare(strict_types=1);

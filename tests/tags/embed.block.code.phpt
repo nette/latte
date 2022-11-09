@@ -33,6 +33,6 @@ $latte->setLoader(new Latte\Loaders\StringLoader(templates: [
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/embed.block.phtml',
+	__DIR__ . '/expected/embed.block.php',
 	$latte->compile('main'),
 );

@@ -28,7 +28,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/extends.4.phtml',
+	__DIR__ . '/expected/extends.4.php',
 	$latte->compile('main'),
 );
 Assert::matchFile(

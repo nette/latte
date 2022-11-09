@@ -23,7 +23,7 @@ This should be erased
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/extends.1.phtml',
+	__DIR__ . '/expected/extends.1.php',
 	$latte->compile('main'),
 );
 Assert::same(

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Latte\Engine and JavaScript in HTML.
+ * Test: JavaScript in HTML
  */
 
 declare(strict_types=1);
@@ -81,59 +81,6 @@ Assert::match(
 Assert::match(
 	'<script type="application/json">{ foo:"<>" }</script>',
 	$latte->renderToString('<script type="application/json">{ foo:{="<>"} }</script>'),
-);
-
-Assert::match(
-	'<script type="text/html">&lt;&gt;</script>',
-	$latte->renderToString('<script type="text/html">{="<>"}</script>'),
-);
-
-// content of <script> is RAWTEXT
-Assert::match(
-	<<<'XX'
-			<script type="text/html">
-			<div n:foreach="[a, b] as $i">def</div>
-			</script>
-			<div>a</div>
-			<div>b</div>
-
-		XX,
-	$latte->renderToString(
-		<<<'XX'
-
-				{var $i = def}
-				<script type="text/html">
-				<div n:foreach="[a, b] as $i">{$i}</div>
-				</script>
-				<div n:foreach="[a, b] as $i">{$i}</div>
-
-			XX,
-	),
-);
-
-// content of <script> changed to html
-Assert::match(
-	<<<'XX'
-			<script type="text/html">
-			<div>a</div>
-			<div>b</div>
-			</script>
-			<div>a</div>
-			<div>b</div>
-
-		XX,
-	$latte->renderToString(
-		<<<'XX'
-
-				{var $i = def}
-				<script type="text/html">
-				{contentType html}
-				<div n:foreach="[a, b] as $i">{$i}</div>
-				</script>
-				<div n:foreach="[a, b] as $i">{$i}</div>
-
-			XX,
-	),
 );
 
 // trim inside <script>

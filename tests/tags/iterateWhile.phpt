@@ -54,7 +54,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/iterateWhile.phtml',
+	__DIR__ . '/expected/iterateWhile.php',
 	$latte->compile($template),
 );
 

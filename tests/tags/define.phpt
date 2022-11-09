@@ -28,7 +28,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.phtml',
+	__DIR__ . '/expected/define.php',
 	$latte->compile($template),
 );
 Assert::matchFile(

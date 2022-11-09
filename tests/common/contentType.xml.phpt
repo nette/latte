@@ -13,9 +13,6 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-restore_error_handler();
-
-
 $latte = new Latte\Engine;
 $latte->setContentType(ContentType::Xml);
 
@@ -28,7 +25,7 @@ $params['xss'] = 'some&<>"\'/chars';
 $params['mxss'] = '`mxss';
 
 Assert::matchFile(
-	__DIR__ . '/expected/contentType.xml.phtml',
+	__DIR__ . '/expected/contentType.xml.php',
 	$latte->compile(__DIR__ . '/templates/contentType.xml.latte'),
 );
 Assert::matchFile(

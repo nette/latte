@@ -34,7 +34,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args1.phtml',
+	__DIR__ . '/expected/define.args1.php',
 	$latte->compile($template),
 );
 Assert::matchFile(
@@ -52,7 +52,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.typehints.phtml',
+	__DIR__ . '/expected/define.typehints.php',
 	$latte->compile($template),
 );
 
@@ -75,7 +75,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args2.phtml',
+	__DIR__ . '/expected/define.args2.php',
 	$latte->compile($template),
 );
 Assert::matchFile(
@@ -100,7 +100,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args3.phtml',
+	__DIR__ . '/expected/define.args3.php',
 	$latte->compile($template),
 );
 
@@ -129,7 +129,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args4.phtml',
+	__DIR__ . '/expected/define.args4.php',
 	$latte->compile('main'),
 );
 Assert::matchFile(
@@ -153,7 +153,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args5.phtml',
+	__DIR__ . '/expected/define.args5.php',
 	$latte->compile($template),
 );
 Assert::matchFile(

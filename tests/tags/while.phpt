@@ -35,6 +35,6 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/while.phtml',
+	__DIR__ . '/expected/while.php',
 	$latte->compile($template),
 );

@@ -62,6 +62,6 @@ Assert::error(
 );
 
 Assert::matchFile(
-	__DIR__ . '/expected/include.block.from.phtml',
+	__DIR__ . '/expected/include.block.from.php',
 	$latte->compile('main5'),
 );

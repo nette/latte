@@ -28,7 +28,7 @@ $template = <<<'EOD'
 	EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/Compiler.unquoted.attrs.phtml',
+	__DIR__ . '/expected/Compiler.unquoted.attrs.php',
 	$latte->compile($template),
 );
 Assert::matchFile(

@@ -50,7 +50,7 @@ $template = <<<'XX'
 	XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/block.vars.phtml',
+	__DIR__ . '/expected/block.vars.php',
 	$latte->compile($template),
 );
 Assert::matchFile(
