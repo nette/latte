@@ -111,6 +111,7 @@ final class CoreExtension extends Latte\Extension
 			'dataStream' => [Filters::class, 'dataStream'],
 			'datastream' => [Filters::class, 'dataStream'],
 			'date' => [Filters::class, 'date'],
+			'escape' => [Latte\Runtime\Filters::class, 'nop'],
 			'escapeCss' => [Latte\Runtime\Filters::class, 'escapeCss'],
 			'escapeHtml' => [Latte\Runtime\Filters::class, 'escapeHtml'],
 			'escapeHtmlComment' => [Latte\Runtime\Filters::class, 'escapeHtmlComment'],

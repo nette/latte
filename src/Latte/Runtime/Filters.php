@@ -191,9 +191,9 @@ class Filters
 	}
 
 
-	public static function nop(string $s): string
+	public static function nop($s): string
 	{
-		return $s;
+		return (string) $s;
 	}
 
 
