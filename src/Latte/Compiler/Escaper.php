@@ -170,7 +170,7 @@ final class Escaper
 			ContentType::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
 			ContentType::Css => 'LR\Filters::escapeCss(' . $str . ')',
 			ContentType::ICal => 'LR\Filters::escapeIcal(' . $str . ')',
-			ContentType::Text => $str,
+			ContentType::Text => '($this->filters->escape)(' . $str . ')',
 			default => throw new \LogicException("Unknown content-type $this->contentType."),
 		};
 	}
