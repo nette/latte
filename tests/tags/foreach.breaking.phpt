@@ -53,7 +53,7 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/foreach.breaking.phtml',
+	__DIR__ . '/expected/foreach.breaking.php',
 	$latte->compile($template)
 );
 
@@ -105,7 +105,7 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/foreach.breaking.attr.phtml',
+	__DIR__ . '/expected/foreach.breaking.attr.php',
 	$latte->compile($template)
 );
 

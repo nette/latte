@@ -27,6 +27,6 @@ end
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/snippet.block.phtml',
+	__DIR__ . '/expected/snippet.block.php',
 	$latte->compile($template)
 );

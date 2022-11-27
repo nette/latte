@@ -55,6 +55,6 @@ Assert::error(function () use ($latte) {
 }, PHP_VERSION_ID < 80000 ? E_NOTICE : E_WARNING, 'Undefined variable%a%');
 
 Assert::matchFile(
-	__DIR__ . '/expected/include.block.from.phtml',
+	__DIR__ . '/expected/include.block.from.php',
 	$latte->compile('main5')
 );

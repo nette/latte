@@ -17,7 +17,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 
 
 Assert::matchFile(
-	__DIR__ . '/expected/foreach.else.phtml',
+	__DIR__ . '/expected/foreach.else.php',
 	$latte->compile('
 {foreach [a] as $item}
 	item

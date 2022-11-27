@@ -35,7 +35,7 @@ d) {include test null}
 XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args1.phtml',
+	__DIR__ . '/expected/define.args1.php',
 	$latte->compile($template)
 );
 Assert::matchFile(
@@ -53,7 +53,7 @@ $template = <<<'XX'
 XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.typehints.phtml',
+	__DIR__ . '/expected/define.typehints.php',
 	$latte->compile($template)
 );
 
@@ -76,7 +76,7 @@ d) {include test, var2 => 1, 2} // invalid
 XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args2.phtml',
+	__DIR__ . '/expected/define.args2.php',
 	$latte->compile($template)
 );
 Assert::matchFile(
@@ -101,7 +101,7 @@ c) {include test, hello => 1}
 XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args3.phtml',
+	__DIR__ . '/expected/define.args3.php',
 	$latte->compile($template)
 );
 
@@ -126,7 +126,7 @@ c) {include test, hello => 1}',
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args4.phtml',
+	__DIR__ . '/expected/define.args4.php',
 	$latte->compile('main')
 );
 Assert::matchFile(
@@ -150,7 +150,7 @@ b) {include test, var1 => 1}
 XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/define.args5.phtml',
+	__DIR__ . '/expected/define.args5.php',
 	$latte->compile($template)
 );
 Assert::matchFile(

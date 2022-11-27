@@ -56,7 +56,7 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/if.phtml',
+	__DIR__ . '/expected/if.php',
 	$latte->compile($template)
 );
 

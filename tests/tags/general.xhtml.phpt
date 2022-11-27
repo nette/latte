@@ -27,7 +27,7 @@ $params['el'] = new Html("<div title='1/2\"'></div>");
 $params['el2'] = Nette\Utils\Html::el('span', ['title' => '/"'])->setText('foo');
 
 Assert::matchFile(
-	__DIR__ . '/expected/general.xhtml.phtml',
+	__DIR__ . '/expected/general.xhtml.php',
 	$latte->compile(__DIR__ . '/templates/general.latte')
 );
 Assert::matchFile(

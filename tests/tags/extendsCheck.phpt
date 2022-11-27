@@ -23,6 +23,6 @@ content
 ';
 
 Assert::matchFile(
-	__DIR__ . '/expected/extendsCheck.phtml',
+	__DIR__ . '/expected/extendsCheck.php',
 	$latte->compile($template)
 );

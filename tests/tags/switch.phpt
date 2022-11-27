@@ -64,7 +64,7 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/switch.phtml',
+	__DIR__ . '/expected/switch.php',
 	$latte->compile($template)
 );
 

@@ -26,7 +26,7 @@ vars
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.vars.phtml',
+	__DIR__ . '/expected/code.vars.php',
 	$latte->compile($template)
 );
 
@@ -48,7 +48,7 @@ functions
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.functions.phtml',
+	__DIR__ . '/expected/code.functions.php',
 	$latte->compile($template)
 );
 
@@ -65,7 +65,7 @@ callbacks
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.callbacks.phtml',
+	__DIR__ . '/expected/code.callbacks.php',
 	$latte->compile($template)
 );
 
@@ -83,7 +83,7 @@ static methods
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.static.methods.phtml',
+	__DIR__ . '/expected/code.static.methods.php',
 	$latte->compile($template)
 );
 
@@ -100,7 +100,7 @@ static props
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.static.props.phtml',
+	__DIR__ . '/expected/code.static.props.php',
 	$latte->compile($template)
 );
 
@@ -119,7 +119,7 @@ consts
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.consts.phtml',
+	__DIR__ . '/expected/code.consts.php',
 	$latte->compile($template)
 );
 
@@ -139,7 +139,7 @@ object methods
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.object.methods.phtml',
+	__DIR__ . '/expected/code.object.methods.php',
 	$latte->compile($template)
 );
 
@@ -169,7 +169,7 @@ props
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.props.phtml',
+	__DIR__ . '/expected/code.props.php',
 	$latte->compile($template)
 );
 
@@ -184,7 +184,7 @@ read-write
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/code.read-write.phtml',
+	__DIR__ . '/expected/code.read-write.php',
 	$latte->compile($template)
 );
 
@@ -200,7 +200,7 @@ EOD;
 
 Assert::matchFile(
 	PHP_VERSION_ID >= 80000
-		? __DIR__ . '/expected/code.optional-chaining.80.phtml'
-		: __DIR__ . '/expected/code.optional-chaining.phtml',
+		? __DIR__ . '/expected/code.optional-chaining.80.php'
+		: __DIR__ . '/expected/code.optional-chaining.php',
 	$latte->compile($template)
 );

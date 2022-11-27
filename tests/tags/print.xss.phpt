@@ -66,7 +66,7 @@ var prop2 = {$people};
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/print.xss.phtml',
+	__DIR__ . '/expected/print.xss.php',
 	$latte->compile($template)
 );
 

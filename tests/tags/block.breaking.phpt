@@ -27,7 +27,7 @@ $template = <<<'XX'
 XX;
 
 Assert::matchFile(
-	__DIR__ . '/expected/block.breaking.phtml',
+	__DIR__ . '/expected/block.breaking.php',
 	$latte->compile($template)
 );
 Assert::match(

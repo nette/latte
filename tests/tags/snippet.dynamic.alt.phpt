@@ -35,6 +35,6 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/snippet.dynamic.alt.phtml',
+	__DIR__ . '/expected/snippet.dynamic.alt.php',
 	$latte->compile($template)
 );

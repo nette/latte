@@ -28,7 +28,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/includeblock.phtml',
+	__DIR__ . '/expected/includeblock.php',
 	@$latte->compile('main') // deprecated
 );
 Assert::matchFile(
@@ -36,6 +36,6 @@ Assert::matchFile(
 	@$latte->renderToString('main') // deprecated
 );
 Assert::matchFile(
-	__DIR__ . '/expected/includeblock.inc.phtml',
+	__DIR__ . '/expected/includeblock.inc.php',
 	@$latte->compile('inc') // deprecated
 );

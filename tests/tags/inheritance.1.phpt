@@ -38,7 +38,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::matchFile(
-	__DIR__ . '/expected/inheritance.1.phtml',
+	__DIR__ . '/expected/inheritance.1.php',
 	$latte->compile('main')
 );
 Assert::matchFile(
@@ -46,6 +46,6 @@ Assert::matchFile(
 	$latte->renderToString('main', ['people' => ['John', 'Mary', 'Paul']])
 );
 Assert::matchFile(
-	__DIR__ . '/expected/inheritance.1.parent.phtml',
+	__DIR__ . '/expected/inheritance.1.parent.php',
 	$latte->compile('parent')
 );

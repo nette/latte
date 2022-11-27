@@ -35,7 +35,7 @@ END:VCALENDAR
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/contentType.ical.phtml',
+	__DIR__ . '/expected/contentType.ical.php',
 	$latte->compile($template)
 );
 Assert::matchFile(

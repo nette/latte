@@ -28,7 +28,7 @@ $params['xss'] = 'some&<>"\'/chars';
 $params['mxss'] = '`mxss';
 
 Assert::matchFile(
-	__DIR__ . '/expected/contentType.xml.phtml',
+	__DIR__ . '/expected/contentType.xml.php',
 	$latte->compile(__DIR__ . '/templates/contentType.xml.latte')
 );
 Assert::matchFile(

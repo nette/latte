@@ -152,7 +152,7 @@ XX
 
 // code
 Assert::matchFile(
-	__DIR__ . '/expected/try.phtml',
+	__DIR__ . '/expected/try.php',
 	$latte->compile(
 		<<<'XX'
 {try}

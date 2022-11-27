@@ -44,7 +44,7 @@ $template = <<<'EOD'
 EOD;
 
 Assert::matchFile(
-	__DIR__ . '/expected/block.local.dynamic.phtml',
+	__DIR__ . '/expected/block.local.dynamic.php',
 	$latte->compile($template)
 );
 Assert::matchFile(
