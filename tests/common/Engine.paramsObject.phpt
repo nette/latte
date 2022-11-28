@@ -43,8 +43,8 @@ class TemplateParams
 	}
 
 
-	#[Latte\Attributes\TemplateFilter]
 	/** @filter */
+	#[Latte\Attributes\TemplateFilter]
 	public function myFilter8($a)
 	{
 		return "%$a%";
