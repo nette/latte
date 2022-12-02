@@ -34,4 +34,10 @@ class TextNode extends AreaNode
 	{
 		return trim($this->content) === '';
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		false && yield;
+	}
 }

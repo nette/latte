@@ -33,4 +33,10 @@ class IdentifierNode extends Node
 	{
 		return $this->name;
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		false && yield;
+	}
 }

@@ -86,4 +86,10 @@ class NameNode extends Node
 		};
 		return $prefix . implode('\\', $this->parts);
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		false && yield;
+	}
 }
