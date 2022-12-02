@@ -238,6 +238,10 @@ final class TemplateParser
 			throw new \LogicException("Incorrect behavior of {{$startTag->name}} parser, unexpected returned value (on line {$startTag->position->line})");
 		}
 
+		if ((new \ReflectionMethod($node, 'getIterator'))->getDeclaringClass()->getName() === Node::class) {
+			trigger_error('Class ' . $node::class . ' should contain method getIterator(), see https://bit.ly/latte-666');
+		}
+
 		if ($this->location === self::LocationHead && $startTag->outputMode !== $startTag::OutputNone) {
 			$this->location = self::LocationText;
 		}
