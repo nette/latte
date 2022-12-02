@@ -238,6 +238,8 @@ final class TemplateParser
 			throw new \LogicException("Incorrect behavior of {{$startTag->name}} parser, unexpected returned value (on line {$startTag->position->line})");
 		}
 
+		$this->checkNodeCompatibility($node);
+
 		if ($this->location === self::LocationHead && $startTag->outputMode !== $startTag::OutputNone) {
 			$this->location = self::LocationText;
 		}
@@ -444,5 +446,18 @@ final class TemplateParser
 	public function isTagAllowed(string $name): bool
 	{
 		return !$this->policy || $this->policy->isTagAllowed($name);
+	}
+
+
+	public function checkNodeCompatibility(Node $node): void
+	{
+		static $prev = ['Nette\Bridges\ApplicationLatte\Nodes\NNonceNode' => true];
+		if (
+			!isset($prev[$node::class])
+			&& (new \ReflectionMethod($node, 'getIterator'))->getDeclaringClass()->getName() === Node::class
+		) {
+			trigger_error('Class ' . $node::class . ' should contain method getIterator(), see https://bit.ly/latte-666');
+		}
+		$prev[$node::class] = true;
 	}
 }

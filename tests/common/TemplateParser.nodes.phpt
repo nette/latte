@@ -13,6 +13,12 @@ class FooNode extends Latte\Compiler\Nodes\AreaNode
 	{
 		return '';
 	}
+
+
+	public function &getIterator(): Generator
+	{
+		false && yield;
+	}
 }
 
 

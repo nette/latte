@@ -36,4 +36,10 @@ class TemplatePrintNode extends StatementNode
 	{
 		return '(new Latte\Essential\Blueprint)->printClass($this, ' . PhpHelpers::dump($this->template) . '); exit;';
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		false && yield;
+	}
 }

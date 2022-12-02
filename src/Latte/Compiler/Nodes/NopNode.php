@@ -18,4 +18,10 @@ class NopNode extends AreaNode
 	{
 		return '';
 	}
+
+
+	public function &getIterator(): \Generator
+	{
+		false && yield;
+	}
 }
