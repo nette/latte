@@ -170,7 +170,7 @@ final class TemplateLexer
 			~xsiAu');
 		} elseif (isset($m['Whitespace'])) {
 		} elseif (isset($m['Quote'])) {
-			$this->pushState(str_starts_with($attrName, self::NPrefix)
+			$this->pushState(str_starts_with($attrName ?? '', self::NPrefix)
 				? 'stateHtmlQuotedNAttrValue'
 				: 'stateHtmlQuotedValue', $m['Quote']);
 		} elseif (
