@@ -34,8 +34,6 @@ class ArrayAccessNode extends ExpressionNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->expr;
-		if ($this->index) {
-			yield $this->index;
-		}
+		yield $this->index;
 	}
 }

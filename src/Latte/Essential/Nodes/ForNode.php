@@ -78,9 +78,7 @@ class ForNode extends StatementNode
 			yield $item;
 		}
 
-		if ($this->condition) {
-			yield $this->condition;
-		}
+		yield $this->condition;
 
 		foreach ($this->next as &$item) {
 			yield $item;

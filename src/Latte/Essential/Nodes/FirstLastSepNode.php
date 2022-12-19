@@ -70,12 +70,8 @@ class FirstLastSepNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->width) {
-			yield $this->width;
-		}
+		yield $this->width;
 		yield $this->then;
-		if ($this->else) {
-			yield $this->else;
-		}
+		yield $this->else;
 	}
 }

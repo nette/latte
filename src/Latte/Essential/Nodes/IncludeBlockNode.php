@@ -131,9 +131,7 @@ class IncludeBlockNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->name;
-		if ($this->from) {
-			yield $this->from;
-		}
+		yield $this->from;
 		yield $this->args;
 		yield $this->modifier;
 	}

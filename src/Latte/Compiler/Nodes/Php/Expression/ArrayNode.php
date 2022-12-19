@@ -86,9 +86,7 @@ class ArrayNode extends ExpressionNode
 	public function &getIterator(): \Generator
 	{
 		foreach ($this->items as &$item) {
-			if ($item) {
-				yield $item;
-			}
+			yield $item;
 		}
 	}
 }

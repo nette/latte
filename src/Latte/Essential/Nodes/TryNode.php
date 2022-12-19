@@ -68,8 +68,6 @@ class TryNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->try;
-		if ($this->else) {
-			yield $this->else;
-		}
+		yield $this->else;
 	}
 }

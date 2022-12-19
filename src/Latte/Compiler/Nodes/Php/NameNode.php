@@ -90,6 +90,6 @@ class NameNode extends Node
 
 	public function &getIterator(): \Generator
 	{
-		false && yield;
+		yield;
 	}
 }

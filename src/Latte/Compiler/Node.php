@@ -22,7 +22,6 @@ abstract class Node implements \IteratorAggregate
 
 	public function &getIterator(): \Generator
 	{
-		return;
 		yield;
 	}
 }

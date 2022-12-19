@@ -63,11 +63,7 @@ class ClosureNode extends ExpressionNode
 			yield $item;
 		}
 
-		if ($this->returnType) {
-			yield $this->returnType;
-		}
-		if ($this->expr) {
-			yield $this->expr;
-		}
+		yield $this->returnType;
+		yield $this->expr;
 	}
 }

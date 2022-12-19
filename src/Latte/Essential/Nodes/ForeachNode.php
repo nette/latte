@@ -143,13 +143,9 @@ class ForeachNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->expression;
-		if ($this->key) {
-			yield $this->key;
-		}
+		yield $this->key;
 		yield $this->value;
 		yield $this->content;
-		if ($this->else) {
-			yield $this->else;
-		}
+		yield $this->else;
 	}
 }

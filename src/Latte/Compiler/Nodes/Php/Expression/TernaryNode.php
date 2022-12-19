@@ -40,11 +40,7 @@ class TernaryNode extends ExpressionNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->cond;
-		if ($this->if) {
-			yield $this->if;
-		}
-		if ($this->else) {
-			yield $this->else;
-		}
+		yield $this->if;
+		yield $this->else;
 	}
 }

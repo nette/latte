@@ -75,6 +75,6 @@ class ContentTypeNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		false && yield;
+		yield;
 	}
 }

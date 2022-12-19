@@ -46,8 +46,6 @@ class DebugbreakNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->condition) {
-			yield $this->condition;
-		}
+		yield $this->condition;
 	}
 }
