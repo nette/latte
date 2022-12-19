@@ -37,9 +37,7 @@ class ArgumentNode extends Node
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->name) {
-			yield $this->name;
-		}
+		yield $this->name;
 		yield $this->value;
 	}
 }

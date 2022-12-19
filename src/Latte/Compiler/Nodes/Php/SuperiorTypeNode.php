@@ -30,6 +30,6 @@ class SuperiorTypeNode extends ComplexTypeNode
 
 	public function &getIterator(): \Generator
 	{
-		false && yield;
+		yield;
 	}
 }

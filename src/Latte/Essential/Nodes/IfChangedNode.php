@@ -134,8 +134,6 @@ class IfChangedNode extends StatementNode
 	{
 		yield $this->conditions;
 		yield $this->then;
-		if ($this->else) {
-			yield $this->else;
-		}
+		yield $this->else;
 	}
 }

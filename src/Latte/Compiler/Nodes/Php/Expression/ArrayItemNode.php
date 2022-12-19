@@ -44,9 +44,7 @@ class ArrayItemNode extends Node
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->key) {
-			yield $this->key;
-		}
+		yield $this->key;
 		yield $this->value;
 	}
 }

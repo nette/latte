@@ -43,12 +43,8 @@ class ParameterNode extends Node
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->type) {
-			yield $this->type;
-		}
+		yield $this->type;
 		yield $this->var;
-		if ($this->default) {
-			yield $this->default;
-		}
+		yield $this->default;
 	}
 }

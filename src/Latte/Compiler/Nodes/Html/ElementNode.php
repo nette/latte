@@ -116,14 +116,8 @@ class ElementNode extends AreaNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->tagNode;
-		if ($this->customName) {
-			yield $this->customName;
-		}
-		if ($this->attributes) {
-			yield $this->attributes;
-		}
-		if ($this->content) {
-			yield $this->content;
-		}
+		yield $this->customName;
+		yield $this->attributes;
+		yield $this->content;
 	}
 }

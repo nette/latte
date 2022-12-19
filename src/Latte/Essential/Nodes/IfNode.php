@@ -173,8 +173,6 @@ class IfNode extends StatementNode
 	{
 		yield $this->condition;
 		yield $this->then;
-		if ($this->else) {
-			yield $this->else;
-		}
+		yield $this->else;
 	}
 }

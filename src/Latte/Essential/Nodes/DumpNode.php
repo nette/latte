@@ -51,8 +51,6 @@ class DumpNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->expression) {
-			yield $this->expression;
-		}
+		yield $this->expression;
 	}
 }

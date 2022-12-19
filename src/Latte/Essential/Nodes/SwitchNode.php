@@ -109,9 +109,7 @@ class SwitchNode extends StatementNode
 	{
 		yield $this->expression;
 		foreach ($this->cases as [&$case, , &$stmt]) {
-			if ($case) {
-				yield $case;
-			}
+			yield $case;
 			yield $stmt;
 		}
 	}

@@ -38,6 +38,6 @@ class TextNode extends AreaNode
 
 	public function &getIterator(): \Generator
 	{
-		false && yield;
+		yield;
 	}
 }

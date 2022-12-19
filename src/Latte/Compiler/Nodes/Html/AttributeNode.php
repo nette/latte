@@ -41,8 +41,6 @@ class AttributeNode extends AreaNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->name;
-		if ($this->value) {
-			yield $this->value;
-		}
+		yield $this->value;
 	}
 }

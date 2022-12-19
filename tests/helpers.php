@@ -126,7 +126,9 @@ function exportAST(Node $node)
 	};
 	$res = $prop ? $prop . "\n" : '';
 	foreach ($node as $sub) {
-		$res .= rtrim(exportAST($sub), "\n") . "\n";
+		if ($sub !== null) {
+			$res .= rtrim(exportAST($sub), "\n") . "\n";
+		}
 	}
 
 	return substr($node::class, strrpos($node::class, '\\') + 1, -4)
