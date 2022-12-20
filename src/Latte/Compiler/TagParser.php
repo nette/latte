@@ -121,9 +121,7 @@ final class TagParser extends TagParserData
 	 */
 	public function tryConsumeSeparatedToken(string ...$kind): ?Token
 	{
-		$token = $this->stream->peek();
-		return $token->is(...$kind) // is followed by whitespace
-			&& $this->stream->peek(1)->position->offset > $token->position->offset + strlen($token->text)
+		return $this->stream->is(...$kind) && $this->isFollowedByWhitespace()
 			? $this->stream->consume()
 			: null;
 	}
@@ -132,6 +130,13 @@ final class TagParser extends TagParserData
 	public function isEnd(): bool
 	{
 		return $this->stream->peek()->isEnd();
+	}
+
+
+	public function isFollowedByWhitespace(): bool
+	{
+		$token = $this->stream->peek();
+		return $this->stream->peek(1)->position->offset > $token->position->offset + strlen($token->text);
 	}
 
 
