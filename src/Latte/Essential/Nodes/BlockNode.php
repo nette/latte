@@ -43,7 +43,7 @@ class BlockNode extends StatementNode
 		$node = new static;
 
 		if (!$stream->is('|', Token::End)) {
-			$layer = $tag->parser->tryConsumeModifier('local')
+			$layer = $tag->parser->tryConsumeTokenBeforeUnquotedString('local')
 				? Template::LayerLocal
 				: $parser->blockLayer;
 			$stream->tryConsume('#');

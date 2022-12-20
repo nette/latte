@@ -45,7 +45,7 @@ class IncludeBlockNode extends StatementNode
 
 		$tag->expectArguments();
 		$node = new static;
-		$tag->parser->tryConsumeModifier('block') ?? $tag->parser->stream->tryConsume('#');
+		$tag->parser->tryConsumeTokenBeforeUnquotedString('block') ?? $tag->parser->stream->tryConsume('#');
 		$node->name = $tag->parser->parseUnquotedStringOrExpression();
 		$tokenName = $tag->parser->stream->peek(-1);
 

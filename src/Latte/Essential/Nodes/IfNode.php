@@ -80,7 +80,7 @@ class IfNode extends StatementNode
 	{
 		$list = [];
 		do {
-			$block = $parser->tryConsumeModifier('block') ?? $parser->stream->tryConsume('#');
+			$block = $parser->tryConsumeTokenBeforeUnquotedString('block') ?? $parser->stream->tryConsume('#');
 			$name = $parser->parseUnquotedStringOrExpression();
 			$list[] = $block || $name instanceof StringNode
 				? ExpressionBuilder::variable('$this')->method('hasBlock', [$name])->build()

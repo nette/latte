@@ -35,7 +35,7 @@ class IncludeFileNode extends StatementNode
 
 		$tag->expectArguments();
 		$node = new static;
-		$tag->parser->tryConsumeModifier('file');
+		$tag->parser->tryConsumeTokenBeforeUnquotedString('file');
 		$node->file = $tag->parser->parseUnquotedStringOrExpression();
 		$node->mode = 'include';
 
