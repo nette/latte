@@ -45,18 +45,27 @@ final class TagParser extends TagParserData
 	}
 
 
+	/**
+	 * Parses PHP-like expression.
+	 */
 	public function parseExpression(): ExpressionNode
 	{
 		return $this->parse(self::SchemaExpression, recovery: true);
 	}
 
 
+	/**
+	 * Parses optional list of arguments. Named and variadic arguments are also supported.
+	 */
 	public function parseArguments(): Expression\ArrayNode
 	{
 		return $this->parse(self::SchemaArguments, recovery: true);
 	}
 
 
+	/**
+	 * Parses optional list of filters.
+	 */
 	public function parseModifier(): Node\ModifierNode
 	{
 		return $this->isEnd()
@@ -65,12 +74,9 @@ final class TagParser extends TagParserData
 	}
 
 
-	public function isEnd(): bool
-	{
-		return $this->stream->peek()->isEnd();
-	}
-
-
+	/**
+	 * Parses unquoted string or PHP-like expression.
+	 */
 	public function parseUnquotedStringOrExpression(bool $colon = true): ExpressionNode
 	{
 		$position = $this->stream->peek()->position;
@@ -91,16 +97,9 @@ final class TagParser extends TagParserData
 	}
 
 
-	public function tryConsumeModifier(string ...$modifiers): ?Token
-	{
-		$token = $this->stream->peek();
-		return $token->is(...$modifiers) // is followed by whitespace
-			&& $this->stream->peek(1)->position->offset > $token->position->offset + strlen($token->text)
-			? $this->stream->consume()
-			: null;
-	}
-
-
+	/**
+	 * Parses optional type declaration.
+	 */
 	public function parseType(): ?Node\SuperiorTypeNode
 	{
 		$kind = [
@@ -114,6 +113,25 @@ final class TagParser extends TagParserData
 		}
 
 		return $res ? new Node\SuperiorTypeNode($res) : null;
+	}
+
+
+	/**
+	 * Consumes optional token followed by whitespace. Suitable before parseUnquotedStringOrExpression().
+	 */
+	public function tryConsumeModifier(string ...$modifiers): ?Token
+	{
+		$token = $this->stream->peek();
+		return $token->is(...$modifiers) // is followed by whitespace
+			&& $this->stream->peek(1)->position->offset > $token->position->offset + strlen($token->text)
+			? $this->stream->consume()
+			: null;
+	}
+
+
+	public function isEnd(): bool
+	{
+		return $this->stream->peek()->isEnd();
 	}
 
 
