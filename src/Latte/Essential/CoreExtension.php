@@ -199,7 +199,7 @@ final class CoreExtension extends Latte\Extension
 	private function includeSplitter(Tag $tag, TemplateParser $parser): Nodes\IncludeBlockNode|Nodes\IncludeFileNode
 	{
 		$tag->expectArguments();
-		$mod = $tag->parser->tryConsumeModifier('block', 'file');
+		$mod = $tag->parser->tryConsumeSeparatedToken('block', 'file');
 		if ($mod) {
 			$block = $mod->text === 'block';
 		} elseif ($tag->parser->stream->tryConsume('#')) {

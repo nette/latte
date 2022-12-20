@@ -36,7 +36,7 @@ class DefineNode extends StatementNode
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$tag->expectArguments();
-		$layer = $tag->parser->tryConsumeModifier('local')
+		$layer = $tag->parser->tryConsumeSeparatedToken('local')
 			? Template::LayerLocal
 			: $parser->blockLayer;
 		$tag->parser->stream->tryConsume('#');
