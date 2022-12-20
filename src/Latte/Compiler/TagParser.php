@@ -119,10 +119,10 @@ final class TagParser extends TagParserData
 	/**
 	 * Consumes optional token followed by whitespace. Used before calling parseUnquotedStringOrExpression().
 	 */
-	public function tryConsumeModifier(string ...$modifiers): ?Token
+	public function tryConsumeSeparatedToken(string ...$kind): ?Token
 	{
 		$token = $this->stream->peek();
-		return $token->is(...$modifiers) // is followed by whitespace
+		return $token->is(...$kind) // is followed by whitespace
 			&& $this->stream->peek(1)->position->offset > $token->position->offset + strlen($token->text)
 			? $this->stream->consume()
 			: null;
