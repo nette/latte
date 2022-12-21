@@ -313,7 +313,10 @@ class Engine
 			$this->contentType,
 		];
 		foreach ($this->extensions as $extension) {
-			$key[] = [$extension::class, $extension->getCacheKey($this)];
+			$key[] = [
+				preg_replace('~\$.*~', '', $extension::class), // remove id from anonymous class
+				$extension->getCacheKey($this),
+			];
 		}
 
 		return 'Template' . substr(md5(serialize($key)), 0, 10);
