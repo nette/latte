@@ -88,6 +88,11 @@ Assert::match(
 	$latte->renderToString('<script type="text/html">{="<>"}</script>'),
 );
 
+Assert::match(
+	'<script type="unknown"><> <\/script></script>',
+	$latte->renderToString('<script type="unknown">{="<> </script>"}</script>'),
+);
+
 // content of <script> is RAWTEXT
 Assert::match(
 	<<<'XX'
