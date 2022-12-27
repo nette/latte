@@ -66,7 +66,7 @@ final class Escaper
 	public function export(): string
 	{
 		return ($this->state === self::HtmlAttribute && $this->quote === '' ? 'html/unquoted-attr' : $this->state)
-			. ($this->subState ? '/' . $this->subState : '');
+			. ($this->subState ? '+' . $this->subState : '');
 	}
 
 
@@ -191,9 +191,9 @@ final class Escaper
 			self::Text => [
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
-				'html/attr/js' => 'escapeHtmlAttr',
-				'html/attr/css' => 'escapeHtmlAttr',
-				'html/attr/url' => 'escapeHtmlAttr',
+				'html/attr+js' => 'escapeHtmlAttr',
+				'html/attr+css' => 'escapeHtmlAttr',
+				'html/attr+url' => 'escapeHtmlAttr',
 				'html/comment' => 'escapeHtmlComment',
 				'xml' => 'escapeXml',
 				'xml/attr' => 'escapeXml',
@@ -201,22 +201,22 @@ final class Escaper
 			self::JavaScript => [
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
-				'html/attr/js' => 'escapeHtmlAttr',
+				'html/attr+js' => 'escapeHtmlAttr',
 				'html/js' => 'convertJSToHtmlRawText',
 				'html/comment' => 'escapeHtmlComment',
 			],
 			self::Css => [
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
-				'html/attr/css' => 'escapeHtmlAttr',
+				'html/attr+css' => 'escapeHtmlAttr',
 				'html/css' => 'convertJSToHtmlRawText',
 				'html/comment' => 'escapeHtmlComment',
 			],
 			'html' => [
 				'html/attr' => 'convertHtmlToHtmlAttr',
-				'html/attr/js' => 'convertHtmlToHtmlAttr',
-				'html/attr/css' => 'convertHtmlToHtmlAttr',
-				'html/attr/url' => 'convertHtmlToHtmlAttr',
+				'html/attr+js' => 'convertHtmlToHtmlAttr',
+				'html/attr+css' => 'convertHtmlToHtmlAttr',
+				'html/attr+url' => 'convertHtmlToHtmlAttr',
 				'html/comment' => 'escapeHtmlComment',
 				'html/unquoted-attr' => 'convertHtmlToUnquotedAttr',
 			],
@@ -224,7 +224,7 @@ final class Escaper
 				'html' => 'convertHtmlToHtmlAttr',
 				'html/unquoted-attr' => 'convertHtmlAttrToUnquotedAttr',
 			],
-			'html/attr/url' => [
+			'html/attr+url' => [
 				'html' => 'convertHtmlToHtmlAttr',
 				'html/attr' => 'nop',
 			],
