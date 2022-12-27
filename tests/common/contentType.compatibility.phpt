@@ -277,6 +277,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context2c' => '<p title="{include html.latte|stripHtml|upper|noescape}"></p>',
 	'context3' => '<p title={include html.latte}></p>',
 	'context4' => '<script>{include html.latte}</script>',
+	'context4a' => '<script type="text/html">{include html.latte}</script>',
 	'context5' => '<style>{include html.latte}</style>',
 	'context6' => '<!--{include html.latte}-->',
 ]));
@@ -300,6 +301,8 @@ Assert::exception(
 	Latte\RuntimeException::class,
 	"Including 'html.latte' with content type HTML into incompatible type HTML/RAW/JS.",
 );
+
+Assert::same('<script type="text/html"><hr><x-script></x-script> " &quot; &lt;</script>', $latte->renderToString('context4a'));
 
 Assert::exception(
 	fn() => $latte->renderToString('context5'),

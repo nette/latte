@@ -68,6 +68,7 @@ final class Escaper
 			self::HtmlAttribute . '/' . self::Css => 'convertHtmlToHtmlAttr',
 			self::HtmlAttribute . '/' . self::Url => 'convertHtmlToHtmlAttr',
 			self::HtmlComment => 'escapeHtmlComment',
+			self::HtmlRawText . '/' . self::HtmlText => 'convertHtmlToHtmlRawText',
 		],
 		self::HtmlAttribute => [
 			self::HtmlText => 'convertHtmlToHtmlAttr',
@@ -192,7 +193,7 @@ final class Escaper
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
 				self::HtmlRawText => match ($this->subType) {
-					self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
+					self::HtmlText => 'LR\Filters::escapeHtmlRawTextHtml(' . $str . ')',
 					self::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
 					self::Css => 'LR\Filters::escapeCss(' . $str . ')',
 				},

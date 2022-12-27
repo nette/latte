@@ -104,6 +104,19 @@ class Filters
 
 
 	/**
+	 * Escapes HTML for usage in <script type=text/html>
+	 */
+	public static function escapeHtmlRawTextHtml($s): string
+	{
+		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
+			return self::convertHtmlToHtmlRawText($s->__toString());
+		}
+
+		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+	}
+
+
+	/**
 	 * Escapes string for use everywhere inside XML (except for comments and tags).
 	 */
 	public static function escapeXml($s): string
@@ -175,15 +188,6 @@ class Filters
 
 
 	/**
-	 * Converts JS and CSS for usage in <script> or <style>
-	 */
-	public static function convertJSToHtmlRawText($s): string
-	{
-		return preg_replace('#</(script|style)#i', '<\/$1', (string) $s);
-	}
-
-
-	/**
 	 * Converts ... to ...
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, string $s): string
@@ -203,6 +207,24 @@ class Filters
 	public static function nop($s): string
 	{
 		return (string) $s;
+	}
+
+
+	/**
+	 * Converts JS and CSS for usage in <script> or <style>
+	 */
+	public static function convertJSToHtmlRawText($s): string
+	{
+		return preg_replace('#</(script|style)#i', '<\/$1', (string) $s);
+	}
+
+
+	/**
+	 * Sanitizes <script> in <script type=text/html>
+	 */
+	public static function convertHtmlToHtmlRawText(string $s): string
+	{
+		return preg_replace('#(</?)(script)#i', '$1x-$2', $s);
 	}
 
 
