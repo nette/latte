@@ -73,7 +73,7 @@ Assert::match(
 	$latte->renderToString('<script type="module">{="<>"}</script>'),
 );
 
-Assert::match(
+Assert::match( // GDPR usage, see #282
 	'<script type="text/plain">"<>"</script>',
 	$latte->renderToString('<script type="text/plain">{="<>"}</script>'),
 );
@@ -81,6 +81,21 @@ Assert::match(
 Assert::match(
 	'<script type="application/json">{ foo:"<>" }</script>',
 	$latte->renderToString('<script type="application/json">{ foo:{="<>"} }</script>'),
+);
+
+Assert::match(
+	'<script type="importmap">{ foo:"<>" }</script>',
+	$latte->renderToString('<script type="importmap">{ foo:{="<>"} }</script>'),
+);
+
+Assert::match(
+	'<script type="">{ foo:"<>" }</script>',
+	$latte->renderToString('<script type="">{ foo:{="<>"} }</script>'),
+);
+
+Assert::match(
+	'<script type>{ foo:"<>" }</script>',
+	$latte->renderToString('<script type>{ foo:{="<>"} }</script>'),
 );
 
 // trim inside <script>

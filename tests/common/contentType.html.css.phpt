@@ -45,8 +45,8 @@ Assert::match(
 	$latte->renderToString('<style type="TEXT/CSS">{="<>"}</style>'),
 );
 
-Assert::match(
-	'<style type="text/html">&lt;&gt;</style>',
+Assert::match( // type is ignored
+	'<style type="text/html">\<\></style>',
 	$latte->renderToString('<style type="text/html">{="<>"}</style>'),
 );
 

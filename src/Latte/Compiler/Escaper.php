@@ -125,18 +125,14 @@ final class Escaper
 
 	public function enterHtmlText(?ElementNode $node): void
 	{
-		$this->state = self::HtmlText;
 		if ($this->contentType === ContentType::Html && $node) {
-			$name = strtolower($node->name);
-			if (
-				($name === 'script' || $name === 'style')
-				&& is_string($attr = $node->getAttribute('type') ?? 'css')
-				&& preg_match('#(java|j|ecma|live)script|module|json|css|plain#i', $attr)
-			) {
-				$this->state = $name === 'script'
-					? self::HtmlJavaScript
-					: self::HtmlCss;
-			}
+			$this->state = match (true) {
+				strtolower($node->name) === 'style' => self::HtmlCss,
+				self::isJSScript($node) => self::HtmlJavaScript,
+				default => self::HtmlText,
+			};
+		} else {
+			$this->state = self::HtmlText;
 		}
 	}
 
@@ -247,5 +243,14 @@ final class Escaper
 		return isset(self::Convertors[$source][$dest])
 			? [Filters::class, self::Convertors[$source][$dest]]
 			: null;
+	}
+
+
+	public static function isJSScript(ElementNode $el): bool
+	{
+		$type = $el->getAttribute('type');
+		return strcasecmp($el->name, 'script') === 0
+			&& ($type === true || $type === null || $type === ''
+				|| is_string($type) && preg_match('#((application|text)/(((x-)?java|ecma|j|live)script|json)|text/plain|module|importmap)$#Ai', $type));
 	}
 }
