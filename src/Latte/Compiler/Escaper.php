@@ -33,8 +33,7 @@ final class Escaper
 		HtmlText = 'html',
 		HtmlComment = 'html/comment',
 		HtmlBogusTag = 'html/bogus',
-		HtmlCss = 'html/css',
-		HtmlJavaScript = 'html/js',
+		HtmlRawText = 'html/raw',
 		HtmlTag = 'html/tag',
 		HtmlAttributeQuoted = 'html/attr',
 		HtmlAttributeUnquoted = 'html/unquoted-attr';
@@ -54,14 +53,14 @@ final class Escaper
 			self::HtmlText => 'escapeHtmlText',
 			self::HtmlAttributeQuoted => 'escapeHtmlAttr',
 			self::HtmlAttributeQuoted . '+' . self::JavaScript => 'escapeHtmlAttr',
-			self::HtmlJavaScript => 'convertJSToHtmlRawText',
+			self::HtmlRawText . '+' . self::JavaScript => 'convertJSToHtmlRawText',
 			self::HtmlComment => 'escapeHtmlComment',
 		],
 		self::Css => [
 			self::HtmlText => 'escapeHtmlText',
 			self::HtmlAttributeQuoted => 'escapeHtmlAttr',
 			self::HtmlAttributeQuoted . '+' . self::Css => 'escapeHtmlAttr',
-			self::HtmlCss => 'convertJSToHtmlRawText',
+			self::HtmlRawText . '+' . self::Css => 'convertJSToHtmlRawText',
 			self::HtmlComment => 'escapeHtmlComment',
 		],
 		self::HtmlText => [
@@ -125,14 +124,20 @@ final class Escaper
 
 	public function enterHtmlText(?ElementNode $node): void
 	{
-		if ($this->contentType === ContentType::Html && $node) {
-			$this->state = match (true) {
-				strtolower($node->name) === 'style' => self::HtmlCss,
-				self::isJSScript($node) => self::HtmlJavaScript,
+		if (
+			$this->contentType === ContentType::Html
+			&& $node
+			&& in_array($name = strtolower($node->name), ['script', 'style'], true)
+		) {
+			$this->state = self::HtmlRawText;
+			$this->subState = match (true) {
+				$name === 'style' => self::Css,
+				self::isJSScript($node) => self::JavaScript,
 				default => self::HtmlText,
 			};
 		} else {
 			$this->state = self::HtmlText;
+			$this->subState = '';
 		}
 	}
 
@@ -198,8 +203,11 @@ final class Escaper
 				},
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
-				self::HtmlJavaScript => 'LR\Filters::escapeJs(' . $str . ')',
-				self::HtmlCss => 'LR\Filters::escapeCss(' . $str . ')',
+				self::HtmlRawText => match ($this->subState) {
+					self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
+					self::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
+					self::Css => 'LR\Filters::escapeCss(' . $str . ')',
+				},
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::Xml => match ($this->state) {
