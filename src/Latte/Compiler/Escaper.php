@@ -39,6 +39,52 @@ final class Escaper
 		HtmlAttributeQuoted = 'html/attr',
 		HtmlAttributeUnquoted = 'html/unquoted-attr';
 
+	private const Convertors = [
+		self::Text => [
+			self::HtmlText => 'escapeHtmlText',
+			self::HtmlAttributeQuoted => 'escapeHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::JavaScript => 'escapeHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::Css => 'escapeHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::Url => 'escapeHtmlAttr',
+			self::HtmlComment => 'escapeHtmlComment',
+			'xml' => 'escapeXml',
+			'xml/attr' => 'escapeXml',
+		],
+		self::JavaScript => [
+			self::HtmlText => 'escapeHtmlText',
+			self::HtmlAttributeQuoted => 'escapeHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::JavaScript => 'escapeHtmlAttr',
+			self::HtmlJavaScript => 'convertJSToHtmlRawText',
+			self::HtmlComment => 'escapeHtmlComment',
+		],
+		self::Css => [
+			self::HtmlText => 'escapeHtmlText',
+			self::HtmlAttributeQuoted => 'escapeHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::Css => 'escapeHtmlAttr',
+			self::HtmlCss => 'convertJSToHtmlRawText',
+			self::HtmlComment => 'escapeHtmlComment',
+		],
+		self::HtmlText => [
+			self::HtmlAttributeQuoted => 'convertHtmlToHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::JavaScript => 'convertHtmlToHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::Css => 'convertHtmlToHtmlAttr',
+			self::HtmlAttributeQuoted . '+' . self::Url => 'convertHtmlToHtmlAttr',
+			self::HtmlComment => 'escapeHtmlComment',
+			self::HtmlAttributeUnquoted => 'convertHtmlToUnquotedAttr',
+		],
+		self::HtmlAttributeQuoted => [
+			self::HtmlText => 'convertHtmlToHtmlAttr',
+			self::HtmlAttributeUnquoted => 'convertHtmlAttrToUnquotedAttr',
+		],
+		self::HtmlAttributeQuoted . '+' . self::Url => [
+			self::HtmlText => 'convertHtmlToHtmlAttr',
+			self::HtmlAttributeQuoted => 'nop',
+		],
+		self::HtmlAttributeUnquoted => [
+			self::HtmlText => 'convertHtmlToHtmlAttr',
+		],
+	];
+
 	private string $state = '';
 	private string $tag = '';
 	private string $quote = '';
@@ -194,58 +240,12 @@ final class Escaper
 
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
-		$table = [
-			self::Text => [
-				'html' => 'escapeHtmlText',
-				'html/attr' => 'escapeHtmlAttr',
-				'html/attr+js' => 'escapeHtmlAttr',
-				'html/attr+css' => 'escapeHtmlAttr',
-				'html/attr+url' => 'escapeHtmlAttr',
-				'html/comment' => 'escapeHtmlComment',
-				'xml' => 'escapeXml',
-				'xml/attr' => 'escapeXml',
-			],
-			self::JavaScript => [
-				'html' => 'escapeHtmlText',
-				'html/attr' => 'escapeHtmlAttr',
-				'html/attr+js' => 'escapeHtmlAttr',
-				'html/js' => 'convertJSToHtmlRawText',
-				'html/comment' => 'escapeHtmlComment',
-			],
-			self::Css => [
-				'html' => 'escapeHtmlText',
-				'html/attr' => 'escapeHtmlAttr',
-				'html/attr+css' => 'escapeHtmlAttr',
-				'html/css' => 'convertJSToHtmlRawText',
-				'html/comment' => 'escapeHtmlComment',
-			],
-			'html' => [
-				'html/attr' => 'convertHtmlToHtmlAttr',
-				'html/attr+js' => 'convertHtmlToHtmlAttr',
-				'html/attr+css' => 'convertHtmlToHtmlAttr',
-				'html/attr+url' => 'convertHtmlToHtmlAttr',
-				'html/comment' => 'escapeHtmlComment',
-				'html/unquoted-attr' => 'convertHtmlToUnquotedAttr',
-			],
-			'html/attr' => [
-				'html' => 'convertHtmlToHtmlAttr',
-				'html/unquoted-attr' => 'convertHtmlAttrToUnquotedAttr',
-			],
-			'html/attr+url' => [
-				'html' => 'convertHtmlToHtmlAttr',
-				'html/attr' => 'nop',
-			],
-			'html/unquoted-attr' => [
-				'html' => 'convertHtmlToHtmlAttr',
-			],
-		];
-
 		if ($source === $dest) {
 			return [Filters::class, 'nop'];
 		}
 
-		return isset($table[$source][$dest])
-			? [Filters::class, $table[$source][$dest]]
+		return isset(self::Convertors[$source][$dest])
+			? [Filters::class, self::Convertors[$source][$dest]]
 			: null;
 	}
 }
