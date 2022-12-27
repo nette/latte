@@ -89,17 +89,17 @@ Assert::match(
 );
 
 Assert::match(
-	'<script type="importmap">{ foo:&lt;&gt; }</script>',
+	'<script type="importmap">{ foo:"<>" }</script>',
 	$latte->renderToString('<script type="importmap">{ foo:{="<>"} }</script>'),
 );
 
 Assert::match(
-	'<script type="">{ foo:&lt;&gt; }</script>',
+	'<script type="">{ foo:"<>" }</script>',
 	$latte->renderToString('<script type="">{ foo:{="<>"} }</script>'),
 );
 
 Assert::match(
-	'<script type>{ foo:&lt;&gt; }</script>',
+	'<script type>{ foo:"<>" }</script>',
 	$latte->renderToString('<script type>{ foo:{="<>"} }</script>'),
 );
 
