@@ -36,7 +36,8 @@ final class Escaper
 		HtmlCss = 'html/css',
 		HtmlJavaScript = 'html/js',
 		HtmlTag = 'html/tag',
-		HtmlAttribute = 'html/attr';
+		HtmlAttributeQuoted = 'html/attr',
+		HtmlAttributeUnquoted = 'html/unquoted-attr';
 
 	private string $state = '';
 	private string $tag = '';
@@ -65,8 +66,7 @@ final class Escaper
 
 	public function export(): string
 	{
-		return ($this->state === self::HtmlAttribute && $this->quote === '' ? 'html/unquoted-attr' : $this->state)
-			. ($this->subState ? '+' . $this->subState : '');
+		return $this->state . ($this->subState ? '+' . $this->subState : '');
 	}
 
 
@@ -103,8 +103,7 @@ final class Escaper
 
 	public function enterHtmlAttribute(?string $name = null, string $quote = ''): void
 	{
-		$this->state = self::HtmlAttribute;
-		$this->quote = $quote;
+		$this->enterHtmlAttributeQuote($quote);
 		$this->subState = '';
 
 		if ($this->contentType === ContentType::Html && is_string($name)) {
@@ -124,6 +123,7 @@ final class Escaper
 
 	public function enterHtmlAttributeQuote(string $quote = '"'): void
 	{
+		$this->state = $quote ? self::HtmlAttributeQuoted : self::HtmlAttributeUnquoted;
 		$this->quote = $quote;
 	}
 
@@ -142,12 +142,12 @@ final class Escaper
 
 	public function escape(string $str): string
 	{
-		[$lq, $rq] = $this->state === self::HtmlAttribute && !$this->quote ? ["'\"' . ", " . '\"'"] : ['', ''];
+		[$lq, $rq] = $this->state === self::HtmlAttributeUnquoted ? ["'\"' . ", " . '\"'"] : ['', ''];
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
 				self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
 				self::HtmlTag => 'LR\Filters::escapeHtmlTag(' . $str . ')',
-				self::HtmlAttribute => match ($this->subState) {
+				self::HtmlAttributeQuoted, self::HtmlAttributeUnquoted => match ($this->subState) {
 					'',
 					self::Url => $lq . 'LR\Filters::escapeHtmlAttr(' . $str . ')' . $rq,
 					self::JavaScript => $lq . 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(' . $str . '))' . $rq,
@@ -162,7 +162,7 @@ final class Escaper
 			ContentType::Xml => match ($this->state) {
 				self::HtmlText,
 				self::HtmlBogusTag => 'LR\Filters::escapeXml(' . $str . ')',
-				self::HtmlAttribute => $lq . 'LR\Filters::escapeXml(' . $str . ')' . $rq,
+				self::HtmlAttributeQuoted, self::HtmlAttributeUnquoted  => $lq . 'LR\Filters::escapeXml(' . $str . ')' . $rq,
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlTag => 'LR\Filters::escapeXmlTag(' . $str . ')',
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
@@ -178,10 +178,16 @@ final class Escaper
 
 	public function check(string $str): string
 	{
-		if ($this->state === self::HtmlAttribute && $this->subState === self::Url) {
+		if ($this->isHtmlAttribute() && $this->subState === self::Url) {
 			$str = 'LR\Filters::safeUrl(' . $str . ')';
 		}
 		return $str;
+	}
+
+
+	public function isHtmlAttribute(): bool
+	{
+		return $this->state === self::HtmlAttributeQuoted || $this->state === self::HtmlAttributeUnquoted;
 	}
 
 
