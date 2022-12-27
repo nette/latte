@@ -6,8 +6,8 @@
 
 declare(strict_types=1);
 
+use Latte\Runtime\Html;
 use Tester\Assert;
-
 
 require __DIR__ . '/../bootstrap.php';
 
@@ -102,4 +102,12 @@ Assert::match(
 Assert::match(
 	'<script>123;</script>',
 	$latte->renderToString('<script>{block|trim}  123;  {/block}</script>'),
+);
+
+Assert::match(
+	'<script> "<div title=\'<\/script>\'><\/div>" </script>',
+	$latte->renderToString(
+		'<script> {$foo} </script>',
+		['foo' => new Html("<div title='</script>'></div>")],
+	),
 );

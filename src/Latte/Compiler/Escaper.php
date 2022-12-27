@@ -204,7 +204,7 @@ final class Escaper
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
 				self::HtmlRawText => match ($this->subState) {
-					self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
+					self::HtmlText => 'LR\Filters::escapeHtmlRawTextHtml(' . $str . ')',
 					self::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
 					self::Css => 'LR\Filters::escapeCss(' . $str . ')',
 				},

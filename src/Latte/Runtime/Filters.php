@@ -170,6 +170,19 @@ class Filters
 
 
 	/**
+	 * Escapes HTML for usage in <script type=text/html>
+	 */
+	public static function escapeHtmlRawTextHtml($s): string
+	{
+		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
+			return str_ireplace('</script', '&lt;/script', $s->__toString());
+		}
+
+		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+	}
+
+
+	/**
 	 * Converts JS and CSS for usage in <script> or <style>
 	 */
 	public static function convertJSToHtmlRawText($s): string
