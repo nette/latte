@@ -162,7 +162,7 @@ final class PrintContext
 
 	public function addBlock(Block $block): void
 	{
-		$block->escaping = $this->getEscaper()->export();
+		$block->escaping = $this->getEscaper()->getState();
 		$block->method = 'block' . ucfirst(trim(preg_replace('#\W+#', '_', $block->name->print($this)), '_'));
 		$lower = strtolower($block->method);
 		$used = $this->blocks + ['block' => 1];

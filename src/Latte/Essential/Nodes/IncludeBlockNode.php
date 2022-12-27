@@ -87,7 +87,7 @@ class IncludeBlockNode extends StatementNode
 				'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
 				$this->modifier,
 			)
-			: ($noEscape || $this->parent ? '' : PhpHelpers::dump($context->getEscaper()->export()));
+			: ($noEscape || $this->parent ? '' : PhpHelpers::dump($context->getEscaper()->getState()));
 
 		return $this->from
 			? $this->printBlockFrom($context, $modArg)

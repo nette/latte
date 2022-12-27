@@ -115,7 +115,7 @@ class DefineNode extends StatementNode
 		return $context->format(
 			'$this->addBlock(%node, %dump, [[$this, %dump]], %dump);',
 			new AssignNode(new VariableNode('ʟ_nm'), $this->block->name),
-			$context->getEscaper()->export(),
+			$context->getEscaper()->getState(),
 			$this->block->method,
 			$this->block->layer,
 		);

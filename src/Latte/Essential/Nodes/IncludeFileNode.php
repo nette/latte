@@ -66,7 +66,7 @@ class IncludeFileNode extends StatementNode
 					'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
 					$this->modifier,
 				)
-				: PhpHelpers::dump($noEscape ? null : $context->getEscaper()->export()),
+				: PhpHelpers::dump($noEscape ? null : $context->getEscaper()->getState()),
 			$this->position,
 		);
 	}

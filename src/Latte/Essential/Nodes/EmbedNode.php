@@ -93,7 +93,7 @@ class EmbedNode extends StatementNode
 				$imports,
 				$this->name,
 				$this->args,
-				$context->getEscaper()->export(),
+				$context->getEscaper()->getState(),
 			)
 			: $context->format(
 				<<<'XX'
@@ -111,7 +111,7 @@ class EmbedNode extends StatementNode
 				$imports,
 				$this->name,
 				$this->args,
-				$context->getEscaper()->export(),
+				$context->getEscaper()->getState(),
 			);
 	}
 

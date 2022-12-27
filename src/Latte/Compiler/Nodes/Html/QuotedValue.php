@@ -31,7 +31,7 @@ class QuotedValue extends AreaNode
 		$escaper = $context->beginEscape();
 		$escaper->enterHtmlAttributeQuote($this->quote);
 
-		if ($this->value instanceof FragmentNode && $escaper->export() === 'html/attr+url') {
+		if ($this->value instanceof FragmentNode && $escaper->getState() === 'html/attr+url') {
 			foreach ($this->value->children as $child) {
 				$res .= $child->print($context);
 				$escaper->enterHtmlAttribute(null, $this->quote);

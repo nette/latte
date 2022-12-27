@@ -101,7 +101,7 @@ class BlockNode extends StatementNode
 				XX,
 			$this->position,
 			$this->content,
-			$context->getEscaper()->export(),
+			$context->getEscaper()->getState(),
 			$this->modifier,
 		);
 	}
@@ -141,7 +141,7 @@ class BlockNode extends StatementNode
 				: '')
 			. ');',
 			new AssignNode(new VariableNode('ʟ_nm'), $this->block->name),
-			$escaper->export(),
+			$escaper->getState(),
 			$this->block->method,
 			$this->block->layer,
 			$this->modifier,

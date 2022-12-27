@@ -60,13 +60,14 @@ final class Escaper
 
 	public function getState(): string
 	{
-		return $this->state;
+		return $this->state . ($this->subState ? '+' . $this->subState : '');
 	}
 
 
+	/** @deprecated use getState() */
 	public function export(): string
 	{
-		return $this->state . ($this->subState ? '+' . $this->subState : '');
+		return $this->getState();
 	}
 
 

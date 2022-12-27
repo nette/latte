@@ -73,7 +73,7 @@ class CaptureNode extends StatementNode
 			$escaper->getState() === Escaper::HtmlText
 				? 'ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()'
 				: 'ob_get_clean()',
-			$escaper->export(),
+			$escaper->getState(),
 			$this->variable,
 			$this->modifier,
 		);
