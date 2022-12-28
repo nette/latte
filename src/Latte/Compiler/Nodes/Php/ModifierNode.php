@@ -70,7 +70,7 @@ class ModifierNode extends Node
 
 		$expr = $escape
 			? $escaper->escape($expr)
-			: $escaper->escapeMandatory($expr);
+			: $escaper->escapeMandatory($expr, $this->position);
 
 		return $expr;
 	}

@@ -230,7 +230,7 @@ final class Escaper
 	}
 
 
-	public function escapeMandatory(string $str): string
+	public function escapeMandatory(string $str, ?Position $position = null): string
 	{
 		$quote = var_export($this->quote, true);
 		return match ($this->contentType) {
@@ -240,10 +240,12 @@ final class Escaper
 					self::HtmlText => 'LR\Filters::convertHtmlToHtmlRawText(' . $str . ')',
 					default => "LR\\Filters::convertJSToHtmlRawText($str)",
 				},
+				self::HtmlAttributeUnquoted, self::HtmlComment => throw new Latte\CompileException('Using |noescape is not allowed in this context.', $position),
 				default => $str,
 			},
 			ContentType::Xml => match ($this->state) {
 				self::HtmlAttributeQuoted => "LR\\Filters::escapeHtmlChar($str, $quote)",
+				self::HtmlAttributeUnquoted, self::HtmlComment => throw new Latte\CompileException('Using |noescape is not allowed in this context.', $position),
 				default => $str,
 			},
 			default => $str,

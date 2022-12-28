@@ -33,9 +33,10 @@ Assert::match(
 );
 
 // attribute unquoted values
-Assert::match(
-	'<p title=foo a=\'a\' b="b">></p>',
-	$latte->renderToString('<p title={="foo a=\'a\' b=\"b\">"|noescape}></p>'),
+Assert::exception(
+	fn() => $latte->renderToString('<p title={="foo a=\'a\' b=\"b\">"|noescape}></p>'),
+	Latte\CompileException::class,
+	'Using |noescape is not allowed in this context (on line 1 at column 32)',
 );
 
 // attribute quoted values
@@ -57,4 +58,11 @@ Assert::match(
 Assert::match(
 	'<p onclick="foo a=\'a\' b=&quot;b&quot;>"></p>',
 	$latte->renderToString('<p onclick="{="foo a=\'a\' b=\"b\">"|noescape}"></p>'),
+);
+
+// comment
+Assert::exception(
+	fn() => $latte->renderToString('<!-- {="-->"|noescape} -->'),
+	Latte\CompileException::class,
+	'Using |noescape is not allowed in this context (on line 1 at column 13)',
 );
