@@ -14,7 +14,7 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class InRangeNode extends ExpressionNode
+class InNode extends ExpressionNode
 {
 	public function __construct(
 		public ExpressionNode $needle,
