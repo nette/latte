@@ -126,4 +126,4 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 6:1 (offset 52)
-   position: null
+   position: 1:1 (offset 0)

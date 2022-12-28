@@ -410,8 +410,8 @@ abstract class TagParserData
 	{
 		(match ($rule) {
 			0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 27, 28, 50, 63, 65, 85, 90, 91, 157, 174, 176, 180, 181, 183, 184, 186, 191, 196, 201, 202, 207, 208, 210, 211, 212, 213, 215, 217, 218, 220, 225, 226, 230, 234, 241, 243, 244, 246, 251, 269, 281 => fn() => $this->semValue = $this->semStack[$pos],
-			2 => fn() => $this->semValue = new Node\ModifierNode($this->semStack[$pos]),
-			3 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos]),
+			2 => fn() => $this->semValue = new Node\ModifierNode($this->semStack[$pos], position: $this->startTokenStack[$pos]->position),
+			3 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos], position: $this->startTokenStack[$pos]->position),
 			21, 22, 23, 24, 25, 55, 56, 57 => fn() => $this->semValue = new Node\IdentifierNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			26 => fn() => $this->semValue = new Expression\VariableNode(substr($this->semStack[$pos], 1), $this->startTokenStack[$pos]->position),
 			29, 39, 44, 74, 82, 83, 84, 142, 143, 163, 164, 182, 209, 216, 242, 245, 277 => fn() => $this->semValue = $this->semStack[$pos - 1],

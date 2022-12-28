@@ -357,4 +357,4 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 29:1 (offset 288)
-   position: null
+   position: 2:1 (offset 16)

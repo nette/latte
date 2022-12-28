@@ -85,4 +85,4 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 3:1 (offset 46)
-   position: null
+   position: 1:1 (offset 0)
