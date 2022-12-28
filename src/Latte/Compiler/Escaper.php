@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
+use Latte;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Filters;
@@ -228,7 +229,7 @@ final class Escaper
 	}
 
 
-	public function escapeMandatory(string $str): string
+	public function escapeMandatory(string $str, ?Position $position = null): string
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
@@ -237,12 +238,12 @@ final class Escaper
 					self::HtmlText => 'LR\Filters::convertHtmlToHtmlRawText(' . $str . ')',
 					default => "LR\\Filters::convertJSToHtmlRawText($str)",
 				},
-				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
+				self::HtmlComment => throw new Latte\CompileException('Using |noescape is not allowed in this context.', $position),
 				default => $str,
 			},
 			ContentType::Xml => match ($this->state) {
 				self::HtmlAttribute => "LR\\Filters::escapeHtmlQuotes($str)",
-				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
+				self::HtmlComment => throw new Latte\CompileException('Using |noescape is not allowed in this context.', $position),
 				default => $str,
 			},
 			default => $str,
