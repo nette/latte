@@ -202,14 +202,14 @@ final class Escaper
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
 				'html/attr/js' => 'escapeHtmlAttr',
-				'html/js' => 'escapeHtmlRawText',
+				'html/js' => 'convertJSToHtmlRawText',
 				'html/comment' => 'escapeHtmlComment',
 			],
 			self::Css => [
 				'html' => 'escapeHtmlText',
 				'html/attr' => 'escapeHtmlAttr',
 				'html/attr/css' => 'escapeHtmlAttr',
-				'html/css' => 'escapeHtmlRawText',
+				'html/css' => 'convertJSToHtmlRawText',
 				'html/comment' => 'escapeHtmlComment',
 			],
 			'html' => [

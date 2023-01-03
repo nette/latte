@@ -170,9 +170,9 @@ class Filters
 
 
 	/**
-	 * Escapes CSS/JS for usage in <script> and <style>..
+	 * Converts JS and CSS for usage in <script> or <style>
 	 */
-	public static function escapeHtmlRawText($s): string
+	public static function convertJSToHtmlRawText($s): string
 	{
 		return preg_replace('#</(script|style)#i', '<\/$1', (string) $s);
 	}
