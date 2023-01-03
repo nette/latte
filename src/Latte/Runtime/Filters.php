@@ -192,6 +192,15 @@ class Filters
 
 
 	/**
+	 * Converts HTML for usage in <script type=text/html>
+	 */
+	public static function convertHtmlToHtmlRawText(string $s): string
+	{
+		return preg_replace('#<(/?)script#i', '&lt;$1script', $s);
+	}
+
+
+	/**
 	 * Converts ... to ...
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, string $s): string

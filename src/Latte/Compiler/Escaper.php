@@ -70,6 +70,7 @@ final class Escaper
 			self::HtmlAttributeQuoted . '+' . self::Url => 'convertHtmlToHtmlAttr',
 			self::HtmlComment => 'escapeHtmlComment',
 			self::HtmlAttributeUnquoted => 'convertHtmlToUnquotedAttr',
+			self::HtmlRawText . '+' . self::HtmlText => 'convertHtmlToHtmlRawText',
 		],
 		self::HtmlAttributeQuoted => [
 			self::HtmlText => 'convertHtmlToHtmlAttr',

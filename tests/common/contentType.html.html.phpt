@@ -30,6 +30,12 @@ Assert::match(
 	),
 );
 
+// include
+Assert::match(
+	' <script type="text/html">&lt;script>&lt;/script></script>',
+	$latte->renderToString('{define a}<script></script>{/define} <script type="text/html">{include a}</script>'),
+);
+
 // content of <script> is RAWTEXT
 Assert::match(
 	<<<'XX'
