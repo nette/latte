@@ -225,6 +225,16 @@ class Filters
 
 
 	/**
+	 * Converts HTML to plain text.
+	 */
+	public static function convertHtmlToText(string $s): string
+	{
+		$s = strip_tags($s);
+		return html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+	}
+
+
+	/**
 	 * Sanitizes string for use inside href attribute.
 	 */
 	public static function safeUrl(string $s): string
