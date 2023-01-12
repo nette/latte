@@ -17,7 +17,7 @@ Assert::same('', Filters::escapeXml(''));
 Assert::same('1', Filters::escapeXml(1));
 Assert::same('string', Filters::escapeXml('string'));
 Assert::same('&lt; &amp; &apos; &quot; &gt;', Filters::escapeXml('< & \' " >'));
-Assert::same('&lt;br&gt;', Filters::escapeXml(new Latte\Runtime\Html('<br>')));
+Assert::same('<br>', Filters::escapeXml(new Latte\Runtime\Html('<br>')));
 Assert::same(
 	"\u{FFFD}\u{FFFD}\u{FFFD}\u{FFFD}\u{FFFD}\u{FFFD}\u{FFFD}\u{FFFD}\u{FFFD}\x09\x0a\u{FFFD}\u{FFFD}\x0d\u{FFFD}\u{FFFD}",
 	Filters::escapeXml("\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f"),

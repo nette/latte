@@ -10,7 +10,7 @@
 	<li>Escaped expression: &lt;b&gt;hello&lt;/b&gt;</li>
 	<li>Non-escaped expression: <b>hello</b></li>
 	<li>Array access: Mary</li>
-	<li>Html: &lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt;</li>
+	<li>Html: <div title='1/2"'></div></li>
 </ul>
 
 <style type="text/css">
@@ -32,8 +32,8 @@ var html = <div title='1/2"'></div>;
 <p onclick='alert(:/item);alert("hello");'
  title=':/item"'
  style="color::/item;'"
- alt='&lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt;'
- onfocus="alert(&lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt;)"
+ alt='<div title='1/2"'></div>'
+ onfocus="alert(<div title='1/2"'></div>)"
 >click on me</p>
 
 

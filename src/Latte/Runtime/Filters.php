@@ -101,10 +101,14 @@ class Filters
 
 
 	/**
-	 * Escapes string for use everywhere inside XML (except for comments).
+	 * Escapes string for use everywhere inside XML (except for comments and tags).
 	 */
 	public static function escapeXml($s): string
 	{
+		if ($s instanceof HtmlStringable) {
+			return $s->__toString();
+		}
+
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,
 		//   \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
