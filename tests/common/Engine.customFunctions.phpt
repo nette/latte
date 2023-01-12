@@ -60,16 +60,16 @@ Assert::same(
 
 
 // case insensitive
-$latte->addFunction('CaSe', 'trim');
+$latte->addFunction('fNC', 'trim');
 Assert::same(
 	'abc',
-	$latte->renderToString('{CaSe(" abc ")}'),
+	$latte->renderToString('{fNC(" abc ")}'),
 );
 
 Assert::error(
-	fn() => $latte->compile('{casE(123)}'),
+	fn() => $latte->compile('{Fnc(123)}'),
 	E_USER_WARNING,
-	"Case mismatch on function name 'casE', correct name is 'CaSe'.",
+	"Case mismatch on function name 'Fnc', correct name is 'fNC'.",
 );
 
 

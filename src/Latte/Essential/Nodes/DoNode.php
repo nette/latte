@@ -20,12 +20,24 @@ use Latte\Compiler\Tag;
  */
 class DoNode extends StatementNode
 {
+	private const RefusedKeywords = [
+		'for', 'foreach', 'switch', 'while', 'if', 'do', 'try',
+		'include', 'include_once', 'require', 'require_once',
+		'throw', 'yield', 'return', 'exit', 'break', 'continue',
+		'class', 'function', 'interface', 'trait', 'enum',
+	];
 	public ExpressionNode $expression;
 
 
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
+
+		$token = $tag->parser->stream->peek();
+		if ($token->is(...self::RefusedKeywords)) {
+			$tag->parser->throwReservedKeywordException($token);
+		}
+
 		$node = new static;
 		$node->expression = $tag->parser->parseExpression();
 		return $node;

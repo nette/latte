@@ -138,12 +138,9 @@ final class TagParser extends TagParserData
 						: null;
 
 
-					if ($token) {
-						$prevToken = $token;
-						$token = $this->stream->consume();
-					} else {
-						$token = new Token(ord($schema), $schema);
-					}
+					$token = $token
+						? $this->stream->consume()
+						: new Token(ord($schema), $schema);
 
 					recovery:
 					$symbol = self::TokenToSymbol[$token->type];
@@ -207,18 +204,13 @@ final class TagParser extends TagParserData
 						$this->startTokenStack[$stackPos] = $token;
 					}
 
+				} elseif ($recovery && $this->isExpectedEof($state)) { // recoverable error
+					[, $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack] = $recovery;
+					$this->stream->seek($recovery[0]);
+					$token = new Token(Token::End, '');
+					goto recovery;
+
 				} else { // error
-					if ($prevToken->is('echo', 'print', 'return', 'yield', 'throw', 'if', 'foreach', 'unset')) {
-						throw new Latte\CompileException("Keyword '$prevToken->text' is forbidden in Latte", $prevToken->position);
-					}
-
-					if ($recovery && $this->isExpectedEof($state)) {
-						[, $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack] = $recovery;
-						$this->stream->seek($recovery[0]);
-						$token = new Token(Token::End, '');
-						goto recovery;
-					}
-
 					throw new Latte\CompileException('Unexpected ' . ($token->text ? "'$token->text'" : 'end'), $token->position);
 				}
 
@@ -252,6 +244,23 @@ final class TagParser extends TagParserData
 		}
 
 		return false;
+	}
+
+
+	public function throwReservedKeywordException(Token $token)
+	{
+		throw new Latte\CompileException("Keyword '$token->text' cannot be used in Latte.", $token->position);
+	}
+
+
+	protected function checkFunctionName(
+		Expression\FunctionCallNode|Expression\FunctionCallableNode $func,
+	): ExpressionNode
+	{
+		if ($func->name instanceof NameNode && $func->name->isKeyword()) {
+			$this->throwReservedKeywordException(new Token(0, (string) $func->name, $func->name->position));
+		}
+		return $func;
 	}
 
 

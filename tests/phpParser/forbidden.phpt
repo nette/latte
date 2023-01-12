@@ -51,6 +51,30 @@ Assert::exception(
 	"Unexpected '\"A.php\"' (on line 1 at column 9)",
 );
 
+Assert::exception(
+	fn() => parseCode('include ("A.php")'),
+	Latte\CompileException::class,
+	"Keyword 'include' cannot be used in Latte (on line 1 at column 1)",
+);
+
+Assert::exception(
+	fn() => parseCode('return 10'),
+	Latte\CompileException::class,
+	"Unexpected '10' (on line 1 at column 8)",
+);
+
+Assert::exception(
+	fn() => parseCode('unset($x)'),
+	Latte\CompileException::class,
+	"Keyword 'unset' cannot be used in Latte (on line 1 at column 1)",
+);
+
+Assert::exception(
+	fn() => parseCode('unset(...)'),
+	Latte\CompileException::class,
+	"Keyword 'unset' cannot be used in Latte (on line 1 at column 1)",
+);
+
 // shell execution
 Assert::exception(
 	fn() => parseCode('`test`'),
@@ -62,7 +86,7 @@ Assert::exception(
 Assert::exception(
 	fn() => parseCode('throw new Exception'),
 	Latte\CompileException::class,
-	"Keyword 'throw' is forbidden in Latte (on line 1 at column 1)",
+	"Unexpected 'newException' (on line 1 at column 7)",
 );
 
 // syntax error, not number

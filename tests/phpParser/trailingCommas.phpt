@@ -13,7 +13,7 @@ $test = <<<'XX'
 	$foo->bar($a, $b, ),
 	Foo::bar($a, $b, ),
 	new Foo($a, $b, ),
-	unset($a, $b, ),
+	abcde($a, $b, ),
 	isset($a, $b, ),
 	XX;
 
@@ -152,7 +152,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'unset'
+   |  |  |  |  |  0 => 'abcde'
    |  |  |  |  kind: 1
    |  |  |  |  position: 5:1 (offset 75)
    |  |  |  args: array (2)

@@ -49,7 +49,7 @@ class NameNode extends Node
 	}
 
 
-	private function isKeyword(): bool
+	public function isKeyword(): bool
 	{
 		static $keywords;
 		$keywords ??= array_flip([
