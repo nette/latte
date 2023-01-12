@@ -77,3 +77,10 @@ Assert::contains(
 	'LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl(($this->filters->upper)($url1)))',
 	$latte->compile('<a href="{$url1|upper}"></a>'),
 );
+
+
+// accepts HtmlStringable
+Assert::match(
+	'<img src="https://nette.org?a=1&amp;b=&lt;a&gt;">',
+	$latte->renderToString('{capture $url}https://nette.org?a=1&amp;b={="<a>"}{/capture}<img src="{$url}">'),
+);
