@@ -123,8 +123,6 @@ final class TagLexer
 			)|
 			(?<Php_NameFullyQualified>  \\ (?&label) ( \\ (?&label) )*  )|
 			(?<Php_NameQualified>  (?&label) ( \\ (?&label) )+  )|
-			(?<Php_Identifier>  TRUE \b | FALSE \b | NULL \b  )|
-			(?<Php_Constant>  [A-Z_][A-Z0-9_]{2,}  \b)|
 			(?<Php_IdentifierFollowed>  (?&label)  (?= [ \t\r\n]* [(&=] )  )|
 			(?<Php_Identifier>  (?&label)(--?[a-zA-Z0-9_\x80-\xff]+)*  )|
 			(
@@ -222,7 +220,10 @@ final class TagLexer
 
 			} elseif (isset($m['Php_Identifier'])) {
 				$lower = strtolower($m['Php_Identifier']);
-				$this->addToken(self::Keywords[$lower] ?? Token::Php_Identifier, $m['Php_Identifier']);
+				$this->addToken(
+					self::Keywords[$lower] ?? (preg_match('~[A-Z_][A-Z0-9_]{2,}$~DA', $m['Php_Identifier']) ? Token::Php_Constant : Token::Php_Identifier),
+					$m['Php_Identifier'],
+				);
 
 			} elseif (isset($m['Php_IdentifierFollowed'])) {
 				$lower = strtolower($m['Php_IdentifierFollowed']);
