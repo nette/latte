@@ -31,7 +31,13 @@ class JumpNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
-		if (!$tag->closestTag($tag->name === 'skipIf' ? ['foreach'] : ['for', 'foreach', 'while'])) {
+		$allowed = $tag->name === 'skipIf' ? ['foreach'] : ['for', 'foreach', 'while'];
+		for (
+			$parent = $tag->parent;
+			in_array($parent?->name, ['if', 'ifset', 'ifcontent'], true);
+			$parent = $parent->parent
+		);
+		if (!in_array($parent?->name, $allowed, true)) {
 			throw new CompileException("Tag {{$tag->name}} is unexpected here.", $tag->position);
 		}
 

@@ -21,11 +21,20 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('{foreach $a as $b}{block}{breakIf true}{/block}{/foreach}'),
+	Latte\CompileException::class,
+	'Tag {breakIf} is unexpected here (on line 1 at column 26)',
+);
+
+Assert::exception(
 	fn() => $latte->compile('{breakIf}'),
 	Latte\CompileException::class,
 	'Missing arguments in {breakIf} (on line 1 at column 1)',
 );
 
+Assert::noError(fn() => $latte->compile('{foreach $a as $b}{if $a}{breakIf true}{/if}{/foreach}'));
+Assert::noError(fn() => $latte->compile('{foreach $a as $b}{if $a}{else}{breakIf true}{/if}{/foreach}'));
+Assert::noError(fn() => $latte->compile('{foreach $a as $b}{ifset $a}{breakIf true}{/ifset}{/foreach}'));
 Assert::noError(fn() => $latte->compile('{for ;;}{if true}{breakIf true}{/if}{/for}'));
 
 
