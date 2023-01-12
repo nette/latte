@@ -85,6 +85,7 @@ final class CoreExtension extends Latte\Extension
 			'first' => [Nodes\FirstLastSepNode::class, 'create'],
 			'skipIf' => [Nodes\JumpNode::class, 'create'],
 			'breakIf' => [Nodes\JumpNode::class, 'create'],
+			'exitIf' => [Nodes\JumpNode::class, 'create'],
 			'continueIf' => [Nodes\JumpNode::class, 'create'],
 
 			'if' => [Nodes\IfNode::class, 'create'],

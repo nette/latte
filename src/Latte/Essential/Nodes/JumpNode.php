@@ -20,6 +20,7 @@ use Latte\Compiler\Tag;
  * {breakIf ...}
  * {continueIf ...}
  * {skipIf ...}
+ * {exitIf ...}
  */
 class JumpNode extends StatementNode
 {
@@ -31,7 +32,11 @@ class JumpNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
-		$allowed = $tag->name === 'skipIf' ? ['foreach'] : ['for', 'foreach', 'while'];
+		$allowed = match ($tag->name) {
+			'breakIf', 'continueIf' => ['for', 'foreach', 'while'],
+			'skipIf' => ['foreach'],
+			'exitIf' => ['block', null],
+		};
 		for (
 			$parent = $tag->parent;
 			in_array($parent?->name, ['if', 'ifset', 'ifcontent'], true);
@@ -53,9 +58,12 @@ class JumpNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$cmd = $this->type === 'skipIf'
-			? '{ $iterator->skipRound(); continue; }'
-			: str_replace('If', '', $this->type) . ';';
+		$cmd = match ($this->type) {
+			'breakIf' => 'break;',
+			'continueIf' => 'continue;',
+			'skipIf' => '{ $iterator->skipRound(); continue; }',
+			'exitIf' => 'return;',
+		};
 
 		if ($this->endTag) {
 			$cmd = "{ echo \"</$this->endTag>\\n\"; $cmd; } ";
