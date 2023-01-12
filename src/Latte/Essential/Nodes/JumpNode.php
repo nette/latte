@@ -21,7 +21,7 @@ use Latte\Compiler\Tag;
  * {continueIf ...}
  * {skipIf ...}
  */
-class SkipNode extends StatementNode
+class JumpNode extends StatementNode
 {
 	public string $type;
 	public ExpressionNode $condition;
