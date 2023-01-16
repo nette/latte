@@ -38,11 +38,13 @@ final class Linter
 		$counter = 0;
 		$errors = 0;
 		foreach ($files as $file) {
-			echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
-			$errors += $this->lintLatte((string) $file) ? 0 : 1;
+			$file = (string) $file;
+			echo preg_replace('~\.?[/\\\\]~A', '', $file), "\x0D";
+			$errors += $this->lintLatte($file) ? 0 : 1;
+			echo str_pad('...', strlen($file)), "\x0D";
+			$counter++;
 		}
 
-		echo str_pad('', 40), "\x0D";
 		echo "Done (checked $counter files, found errors in $errors)\n";
 		return !$errors;
 	}
@@ -167,7 +169,7 @@ final class Linter
 
 		} else {
 			$it = new \RecursiveDirectoryIterator($path);
-			$it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::LEAVES_ONLY);
+			$it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::LEAVES_ONLY, \RecursiveIteratorIterator::CATCH_GET_CHILD);
 			$it = new \RegexIterator($it, '~\.latte$~');
 			return $it;
 		}
