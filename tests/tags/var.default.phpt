@@ -17,7 +17,7 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 test('{var ...}', function () use ($latte) {
-	Assert::contains('$var = null; $var2 = null /*', ws($latte->compile('{var $var, $var2}')));
+	Assert::contains('$var = null; $var2 = null /*', ws($latte->compile('{var $var, $var2,}')));
 	Assert::contains('$var = 123 /*', $latte->compile('{var $var = 123}'));
 	Assert::contains('$var1 = 123; $var2 = \'nette framework\' /*', ws($latte->compile('{var $var1 = 123, $var2 = "nette framework"}')));
 	Assert::contains('$temp->var1 = 123 /*', $latte->compile('{var $temp->var1 = 123}'));

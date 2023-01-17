@@ -62,7 +62,7 @@ class ParametersNode extends StatementNode
 				$stream->seek($save);
 				$stream->throwUnexpectedException(addendum: ' in ' . $tag->getNotation());
 			}
-		} while ($stream->tryConsume(','));
+		} while ($stream->tryConsume(',') && !$stream->peek()->isEnd());
 
 		return $params;
 	}

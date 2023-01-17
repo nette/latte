@@ -22,7 +22,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'inc1.latte' => '{$a ?? "-"} {$b ?? "-"} {$glob ?? "-"}',
 	'inc2.latte' => '{parameters $a} {$a ?? "-"} {$b ?? "-"} {$glob ?? "-"}',
 	'inc3.latte' => '{parameters int $a = 5} {$a ?? "-"} {$b ?? "-"} {$glob ?? "-"}',
-	'inc4.latte' => '{parameters $a, int $b = 5} {$a ?? "-"} {$b ?? "-"} {$glob ?? "-"}',
+	'inc4.latte' => '{parameters $a, int $b = 5,} {$a ?? "-"} {$b ?? "-"} {$glob ?? "-"}',
 	'inc5.latte' => '{parameters $glob} {$a ?? "-"} {$b ?? "-"} {$glob ?? "-"}',
 ]));
 
