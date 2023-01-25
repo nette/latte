@@ -124,7 +124,7 @@ final class TagLexer
 			(?<Php_NameFullyQualified>  \\ (?&label) ( \\ (?&label) )*  )|
 			(?<Php_NameQualified>  (?&label) ( \\ (?&label) )+  )|
 			(?<Php_IdentifierFollowed>  (?&label)  (?= [ \t\r\n]* [(&=] )  )|
-			(?<Php_Identifier>  (?&label)(--?[a-zA-Z0-9_\x80-\xff]+)*  )|
+			(?<Php_Identifier>  (?&label)((--?|\.)[a-zA-Z0-9_\x80-\xff]+)*  )|
 			(
 				(
 					(?<Php_ObjectOperator>  ->  )|
