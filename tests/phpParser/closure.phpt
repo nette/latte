@@ -88,7 +88,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  variadic: false
    |  |  |  |  |  position: 3:11 (offset 70)
    |  |  |  uses: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ClosureUseNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 3:20 (offset 79)
@@ -106,13 +106,13 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  byRef: false
    |  |  |  params: array (0)
    |  |  |  uses: array (2)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ClosureUseNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
    |  |  |  |  |  |  position: 4:18 (offset 105)
    |  |  |  |  |  byRef: false
    |  |  |  |  |  position: 4:18 (offset 105)
-   |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ClosureUseNode
+   |  |  |  |  1 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  position: 4:23 (offset 110)
@@ -175,7 +175,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  byRef: false
    |  |  |  params: array (0)
    |  |  |  uses: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ClosureUseNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
    |  |  |  |  |  |  position: 7:18 (offset 212)

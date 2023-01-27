@@ -7,9 +7,10 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes\Php\Expression;
+namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\Node;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 

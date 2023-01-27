@@ -308,7 +308,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  |  |  variadic: false
    |  |  |  |  |  |  |  |  |  |  |  position: 11:16 (offset 179)
    |  |  |  |  |  |  |  |  |  uses: array (1)
-   |  |  |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ClosureUseNode
+   |  |  |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  |  |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  |  |  |  |  |  name: 'f'
    |  |  |  |  |  |  |  |  |  |  |  |  position: 11:33 (offset 196)
