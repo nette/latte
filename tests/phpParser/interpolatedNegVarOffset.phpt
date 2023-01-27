@@ -1,6 +1,6 @@
 <?php
 
-// Encapsed string negative var offsets
+// Interpolated string negative var offsets
 
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (4)
    |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -42,7 +42,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -59,7 +59,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 2:1 (offset 10)
    |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -75,7 +75,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 3:1 (offset 20)
    |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode

@@ -1,6 +1,6 @@
 <?php
 
-// Encapsed strings
+// Interpolated strings
 
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (18)
    |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'A'
@@ -51,7 +51,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -68,7 +68,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 2:1 (offset 6)
    |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -84,7 +84,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 3:1 (offset 15)
    |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -101,7 +101,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 4:1 (offset 24)
    |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -118,7 +118,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 5:1 (offset 33)
    |  5 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -134,7 +134,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 6:1 (offset 45)
    |  6 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -150,7 +150,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 7:1 (offset 72)
    |  7 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -166,7 +166,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 8:1 (offset 83)
    |  8 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -182,7 +182,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 9:1 (offset 94)
    |  9 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -198,7 +198,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 10:1 (offset 105)
    |  10 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'A'
@@ -209,7 +209,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 11:1 (offset 115)
    |  11 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -225,15 +225,15 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 12:1 (offset 123)
    |  12 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (3)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: '\{'
    |  |  |  |  |  position: 13:2 (offset 137)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  position: 13:4 (offset 139)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: '}'
    |  |  |  |  |  position: 13:6 (offset 141)
    |  |  |  position: 13:1 (offset 136)
@@ -242,15 +242,15 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 13:1 (offset 136)
    |  13 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (3)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: '\{ '
    |  |  |  |  |  position: 14:2 (offset 146)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  position: 14:5 (offset 149)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' }'
    |  |  |  |  |  position: 14:7 (offset 151)
    |  |  |  position: 14:1 (offset 145)
@@ -259,9 +259,9 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 14:1 (offset 145)
    |  14 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (2)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: '\'
    |  |  |  |  |  position: 15:2 (offset 157)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -273,15 +273,15 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 15:1 (offset 156)
    |  15 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (3)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: '\{ '
    |  |  |  |  |  position: 16:2 (offset 167)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  position: 16:6 (offset 171)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' }'
    |  |  |  |  |  position: 16:8 (offset 173)
    |  |  |  position: 16:1 (offset 166)
@@ -290,9 +290,9 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 16:1 (offset 166)
    |  16 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (2)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: '$'
    |  |  |  |  |  position: 17:2 (offset 179)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
@@ -309,15 +309,15 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 17:1 (offset 178)
    |  17 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (3)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: 'A '
    |  |  |  |  |  position: 18:2 (offset 189)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'B'
    |  |  |  |  |  position: 18:4 (offset 191)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' C'
    |  |  |  |  |  position: 18:6 (offset 193)
    |  |  |  position: 18:1 (offset 188)

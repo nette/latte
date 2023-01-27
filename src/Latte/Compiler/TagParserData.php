@@ -525,7 +525,7 @@ abstract class TagParserData
 			189 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),
 			190, 247 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
 			192 => fn() => $this->semValue = Scalar\StringNode::parse($this->semStack[$pos], $this->startTokenStack[$pos]->position),
-			193 => fn() => $this->semValue = Scalar\EncapsedStringNode::parse($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),
+			193 => fn() => $this->semValue = Scalar\InterpolatedStringNode::parse($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),
 			194 => fn() => $this->semValue = Scalar\IntegerNode::parse($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			195 => fn() => $this->semValue = Scalar\FloatNode::parse($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			197, 278 => fn() => $this->semValue = new Scalar\StringNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
@@ -569,7 +569,7 @@ abstract class TagParserData
 				$this->semValue = $this->semStack[$pos - 1];
 			},
 			266 => fn() => $this->semValue = [$this->semStack[$pos - 1], $this->semStack[$pos]],
-			267 => fn() => $this->semValue = new Scalar\EncapsedStringPartNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
+			267 => fn() => $this->semValue = new Node\InterpolatedStringPartNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			268 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			274, 275 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),
 			276 => fn() => $this->semValue = new Expression\ArrayAccessNode($this->semStack[$pos - 4], $this->semStack[$pos - 2], $this->startTokenStack[$pos - 5]->position),

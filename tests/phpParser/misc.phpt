@@ -43,9 +43,9 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  |  parts: array (2)
-   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  |  value: 'foo'
    |  |  |  |  |  |  position: 2:2 (offset 21)
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -63,9 +63,9 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  position: 2:1 (offset 20)
    |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
-   |  |  |  object: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  |  parts: array (2)
-   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  |  value: 'foo'
    |  |  |  |  |  |  position: 3:2 (offset 35)
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode

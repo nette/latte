@@ -81,7 +81,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 3:1 (offset 20)
    |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -98,7 +98,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 4:1 (offset 32)
    |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode

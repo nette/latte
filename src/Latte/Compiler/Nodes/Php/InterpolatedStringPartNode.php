@@ -7,14 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes\Php\Scalar;
+namespace Latte\Compiler\Nodes\Php;
 
-use Latte\Compiler\Nodes\Php\ScalarNode;
+use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class EncapsedStringPartNode extends ScalarNode
+class InterpolatedStringPartNode extends Node
 {
 	public function __construct(
 		public string $value,
@@ -25,6 +25,12 @@ class EncapsedStringPartNode extends ScalarNode
 
 	public function print(PrintContext $context): string
 	{
-		throw new \LogicException('Cannot directly print EncapsedStringPart');
+		throw new \LogicException('Cannot directly print InterpolatedStringPart');
+	}
+
+
+	public function &getIterator(): \Generator
+	{
+		false && yield;
 	}
 }

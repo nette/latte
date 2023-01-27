@@ -11,27 +11,28 @@ namespace Latte\Compiler\Nodes\Php\Scalar;
 
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\InterpolatedStringPartNode;
 use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class EncapsedStringNode extends ScalarNode
+class InterpolatedStringNode extends ScalarNode
 {
 	public function __construct(
-		/** @var ExpressionNode[] */
+		/** @var array<ExpressionNode|InterpolatedStringPartNode> */
 		public array $parts,
 		public ?Position $position = null,
 	) {
 	}
 
 
-	/** @param ExpressionNode[] $parts */
+	/** @param array<ExpressionNode|InterpolatedStringPartNode> $parts */
 	public static function parse(array $parts, Position $position): static
 	{
 		foreach ($parts as $part) {
-			if ($part instanceof EncapsedStringPartNode) {
+			if ($part instanceof InterpolatedStringPartNode) {
 				$part->value = PhpHelpers::decodeEscapeSequences($part->value, '"');
 			}
 		}
@@ -45,7 +46,7 @@ class EncapsedStringNode extends ScalarNode
 		$s = '';
 		$expr = false;
 		foreach ($this->parts as $part) {
-			if ($part instanceof EncapsedStringPartNode) {
+			if ($part instanceof InterpolatedStringPartNode) {
 				$s .= substr($context->encodeString($part->value, '"'), 1, -1);
 				continue;
 			}

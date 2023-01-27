@@ -325,7 +325,7 @@ final class TagParser extends TagParserData
 		string $endToken,
 		Position $startPos,
 		Position $endPos,
-	): Scalar\StringNode|Scalar\EncapsedStringNode
+	): Scalar\StringNode|Scalar\InterpolatedStringNode
 	{
 		$hereDoc = !str_contains($startToken, "'");
 		preg_match('/\A[ \t]*/', $endToken, $matches);
@@ -336,14 +336,14 @@ final class TagParser extends TagParserData
 		} elseif (!$parts) {
 			return new Scalar\StringNode('', $startPos);
 
-		} elseif (!$parts[0] instanceof Scalar\EncapsedStringPartNode) {
+		} elseif (!$parts[0] instanceof Node\InterpolatedStringPartNode) {
 			// If there is no leading encapsed string part, pretend there is an empty one
 			$this->stripIndentation('', $indentation, true, false, $parts[0]->position);
 		}
 
 		$newParts = [];
 		foreach ($parts as $i => $part) {
-			if ($part instanceof Scalar\EncapsedStringPartNode) {
+			if ($part instanceof Node\InterpolatedStringPartNode) {
 				$isLast = $i === \count($parts) - 1;
 				$part->value = $this->stripIndentation(
 					$part->value,
@@ -368,7 +368,7 @@ final class TagParser extends TagParserData
 			$newParts[] = $part;
 		}
 
-		return new Scalar\EncapsedStringNode($newParts, $startPos);
+		return new Scalar\InterpolatedStringNode($newParts, $startPos);
 	}
 
 

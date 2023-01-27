@@ -75,9 +75,9 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 11:1 (offset 107)
    |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (2)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: 'Test '
    |  |  |  |  |  position: 17:1 (offset 165)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -89,15 +89,15 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 16:1 (offset 158)
    |  5 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Scalar\EncapsedStringNode
+   |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (5)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: 'Test '
    |  |  |  |  |  position: 20:1 (offset 185)
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
    |  |  |  |  |  position: 20:6 (offset 190)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' and '
    |  |  |  |  |  position: 20:8 (offset 192)
    |  |  |  |  3 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
@@ -109,7 +109,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  position: 20:17 (offset 201)
    |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 20:13 (offset 197)
-   |  |  |  |  4 => Latte\Compiler\Nodes\Php\Scalar\EncapsedStringPartNode
+   |  |  |  |  4 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' test'
    |  |  |  |  |  position: 20:18 (offset 202)
    |  |  |  position: 19:1 (offset 178)
