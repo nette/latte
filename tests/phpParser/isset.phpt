@@ -24,14 +24,14 @@ Assert::same(
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (3)
-   |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  items: array (2)
-   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  |  |  |  |  kind: 10
@@ -40,7 +40,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  |  position: 1:9 (offset 8)
-   |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  |  kind: 10
@@ -65,13 +65,13 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
-   |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  items: array (1)
-   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  value: 'b'
    |  |  |  |  |  |  |  |  |  position: 2:15 (offset 39)
@@ -92,7 +92,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 2:1 (offset 25)
-   |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode

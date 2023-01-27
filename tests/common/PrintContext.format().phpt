@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler\Nodes\Php\Expression\ArrayItemNode;
+use Latte\Compiler\Nodes\Php\ArrayItemNode;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\FilterNode;
 use Latte\Compiler\Nodes\Php\IdentifierNode;

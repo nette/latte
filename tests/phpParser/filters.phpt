@@ -27,7 +27,7 @@ Assert::same(
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (6)
-   |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
@@ -43,7 +43,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
-   |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
@@ -73,7 +73,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 2:1 (offset 12)
-   |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -115,7 +115,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 3:1 (offset 39)
-   |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -165,7 +165,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 4:1 (offset 68)
-   |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
@@ -202,7 +202,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 5:1 (offset 105)
-   |  5 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'

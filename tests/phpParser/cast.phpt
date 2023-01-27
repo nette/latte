@@ -27,7 +27,7 @@ Assert::same(
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (6)
-   |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CastNode
    |  |  |  type: 'array'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -38,7 +38,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
-   |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CastNode
    |  |  |  type: 'bool'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -49,7 +49,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 2:1 (offset 14)
-   |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CastNode
    |  |  |  type: 'float'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -60,7 +60,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 3:1 (offset 28)
-   |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CastNode
    |  |  |  type: 'int'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -71,7 +71,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 4:1 (offset 42)
-   |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CastNode
    |  |  |  type: 'object'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -82,7 +82,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 5:1 (offset 56)
-   |  5 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CastNode
    |  |  |  type: 'string'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode

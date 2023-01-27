@@ -7,11 +7,9 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes\Php\Expression;
+namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\Node;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
@@ -48,5 +46,17 @@ class ArrayItemNode extends Node
 			yield $this->key;
 		}
 		yield $this->value;
+	}
+}
+
+
+class_alias(ArrayItemNode::class, Expression\ArrayItemNode::class);
+
+namespace Latte\Compiler\Nodes\Php\Expression;
+
+if (false) {
+	/** @deprecated use Latte\Compiler\Nodes\Php\ArrayItemNode */
+	class ArrayItemNode
+	{
 	}
 }

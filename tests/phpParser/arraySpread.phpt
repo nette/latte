@@ -32,14 +32,14 @@ Assert::same(
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (10)
-   |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'array'
    |  |  |  |  position: 1:1 (offset 0)
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  items: array (3)
-   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
@@ -48,7 +48,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  position: 1:11 (offset 10)
-   |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  kind: 10
@@ -57,7 +57,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  position: 1:14 (offset 13)
-   |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  kind: 10
@@ -73,10 +73,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
-   |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  items: array (0)
    |  |  |  |  |  |  position: 3:5 (offset 25)
@@ -89,13 +89,13 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 3:1 (offset 21)
-   |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  items: array (3)
-   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  kind: 10
@@ -104,7 +104,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  position: 4:6 (offset 35)
-   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  |  |  kind: 10
@@ -113,7 +113,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  position: 4:9 (offset 38)
-   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  |  |  kind: 10
@@ -132,10 +132,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 4:1 (offset 30)
-   |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'array'
    |  |  |  |  |  |  position: 5:5 (offset 50)
@@ -148,10 +148,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 5:1 (offset 46)
-   |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  parts: array (1)
@@ -169,10 +169,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 6:1 (offset 59)
-   |  5 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  parts: array (1)
@@ -190,10 +190,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 7:1 (offset 74)
-   |  6 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  parts: array (1)
@@ -204,7 +204,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  items: array (3)
-   |  |  |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  |  |  |  value: 'a'
    |  |  |  |  |  |  |  |  |  |  |  |  position: 8:24 (offset 112)
@@ -212,7 +212,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  |  |  |  position: 8:24 (offset 112)
-   |  |  |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  |  |  |  value: 'b'
    |  |  |  |  |  |  |  |  |  |  |  |  position: 8:29 (offset 117)
@@ -220,7 +220,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  |  |  |  position: 8:29 (offset 117)
-   |  |  |  |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  |  |  |  value: 'c'
    |  |  |  |  |  |  |  |  |  |  |  |  position: 8:34 (offset 122)
@@ -243,10 +243,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 8:1 (offset 89)
-   |  7 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (9)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  kind: 10
@@ -255,7 +255,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 9:2 (offset 131)
-   |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'array'
    |  |  |  |  |  |  position: 9:8 (offset 137)
@@ -263,7 +263,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: true
    |  |  |  |  |  position: 9:5 (offset 134)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  parts: array (1)
@@ -276,7 +276,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: true
    |  |  |  |  |  position: 9:16 (offset 145)
-   |  |  |  |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 6
    |  |  |  |  |  |  kind: 10
@@ -285,7 +285,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 9:29 (offset 158)
-   |  |  |  |  4 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 7
    |  |  |  |  |  |  kind: 10
@@ -294,7 +294,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 9:32 (offset 161)
-   |  |  |  |  5 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 8
    |  |  |  |  |  |  kind: 10
@@ -303,7 +303,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 9:35 (offset 164)
-   |  |  |  |  6 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 9
    |  |  |  |  |  |  kind: 10
@@ -312,7 +312,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 9:38 (offset 167)
-   |  |  |  |  7 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 10
    |  |  |  |  |  |  kind: 10
@@ -321,7 +321,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 9:41 (offset 170)
-   |  |  |  |  8 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  parts: array (1)
@@ -339,10 +339,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 9:1 (offset 130)
-   |  8 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (4)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  kind: 10
@@ -351,7 +351,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  position: 10:2 (offset 189)
-   |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'array'
    |  |  |  |  |  |  position: 10:8 (offset 195)
@@ -359,7 +359,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: true
    |  |  |  |  |  position: 10:5 (offset 192)
-   |  |  |  |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'array'
    |  |  |  |  |  |  position: 10:19 (offset 206)
@@ -367,7 +367,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: true
    |  |  |  |  |  position: 10:16 (offset 203)
-   |  |  |  |  3 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'end'
    |  |  |  |  |  |  position: 10:27 (offset 214)
@@ -380,13 +380,13 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 10:1 (offset 188)
-   |  9 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  9 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  items: array (1)
-   |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  items: array (3)
-   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  kind: 10
@@ -395,7 +395,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  position: 11:12 (offset 233)
-   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  |  |  kind: 10
@@ -404,7 +404,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  |  position: 11:15 (offset 236)
-   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\Expression\ArrayItemNode
+   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  |  |  kind: 10

@@ -99,10 +99,10 @@ final class ExpressionBuilder
 		$lastKey = -1;
 		foreach ($arr as $key => $val) {
 			if ($lastKey !== null && ++$lastKey === $key) {
-				$node->items[] = new Expression\ArrayItemNode(self::valueToNode($val));
+				$node->items[] = new Nodes\Php\ArrayItemNode(self::valueToNode($val));
 			} else {
 				$lastKey = null;
-				$node->items[] = new Expression\ArrayItemNode(self::valueToNode($val), self::valueToNode($key));
+				$node->items[] = new Nodes\Php\ArrayItemNode(self::valueToNode($val), self::valueToNode($key));
 			}
 		}
 
