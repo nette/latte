@@ -241,6 +241,8 @@ class Engine
 		if ((include $file) === false) {
 			throw new RuntimeException("Unable to load '$file'.");
 		}
+
+		flock($lock, LOCK_UN);
 	}
 
 
