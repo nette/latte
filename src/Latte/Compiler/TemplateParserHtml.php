@@ -256,7 +256,9 @@ final class TemplateParserHtml
 				default => null,
 			});
 		} catch (CompileException $e) {
-			if ($followsLatte) {
+			if ($followsLatte // attribute name together with the value inside the tag
+				&& $stream->peek() // it is not lexer exception
+			) {
 				$stream->seek($save);
 				return $this->parser->parseLatteStatement();
 			}

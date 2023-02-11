@@ -86,6 +86,12 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<a {$foo}<'),
+	Latte\CompileException::class,
+	"Unexpected '<' (on line 1 at column 10)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('{time() /}'),
 	Latte\CompileException::class,
 	'Unexpected /} in tag {=time() /} (on line 1 at column 1)',
