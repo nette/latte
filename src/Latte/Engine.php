@@ -19,8 +19,8 @@ class Engine
 {
 	use Strict;
 
-	public const VERSION = '3.0.5';
-	public const VERSION_ID = 30005;
+	public const VERSION = '3.0.6';
+	public const VERSION_ID = 30006;
 
 	/** @deprecated use ContentType::* */
 	public const
