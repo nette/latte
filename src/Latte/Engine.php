@@ -314,7 +314,7 @@ class Engine
 		];
 		foreach ($this->extensions as $extension) {
 			$key[] = [
-				preg_replace('~\$.*~', '', $extension::class), // remove id from anonymous class
+				get_debug_type($extension),
 				$extension->getCacheKey($this),
 			];
 		}
@@ -550,8 +550,6 @@ class Engine
 	{
 		if (is_array($params)) {
 			return $params;
-		} elseif (!is_object($params)) {
-			throw new \InvalidArgumentException(sprintf('Engine::render() expects array|object, %s given.', gettype($params)));
 		}
 
 		$methods = (new \ReflectionClass($params))->getMethods(\ReflectionMethod::IS_PUBLIC);
