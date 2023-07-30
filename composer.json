@@ -15,7 +15,7 @@
 		}
 	],
 	"require": {
-		"php": ">=7.1 <8.3",
+		"php": "7.1 - 8.3",
 		"ext-json": "*",
 		"ext-tokenizer": "*"
 	},
