@@ -80,3 +80,32 @@ Assert::match(
 		XX,
 	$latte->compile($template),
 );
+
+
+$template = <<<'XX'
+	{define foo}
+		a
+		{exitIf true}
+		b
+		{exitIf false}
+		c
+	{/define}
+	XX;
+
+Assert::match(
+	<<<'XX'
+		%A%
+			{
+				echo '	a
+		';
+				if (true) /* line 3 */ return;
+				echo '	b
+		';
+				if (false) /* line 5 */ return;
+				echo '	c
+		';
+			}
+		%A%
+		XX,
+	$latte->compile($template),
+);

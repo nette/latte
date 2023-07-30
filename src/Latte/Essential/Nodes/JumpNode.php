@@ -35,7 +35,7 @@ class JumpNode extends StatementNode
 		$allowed = match ($tag->name) {
 			'breakIf', 'continueIf' => ['for', 'foreach', 'while'],
 			'skipIf' => ['foreach'],
-			'exitIf' => ['block', null],
+			'exitIf' => ['block', 'define', null],
 		};
 		for (
 			$parent = $tag->parent;
