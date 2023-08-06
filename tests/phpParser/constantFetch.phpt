@@ -15,6 +15,8 @@ $test = <<<'XX'
 	A::class,
 	$a::B,
 	$a::class,
+	Foo::{bar()},
+	$foo::{bar()},
 	XX;
 
 $node = parseCode($test);
@@ -26,7 +28,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (6)
+   items: array (8)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'A'
@@ -103,4 +105,42 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 6:1 (offset 30)
+   |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  parts: array (1)
+   |  |  |  |  |  0 => 'Foo'
+   |  |  |  |  kind: 1
+   |  |  |  |  position: 7:1 (offset 41)
+   |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'bar'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 7:7 (offset 47)
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 7:7 (offset 47)
+   |  |  |  position: 7:1 (offset 41)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 7:1 (offset 41)
+   |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  name: 'foo'
+   |  |  |  |  position: 8:1 (offset 55)
+   |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'bar'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 8:8 (offset 62)
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 8:8 (offset 62)
+   |  |  |  position: 8:1 (offset 55)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 8:1 (offset 55)
    position: 1:1 (offset 0)

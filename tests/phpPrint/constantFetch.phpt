@@ -15,6 +15,8 @@ $test = <<<'XX'
 	A::class,
 	$a::B,
 	$a::class,
+	Foo::{bar()},
+	$foo::{bar()},
 	XX;
 
 $node = parseCode($test);
@@ -31,4 +33,6 @@ __halt_compiler();
 A::B,
 A::class,
 $a::B,
-$a::class
+$a::class,
+Foo::{bar()},
+$foo::{bar()}
