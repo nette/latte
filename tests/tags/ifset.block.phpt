@@ -26,8 +26,8 @@ Assert::contains(
 	$latte->compile('{ifset #block, $item->var["#test"]/}'),
 );
 Assert::contains(
-	"if (\$this->hasBlock('block1') && \$this->hasBlock('block2') && isset(\$var3) && isset(item('abc'))) ",
-	$latte->compile('{ifset #block1, block2, $var3, item(abc)/}'),
+	"if (\$this->hasBlock('block1') && \$this->hasBlock('block2') && isset(\$var3) && isset(item()->abc)) ",
+	$latte->compile('{ifset #block1, block2, $var3, item()->abc/}'),
 );
 Assert::contains(
 	"if (\$this->hasBlock('footer') && \$this->hasBlock('header') && \$this->hasBlock('main')) ",
@@ -40,8 +40,8 @@ Assert::contains("} elseif (\$this->hasBlock('block')) ", $latte->compile('{if 1
 Assert::contains("} elseif (\$this->hasBlock('block')) ", $latte->compile('{if 1}{elseifset block}{/if}'));
 Assert::contains("} elseif (\$this->hasBlock('block') && isset(\$item->var['#test'])) ", $latte->compile('{if 1}{elseifset #block, $item->var["#test"]}{/if}'));
 Assert::contains(
-	"} elseif (\$this->hasBlock('block1') && \$this->hasBlock('block2') && isset(\$var3) && isset(item('abc'))) ",
-	$latte->compile('{if 1}{elseifset #block1, block2, $var3, item(abc)}{/if}'),
+	"} elseif (\$this->hasBlock('block1') && \$this->hasBlock('block2') && isset(\$var3) && isset(item()->abc)) ",
+	$latte->compile('{if 1}{elseifset #block1, block2, $var3, item()->abc}{/if}'),
 );
 
 

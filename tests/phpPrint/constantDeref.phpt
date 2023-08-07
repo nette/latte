@@ -1,6 +1,6 @@
 <?php
 
-// Constant/literal dereferencing
+// Dereferencing of constants
 
 declare(strict_types=1);
 
@@ -9,12 +9,25 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	FOO[0],
-	foo[0],
+	A->length,
+	A->length(),
+	A[0],
+	A[0][1][2],
 	x\foo[0],
-	FOO::BAR[0],
-	'FOO'[0],
-	array(FOO)[0],
+
+	A::B[0],
+	A::B[0][1][2],
+	A::B->length,
+	A::B->length(),
+	A::B::C,
+	A::B::$c,
+	A::B::c(),
+
+	$foo::BAR[2][1][0],
+
+	__FUNCTION__[0],
+	__FUNCTION__->length,
+	__FUNCIONT__->length(),
 	XX;
 
 $node = parseCode($test);
@@ -26,9 +39,19 @@ Assert::same(
 );
 
 __halt_compiler();
-FOO[0],
-foo[0],
+A->length,
+A->length(),
+A[0],
+A[0][1][2],
 x\foo[0],
-FOO::BAR[0],
-'FOO'[0],
-[FOO][0]
+A::B[0],
+A::B[0][1][2],
+A::B->length,
+A::B->length(),
+A::B::C,
+A::B::$c,
+A::B::c(),
+$foo::BAR[2][1][0],
+namespace\__FUNCTION__[0],
+namespace\__FUNCTION__->length,
+__FUNCIONT__->length()

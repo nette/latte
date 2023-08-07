@@ -1,6 +1,6 @@
 <?php
 
-// Array/string dereferencing
+// Dereferencing of constants
 
 declare(strict_types=1);
 
@@ -9,20 +9,25 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	"abc"[2],
-	"abc"[2][0][0],
-
-	[1, 2, 3][2],
-	[1, 2, 3][2][0][0],
-
-	array(1, 2, 3)[2],
-	array(1, 2, 3)[2][0][0],
-
-	FOO[0],
-	foo[0],
+	A->length,
+	A->length(),
+	A[0],
+	A[0][1][2],
 	x\foo[0],
-	Foo::BAR[1],
+
+	A::B[0],
+	A::B[0][1][2],
+	A::B->length,
+	A::B->length(),
+	A::B::C,
+	A::B::$c,
+	A::B::c(),
+
 	$foo::BAR[2][1][0],
+
+	__FUNCTION__[0],
+	__FUNCTION__->length,
+	__FUNCIONT__->length(),
 	XX;
 
 $node = parseCode($test);
@@ -34,272 +39,93 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (11)
+   items: array (16)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\StringNode
-   |  |  |  |  value: 'abc'
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 1:1 (offset 0)
    |  |  |  |  position: 1:1 (offset 0)
-   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 2
-   |  |  |  |  kind: 10
-   |  |  |  |  position: 1:7 (offset 6)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'length'
+   |  |  |  |  position: 1:4 (offset 3)
+   |  |  |  nullsafe: false
    |  |  |  position: 1:1 (offset 0)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 2:1 (offset 11)
+   |  |  |  |  position: 2:1 (offset 11)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'length'
+   |  |  |  |  position: 2:4 (offset 14)
+   |  |  |  args: array (0)
+   |  |  |  nullsafe: false
+   |  |  |  position: 2:1 (offset 11)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 2:1 (offset 11)
+   |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\StringNode
-   |  |  |  |  |  |  value: 'abc'
-   |  |  |  |  |  |  position: 2:1 (offset 10)
-   |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  value: 2
-   |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 2:7 (offset 16)
-   |  |  |  |  |  position: 2:1 (offset 10)
-   |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  value: 0
-   |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 2:10 (offset 19)
-   |  |  |  |  position: 2:1 (offset 10)
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 3:1 (offset 24)
+   |  |  |  |  position: 3:1 (offset 24)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 2:13 (offset 22)
-   |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  position: 3:3 (offset 26)
+   |  |  |  position: 3:1 (offset 24)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 10)
-   |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   |  |  |  |  items: array (3)
-   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  value: 1
-   |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 4:2 (offset 28)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:2 (offset 28)
-   |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  value: 2
-   |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 4:5 (offset 31)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:5 (offset 31)
-   |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  value: 3
-   |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 4:8 (offset 34)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:8 (offset 34)
-   |  |  |  |  position: 4:1 (offset 27)
-   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 2
-   |  |  |  |  kind: 10
-   |  |  |  |  position: 4:11 (offset 37)
-   |  |  |  position: 4:1 (offset 27)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 4:1 (offset 27)
+   |  |  position: 3:1 (offset 24)
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   |  |  |  |  |  |  items: array (3)
-   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  |  value: 1
-   |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 5:2 (offset 42)
-   |  |  |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 5:2 (offset 42)
-   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  |  value: 2
-   |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 5:5 (offset 45)
-   |  |  |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 5:5 (offset 45)
-   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  |  value: 3
-   |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 5:8 (offset 48)
-   |  |  |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 5:8 (offset 48)
-   |  |  |  |  |  |  position: 5:1 (offset 41)
+   |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  position: 4:1 (offset 30)
+   |  |  |  |  |  |  position: 4:1 (offset 30)
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  value: 2
+   |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 5:11 (offset 51)
-   |  |  |  |  |  position: 5:1 (offset 41)
+   |  |  |  |  |  |  position: 4:3 (offset 32)
+   |  |  |  |  |  position: 4:1 (offset 30)
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  value: 0
+   |  |  |  |  |  value: 1
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 5:14 (offset 54)
-   |  |  |  |  position: 5:1 (offset 41)
-   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 0
-   |  |  |  |  kind: 10
-   |  |  |  |  position: 5:17 (offset 57)
-   |  |  |  position: 5:1 (offset 41)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 5:1 (offset 41)
-   |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   |  |  |  |  items: array (3)
-   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  value: 1
-   |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 7:7 (offset 68)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 7:7 (offset 68)
-   |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  value: 2
-   |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 7:10 (offset 71)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 7:10 (offset 71)
-   |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  value: 3
-   |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 7:13 (offset 74)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 7:13 (offset 74)
-   |  |  |  |  position: 7:1 (offset 62)
+   |  |  |  |  |  position: 4:6 (offset 35)
+   |  |  |  |  position: 4:1 (offset 30)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 2
    |  |  |  |  kind: 10
-   |  |  |  |  position: 7:16 (offset 77)
-   |  |  |  position: 7:1 (offset 62)
+   |  |  |  |  position: 4:9 (offset 38)
+   |  |  |  position: 4:1 (offset 30)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 7:1 (offset 62)
-   |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   |  |  |  |  |  |  items: array (3)
-   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  |  value: 1
-   |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 8:7 (offset 87)
-   |  |  |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 8:7 (offset 87)
-   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  |  value: 2
-   |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 8:10 (offset 90)
-   |  |  |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 8:10 (offset 90)
-   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  |  value: 3
-   |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 8:13 (offset 93)
-   |  |  |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 8:13 (offset 93)
-   |  |  |  |  |  |  position: 8:1 (offset 81)
-   |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  value: 2
-   |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 8:16 (offset 96)
-   |  |  |  |  |  position: 8:1 (offset 81)
-   |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  value: 0
-   |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 8:19 (offset 99)
-   |  |  |  |  position: 8:1 (offset 81)
-   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 0
-   |  |  |  |  kind: 10
-   |  |  |  |  position: 8:22 (offset 102)
-   |  |  |  position: 8:1 (offset 81)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 8:1 (offset 81)
-   |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
-   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'FOO'
-   |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 10:1 (offset 107)
-   |  |  |  |  position: 10:1 (offset 107)
-   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 0
-   |  |  |  |  kind: 10
-   |  |  |  |  position: 10:5 (offset 111)
-   |  |  |  position: 10:1 (offset 107)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 10:1 (offset 107)
-   |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
-   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'foo'
-   |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 11:1 (offset 115)
-   |  |  |  |  position: 11:1 (offset 115)
-   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 0
-   |  |  |  |  kind: 10
-   |  |  |  |  position: 11:5 (offset 119)
-   |  |  |  position: 11:1 (offset 115)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 11:1 (offset 115)
-   |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  position: 4:1 (offset 30)
+   |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
@@ -307,67 +133,259 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  0 => 'x'
    |  |  |  |  |  |  1 => 'foo'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 12:1 (offset 123)
-   |  |  |  |  position: 12:1 (offset 123)
+   |  |  |  |  |  position: 5:1 (offset 42)
+   |  |  |  |  position: 5:1 (offset 42)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 12:7 (offset 129)
-   |  |  |  position: 12:1 (offset 123)
+   |  |  |  |  position: 5:7 (offset 48)
+   |  |  |  position: 5:1 (offset 42)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 12:1 (offset 123)
-   |  9 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  position: 5:1 (offset 42)
+   |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'Foo'
+   |  |  |  |  |  |  0 => 'A'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 13:1 (offset 133)
+   |  |  |  |  |  position: 7:1 (offset 53)
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
-   |  |  |  |  |  name: 'BAR'
-   |  |  |  |  |  position: 13:6 (offset 138)
-   |  |  |  |  position: 13:1 (offset 133)
+   |  |  |  |  |  name: 'B'
+   |  |  |  |  |  position: 7:4 (offset 56)
+   |  |  |  |  position: 7:1 (offset 53)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  value: 1
+   |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 13:10 (offset 142)
-   |  |  |  position: 13:1 (offset 133)
+   |  |  |  |  position: 7:6 (offset 58)
+   |  |  |  position: 7:1 (offset 53)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 13:1 (offset 133)
+   |  |  position: 7:1 (offset 53)
+   |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
+   |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
+   |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  position: 8:1 (offset 62)
+   |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  |  |  name: 'B'
+   |  |  |  |  |  |  |  position: 8:4 (offset 65)
+   |  |  |  |  |  |  position: 8:1 (offset 62)
+   |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  |  |  value: 0
+   |  |  |  |  |  |  kind: 10
+   |  |  |  |  |  |  position: 8:6 (offset 67)
+   |  |  |  |  |  position: 8:1 (offset 62)
+   |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  |  value: 1
+   |  |  |  |  |  kind: 10
+   |  |  |  |  |  position: 8:9 (offset 70)
+   |  |  |  |  position: 8:1 (offset 62)
+   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  value: 2
+   |  |  |  |  kind: 10
+   |  |  |  |  position: 8:12 (offset 73)
+   |  |  |  position: 8:1 (offset 62)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 8:1 (offset 62)
+   |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 9:1 (offset 77)
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'B'
+   |  |  |  |  |  position: 9:4 (offset 80)
+   |  |  |  |  position: 9:1 (offset 77)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'length'
+   |  |  |  |  position: 9:7 (offset 83)
+   |  |  |  nullsafe: false
+   |  |  |  position: 9:1 (offset 77)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 9:1 (offset 77)
+   |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 10:1 (offset 91)
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'B'
+   |  |  |  |  |  position: 10:4 (offset 94)
+   |  |  |  |  position: 10:1 (offset 91)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'length'
+   |  |  |  |  position: 10:7 (offset 97)
+   |  |  |  args: array (0)
+   |  |  |  nullsafe: false
+   |  |  |  position: 10:1 (offset 91)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 10:1 (offset 91)
+   |  9 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 11:1 (offset 107)
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'B'
+   |  |  |  |  |  position: 11:4 (offset 110)
+   |  |  |  |  position: 11:1 (offset 107)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'C'
+   |  |  |  |  position: 11:7 (offset 113)
+   |  |  |  position: 11:1 (offset 107)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 11:1 (offset 107)
    |  10 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 12:1 (offset 116)
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'B'
+   |  |  |  |  |  position: 12:4 (offset 119)
+   |  |  |  |  position: 12:1 (offset 116)
+   |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
+   |  |  |  |  name: 'c'
+   |  |  |  |  position: 12:7 (offset 122)
+   |  |  |  position: 12:1 (offset 116)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 12:1 (offset 116)
+   |  11 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 13:1 (offset 126)
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'B'
+   |  |  |  |  |  position: 13:4 (offset 129)
+   |  |  |  |  position: 13:1 (offset 126)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'c'
+   |  |  |  |  position: 13:7 (offset 132)
+   |  |  |  args: array (0)
+   |  |  |  position: 13:1 (offset 126)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 13:1 (offset 126)
+   |  12 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
    |  |  |  |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'foo'
-   |  |  |  |  |  |  |  position: 14:1 (offset 146)
+   |  |  |  |  |  |  |  position: 15:1 (offset 138)
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'BAR'
-   |  |  |  |  |  |  |  position: 14:7 (offset 152)
-   |  |  |  |  |  |  position: 14:1 (offset 146)
+   |  |  |  |  |  |  |  position: 15:7 (offset 144)
+   |  |  |  |  |  |  position: 15:1 (offset 138)
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 14:11 (offset 156)
-   |  |  |  |  |  position: 14:1 (offset 146)
+   |  |  |  |  |  |  position: 15:11 (offset 148)
+   |  |  |  |  |  position: 15:1 (offset 138)
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 1
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 14:14 (offset 159)
-   |  |  |  |  position: 14:1 (offset 146)
+   |  |  |  |  |  position: 15:14 (offset 151)
+   |  |  |  |  position: 15:1 (offset 138)
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 14:17 (offset 162)
-   |  |  |  position: 14:1 (offset 146)
+   |  |  |  |  position: 15:17 (offset 154)
+   |  |  |  position: 15:1 (offset 138)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 14:1 (offset 146)
+   |  |  position: 15:1 (offset 138)
+   |  13 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => '__FUNCTION__'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 17:1 (offset 159)
+   |  |  |  |  position: 17:1 (offset 159)
+   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  value: 0
+   |  |  |  |  kind: 10
+   |  |  |  |  position: 17:14 (offset 172)
+   |  |  |  position: 17:1 (offset 159)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 17:1 (offset 159)
+   |  14 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => '__FUNCTION__'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 18:1 (offset 176)
+   |  |  |  |  position: 18:1 (offset 176)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'length'
+   |  |  |  |  position: 18:15 (offset 190)
+   |  |  |  nullsafe: false
+   |  |  |  position: 18:1 (offset 176)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 18:1 (offset 176)
+   |  15 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  parts: array (1)
+   |  |  |  |  |  |  0 => '__FUNCIONT__'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 19:1 (offset 198)
+   |  |  |  |  position: 19:1 (offset 198)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'length'
+   |  |  |  |  position: 19:15 (offset 212)
+   |  |  |  args: array (0)
+   |  |  |  nullsafe: false
+   |  |  |  position: 19:1 (offset 198)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 19:1 (offset 198)
    position: 1:1 (offset 0)

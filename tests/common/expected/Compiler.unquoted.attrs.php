@@ -32,6 +32,20 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '"' . LR\Filters::escapeHtmlAttr($x) . '"' /* line %d% */;
 		echo '></span>
 
+<span attr=c';
+		echo LR\Filters::escapeHtmlTag($x) /* line %d% */;
+		echo 'd></span>
+
+<span onclick=';
+		echo '"' . LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($x)) . '"' /* line %d% */;
+		echo ' ';
+		echo LR\Filters::escapeHtmlTag($x) /* line %d% */;
+		echo '></span>
+
+<span onclick=c';
+		echo LR\Filters::escapeHtmlTag($x) /* line %d% */;
+		echo 'd></span>
+
 <span attr';
 		echo LR\Filters::escapeHtmlTag($x) /* line %d% */;
 		echo 'b=c';

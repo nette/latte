@@ -10,6 +10,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
 	A,
+	\A,
 	A::B,
 	A::class,
 	$a::B,
@@ -25,7 +26,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (5)
+   items: array (6)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'A'
@@ -35,15 +36,12 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
-   |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
+   |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'A'
-   |  |  |  |  kind: 1
+   |  |  |  |  kind: 2
    |  |  |  |  position: 2:1 (offset 3)
-   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
-   |  |  |  |  name: 'B'
-   |  |  |  |  position: 2:4 (offset 6)
    |  |  |  position: 2:1 (offset 3)
    |  |  key: null
    |  |  byRef: false
@@ -55,39 +53,54 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'A'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 3:1 (offset 9)
-   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
-   |  |  |  |  name: 'class'
-   |  |  |  |  position: 3:4 (offset 12)
-   |  |  |  position: 3:1 (offset 9)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 3:1 (offset 9)
-   |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
-   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
-   |  |  |  |  name: 'a'
-   |  |  |  |  position: 4:1 (offset 19)
+   |  |  |  |  position: 3:1 (offset 7)
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'B'
-   |  |  |  |  position: 4:5 (offset 23)
-   |  |  |  position: 4:1 (offset 19)
+   |  |  |  |  position: 3:4 (offset 10)
+   |  |  |  position: 3:1 (offset 7)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 19)
+   |  |  position: 3:1 (offset 7)
+   |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  parts: array (1)
+   |  |  |  |  |  0 => 'A'
+   |  |  |  |  kind: 1
+   |  |  |  |  position: 4:1 (offset 13)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'class'
+   |  |  |  |  position: 4:4 (offset 16)
+   |  |  |  position: 4:1 (offset 13)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 4:1 (offset 13)
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 5:1 (offset 26)
+   |  |  |  |  position: 5:1 (offset 23)
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
-   |  |  |  |  name: 'class'
-   |  |  |  |  position: 5:5 (offset 30)
-   |  |  |  position: 5:1 (offset 26)
+   |  |  |  |  name: 'B'
+   |  |  |  |  position: 5:5 (offset 27)
+   |  |  |  position: 5:1 (offset 23)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 26)
+   |  |  position: 5:1 (offset 23)
+   |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  name: 'a'
+   |  |  |  |  position: 6:1 (offset 30)
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'class'
+   |  |  |  |  position: 6:5 (offset 34)
+   |  |  |  position: 6:1 (offset 30)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 6:1 (offset 30)
    position: 1:1 (offset 0)

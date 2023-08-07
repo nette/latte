@@ -88,3 +88,15 @@ Assert::match(
 	'<script>123;</script>',
 	$latte->renderToString('<script>{block|trim}  123;  {/block}</script>'),
 );
+
+
+// attributes
+Assert::match(
+	'<div onclick="&quot;&lt;&gt;&quot;"></div>',
+	$latte->renderToString('<div onclick="{="<>"}"></div>'),
+);
+
+Assert::match(
+	'<div onclick="[1,2,3]"></div>',
+	$latte->renderToString('<div onclick="{=[1,2,3]}"></div>'),
+);

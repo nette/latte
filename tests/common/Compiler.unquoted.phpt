@@ -23,6 +23,12 @@ $template = <<<'EOD'
 
 	<span {='title'}={$x}></span>
 
+	<span attr=c{$x}d></span> {* not supported *}
+
+	<span onclick={$x} {$x}></span>
+
+	<span onclick=c{$x}d></span> {* not supported *}
+
 	<span attr{$x}b=c{$x}d></span> {* not supported *}
 
 	EOD;

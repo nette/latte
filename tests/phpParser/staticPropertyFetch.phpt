@@ -15,8 +15,6 @@ $test = <<<'XX'
 
 	/* array access */
 	A::$b['c'],
-
-	/* class name variations can be found in staticCall.test */
 	XX;
 
 $node = parseCode($test);

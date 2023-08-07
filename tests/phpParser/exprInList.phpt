@@ -9,10 +9,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	/* This is legal. */
 	list(($a), ((($b)))) = $x,
-	/* This is illegal, but not a syntax error. */
-	list(1 + 1) = $x,
 	XX;
 
 $node = parseCode($test);
@@ -24,7 +21,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (2)
+   items: array (1)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\ArrayNode
@@ -32,57 +29,27 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  |  position: 2:7 (offset 27)
+   |  |  |  |  |  |  |  position: 1:7 (offset 6)
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 2:6 (offset 26)
+   |  |  |  |  |  |  position: 1:6 (offset 5)
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  position: 2:15 (offset 35)
+   |  |  |  |  |  |  |  position: 1:15 (offset 14)
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 2:12 (offset 32)
-   |  |  |  |  position: 2:1 (offset 21)
+   |  |  |  |  |  |  position: 1:12 (offset 11)
+   |  |  |  |  position: 1:1 (offset 0)
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 2:24 (offset 44)
+   |  |  |  |  position: 1:24 (offset 23)
    |  |  |  byRef: false
-   |  |  |  position: 2:1 (offset 21)
+   |  |  |  position: 1:1 (offset 0)
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 21)
-   |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
-   |  |  |  var: Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   |  |  |  |  items: array (1)
-   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
-   |  |  |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  value: 1
-   |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  position: 4:6 (offset 100)
-   |  |  |  |  |  |  |  operator: '+'
-   |  |  |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
-   |  |  |  |  |  |  |  |  value: 1
-   |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  position: 4:10 (offset 104)
-   |  |  |  |  |  |  |  position: 4:6 (offset 100)
-   |  |  |  |  |  |  key: null
-   |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:6 (offset 100)
-   |  |  |  |  position: 4:1 (offset 95)
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
-   |  |  |  |  name: 'x'
-   |  |  |  |  position: 4:15 (offset 109)
-   |  |  |  byRef: false
-   |  |  |  position: 4:1 (offset 95)
-   |  |  key: null
-   |  |  byRef: false
-   |  |  unpack: false
-   |  |  position: 4:1 (offset 95)
-   position: 2:1 (offset 21)
+   |  |  position: 1:1 (offset 0)
+   position: 1:1 (offset 0)
