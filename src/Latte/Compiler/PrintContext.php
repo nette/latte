@@ -331,4 +331,14 @@ final class PrintContext
 			? $expr->print($this)
 			: '(' . $expr->print($this) . ')';
 	}
+
+
+	/**
+	 * @param  Nodes\ArgumentNode[]  $args
+	 */
+	public function argumentsAsArray(array $args): string
+	{
+		$items = array_map(fn(Nodes\ArgumentNode $arg) => $arg->toArrayItem(), $args);
+		return '[' . $this->implode($items) . ']';
+	}
 }

@@ -26,7 +26,7 @@ class MethodCallNode extends Expression\MethodCallNode
 		return '$this->global->sandbox->callMethod('
 			. $this->object->print($context) . ', '
 			. $context->memberAsString($this->name) . ', '
-			. Expression\ArrayNode::fromArguments($this->args)->print($context)
+			. $context->argumentsAsArray($this->args)
 			. ', ' . var_export($this->nullsafe, true) . ')';
 	}
 }

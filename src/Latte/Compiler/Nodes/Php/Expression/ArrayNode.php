@@ -27,13 +27,6 @@ class ArrayNode extends ExpressionNode
 	}
 
 
-	/** @param  ArgumentNode[]  $args */
-	public static function fromArguments(array $args): self
-	{
-		return new self(array_map(fn(ArgumentNode $arg) => $arg->toArrayItem(), $args));
-	}
-
-
 	/** @return ArgumentNode[] */
 	public function toArguments(): array
 	{
