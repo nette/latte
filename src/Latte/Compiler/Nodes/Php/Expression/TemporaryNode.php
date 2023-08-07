@@ -11,30 +11,28 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\ListNode;
-use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class AssignNode extends ExpressionNode
+/**
+ * Only for parser needs.
+ * @internal
+ */
+class TemporaryNode extends ExpressionNode
 {
 	public function __construct(
-		public ExpressionNode|ListNode $var,
-		public ExpressionNode $expr,
-		public bool $byRef = false,
-		public ?Position $position = null,
+		public ListNode|null $value,
 	) {
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		return $context->infixOp($this, $this->var, $this->byRef ? ' = &' : ' = ', $this->expr);
 	}
 
 
 	public function &getIterator(): \Generator
 	{
-		yield $this->var;
-		yield $this->expr;
+		yield;
 	}
 }

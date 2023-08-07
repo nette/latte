@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte;
+use Latte\CompileException;
 use Latte\Compiler\Nodes\Php as Node;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
@@ -34,6 +35,9 @@ final class TagParser extends TagParserData
 
 	public TokenStream /*readonly*/ $stream;
 	public string $text;
+
+	/** @var \SplObjectStorage<Expression\ArrayNode> */
+	protected \SplObjectStorage $shortArrays;
 	private int /*readonly*/ $offsetDelta;
 
 
@@ -152,6 +156,7 @@ final class TagParser extends TagParserData
 		$stateStack = [$state];
 		$this->semStack = []; // Semantic value stack (contains values of tokens and semantic action results)
 		$stackPos = 0; // Current position in the stack(s)
+		$this->shortArrays = new \SplObjectStorage;
 
 		do {
 			if (self::ActionBase[$state] === 0) {
@@ -206,6 +211,7 @@ final class TagParser extends TagParserData
 
 			do {
 				if ($rule === 0) { // accept
+					$this->finalizeShortArrays();
 					return $this->semValue;
 
 				} elseif ($rule !== self::UnexpectedTokenRule) { // reduce
@@ -404,6 +410,40 @@ final class TagParser extends TagParserData
 			},
 			$str,
 		);
+	}
+
+
+	public function convertArrayToList(Expression\ArrayNode $array): Node\ListNode
+	{
+		$this->shortArrays->detach($array);
+		$items = [];
+		foreach ($array->items as $item) {
+			$value = $item->value;
+			if ($item->unpack) {
+				throw new CompileException('Spread operator is not supported in assignments.', $value->position);
+			}
+			$value = match (true) {
+				$value instanceof Expression\TemporaryNode => $value->value,
+				$value instanceof Expression\ArrayNode && $this->shortArrays->contains($value) => $this->convertArrayToList($value),
+				default => $value,
+			};
+			$items[] = $value
+				? new Node\ListItemNode($value, $item->key, $item->byRef, $item->position)
+				: null;
+		}
+		return new Node\ListNode($items, $array->position);
+	}
+
+
+	private function finalizeShortArrays(): void
+	{
+		foreach ($this->shortArrays as $node) {
+			foreach ($node->items as $item) {
+				if ($item->value instanceof Expression\TemporaryNode) {
+					throw new CompileException('Cannot use empty array elements or list() in arrays.', $item->position);
+				}
+			}
+		}
 	}
 
 

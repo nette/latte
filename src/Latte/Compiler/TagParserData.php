@@ -409,7 +409,7 @@ abstract class TagParserData
 	protected function reduce(int $rule, int $pos): void
 	{
 		(match ($rule) {
-			0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 27, 28, 50, 63, 65, 85, 90, 91, 157, 174, 176, 180, 181, 183, 184, 186, 192, 197, 202, 203, 208, 209, 211, 212, 213, 214, 216, 218, 219, 221, 226, 227, 231, 235, 242, 244, 245, 247, 252, 270, 282 => fn() => $this->semValue = $this->semStack[$pos],
+			0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 27, 28, 50, 63, 65, 85, 90, 91, 157, 174, 176, 180, 181, 183, 184, 186, 197, 202, 203, 208, 209, 211, 212, 213, 214, 216, 218, 219, 221, 226, 227, 231, 235, 242, 244, 245, 247, 252, 270, 282 => fn() => $this->semValue = $this->semStack[$pos],
 			2 => fn() => $this->semValue = new Node\ModifierNode($this->semStack[$pos], position: $this->startTokenStack[$pos]->position),
 			3 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos], position: $this->startTokenStack[$pos]->position),
 			21, 22, 23, 24, 25, 55, 56, 57 => fn() => $this->semValue = new Node\IdentifierNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
@@ -433,7 +433,7 @@ abstract class TagParserData
 			53 => fn() => $this->semValue = new Node\IntersectionTypeNode($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			54 => fn() => $this->semValue = TagParser::handleBuiltinTypes($this->semStack[$pos]),
 			58, 60 => fn() => $this->semValue = [$this->semStack[$pos - 2], $this->semStack[$pos]],
-			62, 64, 207, 255 => fn() => $this->semValue = null,
+			62, 64, 207 => fn() => $this->semValue = null,
 			67 => fn() => $this->semValue = $this->semStack[$pos - 2],
 			70 => fn() => $this->semValue = new Node\ArgumentNode($this->semStack[$pos], false, false, null, $this->startTokenStack[$pos]->position),
 			71 => fn() => $this->semValue = new Node\ArgumentNode($this->semStack[$pos], true, false, null, $this->startTokenStack[$pos - 1]->position),
@@ -445,7 +445,8 @@ abstract class TagParserData
 				$this->semStack[$pos - 3][] = new Node\FilterNode($this->semStack[$pos - 1], $this->semStack[$pos], $this->startTokenStack[$pos - 3]->position);
 				$this->semValue = $this->semStack[$pos - 3];
 			},
-			86, 87, 88 => fn() => $this->semValue = new Expression\AssignNode($this->semStack[$pos - 2], $this->semStack[$pos], false, $this->startTokenStack[$pos - 2]->position),
+			86, 88 => fn() => $this->semValue = new Expression\AssignNode($this->semStack[$pos - 2], $this->semStack[$pos], false, $this->startTokenStack[$pos - 2]->position),
+			87 => fn() => $this->semValue = new Expression\AssignNode($this->convertArrayToList($this->semStack[$pos - 2]), $this->semStack[$pos], false, $this->startTokenStack[$pos - 2]->position),
 			89 => fn() => $this->semValue = new Expression\AssignNode($this->semStack[$pos - 3], $this->semStack[$pos], true, $this->startTokenStack[$pos - 3]->position),
 			92 => fn() => $this->semValue = new Expression\CloneNode($this->semStack[$pos], $this->startTokenStack[$pos - 1]->position),
 			93 => fn() => $this->semValue = new Expression\AssignOpNode($this->semStack[$pos - 2], '+', $this->semStack[$pos], $this->startTokenStack[$pos - 2]->position),
@@ -524,7 +525,11 @@ abstract class TagParserData
 			188 => fn() => $this->semValue = new Expression\ClassConstantFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], $this->startTokenStack[$pos - 2]->position),
 			189 => fn() => $this->semValue = new Expression\ClassConstantFetchNode($this->semStack[$pos - 4], $this->semStack[$pos - 1], $this->startTokenStack[$pos - 4]->position),
 			190 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),
-			191, 248 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
+			191 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
+			192 => function () use ($pos) {
+				$this->semValue = $this->semStack[$pos];
+				$this->shortArrays->attach($this->semValue);
+			},
 			193 => fn() => $this->semValue = Scalar\StringNode::parse($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			194 => fn() => $this->semValue = Scalar\InterpolatedStringNode::parse($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),
 			195 => fn() => $this->semValue = Scalar\IntegerNode::parse($this->semStack[$pos], $this->startTokenStack[$pos]->position),
@@ -553,16 +558,23 @@ abstract class TagParserData
 					: $var;
 			},
 			234, 240, 241 => fn() => $this->semValue = new Expression\StaticPropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], $this->startTokenStack[$pos - 2]->position),
+			248 => fn() => $this->semValue = $this->convertArrayToList(new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position)),
 			249 => function () use ($pos) {
 				$this->semValue = $this->semStack[$pos];
 				$end = count($this->semValue) - 1;
-				if ($this->semValue[$end] === null) {
+				if (
+					$this->semValue[$end]->value instanceof Expression\TemporaryNode
+					&& !$this->semValue[$end]->value->value
+				) {
 					array_pop($this->semValue);
 				}
 			},
-			253, 256 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], null, false, false, $this->startTokenStack[$pos]->position),
-			254, 258, 260 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], $this->semStack[$pos - 2], false, false, $this->startTokenStack[$pos - 2]->position),
+			253 => fn() => $this->semValue = new Node\ArrayItemNode(new Expression\TemporaryNode($this->semStack[$pos], $this->startTokenStack[$pos]->position), null, false, false, $this->startTokenStack[$pos]->position),
+			254 => fn() => $this->semValue = new Node\ArrayItemNode(new Expression\TemporaryNode($this->semStack[$pos], $this->startTokenStack[$pos - 2]->position), $this->semStack[$pos - 2], false, false, $this->startTokenStack[$pos - 2]->position),
+			255 => fn() => $this->semValue = new Node\ArrayItemNode(new Expression\TemporaryNode(null), null, false, false, $this->startTokenStack[$pos]->position),
+			256 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], null, false, false, $this->startTokenStack[$pos]->position),
 			257 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], null, true, false, $this->startTokenStack[$pos - 1]->position),
+			258, 260 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], $this->semStack[$pos - 2], false, false, $this->startTokenStack[$pos - 2]->position),
 			259, 261 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], $this->semStack[$pos - 3], true, false, $this->startTokenStack[$pos - 3]->position),
 			262, 263 => fn() => $this->semValue = new Node\ArrayItemNode($this->semStack[$pos], null, false, true, $this->startTokenStack[$pos - 1]->position),
 			264, 265 => function () use ($pos) {

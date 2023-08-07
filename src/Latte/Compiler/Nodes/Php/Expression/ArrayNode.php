@@ -21,11 +21,11 @@ use Latte\Compiler\PrintContext;
 class ArrayNode extends ExpressionNode
 {
 	public function __construct(
-		/** @var array<ArrayItemNode|null> */
+		/** @var array<ArrayItemNode> */
 		public array $items = [],
 		public ?Position $position = null,
 	) {
-		(function (?ArrayItemNode ...$args) {})(...$items);
+		(function (ArrayItemNode ...$args) {})(...$items);
 	}
 
 
@@ -87,9 +87,7 @@ class ArrayNode extends ExpressionNode
 	public function &getIterator(): \Generator
 	{
 		foreach ($this->items as &$item) {
-			if ($item) {
-				yield $item;
-			}
+			yield $item;
 		}
 	}
 }

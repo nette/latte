@@ -7,34 +7,36 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes\Php\Expression;
+namespace Latte\Compiler\Nodes\Php;
 
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ListNode;
+use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class AssignNode extends ExpressionNode
+class ListNode extends Node
 {
 	public function __construct(
-		public ExpressionNode|ListNode $var,
-		public ExpressionNode $expr,
-		public bool $byRef = false,
+		/** @var array<ListItemNode|null> */
+		public array $items = [],
 		public ?Position $position = null,
 	) {
+		(function (?ListItemNode ...$args) {})(...$items);
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		return $context->infixOp($this, $this->var, $this->byRef ? ' = &' : ' = ', $this->expr);
+		return '[' . $context->implode($this->items) . ']';
 	}
 
 
 	public function &getIterator(): \Generator
 	{
-		yield $this->var;
-		yield $this->expr;
+		foreach ($this->items as &$item) {
+			if ($item) {
+				yield $item;
+			}
+		}
 	}
 }
