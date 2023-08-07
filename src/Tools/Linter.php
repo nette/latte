@@ -53,6 +53,7 @@ final class Linter
 	private function createEngine(): Latte\Engine
 	{
 		$engine = new Latte\Engine;
+		$engine->enablePhpLinter(PHP_BINARY);
 		$engine->addExtension(new Latte\Essential\TranslatorExtension(null));
 
 		if (class_exists(Nette\Bridges\ApplicationLatte\UIExtension::class)) {
@@ -91,7 +92,7 @@ final class Linter
 		}
 
 		try {
-			$code = $this->engine->compile($s);
+			$this->engine->compile($s);
 
 		} catch (Latte\CompileException $e) {
 			if ($this->debug) {
@@ -106,37 +107,7 @@ final class Linter
 			restore_error_handler();
 		}
 
-		if ($error = $this->lintPHP($code)) {
-			fwrite(STDERR, "[ERROR]      $file    $error\n");
-			return false;
-		}
-
 		return true;
-	}
-
-
-	private function lintPHP(string $code): ?string
-	{
-		$php = defined('PHP_BINARY') ? PHP_BINARY : 'php';
-		$stdin = tmpfile();
-		fwrite($stdin, $code);
-		fseek($stdin, 0);
-		$process = proc_open(
-			$php . ' -l -d display_errors=1',
-			[$stdin, ['pipe', 'w'], ['pipe', 'w']],
-			$pipes,
-			null,
-			null,
-			['bypass_shell' => true],
-		);
-		if (!is_resource($process)) {
-			return 'Unable to lint PHP code';
-		}
-		$error = stream_get_contents($pipes[1]);
-		if (proc_close($process)) {
-			return strip_tags(explode("\n", $error)[1]);
-		}
-		return null;
 	}
 
 

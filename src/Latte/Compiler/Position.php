@@ -44,6 +44,6 @@ final class Position
 
 	public function toWords(): string
 	{
-		return "on line $this->line at column $this->column";
+		return "on line $this->line" . ($this->column ? " at column $this->column" : '');
 	}
 }

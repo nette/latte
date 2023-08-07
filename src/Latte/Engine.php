@@ -44,6 +44,7 @@ class Engine
 	private bool $strictTypes = false;
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
+	private ?string $phpBinary = null;
 
 
 	public function __construct()
@@ -124,6 +125,10 @@ class Engine
 			}
 
 			throw $e->setSource($source, $name);
+		}
+
+		if ($this->phpBinary) {
+			Compiler\PhpHelpers::checkCode($this->phpBinary, $code, "(compiled $name)");
 		}
 
 		return $code;
@@ -541,6 +546,13 @@ class Engine
 		}
 
 		return $this->loader;
+	}
+
+
+	public function enablePhpLinter(string $phpBinary): static
+	{
+		$this->phpBinary = $phpBinary;
+		return $this;
 	}
 
 

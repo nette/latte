@@ -224,4 +224,34 @@ final class PhpHelpers
 			default => throw new CompileException('Invalid UTF-8 codepoint escape sequence: Codepoint too large'),
 		};
 	}
+
+
+	public static function checkCode(string $phpBinary, string $code, string $name): void
+	{
+		$process = proc_open(
+			$phpBinary . ' -l -n',
+			[['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']],
+			$pipes,
+			null,
+			null,
+			['bypass_shell' => true],
+		);
+		if (!is_resource($process)) {
+			throw new CompileException('Unable to check that the generated PHP is correct.');
+		}
+
+		fwrite($pipes[0], $code);
+		fclose($pipes[0]);
+		$error = stream_get_contents($pipes[1]);
+		if (!proc_close($process)) {
+			return;
+		}
+		$error = strip_tags(explode("\n", $error)[1]);
+		$position = preg_match('~ on line (\d+)~', $error, $m)
+			? new Position((int) $m[1], 0)
+			: null;
+		$error = preg_replace('~(^Fatal error: | in Standard input code| on line \d+)~', '', $error);
+		throw (new CompileException('Error in generated code: ' . trim($error), $position))
+			->setSource($code, $name);
+	}
 }
