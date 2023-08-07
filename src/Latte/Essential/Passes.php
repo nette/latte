@@ -106,7 +106,7 @@ final class Passes
 		(new NodeTraverser)->traverse($node, function (Node $node) {
 			if ($node instanceof VariableNode
 				&& is_string($node->name)
-				&& (str_starts_with($node->name, 'ʟ_'))
+				&& (str_starts_with($node->name, 'ʟ_') || $node->name === 'GLOBALS')
 			) {
 				throw new CompileException("Forbidden variable \$$node->name.", $node->position);
 			}

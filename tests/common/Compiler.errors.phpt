@@ -171,6 +171,12 @@ Assert::exception(
 	'Forbidden variable $ʟ_tmp (on line 1 at column 2)',
 );
 
+Assert::exception(
+	fn() => $latte->compile('{$GLOBALS}'),
+	Latte\CompileException::class,
+	'Forbidden variable $GLOBALS (on line 1 at column 2)',
+);
+
 
 // unclosed macros
 Assert::exception(
