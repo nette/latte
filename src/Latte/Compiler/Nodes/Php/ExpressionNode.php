@@ -14,4 +14,28 @@ use Latte\Compiler\Node;
 
 abstract class ExpressionNode extends Node
 {
+	public function isWritable(): bool
+	{
+		return $this instanceof Expression\ArrayAccessNode
+			|| ($this instanceof Expression\PropertyFetchNode && !$this->nullsafe)
+			|| $this instanceof Expression\StaticPropertyFetchNode
+			|| $this instanceof Expression\VariableNode;
+	}
+
+
+	public function isVariable(): bool
+	{
+		return $this instanceof Expression\ArrayAccessNode
+			|| $this instanceof Expression\PropertyFetchNode
+			|| $this instanceof Expression\StaticPropertyFetchNode
+			|| $this instanceof Expression\VariableNode;
+	}
+
+
+	public function isCall(): bool
+	{
+		return $this instanceof Expression\FunctionCallNode
+			|| $this instanceof Expression\MethodCallNode
+			|| $this instanceof Expression\StaticCallNode;
+	}
 }
