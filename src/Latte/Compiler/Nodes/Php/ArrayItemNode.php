@@ -40,6 +40,18 @@ class ArrayItemNode extends Node
 	}
 
 
+	public function toArgument(): ArgumentNode
+	{
+		$key = match (true) {
+			$this->key instanceof Scalar\StringNode => new IdentifierNode($this->key->value),
+			$this->key instanceof IdentifierNode => $this->key,
+			$this->key === null => null,
+			default => throw new \InvalidArgumentException('The expression used in the key cannot be converted to an argument.'),
+		};
+		return new ArgumentNode($this->value, $this->byRef, $this->unpack, $key, $this->position);
+	}
+
+
 	public function &getIterator(): \Generator
 	{
 		if ($this->key) {
