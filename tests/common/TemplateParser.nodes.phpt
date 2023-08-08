@@ -198,10 +198,7 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  content: ' '
 	   |  |  |  |  |  |  position: 1:27 (offset 26)
 	   |  |  |  |  |  3 => Latte\Compiler\Nodes\Html\AttributeNode
-	   |  |  |  |  |  |  name: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  children: array (1)
-	   |  |  |  |  |  |  |  |  0 => FooNode
-	   |  |  |  |  |  |  |  |  |  position: 1:28 (offset 27)
+	   |  |  |  |  |  |  name: FooNode
 	   |  |  |  |  |  |  |  position: 1:28 (offset 27)
 	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  |  |  |  children: array (1)

@@ -39,6 +39,16 @@ final class FragmentNode extends AreaNode
 	}
 
 
+	public function simplify(bool $allowsNull = true): ?AreaNode
+	{
+		return match (true) {
+			!$this->children => $allowsNull ? null : $this,
+			count($this->children) === 1 => $this->children[0],
+			default => $this,
+		};
+	}
+
+
 	public function print(PrintContext $context): string
 	{
 		$res = '';

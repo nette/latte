@@ -249,63 +249,69 @@ final class TemplateParserHtml
 		$followsLatte = $stream->is(Token::Latte_TagOpen);
 		$save = $stream->getIndex();
 		try {
-			$name = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
-				Token::Html_Name => $this->parser->parseText(),
-				Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
-				Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
-				default => null,
-			});
+			$name = $this->parseAttributeName();
+			if (!$name) {
+				return null;
+			}
 		} catch (CompileException $e) {
-			if ($followsLatte // attribute name together with the value inside the tag
-				&& $stream->peek() // it is not lexer exception
-			) {
+			if ($followsLatte && $stream->peek()) { // it is not lexer exception
 				$stream->seek($save);
-				return $this->parser->parseLatteStatement();
+				return $this->parser->parseLatteStatement(); // attribute name with the value like '<span {if true}attr1=val{/if}>'
 			}
 			throw $e;
 		}
 
-		if (!$name->children) {
-			return null;
-		} elseif (count($name->children) === 1 && $name->children[0] instanceof Nodes\TextNode) {
-			$name = $name->children[0];
-		}
-
-		$save = $stream->getIndex();
-		$this->consumeIgnored();
-		if ($stream->tryConsume(Token::Equals)) {
-			$this->consumeIgnored();
-			$value = match ($stream->peek()->type) {
-				Token::Quote => $this->parseAttributeQuote(),
-				Token::Html_Name => $this->parser->parseText(),
-				Token::Latte_TagOpen => $this->parser->parseFragment(
-					function (FragmentNode $fragment) use ($stream) {
-						if ($fragment->children) {
-							return null;
-						}
-						return match ($stream->peek()->type) {
-							Token::Quote => $this->parseAttributeQuote(),
-							Token::Html_Name => $this->parser->parseText(),
-							Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
-							Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
-							default => null,
-						};
-					},
-				),
-				default => null,
-			}
-			?? $stream->throwUnexpectedException();
-
-		} else {
-			$stream->seek($save);
-			$value = null;
-		}
-
+		$value = $this->parseAttributeValue();
 		return new Html\AttributeNode(
 			name: $name,
 			value: $value,
 			position: $name->position,
 		);
+	}
+
+
+	private function parseAttributeName(): ?AreaNode
+	{
+		$stream = $this->parser->getStream();
+		return $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
+			Token::Html_Name => $this->parser->parseText(),
+			Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
+			Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
+			default => null,
+		})->simplify();
+	}
+
+
+	private function parseAttributeValue(): ?AreaNode
+	{
+		$stream = $this->parser->getStream();
+		$save = $stream->getIndex();
+		$this->consumeIgnored();
+		if (!$stream->tryConsume(Token::Equals)) {
+			$stream->seek($save);
+			return null;
+		}
+
+		$this->consumeIgnored();
+		return match ($stream->peek()->type) {
+			Token::Quote => $this->parseAttributeQuote(),
+			Token::Html_Name => $this->parser->parseText(),
+			Token::Latte_TagOpen => $this->parser->parseFragment(
+				function (FragmentNode $fragment) use ($stream) {
+					if ($fragment->children) {
+						return null;
+					}
+					return match ($stream->peek()->type) {
+						Token::Quote => $this->parseAttributeQuote(),
+						Token::Html_Name => $this->parser->parseText(),
+						Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
+						Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
+						default => null,
+					};
+				},
+			),
+			default => $stream->throwUnexpectedException(),
+		};
 	}
 
 
