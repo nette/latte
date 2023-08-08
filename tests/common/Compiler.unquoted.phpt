@@ -29,7 +29,7 @@ $template = <<<'EOD'
 
 	<span onclick=c{$x}d></span>
 
-	<span attr{$x}b=c{$x}d></span> {* not supported *}
+	<span attr{$x}b=c{$x}d></span>
 
 	EOD;
 
