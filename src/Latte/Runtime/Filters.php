@@ -211,24 +211,6 @@ class Filters
 
 
 	/**
-	 * Converts HTML text to unquoted attribute. The quotation marks need to be escaped.
-	 */
-	public static function convertHtmlToUnquotedAttr(string $s): string
-	{
-		return '"' . self::escapeHtmlAttr($s, false) . '"';
-	}
-
-
-	/**
-	 * Converts HTML quoted attribute to unquoted.
-	 */
-	public static function convertHtmlAttrToUnquotedAttr(string $s): string
-	{
-		return '"' . $s . '"';
-	}
-
-
-	/**
 	 * Converts HTML to plain text.
 	 */
 	public static function convertHtmlToText(string $s): string

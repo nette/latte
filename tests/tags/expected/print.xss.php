@@ -4,14 +4,14 @@
 		echo LR\Filters::escapeHtmlText($el2) /* line %d% */;
 		echo '
 
-<p val=';
-		echo '"' . LR\Filters::escapeHtmlAttr($xss) . '"' /* line %d% */;
-		echo ' val2=';
-		echo '"' . LR\Filters::escapeHtmlAttr($mxss) . '"' /* line %d% */;
-		echo '> </p>
-<p onclick=';
-		echo '"' . LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) . '"' /* line %d% */;
-		echo '> </p>
+<p val="';
+		echo LR\Filters::escapeHtmlAttr($xss) /* line %d% */;
+		echo '" val2="';
+		echo LR\Filters::escapeHtmlAttr($mxss) /* line %d% */;
+		echo '"> </p>
+<p onclick="';
+		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
+		echo '"> </p>
 <p ONCLICK="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo '" ';

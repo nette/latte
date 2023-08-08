@@ -26,7 +26,7 @@ test('', function () {
 	);
 
 	Assert::same(
-		'<meta content=b"ar>b"ar',
+		'<meta content="b"ar">b"ar',
 		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
 	);
 
@@ -141,24 +141,16 @@ test('', function () {
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context4', ['foo' => 'b"ar']));
 
-	Assert::exception(
-		fn() => $latte->renderToString('context5', ['foo' => 'b"ar']),
-		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/ATTR.',
-	);
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context5', ['foo' => 'b"ar']));
 
-	Assert::exception(
-		fn() => $latte->renderToString('context6', ['foo' => 'b"ar']),
-		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/ATTR.',
-	);
+	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context6', ['foo' => 'b"ar']));
 
 	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
 
 	Assert::exception(
 		fn() => $latte->renderToString('context8', ['foo' => 'b"ar']),
 		Latte\RuntimeException::class,
-		'Overridden block foo with content type HTML/UNQUOTED-ATTR by incompatible type HTML/COMMENT.',
+		'Overridden block foo with content type HTML/ATTR by incompatible type HTML/COMMENT.',
 	);
 });
 
@@ -257,11 +249,7 @@ Assert::same('<p> &lt;/script&gt;</p>', $latte->renderToString('context1'));
 
 Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context2'));
 
-Assert::exception(
-	fn() => $latte->renderToString('context3'),
-	Latte\RuntimeException::class,
-	"Including 'js.latte' with content type JS into incompatible type HTML/UNQUOTED-ATTR.",
-);
+Assert::same('<p title=" &lt;/script&gt;"></p>', $latte->renderToString('context3'));
 
 Assert::same('<script> <\/script></script>', $latte->renderToString('context4'));
 

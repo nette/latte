@@ -261,10 +261,11 @@ final class TemplateParserHtml
 			throw $e;
 		}
 
-		$value = $this->parseAttributeValue();
+		[$value, $quote] = $this->parseAttributeValue();
 		return new Html\AttributeNode(
 			name: $name,
 			value: $value,
+			quote: $quote,
 			position: $name->position,
 		);
 	}
@@ -282,7 +283,7 @@ final class TemplateParserHtml
 	}
 
 
-	private function parseAttributeValue(): ?AreaNode
+	private function parseAttributeValue(): ?array
 	{
 		$stream = $this->parser->getStream();
 		$save = $stream->getIndex();
@@ -293,25 +294,26 @@ final class TemplateParserHtml
 		}
 
 		$this->consumeIgnored();
-		return match ($stream->peek()->type) {
-			Token::Quote => $this->parseAttributeQuote(),
-			Token::Html_Name => $this->parser->parseText(),
-			Token::Latte_TagOpen => $this->parser->parseFragment(
-				function (FragmentNode $fragment) use ($stream) {
-					if ($fragment->children) {
-						return null;
-					}
-					return match ($stream->peek()->type) {
-						Token::Quote => $this->parseAttributeQuote(),
-						Token::Html_Name => $this->parser->parseText(),
-						Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
-						Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
-						default => null,
-					};
+		if ($quoteToken = $stream->tryConsume(Token::Quote)) {
+			$value = $this->parser->parseFragment(
+				fn() => match ($stream->peek()->type) {
+					Token::Quote => null,
+					default => $this->parser->inTextResolve(),
 				},
-			),
-			default => $stream->throwUnexpectedException(),
-		};
+			);
+			$stream->consume(Token::Quote);
+			return [$value, $quoteToken->text];
+		}
+
+		$value = $this->parser->parseFragment(
+			fn() => match ($stream->peek()->type) {
+				Token::Html_Name => $this->parser->parseText(),
+				Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
+				Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
+				default => null,
+			},
+		)->simplify() ?? $stream->throwUnexpectedException();
+		return [$value, null];
 	}
 
 
@@ -356,24 +358,6 @@ final class TemplateParserHtml
 			htmlElement: $this->element,
 			data: (object) ['node' => $node = new Nodes\TextNode('')], // TODO: better
 		);
-		return $node;
-	}
-
-
-	private function parseAttributeQuote(): Html\QuotedValue
-	{
-		$stream = $this->parser->getStream();
-		$quoteToken = $stream->consume(Token::Quote);
-		$value = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
-			Token::Quote => null,
-			default => $this->parser->inTextResolve(),
-		});
-		$node = new Html\QuotedValue(
-			value: $value,
-			quote: $quoteToken->text,
-			position: $quoteToken->position,
-		);
-		$stream->consume(Token::Quote);
 		return $node;
 	}
 

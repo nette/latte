@@ -127,6 +127,7 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  |  content: 'attr1'
 	   |  |  |  |  |  |  |  position: 1:5 (offset 4)
 	   |  |  |  |  |  |  value: null
+	   |  |  |  |  |  |  quote: null
 	   |  |  |  |  |  |  position: 1:5 (offset 4)
 	   |  |  |  |  |  2 => Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  content: ' \n'
@@ -138,6 +139,7 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  |  content: 'val'
 	   |  |  |  |  |  |  |  position: 2:7 (offset 17)
+	   |  |  |  |  |  |  quote: null
 	   |  |  |  |  |  |  position: 2:1 (offset 11)
 	   |  |  |  |  |  4 => Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  content: string
@@ -148,15 +150,13 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  name: Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  |  content: 'attr3'
 	   |  |  |  |  |  |  |  position: 3:2 (offset 22)
-	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Html\QuotedValue
-	   |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  |  children: array (1)
-	   |  |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
-	   |  |  |  |  |  |  |  |  |  |  content: 'val'
-	   |  |  |  |  |  |  |  |  |  |  position: 4:2 (offset 30)
-	   |  |  |  |  |  |  |  |  position: 4:2 (offset 30)
-	   |  |  |  |  |  |  |  quote: '''
-	   |  |  |  |  |  |  |  position: 4:1 (offset 29)
+	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
+	   |  |  |  |  |  |  |  children: array (1)
+	   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  |  |  content: 'val'
+	   |  |  |  |  |  |  |  |  |  position: 4:2 (offset 30)
+	   |  |  |  |  |  |  |  position: 4:2 (offset 30)
+	   |  |  |  |  |  |  quote: '''
 	   |  |  |  |  |  |  position: 3:2 (offset 22)
 	   |  |  |  |  position: 1:4 (offset 3)
 	   |  |  |  selfClosing: false
@@ -188,7 +188,7 @@ Assert::match(<<<'XX'
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
 	   |  |  |  customName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  children: array (7)
+	   |  |  |  |  children: array (6)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  content: ' '
 	   |  |  |  |  |  |  position: 1:4 (offset 3)
@@ -200,11 +200,9 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  3 => Latte\Compiler\Nodes\Html\AttributeNode
 	   |  |  |  |  |  |  name: FooNode
 	   |  |  |  |  |  |  |  position: 1:28 (offset 27)
-	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  children: array (1)
-	   |  |  |  |  |  |  |  |  0 => FooNode
-	   |  |  |  |  |  |  |  |  |  position: 1:45 (offset 44)
+	   |  |  |  |  |  |  value: FooNode
 	   |  |  |  |  |  |  |  position: 1:45 (offset 44)
+	   |  |  |  |  |  |  quote: null
 	   |  |  |  |  |  |  position: 1:28 (offset 27)
 	   |  |  |  |  |  4 => Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  content: ' '
@@ -221,21 +219,19 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  |  |  |  content: 'b'
 	   |  |  |  |  |  |  |  |  |  position: 1:69 (offset 68)
 	   |  |  |  |  |  |  |  position: 1:58 (offset 57)
-	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\TextNode
-	   |  |  |  |  |  |  |  content: 'c'
-	   |  |  |  |  |  |  |  position: 1:71 (offset 70)
-	   |  |  |  |  |  |  position: 1:58 (offset 57)
-	   |  |  |  |  |  6 => Latte\Compiler\Nodes\Html\AttributeNode
-	   |  |  |  |  |  |  name: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  children: array (2)
-	   |  |  |  |  |  |  |  |  0 => FooNode
+	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
+	   |  |  |  |  |  |  |  children: array (3)
+	   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  |  |  content: 'c'
+	   |  |  |  |  |  |  |  |  |  position: 1:71 (offset 70)
+	   |  |  |  |  |  |  |  |  1 => FooNode
 	   |  |  |  |  |  |  |  |  |  position: 1:72 (offset 71)
-	   |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  |  |  |  content: 'd'
 	   |  |  |  |  |  |  |  |  |  position: 1:78 (offset 77)
-	   |  |  |  |  |  |  |  position: 1:72 (offset 71)
-	   |  |  |  |  |  |  value: null
-	   |  |  |  |  |  |  position: 1:72 (offset 71)
+	   |  |  |  |  |  |  |  position: 1:71 (offset 70)
+	   |  |  |  |  |  |  quote: null
+	   |  |  |  |  |  |  position: 1:58 (offset 57)
 	   |  |  |  |  position: 1:4 (offset 3)
 	   |  |  |  selfClosing: false
 	   |  |  |  content: null

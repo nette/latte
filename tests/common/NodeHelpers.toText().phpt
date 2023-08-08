@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Latte\Compiler\NodeHelpers;
 use Latte\Compiler\Nodes\AuxiliaryNode;
 use Latte\Compiler\Nodes\FragmentNode;
-use Latte\Compiler\Nodes\Html\QuotedValue;
 use Latte\Compiler\Nodes\NopNode;
 use Latte\Compiler\Nodes\TextNode;
 use Tester\Assert;
@@ -27,9 +26,6 @@ Assert::same('helloworld!', NodeHelpers::toText($fragment));
 
 $fragment->children[] = new NopNode; // is ignored by append
 Assert::same('helloworld!', NodeHelpers::toText($fragment));
-
-$fragment->append(new QuotedValue(new TextNode('quote'), '"'));
-Assert::same('helloworld!quote', NodeHelpers::toText($fragment));
 
 $fragment->append(new AuxiliaryNode(fn() => ''));
 Assert::null(NodeHelpers::toText($fragment));

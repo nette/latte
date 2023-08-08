@@ -51,9 +51,9 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $latte->compile('<span title={if true}{$a}{$b}{/if}></span>'),
+	fn() => $latte->compile('<span title={if true}"a"{/if}></span>'),
 	Latte\CompileException::class,
-	'Unexpected tag {=$b} (on line 1 at column 26)',
+	'Unexpected \'"a"{/if\', expecting {/if} (on line 1 at column 22)',
 );
 
 Assert::exception(
