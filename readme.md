@@ -3,16 +3,16 @@
 
 ✅ The only truly secure templating system for PHP<br>
 ✅ You already know the syntax<br>
-✅ It is really fast<br>
-✅ Highly mature, stable, and widely used library
+✅ Highly mature, fast, and widely used library
 
-When it comes to templates, it pays off to be demanding and always expect nothing but the best. Latte is a true designer-friendly templating language. You will surely appreciate its intuitive syntax and enjoy many of its useful goodies.
+Latte is the safest templating system for PHP. You'll love its intuitive syntax. A wide range of useful features will significantly simplify your work. It provides [top-notch protection against critical vulnerabilities](https://latte.nette.org/en/safety-first) and allows you to focus on creating high-quality applications without worrying about their security.
 
-[Documentation can be found on the website](https://latte.nette.org).
+Latte is cleverly designed and easy to learn for those familiar with PHP, as they can quickly adopt its basic tags.
 
+- 1️⃣ First, familiarize yourself with [Latte syntax](https://latte.nette.org/en/syntax) and [TRY IT ONLINE](https://fiddle.nette.org/latte/#9cc0cf6d89)
+- 2️⃣ Take a look at the basic set of [tags](https://latte.nette.org/en/tags) and [filters](https://latte.nette.org/en/filters)
+- 3️⃣ Write templates in [editor with Latte support](https://latte.nette.org/en/recipes#toc-editors-and-ide)
 
-Support Latte
--------------
 
 Do you like Latte? Are you looking forward to the new features?
 
