@@ -19,4 +19,11 @@
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
 		echo LR\Filters::escapeHtmlText($iterator === null ? 'is null' : null) /* line 11 */;
+		echo '
+
+---
+
+';
+		foreach (['a', 'b'] as [$a, , [$b, [$c]]]) /* line 15 */ {
+		}
 %A%

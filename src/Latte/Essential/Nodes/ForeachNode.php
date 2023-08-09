@@ -74,16 +74,7 @@ class ForeachNode extends StatementNode
 		$stream = $parser->stream;
 		$node->expression = $parser->parseExpression();
 		$stream->consume('as');
-		if (!$stream->is('&')) {
-			$node->value = $parser->parseExpression();
-			if (!$stream->tryConsume('=>')) {
-				return;
-			}
-			$node->key = $node->value;
-		}
-
-		$node->byRef = (bool) $stream->tryConsume('&');
-		$node->value = $parser->parseExpression();
+		[$node->key, $node->value, $node->byRef] = $parser->parseForeach();
 	}
 
 

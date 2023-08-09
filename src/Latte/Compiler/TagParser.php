@@ -29,7 +29,8 @@ final class TagParser extends TagParserData
 	private const
 		SchemaExpression = 'e',
 		SchemaArguments = 'a',
-		SchemaFilters = 'm';
+		SchemaFilters = 'm',
+		SchemaForeach = 'f';
 
 	private const SymbolNone = -1;
 
@@ -117,6 +118,16 @@ final class TagParser extends TagParserData
 		}
 
 		return $res ? new Node\SuperiorTypeNode($res) : null;
+	}
+
+
+	/**
+	 * Parses variables used in foreach.
+	 * @internal
+	 */
+	public function parseForeach(): array
+	{
+		return $this->parse(self::SchemaForeach);
 	}
 
 
