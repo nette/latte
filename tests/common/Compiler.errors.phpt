@@ -57,6 +57,18 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<span {if true}title{/if}=a></span>'),
+	Latte\CompileException::class,
+	"Unexpected '=', expecting end of HTML tag (on line 1 at column 26)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('<span title{if true}{/if}=a></span>'),
+	Latte\CompileException::class,
+	"Unexpected '=', expecting end of HTML tag (on line 1 at column 26)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('<a n:href n:href>'),
 	Latte\CompileException::class,
 	'Found multiple attributes n:href (on line 1 at column 11)',

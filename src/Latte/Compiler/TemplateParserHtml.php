@@ -266,19 +266,13 @@ final class TemplateParserHtml
 	private function parseAttribute(): ?Node
 	{
 		$stream = $this->parser->getStream();
-		$followsLatte = $stream->is(Token::Latte_TagOpen);
-		$save = $stream->getIndex();
-		try {
-			$name = $this->parseAttributeName();
-			if (!$name) {
-				return null;
+		if ($stream->is(Token::Latte_TagOpen)) {
+			$name = $this->parser->parseLatteStatement();
+			if (!$name instanceof Latte\Essential\Nodes\PrintNode) {
+				return $name; // value like '<span {if true}attr1=val{/if}>'
 			}
-		} catch (CompileException $e) {
-			if ($followsLatte && $stream->peek()) { // it is not lexer exception
-				$stream->seek($save);
-				return $this->parser->parseLatteStatement(); // attribute name with the value like '<span {if true}attr1=val{/if}>'
-			}
-			throw $e;
+		} else {
+			$name = $this->parser->parseText();
 		}
 
 		[$value, $quote] = $this->parseAttributeValue();
@@ -288,18 +282,6 @@ final class TemplateParserHtml
 			quote: $quote,
 			position: $name->position,
 		);
-	}
-
-
-	private function parseAttributeName(): ?AreaNode
-	{
-		$stream = $this->parser->getStream();
-		return $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
-			Token::Html_Name => $this->parser->parseText(),
-			Token::Latte_TagOpen => $this->parser->parseLatteStatement(),
-			Token::Latte_CommentOpen => $this->parser->parseLatteComment(),
-			default => null,
-		})->simplify();
 	}
 
 
