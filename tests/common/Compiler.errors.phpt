@@ -29,7 +29,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('Block{/block}'),
 	Latte\CompileException::class,
-	"Unexpected '{/block' (on line 1 at column 6)",
+	"Unexpected '{' (on line 1 at column 6)",
 );
 
 Assert::exception(
@@ -47,13 +47,13 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<span title={if true}a b{/if}></span>'),
 	Latte\CompileException::class,
-	"Unexpected ' b{/if', expecting {/if} (on line 1 at column 23)",
+	"Unexpected ' ', expecting {/if} (on line 1 at column 23)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('<span title={if true}"a"{/if}></span>'),
 	Latte\CompileException::class,
-	'Unexpected \'"a"{/if\', expecting {/if} (on line 1 at column 22)',
+	'Unexpected \'"\', expecting {/if} (on line 1 at column 22)',
 );
 
 Assert::exception(
@@ -194,13 +194,13 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<p n:if=1><span n:if=1></i>'),
 	Latte\CompileException::class,
-	"Unexpected '</i>', expecting </span> for element started on line 1 at column 11 (on line 1 at column 24)",
+	"Unexpected '</i', expecting </span> for element started on line 1 at column 11 (on line 1 at column 24)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('{/if}'),
 	Latte\CompileException::class,
-	"Unexpected '{/if}' (on line 1 at column 1)",
+	"Unexpected '{' (on line 1 at column 1)",
 );
 
 Assert::exception(
@@ -224,7 +224,7 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->compile('<span n:if=1>{/if}'),
 	Latte\CompileException::class,
-	"Unexpected '{/if}', expecting </span> for element started on line 1 at column 1 (on line 1 at column 14)",
+	"Unexpected '{/if', expecting </span> for element started on line 1 at column 1 (on line 1 at column 14)",
 );
 
 Assert::exception(
@@ -234,5 +234,5 @@ Assert::exception(
 				{/foreach}
 		XX),
 	Latte\CompileException::class,
-	"Unexpected '</li>', expecting </a> for element started on line 2 at column 8 (on line 2 at column 37)",
+	"Unexpected '</li', expecting </a> for element started on line 2 at column 8 (on line 2 at column 37)",
 );

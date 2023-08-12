@@ -118,7 +118,10 @@ final class TemplateParserHtml
 			$frag = $this->parser->parseFragment([$this, 'inTextResolve']);
 			$content->append($this->finishNAttrNodes($frag, $innerNodes));
 
-			if ($this->isClosingTag($elem->name)) {
+			if ($stream->is(Token::Html_TagOpen) && $stream->peek(1)->is(Token::Slash)
+				&& ($endName = $stream->peek(2))
+				&& $elem->is($endName->text)
+			) {
 				$elem->content = $content;
 				$elem->content->append($this->extractIndentation());
 				$this->parseEndTag();
@@ -128,6 +131,7 @@ final class TemplateParserHtml
 			) {
 				$stream->throwUnexpectedException(
 					addendum: ", expecting </{$elem->name}> for element started $elem->position",
+					excerpt: $stream->peek(1)?->text . $stream->peek(2)?->text,
 				);
 			} else { // element collapsed to tags
 				$res->append($content);
@@ -403,15 +407,6 @@ final class TemplateParserHtml
 			}
 			return;
 		} while (true);
-	}
-
-
-	private function isClosingTag(string $name): bool
-	{
-		$stream = $this->parser->getStream();
-		return $stream->is(Token::Html_TagOpen)
-			&& $stream->peek(1)->is(Token::Slash)
-			&& strcasecmp($name, $stream->peek(2)->text ?? '') === 0;
 	}
 
 

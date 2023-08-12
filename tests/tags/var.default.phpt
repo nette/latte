@@ -54,7 +54,7 @@ test('{default ...}', function () use ($latte) {
 	Assert::exception(
 		fn() => $latte->compile('{default $temp->var1 = 123}'),
 		Latte\CompileException::class,
-		"Unexpected '\$temp->' in {default} (on line 1 at column 10)",
+		"Unexpected '\$temp' in {default} (on line 1 at column 10)",
 	);
 
 	Assert::exception(

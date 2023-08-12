@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 Assert::exception(
 	fn() => parseCode('$a | $b'),
 	Latte\CompileException::class,
-	"Unexpected '|\$b' (on line 1 at column 4)",
+	"Unexpected '|' (on line 1 at column 4)",
 );
 
 // function declaration
@@ -86,7 +86,7 @@ Assert::exception(
 Assert::exception(
 	fn() => parseCode('throw new Exception'),
 	Latte\CompileException::class,
-	"Unexpected 'newException' (on line 1 at column 7)",
+	"Unexpected 'new' (on line 1 at column 7)",
 );
 
 // syntax error, not number
@@ -107,7 +107,7 @@ Assert::exception(
 Assert::exception(
 	fn() => parseCode('a---b--c'),
 	Latte\CompileException::class,
-	"Unexpected '---b--c' (on line 1 at column 2)",
+	"Unexpected '--' (on line 1 at column 2)",
 );
 
 // syntax error, not unquoted string
@@ -128,21 +128,21 @@ Assert::exception(
 Assert::exception(
 	fn() => parseCode('#comment'),
 	Latte\CompileException::class,
-	"Unexpected '#comment' (on line 1 at column 1)",
+	"Unexpected '#' (on line 1 at column 1)",
 );
 
 // "comments"
 Assert::exception(
 	fn() => parseCode('//comment'),
 	Latte\CompileException::class,
-	"Unexpected '//comment' (on line 1 at column 1)",
+	"Unexpected '/' (on line 1 at column 1)",
 );
 
 // { } access
 Assert::exception(
 	fn() => parseCode('$a{"b"}'),
 	Latte\CompileException::class,
-	"Unexpected '{\"b\"}' (on line 1 at column 3)",
+	"Unexpected '{' (on line 1 at column 3)",
 );
 
 // ${...} is not supported
