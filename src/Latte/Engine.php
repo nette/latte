@@ -549,7 +549,7 @@ class Engine
 	}
 
 
-	public function enablePhpLinter(string $phpBinary): static
+	public function enablePhpLinter(?string $phpBinary): static
 	{
 		$this->phpBinary = $phpBinary;
 		return $this;

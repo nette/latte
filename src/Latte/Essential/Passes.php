@@ -14,6 +14,7 @@ use Latte\CompileException;
 use Latte\Compiler\ExpressionBuilder;
 use Latte\Compiler\Node;
 use Latte\Compiler\Nodes\AuxiliaryNode;
+use Latte\Compiler\Nodes\Php\Expression\FunctionCallableNode;
 use Latte\Compiler\Nodes\Php\Expression\FunctionCallNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\NameNode;
