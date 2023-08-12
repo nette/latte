@@ -124,7 +124,7 @@ final class Token
 		Php_True = 336,
 		Php_False = 337;
 
-	public const NAMES = [
+	public const Names = [
 		self::End => '[EOF]',
 		self::Text => 'text',
 		self::Whitespace => 'whitespace',

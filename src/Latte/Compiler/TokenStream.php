@@ -70,7 +70,7 @@ final class TokenStream
 	{
 		$token = $this->peek();
 		if ($kind && !$token->is(...$kind)) {
-			$kind = array_map(fn($item) => is_string($item) ? "'$item'" : Token::NAMES[$item], $kind);
+			$kind = array_map(fn($item) => is_string($item) ? "'$item'" : Token::Names[$item], $kind);
 			$this->throwUnexpectedException($kind);
 		} elseif (!$token->isEnd()) {
 			$this->index++;
@@ -134,7 +134,7 @@ final class TokenStream
 			}
 		} while (true);
 
-		$expected = array_map(fn($item) => is_int($item) ? Token::NAMES[$item] : $item, $expected);
+		$expected = array_map(fn($item) => is_int($item) ? Token::Names[$item] : $item, $expected);
 
 		throw new CompileException(
 			'Unexpected '

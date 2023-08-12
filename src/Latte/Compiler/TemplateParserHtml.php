@@ -50,9 +50,7 @@ final class TemplateParserHtml
 		$stream = $this->parser->getStream();
 		$token = $stream->peek();
 		return match ($token->type) {
-			Token::Html_TagOpen => $stream->peek(1)?->is(Token::Slash)
-				? $this->parseEndTag()
-				: $this->parseElement(),
+			Token::Html_TagOpen => $this->parseTag(),
 			Token::Html_CommentOpen => $this->parseComment(),
 			Token::Html_BogusOpen => $this->parseBogusTag(),
 			default => $this->parser->inTextResolve(),
@@ -76,11 +74,30 @@ final class TemplateParserHtml
 	}
 
 
+	private function parseTag(): ?Node
+	{
+		$stream = $this->parser->getStream();
+		if (!$stream->peek(1)?->is(Token::Slash)) {
+			return $this->parseElement();
+		}
+
+		$name = $stream->peek(2)->text ?? '';
+		if ($this->element
+			&& $this->parser->peekTag() === $this->element->data->tag
+			&& (strcasecmp($name, $this->element->name) === 0
+				|| !in_array($name, $this->element->data->unclosedTags ?? [], true))
+		) {
+			return null; // go to parseElement() one level up
+		}
+		return $this->parseBogusEndTag();
+	}
+
+
 	private function parseElement(): Node
 	{
 		$res = new FragmentNode;
 		$res->append($this->extractIndentation());
-		$res->append($this->parseTag($this->element));
+		$res->append($this->parseStartTag($this->element));
 		$elem = $this->element;
 
 		$stream = $this->parser->getStream();
@@ -105,7 +122,7 @@ final class TemplateParserHtml
 			if ($this->isClosingTag($elem->name)) {
 				$elem->content = $content;
 				$elem->content->append($this->extractIndentation());
-				$this->parseTag();
+				$this->parseEndTag();
 
 			} elseif ($outerNodes || $innerNodes || $tagNodes
 				|| ($this->parser->getContentType() === ContentType::Html && in_array(strtolower($elem->name), ['script', 'style'], true))
@@ -145,11 +162,10 @@ final class TemplateParserHtml
 	}
 
 
-	private function parseTag(&$elem = null): Html\ElementNode
+	private function parseStartTag(&$elem = null): Html\ElementNode
 	{
 		$stream = $this->parser->getStream();
 		$openToken = $stream->consume(Token::Html_TagOpen);
-		$stream->tryConsume(Token::Slash);
 		$this->parser->lastIndentation = null;
 		$this->parser->location = $this->parser::LocationTag;
 		$elem = new Html\ElementNode(
@@ -166,19 +182,22 @@ final class TemplateParserHtml
 	}
 
 
-	private function parseEndTag(): ?Html\BogusTagNode
+	private function parseEndTag(): void
 	{
 		$stream = $this->parser->getStream();
-		$name = $stream->peek(2)->text ?? '';
+		$stream->consume(Token::Html_TagOpen);
+		$stream->consume(Token::Slash);
+		$stream->consume(Token::Html_Name);
+		$this->parser->location = $this->parser::LocationTag;
+		$this->parser->parseFragment([$this, 'inTagResolve']);
+		$this->parser->location = $this->parser::LocationText;
+		$stream->consume(Token::Html_TagClose);
+	}
 
-		if ($this->element
-			&& $this->parser->peekTag() === $this->element->data->tag
-			&& (strcasecmp($name, $this->element->name) === 0
-				|| !in_array($name, $this->element->data->unclosedTags ?? [], true))
-		) {
-			return null; // go back to parseElement()
-		}
 
+	private function parseBogusEndTag(): ?Html\BogusTagNode
+	{
+		$stream = $this->parser->getStream();
 		$openToken = $stream->consume(Token::Html_TagOpen);
 		$this->parser->lastIndentation = null;
 		$this->parser->location = $this->parser::LocationTag;
@@ -199,10 +218,7 @@ final class TemplateParserHtml
 		$openToken = $stream->consume(Token::Html_BogusOpen);
 		$this->parser->lastIndentation = null;
 		$this->parser->location = $this->parser::LocationTag;
-		$content = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
-			Token::Html_TagClose => null,
-			default => $this->parser->inTextResolve(),
-		});
+		$content = $this->parser->parseFragment([$this->parser, 'inTextResolve']);
 		$this->parser->location = $this->parser::LocationText;
 		return new Html\BogusTagNode(
 			openDelimiter: $openToken->text,
@@ -295,12 +311,7 @@ final class TemplateParserHtml
 
 		$this->consumeIgnored();
 		if ($quoteToken = $stream->tryConsume(Token::Quote)) {
-			$value = $this->parser->parseFragment(
-				fn() => match ($stream->peek()->type) {
-					Token::Quote => null,
-					default => $this->parser->inTextResolve(),
-				},
-			);
+			$value = $this->parser->parseFragment([$this->parser, 'inTextResolve']);
 			$stream->consume(Token::Quote);
 			return [$value, $quoteToken->text];
 		}
@@ -369,10 +380,7 @@ final class TemplateParserHtml
 		$stream = $this->parser->getStream();
 		$node = new Html\CommentNode(
 			position: $stream->consume(Token::Html_CommentOpen)->position,
-			content: $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
-				Token::Html_CommentClose => null,
-				default => $this->parser->inTextResolve(),
-			}),
+			content: $this->parser->parseFragment([$this->parser, 'inTextResolve']),
 		);
 		$stream->consume(Token::Html_CommentClose);
 		$this->parser->location = $this->parser::LocationText;
