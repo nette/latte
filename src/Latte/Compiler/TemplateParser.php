@@ -57,8 +57,9 @@ final class TemplateParser
 	public function parse(string $template, TemplateLexer $lexer): Nodes\TemplateNode
 	{
 		$this->lexer = $lexer;
+		$this->setContentType($this->contentType);
 		$this->html = new TemplateParserHtml($this, $this->completeAttrParsers());
-		$this->stream = new TokenStream($lexer->tokenize($template, $this->contentType));
+		$this->stream = new TokenStream($lexer->tokenize($template));
 
 		$headLength = 0;
 		$findLength = function (FragmentNode $fragment) use (&$headLength) {
@@ -396,7 +397,9 @@ final class TemplateParser
 	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
-		$this->lexer?->setContentType($type);
+		$this->lexer?->setState($type === ContentType::Html || $type === ContentType::Xml
+			? TemplateLexer::StateHtmlText
+			: TemplateLexer::StatePlain);
 		return $this;
 	}
 

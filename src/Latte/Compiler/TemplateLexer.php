@@ -11,7 +11,6 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
-use Latte\ContentType;
 use Latte\RegexpException;
 
 
@@ -45,20 +44,24 @@ final class TemplateLexer
 	private TagLexer $tagLexer;
 
 	/** @var array<array{name: string, args: mixed[]}> */
-	private array $states;
+	private array $states = [];
 	private string $input;
 	private Position $position;
 
 
-	/** @return \Generator<Token> */
-	public function tokenize(string $template, string $contentType = ContentType::Html): \Generator
+	public function __construct()
 	{
 		$this->position = new Position;
-		$this->input = $this->normalize($template);
-		$this->states = [];
-		$this->setContentType($contentType);
+		$this->setState(self::StatePlain);
 		$this->setSyntax(null);
 		$this->tagLexer = new TagLexer;
+	}
+
+
+	/** @return \Generator<Token> */
+	public function tokenize(string $template): \Generator
+	{
+		$this->input = $this->normalize($template);
 
 		do {
 			$offset = $this->position->offset;
@@ -243,13 +246,6 @@ final class TemplateLexer
 		}
 
 		return $tokens;
-	}
-
-
-	public function setContentType(string $type): static
-	{
-		$this->setState($type === ContentType::Html || $type === ContentType::Xml ? self::StateHtmlText : self::StatePlain);
-		return $this;
 	}
 
 
