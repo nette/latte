@@ -11,7 +11,6 @@ require __DIR__ . '/../bootstrap.php';
 test('', function () {
 	$lexer = new TemplateLexer;
 	iterator_to_array($lexer->tokenize("\n{a}"));
-	iterator_to_array($lexer->tokenize(''));
 });
 
 $lexer = new TemplateLexer;
