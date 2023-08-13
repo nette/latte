@@ -172,7 +172,7 @@ final class TemplateParserHtml
 		$openToken = $stream->consume(Token::Html_TagOpen);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 		$this->parser->lastIndentation = null;
-		$this->parser->location = $this->parser::LocationTag;
+		$this->parser->inHead = false;
 		$elem = new Html\ElementNode(
 			name: $stream->consume(Token::Html_Name)->text,
 			position: $openToken->position,
@@ -187,7 +187,6 @@ final class TemplateParserHtml
 			? TemplateLexer::StateHtmlRawText
 			: TemplateLexer::StateHtmlText;
 		$this->parser->getLexer()->setState($state, $elem->name);
-		$this->parser->location = $this->parser::LocationText;
 		return $elem;
 	}
 
@@ -199,9 +198,7 @@ final class TemplateParserHtml
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 		$stream->consume(Token::Slash);
 		$stream->consume(Token::Html_Name);
-		$this->parser->location = $this->parser::LocationTag;
 		$this->parser->parseFragment([$this, 'inTagResolve']);
-		$this->parser->location = $this->parser::LocationText;
 		$stream->consume(Token::Html_TagClose);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
 	}
@@ -213,7 +210,7 @@ final class TemplateParserHtml
 		$openToken = $stream->consume(Token::Html_TagOpen);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 		$this->parser->lastIndentation = null;
-		$this->parser->location = $this->parser::LocationTag;
+		$this->parser->inHead = false;
 		$node = new Html\BogusTagNode(
 			openDelimiter: $openToken->text . $stream->consume(Token::Slash)->text . $stream->tryConsume(Token::Text)?->text,
 			content: $this->parser->parseFragment([$this, 'inTagResolve']),
@@ -221,7 +218,6 @@ final class TemplateParserHtml
 			position: $openToken->position,
 		);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
-		$this->parser->location = $this->parser::LocationText;
 		return $node;
 	}
 
@@ -232,12 +228,11 @@ final class TemplateParserHtml
 		$openToken = $stream->consume(Token::Html_BogusOpen);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlBogus);
 		$this->parser->lastIndentation = null;
-		$this->parser->location = $this->parser::LocationTag;
+		$this->parser->inHead = false;
 		$content = $this->parser->parseFragment(fn() => match ($stream->peek()->type) {
 			Token::Html_TagClose => null,
 			default => $this->parser->inTextResolve(),
 		});
-		$this->parser->location = $this->parser::LocationText;
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
 		return new Html\BogusTagNode(
 			openDelimiter: $openToken->text,
@@ -375,7 +370,7 @@ final class TemplateParserHtml
 			tokens: $tokens,
 			position: $nameToken->position,
 			prefix: $this->getPrefix($name),
-			location: $this->parser->location,
+			inTag: true,
 			htmlElement: $this->element,
 			data: (object) ['node' => $node = new Nodes\TextNode('')], // TODO: better
 		);
@@ -386,7 +381,7 @@ final class TemplateParserHtml
 	private function parseComment(): Html\CommentNode
 	{
 		$this->parser->lastIndentation = null;
-		$this->parser->location = $this->parser::LocationTag;
+		$this->parser->inHead = false;
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlComment);
 		$stream = $this->parser->getStream();
 		$node = new Html\CommentNode(
@@ -398,7 +393,6 @@ final class TemplateParserHtml
 		);
 		$stream->consume(Token::Html_CommentClose);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
-		$this->parser->location = $this->parser::LocationText;
 		return $node;
 	}
 
