@@ -90,7 +90,11 @@ final class TemplateParserHtml
 					&& ($this->element->is($name->text) || !in_array($name->text, $this->element->data->unclosedTags ?? [], true))))
 		) {
 			return null; // go to parseElement() one level up
+
+		} elseif ($this->parser->strict) {
+			$stream->throwUnexpectedException(excerpt: '/');
 		}
+
 		return $this->parseBogusEndTag();
 	}
 
@@ -132,6 +136,7 @@ final class TemplateParserHtml
 				$this->parseEndTag();
 
 			} elseif ($outerNodes || $innerNodes || $tagNodes
+				|| $this->parser->strict
 				|| $elem->variableName
 				|| $endName?->is(Token::Latte_TagOpen)
 				|| $elem->isRawText()
@@ -184,12 +189,16 @@ final class TemplateParserHtml
 			$variableName = $this->parser->parseLatteStatement();
 			if (!$variableName instanceof Latte\Essential\Nodes\PrintNode) {
 				throw new CompileException('Only expression can be used as a HTML tag name.', $variableName->position);
-			} elseif (!$stream->is(Token::Whitespace, Token::Slash, Token::Html_TagClose)) {
-				throw $stream->throwUnexpectedException();
 			}
 		} else {
 			$name = $stream->consume(Token::Html_Name)->text;
 			$variableName = null;
+		}
+
+		if (($this->parser->strict || $variableName)
+			&& !$stream->is(Token::Whitespace, Token::Slash, Token::Html_TagClose)
+		) {
+			throw $stream->throwUnexpectedException();
 		}
 
 		$this->parser->lastIndentation = null;

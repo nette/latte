@@ -102,12 +102,13 @@ final class Passes
 	/**
 	 * $ʟ_xxx variables are forbidden
 	 */
-	public static function internalVariablesPass(TemplateNode $node): void
+	public static function internalVariablesPass(TemplateNode $node, bool $forbidThis = false): void
 	{
-		(new NodeTraverser)->traverse($node, function (Node $node) {
+		$forbidden = $forbidThis ? ['GLOBALS', 'this'] : ['GLOBALS'];
+		(new NodeTraverser)->traverse($node, function (Node $node) use ($forbidden) {
 			if ($node instanceof VariableNode
 				&& is_string($node->name)
-				&& (str_starts_with($node->name, 'ʟ_') || $node->name === 'GLOBALS')
+				&& (str_starts_with($node->name, 'ʟ_') || in_array($node->name, $forbidden, true))
 			) {
 				throw new CompileException("Forbidden variable \$$node->name.", $node->position);
 			}
