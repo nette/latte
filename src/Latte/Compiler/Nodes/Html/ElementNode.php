@@ -18,6 +18,7 @@ use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\ContentType;
 
 
 /**
@@ -44,6 +45,7 @@ class ElementNode extends AreaNode
 		public ?Position $position = null,
 		public /*readonly*/ ?self $parent = null,
 		public ?\stdClass $data = null,
+		public string $contentType = ContentType::Html,
 	) {
 		$this->data ??= new \stdClass;
 		$this->tagNode = new AuxiliaryNode(\Closure::fromCallable([$this, 'printStartTag']));
@@ -62,6 +64,19 @@ class ElementNode extends AreaNode
 		}
 
 		return null;
+	}
+
+
+	public function is(string $name): bool
+	{
+		return strcasecmp($this->name, $name) === 0;
+	}
+
+
+	public function isRawText(): bool
+	{
+		return $this->contentType === ContentType::Html
+			&& ($this->is('script') || $this->is('style'));
 	}
 
 

@@ -77,17 +77,11 @@ final class Escaper
 	public function enterHtmlText(?ElementNode $node): void
 	{
 		$this->state = self::HtmlText;
-		if ($this->contentType === ContentType::Html && $node) {
-			$name = strtolower($node->name);
-			if (
-				($name === 'script' || $name === 'style')
-				&& is_string($attr = $node->getAttribute('type') ?? 'css')
-				&& preg_match('#(java|j|ecma|live)script|module|json|css|plain#i', $attr)
-			) {
-				$this->state = $name === 'script'
-					? self::HtmlJavaScript
-					: self::HtmlCss;
-			}
+		if ($node->isRawText()
+			&& is_string($attr = $node->getAttribute('type') ?? 'css')
+			&& preg_match('#(java|j|ecma|live)script|module|json|css|plain#i', $attr)
+		) {
+			$this->state = $node->is('script') ? self::HtmlJavaScript : self::HtmlCss;
 		}
 	}
 
