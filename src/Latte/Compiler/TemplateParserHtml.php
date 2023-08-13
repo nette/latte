@@ -227,7 +227,7 @@ final class TemplateParserHtml
 		} else {
 			$stream->consume(Token::Html_Name);
 		}
-		$this->parser->parseFragment([$this, 'inTagResolve']);
+		$stream->tryConsume(Token::Whitespace);
 		$stream->consume(Token::Html_TagClose);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
 	}
@@ -242,7 +242,7 @@ final class TemplateParserHtml
 		$this->parser->inHead = false;
 		$node = new Html\BogusTagNode(
 			openDelimiter: $openToken->text . $stream->consume(Token::Slash)->text . $stream->consume(Token::Html_Name)->text,
-			content: $this->parser->parseFragment([$this, 'inTagResolve']),
+			content: new Nodes\TextNode($stream->tryConsume(Token::Whitespace)->text ?? ''),
 			endDelimiter: $stream->consume(Token::Html_TagClose)->text,
 			position: $openToken->position,
 		);
