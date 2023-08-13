@@ -69,7 +69,9 @@ class ElementNode extends AreaNode
 
 	public function is(string $name): bool
 	{
-		return strcasecmp($this->name, $name) === 0;
+		return $this->contentType === ContentType::Html
+			? strcasecmp($this->name, $name) === 0
+			: $this->name === $name;
 	}
 
 

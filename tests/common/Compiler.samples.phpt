@@ -44,6 +44,11 @@ Assert::match( // fix
 	$latte->renderToString('<input x {*a*}>{*b*}'),
 );
 
+Assert::match( // html is case insensitive
+	'<a></a>',
+	$latte->renderToString('<a n:if=1></A>'),
+);
+
 Assert::match(
 	'<a href=""></a>',
 	$latte->renderToString('<a href="{ifset $x}{$x}{/ifset}"></a>'),

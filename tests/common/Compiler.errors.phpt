@@ -81,6 +81,12 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('{contentType xml}<a n:if=1></A>'),
+	Latte\CompileException::class,
+	"Unexpected '</A>', expecting </a> for element started on line 1 at column 18 (on line 1 at column 28)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('<a {if}n:href>'),
 	Latte\CompileException::class,
 	'Attribute n:href must not appear inside {tags} (on line 1 at column 8)',
