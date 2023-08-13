@@ -71,6 +71,7 @@ class SecurityPolicy implements Latte\Policy
 
 		$policy->allowMethods(Latte\Essential\CachingIterator::class, self::All);
 		$policy->allowProperties(Latte\Essential\CachingIterator::class, self::All);
+		$policy->allowMethods(Latte\Essential\Nodes\NTagNode::class, ['check']);
 
 		return $policy;
 	}

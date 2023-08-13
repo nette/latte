@@ -26,7 +26,7 @@ use Latte\ContentType;
  */
 class ElementNode extends AreaNode
 {
-	public ?Node $customName = null;
+	public ?Nodes\Php\ExpressionNode $variableName = null;
 	public ?FragmentNode $attributes = null;
 	public bool $selfClosing = false;
 	public ?AreaNode $content = null;
@@ -83,7 +83,7 @@ class ElementNode extends AreaNode
 	public function print(PrintContext $context): string
 	{
 		$res = $this->endTagVar = null;
-		if ($this->captureTagName || $this->customName) {
+		if ($this->captureTagName || $this->variableName) {
 			$endTag = $this->endTagVar = '$ʟ_tag[' . $context->generateId() . ']';
 			$res = "$this->endTagVar = '';";
 		} else {
@@ -108,14 +108,14 @@ class ElementNode extends AreaNode
 		$context->beginEscape()->enterHtmlTag($this->name);
 		$res = "echo '<';";
 
-		$namePhp = var_export($this->name, true);
 		if ($this->endTagVar) {
-			$res .= 'echo $ʟ_tmp = (' . ($this->customName ? $this->customName->print($context) : $namePhp) . ');';
-			$res .= $this->endTagVar . ' = '
-				. "'</' . \$ʟ_tmp . '>'"
-				. ' . ' . $this->endTagVar . ';';
+			$expr = $this->variableName
+				? 'LR\Filters::safeTag(' . $this->variableName->print($context) . ')'
+				: var_export($this->name, true);
+			$res .= "echo \$ʟ_tmp = $expr /* line {$this->position->line} */;"
+				. "{$this->endTagVar} = '</' . \$ʟ_tmp . '>' . {$this->endTagVar};";
 		} else {
-			$res .= 'echo ' . $namePhp . ';';
+			$res .= 'echo ' . var_export($this->name, true) . ';';
 		}
 
 		foreach ($this->attributes?->children ?? [] as $attr) {
@@ -131,8 +131,8 @@ class ElementNode extends AreaNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->tagNode;
-		if ($this->customName) {
-			yield $this->customName;
+		if ($this->variableName) {
+			yield $this->variableName;
 		}
 		if ($this->attributes) {
 			yield $this->attributes;
