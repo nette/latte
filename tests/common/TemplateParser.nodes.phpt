@@ -172,6 +172,7 @@ Assert::match(<<<'XX'
 	   |  |  |  parent: null
 	   |  |  |  data: stdClass
 	   |  |  |  |  tag: null
+	   |  |  |  |  textualName: 'br'
 	   |  |  |  contentType: 'html'
 	   |  position: 1:1 (offset 0)
 	   contentType: 'html'
@@ -240,6 +241,7 @@ Assert::match(<<<'XX'
 	   |  |  |  parent: null
 	   |  |  |  data: stdClass
 	   |  |  |  |  tag: null
+	   |  |  |  |  textualName: 'br'
 	   |  |  |  contentType: 'html'
 	   |  position: 1:1 (offset 0)
 	   contentType: 'html'
@@ -295,6 +297,7 @@ Assert::match(<<<'XX'
 	   |  |  |  parent: null
 	   |  |  |  data: stdClass
 	   |  |  |  |  tag: null
+	   |  |  |  |  textualName: 'p'
 	   |  |  |  contentType: 'html'
 	   |  position: 1:1 (offset 0)
 	   contentType: 'html'

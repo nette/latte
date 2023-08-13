@@ -155,7 +155,7 @@ final class TemplateParser
 	}
 
 
-	public function parseLatteStatement(): ?Node
+	public function parseLatteStatement(?callable $resolver = null): ?Node
 	{
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		if ($this->stream->peek(1)->is(Token::Slash)
@@ -186,7 +186,7 @@ final class TemplateParser
 			} else {
 				while ($res->valid()) {
 					$startTag->data->filters = $res->current() ?: null;
-					$content = $this->parseFragment($this->lastResolver);
+					$content = $this->parseFragment($resolver ?? $this->lastResolver);
 
 					if (!$this->stream->is(Token::Latte_TagOpen)) {
 						$this->checkEndTag($startTag, null);

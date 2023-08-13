@@ -71,6 +71,11 @@ Assert::match(
 	$latte->renderToString('<a n:syntax="double"><br {foo}></a>'),
 );
 
+Assert::match(
+	'<brx>', // bad, but allowed for compatibility
+	$latte->renderToString('<br{if 1}x{/if}>'),
+);
+
 
 
 // tag name vs content
