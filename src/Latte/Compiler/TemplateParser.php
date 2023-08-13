@@ -309,9 +309,7 @@ final class TemplateParser
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->tagParsers), $name))
 				? ", did you mean {{$t}}?"
 				: '';
-			if ($this->contentType === ContentType::Html
-				&& in_array($this->html->getElement()?->name, ['script', 'style'], true)
-			) {
+			if ($this->html->getElement()?->isRawText()) {
 				$hint .= ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)';
 			}
 			throw new CompileException("Unexpected tag {{$name}}$hint", $pos);

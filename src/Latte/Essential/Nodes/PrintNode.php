@@ -36,7 +36,7 @@ class PrintNode extends StatementNode
 		if (
 			$tag->isInText()
 			&& $parser->getContentType() === ContentType::Html
-			&& $tag->htmlElement?->name === 'script'
+			&& $tag->htmlElement?->is('script')
 			&& preg_match('#["\']#A', $stream->peek()->text)
 		) {
 			throw new CompileException("Do not place {$tag->getNotation(true)} inside quotes in JavaScript.", $tag->position);

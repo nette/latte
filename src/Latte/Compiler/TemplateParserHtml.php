@@ -84,8 +84,7 @@ final class TemplateParserHtml
 		$name = $stream->peek(2)->text ?? '';
 		if ($this->element
 			&& $this->parser->peekTag() === $this->element->data->tag
-			&& (strcasecmp($name, $this->element->name) === 0
-				|| !in_array($name, $this->element->data->unclosedTags ?? [], true))
+			&& ($this->element->is($name) || !in_array($name, $this->element->data->unclosedTags ?? [], true))
 		) {
 			return null; // go to parseElement() one level up
 		}
@@ -125,7 +124,7 @@ final class TemplateParserHtml
 				$this->parseEndTag();
 
 			} elseif ($outerNodes || $innerNodes || $tagNodes
-				|| ($this->parser->getContentType() === ContentType::Html && in_array(strtolower($elem->name), ['script', 'style'], true))
+				|| $elem->isRawText()
 			) {
 				$stream->throwUnexpectedException(
 					addendum: ", expecting </{$elem->name}> for element started " . $elem->position->toWords(),
@@ -173,6 +172,7 @@ final class TemplateParserHtml
 			position: $openToken->position,
 			parent: $this->element,
 			data: (object) ['tag' => $this->parser->peekTag()],
+			contentType: $this->parser->getContentType(),
 		);
 		$elem->attributes = $this->parser->parseFragment([$this, 'inTagResolve']);
 		$elem->selfClosing = (bool) $stream->tryConsume(Token::Slash);
@@ -231,7 +231,7 @@ final class TemplateParserHtml
 
 	private function resolveVoidness(Html\ElementNode $elem): bool
 	{
-		if ($this->parser->getContentType() !== ContentType::Html) {
+		if ($elem->contentType !== ContentType::Html) {
 			return $elem->selfClosing;
 		} elseif (isset(Helpers::$emptyElements[strtolower($elem->name)])) {
 			return true;

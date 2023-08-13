@@ -32,7 +32,7 @@ class ContentTypeNode extends StatementNode
 		while (!$tag->parser->stream->consume()->isEnd());
 		$type = trim($tag->parser->text);
 
-		if (!$tag->isInHead() && !($tag->htmlElement?->name === 'script' && str_contains($type, 'html'))) {
+		if (!$tag->isInHead() && !($tag->htmlElement?->is('script') && str_contains($type, 'html'))) {
 			throw new CompileException('{contentType} is allowed only in template header.', $tag->position);
 		}
 
