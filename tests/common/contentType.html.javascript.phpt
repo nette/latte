@@ -16,6 +16,11 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
+	'<script></script> <div></div>',
+	$latte->renderToString('<script /> <div />'),
+);
+
+Assert::match(
 	'<script>"<>"</script>',
 	$latte->renderToString('<script>{="<>"}</script>'),
 );

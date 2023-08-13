@@ -17,13 +17,37 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{'),
 	Latte\CompileException::class,
-	'Unterminated Latte tag (on line 1 at column 2)',
+	'Unterminated Latte tag (on line 1 at column 1)',
 );
 
 Assert::exception(
 	fn() => $latte->compile("{* \n'abc}"),
 	Latte\CompileException::class,
-	'Unterminated Latte comment (on line 1 at column 3)',
+	'Unterminated Latte comment (on line 1 at column 1)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<!'),
+	Latte\CompileException::class,
+	'Unterminated HTML tag (on line 1 at column 1)',
+);
+
+Assert::exception(
+	fn() => $latte->compile("<a href='xx{* xx *}>"),
+	Latte\CompileException::class,
+	'Unterminated HTML attribute value (on line 1 at column 9)',
+);
+
+Assert::exception(
+	fn() => $latte->compile("<a n:href='xx>"),
+	Latte\CompileException::class,
+	'Unterminated n:attribute value (on line 1 at column 11)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<!--'),
+	Latte\CompileException::class,
+	'Unterminated HTML comment (on line 1 at column 1)',
 );
 
 Assert::exception(
