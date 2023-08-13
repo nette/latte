@@ -268,6 +268,12 @@ final class TemplateLexer
 	}
 
 
+	public function getState(): string
+	{
+		return $this->states[0]['name'];
+	}
+
+
 	/**
 	 * Changes tag delimiters.
 	 */

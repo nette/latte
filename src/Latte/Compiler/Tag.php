@@ -41,7 +41,8 @@ final class Tag
 		public /*readonly*/ Position $position,
 		public /*readonly*/ bool $void = false,
 		public /*readonly*/ bool $closing = false,
-		public /*readonly*/ int $location = 0,
+		public /*readonly*/ bool $inHead = false,
+		public /*readonly*/ bool $inTag = false,
 		public /*readonly*/ ?ElementNode $htmlElement = null,
 		public ?self $parent = null,
 		public /*readonly*/ ?string $prefix = null,
@@ -54,13 +55,13 @@ final class Tag
 
 	public function isInHead(): bool
 	{
-		return $this->location === TemplateParser::LocationHead && !$this->parent;
+		return $this->inHead && !$this->parent;
 	}
 
 
 	public function isInText(): bool
 	{
-		return $this->location <= TemplateParser::LocationText;
+		return !$this->inTag;
 	}
 
 

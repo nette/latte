@@ -23,15 +23,10 @@ final class TemplateParser
 {
 	use Latte\Strict;
 
-	public const
-		LocationHead = 1,
-		LocationText = 2,
-		LocationTag = 3;
-
 	/** @var Block[][] */
 	public array $blocks = [[]];
 	public int $blockLayer = Template::LayerTop;
-	public int $location = self::LocationHead;
+	public bool $inHead = true;
 	public ?Nodes\TextNode $lastIndentation = null;
 
 	/** @var array<string, callable(Tag, self): (Node|\Generator|void)> */
@@ -63,7 +58,7 @@ final class TemplateParser
 
 		$headLength = 0;
 		$findLength = function (FragmentNode $fragment) use (&$headLength) {
-			if ($this->location === self::LocationHead && !end($fragment->children) instanceof Nodes\TextNode) {
+			if ($this->inHead && !end($fragment->children) instanceof Nodes\TextNode) {
 				$headLength = count($fragment->children);
 			}
 		};
@@ -120,9 +115,7 @@ final class TemplateParser
 	public function parseText(): Nodes\TextNode
 	{
 		$token = $this->stream->consume(Token::Text, Token::Html_Name);
-		if ($this->location === self::LocationHead && trim($token->text) !== '') {
-			$this->location = self::LocationText;
-		}
+		$this->inHead = $this->inHead && trim($token->text) === '';
 		$this->lastIndentation = null;
 		return new Nodes\TextNode($token->text, $token->position);
 	}
@@ -244,9 +237,7 @@ final class TemplateParser
 			throw new \LogicException("Incorrect behavior of {{$startTag->name}} parser, unexpected returned value (on line {$startTag->position->line})");
 		}
 
-		if ($this->location === self::LocationHead && $startTag->outputMode !== $startTag::OutputNone) {
-			$this->location = self::LocationText;
-		}
+		$this->inHead = $this->inHead && $startTag->outputMode === $startTag::OutputNone;
 
 		$this->popTag();
 
@@ -262,6 +253,7 @@ final class TemplateParser
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 
+		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], true);
 		$openToken = $stream->consume(Token::Latte_TagOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$tag = new Tag(
@@ -270,7 +262,8 @@ final class TemplateParser
 			name: $stream->tryConsume(Token::Latte_Name)?->text ?? ($closing ? '' : '='),
 			tokens: $this->consumeTag(),
 			void: (bool) $stream->tryConsume(Token::Slash),
-			location: $this->location,
+			inHead: $this->inHead,
+			inTag: $inTag,
 			htmlElement: $this->html->getElement(),
 		);
 		$stream->tryConsume(Token::Latte_TagClose) || $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
