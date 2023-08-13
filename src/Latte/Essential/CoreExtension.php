@@ -27,11 +27,13 @@ final class CoreExtension extends Latte\Extension
 	use Latte\Strict;
 
 	private array $functions;
+	private bool $strict;
 
 
 	public function beforeCompile(Latte\Engine $engine): void
 	{
 		$this->functions = $engine->getFunctions();
+		$this->strict = $engine->isStrictParsing();
 	}
 
 
@@ -185,7 +187,7 @@ final class CoreExtension extends Latte\Extension
 	public function getPasses(): array
 	{
 		return [
-			'internalVariables' => [Passes::class, 'internalVariablesPass'],
+			'internalVariables' => fn(TemplateNode $node) => Passes::internalVariablesPass($node, $this->strict),
 			'overwrittenVariables' => [Passes::class, 'overwrittenVariablesPass'],
 			'customFunctions' => fn(TemplateNode $node) => Passes::customFunctionsPass($node, $this->functions),
 			'moveTemplatePrintToHead' => [Passes::class, 'moveTemplatePrintToHeadPass'],

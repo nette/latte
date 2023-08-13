@@ -98,6 +98,10 @@ final class TemplateParserHtml
 				return null; // go to parseElement() one level up to collapse
 			}
 		}
+
+		if ($this->parser->strict) {
+			$stream->throwUnexpectedException(excerpt: '/');
+		}
 		return $this->parseBogusEndTag();
 	}
 
@@ -135,6 +139,7 @@ final class TemplateParserHtml
 				$elem->content->append($this->extractIndentation());
 
 			} elseif ($outerNodes || $innerNodes || $tagNodes
+				|| $this->parser->strict
 				|| $elem->variableName
 				|| $endVariable
 				|| $elem->isRawText()
@@ -181,8 +186,10 @@ final class TemplateParserHtml
 		$openToken = $stream->consume(Token::Html_TagOpen);
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 
-		[$textual, $variable] = $this->parseTagName(strict: false);
-		if ($variable && !$stream->is(Token::Whitespace, Token::Slash, Token::Html_TagClose)) {
+		[$textual, $variable] = $this->parseTagName($this->parser->strict);
+		if (($this->parser->strict || $variable)
+			&& !$stream->is(Token::Whitespace, Token::Slash, Token::Html_TagClose)
+		) {
 			throw $stream->throwUnexpectedException();
 		}
 

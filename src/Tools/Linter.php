@@ -20,6 +20,7 @@ final class Linter
 	public function __construct(
 		private ?Latte\Engine $engine = null,
 		private bool $debug = false,
+		private bool $strict = false,
 	) {
 	}
 
@@ -54,6 +55,7 @@ final class Linter
 	{
 		$engine = new Latte\Engine;
 		$engine->enablePhpLinter(PHP_BINARY);
+		$engine->setStrictParsing($this->strict);
 		$engine->addExtension(new Latte\Essential\TranslatorExtension(null));
 
 		if (class_exists(Nette\Bridges\ApplicationLatte\UIExtension::class)) {

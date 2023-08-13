@@ -27,6 +27,7 @@ final class TemplateParser
 	public array $blocks = [[]];
 	public int $blockLayer = Template::LayerTop;
 	public bool $inHead = true;
+	public bool $strict = false;
 	public ?Nodes\TextNode $lastIndentation = null;
 
 	/** @var array<string, callable(Tag, self): (Node|\Generator|void)> */

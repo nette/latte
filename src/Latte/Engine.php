@@ -47,6 +47,7 @@ class Engine
 	private ?string $tempDirectory = null;
 	private bool $autoRefresh = true;
 	private bool $strictTypes = false;
+	private bool $strictParsing = false;
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
@@ -147,6 +148,7 @@ class Engine
 	{
 		$lexer = new Compiler\TemplateLexer;
 		$parser = new Compiler\TemplateParser;
+		$parser->strict = $this->strictParsing;
 
 		foreach ($this->extensions as $extension) {
 			$extension->beforeCompile($this);
@@ -534,6 +536,19 @@ class Engine
 	{
 		$this->strictTypes = $on;
 		return $this;
+	}
+
+
+	public function setStrictParsing(bool $on = true): static
+	{
+		$this->strictParsing = $on;
+		return $this;
+	}
+
+
+	public function isStrictParsing(): bool
+	{
+		return $this->strictParsing;
 	}
 
 
