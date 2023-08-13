@@ -116,7 +116,7 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
-	   |  |  |  customName: null
+	   |  |  |  variableName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (6)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
@@ -187,7 +187,7 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
-	   |  |  |  customName: null
+	   |  |  |  variableName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (6)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
@@ -270,7 +270,7 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
-	   |  |  |  customName: null
+	   |  |  |  variableName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (0)
 	   |  |  |  |  position: null
