@@ -110,7 +110,10 @@ class ElementNode extends AreaNode
 
 		if ($this->endTagVar) {
 			$expr = $this->variableName
-				? 'LR\Filters::safeTag(' . $this->variableName->print($context) . ')'
+				? 'LR\Filters::safeTag('
+					. $this->variableName->print($context)
+					. ($this->contentType === ContentType::Xml ? ', true' : '')
+					. ')'
 				: var_export($this->name, true);
 			$res .= "echo \$ʟ_tmp = $expr /* line {$this->position->line} */;"
 				. "{$this->endTagVar} = '</' . \$ʟ_tmp . '>' . {$this->endTagVar};";

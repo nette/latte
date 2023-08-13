@@ -241,13 +241,13 @@ class Filters
 	/**
 	 * Validates HTML tag name.
 	 */
-	public static function safeTag(mixed $name): string
+	public static function safeTag(mixed $name, bool $xml = false): string
 	{
 		if (!is_string($name)) {
 			throw new Latte\RuntimeException('Tag name must be string, ' . get_debug_type($name) . ' given');
 		} elseif (!preg_match('~' . Latte\Compiler\TemplateLexer::ReTagName . '$~DA', $name)) {
 			throw new Latte\RuntimeException("Invalid tag name '$name'");
-		} elseif (in_array(strtolower($name), ['style', 'script'], true)) {
+		} elseif (!$xml && in_array(strtolower($name), ['style', 'script'], true)) {
 			throw new Latte\RuntimeException("Forbidden variable tag name <$name>");
 		}
 		return $name;

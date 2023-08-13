@@ -44,3 +44,7 @@ Assert::exception(
 	Latte\RuntimeException::class,
 	'Forbidden variable tag name <Script>',
 );
+
+Assert::noError(
+	fn() => Filters::safeTag('Script', xml: true),
+);

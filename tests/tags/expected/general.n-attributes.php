@@ -396,7 +396,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			$ʟ_tag[8] = '';
 			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span')) /* line %d% */;
+			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
 			$ʟ_tag[8] = '</' . $ʟ_tmp . '>' . $ʟ_tag[8];
 			echo '>';
 			ob_start();
@@ -420,7 +420,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			$ʟ_tag[9] = '';
 			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span')) /* line %d% */;
+			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
 			$ʟ_tag[9] = '</' . $ʟ_tmp . '>' . $ʟ_tag[9];
 			echo '>';
 			ob_start();
@@ -443,7 +443,7 @@ final class Template%a% extends Latte\Runtime\Template
 		if (1) /* line %d% */ {
 			$ʟ_tag[10] = '';
 			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span')) /* line %d% */;
+			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
 			$ʟ_tag[10] = '</' . $ʟ_tmp . '>' . $ʟ_tag[10];
 			echo '>n:tag & n:if=1';
 			echo $ʟ_tag[10];
@@ -452,7 +452,7 @@ final class Template%a% extends Latte\Runtime\Template
 		if (0) /* line %d% */ {
 			$ʟ_tag[11] = '';
 			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span')) /* line %d% */;
+			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
 			$ʟ_tag[11] = '</' . $ʟ_tmp . '>' . $ʟ_tag[11];
 			echo '>n:tag & n:if=0';
 			echo $ʟ_tag[11];
