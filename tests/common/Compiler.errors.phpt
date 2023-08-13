@@ -69,6 +69,54 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<{if 1}{/if}>'),
+	Latte\CompileException::class,
+	'Only expression can be used as a HTML tag name (on line 1 at column 2)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<{$foo}>'),
+	Latte\CompileException::class,
+	'Unexpected end, expecting </{...}> for element started on line 1 at column 1 (on line 1 at column 9)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<{$foo}x>...</{$foo}>'),
+	Latte\CompileException::class,
+	"Unexpected 'x' (on line 1 at column 8)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('<{$foo}>...</{if 1}{/if}>'),
+	Latte\CompileException::class,
+	'Only expression can be used as a HTML tag name (on line 1 at column 14)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('<a>...</{$foo}>'),
+	Latte\CompileException::class,
+	"Unexpected '</{', expecting </a> for element started on line 1 at column 1 (on line 1 at column 7)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('<{$foo}><span></{$foo}>'),
+	Latte\CompileException::class,
+	"Unexpected '</{', expecting </span> for element started on line 1 at column 9 (on line 1 at column 15)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('<{$foo}></span></{$foo}>'),
+	Latte\CompileException::class,
+	"Unexpected '</span', expecting </{...}> for element started on line 1 at column 1 (on line 1 at column 9)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('</{$foo}>'), // bogus tag
+	Latte\CompileException::class,
+	"Unexpected '{', expecting HTML name (on line 1 at column 3)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('<span title={if true}a b{/if}></span>'),
 	Latte\CompileException::class,
 	"Unexpected ' ', expecting {/if} (on line 1 at column 23)",

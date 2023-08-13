@@ -127,9 +127,9 @@ final class TemplateLexer
 		yield from $this->match('~(?J)
 			(?<Text>.+?)??
 			(
-				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Html_TagOpen><)(?<Slash>/)?(?<Html_Name>' . self::ReTagName . ')|  # <tag </tag
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Html_TagOpen><)(?<Slash>/)?(?=[a-z]|' . $this->openDelimiter . ')|  # < </ tag
 				(?<Html_CommentOpen><!--(?!>|->))|                                                      # <!-- comment
-				(?<Html_BogusOpen><[/?!])|                                                              # <!doctype <?xml or error
+				(?<Html_BogusOpen><[?!])|                                                               # <!doctype <?xml or error
 				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|   # {tag
 				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)|   # {* comment
 				$
