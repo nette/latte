@@ -39,6 +39,11 @@ Assert::match( // fix #58
 	$latte->renderToString('{contentType application/xml}{if true}x{/if}'),
 );
 
+Assert::match( // html is case insensitive
+	'<a></a>',
+	$latte->renderToString('<a n:if=1></A>'),
+);
+
 Assert::match(
 	'<a href=""></a>',
 	$latte->renderToString('<a href="{ifset $x}{$x}{/ifset}"></a>'),
