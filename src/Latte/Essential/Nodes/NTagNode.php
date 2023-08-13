@@ -14,6 +14,8 @@ use Latte\CompileException;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Compiler\TemplateParser;
+use Latte\ContentType;
 
 
 /**
@@ -21,7 +23,7 @@ use Latte\Compiler\Tag;
  */
 final class NTagNode extends StatementNode
 {
-	public static function create(Tag $tag): void
+	public static function create(Tag $tag, TemplateParser $parser): void
 	{
 		if (preg_match('(style$|script$)iA', $tag->htmlElement->name)) {
 			throw new CompileException('Attribute n:tag is not allowed in <script> or <style>', $tag->position);
@@ -31,7 +33,7 @@ final class NTagNode extends StatementNode
 		$newName = $tag->parser->parseExpression();
 		$origName = $tag->htmlElement->name;
 		$tag->htmlElement->variableName = Latte\Compiler\ExpressionBuilder::class(self::class)
-			->staticMethod('check', [$origName, $newName])->build();
+			->staticMethod('check', [$origName, $newName, $parser->getContentType() === ContentType::Xml])->build();
 	}
 
 
@@ -41,11 +43,12 @@ final class NTagNode extends StatementNode
 	}
 
 
-	public static function check(string $orig, mixed $new): mixed
+	public static function check(string $orig, mixed $new, bool $xml): mixed
 	{
 		if ($new === null) {
 			return $orig;
-		} elseif (is_string($new)
+		} elseif (!$xml
+			&& is_string($new)
 			&& isset(Latte\Helpers::$emptyElements[strtolower($orig)]) !== isset(Latte\Helpers::$emptyElements[strtolower($new)])
 		) {
 			throw new Latte\RuntimeException("Forbidden tag <$orig> change to <$new>");

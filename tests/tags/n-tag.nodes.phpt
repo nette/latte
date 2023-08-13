@@ -29,6 +29,8 @@ Assert::match(<<<'XX'
 					Argument:
 						Variable:
 							name: var
+					Argument:
+						Boolean:
 				Fragment:
 					Text:
 						content: ''

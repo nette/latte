@@ -57,6 +57,12 @@ Assert::match(
 );
 
 
+Assert::match(
+	'<script/>',
+	$latte->renderToString('{contentType xml}<img n:tag="script"/>'),
+);
+
+
 // no change
 Assert::match(
 	'<img/>',
@@ -69,7 +75,7 @@ Assert::match(
 		%A%
 				$ʟ_tag[0] = '';
 				echo '<';
-				echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'h' . 1)) /* line 1 */;
+				echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'h' . 1, false)) /* line 1 */;
 				$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
 				echo ' class="bar" ';
 				if (isset($id)) /* line 1 */ {
