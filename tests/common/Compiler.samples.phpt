@@ -39,6 +39,11 @@ Assert::match( // fix #58
 	$latte->renderToString('{contentType application/xml}{if true}x{/if}'),
 );
 
+Assert::match( // fix
+	'<input x >',
+	$latte->renderToString('<input x {*a*}>{*b*}'),
+);
+
 Assert::match(
 	'<a href=""></a>',
 	$latte->renderToString('<a href="{ifset $x}{$x}{/ifset}"></a>'),

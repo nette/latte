@@ -153,19 +153,24 @@ final class TemplateParser
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 		$this->stream->consume(Token::Latte_CommentOpen);
+		$this->lexer->pushState(TemplateLexer::StateLatteComment);
 		$this->stream->consume(Token::Text);
 		$this->stream->consume(Token::Latte_CommentClose);
+		$this->lexer->popState();
 		return new Nodes\NopNode;
 	}
 
 
 	public function parseLatteStatement(): ?Node
 	{
+		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		if ($this->stream->peek(1)->is(Token::Slash)
 			|| isset($this->tag->data->filters) && in_array($this->stream->peek(1)->text, $this->tag->data->filters, true)
 		) {
+			$this->lexer->popState();
 			return null; // go back to previous parseLatteStatement()
 		}
+		$this->lexer->popState();
 
 		$token = $this->stream->peek();
 		$startTag = $this->pushTag($this->parseLatteTag());
@@ -257,6 +262,7 @@ final class TemplateParser
 		}
 
 		$openToken = $stream->consume(Token::Latte_TagOpen);
+		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$tag = new Tag(
 			position: $openToken->position,
 			closing: $closing = (bool) $stream->tryConsume(Token::Slash),
@@ -267,6 +273,7 @@ final class TemplateParser
 			htmlElement: $this->html->getElement(),
 		);
 		$stream->consume(Token::Latte_TagClose);
+		$this->lexer->popState();
 		return $tag;
 	}
 
