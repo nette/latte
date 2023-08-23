@@ -2,6 +2,8 @@
 %A%
 final class Template%a% extends Latte\Runtime\Template
 {
+	public const Source = 'main';
+
 	public const Blocks = [
 		1 => ['a' => 'blockA'],
 		2 => ['a' => 'blockA1'],

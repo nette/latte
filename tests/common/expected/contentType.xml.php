@@ -4,6 +4,8 @@ final class Template%a% extends Latte\Runtime\Template
 {
 	public const ContentType = 'xml';
 
+	public const Source = '%a%.latte';
+
 
 	public function main(array $ʟ_args): void
 	{
