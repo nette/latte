@@ -1,6 +1,6 @@
 <?php
 
-// Reserved identifiers
+// Magic constants
 
 declare(strict_types=1);
 
@@ -9,13 +9,9 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	__FUNCTION__,
-	class,
-	class::$x,
-	class::interface,
-	$obj->interface,
-
-	Foo::class,
+	__FILE__,
+	__DIR__,
+	__LINE__,
 	XX;
 
 $node = parseCode($test);
@@ -27,9 +23,6 @@ Assert::same(
 );
 
 __halt_compiler();
-namespace\__FUNCTION__,
-'class',
-namespace\class::$x,
-namespace\class::interface,
-$obj->interface,
-Foo::class
+(is_file(self::Source) ? self::Source : null),
+(is_file(self::Source) ? dirname(self::Source) : null),
+3
