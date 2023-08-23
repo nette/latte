@@ -7,13 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes;
+namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\Compiler\Node;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\PrintContext;
 
 
-class AuxiliaryNode extends AreaNode
+class AuxiliaryNode extends ExpressionNode
 {
 	/** @var (?Node)[] */
 	public array $nodes;
