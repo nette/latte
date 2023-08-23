@@ -185,12 +185,12 @@ class Engine
 	 */
 	public function generate(TemplateNode $node, string $name): string
 	{
-		$comment = preg_match('#\n|\?#', $name) ? null : "source: $name";
+		$sourceName = preg_match('#\n|\?#', $name) ? null : $name;
 		$generator = new Compiler\TemplateGenerator;
 		return $generator->generate(
 			$node,
 			$this->getTemplateClass($name),
-			$comment,
+			$sourceName,
 			$this->strictTypes,
 		);
 	}

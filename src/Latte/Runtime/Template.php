@@ -28,6 +28,8 @@ class Template
 
 	public const ContentType = Latte\ContentType::Html;
 
+	public const Source = null;
+
 	public const Blocks = [];
 
 	/** global accumulators for intermediate results */
