@@ -163,7 +163,8 @@ Assert::match(<<<'XX'
 	   |  |  |  content: null
 	   |  |  |  nAttributes: array (0)
 	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  callable: Closure($context)
+	   |  |  |  |  nodes: array (0)
+	   |  |  |  |  print: Closure($context)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
 	   |  |  |  endTagVar: unset
@@ -177,6 +178,7 @@ Assert::match(<<<'XX'
 	   |  position: 1:1 (offset 0)
 	   contentType: 'html'
 	   position: null
+
 	XX, parse("<br attr1 \nattr2=val\n attr3=\n'val'>"));
 
 
@@ -232,7 +234,8 @@ Assert::match(<<<'XX'
 	   |  |  |  content: null
 	   |  |  |  nAttributes: array (0)
 	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  callable: Closure($context)
+	   |  |  |  |  nodes: array (0)
+	   |  |  |  |  print: Closure($context)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
 	   |  |  |  endTagVar: unset
@@ -246,6 +249,7 @@ Assert::match(<<<'XX'
 	   |  position: 1:1 (offset 0)
 	   contentType: 'html'
 	   position: null
+
 	XX, parse("<br {foo}attr4='val'{/foo} attr5={foo}b{/foo} attr6=c{foo/}d>"));
 
 
@@ -288,7 +292,8 @@ Assert::match(<<<'XX'
 	   |  |  |  |  position: 1:4 (offset 3)
 	   |  |  |  nAttributes: array (0)
 	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  callable: Closure($context)
+	   |  |  |  |  nodes: array (0)
+	   |  |  |  |  print: Closure($context)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
 	   |  |  |  endTagVar: unset
