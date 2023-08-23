@@ -26,6 +26,14 @@ class ConstantFetchNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
+		if ($this->name->kind === NameNode::KindNormal) {
+			return match ((string) $this->name) {
+				'__LINE__' => (string) $this->position->line,
+				'__FILE__' => '(is_file(self::Source) ? self::Source : null)',
+				'__DIR__' => '(is_file(self::Source) ? dirname(self::Source) : null)',
+				default => $this->name->print($context),
+			};
+		}
 		return $this->name->print($context);
 	}
 
