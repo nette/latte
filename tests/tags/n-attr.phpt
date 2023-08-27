@@ -58,7 +58,7 @@ Assert::match(
 
 		<input checked="checked">
 		XX,
-	$latte->setContentType($latte::CONTENT_XML)->renderToString($template),
+	$latte->setContentType(Latte\ContentType::Xml)->renderToString($template),
 );
 
 
