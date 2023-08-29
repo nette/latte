@@ -17,8 +17,6 @@ use Latte;
  */
 class FilterInfo
 {
-	use Latte\Strict;
-
 	public ?string $contentType = null;
 
 

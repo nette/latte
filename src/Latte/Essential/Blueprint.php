@@ -20,8 +20,6 @@ use Nette\PhpGenerator as Php;
  */
 final class Blueprint
 {
-	use Latte\Strict;
-
 	public function printClass(Template $template, ?string $name = null): void
 	{
 		if (!class_exists(Php\ClassType::class)) {

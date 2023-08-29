@@ -9,13 +9,9 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
-
 
 final class NodeTraverser
 {
-	use Latte\Strict;
-
 	public const DontTraverseChildren = 1;
 	public const StopTraversal = 2;
 

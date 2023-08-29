@@ -21,8 +21,6 @@ use Latte\SecurityViolationException;
 
 final class TemplateParser
 {
-	use Latte\Strict;
-
 	/** @var Block[][] */
 	public array $blocks = [[]];
 	public int $blockLayer = Template::LayerTop;

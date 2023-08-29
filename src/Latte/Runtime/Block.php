@@ -9,14 +9,10 @@ declare(strict_types=1);
 
 namespace Latte\Runtime;
 
-use Latte;
-
 
 /** @internal */
 final class Block
 {
-	use Latte\Strict;
-
 	public ?string $contentType = null;
 
 	/** @var callable[] */

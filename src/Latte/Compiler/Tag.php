@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Html\ElementNode;
 
@@ -19,8 +18,6 @@ use Latte\Compiler\Nodes\Html\ElementNode;
  */
 final class Tag
 {
-	use Latte\Strict;
-
 	public const
 		PrefixInner = 'inner',
 		PrefixTag = 'tag',

@@ -9,14 +9,11 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
 use Latte\CompileException;
 
 
 final class TemplateLexer
 {
-	use Latte\Strict;
-
 	public const
 		StatePlain = 'Plain',
 		StateLatteTag = 'LatteTag',

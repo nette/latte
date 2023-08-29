@@ -25,8 +25,6 @@ use Nette;
  */
 final class CoreExtension extends Latte\Extension
 {
-	use Latte\Strict;
-
 	private array $functions;
 	private bool $strict;
 	private Runtime\Template $template;

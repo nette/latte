@@ -24,8 +24,6 @@ use Latte\SecurityViolationException;
  */
 final class TemplateParserHtml
 {
-	use Latte\Strict;
-
 	/** @var array<string, callable(Tag, TemplateParser): (Node|\Generator|void)> */
 	private array /*readonly*/ $attrParsers;
 	private ?Html\ElementNode $element = null;
