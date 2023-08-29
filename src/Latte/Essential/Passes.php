@@ -24,8 +24,6 @@ use Latte\Essential\Nodes\ForeachNode;
 
 final class Passes
 {
-	use Latte\Strict;
-
 	/**
 	 * Checks if foreach overrides template variables.
 	 */

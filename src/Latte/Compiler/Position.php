@@ -9,13 +9,9 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
-
 
 final class Position
 {
-	use Latte\Strict;
-
 	public function __construct(
 		public /*readonly*/ int $line = 1,
 		public /*readonly*/ int $column = 1,

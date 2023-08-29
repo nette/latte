@@ -17,8 +17,6 @@ use Latte;
  */
 class FileLoader implements Latte\Loader
 {
-	use Latte\Strict;
-
 	protected ?string $baseDir = null;
 
 

@@ -9,16 +9,12 @@ declare(strict_types=1);
 
 namespace Latte\Runtime;
 
-use Latte;
-
 
 /**
  * HTML literal.
  */
 class Html implements HtmlStringable
 {
-	use Latte\Strict;
-
 	private string $value;
 
 

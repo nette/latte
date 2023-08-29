@@ -15,8 +15,6 @@ use Latte;
 /** @internal */
 final class RuntimeChecker
 {
-	use Latte\Strict;
-
 	public function __construct(
 		public Latte\Policy $policy,
 	) {

@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
-
 
 /**
  * @implements \IteratorAggregate<Node>
  */
 abstract class Node implements \IteratorAggregate
 {
-	use Latte\Strict;
-
 	public ?Position $position = null;
 
 

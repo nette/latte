@@ -9,13 +9,9 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
-
 
 final class Token
 {
-	use Latte\Strict;
-
 	public const
 		End = 0,
 		Text = 10000,

@@ -24,8 +24,6 @@ use Latte\Compiler\Nodes\Php\Scalar;
  */
 final class TagParser extends TagParserData
 {
-	use Latte\Strict;
-
 	private const
 		SchemaExpression = 'e',
 		SchemaArguments = 'a',

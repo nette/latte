@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
 use Latte\ContentType;
 
 
@@ -18,8 +17,6 @@ use Latte\ContentType;
  */
 final class TemplateGenerator
 {
-	use Latte\Strict;
-
 	/** @var array<string, ?array{body: string, arguments: string, returns: string, comment: ?string}> */
 	private array $methods = [];
 

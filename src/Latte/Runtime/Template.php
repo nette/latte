@@ -19,8 +19,6 @@ use Latte\Engine;
  */
 class Template
 {
-	use Latte\Strict;
-
 	public const
 		LayerTop = 0,
 		LayerSnippet = 'snippet',

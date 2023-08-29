@@ -17,8 +17,6 @@ use Latte;
  */
 class SecurityPolicy implements Latte\Policy
 {
-	use Latte\Strict;
-
 	public const All = ['*'];
 	public const ALL = self::All;
 

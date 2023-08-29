@@ -17,8 +17,6 @@ use Latte;
  */
 class StringLoader implements Latte\Loader
 {
-	use Latte\Strict;
-
 	/** @var string[]|null  [name => content] */
 	private ?array $templates = null;
 

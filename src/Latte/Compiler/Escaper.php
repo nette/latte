@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Filters;
@@ -20,8 +19,6 @@ use Latte\Runtime\Filters;
  */
 final class Escaper
 {
-	use Latte\Strict;
-
 	public const
 		Text = 'text',
 		JavaScript = 'js',

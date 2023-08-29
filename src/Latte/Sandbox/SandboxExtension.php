@@ -26,8 +26,6 @@ use Latte\SecurityViolationException;
  */
 final class SandboxExtension extends Latte\Extension
 {
-	use Latte\Strict;
-
 	private ?Latte\Policy $policy;
 
 

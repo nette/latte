@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
-use Latte;
 use Latte\CompileException;
 
 
@@ -18,8 +17,6 @@ use Latte\CompileException;
  */
 final class TagLexer
 {
-	use Latte\Strict;
-
 	private const Keywords = [
 		'and' => Token::Php_LogicalAnd,
 		'array' => Token::Php_Array,
