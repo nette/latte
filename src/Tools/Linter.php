@@ -32,10 +32,6 @@ final class Linter
 		echo "Scanning $path\n";
 
 		$files = $this->getFiles($path);
-
-		$this->engine ??= $this->createEngine();
-		$this->engine->setLoader(new Latte\Loaders\StringLoader);
-
 		$counter = 0;
 		$errors = 0;
 		foreach ($files as $file) {
@@ -74,6 +70,13 @@ final class Linter
 	}
 
 
+	public function getEngine(): Latte\Engine
+	{
+		$this->engine ??= $this->createEngine();
+		return $this->engine;
+	}
+
+
 	public function lintLatte(string $file): bool
 	{
 		set_error_handler(function (int $severity, string $message) use ($file) {
@@ -94,7 +97,9 @@ final class Linter
 		}
 
 		try {
-			$this->engine->compile($s);
+			$this->getEngine()
+				->setLoader(new Latte\Loaders\StringLoader)
+				->compile($s);
 
 		} catch (Latte\CompileException $e) {
 			if ($this->debug) {
