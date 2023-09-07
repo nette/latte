@@ -38,7 +38,7 @@ trait PositionAwareException
 			$info[] = "in '" . str_replace(dirname($this->sourceName, 2), '...', $this->sourceName) . "'";
 		}
 		if ($this->position) {
-			$info[] = $this->position->toWords();
+			$info[] = $this->position;
 		}
 		$this->message = $info
 			? rtrim($this->origMessage, '.') . ' (' . implode(' ', $info) . ')'

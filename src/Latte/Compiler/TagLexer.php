@@ -57,7 +57,7 @@ final class TagLexer
 	/** @return Token[] */
 	public function tokenize(string $input, ?Position $position = null): array
 	{
-		$position ??= new Position(1, 1, 0);
+		$position ??= new Position;
 		$this->tokens = $this->tokenizePartially($input, $position, 0);
 		if ($this->offset !== strlen($input)) {
 			$token = str_replace("\n", '\n', substr($input, $this->offset, 10));

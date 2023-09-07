@@ -43,7 +43,7 @@ final class TemplateLexer
 	/** @return \Generator<Token> */
 	public function tokenize(string $template, string $contentType = ContentType::Html): \Generator
 	{
-		$this->position = new Position(1, 1, 0);
+		$this->position = new Position;
 		$this->input = $this->normalize($template);
 		$this->states = [];
 		$this->setContentType($contentType);

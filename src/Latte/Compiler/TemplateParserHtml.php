@@ -127,7 +127,7 @@ final class TemplateParserHtml
 				|| $elem->isRawText()
 			) {
 				$stream->throwUnexpectedException(
-					addendum: ", expecting </{$elem->name}> for element started " . $elem->position->toWords(),
+					addendum: ", expecting </{$elem->name}> for element started $elem->position",
 				);
 			} else { // element collapsed to tags
 				$res->append($content);
