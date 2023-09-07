@@ -152,10 +152,10 @@ final class TemplateParser
 		if (str_ends_with($this->stream->peek(-1)?->text ?? "\n", "\n")) {
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
-		$this->stream->consume(Token::Latte_CommentOpen);
+		$openToken = $this->stream->consume(Token::Latte_CommentOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteComment);
 		$this->stream->consume(Token::Text);
-		$this->stream->consume(Token::Latte_CommentClose);
+		$this->stream->tryConsume(Token::Latte_CommentClose) || $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return new Nodes\NopNode;
 	}
@@ -272,7 +272,7 @@ final class TemplateParser
 			location: $this->location,
 			htmlElement: $this->html->getElement(),
 		);
-		$stream->consume(Token::Latte_TagClose);
+		$stream->tryConsume(Token::Latte_TagClose) || $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return $tag;
 	}

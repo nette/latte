@@ -311,7 +311,7 @@ final class TemplateParserHtml
 		if ($quoteToken = $stream->tryConsume(Token::Quote)) {
 			$this->parser->getLexer()->setState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
 			$value = $this->parser->parseFragment([$this->parser, 'inTextResolve']);
-			$stream->consume(Token::Quote);
+			$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of HTML attribute started $quoteToken->position");
 			$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 			return [$value, $quoteToken->text];
 		}
@@ -349,7 +349,7 @@ final class TemplateParserHtml
 				$this->parser->getLexer()->setState(TemplateLexer::StateHtmlQuotedNAttrValue, $quoteToken->text);
 				$valueToken = $stream->tryConsume(Token::Text);
 				$pos = $stream->peek()->position;
-				$stream->consume(Token::Quote);
+				$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of n:attribute started $quoteToken->position");
 				$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 			} else {
 				$valueToken = $stream->consume(Token::Html_Name);
@@ -381,11 +381,12 @@ final class TemplateParserHtml
 		$this->parser->location = $this->parser::LocationTag;
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlComment);
 		$stream = $this->parser->getStream();
+		$openToken = $stream->consume(Token::Html_CommentOpen);
 		$node = new Html\CommentNode(
-			position: $stream->consume(Token::Html_CommentOpen)->position,
+			position: $openToken->position,
 			content: $this->parser->parseFragment([$this->parser, 'inTextResolve']),
 		);
-		$stream->consume(Token::Html_CommentClose);
+		$stream->tryConsume(Token::Html_CommentClose) || $stream->throwUnexpectedException([Token::Html_CommentClose], addendum: " started $openToken->position");
 		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
 		$this->parser->location = $this->parser::LocationText;
 		return $node;

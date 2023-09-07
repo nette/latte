@@ -17,37 +17,55 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 Assert::exception(
 	fn() => $latte->compile('{'),
 	Latte\CompileException::class,
-	'Unterminated Latte tag (on line 1 at column 1)',
+	'Unexpected end, expecting end of Latte tag started on line 1 at column 1 (on line 1 at column 2)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('{foo'),
+	Latte\CompileException::class,
+	'Unexpected end, expecting end of Latte tag started on line 1 at column 1 (on line 1 at column 5)',
 );
 
 Assert::exception(
 	fn() => $latte->compile("{* \n'abc}"),
 	Latte\CompileException::class,
-	'Unterminated Latte comment (on line 1 at column 1)',
+	'Unexpected end, expecting end of Latte comment started on line 1 at column 1 (on line 2 at column 6)',
 );
 
 Assert::exception(
-	fn() => $latte->compile('<!'),
+	fn() => $latte->compile('{syntax double} {{a'),
 	Latte\CompileException::class,
-	'Unterminated HTML tag (on line 1 at column 1)',
+	'Unexpected end, expecting end of Latte tag started on line 1 at column 17 (on line 1 at column 20)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('{syntax double} {{a } b'),
+	Latte\CompileException::class,
+	"Unexpected '} b' (on line 1 at column 21)",
+);
+
+Assert::exception(
+	fn() => $latte->compile('<! foo'),
+	Latte\CompileException::class,
+	'Unexpected end, expecting end of HTML tag (on line 1 at column 7)',
 );
 
 Assert::exception(
 	fn() => $latte->compile("<a href='xx{* xx *}>"),
 	Latte\CompileException::class,
-	'Unterminated HTML attribute value (on line 1 at column 9)',
+	"Unexpected end, expecting ', end of HTML attribute started on line 1 at column 9 (on line 1 at column 21)",
 );
 
 Assert::exception(
 	fn() => $latte->compile("<a n:href='xx>"),
 	Latte\CompileException::class,
-	'Unterminated n:attribute value (on line 1 at column 11)',
+	"Unexpected end, expecting ', end of n:attribute started on line 1 at column 11 (on line 1 at column 15)",
 );
 
 Assert::exception(
-	fn() => $latte->compile('<!--'),
+	fn() => $latte->compile('<!-- xxx'),
 	Latte\CompileException::class,
-	'Unterminated HTML comment (on line 1 at column 1)',
+	'Unexpected end, expecting end of HTML comment started on line 1 at column 1 (on line 1 at column 9)',
 );
 
 Assert::exception(

@@ -134,11 +134,11 @@ final class Token
 		self::Equals => "'='",
 		self::Quote => 'quote',
 
-		self::Latte_TagOpen => "'{'",
-		self::Latte_TagClose => "'}'",
+		self::Latte_TagOpen => 'Latte tag',
+		self::Latte_TagClose => 'end of Latte tag',
 		self::Latte_Name => 'tag name',
-		self::Latte_CommentOpen => "'{*'",
-		self::Latte_CommentClose => "'*}'",
+		self::Latte_CommentOpen => 'Latte comment',
+		self::Latte_CommentClose => 'end of Latte comment',
 
 		self::Html_TagOpen => 'HTML tag',
 		self::Html_TagClose => 'end of HTML tag',

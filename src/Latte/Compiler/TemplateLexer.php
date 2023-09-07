@@ -90,8 +90,6 @@ final class TemplateLexer
 
 	private function stateLatteTag(): \Generator
 	{
-		$pos = $this->states[0]['pos'];
-
 		yield from $this->match('~
 			(?<Slash>/)?
 			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))?   # name, /name, but not function( or class:: or namespace\
@@ -103,8 +101,7 @@ final class TemplateLexer
 			(?<Slash>/)?
 			(?<Latte_TagClose>' . $this->closeDelimiter . ')
 			(?<Newline>[ \t]*\R)?
-		~xsiAu')
-		or throw new CompileException('Unterminated Latte tag', $pos);
+		~xsiAu');
 	}
 
 
@@ -112,10 +109,11 @@ final class TemplateLexer
 	{
 		yield from $this->match('~
 			(?<Text>.+?)??
-			(?<Latte_CommentClose>\*' . $this->closeDelimiter . ')
-			(?<Newline>[ \t]*\R{1,2})?
-		~xsiAu')
-		or throw new CompileException('Unterminated Latte comment', $this->states[0]['pos']);
+			(
+				(?<Latte_CommentClose>\*' . $this->closeDelimiter . ')(?<Newline>[ \t]*\R{1,2})?|
+				$
+			)
+		~xsiAu');
 	}
 
 
@@ -155,22 +153,26 @@ final class TemplateLexer
 	private function stateHtmlQuotedValue(string $quote): \Generator
 	{
 		yield from $this->match('~
-			(?<Text>.+?)??(
+			(?<Text>.+?)??
+			(
 				(?<Quote>' . $quote . ')|
 				(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|      # {tag
-				(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)       # {* comment
+				(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)|      # {* comment
+				$
 			)
-		~xsiAu')
-		or throw new CompileException('Unterminated HTML attribute value', $this->states[0]['pos']);
+		~xsiAu');
 	}
 
 
 	private function stateHtmlQuotedNAttrValue(string $quote): \Generator
 	{
 		yield from $this->match('~
-			(?<Text>.+?)??(?<Quote>' . $quote . ')
-		~xsiAu')
-		or throw new CompileException('Unterminated n:attribute value', $this->states[0]['pos']);
+			(?<Text>.+?)??
+			(
+				(?<Quote>' . $quote . ')|
+				$
+			)
+		~xsiAu');
 	}
 
 
@@ -196,23 +198,24 @@ final class TemplateLexer
 			(
 				(?<Html_CommentClose>-->)|                                                              # -->
 				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|   # {tag
-				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)    # {* comment
+				(?<Indentation>(?<=\n|^)[ \t]+)?(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)|   # {* comment
+				$
 			)
-		~xsiAu')
-		or throw new CompileException('Unterminated HTML comment', $this->states[0]['pos']);
+		~xsiAu');
 	}
 
 
 	private function stateHtmlBogus(): \Generator
 	{
 		yield from $this->match('~
-			(?<Text>.+?)??(
+			(?<Text>.+?)??
+			(
 				(?<Html_TagClose>>)|                                       # >
 				(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|      # {tag
-				(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)       # {* comment
+				(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)|      # {* comment
+				$
 			)
-		~xsiAu')
-		or throw new CompileException('Unterminated HTML tag', $this->states[0]['pos']);
+		~xsiAu');
 	}
 
 
@@ -246,7 +249,7 @@ final class TemplateLexer
 
 	public function setState(string $state, ...$args): void
 	{
-		$this->states[0] = ['name' => $state, 'args' => $args, 'pos' => $this->position];
+		$this->states[0] = ['name' => $state, 'args' => $args];
 	}
 
 
