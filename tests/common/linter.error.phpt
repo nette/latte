@@ -6,6 +6,10 @@ use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
 
+if (str_contains(PHP_BINARY, 'phpdbg')) {
+	Tester\Environment::skip('Is not compatible with phpdbg');
+}
+
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
