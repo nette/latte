@@ -19,8 +19,8 @@ class Engine
 {
 	use Strict;
 
-	public const Version = '3.0.7';
-	public const VersionId = 30007;
+	public const Version = '3.0.9';
+	public const VersionId = 30009;
 
 	/** @deprecated use Engine::Version */
 	public const
