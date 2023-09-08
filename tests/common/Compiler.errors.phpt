@@ -87,6 +87,12 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<a></a foo>'),
+	Latte\CompileException::class,
+	"Unexpected 'foo', expecting end of HTML tag (on line 1 at column 8)",
+);
+
+Assert::exception(
 	fn() => $latte->compile('<{if 1}{/if}>'),
 	Latte\CompileException::class,
 	'Only expression can be used as a HTML tag name (on line 1 at column 2)',
