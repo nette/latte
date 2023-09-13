@@ -228,11 +228,11 @@ class Filters
 	/**
 	 * Sanitizes string for use inside href attribute.
 	 */
-	public static function safeUrl(string|HtmlStringable $s): string
+	public static function safeUrl(string|\Stringable $s): string
 	{
-		if ($s instanceof HtmlStringable) {
-			$s = self::convertHtmlToText((string) $s);
-		}
+		$s = $s instanceof HtmlStringable
+			? self::convertHtmlToText((string) $s)
+			: (string) $s;
 
 		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
 	}

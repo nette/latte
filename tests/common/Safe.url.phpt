@@ -84,3 +84,22 @@ Assert::match(
 	'<img src="https://nette.org?a=1&amp;b=&lt;a&gt;">',
 	$latte->renderToString('{capture $url}https://nette.org?a=1&amp;b={="<a>"}{/capture}<img src="{$url}">'),
 );
+
+Assert::match(
+	'<img src="">',
+	$latte->renderToString('{capture $url}&#x6a;&#x61;vascript:foo{/capture}<img src="{$url}">'),
+);
+
+// accepts Stringable
+Assert::match(
+	'<img src="&lt;a&gt;">',
+	$latte->renderToString(
+		'<img src="{$url}">',
+		['url' => new class {
+			public function __toString()
+			{
+				return '<a>';
+			}
+		}],
+	),
+);
