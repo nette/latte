@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
+use Latte\Runtime;
 use Latte\RuntimeException;
 use Nette;
 
@@ -28,12 +29,19 @@ final class CoreExtension extends Latte\Extension
 
 	private array $functions;
 	private bool $strict;
+	private Runtime\Template $template;
 
 
 	public function beforeCompile(Latte\Engine $engine): void
 	{
 		$this->functions = $engine->getFunctions();
 		$this->strict = $engine->isStrictParsing();
+	}
+
+
+	public function beforeRender(Runtime\Template $template): void
+	{
+		$this->template = $template;
 	}
 
 
@@ -180,6 +188,7 @@ final class CoreExtension extends Latte\Extension
 			'last' => [Filters::class, 'last'],
 			'odd' => [Filters::class, 'odd'],
 			'slice' => [Filters::class, 'slice'],
+			'hasBlock' => fn(string $name): bool => $this->template->hasBlock($name),
 		];
 	}
 
