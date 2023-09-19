@@ -77,6 +77,23 @@ test('', function () {
 
 test('', function () {
 	$filters = new FilterExecutor;
+	$filters->add(null, function ($name) use ($filters) {
+		if ($name === 'dynamic') {
+			return fn(FilterInfo $info, ...$vals) => $name . ',' . implode(',', $vals);
+		}
+	});
+	Assert::same('dynamic,x,y', $filters->filterContent('dynamic', new FilterInfo, 'x', 'y'));
+
+	Assert::exception(
+		fn() => $filters->filterContent('unknown', new FilterInfo, ''),
+		LogicException::class,
+		"Filter 'unknown' is not defined.",
+	);
+});
+
+
+test('', function () {
+	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic
 	$filters->add('f1', fn(FilterInfo $info, $val) => gettype($info->contentType) . ',' . strtolower($val), true);
