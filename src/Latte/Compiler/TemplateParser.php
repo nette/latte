@@ -38,24 +38,29 @@ final class TemplateParser
 
 	private TemplateParserHtml $html;
 	private ?TokenStream $stream = null;
-	private ?TemplateLexer $lexer = null;
+	private TemplateLexer $lexer;
 	private ?Policy $policy = null;
-	private string $contentType = ContentType::Html;
+	private string $contentType;
 	private int $counter = 0;
 	private ?Tag $tag = null;
 	private $lastResolver;
+
+
+	public function __construct()
+	{
+		$this->lexer = new TemplateLexer;
+		$this->setContentType(ContentType::Html);
+	}
 
 
 	/**
 	 * Parses tokens to nodes.
 	 * @throws CompileException
 	 */
-	public function parse(string $template, TemplateLexer $lexer): Nodes\TemplateNode
+	public function parse(string $template): Nodes\TemplateNode
 	{
-		$this->lexer = $lexer;
-		$this->setContentType($this->contentType);
 		$this->html = new TemplateParserHtml($this, $this->completeAttrParsers());
-		$this->stream = new TokenStream($lexer->tokenize($template));
+		$this->stream = new TokenStream($this->lexer->tokenize($template));
 
 		$headLength = 0;
 		$findLength = function (FragmentNode $fragment) use (&$headLength) {
@@ -391,7 +396,7 @@ final class TemplateParser
 	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
-		$this->lexer?->setState($type === ContentType::Html || $type === ContentType::Xml
+		$this->lexer->setState($type === ContentType::Html || $type === ContentType::Xml
 			? TemplateLexer::StateHtmlText
 			: TemplateLexer::StatePlain);
 		return $this;

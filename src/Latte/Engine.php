@@ -146,7 +146,6 @@ class Engine
 	 */
 	public function parse(string $source): TemplateNode
 	{
-		$lexer = new Compiler\TemplateLexer;
 		$parser = new Compiler\TemplateParser;
 		$parser->strict = $this->strictParsing;
 
@@ -158,7 +157,7 @@ class Engine
 		return $parser
 			->setContentType($this->contentType)
 			->setPolicy($this->getPolicy(effective: true))
-			->parse($source, $lexer);
+			->parse($source);
 	}
 
 
