@@ -189,7 +189,7 @@ final class TemplateLexer
 			(?<Text>.+?)??
 			(?<Indentation>(?<=\n|^)[ \t]+)?
 			(
-				(?<Html_TagOpen><)(?<Slash>/)(?<Html_Name>' . preg_quote(strtolower($tagName), '~') . ')|  # </tag
+				(?<Html_TagOpen><)(?<Slash>/)(?<Html_Name>' . preg_quote($tagName, '~') . ')|  # </tag
 				(?<Latte_TagOpen>' . $this->openDelimiter . '(?!\*))|                          # {tag
 				(?<Latte_CommentOpen>' . $this->openDelimiter . '\*)|                          # {* comment
 				$
