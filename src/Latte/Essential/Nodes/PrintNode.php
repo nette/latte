@@ -45,7 +45,7 @@ class PrintNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->followsQuote && $context->getEscaper()->export() === 'html/js') {
+		if ($this->followsQuote && $context->getEscaper()->export() === 'html/raw/js') {
 			throw new CompileException("Do not place {$this->followsQuote} inside quotes in JavaScript.", $this->position);
 		}
 		return $context->format(

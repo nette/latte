@@ -172,7 +172,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('<div>{include style}</div> <STYLE n:inner-block=style>...</STYLE>'),
 		Latte\RuntimeException::class,
-		'Including block style with content type HTML/CSS into incompatible type HTML.',
+		'Including block style with content type HTML/RAW/CSS into incompatible type HTML.',
 	);
 
 	Assert::match(
@@ -183,7 +183,7 @@ test('', function () {
 	Assert::exception(
 		fn() => $latte->renderToString('<div>{include script}</div> <script n:inner-block=script>...</script>'),
 		Latte\RuntimeException::class,
-		'Including block script with content type HTML/JS into incompatible type HTML.',
+		'Including block script with content type HTML/RAW/JS into incompatible type HTML.',
 	);
 });
 
@@ -256,7 +256,7 @@ Assert::same('<script> <\/script></script>', $latte->renderToString('context4'))
 Assert::exception(
 	fn() => $latte->renderToString('context5'),
 	Latte\RuntimeException::class,
-	"Including 'js.latte' with content type JS into incompatible type HTML/CSS.",
+	"Including 'js.latte' with content type JS into incompatible type HTML/RAW/CSS.",
 );
 
 Assert::same('<!-- </script>-->', $latte->renderToString('context6'));
@@ -298,13 +298,13 @@ Assert::same('<p title="&lt;hr&gt;&lt;script&gt;&lt;/script&gt; &quot; &quot; &l
 Assert::exception(
 	fn() => $latte->renderToString('context4'),
 	Latte\RuntimeException::class,
-	"Including 'html.latte' with content type HTML into incompatible type HTML/JS.",
+	"Including 'html.latte' with content type HTML into incompatible type HTML/RAW/JS.",
 );
 
 Assert::exception(
 	fn() => $latte->renderToString('context5'),
 	Latte\RuntimeException::class,
-	"Including 'html.latte' with content type HTML into incompatible type HTML/CSS.",
+	"Including 'html.latte' with content type HTML into incompatible type HTML/RAW/CSS.",
 );
 
 Assert::same('<!--<hr><script></script> " &quot; &lt;-->', $latte->renderToString('context6'));
