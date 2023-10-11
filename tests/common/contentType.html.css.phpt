@@ -54,3 +54,9 @@ Assert::match(
 	'<style> a { background: url("\"") } </style>',
 	$latte->renderToString('<style> a { background: url("{=\'"\'}") } </style>'),
 );
+
+// no escape
+Assert::match(
+	'<style></style></style>',
+	$latte->renderToString('<style>{="</style>"|noescape}</style>'),
+);
