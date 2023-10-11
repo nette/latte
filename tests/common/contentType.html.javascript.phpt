@@ -46,7 +46,7 @@ Assert::match(
 );
 
 Assert::exception(
-	fn() => $latte->compile('<script>"{=123|noescape}"'),
+	fn() => $latte->compile('<script>"{=123|noescape}"</script>'),
 	Latte\CompileException::class,
 	'Do not place {=123|noescape} inside quotes in JavaScript (on line 1 at column 10)',
 );
