@@ -23,3 +23,11 @@ Assert::matchFile(
 		$params,
 	),
 );
+
+
+// no escape
+$latte->setLoader(new Latte\Loaders\StringLoader);
+Assert::match(
+	'<!--  - - > -->',
+	$latte->renderToString('<!-- {="-->"|noescape} -->'),
+);

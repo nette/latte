@@ -68,9 +68,9 @@ class ModifierNode extends Node
 			$expr = $escaper->check($expr);
 		}
 
-		if ($escape) {
-			$expr = $escaper->escape($expr);
-		}
+		$expr = $escape
+			? $escaper->escape($expr)
+			: $escaper->escapeMandatory($expr);
 
 		return $expr;
 	}

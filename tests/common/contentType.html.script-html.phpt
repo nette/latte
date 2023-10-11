@@ -32,7 +32,7 @@ Assert::match(
 
 // no escape
 Assert::match(
-	'<script type="text/html"></script></script>',
+	'<script type="text/html"></x-script></script>',
 	$latte->renderToString('<script type="text/html">{="</script>"|noescape}</script>'),
 );
 

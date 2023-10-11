@@ -220,6 +220,28 @@ final class Escaper
 	}
 
 
+	public function escapeMandatory(string $str): string
+	{
+		return match ($this->contentType) {
+			ContentType::Html => match ($this->state) {
+				self::HtmlAttribute => "LR\\Filters::escapeHtmlQuotes($str)",
+				self::HtmlRawText => match ($this->subType) {
+					self::HtmlText => 'LR\Filters::convertHtmlToHtmlRawText(' . $str . ')',
+					default => "LR\\Filters::convertJSToHtmlRawText($str)",
+				},
+				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
+				default => $str,
+			},
+			ContentType::Xml => match ($this->state) {
+				self::HtmlAttribute => "LR\\Filters::escapeHtmlQuotes($str)",
+				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
+				default => $str,
+			},
+			default => $str,
+		};
+	}
+
+
 	public function check(string $str): string
 	{
 		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {

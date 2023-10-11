@@ -57,6 +57,6 @@ Assert::match(
 
 // no escape
 Assert::match(
-	'<style></style></style>',
+	'<style><\/style></style>',
 	$latte->renderToString('<style>{="</style>"|noescape}</style>'),
 );

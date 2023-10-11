@@ -35,12 +35,12 @@ Assert::match(
 
 // no escape in attribute
 Assert::match(
-	'<p title="foo a=\'a\' b="b">"></p>',
+	'<p title="foo a=&apos;a&apos; b=&quot;b&quot;>"></p>',
 	$latte->renderToString('<p title={="foo a=\'a\' b=\"b\">"|noescape}></p>'),
 );
 
 // no escape in JS attribute
 Assert::match(
-	'<p onclick="foo a=\'a\' b="b">"></p>',
+	'<p onclick="foo a=&apos;a&apos; b=&quot;b&quot;>"></p>',
 	$latte->renderToString('<p onclick="{="foo a=\'a\' b=\"b\">"|noescape}"></p>'),
 );

@@ -117,6 +117,15 @@ class Filters
 
 
 	/**
+	 * Escapes only quotes.
+	 */
+	public static function escapeHtmlQuotes($s): string
+	{
+		return strtr((string) $s, ['"' => '&quot;', "'" => '&apos;']);
+	}
+
+
+	/**
 	 * Escapes string for use everywhere inside XML (except for comments and tags).
 	 */
 	public static function escapeXml($s): string

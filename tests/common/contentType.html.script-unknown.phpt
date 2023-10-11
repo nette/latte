@@ -37,6 +37,12 @@ Assert::exception(
 	'Including block a with content type HTML into incompatible type HTML/RAW/TEXT.',
 );
 
+// no escape
+Assert::match(
+	'<script type="foo"><\/script></script>',
+	$latte->renderToString('<script type="foo">{="</script>"|noescape}</script>'),
+);
+
 // content of <script> is RAWTEXT
 Assert::match(
 	<<<'XX'

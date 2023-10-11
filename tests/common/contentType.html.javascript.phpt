@@ -131,6 +131,6 @@ Assert::match(
 
 // no escape
 Assert::match(
-	'<script></script></script>',
+	'<script><\/script></script>',
 	$latte->renderToString('<script>{="</script>"|noescape}</script>'),
 );
