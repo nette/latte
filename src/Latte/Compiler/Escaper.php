@@ -38,6 +38,47 @@ final class Escaper
 		HtmlTag = 'html/tag',
 		HtmlAttribute = 'html/attr';
 
+	private const Convertors = [
+		self::Text => [
+			self::HtmlText => 'escapeHtmlText',
+			self::HtmlAttribute => 'escapeHtmlAttr',
+			self::HtmlAttribute . '/' . self::JavaScript => 'escapeHtmlAttr',
+			self::HtmlAttribute . '/' . self::Css => 'escapeHtmlAttr',
+			self::HtmlAttribute . '/' . self::Url => 'escapeHtmlAttr',
+			self::HtmlComment => 'escapeHtmlComment',
+			'xml' => 'escapeXml',
+			'xml/attr' => 'escapeXml',
+		],
+		self::JavaScript => [
+			self::HtmlText => 'escapeHtmlText',
+			self::HtmlAttribute => 'escapeHtmlAttr',
+			self::HtmlAttribute . '/' . self::JavaScript => 'escapeHtmlAttr',
+			self::HtmlJavaScript => 'convertJSToHtmlRawText',
+			self::HtmlComment => 'escapeHtmlComment',
+		],
+		self::Css => [
+			self::HtmlText => 'escapeHtmlText',
+			self::HtmlAttribute => 'escapeHtmlAttr',
+			self::HtmlAttribute . '/' . self::Css => 'escapeHtmlAttr',
+			self::HtmlCss => 'convertJSToHtmlRawText',
+			self::HtmlComment => 'escapeHtmlComment',
+		],
+		self::HtmlText => [
+			self::HtmlAttribute => 'convertHtmlToHtmlAttr',
+			self::HtmlAttribute . '/' . self::JavaScript => 'convertHtmlToHtmlAttr',
+			self::HtmlAttribute . '/' . self::Css => 'convertHtmlToHtmlAttr',
+			self::HtmlAttribute . '/' . self::Url => 'convertHtmlToHtmlAttr',
+			self::HtmlComment => 'escapeHtmlComment',
+		],
+		self::HtmlAttribute => [
+			self::HtmlText => 'convertHtmlToHtmlAttr',
+		],
+		self::HtmlAttribute . '/' . self::Url => [
+			self::HtmlText => 'convertHtmlToHtmlAttr',
+			self::HtmlAttribute => 'nop',
+		],
+	];
+
 	private string $state = '';
 	private string $tag = '';
 	private string $subType = '';
@@ -171,53 +212,10 @@ final class Escaper
 
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
-		$table = [
-			self::Text => [
-				'html' => 'escapeHtmlText',
-				'html/attr' => 'escapeHtmlAttr',
-				'html/attr/js' => 'escapeHtmlAttr',
-				'html/attr/css' => 'escapeHtmlAttr',
-				'html/attr/url' => 'escapeHtmlAttr',
-				'html/comment' => 'escapeHtmlComment',
-				'xml' => 'escapeXml',
-				'xml/attr' => 'escapeXml',
-			],
-			self::JavaScript => [
-				'html' => 'escapeHtmlText',
-				'html/attr' => 'escapeHtmlAttr',
-				'html/attr/js' => 'escapeHtmlAttr',
-				'html/js' => 'convertJSToHtmlRawText',
-				'html/comment' => 'escapeHtmlComment',
-			],
-			self::Css => [
-				'html' => 'escapeHtmlText',
-				'html/attr' => 'escapeHtmlAttr',
-				'html/attr/css' => 'escapeHtmlAttr',
-				'html/css' => 'convertJSToHtmlRawText',
-				'html/comment' => 'escapeHtmlComment',
-			],
-			'html' => [
-				'html/attr' => 'convertHtmlToHtmlAttr',
-				'html/attr/js' => 'convertHtmlToHtmlAttr',
-				'html/attr/css' => 'convertHtmlToHtmlAttr',
-				'html/attr/url' => 'convertHtmlToHtmlAttr',
-				'html/comment' => 'escapeHtmlComment',
-			],
-			'html/attr' => [
-				'html' => 'convertHtmlToHtmlAttr',
-			],
-			'html/attr/url' => [
-				'html' => 'convertHtmlToHtmlAttr',
-				'html/attr' => 'nop',
-			],
-		];
-
-		if ($source === $dest) {
-			return [Filters::class, 'nop'];
-		}
-
-		return isset($table[$source][$dest])
-			? [Filters::class, $table[$source][$dest]]
-			: null;
+		return match (true) {
+			$source === $dest => [Filters::class, 'nop'],
+			isset(self::Convertors[$source][$dest]) => [Filters::class, self::Convertors[$source][$dest]],
+			default => null,
+		};
 	}
 }
