@@ -119,13 +119,16 @@ final class Escaper
 	{
 		if ($el->isRawText()) {
 			$this->state = self::HtmlRawText;
-			$this->subType = self::HtmlText;
+			$this->subType = self::Text;
 			if ($el->is('script')) {
 				$type = $el->getAttribute('type');
 				if ($type === true || $type === null
 					|| is_string($type) && preg_match('#((application|text)/(((x-)?java|ecma|j|live)script|json)|text/plain|module|importmap|)$#Ai', $type)
 				) {
 					$this->subType = self::JavaScript;
+
+				} elseif (is_string($type) && preg_match('#text/((x-)?template|html)$#Ai', $type)) {
+					$this->subType = self::HtmlText;
 				}
 
 			} elseif ($el->is('style')) {
@@ -193,6 +196,7 @@ final class Escaper
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
 				self::HtmlRawText => match ($this->subType) {
+					self::Text => 'LR\Filters::convertJSToHtmlRawText(' . $str . ')', // sanitization, escaping is not possible
 					self::HtmlText => 'LR\Filters::escapeHtmlRawTextHtml(' . $str . ')',
 					self::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
 					self::Css => 'LR\Filters::escapeCss(' . $str . ')',
