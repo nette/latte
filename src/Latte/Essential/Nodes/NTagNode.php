@@ -11,6 +11,7 @@ namespace Latte\Essential\Nodes;
 
 use Latte;
 use Latte\CompileException;
+use Latte\Compiler\Nodes\Php\Expression\AuxiliaryNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -30,10 +31,15 @@ final class NTagNode extends StatementNode
 		}
 
 		$tag->expectArguments();
-		$newName = $tag->parser->parseExpression();
-		$origName = $tag->htmlElement->name;
-		$tag->htmlElement->variableName = Latte\Compiler\ExpressionBuilder::class(self::class)
-			->staticMethod('check', [$origName, $newName, $parser->getContentType() === ContentType::Xml])->build();
+		$tag->htmlElement->variableName = new AuxiliaryNode(
+			fn(PrintContext $context, $newName) => $context->format(
+				self::class . '::check(%dump, %node, %dump)',
+				$tag->htmlElement->name,
+				$newName,
+				$parser->getContentType() === ContentType::Xml,
+			),
+			[$tag->parser->parseExpression()],
+		);
 	}
 
 
