@@ -31,17 +31,17 @@ class JumpNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
-		$allowed = match ($tag->name) {
-			'breakIf', 'continueIf' => ['for', 'foreach', 'while'],
-			'skipIf' => ['foreach'],
-			'exitIf' => ['block', 'define', null],
-		};
 		for (
 			$parent = $tag->parent;
-			in_array($parent?->name, ['if', 'ifset', 'ifcontent'], true);
+			$parent?->node instanceof IfNode || $parent?->node instanceof IfContentNode;
 			$parent = $parent->parent
 		);
-		if (!in_array($parent?->name, $allowed, true)) {
+		$pnode = $parent?->node;
+		if (!match ($tag->name) {
+			'breakIf', 'continueIf' => $pnode instanceof ForNode || $pnode instanceof ForeachNode || $pnode instanceof WhileNode,
+			'skipIf' => $pnode instanceof ForeachNode,
+			'exitIf' => !$pnode || $pnode instanceof BlockNode || $pnode instanceof DefineNode,
+		}) {
 			throw new CompileException("Tag {{$tag->name}} is unexpected here.", $tag->position);
 		}
 

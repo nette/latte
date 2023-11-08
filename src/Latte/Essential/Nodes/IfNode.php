@@ -41,7 +41,7 @@ class IfNode extends StatementNode
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
-		$node = new static;
+		$node = $tag->node = new static;
 		$node->ifset = in_array($tag->name, ['ifset', 'elseifset'], true);
 		$node->capture = !$tag->isNAttribute() && $tag->name === 'if' && $tag->parser->isEnd();
 		$node->position = $tag->position;

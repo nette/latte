@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte\CompileException;
+use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\Html\ElementNode;
 
 
@@ -44,6 +45,7 @@ final class Tag
 		public ?self $parent = null,
 		public /*readonly*/ ?string $prefix = null,
 		public ?\stdClass $data = null,
+		public ?AreaNode $node = null,
 	) {
 		$this->data ??= new \stdClass;
 		$this->parser = new TagParser($tokens);

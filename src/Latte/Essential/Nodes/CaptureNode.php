@@ -43,7 +43,7 @@ class CaptureNode extends StatementNode
 
 			throw new CompileException("It is not possible to write into '$text' in " . $tag->getNotation(), $tag->position);
 		}
-		$node = new static;
+		$node = $tag->node = new static;
 		$node->variable = $variable;
 		$node->modifier = $tag->parser->parseModifier();
 		[$node->content] = yield;

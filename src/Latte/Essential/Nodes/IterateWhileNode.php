@@ -38,7 +38,7 @@ class IterateWhileNode extends StatementNode
 			throw new CompileException("Tag {{$tag->name}} must be inside {foreach} ... {/foreach}.", $tag->position);
 		}
 
-		$node = new static;
+		$node = $tag->node = new static;
 		$node->postTest = $tag->parser->isEnd();
 		if (!$node->postTest) {
 			$node->condition = $tag->parser->parseExpression();

@@ -29,7 +29,7 @@ class WhileNode extends StatementNode
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
-		$node = new static;
+		$node = $tag->node = new static;
 		$node->postTest = $tag->parser->isEnd();
 		if (!$node->postTest) {
 			$node->condition = $tag->parser->parseExpression();

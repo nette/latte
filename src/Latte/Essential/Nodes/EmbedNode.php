@@ -43,7 +43,7 @@ class EmbedNode extends StatementNode
 		$tag->outputMode = $tag::OutputRemoveIndentation;
 		$tag->expectArguments();
 
-		$node = new static;
+		$node = $tag->node = new static;
 		$mode = $tag->parser->tryConsumeTokenBeforeUnquotedString('block', 'file')?->text;
 		$node->name = $tag->parser->parseUnquotedStringOrExpression();
 		$node->mode = $mode ?? ($node->name instanceof StringNode && preg_match('~[\w-]+$~DA', $node->name->value) ? 'block' : 'file');
