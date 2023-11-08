@@ -31,7 +31,7 @@ class IfChangedNode extends StatementNode
 	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
-		$node = new static;
+		$node = $tag->node = new static;
 		$node->conditions = $tag->parser->parseArguments();
 
 		[$node->then, $nextTag] = yield ['else'];

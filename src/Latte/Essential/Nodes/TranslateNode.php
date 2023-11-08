@@ -35,7 +35,7 @@ class TranslateNode extends StatementNode
 	{
 		$tag->outputMode = $tag::OutputKeepIndentation;
 
-		$node = new static;
+		$node = $tag->node = new static;
 		$args = $tag->parser->parseArguments();
 		$node->modifier = $tag->parser->parseModifier();
 		$node->modifier->escape = true;

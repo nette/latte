@@ -40,7 +40,7 @@ class BlockNode extends StatementNode
 	{
 		$tag->outputMode = $tag::OutputRemoveIndentation;
 		$stream = $tag->parser->stream;
-		$node = new static;
+		$node = $tag->node = new static;
 
 		if (!$stream->is('|', Token::End)) {
 			$layer = $tag->parser->tryConsumeTokenBeforeUnquotedString('local')

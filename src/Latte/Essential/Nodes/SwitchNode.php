@@ -37,7 +37,7 @@ class SwitchNode extends StatementNode
 			throw new CompileException('Attribute n:switch is not supported.', $tag->position);
 		}
 
-		$node = new static;
+		$node = $tag->node = new static;
 		$node->expression = $tag->parser->isEnd()
 			? null
 			: $tag->parser->parseExpression();

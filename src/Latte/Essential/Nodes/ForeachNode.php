@@ -41,7 +41,7 @@ class ForeachNode extends StatementNode
 	public static function create(Tag $tag): \Generator
 	{
 		$tag->expectArguments();
-		$node = new static;
+		$node = $tag->node = new static;
 		self::parseArguments($tag->parser, $node);
 		$tag->data->iterateWhile = [$node->key, $node->value];
 

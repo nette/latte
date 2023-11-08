@@ -35,7 +35,7 @@ class ForNode extends StatementNode
 	{
 		$tag->expectArguments();
 		$stream = $tag->parser->stream;
-		$node = new static;
+		$node = $tag->node = new static;
 		while (!$stream->is(';')) {
 			$node->init[] = $tag->parser->parseExpression();
 			$stream->tryConsume(',');
