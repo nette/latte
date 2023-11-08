@@ -177,7 +177,7 @@ class Filters
 
 		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
 		if ($error = json_last_error()) {
-			throw new Latte\RuntimeException(json_last_error_msg(), $error);
+			throw new Latte\RuntimeException(json_last_error_msg());
 		}
 
 		return str_replace([']]>', '<!', '</'], [']]\u003E', '\u003C!', '<\/'], $json);

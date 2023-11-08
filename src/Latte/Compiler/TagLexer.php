@@ -11,7 +11,6 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
-use Latte\RegexpException;
 
 
 /**
@@ -185,7 +184,7 @@ final class TagLexer
 		matchRE:
 		preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);
 		if (preg_last_error()) {
-			throw new RegexpException;
+			throw new CompileException(preg_last_error_msg());
 		}
 
 		foreach ($matches as $m) {
@@ -330,7 +329,7 @@ final class TagLexer
 		matchRE:
 		preg_match_all($re, $this->input, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL, $this->offset);
 		if (preg_last_error()) {
-			throw new RegexpException;
+			throw new CompileException(preg_last_error_msg());
 		}
 
 		$buffer = '';

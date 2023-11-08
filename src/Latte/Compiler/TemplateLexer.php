@@ -11,7 +11,6 @@ namespace Latte\Compiler;
 
 use Latte;
 use Latte\CompileException;
-use Latte\RegexpException;
 
 
 final class TemplateLexer
@@ -234,7 +233,7 @@ final class TemplateLexer
 	{
 		preg_match($re, $this->input, $matches, PREG_UNMATCHED_AS_NULL, $this->position->offset);
 		if (preg_last_error()) {
-			throw new RegexpException;
+			throw new CompileException(preg_last_error_msg());
 		}
 
 		$tokens = [];
