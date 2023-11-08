@@ -43,7 +43,6 @@ class ForeachNode extends StatementNode
 		$tag->expectArguments();
 		$node = $tag->node = new static;
 		self::parseArguments($tag->parser, $node);
-		$tag->data->iterateWhile = [$node->key, $node->value];
 
 		$modifier = $tag->parser->parseModifier();
 		foreach ($modifier->filters as $filter) {

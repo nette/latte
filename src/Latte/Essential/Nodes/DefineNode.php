@@ -46,7 +46,6 @@ class DefineNode extends StatementNode
 		$node->block = new Block($name, $layer, $tag);
 		if (!$node->block->isDynamic()) {
 			$parser->checkBlockIsUnique($node->block);
-			$tag->data->block = $node->block; // for {include}
 			$tag->parser->stream->tryConsume(',');
 			$node->block->parameters = self::parseParameters($tag);
 		}

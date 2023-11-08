@@ -52,7 +52,6 @@ class BlockNode extends StatementNode
 
 			if (!$node->block->isDynamic()) {
 				$parser->checkBlockIsUnique($node->block);
-				$tag->data->block = $node->block; // for {include}
 			}
 		}
 
