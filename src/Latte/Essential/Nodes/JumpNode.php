@@ -26,7 +26,6 @@ class JumpNode extends StatementNode
 {
 	public string $type;
 	public ExpressionNode $condition;
-	public ?string $endTag = null;
 
 
 	public static function create(Tag $tag): static
@@ -46,34 +45,34 @@ class JumpNode extends StatementNode
 			throw new CompileException("Tag {{$tag->name}} is unexpected here.", $tag->position);
 		}
 
+		$last = $parent?->prefix === Tag::PrefixNone
+			? $parent->htmlElement->parent
+			: $parent?->htmlElement;
+		$el = $tag->htmlElement;
+		while ($el && $el !== $last) {
+			$el->breakable = true;
+			$el = $el->parent;
+		}
+
 		$node = new static;
 		$node->type = $tag->name;
 		$node->condition = $tag->parser->parseExpression();
-		if (isset($tag->htmlElement->nAttributes['foreach'])) {
-			$node->endTag = $tag->htmlElement->name;
-		}
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		$cmd = match ($this->type) {
-			'breakIf' => 'break;',
-			'continueIf' => 'continue;',
-			'skipIf' => '{ $iterator->skipRound(); continue; }',
-			'exitIf' => 'return;',
-		};
-
-		if ($this->endTag) {
-			$cmd = "{ echo \"</$this->endTag>\\n\"; $cmd; } ";
-		}
-
 		return $context->format(
 			"if (%node) %line %raw\n",
 			$this->condition,
 			$this->position,
-			$cmd,
+			match ($this->type) {
+				'breakIf' => 'break;',
+				'continueIf' => 'continue;',
+				'skipIf' => '{ $iterator->skipRound(); continue; }',
+				'exitIf' => 'return;',
+			},
 		);
 	}
 

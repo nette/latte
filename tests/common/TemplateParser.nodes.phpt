@@ -166,6 +166,7 @@ Assert::match(<<<'XX'
 	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
+	   |  |  |  breakable: false
 	   |  |  |  endTagVar: unset
 	   |  |  |  name: 'br'
 	   |  |  |  position: 1:1 (offset 0)
@@ -237,6 +238,7 @@ Assert::match(<<<'XX'
 	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
+	   |  |  |  breakable: false
 	   |  |  |  endTagVar: unset
 	   |  |  |  name: 'br'
 	   |  |  |  position: 1:1 (offset 0)
@@ -295,6 +297,7 @@ Assert::match(<<<'XX'
 	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
+	   |  |  |  breakable: false
 	   |  |  |  endTagVar: unset
 	   |  |  |  name: 'p'
 	   |  |  |  position: 1:1 (offset 0)
@@ -306,4 +309,5 @@ Assert::match(<<<'XX'
 	   |  position: 1:1 (offset 0)
 	   contentType: 'html'
 	   position: null
+
 	XX, parse("<p>\n...\n</p>"));

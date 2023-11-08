@@ -339,14 +339,13 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (true) /* line %d% */ {
-				echo "</li>\n";
-				break;
-				;
+			try {
+				echo LR\Filters::escapeHtmlText($person) /* line 107 */;
+				if (true) /* line 107 */ break;
+			} finally {
+				echo '</li>';
 			}
-			echo '</li>
-';
+			echo "\n";
 
 		}
 
@@ -356,14 +355,13 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
-			if (true) /* line %d% */ {
-				echo "</li>\n";
-				continue;
-				;
+			try {
+				echo LR\Filters::escapeHtmlText($person) /* line 111 */;
+				if (true) /* line 111 */ continue;
+			} finally {
+				echo '</li>';
 			}
-			echo '</li>
-';
+			echo "\n";
 
 		}
 

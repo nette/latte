@@ -125,22 +125,13 @@ Assert::match(
 	<<<'XX'
 
 		<ul title="foreach break">
-			<li>0</li>
-		</ul>
+			<li>0</li></ul>
 
 		<ul title="foreach continue">
-			<li>0</li>
-			<li>1</li>
-			<li>2</li>
-			<li>3</li>
-		</ul>
+			<li>0</li>	<li>1</li>	<li>2</li>	<li>3</li></ul>
 
 		<ul title="foreach skip">
-			<li>0</li>
-			<li>1</li>
-			<li>2</li>
-			<li>3</li>
-		</ul>
+			<li>0</li>	<li>1</li>	<li>2</li>	<li>3</li></ul>
 
 
 		<ul title="inner foreach break">
@@ -154,6 +145,38 @@ Assert::match(
 		<ul title="inner foreach skip">
 			<li>0123</li>
 		</ul>
+
+		XX,
+	$latte->renderToString($template),
+);
+
+
+$template = <<<'EOD'
+	{foreach [0, 1] as $i}
+	<div>
+		<span>{breakIf true}</span>
+	</div>
+	{/foreach}
+
+	<div>
+		{foreach [0, 1] as $i}
+			<span>{breakIf true}</span>
+		{/foreach}
+	</div>
+
+	EOD;
+
+Assert::matchFile(
+	__DIR__ . '/expected/foreach.breaking.tags.php',
+	$latte->compile($template),
+);
+
+Assert::match(
+	<<<'XX'
+		<div>
+			<span></span></div>
+		<div>
+				<span></span></div>
 
 		XX,
 	$latte->renderToString($template),

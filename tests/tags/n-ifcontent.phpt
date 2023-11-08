@@ -57,8 +57,7 @@ Assert::match(
 
 
 Assert::match(
-	'<div>1</div>
-<div>2</div>',
+	'<div>1</div><div>2</div>',
 	$latte->renderToString('<div n:foreach="[1,2] as $n" n:ifcontent>{$n}{continueIf true}</div>'),
 );
 
