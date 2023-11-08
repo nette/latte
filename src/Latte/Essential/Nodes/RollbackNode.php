@@ -22,7 +22,7 @@ class RollbackNode extends StatementNode
 {
 	public static function create(Tag $tag): static
 	{
-		if (!$tag->closestTag(['try'])) {
+		if (!$tag->closestTag([TryNode::class])) {
 			throw new CompileException('Tag {rollback} must be inside {try} ... {/try}.', $tag->position);
 		}
 
