@@ -46,12 +46,11 @@ class TryNode extends StatementNode
 				try %line {
 					%node
 				} catch (Throwable $ʟ_e) {
-					ob_end_clean();
+					ob_clean();
 					if (!($ʟ_e instanceof Latte\Essential\RollbackException) && isset($this->global->coreExceptionHandler)) {
 						($this->global->coreExceptionHandler)($ʟ_e, $this);
 					}
 					%node
-					ob_start();
 				} finally {
 					echo ob_get_clean();
 					$iterator = $ʟ_it = $ʟ_try[%0.dump][0];

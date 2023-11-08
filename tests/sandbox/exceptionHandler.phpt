@@ -44,3 +44,10 @@ Assert::match(
 );
 Assert::type(Latte\SecurityViolationException::class, $args[0]);
 Assert::type(Latte\Runtime\Template::class, $args[1]);
+
+
+$latte->setExceptionHandler(fn(Throwable $e) => throw $e);
+Assert::exception(
+	fn() => $latte->renderToString('main'),
+	Latte\SecurityViolationException::class,
+);

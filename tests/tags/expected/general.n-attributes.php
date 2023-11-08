@@ -323,11 +323,10 @@ final class Template%a% extends Latte\Runtime\Template
 			echo "\n";
 
 		} catch (Throwable $ʟ_e) {
-			ob_end_clean();
+			ob_clean();
 			if (!($ʟ_e instanceof Latte\Essential\RollbackException) && isset($this->global->coreExceptionHandler)) {
 				($this->global->coreExceptionHandler)($ʟ_e, $this);
 			}
-			ob_start();
 		} finally {
 			echo ob_get_clean();
 			$iterator = $ʟ_it = $ʟ_try[6][0];

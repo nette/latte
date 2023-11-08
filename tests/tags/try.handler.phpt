@@ -40,6 +40,20 @@ Assert::type(CustomException::class, $args[0]);
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 
+Assert::exception(
+	fn() => $latte->renderToString('{try}{=error()}{else}{=error()}{/try}'),
+	CustomException::class,
+);
+
+
 $args = null;
 $latte->renderToString('{try}{rollback}{/try}');
 Assert::null($args);
+
+
+$latte->setExceptionHandler(fn(Throwable $e) => throw $e);
+
+Assert::exception(
+	fn() => $latte->renderToString('{try}{=error()}{/try}'),
+	CustomException::class,
+);
