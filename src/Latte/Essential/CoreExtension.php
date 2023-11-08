@@ -100,6 +100,7 @@ final class CoreExtension extends Latte\Extension
 			'ifset' => [Nodes\IfNode::class, 'create'],
 			'ifchanged' => [Nodes\IfChangedNode::class, 'create'],
 			'n:ifcontent' => [Nodes\IfContentNode::class, 'create'],
+			'n:else' => [Nodes\NElseNode::class, 'create'],
 			'switch' => [Nodes\SwitchNode::class, 'create'],
 		];
 	}
@@ -198,6 +199,7 @@ final class CoreExtension extends Latte\Extension
 			'overwrittenVariables' => [Passes::class, 'overwrittenVariablesPass'],
 			'customFunctions' => fn(TemplateNode $node) => Passes::customFunctionsPass($node, $this->functions),
 			'moveTemplatePrintToHead' => [Passes::class, 'moveTemplatePrintToHeadPass'],
+			'nElse' => [Nodes\NElseNode::class, 'processPass'],
 		];
 	}
 
