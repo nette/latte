@@ -430,7 +430,7 @@ final class TemplateParserHtml
 			prefix: $this->getPrefix($name),
 			inTag: true,
 			htmlElement: $this->element,
-			data: (object) ['node' => $node = new Nodes\TextNode('')], // TODO: better
+			attrNode: $node = new Nodes\TextNode(''),
 		);
 		return $node;
 	}

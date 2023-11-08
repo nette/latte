@@ -42,6 +42,7 @@ final class TemplateParser
 	private int $counter = 0;
 	private ?Tag $tag = null;
 	private $lastResolver;
+	private \WeakMap $lookFor;
 
 
 	public function __construct()
@@ -59,6 +60,7 @@ final class TemplateParser
 	{
 		$this->html = new TemplateParserHtml($this, $this->completeAttrParsers());
 		$this->stream = new TokenStream($this->lexer->tokenize($template));
+		$this->lookFor = new \WeakMap;
 
 		$headLength = 0;
 		$findLength = function (FragmentNode $fragment) use (&$headLength) {
@@ -163,7 +165,7 @@ final class TemplateParser
 	{
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		if ($this->stream->peek(1)->is(Token::Slash)
-			|| isset($this->tag->data->filters) && in_array($this->stream->peek(1)->text, $this->tag->data->filters, true)
+			|| (isset($this->tag, $this->lookFor[$this->tag]) && in_array($this->stream->peek(1)->text, $this->lookFor[$this->tag], true))
 		) {
 			$this->lexer->popState();
 			return null; // go back to previous parseLatteStatement()
@@ -189,7 +191,7 @@ final class TemplateParser
 				$res->send([new FragmentNode, $startTag]);
 			} else {
 				while ($res->valid()) {
-					$startTag->data->filters = $res->current() ?: null;
+					$this->lookFor[$startTag] = $res->current() ?: null;
 					$content = $this->parseFragment($resolver ?? $this->lastResolver);
 
 					if (!$this->stream->is(Token::Latte_TagOpen)) {
@@ -209,7 +211,7 @@ final class TemplateParser
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
 						break;
-					} elseif (in_array($tag->name, $startTag->data->filters ?? [], true)) {
+					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], true)) {
 						$this->pushTag($tag);
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);

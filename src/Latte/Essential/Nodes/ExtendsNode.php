@@ -33,8 +33,6 @@ class ExtendsNode extends StatementNode
 		$node = new static;
 		if (!$tag->isInHead()) {
 			throw new CompileException("{{$tag->name}} must be placed in template head.", $tag->position);
-		} elseif (isset($tag->data->extends)) {
-			throw new CompileException("Multiple {{$tag->name}} declarations are not allowed.", $tag->position);
 		} elseif ($tag->parser->stream->tryConsume('auto')) {
 			$node->extends = new NullNode;
 		} elseif ($tag->parser->stream->tryConsume('none')) {
@@ -42,7 +40,6 @@ class ExtendsNode extends StatementNode
 		} else {
 			$node->extends = $tag->parser->parseUnquotedStringOrExpression();
 		}
-		$tag->data->extends = true;
 		return $node;
 	}
 

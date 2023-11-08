@@ -67,13 +67,13 @@ class IncludeBlockNode extends StatementNode
 		} elseif ($node->parent || $tokenName->is('this')) {
 			$item = $tag->closestTag(
 				[BlockNode::class, DefineNode::class],
-				fn($item) => isset($item->data->block) && $item->data->block->name !== ''
+				fn($item) => $item->node?->block && !$item->node->block->isDynamic() && $item->node->block->name !== ''
 			);
 			if (!$item) {
 				throw new CompileException("Cannot include $tokenName->text block outside of any block.", $tag->position);
 			}
 
-			$node->name = $item->data->block->name;
+			$node->name = $item->node->block->name;
 		}
 
 		$node->blocks = &$parser->blocks;
