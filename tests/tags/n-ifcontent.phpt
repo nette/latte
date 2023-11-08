@@ -110,6 +110,7 @@ Assert::match(
 				} finally {
 					if ($ʟ_ifc[0] ?? null) {
 						ob_end_clean();
+
 					} else {
 						echo ob_get_clean();
 					}

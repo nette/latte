@@ -411,6 +411,7 @@ final class Template%a% extends Latte\Runtime\Template
 		} finally {
 			if ($ʟ_ifc[0] ?? null) {
 				ob_end_clean();
+
 			} else {
 				echo ob_get_clean();
 			}
@@ -434,6 +435,7 @@ final class Template%a% extends Latte\Runtime\Template
 		} finally {
 			if ($ʟ_ifc[1] ?? null) {
 				ob_end_clean();
+
 			} else {
 				echo ob_get_clean();
 			}
