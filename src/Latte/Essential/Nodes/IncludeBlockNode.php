@@ -65,7 +65,10 @@ class IncludeBlockNode extends StatementNode
 			throw new CompileException('Filters are not allowed in {include parent}', $tag->position);
 
 		} elseif ($node->parent || $tokenName->is('this')) {
-			$item = $tag->closestTag(['block', 'define'], fn($item) => isset($item->data->block) && $item->data->block->name !== '');
+			$item = $tag->closestTag(
+				[BlockNode::class, DefineNode::class],
+				fn($item) => isset($item->data->block) && $item->data->block->name !== ''
+			);
 			if (!$item) {
 				throw new CompileException("Cannot include $tokenName->text block outside of any block.", $tag->position);
 			}

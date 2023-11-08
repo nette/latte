@@ -84,13 +84,13 @@ final class Tag
 
 
 	/**
-	 * @param  string[]  $names
+	 * @param  class-string[]  $classes
 	 */
-	public function closestTag(array $names, ?callable $condition = null): ?self
+	public function closestTag(array $classes, ?callable $condition = null): ?self
 	{
 		$tag = $this->parent;
 		while ($tag && (
-			!in_array($tag->name, $names, true)
+			(!in_array($tag->node ? $tag->node::class : null, $classes, true) && !in_array($tag->name, $classes, true))
 			|| ($condition && !$condition($tag))
 		)) {
 			$tag = $tag->parent;
