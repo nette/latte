@@ -42,6 +42,7 @@ class LattePanel implements Tracy\IBarPanel
 	{
 		$this->name = $name;
 		if ($latte) {
+			trigger_error('Replace LattePanel with TracyExtension; see https://bit.ly/46flfDi', E_USER_DEPRECATED);
 			$latte->addExtension(
 				new class ($this->templates) extends Extension {
 					public function __construct(
