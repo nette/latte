@@ -91,7 +91,7 @@ final class Tag
 	{
 		$tag = $this->parent;
 		while ($tag && (
-			(!in_array($tag->node ? $tag->node::class : null, $classes, true) && !in_array($tag->name, $classes, true))
+			!in_array($tag->node ? $tag->node::class : null, $classes, true)
 			|| ($condition && !$condition($tag))
 		)) {
 			$tag = $tag->parent;
