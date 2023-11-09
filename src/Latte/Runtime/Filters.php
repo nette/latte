@@ -23,10 +23,6 @@ use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1, JSON_IN
  */
 class Filters
 {
-	/** @deprecated */
-	public static string $dateFormat = "j.\u{a0}n.\u{a0}Y";
-
-
 	/**
 	 * Escapes string for use everywhere inside HTML (except for comments).
 	 */

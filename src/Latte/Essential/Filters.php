@@ -170,9 +170,11 @@ final class Filters
 	/**
 	 * Date/time formatting.
 	 */
-	public static function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
+	public static function date(
+		string|int|\DateTimeInterface|\DateInterval|null $time,
+		string $format = "j.\u{a0}n.\u{a0}Y",
+	): ?string
 	{
-		$format ??= Latte\Runtime\Filters::$dateFormat;
 		if ($time == null) { // intentionally ==
 			return null;
 		} elseif ($time instanceof \DateInterval) {
