@@ -25,15 +25,10 @@ class CompileException extends \Exception implements Exception
 {
 	use PositionAwareException;
 
-	/** @deprecated */
-	public ?int $sourceLine;
-
-
 	public function __construct(string $message, ?Compiler\Position $position = null, ?\Throwable $previous = null)
 	{
 		parent::__construct($message, 0, $previous);
 		$this->position = $position;
-		$this->sourceLine = $position?->line;
 		$this->generateMessage();
 	}
 }
