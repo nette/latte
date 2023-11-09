@@ -43,13 +43,3 @@ class StaticMethodCallableNode extends ExpressionNode
 		yield $this->name;
 	}
 }
-
-
-class_alias(StaticMethodCallableNode::class, StaticCallableNode::class);
-
-if (false) {
-	/** @deprecated use Latte\Compiler\Nodes\Php\Expression\StaticMethodCallableNode */
-	class StaticCallableNode
-	{
-	}
-}
