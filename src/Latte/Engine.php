@@ -54,7 +54,7 @@ class Engine
 	private array $extensions = [];
 	private string $contentType = ContentType::Html;
 	private Cache $cache;
-	private bool $strictTypes = false;
+	private bool $strictTypes = true;
 	private bool $strictParsing = false;
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
