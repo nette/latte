@@ -37,7 +37,7 @@ __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (10)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'A'
@@ -53,7 +53,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 2:1 (offset 29)
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'A'
@@ -69,7 +69,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 3:1 (offset 37)
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'A'
@@ -137,7 +137,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  position: 6:1 (offset 72)
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  parts: array (1)
    |  |  |  |  |  |  0 => 'A'
@@ -157,7 +157,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 9:1 (offset 118)
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'static'
@@ -173,7 +173,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 12:1 (offset 160)
    |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
    |  |  |  |  position: 13:1 (offset 173)
@@ -187,7 +187,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 13:1 (offset 173)
    |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'a'
@@ -203,7 +203,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 14:1 (offset 182)
    |  9 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'

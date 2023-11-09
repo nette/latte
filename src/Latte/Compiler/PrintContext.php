@@ -298,8 +298,8 @@ final class PrintContext
 			|| $expr instanceof Expression\FunctionCallableNode
 			|| $expr instanceof Expression\MethodCallNode
 			|| $expr instanceof Expression\MethodCallableNode
-			|| $expr instanceof Expression\StaticCallNode
-			|| $expr instanceof Expression\StaticCallableNode
+			|| $expr instanceof Expression\StaticMethodCallNode
+			|| $expr instanceof Expression\StaticMethodCallableNode
 			|| $expr instanceof Expression\ArrayNode
 			? $expr->print($this)
 			: '(' . $expr->print($this) . ')';
@@ -320,8 +320,8 @@ final class PrintContext
 			|| $expr instanceof Expression\FunctionCallableNode
 			|| $expr instanceof Expression\MethodCallNode
 			|| $expr instanceof Expression\MethodCallableNode
-			|| $expr instanceof Expression\StaticCallNode
-			|| $expr instanceof Expression\StaticCallableNode
+			|| $expr instanceof Expression\StaticMethodCallNode
+			|| $expr instanceof Expression\StaticMethodCallableNode
 			|| $expr instanceof Expression\ArrayNode
 			|| $expr instanceof Scalar\StringNode
 			|| $expr instanceof Scalar\BooleanNode

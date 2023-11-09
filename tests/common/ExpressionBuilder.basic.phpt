@@ -7,7 +7,7 @@ use Latte\Compiler\Nodes\Php\ArgumentNode;
 use Latte\Compiler\Nodes\Php\Expression\FunctionCallNode;
 use Latte\Compiler\Nodes\Php\Expression\MethodCallNode;
 use Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode;
-use Latte\Compiler\Nodes\Php\Expression\StaticCallNode;
+use Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\NameNode;
@@ -87,16 +87,16 @@ Assert::equal(
 // staticMethod() & immutability
 $var = ExpressionBuilder::variable('$this');
 Assert::equal(
-	new StaticCallNode(new VariableNode('this'), new IdentifierNode('foo')),
+	new StaticMethodCallNode(new VariableNode('this'), new IdentifierNode('foo')),
 	$var->staticMethod('foo')->build(),
 );
 
 Assert::equal(
-	new PropertyFetchNode(new StaticCallNode(new VariableNode('this'), new IdentifierNode('foo'), [new ArgumentNode(new IntegerNode(123))]), new IdentifierNode('bar')),
+	new PropertyFetchNode(new StaticMethodCallNode(new VariableNode('this'), new IdentifierNode('foo'), [new ArgumentNode(new IntegerNode(123))]), new IdentifierNode('bar')),
 	$var->staticMethod('foo', [123])->property('bar')->build(),
 );
 
 Assert::equal(
-	new StaticCallNode(new NameNode('Foo'), new IdentifierNode('foo')),
+	new StaticMethodCallNode(new NameNode('Foo'), new IdentifierNode('foo')),
 	ExpressionBuilder::class('Foo')->staticMethod('foo')->build(),
 );

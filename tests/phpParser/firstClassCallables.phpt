@@ -50,7 +50,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 2:1 (offset 10)
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallableNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallableNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'A'

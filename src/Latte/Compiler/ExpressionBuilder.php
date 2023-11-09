@@ -70,7 +70,7 @@ final class ExpressionBuilder
 		$name = is_string($name)
 			? new IdentifierNode($name)
 			: ($name instanceof self ? $name->expr : $name);
-		return new self(new Expression\StaticCallNode($this->expr, $name, self::arrayToArgs($args)));
+		return new self(new Expression\StaticMethodCallNode($this->expr, $name, self::arrayToArgs($args)));
 	}
 
 

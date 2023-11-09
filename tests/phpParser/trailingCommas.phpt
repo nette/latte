@@ -88,7 +88,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 2:1 (offset 15)
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  parts: array (1)
    |  |  |  |  |  0 => 'Foo'

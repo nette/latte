@@ -125,8 +125,8 @@ final class SandboxExtension extends Latte\Extension
 			|| $node instanceof Expression\FunctionCallableNode
 			|| $node instanceof Expression\MethodCallNode
 			|| $node instanceof Expression\MethodCallableNode
-			|| $node instanceof Expression\StaticCallNode
-			|| $node instanceof Expression\StaticCallableNode
+			|| $node instanceof Expression\StaticMethodCallNode
+			|| $node instanceof Expression\StaticMethodCallableNode
 		) {
 			$class = namespace\Nodes::class . strrchr($node::class, '\\');
 			return new $class($node);

@@ -282,7 +282,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 12:1 (offset 116)
    |  11 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticCallNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  parts: array (1)
