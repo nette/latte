@@ -17,6 +17,7 @@ use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 
 
+/** @deprecated */
 final class ExpressionBuilder
 {
 	public function __construct(
