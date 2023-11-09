@@ -60,15 +60,3 @@ class ArrayItemNode extends Node
 		yield $this->value;
 	}
 }
-
-
-class_alias(ArrayItemNode::class, Expression\ArrayItemNode::class);
-
-namespace Latte\Compiler\Nodes\Php\Expression;
-
-if (false) {
-	/** @deprecated use Latte\Compiler\Nodes\Php\ArrayItemNode */
-	class ArrayItemNode
-	{
-	}
-}

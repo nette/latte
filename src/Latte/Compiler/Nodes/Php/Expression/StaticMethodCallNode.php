@@ -55,13 +55,3 @@ class StaticMethodCallNode extends ExpressionNode
 		Helpers::removeNulls($this->args);
 	}
 }
-
-
-class_alias(StaticMethodCallNode::class, StaticCallNode::class);
-
-if (false) {
-	/** @deprecated use Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode */
-	class StaticCallNode
-	{
-	}
-}

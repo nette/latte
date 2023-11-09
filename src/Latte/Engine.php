@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
-use function array_map, array_merge, class_exists, extension_loaded, filemtime, get_debug_type, get_object_vars, is_array, preg_match, serialize, strpos, substr;
+use function array_map, array_merge, class_exists, extension_loaded, filemtime, get_debug_type, get_object_vars, is_array, preg_match, serialize, substr;
 use const PHP_VERSION_ID;
 
 
@@ -529,16 +529,6 @@ class Engine
 			}
 
 			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
-				$this->addFunction($method->name, [$params, $method->name]);
-			}
-
-			if (strpos((string) $method->getDocComment(), '@filter')) {
-				trigger_error('Annotation @filter is deprecated, use attribute #[Latte\Attributes\TemplateFilter]');
-				$this->addFilter($method->name, [$params, $method->name]);
-			}
-
-			if (strpos((string) $method->getDocComment(), '@function')) {
-				trigger_error('Annotation @function is deprecated, use attribute #[Latte\Attributes\TemplateFunction]');
 				$this->addFunction($method->name, [$params, $method->name]);
 			}
 		}
