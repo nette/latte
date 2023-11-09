@@ -17,6 +17,7 @@ use Tracy;
 
 /**
  * Bar panel for Tracy 2.x
+ * @internal
  */
 class LattePanel implements Tracy\IBarPanel
 {
@@ -28,7 +29,7 @@ class LattePanel implements Tracy\IBarPanel
 	private ?string $name = null;
 
 
-	/** @deprecated use TracyExtension */
+	/** @deprecated use TracyExtension see https://bit.ly/46flfDi */
 	public static function initialize(Engine $latte, ?string $name = null, ?Tracy\Bar $bar = null): void
 	{
 		$bar ??= Tracy\Debugger::getBar();
@@ -36,7 +37,7 @@ class LattePanel implements Tracy\IBarPanel
 	}
 
 
-	/** @deprecated use TracyExtension */
+	/** @deprecated use TracyExtension see https://bit.ly/46flfDi */
 	public function __construct(?Engine $latte = null, ?string $name = null)
 	{
 		$this->name = $name;
