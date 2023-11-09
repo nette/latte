@@ -265,7 +265,7 @@ final class Filters
 	public static function breaklines(string|Stringable|null $s): Html
 	{
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
-		return new Html(nl2br($s, Latte\Runtime\Filters::$xml));
+		return new Html(nl2br($s, false));
 	}
 
 

@@ -142,8 +142,6 @@ class Template
 			$this->parentName = ($this->global->coreParentFinder)($this);
 		}
 
-		Filters::$xml = static::ContentType === Latte\ContentType::Xml;
-
 		if ($this->referenceType === 'import') {
 			if ($this->parentName) {
 				throw new Latte\RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
