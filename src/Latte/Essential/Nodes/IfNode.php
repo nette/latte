@@ -84,7 +84,7 @@ class IfNode extends StatementNode
 			$list[] = $block || $name instanceof StringNode
 				? new Expression\AuxiliaryNode(
 					fn(PrintContext $context, ExpressionNode $name) => '$this->hasBlock(' . $name->print($context) . ')',
-					$name,
+					[$name],
 				)
 				: new Expression\IssetNode([$name]);
 		} while ($parser->stream->tryConsume(','));

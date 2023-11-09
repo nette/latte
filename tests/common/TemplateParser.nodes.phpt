@@ -162,8 +162,8 @@ Assert::match(<<<'XX'
 	   |  |  |  content: null
 	   |  |  |  nAttributes: array (0)
 	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  print: Closure($context)
+	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
 	   |  |  |  endTagVar: unset
@@ -233,8 +233,8 @@ Assert::match(<<<'XX'
 	   |  |  |  content: null
 	   |  |  |  nAttributes: array (0)
 	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  print: Closure($context)
+	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
 	   |  |  |  endTagVar: unset
@@ -291,8 +291,8 @@ Assert::match(<<<'XX'
 	   |  |  |  |  position: 1:4 (offset 3)
 	   |  |  |  nAttributes: array (0)
 	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  print: Closure($context)
+	   |  |  |  |  nodes: array (0)
 	   |  |  |  |  position: null
 	   |  |  |  captureTagName: false
 	   |  |  |  endTagVar: unset

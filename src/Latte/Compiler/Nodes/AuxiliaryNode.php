@@ -15,15 +15,12 @@ use Latte\Compiler\PrintContext;
 
 class AuxiliaryNode extends AreaNode
 {
-	/** @var (?Node)[] */
-	public array $nodes;
-
-
 	public function __construct(
 		public /*readonly*/ \Closure $print,
-		?Node ...$nodes,
+		/** @var (?Node)[] */
+		public array $nodes = [],
 	) {
-		$this->nodes = $nodes;
+		(function (?Node ...$nodes) {})(...$nodes);
 	}
 
 
