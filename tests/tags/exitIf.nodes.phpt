@@ -14,10 +14,10 @@ require __DIR__ . '/../bootstrap.php';
 Assert::match(<<<'XX'
 	Template:
 		Fragment:
+		Fragment:
 			Jump:
 				Variable:
 					name: a
-		Fragment:
 			Text:
 				content: ' '
 			Block:

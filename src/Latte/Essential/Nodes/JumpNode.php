@@ -31,6 +31,10 @@ class JumpNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$tag->expectArguments();
+		$tag->outputMode = $tag->name === 'exitIf' // to not be in prepare()
+			? $tag::OutputRemoveIndentation
+			: $tag::OutputNone;
+
 		for (
 			$parent = $tag->parent;
 			$parent?->node instanceof IfNode || $parent?->node instanceof IfContentNode;
