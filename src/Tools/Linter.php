@@ -15,8 +15,7 @@ use Nette;
 
 final class Linter
 {
-	use Latte\Strict;
-
+	
 	public function __construct(
 		private ?Latte\Engine $engine = null,
 		private bool $debug = false,
