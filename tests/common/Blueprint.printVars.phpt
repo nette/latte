@@ -7,9 +7,9 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$printer = new Latte\Essential\Blueprint;
+$blueprint = new Latte\Essential\Blueprint;
 ob_start();
-$printer->printVars(['int' => 123, 'unknown' => null]);
+$blueprint->printVars(['int' => 123, 'unknown' => null]);
 $res = ob_get_clean();
 
 Assert::match(

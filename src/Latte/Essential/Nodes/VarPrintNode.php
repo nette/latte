@@ -33,9 +33,16 @@ class VarPrintNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$vars = $this->all ? 'get_defined_vars()'
+		$vars = $this->all
+			? 'get_defined_vars()'
 			: 'array_diff_key(get_defined_vars(), $this->getParameters())';
-		return "(new Latte\\Essential\\Blueprint)->printVars($vars); exit;";
+		return <<<XX
+			\$ʟ_bp = new Latte\\Essential\\Blueprint;
+			\$ʟ_bp->printBegin();
+			\$ʟ_bp->printVars($vars);
+			\$ʟ_bp->printEnd();
+			exit;
+			XX;
 	}
 
 
