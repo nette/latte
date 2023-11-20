@@ -122,7 +122,7 @@ final class Escaper
 			if ($el->is('script')) {
 				$type = $el->getAttribute('type');
 				if ($type === true || $type === null
-					|| is_string($type) && preg_match('#((application|text)/(((x-)?java|ecma|j|live)script|json)|text/plain|module|importmap|)$#Ai', $type)
+					|| is_string($type) && preg_match('#((application|text)/(((x-)?java|ecma|j|live)script|json)|application/.+\+json|text/plain|module|importmap|)$#Ai', $type)
 				) {
 					$this->subType = self::JavaScript;
 

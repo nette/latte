@@ -89,6 +89,11 @@ Assert::match(
 );
 
 Assert::match(
+	'<script type="application/ld+json">{ foo:"<>" }</script>',
+	$latte->renderToString('<script type="application/ld+json">{ foo:{="<>"} }</script>'),
+);
+
+Assert::match(
 	'<script type="importmap">{ foo:"<>" }</script>',
 	$latte->renderToString('<script type="importmap">{ foo:{="<>"} }</script>'),
 );
