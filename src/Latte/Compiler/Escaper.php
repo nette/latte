@@ -84,7 +84,9 @@ final class Escaper
 	public function __construct(
 		private string $contentType,
 	) {
-		$this->state = $this->contentType;
+		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], true)
+			? self::HtmlText
+			: $contentType;
 	}
 
 

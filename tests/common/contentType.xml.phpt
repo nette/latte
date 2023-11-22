@@ -14,6 +14,20 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+
+Assert::same(
+	' &lt;&gt;&quot;&apos;',
+	$latte->renderToString('{contentType xml} {$foo}', ['foo' => '<>"\'']),
+);
+
+Assert::same(
+	' &lt;&gt;&quot;&apos;',
+	$latte->renderToString('{contentType application/xml} {$foo}', ['foo' => '<>"\'']),
+);
+
+
+$latte = new Latte\Engine;
 $latte->setContentType(ContentType::Xml);
 
 $params['hello'] = '<i>Hello</i>';
