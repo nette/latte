@@ -112,8 +112,9 @@ final class CoreExtension extends Latte\Extension
 			'bytes' => [Filters::class, 'bytes'],
 			'capitalize' => extension_loaded('mbstring')
 				? [Filters::class, 'capitalize']
-				: function () { throw new RuntimeException('Filter |capitalize requires mbstring extension.'); },
+				: fn() => throw new RuntimeException('Filter |capitalize requires mbstring extension.'),
 			'ceil' => [Filters::class, 'ceil'],
+			'checkUrl' => [Latte\Runtime\Filters::class, 'safeUrl'],
 			'clamp' => [Filters::class, 'clamp'],
 			'dataStream' => [Filters::class, 'dataStream'],
 			'datastream' => [Filters::class, 'dataStream'],
@@ -130,9 +131,8 @@ final class CoreExtension extends Latte\Extension
 			'first' => [Filters::class, 'first'],
 			'firstUpper' => extension_loaded('mbstring')
 				? [Filters::class, 'firstUpper']
-				: function () { throw new RuntimeException('Filter |firstUpper requires mbstring extension.'); },
+				: fn() => throw new RuntimeException('Filter |firstUpper requires mbstring extension.'),
 			'floor' => [Filters::class, 'floor'],
-			'checkUrl' => [Latte\Runtime\Filters::class, 'safeUrl'],
 			'implode' => [Filters::class, 'implode'],
 			'indent' => [Filters::class, 'indent'],
 			'join' => [Filters::class, 'implode'],
@@ -140,7 +140,7 @@ final class CoreExtension extends Latte\Extension
 			'length' => [Filters::class, 'length'],
 			'lower' => extension_loaded('mbstring')
 				? [Filters::class, 'lower']
-				: function () { throw new RuntimeException('Filter |lower requires mbstring extension.'); },
+				: fn() => throw new RuntimeException('Filter |lower requires mbstring extension.'),
 			'number' => 'number_format',
 			'padLeft' => [Filters::class, 'padLeft'],
 			'padRight' => [Filters::class, 'padRight'],
@@ -166,10 +166,10 @@ final class CoreExtension extends Latte\Extension
 			'truncate' => [Filters::class, 'truncate'],
 			'upper' => extension_loaded('mbstring')
 				? [Filters::class, 'upper']
-				: function () { throw new RuntimeException('Filter |upper requires mbstring extension.'); },
+				: fn() => throw new RuntimeException('Filter |upper requires mbstring extension.'),
 			'webalize' => class_exists(Nette\Utils\Strings::class)
 				? [Nette\Utils\Strings::class, 'webalize']
-				: function () { throw new RuntimeException('Filter |webalize requires nette/utils package.'); },
+				: fn() => throw new RuntimeException('Filter |webalize requires nette/utils package.'),
 		];
 	}
 

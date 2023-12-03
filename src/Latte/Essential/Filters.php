@@ -172,17 +172,12 @@ final class Filters
 			return null;
 		}
 
-		if (!isset($format)) {
-			$format = Latte\Runtime\Filters::$dateFormat;
-		}
-
+		$format ??= Latte\Runtime\Filters::$dateFormat;
 		if ($time instanceof \DateInterval) {
 			return $time->format($format);
 
 		} elseif (is_numeric($time)) {
-			$time = new \DateTime('@' . $time);
-			$time->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
-
+			$time = (new \DateTime)->setTimestamp((int) $time);
 		} elseif (!$time instanceof \DateTimeInterface) {
 			$time = new \DateTime($time);
 		}
@@ -200,7 +195,7 @@ final class Filters
 
 
 	/**
-	 * Converts to human readable file size.
+	 * Converts to human-readable file size.
 	 */
 	public static function bytes(float $bytes, int $precision = 2): string
 	{
@@ -262,10 +257,7 @@ final class Filters
 	 */
 	public static function dataStream(string $data, ?string $type = null): string
 	{
-		if ($type === null) {
-			$type = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $data);
-		}
-
+		$type ??= finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $data);
 		return 'data:' . ($type ? "$type;" : '') . 'base64,' . base64_encode($data);
 	}
 
@@ -283,15 +275,11 @@ final class Filters
 	public static function substring(string|Stringable|null $s, int $start, ?int $length = null): string
 	{
 		$s = (string) $s;
-		if ($length === null) {
-			$length = self::strLength($s);
-		}
-
-		if (function_exists('mb_substr')) {
-			return mb_substr($s, $start, $length, 'UTF-8'); // MB is much faster
-		}
-
-		return iconv_substr($s, $start, $length, 'UTF-8');
+		return match (true) {
+			extension_loaded('mbstring') => mb_substr($s, $start, $length, 'UTF-8'),
+			extension_loaded('iconv') => iconv_substr($s, $start, $length, 'UTF-8'),
+			default => throw new Latte\RuntimeException("Filter |substr requires 'mbstring' or 'iconv' extension."),
+		};
 	}
 
 
@@ -422,7 +410,7 @@ final class Filters
 	/**
 	 * Reverses string or array.
 	 */
-	public static function reverse(string|array|\Traversable $val, bool $preserveKeys = false): string|array
+	public static function reverse(string|iterable $val, bool $preserveKeys = false): string|array
 	{
 		if (is_array($val)) {
 			return array_reverse($val, $preserveKeys);
@@ -437,7 +425,7 @@ final class Filters
 	/**
 	 * Chunks items by returning an array of arrays with the given number of items.
 	 */
-	public static function batch(array|\Traversable $list, int $length, $rest = null): \Generator
+	public static function batch(iterable $list, int $length, $rest = null): \Generator
 	{
 		$batch = [];
 		foreach ($list as $key => $value) {
@@ -524,23 +512,23 @@ final class Filters
 
 
 	/**
-	 * Returns the first item from the array or null if array is empty.
+	 * Returns the first element in an array or character in a string, or null if none.
 	 */
 	public static function first(string|array $value): mixed
 	{
 		return is_array($value)
-			? (count($value) ? reset($value) : null)
+			? ($value[array_key_first($value)] ?? null)
 			: self::substring($value, 0, 1);
 	}
 
 
 	/**
-	 * Returns the last item from the array or null if array is empty.
+	 * Returns the last element in an array or character in a string, or null if none.
 	 */
 	public static function last(string|array $value): mixed
 	{
 		return is_array($value)
-			? (count($value) ? end($value) : null)
+			? ($value[array_key_last($value)] ?? null)
 			: self::substring($value, -1);
 	}
 
