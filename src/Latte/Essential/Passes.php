@@ -17,15 +17,23 @@ use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PrintContext;
+use Latte\Engine;
 
 
 final class Passes
 {
+	public function __construct(
+		private Engine $engine,
+	) {
+	}
+
+
 	/**
 	 * Enable custom functions.
 	 */
-	public static function customFunctionsPass(TemplateNode $node, array $functions): void
+	public function customFunctionsPass(TemplateNode $node): void
 	{
+		$functions = $this->engine->getFunctions();
 		$names = array_keys($functions);
 		$names = array_combine(array_map('strtolower', $names), $names);
 
@@ -48,11 +56,11 @@ final class Passes
 
 
 	/**
-	 * $ʟ_xxx variables are forbidden
+	 * $ʟ_xxx, $GLOBALS and $this are forbidden
 	 */
-	public static function internalVariablesPass(TemplateNode $node, bool $forbidThis = false): void
+	public function forbiddenVariablesPass(TemplateNode $node): void
 	{
-		$forbidden = $forbidThis ? ['GLOBALS', 'this'] : ['GLOBALS'];
+		$forbidden = $this->engine->isStrictParsing() ? ['GLOBALS', 'this'] : ['GLOBALS'];
 		(new NodeTraverser)->traverse($node, function (Node $node) use ($forbidden) {
 			if ($node instanceof VariableNode
 				&& is_string($node->name)

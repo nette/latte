@@ -11,7 +11,6 @@ namespace Latte\Essential;
 
 use Latte;
 use Latte\Compiler\Nodes\Php\Scalar;
-use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
@@ -25,15 +24,13 @@ use Nette;
  */
 final class CoreExtension extends Latte\Extension
 {
-	private array $functions;
-	private bool $strict;
+	private Latte\Engine $engine;
 	private Runtime\Template $template;
 
 
 	public function beforeCompile(Latte\Engine $engine): void
 	{
-		$this->functions = $engine->getFunctions();
-		$this->strict = $engine->isStrictParsing();
+		$this->engine = $engine;
 	}
 
 
@@ -194,10 +191,11 @@ final class CoreExtension extends Latte\Extension
 
 	public function getPasses(): array
 	{
+		$passes = new Passes($this->engine);
 		return [
-			'internalVariables' => fn(TemplateNode $node) => Passes::internalVariablesPass($node, $this->strict),
+			'internalVariables' => [$passes, 'forbiddenVariablesPass'],
 			'overwrittenVariables' => [Nodes\ForeachNode::class, 'overwrittenVariablesPass'],
-			'customFunctions' => fn(TemplateNode $node) => Passes::customFunctionsPass($node, $this->functions),
+			'customFunctions' => [$passes, 'customFunctionsPass'],
 			'moveTemplatePrintToHead' => [Nodes\TemplatePrintNode::class, 'moveToHeadPass'],
 			'nElse' => [Nodes\NElseNode::class, 'processPass'],
 		];
