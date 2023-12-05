@@ -451,10 +451,22 @@ final class Filters
 	/**
 	 * Sorts elements using the comparison function and preserves the key association.
 	 */
-	public static function sort(iterable $iterable, ?\Closure $comparison = null): iterable
+	public static function sort(
+		iterable $iterable,
+		?\Closure $comparison = null,
+		bool $byKey = false,
+		string|int|\Closure|null $by = null,
+	): array|AuxiliaryIterator
 	{
+		$comparison ??= fn($a, $b) => $a <=> $b;
+		$comparison = match (true) {
+			$by === null => $comparison,
+			$by instanceof \Closure => fn($a, $b) => $comparison($by($a), $by($b)),
+			default => fn($a, $b) => $comparison(is_array($a) ? $a[$by] : $a->$by, is_array($b) ? $b[$by] : $b->$by),
+		};
+
 		if (is_array($iterable)) {
-			$comparison ? uasort($iterable, $comparison) : asort($iterable);
+			$byKey ? uksort($iterable, $comparison) : uasort($iterable, $comparison);
 			return $iterable;
 		}
 
@@ -462,7 +474,7 @@ final class Filters
 		foreach ($iterable as $key => $value) {
 			$pairs[] = [$key, $value];
 		}
-		uasort($pairs, fn($a, $b) => $comparison ? $comparison($a[1], $b[1]) : $a[1] <=> $b[1]);
+		uasort($pairs, fn($a, $b) => $byKey ? $comparison($a[0], $b[0]) : $comparison($a[1], $b[1]));
 
 		return new AuxiliaryIterator($pairs);
 	}
