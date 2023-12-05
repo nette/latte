@@ -40,6 +40,12 @@ final class CoreExtension extends Latte\Extension
 	}
 
 
+	public function beforeRender(Runtime\Template $template): void
+	{
+		$this->filters->locale = $template->getEngine()->getLocale();
+	}
+
+
 	public function getTags(): array
 	{
 		return [
@@ -142,7 +148,7 @@ final class CoreExtension extends Latte\Extension
 			'lower' => extension_loaded('mbstring')
 				? [$this->filters, 'lower']
 				: fn() => throw new RuntimeException('Filter |lower requires mbstring extension.'),
-			'number' => 'number_format',
+			'number' => [$this->filters, 'number'],
 			'padLeft' => [$this->filters, 'padLeft'],
 			'padRight' => [$this->filters, 'padRight'],
 			'query' => [$this->filters, 'query'],

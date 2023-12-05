@@ -23,6 +23,9 @@ use function is_array, is_string, count, strlen;
  */
 final class Filters
 {
+	public ?string $locale = null;
+
+
 	/**
 	 * Converts HTML to plain text.
 	 */
@@ -166,16 +169,13 @@ final class Filters
 	/**
 	 * Date/time formatting.
 	 */
-	public static function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
+	public function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
 	{
+		$format ??= Latte\Runtime\Filters::$dateFormat;
 		if ($time == null) { // intentionally ==
 			return null;
-		}
-
-		$format ??= Latte\Runtime\Filters::$dateFormat;
-		if ($time instanceof \DateInterval) {
+		} elseif ($time instanceof \DateInterval) {
 			return $time->format($format);
-
 		} elseif (is_numeric($time)) {
 			$time = (new \DateTime)->setTimestamp((int) $time);
 		} elseif (!$time instanceof \DateTimeInterface) {
@@ -186,8 +186,23 @@ final class Filters
 			if (PHP_VERSION_ID >= 80100) {
 				trigger_error("Function strftime() used by filter |date is deprecated since PHP 8.1, use format without % characters like 'Y-m-d'.", E_USER_DEPRECATED);
 			}
-
 			return @strftime($format, $time->format('U') + 0);
+
+		} elseif (preg_match('#^(\+(short|medium|long|full))?(\+time(\+sec)?)?$#', '+' . $format, $m)) {
+			$formatter = new \IntlDateFormatter(
+				$this->getLocale('date'),
+				match ($m[2]) {
+					'short' => \IntlDateFormatter::SHORT,
+					'medium' => \IntlDateFormatter::MEDIUM,
+					'long' => \IntlDateFormatter::LONG,
+					'full' => \IntlDateFormatter::FULL,
+					'' => \IntlDateFormatter::NONE,
+				},
+				isset($m[3]) ? (isset($m[4]) ? \IntlDateFormatter::MEDIUM : \IntlDateFormatter::SHORT) : \IntlDateFormatter::NONE,
+			);
+			$res = $formatter->format($time);
+			$res = preg_replace('~(\d\.) ~', "\$1\u{a0}", $res);
+			return $res;
 		}
 
 		return $time->format($format);
@@ -197,7 +212,7 @@ final class Filters
 	/**
 	 * Converts to human-readable file size.
 	 */
-	public static function bytes(float $bytes, int $precision = 2): string
+	public function bytes(float $bytes, int $precision = 2): string
 	{
 		$bytes = round($bytes);
 		$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
@@ -209,7 +224,15 @@ final class Filters
 			$bytes /= 1024;
 		}
 
-		return round($bytes, $precision) . ' ' . $unit;
+		if ($this->locale === null) {
+			$bytes = (string) round($bytes, $precision);
+		} else {
+			$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+			$formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
+			$bytes = $formatter->format($bytes);
+		}
+
+		return $bytes . ' ' . $unit;
 	}
 
 
@@ -455,7 +478,7 @@ final class Filters
 	 * @param  iterable<K, V>  $data
 	 * @return iterable<K, V>
 	 */
-	public static function sort(
+	public function sort(
 		iterable $data,
 		?\Closure $comparison = null,
 		string|int|\Closure|null $by = null,
@@ -469,7 +492,16 @@ final class Filters
 			$by = $byKey === true ? null : $byKey;
 		}
 
-		$comparison ??= fn($a, $b) => $a <=> $b;
+		if ($comparison) {
+		} elseif ($this->locale === null) {
+			$comparison = fn($a, $b) => $a <=> $b;
+		} else {
+			$collator = new \Collator($this->locale);
+			$comparison = fn($a, $b) => is_string($a) && is_string($b)
+				? $collator->compare($a, $b)
+				: $a <=> $b;
+		}
+
 		$comparison = match (true) {
 			$by === null => $comparison,
 			$by instanceof \Closure => fn($a, $b) => $comparison($by($a), $by($b)),
@@ -649,5 +681,40 @@ final class Filters
 		return $values
 			? $values[array_rand($values, 1)]
 			: null;
+	}
+
+
+	/**
+	 * Formats a number with grouped thousands and optionally decimal digits according to locale.
+	 */
+	public function number(
+		float $number,
+		string|int $patternOrDecimals = 0,
+		string $decimalSeparator = '.',
+		string $thousandsSeparator = ',',
+	): string
+	{
+		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
+			throw new Latte\RuntimeException("Filter |$name: number of decimal must not be negative");
+		} elseif ($this->locale === null || func_num_args() > 2) {
+			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
+		}
+
+		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+		if (is_string($patternOrDecimals)) {
+			$formatter->setPattern($patternOrDecimals);
+		} else {
+			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
+		}
+		return $formatter->format($number);
+	}
+
+
+	private function getLocale(string $name): string
+	{
+		if ($this->locale === null) {
+			throw new Latte\RuntimeException("Filter |$name requires the locale to be set using Engine::setLocale()");
+		}
+		return $this->locale;
 	}
 }

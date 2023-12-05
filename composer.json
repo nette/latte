@@ -30,6 +30,7 @@
 		"ext-iconv": "to use filters |reverse, |substring",
 		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
 		"ext-fileinfo": "to use filter |datastream",
+		"ext-intl": "to use Latte\\Engine::setLocale()",
 		"nette/utils": "to use filter |webalize",
 		"nette/php-generator": "to use tag {templatePrint}"
 	},
