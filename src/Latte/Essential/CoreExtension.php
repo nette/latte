@@ -40,6 +40,12 @@ final class CoreExtension extends Latte\Extension
 	}
 
 
+	public function beforeRender(Runtime\Template $template): void
+	{
+		$this->filters->locale = $template->getEngine()->getLocale();
+	}
+
+
 	public function getTags(): array
 	{
 		return [
@@ -139,10 +145,11 @@ final class CoreExtension extends Latte\Extension
 			'join' => [$this->filters, 'implode'],
 			'last' => [$this->filters, 'last'],
 			'length' => [$this->filters, 'length'],
+			'localDate' => [$this->filters, 'localDate'],
 			'lower' => extension_loaded('mbstring')
 				? [$this->filters, 'lower']
 				: fn() => throw new RuntimeException('Filter |lower requires mbstring extension.'),
-			'number' => 'number_format',
+			'number' => [$this->filters, 'number'],
 			'padLeft' => [$this->filters, 'padLeft'],
 			'padRight' => [$this->filters, 'padRight'],
 			'query' => [$this->filters, 'query'],

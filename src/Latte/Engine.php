@@ -50,6 +50,7 @@ class Engine
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
 	private ?string $cacheKey;
+	private ?string $locale = null;
 
 
 	public function __construct()
@@ -562,6 +563,25 @@ class Engine
 	public function isStrictParsing(): bool
 	{
 		return $this->strictParsing;
+	}
+
+
+	/**
+	 * Sets the locale. It uses the same identifiers as the PHP intl extension.
+	 */
+	public function setLocale(?string $locale): static
+	{
+		if ($locale && !extension_loaded('intl')) {
+			throw new RuntimeException("Setting a locale requires the 'intl' extension to be installed.");
+		}
+		$this->locale = $locale;
+		return $this;
+	}
+
+
+	public function getLocale(): ?string
+	{
+		return $this->locale;
 	}
 
 

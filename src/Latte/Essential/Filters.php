@@ -23,6 +23,9 @@ use function is_array, is_string, count, strlen;
  */
 final class Filters
 {
+	public ?string $locale = null;
+
+
 	/**
 	 * Converts HTML to plain text.
 	 */
@@ -168,14 +171,11 @@ final class Filters
 	 */
 	public static function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
 	{
+		$format ??= Latte\Runtime\Filters::$dateFormat;
 		if ($time == null) { // intentionally ==
 			return null;
-		}
-
-		$format ??= Latte\Runtime\Filters::$dateFormat;
-		if ($time instanceof \DateInterval) {
+		} elseif ($time instanceof \DateInterval) {
 			return $time->format($format);
-
 		} elseif (is_numeric($time)) {
 			$time = (new \DateTime)->setTimestamp((int) $time);
 		} elseif (!$time instanceof \DateTimeInterface) {
@@ -195,9 +195,74 @@ final class Filters
 
 
 	/**
+	 * Date/time formatting according to locale.
+	 */
+	public function localDate(
+		string|int|\DateTimeInterface|null $value,
+		?string $format = null,
+		?string $date = null,
+		?string $time = null,
+	): ?string
+	{
+		if ($this->locale === null) {
+			throw new Latte\RuntimeException('Filter |localDate requires the locale to be set using Engine::setLocale()');
+		} elseif ($value == null) { // intentionally ==
+			return null;
+		} elseif (is_numeric($value)) {
+			$value = (new \DateTime)->setTimestamp((int) $value);
+		} elseif (!$value instanceof \DateTimeInterface) {
+			$value = new \DateTime($value);
+			$errors = \DateTime::getLastErrors();
+			if (!empty($errors['warnings'])) {
+				throw new \InvalidArgumentException(reset($errors['warnings']));
+			}
+		}
+
+		if ($format === null) {
+			$xlt = ['' => \IntlDateFormatter::NONE, 'full' => \IntlDateFormatter::FULL, 'long' => \IntlDateFormatter::LONG, 'medium' => \IntlDateFormatter::MEDIUM, 'short' => \IntlDateFormatter::SHORT,
+				'relative-full' => \IntlDateFormatter::RELATIVE_FULL, 'relative-long' => \IntlDateFormatter::RELATIVE_LONG, 'relative-medium' => \IntlDateFormatter::RELATIVE_MEDIUM, 'relative-short' => \IntlDateFormatter::RELATIVE_SHORT];
+			$date ??= $time === null ? 'long' : null;
+			$options = [$xlt[$date], $xlt[$time]];
+		} else {
+			$options = (new \IntlDatePatternGenerator($this->locale))->getBestPattern($format);
+		}
+
+		$res = \IntlDateFormatter::formatObject($value, $options, $this->locale);
+		$res = preg_replace('~(\d\.) ~', "\$1\u{a0}", $res);
+		return $res;
+	}
+
+
+	/**
+	 * Formats a number with grouped thousands and optionally decimal digits according to locale.
+	 */
+	public function number(
+		float $number,
+		string|int $patternOrDecimals = 0,
+		string $decimalSeparator = '.',
+		string $thousandsSeparator = ',',
+	): string
+	{
+		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
+			throw new Latte\RuntimeException('Filter |number: the number of decimal must not be negative');
+		} elseif ($this->locale === null || func_num_args() > 2) {
+			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
+		}
+
+		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+		if (is_string($patternOrDecimals)) {
+			$formatter->setPattern($patternOrDecimals);
+		} else {
+			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
+		}
+		return $formatter->format($number);
+	}
+
+
+	/**
 	 * Converts to human-readable file size.
 	 */
-	public static function bytes(float $bytes, int $precision = 2): string
+	public function bytes(float $bytes, int $precision = 2): string
 	{
 		$bytes = round($bytes);
 		$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
@@ -209,7 +274,15 @@ final class Filters
 			$bytes /= 1024;
 		}
 
-		return round($bytes, $precision) . ' ' . $unit;
+		if ($this->locale === null) {
+			$bytes = (string) round($bytes, $precision);
+		} else {
+			$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+			$formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
+			$bytes = $formatter->format($bytes);
+		}
+
+		return $bytes . ' ' . $unit;
 	}
 
 
@@ -455,7 +528,7 @@ final class Filters
 	 * @param  iterable<K, V>  $data
 	 * @return iterable<K, V>
 	 */
-	public static function sort(
+	public function sort(
 		iterable $data,
 		?\Closure $comparison = null,
 		string|int|\Closure|null $by = null,
@@ -469,7 +542,16 @@ final class Filters
 			$by = $byKey === true ? null : $byKey;
 		}
 
-		$comparison ??= fn($a, $b) => $a <=> $b;
+		if ($comparison) {
+		} elseif ($this->locale === null) {
+			$comparison = fn($a, $b) => $a <=> $b;
+		} else {
+			$collator = new \Collator($this->locale);
+			$comparison = fn($a, $b) => is_string($a) && is_string($b)
+				? $collator->compare($a, $b)
+				: $a <=> $b;
+		}
+
 		$comparison = match (true) {
 			$by === null => $comparison,
 			$by instanceof \Closure => fn($a, $b) => $comparison($by($a), $by($b)),
