@@ -514,11 +514,17 @@ final class Filters
 	/**
 	 * Returns the first element in an array or character in a string, or null if none.
 	 */
-	public static function first(string|array $value): mixed
+	public static function first(string|iterable $value): mixed
 	{
-		return is_array($value)
-			? ($value[array_key_first($value)] ?? null)
-			: self::substring($value, 0, 1);
+		if (is_string($value)) {
+			return self::substring($value, 0, 1);
+		}
+
+		foreach ($value as $item) {
+			return $item;
+		}
+
+		return null;
 	}
 
 
