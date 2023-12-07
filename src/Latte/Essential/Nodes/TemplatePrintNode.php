@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace Latte\Essential\Nodes;
 
+use Latte\Compiler\Node;
+use Latte\Compiler\Nodes;
 use Latte\Compiler\Nodes\StatementNode;
+use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -41,5 +44,19 @@ class TemplatePrintNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		false && yield;
+	}
+
+
+	/**
+	 * Pass: moves this node to head.
+	 */
+	public static function moveToHeadPass(Nodes\TemplateNode $templateNode): void
+	{
+		(new NodeTraverser)->traverse($templateNode->main, function (Node $node) use ($templateNode) {
+			if ($node instanceof self) {
+				array_unshift($templateNode->head->children, $node);
+				return new Nodes\NopNode;
+			}
+		});
 	}
 }

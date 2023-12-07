@@ -196,9 +196,9 @@ final class CoreExtension extends Latte\Extension
 	{
 		return [
 			'internalVariables' => fn(TemplateNode $node) => Passes::internalVariablesPass($node, $this->strict),
-			'overwrittenVariables' => [Passes::class, 'overwrittenVariablesPass'],
+			'overwrittenVariables' => [Nodes\ForeachNode::class, 'overwrittenVariablesPass'],
 			'customFunctions' => fn(TemplateNode $node) => Passes::customFunctionsPass($node, $this->functions),
-			'moveTemplatePrintToHead' => [Passes::class, 'moveTemplatePrintToHeadPass'],
+			'moveTemplatePrintToHead' => [Nodes\TemplatePrintNode::class, 'moveToHeadPass'],
 			'nElse' => [Nodes\NElseNode::class, 'processPass'],
 		];
 	}

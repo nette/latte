@@ -10,11 +10,16 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
+use Latte\Compiler\Node;
 use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\Nodes\AuxiliaryNode;
 use Latte\Compiler\Nodes\NopNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\ListNode;
 use Latte\Compiler\Nodes\StatementNode;
+use Latte\Compiler\Nodes\TemplateNode;
+use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
@@ -141,6 +146,37 @@ class ForeachNode extends StatementNode
 		yield $this->content;
 		if ($this->else) {
 			yield $this->else;
+		}
+	}
+
+
+	/**
+	 * Pass: checks if foreach overrides template variables.
+	 */
+	public static function overwrittenVariablesPass(TemplateNode $node): void
+	{
+		$vars = [];
+		(new NodeTraverser)->traverse($node, function (Node $node) use (&$vars) {
+			if ($node instanceof self && $node->checkArgs) {
+				foreach ([$node->key, $node->value] as $var) {
+					if ($var instanceof VariableNode) {
+						$vars[$var->name][] = $node->position->line;
+					}
+				}
+			}
+		});
+		if ($vars) {
+			array_unshift($node->head->children, new AuxiliaryNode(fn(PrintContext $context) => $context->format(
+				<<<'XX'
+					if (!$this->getReferringTemplate() || $this->getReferenceType() === 'extends') {
+						foreach (array_intersect_key(%dump, $this->params) as $ʟ_v => $ʟ_l) {
+							trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
+						}
+					}
+
+					XX,
+				array_map(fn($l) => implode(', ', $l), $vars),
+			)));
 		}
 	}
 }
