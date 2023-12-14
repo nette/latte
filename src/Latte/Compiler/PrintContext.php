@@ -102,7 +102,7 @@ final class PrintContext
 			function ($m) use ($args) {
 				[, $pos, $fn, $var] = $m;
 				$var = substr($var, 1, -1);
-				/** @var Nodes\FilterNode[] $args */
+				/** @var Nodes\ModifierNode[] $args */
 				return match ($fn) {
 					'modify' => $args[$pos]->printSimple($this, $var),
 					'modifyContent' => $args[$pos]->printContentAware($this, $var),
