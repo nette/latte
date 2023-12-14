@@ -34,7 +34,7 @@ class FilterNode extends Node
 
 	public function printSimple(PrintContext $context, string $expr): string
 	{
-		return '($this->filters->' . $this->name . ')('
+		return '($this->filters->' . $context->objectProperty($this->name) . ')('
 			. $expr
 			. ($this->args ? ', ' . $context->implode($this->args) : '')
 			. ')';
