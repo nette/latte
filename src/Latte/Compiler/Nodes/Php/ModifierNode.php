@@ -49,6 +49,7 @@ class ModifierNode extends Node
 	{
 		$escape = $this->escape;
 		$check = $this->check;
+		$filters = [];
 		foreach ($this->filters as $filter) {
 			$name = $filter->name->name;
 			if ($name === 'nocheck' || $name === 'noCheck') {
@@ -59,9 +60,10 @@ class ModifierNode extends Node
 				if ($name === 'datastream' || $name === 'dataStream') {
 					$check = false;
 				}
-				$expr = $filter->printSimple($context, $expr);
+				$filters[] = $filter;
 			}
 		}
+		$expr = FilterNode::printFilters($context, $filters, $expr);
 
 		$escaper = $context->getEscaper();
 		if ($check) {

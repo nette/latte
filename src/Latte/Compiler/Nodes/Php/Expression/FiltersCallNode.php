@@ -29,11 +29,7 @@ class FiltersCallNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		$expr = $this->expr->print($context);
-		foreach ($this->filters as $filter) {
-			$expr = $filter->printSimple($context, $expr);
-		}
-		return $expr;
+		return FilterNode::printFilters($context, $this->filters, $this->expr->print($context));
 	}
 
 

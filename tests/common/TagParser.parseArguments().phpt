@@ -93,6 +93,12 @@ test('inline modifiers', function () {
 });
 
 
+test('inline nullsafe pipe', function () {
+	Assert::same('(($ʟ_fv = 0) === null ? null : ($this->filters->mod)($ʟ_fv))', formatArgs('(0?|mod)'));
+	Assert::same('(($ʟ_fv = 0) === null ? null : (($ʟ_fv = ($this->filters->mod2)(($this->filters->mod1)($ʟ_fv))) === null ? null : ($this->filters->mod3)($ʟ_fv)))', formatArgs('(0?|mod1|mod2?|mod3)'));
+});
+
+
 test('in operator', function () {
 	Assert::same("in_array(\$a, ['a', 'b'], true), 1", formatArgs('$a in [a, b], 1'));
 	Assert::same('$a, in_array($b->func(), [1, 2], true)', formatArgs('$a, $b->func() in [1, 2]'));

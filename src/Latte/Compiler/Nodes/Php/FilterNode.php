@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Compiler\Nodes\Php;
 
+use Latte\CompileException;
 use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
@@ -20,6 +21,7 @@ class FilterNode extends Node
 		public IdentifierNode $name,
 		/** @var ArgumentNode[] */
 		public array $args = [],
+		public bool $nullsafe = false,
 		public ?Position $position = null,
 	) {
 		(function (ArgumentNode ...$args) {})(...$args);
@@ -32,7 +34,24 @@ class FilterNode extends Node
 	}
 
 
-	public function printSimple(PrintContext $context, string $expr): string
+	/**
+	 * @param  self[]  $filters
+	 */
+	public static function printFilters(PrintContext $context, array $filters, string $expr): string
+	{
+		$filter = array_shift($filters);
+		if (!$filter) {
+			return $expr;
+		}
+		return $filter->nullsafe
+			? '(($ʟ_fv = ' . $expr . ') === null ? null : '
+				. self::printFilters($context, $filters, $filter->printSimple($context, '$ʟ_fv'))
+				. ')'
+			: self::printFilters($context, $filters, $filter->printSimple($context, $expr));
+	}
+
+
+	private function printSimple(PrintContext $context, string $expr): string
 	{
 		return '($this->filters->' . $context->objectProperty($this->name) . ')('
 			. $expr
@@ -43,6 +62,9 @@ class FilterNode extends Node
 
 	public function printContentAware(PrintContext $context, string $expr): string
 	{
+		if ($this->nullsafe) {
+			throw new CompileException('Nullsafe pipe is not allowed here', $this->position);
+		}
 		return '$this->filters->filterContent('
 			. $context->encodeString($this->name->name)
 			. ', $ʟ_fi, '

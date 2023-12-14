@@ -118,7 +118,8 @@ final class Token
 		Php_Comment = 334,
 		Php_Null = 335,
 		Php_True = 336,
-		Php_False = 337;
+		Php_False = 337,
+		Php_NullsafePipe = 338;
 
 	public const Names = [
 		self::End => '[EOF]',
@@ -224,6 +225,7 @@ final class Token
 		self::Php_Null => "'null'",
 		self::Php_True => "'true'",
 		self::Php_False => "'false'",
+		self::Php_NullsafePipe => "'?|'",
 	];
 
 

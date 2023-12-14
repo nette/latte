@@ -57,6 +57,10 @@ test('depth', function () {
 });
 
 
+test('nullsafe pipe', function () {
+	Assert::same('(($ʟ_fv = @) === null ? null : (($ʟ_fv = ($this->filters->mod2)(($this->filters->mod1)($ʟ_fv))) === null ? null : ($this->filters->mod3)($ʟ_fv)))', format('?|mod1|mod2?|mod3'));
+});
+
 test('optionalChainingPass', function () {
 	Assert::same(
 		'($this->filters->mod)(@, $var?->prop?->elem[1]?->call(2)?->item)',

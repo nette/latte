@@ -10,7 +10,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	|truncate: 10, (20|round)|trim
+	?|truncate: 10, (20?|round)?|trim
 	XX;
 
 $code = normalizeNl($test);
@@ -32,45 +32,45 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'truncate'
-   |  |  |  position: 1:2 (offset 1)
+   |  |  |  position: 1:3 (offset 2)
    |  |  args: array (2)
    |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 10
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 1:12 (offset 11)
+   |  |  |  |  |  position: 1:13 (offset 12)
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:12 (offset 11)
+   |  |  |  |  position: 1:13 (offset 12)
    |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FiltersCallNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:17 (offset 16)
+   |  |  |  |  |  |  position: 1:18 (offset 17)
    |  |  |  |  |  filters: array (1)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  |  position: 1:20 (offset 19)
+   |  |  |  |  |  |  |  |  position: 1:22 (offset 21)
    |  |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  |  |  position: 1:19 (offset 18)
-   |  |  |  |  |  position: 1:16 (offset 15)
+   |  |  |  |  |  |  |  nullsafe: true
+   |  |  |  |  |  |  |  position: 1:20 (offset 19)
+   |  |  |  |  |  position: 1:17 (offset 16)
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:16 (offset 15)
-   |  |  nullsafe: false
+   |  |  |  |  position: 1:17 (offset 16)
+   |  |  nullsafe: true
    |  |  position: 1:1 (offset 0)
    |  1 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'trim'
-   |  |  |  position: 1:27 (offset 26)
+   |  |  |  position: 1:30 (offset 29)
    |  |  args: array (0)
-   |  |  nullsafe: false
-   |  |  position: 1:26 (offset 25)
+   |  |  nullsafe: true
+   |  |  position: 1:28 (offset 27)
    escape: false
    check: true
    position: 1:1 (offset 0)
