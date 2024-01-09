@@ -54,7 +54,7 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  |  |  |  |  |  |  name: 'round'
    |  |  |  |  |  |  |  position: 1:20 (offset 19)
    |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  position: 1:17 (offset 16)
+   |  |  |  |  |  |  position: 1:19 (offset 18)
    |  |  |  |  |  position: 1:17 (offset 16)
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
@@ -66,7 +66,7 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  |  |  name: 'trim'
    |  |  |  position: 1:27 (offset 26)
    |  |  args: array (0)
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:26 (offset 25)
    escape: false
    check: true
    position: 1:1 (offset 0)

@@ -37,7 +37,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'upper'
    |  |  |  |  |  position: 1:5 (offset 4)
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 1:2 (offset 1)
+   |  |  |  |  position: 1:4 (offset 3)
    |  |  |  position: 1:2 (offset 1)
    |  |  key: null
    |  |  byRef: false
@@ -60,14 +60,14 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  name: 'upper'
    |  |  |  |  |  |  position: 2:11 (offset 22)
    |  |  |  |  |  args: array (0)
-   |  |  |  |  |  position: 2:2 (offset 13)
+   |  |  |  |  |  position: 2:10 (offset 21)
    |  |  |  |  position: 2:2 (offset 13)
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'truncate'
    |  |  |  |  |  position: 2:17 (offset 28)
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 2:2 (offset 13)
+   |  |  |  |  position: 2:16 (offset 27)
    |  |  |  position: 2:2 (offset 13)
    |  |  key: null
    |  |  byRef: false
@@ -102,14 +102,14 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
    |  |  |  |  |  |  |  position: 3:20 (offset 58)
-   |  |  |  |  |  position: 3:2 (offset 40)
+   |  |  |  |  |  position: 3:5 (offset 43)
    |  |  |  |  position: 3:2 (offset 40)
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'trim'
    |  |  |  |  |  position: 3:23 (offset 61)
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 3:2 (offset 40)
+   |  |  |  |  position: 3:22 (offset 60)
    |  |  |  position: 3:2 (offset 40)
    |  |  key: null
    |  |  byRef: false
@@ -146,20 +146,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  |  name: 'round'
    |  |  |  |  |  |  |  |  |  |  position: 4:24 (offset 91)
    |  |  |  |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  |  |  |  position: 4:21 (offset 88)
+   |  |  |  |  |  |  |  |  |  position: 4:23 (offset 90)
    |  |  |  |  |  |  |  |  position: 4:21 (offset 88)
    |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
    |  |  |  |  |  |  |  position: 4:20 (offset 87)
-   |  |  |  |  |  position: 4:2 (offset 69)
+   |  |  |  |  |  position: 4:5 (offset 72)
    |  |  |  |  position: 4:2 (offset 69)
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'trim'
    |  |  |  |  |  position: 4:31 (offset 98)
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 4:2 (offset 69)
+   |  |  |  |  position: 4:30 (offset 97)
    |  |  |  position: 4:2 (offset 69)
    |  |  key: null
    |  |  byRef: false
@@ -196,7 +196,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  |  position: 5:23 (offset 127)
    |  |  |  |  |  |  position: 5:23 (offset 127)
-   |  |  |  |  position: 5:2 (offset 106)
+   |  |  |  |  position: 5:5 (offset 109)
    |  |  |  position: 5:2 (offset 106)
    |  |  key: null
    |  |  byRef: false
@@ -233,7 +233,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  |  position: 6:23 (offset 159)
    |  |  |  |  |  |  position: 6:23 (offset 159)
-   |  |  |  |  position: 6:2 (offset 138)
+   |  |  |  |  position: 6:5 (offset 141)
    |  |  |  position: 6:2 (offset 138)
    |  |  key: null
    |  |  byRef: false
