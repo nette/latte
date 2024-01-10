@@ -44,18 +44,19 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  |  |  |  name: null
    |  |  |  |  position: 1:12 (offset 11)
    |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
-   |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
+   |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FiltersCallNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  kind: 10
    |  |  |  |  |  |  position: 1:17 (offset 16)
-   |  |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
-   |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
-   |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  position: 1:20 (offset 19)
-   |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  position: 1:19 (offset 18)
-   |  |  |  |  |  position: 1:17 (offset 16)
+   |  |  |  |  |  filters: array (1)
+   |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\FilterNode
+   |  |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  |  |  |  name: 'round'
+   |  |  |  |  |  |  |  |  position: 1:20 (offset 19)
+   |  |  |  |  |  |  |  args: array (0)
+   |  |  |  |  |  |  |  position: 1:19 (offset 18)
+   |  |  |  |  |  position: 1:16 (offset 15)
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null

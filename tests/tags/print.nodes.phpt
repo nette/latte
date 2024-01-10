@@ -29,13 +29,12 @@ Assert::match(<<<'XX'
 		Fragment:
 		Fragment:
 			Print:
-				FilterCall:
-					FilterCall:
-						Variable:
-							name: var
-						Filter:
-							Identifier:
-								name: trim
+				FiltersCall:
+					Variable:
+						name: var
+					Filter:
+						Identifier:
+							name: trim
 					Filter:
 						Identifier:
 							name: upper

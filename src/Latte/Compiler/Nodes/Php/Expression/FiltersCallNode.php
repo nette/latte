@@ -9,31 +9,39 @@ declare(strict_types=1);
 
 namespace Latte\Compiler\Nodes\Php\Expression;
 
-use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\FilterNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class FilterCallNode extends ExpressionNode
+class FiltersCallNode extends ExpressionNode
 {
 	public function __construct(
 		public ExpressionNode $expr,
-		public Php\FilterNode $filter,
+		/** @var FilterNode[] */
+		public array $filters,
 		public ?Position $position = null,
 	) {
+		(function (FilterNode ...$args) {})(...$filters);
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		return $this->filter->printSimple($context, $this->expr->print($context));
+		$expr = $this->expr->print($context);
+		foreach ($this->filters as $filter) {
+			$expr = $filter->printSimple($context, $expr);
+		}
+		return $expr;
 	}
 
 
 	public function &getIterator(): \Generator
 	{
 		yield $this->expr;
-		yield $this->filter;
+		foreach ($this->filters as &$filter) {
+			yield $filter;
+		}
 	}
 }
