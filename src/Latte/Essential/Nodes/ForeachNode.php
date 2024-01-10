@@ -50,12 +50,11 @@ class ForeachNode extends StatementNode
 		self::parseArguments($tag->parser, $node);
 
 		$modifier = $tag->parser->parseModifier();
-		foreach ($modifier->filters as $filter) {
-			match ($filter->name->name) {
-				'nocheck', 'noCheck' => $node->checkArgs = false,
-				'noiterator', 'noIterator' => $node->iterator = false,
-				default => throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.', $tag->position),
-			};
+		$modifier->defineFlags('nocheck', 'noCheck', 'noiterator', 'noIterator');
+		$node->checkArgs = !$modifier->hasFlag('nocheck') && !$modifier->hasFlag('noCheck');
+		$node->iterator = $modifier->hasFlag('noiterator') || $modifier->hasFlag('noIterator') ? false : null;
+		if ($modifier->filters) {
+			throw new CompileException('Only modifiers |noiterator and |nocheck are allowed here.', $tag->position);
 		}
 
 		if ($tag->void) {

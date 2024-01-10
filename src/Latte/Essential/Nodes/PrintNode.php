@@ -38,16 +38,24 @@ class PrintNode extends StatementNode
 			: null;
 		$node->expression = $tag->parser->parseExpression();
 		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = true;
+		$node->modifier->defineFlags('noescape');
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->followsQuote && $context->getEscaper()->export() === 'html/raw/js') {
+		$escaper = $context->getEscaper();
+		if ($this->followsQuote && $escaper->export() === 'html/raw/js') {
 			throw new CompileException("Do not place {$this->followsQuote} inside quotes in JavaScript.", $this->position);
 		}
+
+		if ($escaper->export() === 'html/attr/url') {
+			$this->modifier->defineFlags('nocheck', 'noCheck');
+			$this->modifier->check = !$this->modifier->hasFlag('nocheck') && !$this->modifier->hasFlag('noCheck')
+				&& !$this->modifier->hasFilter('datastream') && !$this->modifier->hasFilter('dataStream');
+		}
+
 		return $context->format(
 			"echo %modify(%node) %line;\n",
 			$this->modifier,

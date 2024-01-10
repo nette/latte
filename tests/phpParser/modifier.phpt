@@ -28,6 +28,8 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\ModifierNode
+   flags: array (0)
+   check: false
    filters: array (2)
    |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
@@ -72,5 +74,4 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  |  nullsafe: false
    |  |  position: 1:26 (offset 25)
    escape: false
-   check: true
    position: 1:1 (offset 0)

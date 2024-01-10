@@ -356,3 +356,27 @@ Assert::exception(
 	Latte\CompileException::class,
 	'Nullsafe pipe is not allowed here (on line 1 at column 13)',
 );
+
+Assert::exception(
+	fn() => $latte->compile('{capture $foo|noescape}...{/capture}'),
+	Latte\CompileException::class,
+	'Filter |noescape is not allowed here (on line 1 at column 14)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('{$foo|nocheck}'),
+	Latte\CompileException::class,
+	'Filter |nocheck is not allowed here (on line 1 at column 6)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('{$foo?|noescape}'),
+	Latte\CompileException::class,
+	'Flag |noescape cannot have arguments or nullsafe pipe (on line 1 at column 6)',
+);
+
+Assert::exception(
+	fn() => $latte->compile('{$foo|noescape:123}'),
+	Latte\CompileException::class,
+	'Flag |noescape cannot have arguments or nullsafe pipe (on line 1 at column 6)',
+);
