@@ -33,8 +33,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'a'
+   |  |  |  |  name: 'a'
    |  |  |  |  kind: 1
    |  |  |  |  position: 2:1 (offset 31)
    |  |  |  args: array (0)
@@ -109,8 +108,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'a'
+   |  |  |  |  |  name: 'a'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 9:1 (offset 104)
    |  |  |  |  args: array (0)

@@ -106,8 +106,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  position: 3:23 (offset 101)
    |  |  |  |  |  default: null
    |  |  |  |  |  type: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  0 => 'Type'
+   |  |  |  |  |  |  name: 'Type'
    |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  position: 3:15 (offset 93)
    |  |  |  |  |  byRef: false
@@ -141,8 +140,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  position: 4:24 (offset 146)
    |  |  |  |  |  default: null
    |  |  |  |  |  type: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  0 => 'Type'
+   |  |  |  |  |  |  name: 'Type'
    |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  position: 4:15 (offset 137)
    |  |  |  |  |  byRef: true

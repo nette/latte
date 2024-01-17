@@ -29,7 +29,7 @@ Assert::match(<<<'XX'
 						name: b
 					New:
 						Name:
-							parts: ['Foo']
+							name: Foo
 				Fragment:
 					Text:
 						content: '...'

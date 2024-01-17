@@ -64,8 +64,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  position: 4:5 (offset 46)
    |  |  |  |  |  default: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
    |  |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  |  |  name: 'A'
    |  |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  |  position: 4:10 (offset 51)
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
@@ -181,8 +180,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  position: 11:5 (offset 172)
    |  |  |  |  |  default: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  |  0 => 'Foo'
+   |  |  |  |  |  |  |  name: 'Foo'
    |  |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  |  position: 11:14 (offset 181)
    |  |  |  |  |  |  args: array (0)

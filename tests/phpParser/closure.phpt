@@ -182,9 +182,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  byRef: false
    |  |  |  |  |  position: 7:18 (offset 212)
    |  |  |  returnType: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (2)
-   |  |  |  |  |  0 => 'Foo'
-   |  |  |  |  |  1 => 'Bar'
+   |  |  |  |  name: 'Foo\Bar'
    |  |  |  |  kind: 2
    |  |  |  |  position: 7:25 (offset 219)
    |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\NullNode

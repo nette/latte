@@ -46,8 +46,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'A'
+   |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
    |  |  |  |  position: 1:5 (offset 4)
    |  |  |  args: array (0)
@@ -59,8 +58,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'A'
+   |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
    |  |  |  |  position: 2:5 (offset 11)
    |  |  |  args: array (1)
@@ -108,8 +106,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 7:5 (offset 76)
    |  |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
@@ -232,8 +229,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'Test'
+   |  |  |  |  |  name: 'Test'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 17:5 (offset 250)
    |  |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
@@ -293,8 +289,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  14 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'A'
+   |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
    |  |  |  |  position: 22:6 (offset 390)
    |  |  |  args: array (0)

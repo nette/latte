@@ -30,8 +30,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'foo'
+   |  |  |  |  name: 'foo'
    |  |  |  |  kind: 1
    |  |  |  |  position: 1:1 (offset 0)
    |  |  |  args: array (2)
@@ -90,8 +89,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'Foo'
+   |  |  |  |  name: 'Foo'
    |  |  |  |  kind: 1
    |  |  |  |  position: 3:1 (offset 36)
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
@@ -122,8 +120,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'Foo'
+   |  |  |  |  name: 'Foo'
    |  |  |  |  kind: 1
    |  |  |  |  position: 4:5 (offset 60)
    |  |  |  args: array (2)
@@ -151,8 +148,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'abcde'
+   |  |  |  |  name: 'abcde'
    |  |  |  |  kind: 1
    |  |  |  |  position: 5:1 (offset 75)
    |  |  |  args: array (2)

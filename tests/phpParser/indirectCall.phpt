@@ -46,8 +46,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'id'
+   |  |  |  |  |  name: 'id'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 1:1 (offset 0)
    |  |  |  |  args: array (1)
@@ -80,8 +79,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  0 => 'id'
+   |  |  |  |  |  |  name: 'id'
    |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  position: 3:1 (offset 20)
    |  |  |  |  |  args: array (1)
@@ -125,8 +123,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  |  0 => 'id'
+   |  |  |  |  |  |  |  name: 'id'
    |  |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  |  position: 5:1 (offset 46)
    |  |  |  |  |  |  args: array (0)
@@ -165,8 +162,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  |  |  0 => 'id'
+   |  |  |  |  |  |  |  |  name: 'id'
    |  |  |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  |  |  position: 7:1 (offset 70)
    |  |  |  |  |  |  |  args: array (1)

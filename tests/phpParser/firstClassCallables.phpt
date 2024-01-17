@@ -27,8 +27,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallableNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'foo'
+   |  |  |  |  name: 'foo'
    |  |  |  |  kind: 1
    |  |  |  |  position: 1:1 (offset 0)
    |  |  |  position: 1:1 (offset 0)
@@ -52,8 +51,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallableNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'A'
+   |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
    |  |  |  |  position: 3:1 (offset 27)
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode

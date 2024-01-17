@@ -38,8 +38,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'MD5'
+   |  |  |  |  name: 'MD5'
    |  |  |  |  kind: 1
    |  |  |  |  position: 2:1 (offset 3)
    |  |  |  position: 2:1 (offset 3)

@@ -20,31 +20,21 @@ class NameNode extends Node
 		KindNormal = 1,
 		KindFullyQualified = 2;
 
-	/** @var string[] */
-	public array $parts;
-
 
 	public function __construct(
-		string|array $name,
+		public string $name,
 		public int $kind = self::KindNormal,
 		public ?Position $position = null,
 	) {
-		if ($name === '' || $name === []) {
+		if ($name === '') {
 			throw new \InvalidArgumentException('Name cannot be empty');
-
-		} elseif (is_string($name)) {
-			if (str_starts_with($name, '\\')) {
-				$this->kind = self::KindFullyQualified;
-				$name = substr($name, 1);
-			} elseif (str_starts_with($name, 'namespace\\')) {
-				throw new \InvalidArgumentException('Relative name is not supported');
-			} else {
-				$this->kind = self::KindNormal;
-			}
-			$this->parts = explode('\\', $name);
-
+		} elseif (str_starts_with($name, 'namespace\\')) {
+			throw new \InvalidArgumentException('Relative name is not supported');
+		} elseif (str_starts_with($name, '\\')) {
+			$this->kind = self::KindFullyQualified;
+			$this->name = substr($name, 1);
 		} else {
-			$this->parts = $name;
+			$this->kind = self::KindNormal;
 		}
 	}
 
@@ -62,7 +52,7 @@ class NameNode extends Node
 			'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'yield',
 			'parent', 'self', 'mixed', 'void', 'enum', // extra
 		]);
-		return count($this->parts) === 1 && isset($keywords[strtolower($this->parts[0])]);
+		return isset($keywords[strtolower($this->name)]);
 	}
 
 
@@ -74,7 +64,7 @@ class NameNode extends Node
 
 	public function __toString(): string
 	{
-		return implode('\\', $this->parts);
+		return $this->name;
 	}
 
 
@@ -84,7 +74,7 @@ class NameNode extends Node
 			self::KindNormal => $this->isKeyword() ? 'namespace\\' : '',
 			self::KindFullyQualified => '\\',
 		};
-		return $prefix . implode('\\', $this->parts);
+		return $prefix . $this->name;
 	}
 
 

@@ -29,8 +29,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'f'
+   |  |  |  |  name: 'f'
    |  |  |  |  kind: 1
    |  |  |  |  position: 1:1 (offset 0)
    |  |  |  args: array (0)
@@ -42,8 +41,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'f'
+   |  |  |  |  name: 'f'
    |  |  |  |  kind: 1
    |  |  |  |  position: 2:1 (offset 5)
    |  |  |  args: array (1)
@@ -63,8 +61,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'f'
+   |  |  |  |  name: 'f'
    |  |  |  |  kind: 1
    |  |  |  |  position: 3:1 (offset 12)
    |  |  |  args: array (2)
@@ -92,8 +89,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'f'
+   |  |  |  |  name: 'f'
    |  |  |  |  kind: 1
    |  |  |  |  position: 4:1 (offset 23)
    |  |  |  args: array (1)
@@ -113,8 +109,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'f'
+   |  |  |  |  name: 'f'
    |  |  |  |  kind: 1
    |  |  |  |  position: 5:1 (offset 31)
    |  |  |  args: array (2)

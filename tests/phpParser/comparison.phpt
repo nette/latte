@@ -164,8 +164,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  name: 'a'
    |  |  |  |  position: 10:1 (offset 91)
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  parts: array (1)
-   |  |  |  |  |  0 => 'B'
+   |  |  |  |  name: 'B'
    |  |  |  |  kind: 1
    |  |  |  |  position: 10:15 (offset 105)
    |  |  |  position: 10:1 (offset 91)

@@ -29,8 +29,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 1:6 (offset 5)
    |  |  |  |  args: array (0)
@@ -48,8 +47,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 2:6 (offset 17)
    |  |  |  |  args: array (0)
@@ -68,8 +66,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
    |  |  |  |  |  position: 3:6 (offset 31)
    |  |  |  |  args: array (0)
@@ -87,8 +84,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  |  |  parts: array (1)
-   |  |  |  |  |  |  |  0 => 'A'
+   |  |  |  |  |  |  name: 'A'
    |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  position: 4:6 (offset 45)
    |  |  |  |  |  args: array (0)
