@@ -64,6 +64,7 @@ Assert::same("'fo:o'", format('fo:o ,'));
 Assert::same("'fo:o'", format('fo:o foo'));
 Assert::same("'fo:o'", format('fo:o ()'));
 Assert::same("'fo:o'", format('fo:o ""'));
+Assert::same("'fo:o'", format('fo:o \foo'));
 
 // non-unquoted & following chars
 Assert::same('true ? false : null', format('true ? false'));
