@@ -256,7 +256,7 @@ class Filters
 	/**
 	 * Sanitizes string for use inside href attribute.
 	 */
-	public static function safeUrl(string|\Stringable $s): string
+	public static function safeUrl($s): string
 	{
 		$s = $s instanceof HtmlStringable
 			? self::convertHtmlToText((string) $s)

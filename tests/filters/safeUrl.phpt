@@ -28,3 +28,5 @@ Assert::same('', Filters::safeUrl('data:'));
 Assert::same('', Filters::safeUrl('javascript:'));
 Assert::same('', Filters::safeUrl(' javascript:'));
 Assert::same('javascript', Filters::safeUrl('javascript'));
+Assert::same('', Filters::safeUrl(null));
+Assert::same('1', Filters::safeUrl(1));
