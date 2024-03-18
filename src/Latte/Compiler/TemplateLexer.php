@@ -35,8 +35,9 @@ final class TemplateLexer
 	/** HTML attribute name/value (\p{C} means \x00-\x1F except space) */
 	private const ReAttrName = '[^\p{C} "\'<>=`/]';
 
-	public string $openDelimiter;
-	public string $closeDelimiter;
+	private string $openDelimiter = '';
+	private string $closeDelimiter = '';
+	private array $delimiters = [];
 	private TagLexer $tagLexer;
 
 	/** @var array<array{name: string, args: mixed[]}> */
@@ -278,6 +279,7 @@ final class TemplateLexer
 		$left = '\{(?![\s\'"{}])';
 		$end = $endTag ? '\{/' . preg_quote($endTag, '~') . '\}' : null;
 
+		$this->delimiters[] = [$this->openDelimiter, $this->closeDelimiter];
 		[$this->openDelimiter, $this->closeDelimiter] = match ($type) {
 			null => [$left, '\}'], // {...}
 			'off' => [$endTag ? '(?=' . $end . ')\{' : '(?!x)x', '\}'],
@@ -287,6 +289,12 @@ final class TemplateLexer
 			default => throw new \InvalidArgumentException("Unknown syntax '$type'"),
 		};
 		return $this;
+	}
+
+
+	public function popSyntax(): void
+	{
+		[$this->openDelimiter, $this->closeDelimiter] = array_pop($this->delimiters);
 	}
 
 

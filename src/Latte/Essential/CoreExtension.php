@@ -244,10 +244,9 @@ final class CoreExtension extends Latte\Extension
 		$tag->expectArguments();
 		$token = $tag->parser->stream->consume();
 		$lexer = $parser->getLexer();
-		$saved = [$lexer->openDelimiter, $lexer->closeDelimiter];
 		$lexer->setSyntax($token->text, $tag->isNAttribute() ? null : $tag->name);
 		[$inner] = yield;
-		[$lexer->openDelimiter, $lexer->closeDelimiter] = $saved;
+		$lexer->popSyntax();
 		return $inner;
 	}
 }
