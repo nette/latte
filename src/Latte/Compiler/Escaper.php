@@ -148,6 +148,13 @@ final class Escaper
 	}
 
 
+	public function enterHtmlRaw(string $subType): void
+	{
+		$this->state = self::HtmlRawText;
+		$this->subType = $subType;
+	}
+
+
 	public function enterHtmlAttribute(?string $name = null): void
 	{
 		$this->state = self::HtmlAttribute;

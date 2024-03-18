@@ -42,6 +42,12 @@ Assert::match(
 	$latte->renderToString('{define a}<script></script>{/define} <script type="text/html">{include a}</script>'),
 );
 
+// include, content of <script> changed to html
+Assert::match(
+	' <script type="text/html"><x-script></x-script></script>',
+	$latte->renderToString('{define a}<script></script>{/define} <script type="text/html">{contentType html}{include a}</script>'),
+);
+
 // content of <script> is RAWTEXT
 Assert::match(
 	<<<'XX'
