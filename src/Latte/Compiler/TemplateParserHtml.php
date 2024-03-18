@@ -217,13 +217,17 @@ final class TemplateParserHtml
 	private function parseEndTag(): array
 	{
 		$stream = $this->parser->getStream();
+		$lexer = $this->parser->getLexer();
 		$stream->consume(Token::Html_TagOpen);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
+		$lexer->setState(TemplateLexer::StateHtmlTag);
 		$stream->consume(Token::Slash);
+		if (isset($this->element->nAttributes['syntax'])) {  // hardcoded
+			$lexer->popSyntax();
+		}
 		$name = $this->parseTagName();
 		$stream->tryConsume(Token::Whitespace);
 		$stream->consume(Token::Html_TagClose);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
+		$lexer->setState(TemplateLexer::StateHtmlText);
 		return $name;
 	}
 

@@ -246,7 +246,9 @@ final class CoreExtension extends Latte\Extension
 		$lexer = $parser->getLexer();
 		$lexer->setSyntax($token->text, $tag->isNAttribute() ? null : $tag->name);
 		[$inner] = yield;
-		$lexer->popSyntax();
+		if (!$tag->isNAttribute()) {
+			$lexer->popSyntax();
+		}
 		return $inner;
 	}
 }
