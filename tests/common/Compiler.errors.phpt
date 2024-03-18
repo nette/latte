@@ -182,6 +182,12 @@ Assert::match(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<a n:inner-syntax>'),
+	Latte\CompileException::class,
+	'Use n:syntax instead of n:inner-syntax (on line 1 at column 4)',
+);
+
+Assert::exception(
 	fn() => $latte->compile('<a n:class class>'),
 	Latte\CompileException::class,
 	'It is not possible to combine class with n:class (on line 1 at column 4)',

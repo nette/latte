@@ -238,6 +238,9 @@ final class CoreExtension extends Latte\Extension
 	 */
 	private function parseSyntax(Tag $tag, TemplateParser $parser): \Generator
 	{
+		if ($tag->isNAttribute() && $tag->prefix !== $tag::PrefixNone) {
+			throw new Latte\CompileException("Use n:syntax instead of {$tag->getNotation()}", $tag->position);
+		}
 		$tag->expectArguments();
 		$token = $tag->parser->stream->consume();
 		$lexer = $parser->getLexer();
