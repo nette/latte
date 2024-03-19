@@ -426,7 +426,7 @@ class Engine
 	 */
 	public function invokeFunction(string $name, array $args): mixed
 	{
-		return ($this->functions->$name)(...$args);
+		return ($this->functions->$name)(null, ...$args);
 	}
 
 

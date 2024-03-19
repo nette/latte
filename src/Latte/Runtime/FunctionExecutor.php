@@ -22,6 +22,9 @@ class FunctionExecutor
 	/** @var callable[] */
 	private array $_list = [];
 
+	/** @var bool[] */
+	private array $_aware = [];
+
 
 	/**
 	 * Registers run-time function.
@@ -29,7 +32,7 @@ class FunctionExecutor
 	public function add(string $name, callable $callback): static
 	{
 		$this->_list[$name] = $callback;
-		unset($this->$name);
+		unset($this->$name, $this->_aware[$name]);
 		return $this;
 	}
 
@@ -52,8 +55,14 @@ class FunctionExecutor
 				? ", did you mean '$t'?"
 				: '.';
 			throw new \LogicException("Function '$name' is not defined$hint");
+
+		} elseif (!isset($this->_aware[$name])) {
+			$params = Helpers::toReflection($callback)->getParameters();
+			$this->_aware[$name] = $params && (string) $params[0]->getType() === Template::class;
 		}
 
-		return $callback;
+		return $this->$name = $this->_aware[$name]
+			? $callback
+			: fn($info, ...$args) => $callback(...$args);
 	}
 }

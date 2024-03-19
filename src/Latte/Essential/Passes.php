@@ -47,7 +47,7 @@ final class Passes
 				}
 
 				return new Expression\AuxiliaryNode(
-					fn(PrintContext $context, ...$args) => '($this->global->fn->' . $orig . ')(' . $context->implode($args) . ')',
+					fn(PrintContext $context, ...$args) => '($this->global->fn->' . $orig . ')($this, ' . $context->implode($args) . ')',
 					$node->args,
 				);
 			}
