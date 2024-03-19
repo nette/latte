@@ -25,7 +25,6 @@ use Nette;
 final class CoreExtension extends Latte\Extension
 {
 	private Latte\Engine $engine;
-	private Runtime\Template $template;
 	private Filters $filters;
 
 
@@ -38,12 +37,6 @@ final class CoreExtension extends Latte\Extension
 	public function beforeCompile(Latte\Engine $engine): void
 	{
 		$this->engine = $engine;
-	}
-
-
-	public function beforeRender(Runtime\Template $template): void
-	{
-		$this->template = $template;
 	}
 
 
@@ -191,7 +184,7 @@ final class CoreExtension extends Latte\Extension
 			'last' => [$this->filters, 'last'],
 			'odd' => [$this->filters, 'odd'],
 			'slice' => [$this->filters, 'slice'],
-			'hasBlock' => fn(string $name): bool => $this->template->hasBlock($name),
+			'hasBlock' => fn(Runtime\Template $template, string $name): bool => $template->hasBlock($name),
 		];
 	}
 
