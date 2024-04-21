@@ -116,33 +116,33 @@ class Engine
 			throw new \LogicException('In sandboxed mode you need to set a security policy.');
 		}
 
-		$source = $this->getLoader()->getContent($name);
+		$template = $this->getLoader()->getContent($name);
 
 		try {
-			$node = $this->parse($source);
+			$node = $this->parse($template);
 			$this->applyPasses($node);
-			$code = $this->generate($node, $name);
+			$compiled = $this->generate($node, $name);
 
 		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException && !$e instanceof SecurityViolationException) {
 				$e = new CompileException("Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			throw $e->setSource($source, $name);
+			throw $e->setSource($template, $name);
 		}
 
 		if ($this->phpBinary) {
-			Compiler\PhpHelpers::checkCode($this->phpBinary, $code, "(compiled $name)");
+			Compiler\PhpHelpers::checkCode($this->phpBinary, $compiled, "(compiled $name)");
 		}
 
-		return $code;
+		return $compiled;
 	}
 
 
 	/**
 	 * Parses template to AST node.
 	 */
-	public function parse(string $source): TemplateNode
+	public function parse(string $template): TemplateNode
 	{
 		$parser = new Compiler\TemplateParser;
 		$parser->strict = $this->strictParsing;
@@ -155,7 +155,7 @@ class Engine
 		return $parser
 			->setContentType($this->contentType)
 			->setPolicy($this->getPolicy(effective: true))
-			->parse($source);
+			->parse($template);
 	}
 
 
@@ -178,16 +178,15 @@ class Engine
 
 
 	/**
-	 * Generates template PHP code.
+	 * Generates compiled PHP code.
 	 */
 	public function generate(TemplateNode $node, string $name): string
 	{
-		$sourceName = preg_match('#\n|\?#', $name) ? null : $name;
 		$generator = new Compiler\TemplateGenerator;
 		return $generator->generate(
 			$node,
 			$this->getTemplateClass($name),
-			$sourceName,
+			$name,
 			$this->strictTypes,
 		);
 	}
@@ -213,10 +212,10 @@ class Engine
 	private function loadTemplate(string $name): void
 	{
 		if (!$this->tempDirectory) {
-			$code = $this->compile($name);
-			if (@eval(substr($code, 5)) === false) { // @ is escalated to exception, substr removes <?php
+			$compiled = $this->compile($name);
+			if (@eval(substr($compiled, 5)) === false) { // @ is escalated to exception, substr removes <?php
 				throw (new CompileException('Error in template: ' . error_get_last()['message']))
-					->setSource($code, "$name (compiled)");
+					->setSource($compiled, "$name (compiled)");
 			}
 
 			return;
@@ -226,12 +225,12 @@ class Engine
 		// 1) We want to do as little as possible IO calls on production and also directory and file can be not writable
 		// so on Linux we include the file directly without shared lock, therefore, the file must be created atomically by renaming.
 		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
-		$file = $this->getCacheFile($name);
+		$cacheFile = $this->getCacheFile($name);
 		$lock = defined('PHP_WINDOWS_VERSION_BUILD')
-			? $this->acquireLock("$file.lock", LOCK_SH)
+			? $this->acquireLock("$cacheFile.lock", LOCK_SH)
 			: null;
 
-		if (!$this->isExpired($file, $name) && (@include $file) !== false) { // @ - file may not exist
+		if (!$this->isExpired($cacheFile, $name) && (@include $cacheFile) !== false) { // @ - file may not exist
 			return;
 		}
 
@@ -239,23 +238,26 @@ class Engine
 			flock($lock, LOCK_UN); // release shared lock so we can get exclusive
 		}
 
-		$lock = $this->acquireLock("$file.lock", LOCK_EX);
+		$lock = $this->acquireLock("$cacheFile.lock", LOCK_EX);
 
 		// while waiting for exclusive lock, someone might have already created the cache
-		if (!is_file($file) || $this->isExpired($file, $name)) {
-			$code = $this->compile($name);
-			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
-				@unlink("$file.tmp"); // @ - file may not exist
-				throw new RuntimeException("Unable to create '$file'.");
+		if (!is_file($cacheFile) || $this->isExpired($cacheFile, $name)) {
+			$compiled = $this->compile($name);
+			if (
+				file_put_contents("$cacheFile.tmp", $compiled) !== strlen($compiled)
+				|| !rename("$cacheFile.tmp", $cacheFile)
+			) {
+				@unlink("$cacheFile.tmp"); // @ - file may not exist
+				throw new RuntimeException("Unable to create '$cacheFile'.");
 			}
 
 			if (function_exists('opcache_invalidate')) {
-				@opcache_invalidate($file, true); // @ can be restricted
+				@opcache_invalidate($cacheFile, true); // @ can be restricted
 			}
 		}
 
-		if ((include $file) === false) {
-			throw new RuntimeException("Unable to load '$file'.");
+		if ((include $cacheFile) === false) {
+			throw new RuntimeException("Unable to load '$cacheFile'.");
 		}
 
 		flock($lock, LOCK_UN);
@@ -283,13 +285,13 @@ class Engine
 	}
 
 
-	private function isExpired(string $file, string $name): bool
+	private function isExpired(string $cacheFile, string $name): bool
 	{
 		if (!$this->autoRefresh) {
 			return false;
 		}
 
-		$time = @filemtime($file); // @ - file may not exist
+		$time = @filemtime($cacheFile); // @ - file may not exist
 		if ($time === false) {
 			return true;
 		}
@@ -351,9 +353,9 @@ class Engine
 	/**
 	 * Registers filter loader.
 	 */
-	public function addFilterLoader(callable $callback): static
+	public function addFilterLoader(callable $loader): static
 	{
-		$this->filters->add(null, $callback);
+		$this->filters->add(null, $loader);
 		return $this;
 	}
 
@@ -442,13 +444,13 @@ class Engine
 	/**
 	 * Adds new provider.
 	 */
-	public function addProvider(string $name, mixed $value): static
+	public function addProvider(string $name, mixed $provider): static
 	{
 		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
 			throw new \LogicException("Invalid provider name '$name'.");
 		}
 
-		$this->providers->$name = $value;
+		$this->providers->$name = $provider;
 		return $this;
 	}
 
@@ -478,16 +480,16 @@ class Engine
 	}
 
 
-	public function setExceptionHandler(callable $callback): static
+	public function setExceptionHandler(callable $handler): static
 	{
-		$this->providers->coreExceptionHandler = $callback;
+		$this->providers->coreExceptionHandler = $handler;
 		return $this;
 	}
 
 
-	public function setSandboxMode(bool $on = true): static
+	public function setSandboxMode(bool $state = true): static
 	{
-		$this->sandboxed = $on;
+		$this->sandboxed = $state;
 		return $this;
 	}
 
@@ -512,9 +514,9 @@ class Engine
 	/**
 	 * Sets auto-refresh mode.
 	 */
-	public function setAutoRefresh(bool $on = true): static
+	public function setAutoRefresh(bool $state = true): static
 	{
-		$this->autoRefresh = $on;
+		$this->autoRefresh = $state;
 		return $this;
 	}
 
@@ -522,16 +524,16 @@ class Engine
 	/**
 	 * Enables declare(strict_types=1) in templates.
 	 */
-	public function setStrictTypes(bool $on = true): static
+	public function setStrictTypes(bool $state = true): static
 	{
-		$this->strictTypes = $on;
+		$this->strictTypes = $state;
 		return $this;
 	}
 
 
-	public function setStrictParsing(bool $on = true): static
+	public function setStrictParsing(bool $state = true): static
 	{
-		$this->strictParsing = $on;
+		$this->strictParsing = $state;
 		return $this;
 	}
 
