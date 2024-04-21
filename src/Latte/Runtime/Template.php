@@ -170,7 +170,7 @@ class Template
 		$name = $this->engine->getLoader()->getReferredName($name, $this->name);
 		$referred = $referenceType === 'sandbox'
 			? (clone $this->engine)->setSandboxMode()->createTemplate($name, $params)
-			: $this->engine->createTemplate($name, $params);
+			: $this->engine->createTemplate($name, $params, clearCache: false);
 
 		$referred->referringTemplate = $this;
 		$referred->referenceType = $referenceType;

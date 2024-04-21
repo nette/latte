@@ -49,6 +49,7 @@ class Engine
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
+	private ?string $cacheKey;
 
 
 	public function __construct()
@@ -89,8 +90,9 @@ class Engine
 	 * Creates template object.
 	 * @param  mixed[]  $params
 	 */
-	public function createTemplate(string $name, array $params = []): Runtime\Template
+	public function createTemplate(string $name, array $params = [], $clearCache = true): Runtime\Template
 	{
+		$this->cacheKey = $clearCache ? null : $this->cacheKey;
 		$class = $this->getTemplateClass($name);
 		if (!class_exists($class, false)) {
 			$this->loadTemplate($name);
@@ -324,7 +326,8 @@ class Engine
 
 	private function generateCacheHash(string $name): string
 	{
-		$hash = md5(serialize([$this->getCacheKey(), $this->getLoader()->getUniqueId($name)]));
+		$this->cacheKey ??= md5(serialize($this->getCacheKey()));
+		$hash = $this->cacheKey . $this->getLoader()->getUniqueId($name);
 		return substr(md5($hash), 0, 10);
 	}
 
