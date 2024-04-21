@@ -228,22 +228,29 @@ class Engine
 		// so on Linux we include the file directly without shared lock, therefore, the file must be created atomically by renaming.
 		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
 		$cacheFile = $this->getCacheFile($name);
-		$lock = defined('PHP_WINDOWS_VERSION_BUILD')
+		$cacheKey = $this->autoRefresh
+			? md5(serialize($this->getCacheSignature($name)))
+			: null;
+		$lock = defined('PHP_WINDOWS_VERSION_BUILD') || $this->autoRefresh
 			? $this->acquireLock("$cacheFile.lock", LOCK_SH)
 			: null;
 
-		if (!$this->isExpired($cacheFile, $name) && (@include $cacheFile) !== false) { // @ - file may not exist
+		if (
+			!($this->autoRefresh && $cacheKey !== stream_get_contents($lock))
+			&& (@include $cacheFile) !== false // @ - file may not exist
+		) {
 			return;
 		}
 
 		if ($lock) {
 			flock($lock, LOCK_UN); // release shared lock so we can get exclusive
+			fseek($lock, 0);
 		}
 
 		$lock = $this->acquireLock("$cacheFile.lock", LOCK_EX);
 
 		// while waiting for exclusive lock, someone might have already created the cache
-		if (!is_file($cacheFile) || $this->isExpired($cacheFile, $name)) {
+		if (!is_file($cacheFile) || ($this->autoRefresh && $cacheKey !== stream_get_contents($lock))) {
 			$compiled = $this->compile($name);
 			if (
 				file_put_contents("$cacheFile.tmp", $compiled) !== strlen($compiled)
@@ -252,6 +259,10 @@ class Engine
 				@unlink("$cacheFile.tmp"); // @ - file may not exist
 				throw new RuntimeException("Unable to create '$cacheFile'.");
 			}
+
+			fseek($lock, 0);
+			fwrite($lock, $cacheKey ?? md5(serialize($this->getCacheSignature($name))));
+			ftruncate($lock, ftell($lock));
 
 			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($cacheFile, true); // @ can be restricted
@@ -276,7 +287,7 @@ class Engine
 			throw new RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
 		}
 
-		$handle = @fopen($file, 'w'); // @ is escalated to exception
+		$handle = @fopen($file, 'c+'); // @ is escalated to exception
 		if (!$handle) {
 			throw new RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
 		} elseif (!@flock($handle, $mode)) { // @ is escalated to exception
@@ -284,28 +295,6 @@ class Engine
 		}
 
 		return $handle;
-	}
-
-
-	private function isExpired(string $cacheFile, string $name): bool
-	{
-		if (!$this->autoRefresh) {
-			return false;
-		}
-
-		$time = @filemtime($cacheFile); // @ - file may not exist
-		if ($time === false) {
-			return true;
-		}
-
-		foreach ($this->extensions as $extension) {
-			$r = new \ReflectionObject($extension);
-			if (is_file($r->getFileName()) && filemtime($r->getFileName()) > $time) {
-				return true;
-			}
-		}
-
-		return $this->getLoader()->isExpired($name, $time);
 	}
 
 
@@ -338,14 +327,30 @@ class Engine
 	protected function getCacheKey(): array
 	{
 		return [
-			self::Version,
-			array_keys($this->getFunctions()),
 			$this->contentType,
+			array_keys($this->getFunctions()),
 			array_map(
 				fn($extension) => [
 					get_debug_type($extension),
 					$extension->getCacheKey($this),
+					filemtime((new \ReflectionObject($extension))->getFileName()),
 				],
+				$this->extensions,
+			),
+		];
+	}
+
+
+	/**
+	 * Values that check the expiration of the compiled template.
+	 */
+	protected function getCacheSignature(string $name): array
+	{
+		return [
+			self::Version,
+			$this->getLoader()->getContent($name),
+			array_map(
+				fn($extension) => filemtime((new \ReflectionObject($extension))->getFileName()),
 				$this->extensions,
 			),
 		];
