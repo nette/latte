@@ -309,7 +309,7 @@ class Engine
 
 	public function getTemplateClass(string $name): string
 	{
-		return 'Template' . $this->generateCacheHash($name);
+		return 'Template_' . $this->generateCacheHash($name);
 	}
 
 
