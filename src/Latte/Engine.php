@@ -309,30 +309,43 @@ class Engine
 
 	public function getCacheFile(string $name): string
 	{
-		$hash = substr($this->getTemplateClass($name), 8);
 		$base = preg_match('#([/\\\\][\w@.-]{3,35}){1,3}$#D', $name, $m)
 			? preg_replace('#[^\w@.-]+#', '-', substr($m[0], 1)) . '--'
 			: '';
-		return "$this->tempDirectory/$base$hash.php";
+		return $this->tempDirectory . '/' . $base . $this->generateCacheHash($name) . '.php';
 	}
 
 
 	public function getTemplateClass(string $name): string
 	{
-		$key = [
-			$this->getLoader()->getUniqueId($name),
+		return 'Template' . $this->generateCacheHash($name);
+	}
+
+
+	private function generateCacheHash(string $name): string
+	{
+		$hash = md5(serialize([$this->getCacheKey(), $this->getLoader()->getUniqueId($name)]));
+		return substr(md5($hash), 0, 10);
+	}
+
+
+	/**
+	 * Values that affect the results of compilation and the name of the cache file.
+	 */
+	protected function getCacheKey(): array
+	{
+		return [
 			self::Version,
 			array_keys($this->getFunctions()),
 			$this->contentType,
+			array_map(
+				fn($extension) => [
+					get_debug_type($extension),
+					$extension->getCacheKey($this),
+				],
+				$this->extensions,
+			),
 		];
-		foreach ($this->extensions as $extension) {
-			$key[] = [
-				get_debug_type($extension),
-				$extension->getCacheKey($this),
-			];
-		}
-
-		return 'Template' . substr(md5(serialize($key)), 0, 10);
 	}
 
 
@@ -553,11 +566,7 @@ class Engine
 
 	public function getLoader(): Loader
 	{
-		if (!$this->loader) {
-			$this->loader = new Loaders\FileLoader;
-		}
-
-		return $this->loader;
+		return $this->loader ??= new Loaders\FileLoader;
 	}
 
 
