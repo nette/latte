@@ -44,6 +44,21 @@ test('iterator', function () {
 });
 
 
+test('re-iteration', function () {
+	$sorted = Filters::sort(iterator());
+
+	Assert::same(
+		[['b', 10], ['a', 20], [[true], 30]],
+		exportIterator($sorted),
+	);
+
+	Assert::same(
+		[['b', 10], ['a', 20], [[true], 30]],
+		exportIterator($sorted),
+	);
+});
+
+
 test('user comparison + array', function () {
 	Assert::same(
 		[2 => 30, 0 => 20, 1 => 10],
