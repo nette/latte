@@ -408,6 +408,16 @@ final class TemplateParser
 		return $this->contentType;
 	}
 
+	
+	/**
+	 * Sets tag syntax for lexer
+	 */
+	public function setSyntax(?string $syntax): static
+	{
+		$this->lexer->setSyntax($syntax);
+		return $this;
+	}
+
 
 	/** @internal */
 	public function getStream(): TokenStream
