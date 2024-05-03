@@ -182,6 +182,7 @@ final class CoreExtension extends Latte\Extension
 			'divisibleBy' => [$this->filters, 'divisibleBy'],
 			'even' => [$this->filters, 'even'],
 			'first' => [$this->filters, 'first'],
+			'group' => [$this->filters, 'group'],
 			'last' => [$this->filters, 'last'],
 			'odd' => [$this->filters, 'odd'],
 			'slice' => [$this->filters, 'slice'],
