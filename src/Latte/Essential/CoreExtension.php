@@ -133,6 +133,7 @@ final class CoreExtension extends Latte\Extension
 				? [$this->filters, 'firstUpper']
 				: fn() => throw new RuntimeException('Filter |firstUpper requires mbstring extension.'),
 			'floor' => [$this->filters, 'floor'],
+			'group' => [$this->filters, 'group'],
 			'implode' => [$this->filters, 'implode'],
 			'indent' => [$this->filters, 'indent'],
 			'join' => [$this->filters, 'implode'],
@@ -181,6 +182,7 @@ final class CoreExtension extends Latte\Extension
 			'divisibleBy' => [$this->filters, 'divisibleBy'],
 			'even' => [$this->filters, 'even'],
 			'first' => [$this->filters, 'first'],
+			'group' => [$this->filters, 'group'],
 			'last' => [$this->filters, 'last'],
 			'odd' => [$this->filters, 'odd'],
 			'slice' => [$this->filters, 'slice'],
