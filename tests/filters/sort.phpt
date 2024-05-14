@@ -14,9 +14,9 @@ require __DIR__ . '/../bootstrap.php';
 
 function iterator(): Generator
 {
-	yield 'a' => 20;
-	yield 'b' => 10;
-	yield [true] => 30;
+	yield ['a' => 55] => ['k' => 22];
+	yield ['a' => 66] => (object) ['k' => 11];
+	yield ['a' => 77] => ['k' => 33];
 }
 
 
@@ -31,29 +31,39 @@ function exportIterator(Traversable $iterator): array
 
 
 test('array', function () {
-	Assert::same([1 => 10, 0 => 20, 30], Filters::sort([20, 10, 30]));
+	Assert::same([1 => 11, 0 => 22, 33], Filters::sort([22, 11, 33]));
 	Assert::same([], Filters::sort([]));
 });
 
 
 test('iterator', function () {
-	Assert::same(
-		[['b', 10], ['a', 20], [[true], 30]],
-		exportIterator(Filters::sort(iterator())),
+	$sorted = Filters::sort(iterator());
+
+	Assert::same(3, count($sorted));
+	Assert::equal(
+		[
+			[['a' => 55], ['k' => 22]],
+			[['a' => 77], ['k' => 33]],
+			[['a' => 66], (object) ['k' => 11]],
+		],
+		exportIterator($sorted),
 	);
 });
 
 
 test('re-iteration', function () {
 	$sorted = Filters::sort(iterator());
-
-	Assert::same(
-		[['b', 10], ['a', 20], [[true], 30]],
+	$res = [
+		[['a' => 55], ['k' => 22]],
+		[['a' => 77], ['k' => 33]],
+		[['a' => 66], (object) ['k' => 11]],
+	];
+	Assert::equal(
+		$res,
 		exportIterator($sorted),
 	);
-
-	Assert::same(
-		[['b', 10], ['a', 20], [[true], 30]],
+	Assert::equal(
+		$res,
 		exportIterator($sorted),
 	);
 });
@@ -61,15 +71,122 @@ test('re-iteration', function () {
 
 test('user comparison + array', function () {
 	Assert::same(
-		[2 => 30, 0 => 20, 1 => 10],
-		Filters::sort([20, 10, 30], fn($a, $b) => $b <=> $a)
+		[2 => 33, 0 => 22, 1 => 11],
+		Filters::sort([22, 11, 33], fn($a, $b) => $b <=> $a)
 	);
 });
 
 
 test('user comparison + iterator', function () {
-	Assert::same(
-		[[[true], 30], ['a', 20], ['b', 10]],
+	Assert::equal(
+		[
+			[['a' => 66], (object) ['k' => 11]],
+			[['a' => 77], ['k' => 33]],
+			[['a' => 55], ['k' => 22]],
+		],
 		exportIterator(Filters::sort(iterator(), fn($a, $b) => $b <=> $a)),
+	);
+});
+
+
+test('array + by', function () {
+	Assert::equal(
+		[1 => (object) ['k' => 11], 0 => ['k' => 22], ['k' => 33]],
+		Filters::sort([['k' => 22], (object) ['k' => 11], ['k' => 33]], by: 'k'),
+	);
+	Assert::same([], Filters::sort([], by: 'k'));
+});
+
+
+test('iterator + by', function () {
+	Assert::equal(
+		[
+			[['a' => 66], (object) ['k' => 11]],
+			[['a' => 55], ['k' => 22]],
+			[['a' => 77], ['k' => 33]],
+		],
+		exportIterator(Filters::sort(iterator(), by: 'k')),
+	);
+});
+
+
+test('callback + array + by', function () {
+	Assert::same(
+		[1 => 11, 0 => 22, 33],
+		Filters::sort([22, 11, 33], by: fn($a) => $a * 11)
+	);
+});
+
+
+test('callback + iterator + by', function () {
+	Assert::equal(
+		[
+			[['a' => 77], ['k' => 33]],
+			[['a' => 55], ['k' => 22]],
+			[['a' => 66], (object) ['k' => 11]],
+		],
+		exportIterator(Filters::sort(iterator(), by: fn($a) => -((array) $a)['k'])),
+	);
+});
+
+
+test('array + byKey', function () {
+	Assert::same([1 => 11, 0 => 22, 33], Filters::sort([22, 11, 33]));
+	Assert::same([], Filters::sort([], byKey: true));
+});
+
+
+test('iterator + byKey', function () {
+	Assert::equal(
+		[
+			[['a' => 55], ['k' => 22]],
+			[['a' => 66], (object) ['k' => 11]],
+			[['a' => 77], ['k' => 33]],
+		],
+		exportIterator(Filters::sort(iterator(), byKey: true)),
+	);
+});
+
+
+test('user comparison + array + byKey', function () {
+	Assert::same(
+		[2 => 33, 1 => 11, 0 => 22],
+		Filters::sort([22, 11, 33], fn($a, $b) => $b <=> $a, byKey: true),
+	);
+});
+
+
+test('user comparison + iterator + byKey', function () {
+	Assert::equal(
+		[
+			[['a' => 77], ['k' => 33]],
+			[['a' => 66], (object) ['k' => 11]],
+			[['a' => 55], ['k' => 22]],
+		],
+		exportIterator(Filters::sort(iterator(), fn($a, $b) => $b <=> $a, byKey: true)),
+	);
+});
+
+
+test('iterator + by + byKey', function () {
+	Assert::equal(
+		[
+			[['a' => 55], ['k' => 22]],
+			[['a' => 66], (object) ['k' => 11]],
+			[['a' => 77], ['k' => 33]],
+		],
+		exportIterator(Filters::sort(iterator(), byKey: 'a')),
+	);
+});
+
+
+test('callback + iterator + by + byKey', function () {
+	Assert::equal(
+		[
+			[['a' => 77], ['k' => 33]],
+			[['a' => 66], (object) ['k' => 11]],
+			[['a' => 55], ['k' => 22]],
+		],
+		exportIterator(Filters::sort(iterator(), byKey: fn($a) => -((array) $a)['a'])),
 	);
 });

@@ -455,10 +455,29 @@ final class Filters
 	 * @param  iterable<K, V>  $data
 	 * @return iterable<K, V>
 	 */
-	public static function sort(iterable $data, ?\Closure $comparison = null): iterable
+	public static function sort(
+		iterable $data,
+		?\Closure $comparison = null,
+		string|int|\Closure|null $by = null,
+		string|int|\Closure|bool $byKey = false,
+	): iterable
 	{
+		if ($byKey !== false) {
+			if ($by !== null) {
+				throw new \InvalidArgumentException('Filter |sort cannot use both $by and $byKey.');
+			}
+			$by = $byKey === true ? null : $byKey;
+		}
+
+		$comparison ??= fn($a, $b) => $a <=> $b;
+		$comparison = match (true) {
+			$by === null => $comparison,
+			$by instanceof \Closure => fn($a, $b) => $comparison($by($a), $by($b)),
+			default => fn($a, $b) => $comparison(is_array($a) ? $a[$by] : $a->$by, is_array($b) ? $b[$by] : $b->$by),
+		};
+
 		if (is_array($data)) {
-			$comparison ? uasort($data, $comparison) : asort($data);
+			$byKey ? uksort($data, $comparison) : uasort($data, $comparison);
 			return $data;
 		}
 
@@ -466,7 +485,7 @@ final class Filters
 		foreach ($data as $key => $value) {
 			$pairs[] = [$key, $value];
 		}
-		uasort($pairs, fn($a, $b) => $comparison ? $comparison($a[1], $b[1]) : $a[1] <=> $b[1]);
+		uasort($pairs, fn($a, $b) => $byKey ? $comparison($a[0], $b[0]) : $comparison($a[1], $b[1]));
 
 		return new AuxiliaryIterator($pairs);
 	}
