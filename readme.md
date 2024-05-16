@@ -26,7 +26,7 @@ Getting started
 
 1️⃣ First, familiarize yourself with [Latte syntax](https://latte.nette.org/en/syntax) and [try it online](https://fiddle.nette.org/latte/#9cc0cf6d89)<br>
 2️⃣ Take a look at the basic set of [tags](https://latte.nette.org/en/tags) and [filters](https://latte.nette.org/en/filters)<br>
-3️⃣ Write templates in [editor with Latte support](https://latte.nette.org/en/recipes#toc-editors-and-ide)
+3️⃣ Render a template with a [few lines of PHP code](https://latte.nette.org/en/develop)
 
 </h3>
 
