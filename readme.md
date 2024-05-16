@@ -13,6 +13,7 @@ Latte is cleverly designed and easy to learn for those familiar with PHP, as the
 - 2️⃣ Take a look at the basic set of [tags](https://latte.nette.org/en/tags) and [filters](https://latte.nette.org/en/filters)
 - 3️⃣ Write templates in [editor with Latte support](https://latte.nette.org/en/recipes#toc-editors-and-ide)
 
+Usage: https://latte.nette.org/en/develop
 
 Do you like Latte? Are you looking forward to the new features?
 
