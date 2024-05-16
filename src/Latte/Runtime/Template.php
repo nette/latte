@@ -138,7 +138,7 @@ class Template
 
 		$params = $this->prepare();
 
-		if ($this->parentName === null && isset($this->global->coreParentFinder)) {
+		if ($this->parentName === null && !$this->referringTemplate && isset($this->global->coreParentFinder)) {
 			$this->parentName = ($this->global->coreParentFinder)($this);
 		}
 
