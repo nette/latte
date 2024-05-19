@@ -17,5 +17,22 @@ Assert::match(<<<'XX'
 			Import:
 				Variable:
 					name: var
+				Array:
 		Fragment:
 	XX, exportTraversing('{import $var}'));
+
+
+Assert::match(<<<'XX'
+	Template:
+		Fragment:
+			Import:
+				Variable:
+					name: var
+				Array:
+					ArrayItem:
+						Identifier:
+							name: param
+						String:
+							value: val
+		Fragment:
+	XX, exportTraversing('{import $var, param: val}'));
