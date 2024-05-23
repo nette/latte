@@ -16,9 +16,3 @@ use Attribute;
 class TemplateFunction
 {
 }
-
-
-#[Attribute(Attribute::TARGET_METHOD)]
-class TemplateFilter
-{
-}
