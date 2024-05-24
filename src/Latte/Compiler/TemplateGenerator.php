@@ -188,7 +188,7 @@ final class TemplateGenerator
 
 
 	/**
-	 * Returns custom properites.
+	 * Returns custom properties.
 	 * @return array<string, mixed>
 	 * @internal
 	 */

@@ -35,7 +35,7 @@ final class Filters
 
 
 	/**
-	 * Removes tags from HTML (but remains HTML entites).
+	 * Removes tags from HTML (but remains HTML entities).
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
 	{
