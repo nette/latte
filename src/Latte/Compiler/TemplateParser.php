@@ -82,7 +82,7 @@ final class TemplateParser
 	}
 
 
-	public function parseFragment(callable $resolver, callable $after = null): FragmentNode
+	public function parseFragment(callable $resolver, ?callable $after = null): FragmentNode
 	{
 		$res = new FragmentNode;
 		$save = [$this->lastResolver, $this->tag];
