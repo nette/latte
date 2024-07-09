@@ -10,8 +10,10 @@ declare(strict_types=1);
 namespace Latte\Essential\Nodes;
 
 use Latte\Compiler\Nodes\Php\Expression\AssignNode;
+use Latte\Compiler\Nodes\Php\Expression\AssignOpNode;
+use Latte\Compiler\Nodes\Php\Expression\AuxiliaryNode;
+use Latte\Compiler\Nodes\Php\Expression\TernaryNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
@@ -67,25 +69,19 @@ class VarNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		$res = [];
-		if ($this->default) {
-			foreach ($this->assignments as $assign) {
-				assert($assign->var instanceof VariableNode);
-				if ($assign->var->name instanceof ExpressionNode) {
-					$var = $assign->var->name->print($context);
-				} else {
-					$var = $context->encodeString($assign->var->name);
-				}
-				$res[] = $var . ' => ' . $assign->expr->print($context);
-			}
-
-			return $context->format(
-				'extract([%raw], EXTR_SKIP) %line;',
-				implode(', ', $res),
-				$this->position,
-			);
-		}
-
 		foreach ($this->assignments as $assign) {
+			if ($this->default) {
+				assert($assign->var instanceof VariableNode);
+				$assign = new AssignOpNode(
+					$assign->var,
+					'??',
+					new TernaryNode(
+						new AuxiliaryNode(fn() => 'array_key_exists(' . $context->encodeString($assign->var->name) . ', get_defined_vars())'),
+						new NullNode,
+						$assign->expr,
+					),
+				);
+			}
 			$res[] = $assign->print($context);
 		}
 

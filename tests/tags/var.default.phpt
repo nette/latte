@@ -42,13 +42,37 @@ test('{var ...}', function () use ($latte) {
 
 
 test('{default ...}', function () use ($latte) {
-	Assert::contains("extract(['var' => null, 'var2' => null], EXTR_SKIP) /*", $latte->compile('{default $var, $var2}'));
-	Assert::contains("extract(['var' => 123], EXTR_SKIP) /*", $latte->compile('{default $var = 123}'));
-	Assert::contains("extract(['var1' => 123, 'var2' => 'nette framework'], EXTR_SKIP) /*", $latte->compile('{default $var1 = 123, $var2 = "nette framework"}'));
+	Assert::match(<<<'XX'
+		%A%
+				$var ??= array_key_exists('var', get_defined_vars()) ? null : null;
+				$var2 ??= array_key_exists('var2', get_defined_vars()) ? null : null /* line 1 */;
+		%A%
+		XX, $latte->compile('{default $var, $var2}'));
+
+	Assert::contains(
+		'$var ??= array_key_exists(\'var\', get_defined_vars()) ? null : (1 ? 2 : 3) /* line 1 */;',
+		$latte->compile('{default $var = 1 ? 2 : 3}'),
+	);
+
+	Assert::match(<<<'XX'
+		%A%
+				$var1 ??= array_key_exists('var1', get_defined_vars()) ? null : 123;
+				$var2 ??= array_key_exists('var2', get_defined_vars()) ? null : 'nette framework' /* line 1 */;
+		%A%
+		XX, $latte->compile('{default $var1 = 123, $var2 = "nette framework"}'));
 
 	// types
-	Assert::contains("extract(['var' => 123], EXTR_SKIP) /*", $latte->compile('{default null|int|string[] $var = 123}'));
-	Assert::contains("extract(['var1' => 123, 'var2' => 'nette framework'], EXTR_SKIP) /*", $latte->compile('{default int|string[] $var1 = 123, ?class $var2 = "nette framework"}'));
+	Assert::contains(
+		'$var ??= array_key_exists(\'var\', get_defined_vars()) ? null : 123 /* line 1 */;',
+		$latte->compile('{default null|int|string[] $var = 123}'),
+	);
+
+	Assert::match(<<<'XX'
+		%A%
+				$var1 ??= array_key_exists('var1', get_defined_vars()) ? null : 123;
+				$var2 ??= array_key_exists('var2', get_defined_vars()) ? null : 'nette framework' /* line 1 */;
+		%A%
+		XX, $latte->compile('{default int|string[] $var1 = 123, ?class $var2 = "nette framework"}'));
 
 	// errors
 	Assert::exception(
@@ -62,7 +86,4 @@ test('{default ...}', function () use ($latte) {
 		Latte\CompileException::class,
 		'Unexpected end in {default} (on line 1 at column 30)',
 	);
-
-	// preprocess
-	Assert::contains("extract(['var1' => true ? 'a' : null], EXTR_SKIP) /*", $latte->compile('{default $var1 = true ? a}'));
 });

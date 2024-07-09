@@ -53,7 +53,9 @@ Parent: ';
 	{
 		extract($this->params);
 
-		extract(['class' => null, 'namespace' => null, 'top' => true], EXTR_SKIP) /* line %d% */;
+		$class ??= array_key_exists('class', get_defined_vars()) ? null : null;
+		$namespace ??= array_key_exists('namespace', get_defined_vars()) ? null : null;
+		$top ??= array_key_exists('top', get_defined_vars()) ? null : true /* line 1 */;
 		return get_defined_vars();
 	}
 
