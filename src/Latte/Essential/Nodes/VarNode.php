@@ -11,7 +11,6 @@ namespace Latte\Essential\Nodes;
 
 use Latte\Compiler\Nodes\Php\Expression\AssignNode;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
@@ -67,26 +66,18 @@ class VarNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		$res = [];
-		if ($this->default) {
-			foreach ($this->assignments as $assign) {
-				assert($assign->var instanceof VariableNode);
-				if ($assign->var->name instanceof ExpressionNode) {
-					$var = $assign->var->name->print($context);
-				} else {
-					$var = $context->encodeString($assign->var->name);
-				}
-				$res[] = $var . ' => ' . $assign->expr->print($context);
-			}
-
-			return $context->format(
-				'extract([%raw], EXTR_SKIP) %line;',
-				implode(', ', $res),
-				$this->position,
-			);
-		}
-
 		foreach ($this->assignments as $assign) {
-			$res[] = $assign->print($context);
+			if ($this->default) {
+				assert($assign->var instanceof VariableNode);
+				$res[] = $context->format(
+					'%node ??= array_key_exists(%raw, get_defined_vars()) ? null : %node',
+					$assign->var,
+					$context->encodeString($assign->var->name),
+					$assign->expr,
+				);
+			} else {
+				$res[] = $assign->print($context);
+			}
 		}
 
 		return $context->format(
