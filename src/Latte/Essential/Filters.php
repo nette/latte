@@ -23,6 +23,9 @@ use function is_array, is_string, count, strlen;
  */
 final class Filters
 {
+	public ?string $locale = null;
+
+
 	/**
 	 * Converts HTML to plain text.
 	 */
@@ -35,7 +38,7 @@ final class Filters
 
 
 	/**
-	 * Removes tags from HTML (but remains HTML entites).
+	 * Removes tags from HTML (but remains HTML entities).
 	 */
 	public static function stripTags(FilterInfo $info, $s): string
 	{
@@ -166,16 +169,13 @@ final class Filters
 	/**
 	 * Date/time formatting.
 	 */
-	public static function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
+	public function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
 	{
+		$format ??= Latte\Runtime\Filters::$dateFormat;
 		if ($time == null) { // intentionally ==
 			return null;
-		}
-
-		$format ??= Latte\Runtime\Filters::$dateFormat;
-		if ($time instanceof \DateInterval) {
+		} elseif ($time instanceof \DateInterval) {
 			return $time->format($format);
-
 		} elseif (is_numeric($time)) {
 			$time = (new \DateTime)->setTimestamp((int) $time);
 		} elseif (!$time instanceof \DateTimeInterface) {
@@ -186,8 +186,23 @@ final class Filters
 			if (PHP_VERSION_ID >= 80100) {
 				trigger_error("Function strftime() used by filter |date is deprecated since PHP 8.1, use format without % characters like 'Y-m-d'.", E_USER_DEPRECATED);
 			}
-
 			return @strftime($format, $time->format('U') + 0);
+
+		} elseif (preg_match('#^(\+(short|medium|long|full))?(\+time(\+sec)?)?$#', '+' . $format, $m)) {
+			$formatter = new \IntlDateFormatter(
+				$this->getLocale('date'),
+				match ($m[2]) {
+					'short' => \IntlDateFormatter::SHORT,
+					'medium' => \IntlDateFormatter::MEDIUM,
+					'long' => \IntlDateFormatter::LONG,
+					'full' => \IntlDateFormatter::FULL,
+					'' => \IntlDateFormatter::NONE,
+				},
+				isset($m[3]) ? (isset($m[4]) ? \IntlDateFormatter::MEDIUM : \IntlDateFormatter::SHORT) : \IntlDateFormatter::NONE,
+			);
+			$res = $formatter->format($time);
+			$res = preg_replace('~(\d\.) ~', "\$1\u{a0}", $res);
+			return $res;
 		}
 
 		return $time->format($format);
@@ -197,7 +212,7 @@ final class Filters
 	/**
 	 * Converts to human-readable file size.
 	 */
-	public static function bytes(float $bytes, int $precision = 2): string
+	public function bytes(float $bytes, int $precision = 2): string
 	{
 		$bytes = round($bytes);
 		$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
@@ -209,7 +224,15 @@ final class Filters
 			$bytes /= 1024;
 		}
 
-		return round($bytes, $precision) . ' ' . $unit;
+		if ($this->locale === null) {
+			$bytes = (string) round($bytes, $precision);
+		} else {
+			$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+			$formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
+			$bytes = $formatter->format($bytes);
+		}
+
+		return $bytes . ' ' . $unit;
 	}
 
 
@@ -450,38 +473,69 @@ final class Filters
 
 	/**
 	 * Sorts elements using the comparison function and preserves the key association.
+	 * @template K
+	 * @template V
+	 * @param  iterable<K, V>  $data
+	 * @return iterable<K, V>
 	 */
-	public static function sort(iterable $iterable, ?\Closure $comparison = null): iterable
+	public function sort(
+		iterable $data,
+		?\Closure $comparison = null,
+		string|int|\Closure|null $by = null,
+		string|int|\Closure|bool $byKey = false,
+	): iterable
 	{
-		if (is_array($iterable)) {
-			$comparison ? uasort($iterable, $comparison) : asort($iterable);
-			return $iterable;
-		}
-
-		$keys = $values = [];
-		foreach ($iterable as $key => $value) {
-			$keys[] = $key;
-			$values[] = $value;
-		}
-		$comparison ? uasort($values, $comparison) : asort($values);
-
-		return (static function () use ($keys, $values): \Generator {
-			foreach ($values as $i => $value) {
-				yield $keys[$i] => $value;
+		if ($byKey !== false) {
+			if ($by !== null) {
+				throw new \InvalidArgumentException('Filter |sort cannot use both $by and $byKey.');
 			}
-		})();
+			$by = $byKey === true ? null : $byKey;
+		}
+
+		if ($comparison) {
+		} elseif ($this->locale === null) {
+			$comparison = fn($a, $b) => $a <=> $b;
+		} else {
+			$collator = new \Collator($this->locale);
+			$comparison = fn($a, $b) => is_string($a) && is_string($b)
+				? $collator->compare($a, $b)
+				: $a <=> $b;
+		}
+
+		$comparison = match (true) {
+			$by === null => $comparison,
+			$by instanceof \Closure => fn($a, $b) => $comparison($by($a), $by($b)),
+			default => fn($a, $b) => $comparison(is_array($a) ? $a[$by] : $a->$by, is_array($b) ? $b[$by] : $b->$by),
+		};
+
+		if (is_array($data)) {
+			$byKey ? uksort($data, $comparison) : uasort($data, $comparison);
+			return $data;
+		}
+
+		$pairs = [];
+		foreach ($data as $key => $value) {
+			$pairs[] = [$key, $value];
+		}
+		uasort($pairs, fn($a, $b) => $byKey ? $comparison($a[0], $b[0]) : $comparison($a[1], $b[1]));
+
+		return new AuxiliaryIterator($pairs);
 	}
 
 
 	/**
 	 * Groups elements by the element indices and preserves the key association and order.
+	 * @template K
+	 * @template V
+	 * @param  iterable<K, V>  $data
+	 * @return iterable<iterable<K, V>>
 	 */
-	public static function group(iterable $iterable, string|int|\Closure $by): \Generator
+	public static function group(iterable $data, string|int|\Closure $by): iterable
 	{
 		$fn = $by instanceof \Closure ? $by : fn($a) => is_array($a) ? $a[$by] : $a->$by;
-		$keys = $groups = $prevKey = [];
+		$keys = $groups = [];
 
-		foreach ($iterable as $k => $v) {
+		foreach ($data as $k => $v) {
 			$groupKey = $fn($v, $k);
 			if (!$groups || $prevKey !== $groupKey) {
 				$index = array_search($groupKey, $keys, true);
@@ -491,17 +545,14 @@ final class Filters
 				}
 				$prevKey = $groupKey;
 			}
-			$groups[$index][0][] = $k;
-			$groups[$index][1][] = $v;
+			$groups[$index][] = [$k, $v];
 		}
 
-		foreach ($groups as $index => $pair) {
-			yield $keys[$index] => (static function () use ($pair): \Generator {
-				foreach ($pair[1] as $i => $value) {
-					yield $pair[0][$i] => $value;
-				}
-			})();
-		}
+		return new AuxiliaryIterator(array_map(
+			fn($key, $group) => [$key, new AuxiliaryIterator($group)],
+			$keys,
+			$groups,
+		));
 	}
 
 
@@ -630,5 +681,40 @@ final class Filters
 		return $values
 			? $values[array_rand($values, 1)]
 			: null;
+	}
+
+
+	/**
+	 * Formats a number with grouped thousands and optionally decimal digits according to locale.
+	 */
+	public function number(
+		float $number,
+		string|int $patternOrDecimals = 0,
+		string $decimalSeparator = '.',
+		string $thousandsSeparator = ',',
+	): string
+	{
+		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
+			throw new Latte\RuntimeException("Filter |$name: number of decimal must not be negative");
+		} elseif ($this->locale === null || func_num_args() > 2) {
+			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
+		}
+
+		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+		if (is_string($patternOrDecimals)) {
+			$formatter->setPattern($patternOrDecimals);
+		} else {
+			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
+		}
+		return $formatter->format($number);
+	}
+
+
+	private function getLocale(string $name): string
+	{
+		if ($this->locale === null) {
+			throw new Latte\RuntimeException("Filter |$name requires the locale to be set using Engine::setLocale()");
+		}
+		return $this->locale;
 	}
 }

@@ -48,11 +48,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'extendsNone' => '{extends none}',
 	'parent' => '',
 ]));
-$latte->addProvider('coreParentFinder', function ($template) {
-	if (!$template->getReferenceType()) {
-		return 'parent';
-	}
-});
+$latte->addProvider('coreParentFinder', fn($template) => 'parent');
 
 $template = $latte->createTemplate('empty');
 $template->render();

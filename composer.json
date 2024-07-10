@@ -15,21 +15,22 @@
 		}
 	],
 	"require": {
-		"php": "8.0 - 8.3",
+		"php": "8.0 - 8.4",
 		"ext-json": "*",
 		"ext-tokenizer": "*"
 	},
 	"require-dev": {
-		"nette/tester": "^2.0",
-		"tracy/tracy": "^2.3",
-		"nette/utils": "^3.0",
+		"nette/tester": "^2.5",
+		"tracy/tracy": "^2.10",
+		"nette/utils": "^4.0",
 		"phpstan/phpstan": "^1",
-		"nette/php-generator": "^3.6 || ^4.0"
+		"nette/php-generator": "^4.0"
 	},
 	"suggest": {
 		"ext-iconv": "to use filters |reverse, |substring",
 		"ext-mbstring": "to use filters like lower, upper, capitalize, ...",
 		"ext-fileinfo": "to use filter |datastream",
+		"ext-intl": "to use Latte\\Engine::setLocale()",
 		"nette/utils": "to use filter |webalize",
 		"nette/php-generator": "to use tag {templatePrint}"
 	},

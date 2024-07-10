@@ -66,7 +66,7 @@ final class TagLexer
 
 
 	/** @return Token[] */
-	public function tokenizePartially(string $input, Position &$position, int $ofs = null): array
+	public function tokenizePartially(string $input, Position &$position, ?int $ofs = null): array
 	{
 		$this->input = $input;
 		$this->offset = $ofs ?? $position->offset;
@@ -120,7 +120,7 @@ final class TagLexer
 			(?<Php_NameFullyQualified>  \\ (?&label) ( \\ (?&label) )*  )|
 			(?<Php_NameQualified>  (?&label) ( \\ (?&label) )+  )|
 			(?<Php_IdentifierFollowed>  (?&label)  (?= [ \t\r\n]* [(&=] )  )|
-			(?<Php_Identifier>  (?&label)((--?|\.)[a-zA-Z0-9_\x80-\xff]+)*  )|
+			(?<Php_Identifier>  (?&label)((--?|\.|\+)[a-zA-Z0-9_\x80-\xff]+)*  )|
 			(
 				(
 					(?<Php_ObjectOperator>  ->  )|

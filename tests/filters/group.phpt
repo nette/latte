@@ -15,8 +15,8 @@ require __DIR__ . '/../bootstrap.php';
 function iterator(): Generator
 {
 	yield ['a' => 55] => ['k' => 22, 'k2'];
-	yield ['a' => 66] => (object) ['k' => 22, 'k2'];
 	yield ['a' => 77] => ['k' => 11];
+	yield ['a' => 66] => (object) ['k' => 22, 'k2'];
 	yield ['a' => 88] => ['k' => 33];
 }
 
@@ -51,6 +51,9 @@ test('array', function () {
 
 
 test('iterator', function () {
+	$groups = Filters::group(iterator(), 'k');
+
+	Assert::same(3, count($groups));
 	Assert::equal(
 		[
 			[22, [
@@ -60,7 +63,43 @@ test('iterator', function () {
 			[11, [[['a' => 77], ['k' => 11]]]],
 			[33, [[['a' => 88], ['k' => 33]]]],
 		],
-		exportIterator(Filters::group(iterator(), 'k')),
+		exportIterator($groups),
+	);
+});
+
+
+test('re-iteration', function () {
+	$groups = Filters::group(iterator(), 'k');
+	$res = [
+		[22, [
+			[['a' => 55], ['k' => 22, 'k2']],
+			[['a' => 66], (object) ['k' => 22, 'k2']],
+		]],
+		[11, [[['a' => 77], ['k' => 11]]]],
+		[33, [[['a' => 88], ['k' => 33]]]],
+	];
+	Assert::equal(
+		$res,
+		exportIterator($groups),
+	);
+	Assert::equal(
+		$res,
+		exportIterator($groups),
+	);
+});
+
+
+test('nested re-iteration', function () {
+	$groups = Filters::group(iterator(), 'k');
+	$keys = [];
+	foreach ($groups as $key => $group) {
+		$keys[] = $key;
+		foreach ($groups as $group);
+	}
+
+	Assert::equal(
+		[22, 11, 33],
+		$keys,
 	);
 });
 
