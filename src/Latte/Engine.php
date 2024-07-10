@@ -572,7 +572,7 @@ class Engine
 	public function setLocale(?string $locale): static
 	{
 		if ($locale && !extension_loaded('intl')) {
-			throw new RuntimeException("Locate requires the 'intl' extension to be installed.");
+			throw new RuntimeException("Setting a locale requires the 'intl' extension to be installed.");
 		}
 		$this->locale = $locale;
 		return $this;
