@@ -13,7 +13,6 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
-use const PHP_VERSION_ID;
 
 
 class MethodCallableNode extends ExpressionNode
@@ -28,10 +27,8 @@ class MethodCallableNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		return PHP_VERSION_ID < 80100
-			? '[' . $this->object->print($context) . ', ' . $context->memberAsString($this->name) . ']'
-			: $context->dereferenceExpr($this->object)
-				. '->' . $context->objectProperty($this->name) . '(...)';
+		return $context->dereferenceExpr($this->object)
+			. '->' . $context->objectProperty($this->name) . '(...)';
 	}
 
 

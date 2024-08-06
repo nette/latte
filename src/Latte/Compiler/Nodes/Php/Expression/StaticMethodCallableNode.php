@@ -14,7 +14,6 @@ use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
-use const PHP_VERSION_ID;
 
 
 class StaticMethodCallableNode extends ExpressionNode
@@ -34,9 +33,7 @@ class StaticMethodCallableNode extends ExpressionNode
 			$this->name instanceof ExpressionNode => '{' . $this->name->print($context) . '}',
 			default => $this->name,
 		};
-		return PHP_VERSION_ID < 80100
-			? '[' . $this->class->print($context) . ', ' . $context->memberAsString($this->name) . ']'
-			: $context->dereferenceExpr($this->class) . '::' . $name . '(...)';
+		return $context->dereferenceExpr($this->class) . '::' . $name . '(...)';
 	}
 
 
