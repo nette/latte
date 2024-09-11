@@ -15,6 +15,7 @@ $test = <<<'XX'
 	($a |truncate: 10, (20|round)|trim),
 	($a |truncate: a: 10, b: true),
 	($a |truncate( a: 10, b: true)),
+	($a |truncate( a: 10, )),
 	XX;
 
 $node = parseCode($test);
@@ -26,7 +27,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (6)
+   items: array (7)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -239,4 +240,31 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 6:1 (offset 137)
+   |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  name: 'a'
+   |  |  |  |  position: 7:2 (offset 171)
+   |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'truncate'
+   |  |  |  |  |  position: 7:6 (offset 175)
+   |  |  |  |  args: array (1)
+   |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
+   |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  |  |  |  value: 10
+   |  |  |  |  |  |  |  kind: 10
+   |  |  |  |  |  |  |  position: 7:19 (offset 188)
+   |  |  |  |  |  |  byRef: false
+   |  |  |  |  |  |  unpack: false
+   |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  |  |  name: 'a'
+   |  |  |  |  |  |  |  position: 7:16 (offset 185)
+   |  |  |  |  |  |  position: 7:16 (offset 185)
+   |  |  |  |  position: 7:5 (offset 174)
+   |  |  |  position: 7:2 (offset 171)
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 7:1 (offset 170)
    position: 1:1 (offset 0)
