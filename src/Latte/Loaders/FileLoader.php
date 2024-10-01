@@ -87,6 +87,7 @@ class FileLoader implements Latte\Loader
 			}
 		}
 
-		return implode(DIRECTORY_SEPARATOR, $res);
+		$res_str = implode(DIRECTORY_SEPARATOR, $res);
+		return (str_starts_with($res_str, 'phar:') ? str_replace(":\\\\","://", $res_str) : $res_str);
 	}
 }
