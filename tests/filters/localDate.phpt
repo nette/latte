@@ -38,7 +38,18 @@ test('edge cases', function () {
 });
 
 
-test('timestamp & zone', function () {
+test('PHP timezone', function () {
+	$filters = new Filters;
+	$filters->locale = 'cs_CZ';
+
+	date_default_timezone_set('Europe/Prague');
+	$now = new DateTime('2024-10-01 21:37:45 UTC');
+	Assert::same('23:37:45 SELČ', $filters->localDate($now, 'Hmmssz'));
+	Assert::same('23:37', $filters->localDate($now, time: 'short'));
+});
+
+
+test('timestamp & timezone', function () {
 	$filters = new Filters;
 	$filters->locale = 'cs_CZ';
 
