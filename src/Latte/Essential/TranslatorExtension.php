@@ -50,7 +50,7 @@ final class TranslatorExtension extends Latte\Extension
 	public function getFilters(): array
 	{
 		return [
-			'translate' => fn(Latte\Runtime\FilterInfo $fi, ...$args): string => $this->translator
+			'translate' => fn(Latte\Runtime\FilterInfo $fi, ...$args) => $this->translator
 				? ($this->translator)(...$args)
 				: $args[0],
 		];
