@@ -134,6 +134,7 @@ final class CoreExtension extends Latte\Extension
 			'escapeUrl' => 'rawurlencode',
 			'escapeXml' => [Latte\Runtime\Filters::class, 'escapeXml'],
 			'explode' => [$this->filters, 'explode'],
+			'filter' => [$this->filters, 'filter'],
 			'first' => [$this->filters, 'first'],
 			'firstUpper' => extension_loaded('mbstring')
 				? [$this->filters, 'firstUpper']

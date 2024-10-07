@@ -607,6 +607,24 @@ final class Filters
 
 
 	/**
+	 * Filters elements according to a given $predicate. Maintains original keys.
+	 * @template K
+	 * @template V
+	 * @param  iterable<K, V>  $iterable
+	 * @param  callable(V, K, iterable<K, V>): bool  $predicate
+	 * @return iterable<K, V>
+	 */
+	public static function filter(iterable $iterable, callable $predicate): iterable
+	{
+		foreach ($iterable as $k => $v) {
+			if ($predicate($v, $k, $iterable)) {
+				yield $k => $v;
+			}
+		}
+	}
+
+
+	/**
 	 * Returns value clamped to the inclusive range of min and max.
 	 */
 	public static function clamp(int|float $value, int|float $min, int|float $max): int|float
