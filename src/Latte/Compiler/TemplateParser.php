@@ -71,7 +71,7 @@ final class TemplateParser
 		};
 
 		$node = new Nodes\TemplateNode;
-		$node->main = $this->parseFragment([$this->html, 'inTextResolve'], $findLength);
+		$node->main = $this->parseFragment($this->html->inTextResolve(...), $findLength);
 		$node->head = new FragmentNode(array_splice($node->main->children, 0, $headLength));
 		$node->contentType = $this->contentType;
 
