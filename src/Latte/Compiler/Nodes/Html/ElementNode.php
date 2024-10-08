@@ -49,7 +49,7 @@ class ElementNode extends AreaNode
 		public string $contentType = ContentType::Html,
 	) {
 		$this->data ??= new \stdClass;
-		$this->tagNode = new AuxiliaryNode(\Closure::fromCallable([$this, 'printStartTag']));
+		$this->tagNode = new AuxiliaryNode($this->printStartTag(...));
 	}
 
 

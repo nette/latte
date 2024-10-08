@@ -355,7 +355,7 @@ class Template
 		$this->blocks[$destId] = [];
 		foreach (static::Blocks[$staticId] ?? [] as $nm => $info) {
 			[$method, $contentType] = is_array($info) ? $info : [$info, static::ContentType];
-			$this->addBlock($nm, $contentType, [[$this, $method]], $destId);
+			$this->addBlock($nm, $contentType, [$this->$method(...)], $destId);
 		}
 	}
 
