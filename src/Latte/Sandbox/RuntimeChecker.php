@@ -47,7 +47,7 @@ final class RuntimeChecker
 		}
 
 		self::args(...$args);
-		return [$object, $method](...$args);
+		return $object->$method(...$args);
 	}
 
 
