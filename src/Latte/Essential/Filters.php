@@ -210,6 +210,71 @@ final class Filters
 
 
 	/**
+	 * Date/time formatting according to locale.
+	 */
+	public function localDate(
+		string|int|\DateTimeInterface|null $value,
+		?string $format = null,
+		?string $date = null,
+		?string $time = null,
+	): ?string
+	{
+		if ($this->locale === null) {
+			throw new Latte\RuntimeException('Filter |localDate requires the locale to be set using Engine::setLocale()');
+		} elseif ($value == null) { // intentionally ==
+			return null;
+		} elseif (is_numeric($value)) {
+			$value = (new \DateTime)->setTimestamp((int) $value);
+		} elseif (!$value instanceof \DateTimeInterface) {
+			$value = new \DateTime($value);
+			$errors = \DateTime::getLastErrors();
+			if (!empty($errors['warnings'])) {
+				throw new \InvalidArgumentException(reset($errors['warnings']));
+			}
+		}
+
+		if ($format === null) {
+			$xlt = ['' => \IntlDateFormatter::NONE, 'full' => \IntlDateFormatter::FULL, 'long' => \IntlDateFormatter::LONG, 'medium' => \IntlDateFormatter::MEDIUM, 'short' => \IntlDateFormatter::SHORT,
+				'relative-full' => \IntlDateFormatter::RELATIVE_FULL, 'relative-long' => \IntlDateFormatter::RELATIVE_LONG, 'relative-medium' => \IntlDateFormatter::RELATIVE_MEDIUM, 'relative-short' => \IntlDateFormatter::RELATIVE_SHORT];
+			$date ??= $time === null ? 'long' : null;
+			$formatter = new \IntlDateFormatter($this->locale, $xlt[$date], $xlt[$time]);
+		} else {
+			$formatter = new \IntlDateFormatter($this->locale, pattern: (new \IntlDatePatternGenerator($this->locale))->getBestPattern($format));
+		}
+
+		$res = $formatter->format($value);
+		$res = preg_replace('~(\d\.) ~', "\$1\u{a0}", $res);
+		return $res;
+	}
+
+
+	/**
+	 * Formats a number with grouped thousands and optionally decimal digits according to locale.
+	 */
+	public function number(
+		float $number,
+		string|int $patternOrDecimals = 0,
+		string $decimalSeparator = '.',
+		string $thousandsSeparator = ',',
+	): string
+	{
+		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
+			throw new Latte\RuntimeException('Filter |number: the number of decimal must not be negative');
+		} elseif ($this->locale === null || func_num_args() > 2) {
+			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
+		}
+
+		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+		if (is_string($patternOrDecimals)) {
+			$formatter->setPattern($patternOrDecimals);
+		} else {
+			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
+		}
+		return $formatter->format($number);
+	}
+
+
+	/**
 	 * Converts to human-readable file size.
 	 */
 	public function bytes(float $bytes, int $precision = 2): string
@@ -553,6 +618,24 @@ final class Filters
 			$keys,
 			$groups,
 		));
+	}
+
+
+	/**
+	 * Filters elements according to a given $predicate. Maintains original keys.
+	 * @template K
+	 * @template V
+	 * @param  iterable<K, V>  $iterable
+	 * @param  callable(V, K, iterable<K, V>): bool  $predicate
+	 * @return iterable<K, V>
+	 */
+	public static function filter(iterable $iterable, callable $predicate): iterable
+	{
+		foreach ($iterable as $k => $v) {
+			if ($predicate($v, $k, $iterable)) {
+				yield $k => $v;
+			}
+		}
 	}
 
 

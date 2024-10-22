@@ -134,6 +134,7 @@ final class CoreExtension extends Latte\Extension
 			'escapeUrl' => 'rawurlencode',
 			'escapeXml' => [Latte\Runtime\Filters::class, 'escapeXml'],
 			'explode' => [$this->filters, 'explode'],
+			'filter' => [$this->filters, 'filter'],
 			'first' => [$this->filters, 'first'],
 			'firstUpper' => extension_loaded('mbstring')
 				? [$this->filters, 'firstUpper']
@@ -145,6 +146,7 @@ final class CoreExtension extends Latte\Extension
 			'join' => [$this->filters, 'implode'],
 			'last' => [$this->filters, 'last'],
 			'length' => [$this->filters, 'length'],
+			'localDate' => [$this->filters, 'localDate'],
 			'lower' => extension_loaded('mbstring')
 				? [$this->filters, 'lower']
 				: fn() => throw new RuntimeException('Filter |lower requires mbstring extension.'),

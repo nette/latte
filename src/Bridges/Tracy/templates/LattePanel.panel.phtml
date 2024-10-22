@@ -92,7 +92,10 @@ $colors = [
 	<h2>Parameters</h2>
 
 	<div class="tracy-inner">
-		<?= Dumper::toHtml(reset($list)->template->getParameters(), [Dumper::LIVE => true]); ?>
+		<table class="tracy-sortable tracy-dump-seamless">
+<?php	foreach (reset($list)->template->getParameters() as $k => $v): ?>
+			<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= Dumper::toHtml($v, [Dumper::LIVE => true]) ?></td></tr>
+<?php	endforeach ?>
 	</div>
 	<?php endif ?>
 </div>
