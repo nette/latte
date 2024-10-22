@@ -169,7 +169,7 @@ final class Filters
 	/**
 	 * Date/time formatting.
 	 */
-	public function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
+	public static function date(string|int|\DateTimeInterface|\DateInterval|null $time, ?string $format = null): ?string
 	{
 		$format ??= Latte\Runtime\Filters::$dateFormat;
 		if ($time == null) { // intentionally ==
@@ -186,23 +186,8 @@ final class Filters
 			if (PHP_VERSION_ID >= 80100) {
 				trigger_error("Function strftime() used by filter |date is deprecated since PHP 8.1, use format without % characters like 'Y-m-d'.", E_USER_DEPRECATED);
 			}
-			return @strftime($format, $time->format('U') + 0);
 
-		} elseif (preg_match('#^(\+(short|medium|long|full))?(\+time(\+sec)?)?$#', '+' . $format, $m)) {
-			$formatter = new \IntlDateFormatter(
-				$this->getLocale('date'),
-				match ($m[2]) {
-					'short' => \IntlDateFormatter::SHORT,
-					'medium' => \IntlDateFormatter::MEDIUM,
-					'long' => \IntlDateFormatter::LONG,
-					'full' => \IntlDateFormatter::FULL,
-					'' => \IntlDateFormatter::NONE,
-				},
-				isset($m[3]) ? (isset($m[4]) ? \IntlDateFormatter::MEDIUM : \IntlDateFormatter::SHORT) : \IntlDateFormatter::NONE,
-			);
-			$res = $formatter->format($time);
-			$res = preg_replace('~(\d\.) ~', "\$1\u{a0}", $res);
-			return $res;
+			return @strftime($format, $time->format('U') + 0);
 		}
 
 		return $time->format($format);
@@ -764,40 +749,5 @@ final class Filters
 		return $values
 			? $values[array_rand($values, 1)]
 			: null;
-	}
-
-
-	/**
-	 * Formats a number with grouped thousands and optionally decimal digits according to locale.
-	 */
-	public function number(
-		float $number,
-		string|int $patternOrDecimals = 0,
-		string $decimalSeparator = '.',
-		string $thousandsSeparator = ',',
-	): string
-	{
-		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
-			throw new Latte\RuntimeException("Filter |$name: number of decimal must not be negative");
-		} elseif ($this->locale === null || func_num_args() > 2) {
-			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
-		}
-
-		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
-		if (is_string($patternOrDecimals)) {
-			$formatter->setPattern($patternOrDecimals);
-		} else {
-			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
-		}
-		return $formatter->format($number);
-	}
-
-
-	private function getLocale(string $name): string
-	{
-		if ($this->locale === null) {
-			throw new Latte\RuntimeException("Filter |$name requires the locale to be set using Engine::setLocale()");
-		}
-		return $this->locale;
 	}
 }
