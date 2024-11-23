@@ -27,14 +27,23 @@ class Engine
 		VERSION = self::Version,
 		VERSION_ID = self::VersionId;
 
-	/** @deprecated use ContentType::* */
-	public const
-		CONTENT_HTML = ContentType::Html,
-		CONTENT_XML = ContentType::Xml,
-		CONTENT_JS = ContentType::JavaScript,
-		CONTENT_CSS = ContentType::Css,
-		CONTENT_ICAL = ContentType::ICal,
-		CONTENT_TEXT = ContentType::Text;
+	#[\Deprecated('use Latte\ContentType::Html')]
+	public const CONTENT_HTML = ContentType::Html;
+
+	#[\Deprecated('use Latte\ContentType::Xml')]
+	public const CONTENT_XML = ContentType::Xml;
+
+	#[\Deprecated('use Latte\ContentType::JavaScript')]
+	public const CONTENT_JS = ContentType::JavaScript;
+
+	#[\Deprecated('use Latte\ContentType::Css')]
+	public const CONTENT_CSS = ContentType::Css;
+
+	#[\Deprecated('use Latte\ContentType::ICal')]
+	public const CONTENT_ICAL = ContentType::ICal;
+
+	#[\Deprecated('use Latte\ContentType::Text')]
+	public const CONTENT_TEXT = ContentType::Text;
 
 	private ?Loader $loader = null;
 	private Runtime\FilterExecutor $filters;
