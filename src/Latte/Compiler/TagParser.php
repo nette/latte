@@ -143,7 +143,7 @@ final class TagParser extends TagParserData
 	}
 
 
-	/** @deprecated use tryConsumeTokenBeforeUnquotedString() */
+	#[\Deprecated('use tryConsumeTokenBeforeUnquotedString()')]
 	public function tryConsumeModifier(string ...$kind): ?Token
 	{
 		trigger_error(__METHOD__ . '() was renamed to tryConsumeTokenBeforeUnquotedString()', E_USER_DEPRECATED);
