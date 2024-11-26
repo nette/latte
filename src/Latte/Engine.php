@@ -51,6 +51,7 @@ class Engine
 	private ?string $phpBinary = null;
 	private ?string $cacheKey;
 	private ?string $locale = null;
+	private ?string $defaultSyntax = null;
 
 
 	public function __construct()
@@ -148,6 +149,9 @@ class Engine
 	public function parse(string $template): TemplateNode
 	{
 		$parser = new Compiler\TemplateParser;
+		if ($this->defaultSyntax) {
+			$parser->setSyntax($this->defaultSyntax);
+		}
 		$parser->strict = $this->strictParsing;
 
 		foreach ($this->extensions as $extension) {
@@ -565,6 +569,16 @@ class Engine
 		return $this->strictParsing;
 	}
 
+	
+	/**
+	 * Sets default tag syntax
+	 */
+	public function setDefaultSyntax(?string $defaultSyntax): static
+	{
+		$this->defaultSyntax = $defaultSyntax;
+		return $this;
+	}
+	
 
 	/**
 	 * Sets the locale. It uses the same identifiers as the PHP intl extension.
