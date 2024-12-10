@@ -212,6 +212,12 @@ final class CoreExtension extends Latte\Extension
 	}
 
 
+	public function getCacheKey(Latte\Engine $engine): mixed
+	{
+		return array_keys($engine->getFunctions());
+	}
+
+
 	/**
 	 * {include [file] "file" [with blocks] [,] [params]}
 	 * {include [block] name [,] [params]}
