@@ -329,7 +329,6 @@ class Engine
 	{
 		return [
 			$this->contentType,
-			array_keys($this->getFunctions()),
 			array_map(
 				fn($extension) => [
 					get_debug_type($extension),
