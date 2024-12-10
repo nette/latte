@@ -48,7 +48,7 @@ class Engine
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
-	private ?string $cacheKey;
+	private ?string $environmentHash;
 	private ?string $locale = null;
 
 
@@ -93,12 +93,8 @@ class Engine
 	 */
 	public function createTemplate(string $name, array $params = [], $clearCache = true): Runtime\Template
 	{
-		$this->cacheKey = $clearCache ? null : $this->cacheKey;
-		$class = $this->getTemplateClass($name);
-		if (!class_exists($class, false)) {
-			$this->loadTemplate($name);
-		}
-
+		$this->environmentHash = $clearCache ? null : $this->environmentHash;
+		$class = $this->loadTemplate($name);
 		$this->providers->fn = $this->functions;
 		return new $class(
 			$this,
@@ -205,16 +201,16 @@ class Engine
 			throw new \LogicException('Path to temporary directory is not set.');
 		}
 
-		$class = $this->getTemplateClass($name);
-		if (!class_exists($class, false)) {
-			$this->loadTemplate($name);
-		}
+		$this->loadTemplate($name);
 	}
 
 
-	private function loadTemplate(string $name): void
+	private function loadTemplate(string $name): string
 	{
-		if ($this->cache->directory) {
+		$class = $this->getTemplateClass($name);
+		if (class_exists($class, false)) {
+			// nothing
+		} elseif ($this->cache->directory) {
 			$this->cache->loadOrCreate($this, $name);
 		} else {
 			$compiled = $this->compile($name);
@@ -223,25 +219,26 @@ class Engine
 					->setSource($compiled, "$name (compiled)");
 			}
 		}
+		return $class;
 	}
 
 
 	public function getCacheFile(string $name): string
 	{
-		return $this->cache->generateFileName($name, $this->generateCacheHash($name));
+		return $this->cache->generateFileName($name, $this->generateTemplateHash($name));
 	}
 
 
 	public function getTemplateClass(string $name): string
 	{
-		return 'Template_' . $this->generateCacheHash($name);
+		return 'Template_' . $this->generateTemplateHash($name);
 	}
 
 
-	private function generateCacheHash(string $name): string
+	private function generateTemplateHash(string $name): string
 	{
-		$this->cacheKey ??= md5(serialize($this->getCacheKey()));
-		$hash = $this->cacheKey . $this->getLoader()->getUniqueId($name);
+		$this->environmentHash ??= md5(serialize($this->getCacheKey()));
+		$hash = $this->environmentHash . $this->getLoader()->getUniqueId($name);
 		return substr(md5($hash), 0, 10);
 	}
 
