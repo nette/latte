@@ -10,13 +10,16 @@ declare(strict_types=1);
 namespace Latte;
 
 
+/**
+ * Common interface for all Latte exceptions.
+ */
 interface Exception
 {
 }
 
 
 /**
- * The exception occurred during Latte compilation.
+ * Template compilation failed.
  */
 class CompileException extends \Exception implements Exception
 {
@@ -37,7 +40,7 @@ class CompileException extends \Exception implements Exception
 
 
 /**
- * The exception occurred during template rendering.
+ * Template rendering failed.
  */
 class RuntimeException extends \RuntimeException implements Exception
 {
@@ -45,7 +48,7 @@ class RuntimeException extends \RuntimeException implements Exception
 
 
 /**
- * Exception thrown when a not allowed construction is used in a template.
+ * Template uses forbidden function, filter or variable in sandbox mode.
  */
 class SecurityViolationException extends \Exception implements Exception
 {
