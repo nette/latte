@@ -58,7 +58,7 @@ $latte->compile($template);
 Assert::equal(
 	[
 		'tags' => Expect::type('array'),
-		'functions' => ['trim', 'trim', 'ns\\test'],
+		'functions' => ['trim', 'trim', 'ns\test'],
 	],
 	$policy->log,
 );

@@ -34,7 +34,7 @@ final class Linter
 		$errors = 0;
 		foreach ($files as $file) {
 			$file = (string) $file;
-			echo preg_replace('~\.?[/\\\\]~A', '', $file), "\x0D";
+			echo preg_replace('~\.?[/\\\]~A', '', $file), "\x0D";
 			$errors += $this->lintLatte($file) ? 0 : 1;
 			echo str_pad('...', strlen($file)), "\x0D";
 			$counter++;

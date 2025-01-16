@@ -59,7 +59,7 @@ class FileLoader implements Latte\Loader
 	 */
 	public function getReferredName(string $file, string $referringFile): string
 	{
-		if ($this->baseDir || !preg_match('#/|\\\\|[a-z]:|phar:#iA', $file)) {
+		if ($this->baseDir || !preg_match('#/|\\\|[a-z]:|phar:#iA', $file)) {
 			$file = $this->normalizePath($referringFile . '/../' . $file);
 		}
 

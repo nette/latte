@@ -185,7 +185,7 @@ final class PhpHelpers
 		}
 
 		return preg_replace_callback(
-			'~\\\\([\\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u\{([0-9a-fA-F]+)\})~',
+			'~\\\([\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u\{([0-9a-fA-F]+)\})~',
 			function ($matches) {
 				$ch = $matches[1];
 				$replacements = [

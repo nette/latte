@@ -33,7 +33,7 @@ Assert::same('$var', format('$var'));
 Assert::same("'symbol'", format('symbol$var')); // bc break
 Assert::same("'var'", format("'var'"));
 Assert::same("'var'", format('"var"'));
-Assert::same("'v\"ar'", format('"v\\"ar"'));
+Assert::same("'v\"ar'", format('"v\"ar"'));
 Assert::same("'var' . 'var'", format("var.'var'"));
 Assert::same("\$var['var']", format('$var[var]'));
 Assert::same("\$x['[x]']", format('$x["[x]"]'));

@@ -51,7 +51,9 @@ class IfNode extends StatementNode
 				: $tag->parser->parseExpression();
 		}
 
-		[$node->then, $nextTag] = yield $node->capture ? ['else'] : ['else', 'elseif', 'elseifset'];
+		[$node->then, $nextTag] = yield $node->capture
+			? ['else']
+			: ['else', 'elseif', 'elseifset'];
 
 		if ($nextTag?->name === 'else') {
 			if ($nextTag->parser->stream->is('if')) {

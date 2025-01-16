@@ -73,7 +73,7 @@ test('re-iteration', function () {
 test('user comparison + array', function () {
 	Assert::same(
 		[2 => 33, 0 => 22, 1 => 11],
-		(new Filters)->sort([22, 11, 33], fn($a, $b) => $b <=> $a)
+		(new Filters)->sort([22, 11, 33], fn($a, $b) => $b <=> $a),
 	);
 });
 
@@ -115,7 +115,7 @@ test('iterator + by', function () {
 test('callback + array + by', function () {
 	Assert::same(
 		[1 => 11, 0 => 22, 33],
-		(new Filters)->sort([22, 11, 33], by: fn($a) => $a * 11)
+		(new Filters)->sort([22, 11, 33], by: fn($a) => $a * 11),
 	);
 });
 

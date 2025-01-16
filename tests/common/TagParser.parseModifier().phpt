@@ -33,7 +33,7 @@ test('common', function () {
 test('arguments', function () {
 	Assert::same("(\$this->filters->mod)(@, 'arg1', 2, \$var['pocet'])", format('|mod,arg1,2,$var["pocet"]'));
 	Assert::same("(\$this->filters->mod)(@, ' ,a,b,c', '', 3, '')", @format('|mod:" ,a,b,c", "", 3, ""'));
-	Assert::same("(\$this->filters->mod)(@, '\",a,b,c')", format('|mod:"\\",a,b,c"'));
+	Assert::same("(\$this->filters->mod)(@, '\",a,b,c')", format('|mod:"\",a,b,c"'));
 	Assert::same("(\$this->filters->mod)(@, '\\',a,b,c')", format("|mod:'\\',a,b,c'"));
 	Assert::same("(\$this->filters->mod)(@, 'param', 'param')", @format('|mod , param , param'));
 	Assert::same("(\$this->filters->mod)(@, \$var, 0, -0.0, 'str', 'str')", format('|mod, $var, 0, -0.0, "str", \'str\''));

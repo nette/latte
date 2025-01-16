@@ -94,7 +94,7 @@ final class TemplateLexer
 	{
 		$tokens[] = $this->match('~
 			(?<Slash>/)?
-			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\\))?   # name, /name, but not function( or class:: or namespace\
+			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\))?   # name, /name, but not function( or class:: or namespace\
 		~xsiAu');
 
 		$tokens[] = $this->tagLexer->tokenizePartially($this->input, $this->position);

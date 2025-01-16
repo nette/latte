@@ -20,7 +20,7 @@ $node = new Nodes\AuxiliaryNode(
 
 $node = (new NodeTraverser)->traverse(
 	$node,
-	fn(Node $node) => $node instanceof StringNode ? new StringNode('new') : $node
+	fn(Node $node) => $node instanceof StringNode ? new StringNode('new') : $node,
 );
 Assert::same("'new' 'new'", $node->print(new PrintContext));
 
@@ -32,6 +32,6 @@ $node = new Expression\AuxiliaryNode(
 
 $node = (new NodeTraverser)->traverse(
 	$node,
-	fn(Node $node) => $node instanceof StringNode ? new StringNode('new') : $node
+	fn(Node $node) => $node instanceof StringNode ? new StringNode('new') : $node,
 );
 Assert::same("'new' 'new'", $node->print(new PrintContext));
