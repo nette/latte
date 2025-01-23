@@ -272,4 +272,58 @@ class Filters
 		}
 		return $name;
 	}
+
+
+	/**
+	 * Renders HTML tag attribute.
+	 */
+	public static function renderHtmlAttribute(string $name, mixed $value): ?string
+	{
+		if ($value === null || $value === false) {
+			return null;
+
+		} elseif ($value === true) {
+			return $name;
+
+		} elseif (is_array($value)) {
+			$items = [];
+			foreach ($value as $k => $v) {
+				if ($v != null) { // intentionally ==, skip nulls & empty string
+					$items[] = match (true) {
+						$v === true => $k,
+						is_string($k) => $k . ':' . $v,
+						default => $v,
+					};
+				}
+			}
+
+			if (!$items) {
+				return null;
+			}
+
+			$value = implode($name === 'style' ? ';' : ' ', $items);
+
+		} else {
+			$value = (string) $value;
+		}
+
+		$q = str_contains($value, '"') ? "'" : '"';
+		return $name . '=' . $q
+			. str_replace(['&', $q], ['&amp;', $q === '"' ? '&quot;' : '&apos;'], $value)
+			. $q;
+	}
+
+
+	/**
+	 * Renders XML tag attribute.
+	 */
+	public static function renderXmlAttribute(string $name, mixed $value): ?string
+	{
+		return match (true) {
+			$value === null, $value === false => null,
+			$value === true => $name . '="' . $name . '"',
+			is_array($value) => throw new Latte\RuntimeException('Array is not allowed as XML attribute value'),
+			default => $name . '="' . self::escapeXml($value) . '"',
+		};
+	}
 }

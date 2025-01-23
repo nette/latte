@@ -37,7 +37,7 @@ final class NAttrNode extends StatementNode
 	{
 		return $context->format(
 			'$ʟ_tmp = %node;
-			echo %raw::attrs(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp, %dump) %line;',
+			%raw::attrs(is_array($ʟ_tmp[0] ?? null) ? $ʟ_tmp[0] : $ʟ_tmp, %dump) %line;',
 			$this->args,
 			self::class,
 			$context->getEscaper()->getContentType() === Latte\ContentType::Xml,
@@ -47,53 +47,16 @@ final class NAttrNode extends StatementNode
 
 
 	/** @internal */
-	public static function attrs($attrs, bool $xml): string
+	public static function attrs($attrs, bool $xml): void
 	{
-		if (!is_array($attrs)) {
-			return '';
-		}
-
-		$s = '';
-		foreach ($attrs as $key => $value) {
-			if ($value === null || $value === false) {
-				continue;
-
-			} elseif ($value === true) {
-				$s .= ' ' . $key . ($xml ? '="' . $key . '"' : '');
-				continue;
-
-			} elseif (is_array($value)) {
-				$tmp = null;
-				foreach ($value as $k => $v) {
-					if ($v != null) { // intentionally ==, skip nulls & empty string
-						//  composite 'style' vs. 'others'
-						$tmp[] = $v === true
-							? $k
-							: (is_string($k) ? $k . ':' . $v : $v);
-					}
-				}
-
-				if ($tmp === null) {
-					continue;
-				}
-
-				$value = implode($key === 'style' || !strncmp($key, 'on', 2) ? ';' : ' ', $tmp);
-
-			} else {
-				$value = (string) $value;
+		foreach ((is_array($attrs) ? $attrs : []) as $name => $value) {
+			$tmp = $xml
+				? Latte\Runtime\Filters::renderXmlAttribute($name, $value)
+				: Latte\Runtime\Filters::renderHtmlAttribute($name, $value);
+			if ($tmp !== null) {
+				echo ' ', $tmp;
 			}
-
-			$q = !str_contains($value, '"') ? '"' : "'";
-			$s .= ' ' . $key . '=' . $q
-				. str_replace(
-					['&', $q, '<'],
-					['&amp;', $q === '"' ? '&quot;' : '&#39;', $xml ? '&lt;' : '<'],
-					$value,
-				)
-				. $q;
 		}
-
-		return $s;
 	}
 
 
