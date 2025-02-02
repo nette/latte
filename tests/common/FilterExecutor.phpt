@@ -30,7 +30,7 @@ class MyFilter
 }
 
 
-test('', function () {
+test('filter registration and invocation', function () {
 	$filters = new FilterExecutor;
 
 	$filters->add('f1', 'strtoupper');
@@ -57,7 +57,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('dynamic filter resolution', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name) use ($filters) {
 		if ($name === 'dynamic') {
@@ -75,7 +75,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('dynamic filters with content type awareness', function () {
 	$filters = new FilterExecutor;
 	$filters->add(null, function ($name) use ($filters) {
 		if ($name === 'dynamic') {
@@ -92,7 +92,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('content type handling in filters', function () {
 	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic
@@ -124,7 +124,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('HTML object handling in filters', function () {
 	$filters = new FilterExecutor;
 
 	// FilterInfo aware called as classic with Latte\Runtime\Html

@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
+test('direct content handling and missing template exception', function () {
 	$loader = new StringLoader;
 	Assert::same('content', $loader->getContent('content'));
 
@@ -23,7 +23,7 @@ test('', function () {
 	);
 });
 
-test('', function () {
+test('predefined template retrieval and reference resolution', function () {
 	$loader = new StringLoader(['main' => 'maincontent', 'other' => 'othercontent']);
 	Assert::same('maincontent', $loader->getContent('main'));
 	Assert::same('othercontent', $loader->getContent('other'));

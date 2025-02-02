@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
+test('width-based position checks', function () {
 	$arr = ['The', 'Nette', 'Framework'];
 
 	$iterator = new CachingIterator($arr);
@@ -50,7 +50,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('empty iterator width handling', function () {
 	$iterator = new CachingIterator([]);
 	Assert::false($iterator->isFirst(0));
 	Assert::true($iterator->isLast(0));

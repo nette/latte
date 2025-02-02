@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
+test('whitespace stripping in text content', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('', Filters::strip($info, ''));
 	Assert::same('', Filters::strip($info, "\r\n "));
@@ -24,7 +24,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('HTML-aware whitespace stripping', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::strip($info, ''));
 	Assert::same('', Filters::strip($info, "\r\n "));
