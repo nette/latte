@@ -23,7 +23,7 @@ Assert::same(
 );
 
 
-test('', function () {
+test('exception on incompatible content type (TEXT)', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::exception(
 		fn() => Filters::stripTags($info, ''),
@@ -33,7 +33,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('HTML tag stripping with entity preservation', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));
@@ -41,7 +41,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('XML tag stripping with entity preservation', function () {
 	$info = new FilterInfo(ContentType::Xml);
 	Assert::same('', Filters::stripTags($info, ''));
 	Assert::same('abc', Filters::stripTags($info, 'abc'));

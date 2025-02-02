@@ -23,7 +23,7 @@ Assert::same(
 );
 
 
-test('', function () {
+test('exception on incompatible content type', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::exception(
 		fn() => Filters::stripHtml($info, ''),
@@ -33,14 +33,14 @@ test('', function () {
 });
 
 
-test('', function () {
+test('empty HTML content type transition', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::stripHtml($info, ''));
 	Assert::same(ContentType::Text, $info->contentType);
 });
 
 
-test('', function () {
+test('HTML stripping with entities and error suppression', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', @Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', @Filters::stripHtml(clone $info, 'abc'));
@@ -48,7 +48,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('HTML entity and tag conversion', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
@@ -56,7 +56,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('XML content stripping', function () {
 	$info = new FilterInfo(ContentType::Xml);
 	Assert::same('', Filters::stripHtml(clone $info, ''));
 	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
@@ -64,7 +64,7 @@ test('', function () {
 });
 
 
-test('invalid UTF-8', function () {
+test('invalid UTF-8 handling', function () {
 	$info = new FilterInfo(ContentType::Xml);
 	Assert::same("foo \u{D800} bar", Filters::stripHtml(clone $info, "foo \u{D800} bar")); // invalid codepoint high surrogates
 	Assert::same("foo \xE3\x80\x22 bar", Filters::stripHtml(clone $info, "foo \xE3\x80\x22 bar")); // stripped UTF

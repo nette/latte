@@ -12,7 +12,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('Two items in array', function () {
+test('basic iteration with multiple elements', function () {
 	$arr = ['Nette', 'Framework'];
 
 	$iterator = new CachingIterator($arr);
@@ -43,7 +43,7 @@ test('Two items in array', function () {
 });
 
 
-test('', function () {
+test('single element iteration', function () {
 	$arr = ['Nette'];
 
 	$iterator = new CachingIterator($arr);
@@ -66,7 +66,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('empty iterator handling', function () {
 	$arr = [];
 
 	$iterator = new CachingIterator($arr);
@@ -79,7 +79,7 @@ test('', function () {
 	Assert::true($iterator->isEmpty());
 });
 
-test('Check if next position is valid', function () {
+test('empty inner iterator compatibility', function () {
 	// empty iterator
 	$inner = new class implements Iterator {
 		public function current(): mixed

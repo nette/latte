@@ -11,7 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
+test('block type compatibility in HTML contexts', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 
@@ -67,7 +67,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('template inheritance with content type checks', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader([
 		'parent' => '<meta name={block foo}{/block}>',
@@ -155,7 +155,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('block inclusion in different content types', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 

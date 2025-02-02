@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
+test('text content repetition', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('', Filters::repeat($info, '', 1));
 	Assert::same('ab', Filters::repeat($info, 'ab', 1));
@@ -23,7 +23,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('HTML content repetition', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::repeat($info, '', 1));
 	Assert::same('ab', Filters::repeat($info, 'ab', 1));

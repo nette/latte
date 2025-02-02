@@ -14,7 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('', function () {
+test('text indentation', function () {
 	$info = new FilterInfo(ContentType::Text);
 	Assert::same('', Filters::indent($info, ''));
 	Assert::same("\n", Filters::indent($info, "\n"));
@@ -28,7 +28,7 @@ test('', function () {
 });
 
 
-test('', function () {
+test('HTML indentation', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('', Filters::indent($info, ''));
 	Assert::same("\n", Filters::indent($info, "\n"));
