@@ -36,7 +36,6 @@ $params['people'] = ['John', 'Mary', 'Paul', ']]> <!--'];
 $params['comment'] = 'test -- comment';
 $params['el'] = new Html("<div title='1/2\"'></div>");
 $params['xss'] = 'some&<>"\'/chars';
-$params['mxss'] = '`mxss';
 
 Assert::matchFile(
 	__DIR__ . '/expected/contentType.xml.php',

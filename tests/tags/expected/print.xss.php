@@ -6,9 +6,7 @@
 
 <p val="';
 		echo LR\Filters::escapeHtmlAttr($xss) /* line %d% */;
-		echo '" val2="';
-		echo LR\Filters::escapeHtmlAttr($mxss) /* line %d% */;
-		echo '"> </p>
+		echo '" > </p>
 <p onclick="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d% */;
 		echo '"> </p>

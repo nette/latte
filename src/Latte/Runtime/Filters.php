@@ -56,10 +56,6 @@ class Filters
 	{
 		$double = $double && $s instanceof HtmlStringable ? false : $double;
 		$s = (string) $s;
-		if (str_contains($s, '`') && strpbrk($s, ' <>"\'') === false) {
-			$s .= ' '; // protection against innerHTML mXSS vulnerability nette/nette#1496
-		}
-
 		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', $double);
 		$s = str_replace('{', '&#123;', $s);
 		return $s;

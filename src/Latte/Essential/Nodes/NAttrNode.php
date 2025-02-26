@@ -90,7 +90,6 @@ final class NAttrNode extends StatementNode
 					['&amp;', $q === '"' ? '&quot;' : '&#39;', $xml ? '&lt;' : '<'],
 					$value,
 				)
-				. (str_contains($value, '`') && strpbrk($value, ' <>"\'') === false ? ' ' : '')
 				. $q;
 		}
 

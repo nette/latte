@@ -123,9 +123,7 @@ var html = ';
 
 <p val="';
 		echo LR\Filters::escapeXml($xss) /* line %d% */;
-		echo '" val2="';
-		echo LR\Filters::escapeXml($mxss) /* line %d% */;
-		echo '"> </p>
+		echo '" > </p>
 
 <p onclick="';
 		echo LR\Filters::escapeXml($xss) /* line %d% */;

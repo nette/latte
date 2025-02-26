@@ -15,7 +15,7 @@ $template = <<<'EOD'
 	{$el}
 	{$el2}
 
-	<p val = {$xss} val2={$mxss}> </p>
+	<p val = {$xss} > </p>
 	<p onclick = {$xss}> </p>
 	<p ONCLICK ="{$xss}" {$xss}> </p>
 
@@ -68,7 +68,6 @@ $params['people'] = ['John', 'Mary', 'Paul', ']]> <!--'];
 $params['el'] = new Html("<div title='1/2\"'></div>");
 $params['el2'] = Nette\Utils\Html::el('span', ['title' => '/"'])->setText('foo');
 $params['xss'] = 'some&<>"\'/chars';
-$params['mxss'] = '`mxss';
 $params['menu'] = ['about', ['product1', 'product2'], 'contact'];
 
 Assert::matchFile(

@@ -20,8 +20,6 @@ Assert::same(' style="float:left" class="three" a=\'<>"\' b="\'" title="0" check
 	'selected' => false,
 ], false));
 
-Assert::same(' a="`test "', NAttrNode::attrs(['a' => '`test'], false)); // mXSS
-
 Assert::same(' style="float:left" class="three" a=\'&lt;>"\' b="\'" title="0" checked="checked"', NAttrNode::attrs([
 	'style' => 'float:left',
 	'class' => 'three',
