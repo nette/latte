@@ -18,7 +18,6 @@ $latte->addFilter('join', 'implode');
 
 $params['hello'] = '<i>Hello</i>';
 $params['xss'] = 'some&<>"\'/chars';
-$params['mxss'] = '`mxss';
 $params['people'] = ['John', 'Mary', 'Paul', ']]> <!--'];
 $params['menu'] = ['about', ['product1', 'product2'], 'contact'];
 $params['el'] = new Html("<div title='1/2\"'></div>");
