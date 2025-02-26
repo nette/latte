@@ -288,6 +288,9 @@ class Filters
 		} elseif ($value === true) {
 			return $name;
 
+		} elseif (isset(Latte\Helpers::$booleanAttributes[$name])) {
+			return $value ? $name : null;
+
 		} elseif (is_array($value)) {
 			if (str_starts_with($name, 'data-')) {
 				return $name . "='"

@@ -22,6 +22,14 @@ class Helpers
 		'col' => 1, 'link' => 1, 'param' => 1, 'basefont' => 1, 'frame' => 1, 'isindex' => 1, 'wbr' => 1, 'command' => 1, 'track' => 1,
 	];
 
+	/** @var array<string, int>  boolean HTML attributes */
+	public static array $booleanAttributes = [
+		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1, 'default' => 1, 'defer' => 1,
+		'disabled' => 1, 'formnovalidate' => 1, 'inert' => 1, 'ismap' => 1, 'itemscope' => 1, 'loop' => 1, 'multiple' => 1, 'muted' => 1,
+		'nomodule' => 1, 'novalidate' => 1, 'open' => 1, 'playsinline' => 1, 'readonly' => 1, 'required' => 1, 'reversed' => 1, 'selected' => 1,
+		'shadowrootclonable' => 1, 'shadowrootdelegatesfocus' => 1, 'shadowrootserializable' => 1,
+	];
+
 
 	/**
 	 * Finds the best suggestion.

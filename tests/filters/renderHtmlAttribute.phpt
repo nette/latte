@@ -37,9 +37,10 @@ test('Regular text attributes', function () {
 
 test('boolean attributes', function () {
 	Assert::same('disabled', Filters::renderHtmlAttribute('disabled', true));
+	Assert::same('disabled', Filters::renderHtmlAttribute('disabled', 1));
 	Assert::null(Filters::renderHtmlAttribute('disabled', false));
 	Assert::null(Filters::renderHtmlAttribute('required', null));
-	Assert::same('readonly="0"', Filters::renderHtmlAttribute('readonly', 0));
+	Assert::null(Filters::renderHtmlAttribute('readonly', 0));
 });
 
 
