@@ -65,6 +65,17 @@ test('class attribute', function () {
 });
 
 
+test('data attributes', function () {
+	Assert::same('data-foo="bar"', Filters::renderHtmlAttribute('data-foo', 'bar'));
+	Assert::same('data-foo="0"', Filters::renderHtmlAttribute('data-foo', 0));
+
+	Assert::same(
+		'data-json=\'{"user":"Karel","age":30,"spec":"&<>\"\u0027\""}\'',
+		Filters::renderHtmlAttribute('data-json', ['user' => 'Karel', 'age' => 30, 'spec' => '&<>"\'"']),
+	);
+});
+
+
 test('special values (numbers, Infinity, NaN)', function () {
 	Assert::same('width="0"', Filters::renderHtmlAttribute('width', 0));
 	Assert::same('foo="NAN"', Filters::renderHtmlAttribute('foo', NAN));

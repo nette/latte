@@ -289,6 +289,12 @@ class Filters
 			return $name;
 
 		} elseif (is_array($value)) {
+			if (str_starts_with($name, 'data-')) {
+				return $name . "='"
+					. json_encode($value, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR)
+					. "'";
+			}
+
 			$items = [];
 			foreach ($value as $k => $v) {
 				if ($v != null) { // intentionally ==, skip nulls & empty string
