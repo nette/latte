@@ -8,6 +8,19 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
+test('name validity', function () {
+	Assert::type('string', Filters::renderHtmlAttribute('_name', ''));
+	Assert::type('string', Filters::renderHtmlAttribute('42name', ''));
+	Assert::type('string', Filters::renderHtmlAttribute('元素', '')); // Chinese for "element"
+	Assert::type('string', Filters::renderHtmlAttribute('-my&HTML_element.name:2', ''));
+
+	Assert::exception(fn() => Filters::renderHtmlAttribute('', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderHtmlAttribute("name\n", ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderHtmlAttribute('name name', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderHtmlAttribute('name"name', ''), Latte\RuntimeException::class);
+});
+
+
 test('Skipped attributes', function () {
 	Assert::null(Filters::renderHtmlAttribute('title', false));
 	Assert::null(Filters::renderHtmlAttribute('placeholder', null));

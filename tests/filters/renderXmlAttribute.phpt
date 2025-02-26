@@ -8,6 +8,21 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
+test('name validity', function () {
+	Assert::type('string', Filters::renderXmlAttribute('_name', ''));
+	Assert::type('string', Filters::renderXmlAttribute('元素', '')); // Chinese for "element"
+	Assert::type('string', Filters::renderXmlAttribute(':my-XML_element.name:2', ''));
+
+	Assert::exception(fn() => Filters::renderXmlAttribute('', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderXmlAttribute("name\n", ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderXmlAttribute('1name', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderXmlAttribute('-name', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderXmlAttribute('name name', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderXmlAttribute('name&name', ''), Latte\RuntimeException::class);
+	Assert::exception(fn() => Filters::renderXmlAttribute('name"name', ''), Latte\RuntimeException::class);
+});
+
+
 test('Skipped attributes', function () {
 	Assert::null(Filters::renderXmlAttribute('title', false));
 	Assert::null(Filters::renderXmlAttribute('placeholder', null));

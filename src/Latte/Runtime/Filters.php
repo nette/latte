@@ -279,7 +279,10 @@ class Filters
 	 */
 	public static function renderHtmlAttribute(string $name, mixed $value): ?string
 	{
-		if ($value === null || $value === false) {
+		if (!preg_match('~^[^\p{C} "\'>=/]+$~Du', $name)) {
+			throw new Latte\RuntimeException("Invalid HTML attribute name '$name'");
+
+		} elseif ($value === null || $value === false) {
 			return null;
 
 		} elseif ($value === true) {
@@ -319,6 +322,10 @@ class Filters
 	 */
 	public static function renderXmlAttribute(string $name, mixed $value): ?string
 	{
+		if (!preg_match('~^[:A-Z_a-z\x{C0}-\x{D6}\x{D8}-\x{F6}\x{F8}-\x{2FF}\x{370}-\x{37D}\x{37F}-\x{1FFF}\x{200C}-\x{200D}\x{2070}-\x{218F}\x{2C00}-\x{2FEF}\x{3001}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFFD}\x{10000}-\x{EFFFF}][\-\.0-9:A-Z_a-z\x{B7}\x{C0}-\x{D6}\x{D8}-\x{F6}\x{F8}-\x{2FF}\x{300}-\x{36F}\x{370}-\x{37D}\x{37F}-\x{1FFF}\x{200C}-\x{200D}\x{203F}-\x{2040}\x{2070}-\x{218F}\x{2C00}-\x{2FEF}\x{3001}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFFD}\x{10000}-\x{EFFFF}]*$~Du', $name)) {
+			throw new Latte\RuntimeException("Invalid XML attribute name '$name'"); // https://www.w3.org/TR/xml/#NT-Name
+		}
+
 		return match (true) {
 			$value === null, $value === false => null,
 			$value === true => $name . '="' . $name . '"',
