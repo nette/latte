@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Loaders;
 
 use Latte;
+use Latte\ContentType;
 use function array_pop, end, explode, file_get_contents, implode, is_file, preg_match, str_starts_with, strtr, time, touch;
 use const DIRECTORY_SEPARATOR;
 
@@ -38,7 +39,13 @@ class FileLoader implements Latte\Loader
 			throw new Latte\TemplateNotFoundException("Missing template file '$path'.");
 		}
 
-		return new Latte\LoadedContent(file_get_contents($path), sourceName: $path);
+		[$contentType, $static] = $this->detectContentType($file);
+		return new Latte\LoadedContent(
+			file_get_contents($path),
+			contentType: $contentType,
+			sourceName: $path,
+			static: $static,
+		);
 	}
 
 
@@ -77,5 +84,25 @@ class FileLoader implements Latte\Loader
 		}
 
 		return $m[1] . implode(DIRECTORY_SEPARATOR, $res);
+	}
+
+
+	/** @internal */
+	public function detectContentType(string $file): array
+	{
+		[, $prev, $last] = preg_match('/(?:\.(\w+))?\.(\w+)$/', $file, $m) ? $m : null;
+		$static = $last !== 'latte';
+		return [
+			match ($static ? $last : $prev) {
+				'html' => ContentType::Html,
+				'xml' => ContentType::Xml,
+				'txt' => ContentType::Text,
+				'js' => ContentType::JavaScript,
+				'css' => ContentType::Css,
+				'ical' => ContentType::ICal,
+				default => null,
+			},
+			$static,
+		];
 	}
 }
