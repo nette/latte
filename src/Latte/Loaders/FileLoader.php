@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Loaders;
 
 use Latte;
-use function array_pop, end, explode, file_get_contents, implode, is_file, preg_match, str_starts_with, strtr;
+use function array_pop, end, explode, file_get_contents, implode, is_file, preg_match, str_starts_with, strtr, time, touch;
 use const DIRECTORY_SEPARATOR;
 
 
@@ -28,20 +28,17 @@ class FileLoader implements Latte\Loader
 	}
 
 
-	/**
-	 * Returns template source code.
-	 */
-	public function getContent(string $fileName): string
+	public function load(string $file): Latte\LoadedContent
 	{
-		$file = $this->baseDir . $fileName;
-		if ($this->baseDir && !str_starts_with($this->normalizePath($file), $this->baseDir)) {
-			throw new Latte\RuntimeException("Template '$file' is not within the allowed path '{$this->baseDir}'.");
+		$path = $this->baseDir . $file;
+		if ($this->baseDir && !str_starts_with($this->normalizePath($path), $this->baseDir)) {
+			throw new Latte\RuntimeException("Template '$path' is not within the allowed path '{$this->baseDir}'.");
 
-		} elseif (!is_file($file)) {
-			throw new Latte\TemplateNotFoundException("Missing template file '$file'.");
+		} elseif (!is_file($path)) {
+			throw new Latte\TemplateNotFoundException("Missing template file '$path'.");
 		}
 
-		return file_get_contents($file);
+		return new Latte\LoadedContent(file_get_contents($path));
 	}
 
 

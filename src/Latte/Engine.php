@@ -127,10 +127,10 @@ class Engine
 			throw new \LogicException('In sandboxed mode you need to set a security policy.');
 		}
 
-		$template = $this->getLoader()->getContent($name);
+		$source = $this->loadCompatible($name);
 
 		try {
-			$node = $this->parse($template);
+			$node = $this->parse($source->content);
 			$this->applyPasses($node);
 			$compiled = $this->generate($node, $name);
 
@@ -139,7 +139,7 @@ class Engine
 				$e = new CompileException("Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			$e->setSource(new SourceReference($name, $e->getSource()?->line, $e->getSource()?->column, $template));
+			$e->setSource(new SourceReference($name, $e->getSource()?->line, $e->getSource()?->column, $source->content));
 			throw $e;
 		}
 
@@ -574,5 +574,15 @@ class Engine
 		}
 
 		return $res;
+	}
+
+
+	/** @internal */
+	public function loadCompatible(string $name): LoadedContent
+	{
+		$loader = $this->getLoader();
+		return method_exists($loader, 'load') // back compatibility
+			? $loader->load($name)
+			: new LoadedContent($loader->getContent($name));
 	}
 }

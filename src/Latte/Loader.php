@@ -16,9 +16,9 @@ namespace Latte;
 interface Loader
 {
 	/**
-	 * Returns template source code.
+	 * Loads template or static file content.
 	 */
-	function getContent(string $name): string;
+	//function load(string $name): LoadedContent;
 
 	/**
 	 * Returns referred template name.

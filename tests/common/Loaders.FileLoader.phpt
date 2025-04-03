@@ -13,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $loader = new FileLoader;
-Assert::same(file_get_contents(__FILE__), $loader->getContent(__FILE__));
+Assert::same(file_get_contents(__FILE__), $loader->load(__FILE__)->content);
 
 Assert::same('/a/b/inner', strtr($loader->getReferredName('inner', '/a\b/c'), '\\', '/'));
 Assert::same('/a/b/c', strtr($loader->getReferredName('/a/b/c', '/a/b/c'), '\\', '/'));
@@ -26,17 +26,17 @@ Assert::same('phar://file.phar/../c', strtr($loader->getReferredName('../c', 'ph
 
 $loader = new FileLoader;
 Assert::exception(
-	fn() => $loader->getContent('unknown'),
+	fn() => $loader->load('unknown'),
 	Latte\TemplateNotFoundException::class,
 	"Missing template file 'unknown'.",
 );
 
 
 $loader = new FileLoader(dirname(__DIR__));
-Assert::same(file_get_contents(__FILE__), $loader->getContent('common/' . basename(__FILE__)));
+Assert::same(file_get_contents(__FILE__), $loader->load('common/' . basename(__FILE__))->content);
 
 Assert::exception(
-	fn() => $loader->getContent('common/.././../file'),
+	fn() => $loader->load('common/.././../file'),
 	Latte\RuntimeException::class,
 	"Template '%a%common/.././../file' is not within the allowed path '%a%'.",
 );
