@@ -14,7 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 test('direct content handling and missing template exception', function () {
 	$loader = new StringLoader;
-	Assert::same('content', $loader->getContent('content'));
+	Assert::same('content', $loader->load('content')->content);
 
 	Assert::exception(
 		fn() => $loader->getReferredName('inner', 'referrer'),
@@ -25,8 +25,8 @@ test('direct content handling and missing template exception', function () {
 
 test('predefined template retrieval and reference resolution', function () {
 	$loader = new StringLoader(['main' => 'maincontent', 'other' => 'othercontent']);
-	Assert::same('maincontent', $loader->getContent('main'));
-	Assert::same('othercontent', $loader->getContent('other'));
+	Assert::same('maincontent', $loader->load('main')->content);
+	Assert::same('othercontent', $loader->load('other')->content);
 
 	Assert::same('other', $loader->getReferredName('other', 'referrer'));
 });
