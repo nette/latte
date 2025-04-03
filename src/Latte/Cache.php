@@ -132,7 +132,7 @@ final class Cache
 	{
 		return [
 			Engine::Version,
-			$engine->getLoader()->getContent($name),
+			$engine->loadCompatible($name)->content,
 			array_map(
 				fn($extension) => filemtime((new \ReflectionObject($extension))->getFileName()),
 				$engine->getExtensions(),

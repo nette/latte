@@ -30,15 +30,12 @@ class StringLoader implements Latte\Loader
 	}
 
 
-	/**
-	 * Returns template source code.
-	 */
-	public function getContent(string $name): string
+	public function load(string $name): Latte\LoadedContent
 	{
 		if ($this->templates === null) {
-			return $name;
+			return new Latte\LoadedContent($name);
 		} elseif (isset($this->templates[$name])) {
-			return $this->templates[$name];
+			return new Latte\LoadedContent($this->templates[$name]);
 		} else {
 			throw new Latte\TemplateNotFoundException("Missing template '$name'.");
 		}
@@ -63,6 +60,6 @@ class StringLoader implements Latte\Loader
 	 */
 	public function getUniqueId(string $name): string
 	{
-		return $this->getContent($name);
+		return $this->load($name)->content;
 	}
 }
