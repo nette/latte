@@ -130,7 +130,7 @@ class Engine
 		$source = $this->loadCompatible($name);
 
 		try {
-			$node = $this->parse($source->content);
+			$node = $this->parse($source);
 			$this->applyPasses($node);
 			$compiled = $this->generate($node, $this->getTemplateClass($name), $source->sourceName);
 
@@ -154,10 +154,11 @@ class Engine
 	/**
 	 * Parses template to AST node.
 	 */
-	public function parse(string $template): TemplateNode
+	public function parse(LoadedContent|string $source): TemplateNode
 	{
+		$source = is_string($source) ? new LoadedContent($source) : $source;
 		$parser = new Compiler\TemplateParser;
-		$parser->getLexer()->setSyntax($this->syntax);
+		$parser->getLexer()->setSyntax($source->static ? 'off' : $this->syntax);
 		$parser->strict = $this->strictParsing;
 
 		foreach ($this->extensions as $extension) {
@@ -166,9 +167,9 @@ class Engine
 		}
 
 		return $parser
-			->setContentType($this->contentType)
+			->setContentType($source->contentType ?? $this->contentType)
 			->setPolicy($this->getPolicy(effective: true))
-			->parse($template);
+			->parse($source->content);
 	}
 
 
@@ -230,8 +231,8 @@ class Engine
 			$compiled = $this->compile($name);
 			if (@eval(substr($compiled, 5)) === false) { // @ is escalated to exception, substr removes <?php
 				throw new CompileException(
-					'Error in template: ' . error_get_last()['message'],
-					new SourceReference("$name (compiled)", code: $compiled),
+					'Error in compiled template: ' . error_get_last()['message'],
+					new SourceReference($this->loadCompat($name)->sourceName, code: $compiled), // TODO
 				);
 			}
 		}

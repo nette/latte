@@ -18,7 +18,9 @@ class LoadedContent
 {
 	public function __construct(
 		public readonly string $content,
+		public readonly ?string $contentType = null,
 		public readonly ?string $sourceName = null,
+		public readonly bool $static = false,
 	) {
 	}
 }
