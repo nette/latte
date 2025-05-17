@@ -103,3 +103,11 @@ Assert::contains(
 	'escapeHtmlText(My\Class::foo)',
 	$latte->compile('{My\Class::foo}'),
 );
+
+
+// allowed ? in name
+Assert::exception(
+	fn() => $latte->compile('{foo?}'),
+	Latte\CompileException::class,
+	'Unexpected tag {foo?} (on line 1 at column 1)',
+);
