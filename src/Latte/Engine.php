@@ -519,7 +519,8 @@ class Engine
 			return $params;
 		}
 
-		$methods = (new \ReflectionClass($params))->getMethods(\ReflectionMethod::IS_PUBLIC);
+		$rc = new \ReflectionClass($params);
+		$methods = $rc->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {
 			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
 				$this->addFilter($method->name, [$params, $method->name]);
@@ -540,7 +541,17 @@ class Engine
 			}
 		}
 
-		return array_filter((array) $params, fn($key) => $key[0] !== "\0", ARRAY_FILTER_USE_KEY);
+		$res = get_object_vars($params);
+		if (PHP_VERSION_ID >= 80400) {
+			foreach ($rc->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+				if ($property->isVirtual() && $property->hasHook(\PropertyHookType::Get)) {
+					$name = $property->getName();
+					$res[$name] = $params->$name;
+				}
+			}
+		}
+
+		return $res;
 	}
 
 
