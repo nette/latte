@@ -25,6 +25,12 @@ test('no locale', function () {
 	Assert::same('-1,234', $filters->number(-1234));
 	Assert::same('-1,234.57', $filters->number(-1234.5678, 2));
 	Assert::same('nan', $filters->number(NAN, 2));
+
+	Assert::exception(
+		fn() => $filters->number(123.456, '00,000.0000'),
+		Latte\RuntimeException::class,
+		'Filter |number: using a pattern requires setting a locale via Engine::setLocale().',
+	);
 });
 
 

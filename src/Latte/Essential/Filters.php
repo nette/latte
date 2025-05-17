@@ -246,6 +246,9 @@ final class Filters
 		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
 			throw new Latte\RuntimeException('Filter |number: the number of decimal must not be negative');
 		} elseif ($this->locale === null || func_num_args() > 2) {
+			if (is_string($patternOrDecimals)) {
+				throw new Latte\RuntimeException('Filter |number: using a pattern requires setting a locale via Engine::setLocale().');
+			}
 			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
 		}
 
