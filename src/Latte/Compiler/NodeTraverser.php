@@ -14,6 +14,7 @@ final class NodeTraverser
 {
 	public const DontTraverseChildren = 1;
 	public const StopTraversal = 2;
+	public const RemoveNode = 3;
 
 	/** @var ?callable(Node): (Node|int|null) */
 	private $enter;
@@ -24,7 +25,7 @@ final class NodeTraverser
 	private bool $stop;
 
 
-	public function traverse(Node $node, ?callable $enter = null, ?callable $leave = null): Node
+	public function traverse(Node $node, ?callable $enter = null, ?callable $leave = null): ?Node
 	{
 		$this->enter = $enter;
 		$this->leave = $leave;
@@ -33,7 +34,7 @@ final class NodeTraverser
 	}
 
 
-	private function traverseNode(Node $node): Node
+	private function traverseNode(Node $node): ?Node
 	{
 		$children = true;
 		if ($this->enter) {
@@ -46,7 +47,10 @@ final class NodeTraverser
 
 			} elseif ($res === self::StopTraversal) {
 				$this->stop = true;
-				$children = false;
+				return $node;
+
+			} elseif ($res === self::RemoveNode) {
+				return null;
 			}
 		}
 
@@ -63,8 +67,12 @@ final class NodeTraverser
 			$res = ($this->leave)($node);
 			if ($res instanceof Node) {
 				$node = $res;
+
 			} elseif ($res === self::StopTraversal) {
 				$this->stop = true;
+
+			} elseif ($res === self::RemoveNode) {
+				return null;
 			}
 		}
 
