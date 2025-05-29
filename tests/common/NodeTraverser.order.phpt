@@ -102,3 +102,38 @@ Assert::equal([
 	['leave', $leafNode2],
 	['leave', $parentNode],
 ], $trace);
+
+
+
+// Test RemoveNode functionality
+$leafNode3 = new LeafNode;
+$leafNode4 = new LeafNode;
+$arrayNodeForRemoval = new ArrayNode([$leafNode3, $leafNode4]);
+
+$trace = [];
+$res = (new NodeTraverser)->traverse(
+	$arrayNodeForRemoval,
+	function ($node) use (&$trace, $leafNode4) {
+		$trace[] = ['enter', $node];
+		return $node === $leafNode4
+			? NodeTraverser::RemoveNode
+			: null;
+	},
+	function ($node) use (&$trace) { $trace[] = ['leave', $node]; },
+);
+
+Assert::equal($arrayNodeForRemoval, $res);
+Assert::equal([
+	['enter', $arrayNodeForRemoval],
+	['enter', $leafNode3],
+	['leave', $leafNode3],
+	['enter', $leafNode4],
+	['leave', $arrayNodeForRemoval],
+], $trace);
+
+// Verify that the removed node is replaced with null in the array
+$children = [];
+foreach ($arrayNodeForRemoval as $child) {
+	$children[] = $child;
+}
+Assert::equal([$leafNode3, null], $children);
