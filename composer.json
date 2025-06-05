@@ -23,8 +23,8 @@
 		"nette/tester": "^2.5",
 		"tracy/tracy": "^2.10",
 		"nette/utils": "^4.0",
-		"phpstan/phpstan": "^1",
-		"nette/php-generator": "^4.0"
+		"nette/php-generator": "^4.0",
+		"phpstan/phpstan-nette": "^2.0@stable"
 	},
 	"suggest": {
 		"ext-iconv": "to use filters |reverse, |substring",
