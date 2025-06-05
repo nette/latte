@@ -39,7 +39,10 @@
 		"nette/caching": "<3.1.4"
 	},
 	"autoload": {
-		"classmap": ["src/"]
+		"classmap": ["src/"],
+		"psr-4": {
+			"Latte\\": "src"
+		}
 	},
 	"minimum-stability": "dev",
 	"bin": ["bin/latte-lint"],
