@@ -137,6 +137,9 @@ final class CoreExtension extends Latte\Extension
 			'explode' => [$this->filters, 'explode'],
 			'filter' => [$this->filters, 'filter'],
 			'first' => [$this->filters, 'first'],
+			'firstLower' => extension_loaded('mbstring')
+				? [$this->filters, 'firstLower']
+				: fn() => throw new RuntimeException('Filter |firstLower requires mbstring extension.'),
 			'firstUpper' => extension_loaded('mbstring')
 				? [$this->filters, 'firstUpper']
 				: fn() => throw new RuntimeException('Filter |firstUpper requires mbstring extension.'),

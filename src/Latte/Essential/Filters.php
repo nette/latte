@@ -402,6 +402,16 @@ final class Filters
 
 
 	/**
+	 * Convert first character to lower case.
+	 */
+	public static function firstLower($s): string
+	{
+		$s = (string) $s;
+		return self::lower(self::substring($s, 0, 1)) . self::substring($s, 1);
+	}
+
+
+	/**
 	 * Convert first character to upper case.
 	 */
 	public static function firstUpper($s): string
