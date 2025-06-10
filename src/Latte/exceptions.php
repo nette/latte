@@ -48,6 +48,14 @@ class RuntimeException extends \RuntimeException implements Exception
 
 
 /**
+ * Template file not found or could not be loaded.
+ */
+class TemplateNotFoundException extends RuntimeException
+{
+}
+
+
+/**
  * Template uses forbidden function, filter or variable in sandbox mode.
  */
 class SecurityViolationException extends \Exception implements Exception

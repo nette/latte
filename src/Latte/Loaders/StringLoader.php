@@ -40,7 +40,7 @@ class StringLoader implements Latte\Loader
 		} elseif (isset($this->templates[$name])) {
 			return $this->templates[$name];
 		} else {
-			throw new Latte\RuntimeException("Missing template '$name'.");
+			throw new Latte\TemplateNotFoundException("Missing template '$name'.");
 		}
 	}
 
@@ -57,7 +57,7 @@ class StringLoader implements Latte\Loader
 	public function getReferredName(string $name, string $referringName): string
 	{
 		if ($this->templates === null) {
-			throw new \LogicException("Missing template '$name'.");
+			throw new Latte\TemplateNotFoundException("Missing template '$name'.");
 		}
 
 		return $name;

@@ -27,7 +27,7 @@ Assert::same('phar://file.phar/../c', strtr($loader->getReferredName('../c', 'ph
 $loader = new FileLoader;
 Assert::exception(
 	fn() => $loader->getContent('unknown'),
-	Latte\RuntimeException::class,
+	Latte\TemplateNotFoundException::class,
 	"Missing template file 'unknown'.",
 );
 

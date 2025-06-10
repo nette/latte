@@ -38,7 +38,7 @@ class FileLoader implements Latte\Loader
 			throw new Latte\RuntimeException("Template '$file' is not within the allowed path '{$this->baseDir}'.");
 
 		} elseif (!is_file($file)) {
-			throw new Latte\RuntimeException("Missing template file '$file'.");
+			throw new Latte\TemplateNotFoundException("Missing template file '$file'.");
 
 		} elseif ($this->isExpired($fileName, time())) {
 			if (@touch($file) === false) {

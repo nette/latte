@@ -18,7 +18,7 @@ test('direct content handling and missing template exception', function () {
 
 	Assert::exception(
 		fn() => $loader->getReferredName('inner', 'referrer'),
-		LogicException::class,
+		Latte\TemplateNotFoundException::class,
 		"Missing template 'inner'.",
 	);
 });
