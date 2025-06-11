@@ -61,7 +61,7 @@ final class NElseNode extends StatementNode
 
 					array_splice($node->children, $i, 1);
 					$prev = $node->children[--$i] ?? null;
-					if ($prev instanceof Nodes\TextNode && trim($prev->content) === '') {
+					while ($prev instanceof Nodes\TextNode && trim($prev->content) === '') {
 						array_splice($node->children, $i, 1);
 						$prev = $node->children[--$i] ?? null;
 					}

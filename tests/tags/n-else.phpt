@@ -44,14 +44,15 @@ Assert::exception(
 Assert::match(
 	<<<'XX'
 		begin
-		<div>in1</div>
+			<div>in1</div>
 		end
 		XX,
 	$latte->renderToString(
 		<<<'XX'
 			begin
-			<div n:if=1>in1</div>
-			<p n:else>else</p>
+				<div n:if=1>in1</div>
+
+				<p n:else>else</p>
 			end
 			XX,
 	),
