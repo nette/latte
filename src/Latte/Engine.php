@@ -93,7 +93,7 @@ class Engine
 	 * Creates template object.
 	 * @param  mixed[]  $params
 	 */
-	public function createTemplate(string $name, array $params = [], $clearCache = true): Runtime\Template
+	public function createTemplate(string $name, array $params = [], bool $clearCache = true): Runtime\Template
 	{
 		$this->environmentHash = $clearCache ? null : $this->environmentHash;
 		$class = $this->loadTemplate($name);

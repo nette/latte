@@ -12,17 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader([
-	'main' => <<<'XX'
-		{foreach [a, b] as $item}
-			{foreach [c, d] as $item}
-				{$iterator->parent->current()}
-			{/foreach}
-		{/foreach}
-
-		XX,
-]));
-
+$latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
 	<<<'XX'
@@ -31,7 +21,14 @@ Assert::match(
 				b
 				b
 		XX,
-	$latte->renderToString('main'),
+	$latte->renderToString(<<<'XX'
+		{foreach [a, b] as $item}
+			{foreach [c, d] as $item}
+				{$iterator->parent->current()}
+			{/foreach}
+		{/foreach}
+
+		XX),
 );
 
 

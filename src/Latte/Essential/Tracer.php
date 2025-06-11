@@ -70,13 +70,13 @@ final class Tracer
 					// {include file}, extends, embed, sandbox, ...
 					$res[count($res) - 1]['line'] = self::getSourceLine($item['file'], $item['line']);
 
-				} elseif ($method === 'renderBlock' || $method === 'renderBlockParent') {
+				} elseif ($method === 'renderBlock' || $method === 'renderParentBlock') {
 					// {include block}
 					$res[count($res) - 1]['args'] = self::filterParams($item['args'][1] + $object->getParameters());
 
 					if ($method !== 'renderBlock' || isset($item['args'][2])) { // is not {block}
 						$res[] = [
-							'function' => '{include ' . ($method === 'renderBlockParent' ? 'parent' : $item['args'][0]) . '}',
+							'function' => '{include ' . ($method === 'renderParentBlock' ? 'parent' : $item['args'][0]) . '}',
 							'file' => $object->getName(),
 							'line' => self::getSourceLine($item['file'], $item['line']),
 							'args' => self::filterParams($item['args'][1]),
