@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Essential;
 
 use Nette\PhpGenerator as Php;
+use const DIRECTORY_SEPARATOR;
 
 
 /**

@@ -17,6 +17,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use function array_splice, count, trim;
 
 
 /**

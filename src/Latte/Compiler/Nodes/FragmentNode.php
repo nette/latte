@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\PrintContext;
+use function array_merge, count;
 
 
 final class FragmentNode extends AreaNode

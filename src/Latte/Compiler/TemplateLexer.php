@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte\CompileException;
+use function array_merge, array_pop, array_shift, array_unshift, constant, dechex, is_int, ord, preg_last_error, preg_last_error_msg, preg_match, preg_quote, str_replace, str_starts_with, strlen, substr;
+use const PREG_UNMATCHED_AS_NULL;
 
 
 final class TemplateLexer
@@ -236,8 +238,8 @@ final class TemplateLexer
 
 		$tokens = [];
 		foreach ($matches as $k => $v) {
-			if ($v !== null && !\is_int($k)) {
-				$tokens[] = new Token(\constant(Token::class . '::' . $k), $v, $this->position);
+			if ($v !== null && !is_int($k)) {
+				$tokens[] = new Token(constant(Token::class . '::' . $k), $v, $this->position);
 				$this->position = $this->position->advance($v);
 			}
 		}

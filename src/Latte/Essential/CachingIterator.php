@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Latte\Essential;
 
+use function get_debug_type, is_array, max, method_exists, sprintf;
+
 
 /**
  * Smarter caching iterator.

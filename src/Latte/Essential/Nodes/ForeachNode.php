@@ -24,6 +24,7 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TagParser;
+use function array_map, array_unshift, implode, preg_match;
 
 
 /**

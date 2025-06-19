@@ -12,6 +12,7 @@ namespace Latte\Compiler;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Filters;
+use function in_array, is_string, preg_match, str_starts_with, strtolower;
 
 
 /**

@@ -12,6 +12,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\Compiler\Escaper;
 use Latte\Engine;
+use function array_keys, array_merge, array_pop, end, in_array, is_array, next, ob_end_clean, ob_get_clean, ob_start, prev, reset, sprintf, strtoupper;
 
 
 /**

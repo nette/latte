@@ -12,6 +12,7 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use function array_flip, str_starts_with, strtolower, substr;
 
 
 class NameNode extends Node

@@ -19,6 +19,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Engine;
 use Latte\Runtime\Template;
 use Latte\SecurityViolationException;
+use function is_string, strrchr;
 
 
 /**

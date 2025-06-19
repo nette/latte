@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use const PHP_INT_MAX;
 
 
 class IntegerNode extends ScalarNode
@@ -44,9 +45,9 @@ class IntegerNode extends ScalarNode
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->value === -\PHP_INT_MAX - 1) {
+		if ($this->value === -PHP_INT_MAX - 1) {
 			// PHP_INT_MIN cannot be represented as a literal, because the sign is not part of the literal
-			return '(-' . \PHP_INT_MAX . '-1)';
+			return '(-' . PHP_INT_MAX . '-1)';
 
 		} elseif ($this->kind === self::KindDecimal) {
 			return (string) $this->value;

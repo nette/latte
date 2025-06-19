@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use function strtr, substr;
 
 
 class StringNode extends ScalarNode

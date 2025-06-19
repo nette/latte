@@ -20,6 +20,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TagParser;
 use Latte\Compiler\TemplateParser;
+use function in_array;
 
 
 /**

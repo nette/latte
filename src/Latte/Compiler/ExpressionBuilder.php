@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Nodes\Php\Scalar;
+use function is_array, is_bool, is_float, is_int, is_string;
 
 
 /** @deprecated */

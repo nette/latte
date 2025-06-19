@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use const PHP_VERSION_ID;
 
 
 class StaticMethodCallableNode extends ExpressionNode

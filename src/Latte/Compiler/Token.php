@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Latte\Compiler;
 
+use function in_array;
+
 
 final class Token
 {

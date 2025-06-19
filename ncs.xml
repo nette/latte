@@ -16,10 +16,6 @@
 		<exclude-pattern>*.php</exclude-pattern>
 	</rule>
 
-	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine.MultipleUsesPerLine">
-		<exclude-pattern>./src/Latte/Essential/Filters.php</exclude-pattern>
-	</rule>
-
 	<!-- strfime() -->
 	<rule ref="Generic.PHP.DeprecatedFunctions.Deprecated">
 		<exclude-pattern>./src/Latte/Essential/Filters.php</exclude-pattern>

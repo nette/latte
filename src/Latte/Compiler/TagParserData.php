@@ -12,6 +12,7 @@ namespace Latte\Compiler;
 use Latte\Compiler\Nodes\Php as Node;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Scalar;
+use function array_pop, count, is_string, substr;
 
 
 /** @internal generated trait used by TagParser */
@@ -571,7 +572,7 @@ abstract class TagParserData
 			240 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
 			241 => function () use ($pos) {
 				$var = $this->semStack[$pos]->name;
-				$this->semValue = \is_string($var)
+				$this->semValue = is_string($var)
 					? new Node\VarLikeIdentifierNode($var, $this->startTokenStack[$pos]->position)
 					: $var;
 			},

@@ -13,6 +13,8 @@ use Latte;
 use Latte\ContentType;
 use Latte\RuntimeException;
 use Nette;
+use function addcslashes, get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_string, json_encode, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtoupper, strtr, substr;
+use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
 /**

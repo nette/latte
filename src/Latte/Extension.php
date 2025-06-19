@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Latte;
 
+use function get_defined_vars;
+
 
 /**
  * Latte extension.

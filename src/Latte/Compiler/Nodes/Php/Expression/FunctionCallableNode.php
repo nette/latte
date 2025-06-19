@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use const PHP_VERSION_ID;
 
 
 class FunctionCallableNode extends ExpressionNode
