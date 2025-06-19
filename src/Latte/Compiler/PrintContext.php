@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php as Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\ContentType;
+use function addcslashes, array_map, array_pop, end, implode, preg_replace, preg_replace_callback, strtolower, substr, trim, ucfirst;
 
 
 /**

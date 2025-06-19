@@ -18,6 +18,7 @@ use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PrintContext;
 use Latte\Engine;
+use function array_combine, array_keys, array_map, in_array, is_string, str_starts_with, strtolower;
 
 
 final class Passes

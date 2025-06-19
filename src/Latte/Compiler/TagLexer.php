@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Latte\Compiler;
 
 use Latte\CompileException;
+use function array_splice, constant, count, is_float, is_int, is_numeric, ord, preg_last_error, preg_last_error_msg, preg_match, preg_match_all, str_contains, str_replace, str_split, strlen, strtolower, substr, trim;
+use const PREG_SET_ORDER, PREG_UNMATCHED_AS_NULL;
 
 
 /**

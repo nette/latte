@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\ArrayItemNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use const PHP_VERSION_ID;
 
 
 class ArrayNode extends ExpressionNode

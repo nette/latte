@@ -21,6 +21,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Runtime\Template;
+use function count;
 
 
 /**

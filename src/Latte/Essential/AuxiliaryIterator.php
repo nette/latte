@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Latte\Essential;
 
+use function count;
+
 
 /**
  * Iterates over key-value pairs.

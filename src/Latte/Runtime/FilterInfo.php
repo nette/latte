@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
+use function in_array, strtoupper;
 
 
 /**

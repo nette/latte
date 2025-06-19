@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Sandbox;
 
 use Latte;
+use function count, explode, is_array, is_callable, is_object, is_string;
 
 
 /** @internal */

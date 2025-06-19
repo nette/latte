@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Latte\Loaders;
 
 use Latte;
+use function array_pop, end, explode, file_get_contents, implode, is_file, preg_match, str_starts_with, strtr, time, touch;
+use const DIRECTORY_SEPARATOR;
 
 
 /**

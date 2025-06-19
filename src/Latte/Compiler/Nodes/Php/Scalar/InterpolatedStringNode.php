@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use function substr;
 
 
 class InterpolatedStringNode extends ScalarNode

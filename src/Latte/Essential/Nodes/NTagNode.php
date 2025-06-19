@@ -17,6 +17,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\ContentType;
+use function is_string, preg_match, strtolower;
 
 
 /**

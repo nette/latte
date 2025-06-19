@@ -19,6 +19,7 @@ use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Essential\TranslatorExtension;
+use function array_unshift, is_array, is_string;
 
 
 /**

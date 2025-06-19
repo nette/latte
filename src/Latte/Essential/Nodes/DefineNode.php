@@ -21,6 +21,7 @@ use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Compiler\Token;
 use Latte\Runtime\Template;
+use function is_string;
 
 
 /**

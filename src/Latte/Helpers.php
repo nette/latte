@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace Latte;
 
+use function array_keys, array_search, array_slice, array_unique, count, is_array, is_object, is_string, levenshtein, max, min, strlen, strpos;
+use const PHP_VERSION_ID;
+
 
 /**
  * Latte helpers.

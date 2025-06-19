@@ -12,6 +12,7 @@ namespace Latte\Essential;
 use Latte;
 use Latte\Engine;
 use Latte\Runtime\Template;
+use function count, is_string;
 
 
 /**

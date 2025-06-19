@@ -12,6 +12,7 @@ namespace Latte\Compiler;
 use Latte\CompileException;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use function array_search, in_array;
 
 
 /**

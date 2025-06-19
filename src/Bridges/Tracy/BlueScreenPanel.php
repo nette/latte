@@ -13,6 +13,8 @@ use Latte;
 use Tracy;
 use Tracy\BlueScreen;
 use Tracy\Helpers;
+use function array_slice;
+use const ENT_IGNORE;
 
 
 /**

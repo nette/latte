@@ -11,6 +11,8 @@ namespace Latte\Tools;
 
 use Latte;
 use Nette;
+use function in_array, strlen;
+use const PHP_BINARY, STDERR;
 
 
 final class Linter

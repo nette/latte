@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use function implode, is_array, is_string, str_contains, str_replace, strncmp;
 
 
 /**

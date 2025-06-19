@@ -17,6 +17,7 @@ use Latte\Compiler\Nodes\Html;
 use Latte\ContentType;
 use Latte\Helpers;
 use Latte\SecurityViolationException;
+use function array_keys, array_pop, end, implode, in_array, key, preg_replace, str_starts_with, strlen, strtolower, substr;
 
 
 /**

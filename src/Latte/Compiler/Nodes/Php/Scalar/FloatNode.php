@@ -13,6 +13,8 @@ use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use function is_finite, preg_match, sprintf, str_replace, strpbrk;
+use const INF;
 
 
 class FloatNode extends ScalarNode
@@ -35,9 +37,9 @@ class FloatNode extends ScalarNode
 	public function print(PrintContext $context): string
 	{
 		if (!is_finite($this->value)) {
-			if ($this->value === \INF) {
+			if ($this->value === INF) {
 				return '\INF';
-			} elseif ($this->value === -\INF) {
+			} elseif ($this->value === -INF) {
 				return '-\INF';
 			} else {
 				return '\NAN';
