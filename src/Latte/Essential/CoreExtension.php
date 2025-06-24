@@ -199,6 +199,7 @@ final class CoreExtension extends Latte\Extension
 			'odd' => [$this->filters, 'odd'],
 			'slice' => [$this->filters, 'slice'],
 			'hasBlock' => fn(Runtime\Template $template, string $name): bool => $template->hasBlock($name),
+			'hasTemplate' => fn(Runtime\Template $template, string $name): bool => $this->hasTemplate($name, $template->getName()),
 		];
 	}
 
@@ -263,5 +264,20 @@ final class CoreExtension extends Latte\Extension
 			$lexer->popSyntax();
 		}
 		return $inner;
+	}
+
+
+	/**
+	 * Checks if template exists.
+	 */
+	private function hasTemplate(string $name, string $referringName): bool
+	{
+		try {
+			$name = $this->engine->getLoader()->getReferredName($name, $referringName);
+			$this->engine->createTemplate($name, [], clearCache: false);
+			return true;
+		} catch (Latte\TemplateNotFoundException) {
+			return false;
+		}
 	}
 }
