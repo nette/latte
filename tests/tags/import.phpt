@@ -48,3 +48,11 @@ Assert::match(
 	'Test block',
 	trim($latte->renderToString('main-dynamic')),
 );
+
+
+$latte->setLoader(new Latte\Loaders\StringLoader);
+Assert::exception(
+	fn() => $latte->renderToString('{import (null)}'),
+	InvalidArgumentException::class,
+	'Template name must be a string, null given.',
+);

@@ -919,3 +919,12 @@ testTemplate(
 
 		XX,
 );
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+Assert::exception(
+	fn() => $latte->renderToString('{embed (null)/}'),
+	InvalidArgumentException::class,
+	'Template name must be a string, null given.',
+);

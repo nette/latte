@@ -17,8 +17,8 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) /* line %d% */ {
-			$this->addBlock($ʟ_nm = $name, 'html', [[$this, 'blockName']], 0);
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) /* line 8 */ {
+			$this->addBlock($ʟ_nm = (is_string($ʟ_tmp = $name) ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockName']], 0);
 			$this->renderBlock($ʟ_nm, get_defined_vars());
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
@@ -28,14 +28,14 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		$this->renderBlock('static', ['var' => 30] + get_defined_vars(), 'html') /* line %d% */;
 		echo "\n";
-		$this->renderBlock($name . '', ['var' => 40] + [], 'html') /* line %d% */;
+		$this->renderBlock((is_string($ʟ_tmp = $name . '') ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), ['var' => 40] + [], 'html') /* line 18 */;
 		echo "\n";
-		$this->addBlock($ʟ_nm = "word{$name}", 'html', [[$this, 'blockWord_name']], 0);
+		$this->addBlock($ʟ_nm = (is_string($ʟ_tmp = "word{$name}") ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockWord_name']], 0);
 		$this->renderBlock($ʟ_nm, get_defined_vars());
 		echo '
 
 ';
-		$this->addBlock($ʟ_nm = "strip{$name}", 'html', [[$this, 'blockStrip_name']], 0);
+		$this->addBlock($ʟ_nm = (is_string($ʟ_tmp = "strip{$name}") ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockStrip_name']], 0);
 		$this->renderBlock($ʟ_nm, get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
 			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('striptags', $ʟ_fi, $s));
@@ -43,7 +43,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		$this->addBlock($ʟ_nm = rand() < 5 ? 'a' : 'b', 'html', [[$this, 'blockRand_5_a_b']], 0);
+		$this->addBlock($ʟ_nm = (is_string($ʟ_tmp = rand() < 5 ? 'a' : 'b') ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockRand_5_a_b']], 0);
 		$this->renderBlock($ʟ_nm, get_defined_vars());
 	}
 

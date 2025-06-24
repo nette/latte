@@ -13,8 +13,6 @@ use Latte\CompileException;
 use Latte\Compiler\Block;
 use Latte\Compiler\Escaper;
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\Php\Expression\AssignNode;
-use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\StatementNode;
@@ -115,12 +113,12 @@ class BlockNode extends StatementNode
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
-			'$this->renderBlock(%node, get_defined_vars()'
+			'$this->renderBlock(%raw, get_defined_vars()'
 			. ($this->modifier->filters || $this->modifier->escape
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: '')
 			. ') %2.line;',
-			$this->block->name,
+			$context->ensureString($this->block->name, 'Block name'),
 			$this->modifier,
 			$this->position,
 		);
@@ -135,13 +133,13 @@ class BlockNode extends StatementNode
 		$this->modifier->escape = $this->modifier->escape || $escaper->getState() === Escaper::HtmlAttribute;
 
 		return $context->format(
-			'$this->addBlock(%node, %dump, [[$this, %dump]], %dump);
+			'$this->addBlock($ʟ_nm = %raw, %dump, [[$this, %dump]], %dump);
 			$this->renderBlock($ʟ_nm, get_defined_vars()'
 			. ($this->modifier->filters || $this->modifier->escape
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'
 				: '')
 			. ');',
-			new AssignNode(new VariableNode('ʟ_nm'), $this->block->name),
+			$context->ensureString($this->block->name, 'Block name'),
 			$escaper->export(),
 			$this->block->method,
 			$this->block->layer,

@@ -108,10 +108,10 @@ class IncludeBlockNode extends StatementNode
 
 		return $context->format(
 			'$this->render' . ($this->parent ? 'ParentBlock' : 'Block')
-			. '(%node, %node? + '
+			. '(%raw, %node? + '
 			. (isset($block) && !$block->parameters ? 'get_defined_vars()' : '[]')
 			. '%raw) %line;',
-			$this->name,
+			$context->ensureString($this->name, 'Block name'),
 			$this->args,
 			$contentFilter ? ", $contentFilter" : '',
 			$this->position,
@@ -122,11 +122,11 @@ class IncludeBlockNode extends StatementNode
 	private function printBlockFrom(PrintContext $context, string $contentFilter): string
 	{
 		return $context->format(
-			'$this->createTemplate(%node, %node? + $this->params, "include")->renderToContentType(%raw, %node) %line;',
-			$this->from,
+			'$this->createTemplate(%raw, %node? + $this->params, "include")->renderToContentType(%raw, %raw) %line;',
+			$context->ensureString($this->from, 'Template name'),
 			$this->args,
 			$contentFilter,
-			$this->name,
+			$context->ensureString($this->name, 'Block name'),
 			$this->position,
 		);
 	}

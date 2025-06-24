@@ -20,6 +20,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main5' => 'before {include file inc2 var => 1} after',
 	'main6' => 'before {include file "inc" . 2, var => 1} after',
 	'main7' => '{include inc.latte $a = 1, var => 2}',
+	'main8' => '{include (null)}',
 
 	'inc.latte' => '<b>included {$var}</b>',
 	'inc2' => '<b>included {$var}</b>',
@@ -53,4 +54,10 @@ Assert::match(
 Assert::match(
 	'before <b>included 1</b> after',
 	$latte->renderToString('main6'),
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('main8'),
+	InvalidArgumentException::class,
+	'Template name must be a string, null given.',
 );

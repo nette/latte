@@ -39,8 +39,8 @@ class ImportNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		return $context->format(
-			'$this->createTemplate(%node, %node? + $this->params, "import")->render() %line;',
-			$this->file,
+			'$this->createTemplate(%raw, %node? + $this->params, "import")->render() %line;',
+			$context->ensureString($this->file, 'Template name'),
 			$this->args,
 			$this->position,
 		);

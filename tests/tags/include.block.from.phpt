@@ -20,6 +20,8 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main4' => 'before {include block loc from inc} after',
 	'main5' => 'before {include block bl from inc.ext, var => 1} after',
 	'main6' => '{var $var = 1} {include block bl from inc} after',
+	'main7' => '{include block (null) from main1}',
+	'main8' => '{include block bl from (null)}',
 
 	'inc' => '{define bl}<b>block {$var}</b>{/define}  {define local loc}local{/define}',
 	'inc.ext' => '{extends inc} {define bl}*{include parent $var}*{/define}',
@@ -64,4 +66,16 @@ Assert::error(
 Assert::matchFile(
 	__DIR__ . '/expected/include.block.from.php',
 	$latte->compile('main5'),
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('main7'),
+	InvalidArgumentException::class,
+	'Block name must be a string, null given.',
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('main8'),
+	InvalidArgumentException::class,
+	'Template name must be a string, null given.',
 );

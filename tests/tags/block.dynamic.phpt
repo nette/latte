@@ -49,3 +49,10 @@ Assert::matchFile(
 	__DIR__ . '/expected/block.dynamic.html',
 	$latte->renderToString($template),
 );
+
+
+Assert::exception(
+	fn() => $latte->renderToString('{block (null)/}'),
+	InvalidArgumentException::class,
+	'Block name must be a string, null given.',
+);

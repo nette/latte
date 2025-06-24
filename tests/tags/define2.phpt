@@ -20,6 +20,12 @@ Assert::match('', $latte->renderToString('{define foo-bar}Hello{/define}'));
 
 Assert::match('', $latte->renderToString('{define $foo}Hello{/define}', ['foo' => 'bar']));
 
+Assert::exception(
+	fn() => $latte->renderToString('{define (null)/}'),
+	InvalidArgumentException::class,
+	'Block name must be a string, null given.',
+);
+
 // no empty line
 Assert::match(
 	<<<'XX'

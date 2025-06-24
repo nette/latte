@@ -83,7 +83,7 @@ class EmbedNode extends StatementNode
 				<<<'XX'
 					$this->enterBlockLayer(%dump, get_defined_vars()) %line; %raw
 					try {
-						$this->createTemplate(%node, %node, "embed")->renderToContentType(%dump) %1.line;
+						$this->createTemplate(%raw, %node, "embed")->renderToContentType(%dump) %1.line;
 					} finally {
 						$this->leaveBlockLayer();
 					}
@@ -92,7 +92,7 @@ class EmbedNode extends StatementNode
 				$this->layer,
 				$this->position,
 				$imports,
-				$this->name,
+				$context->ensureString($this->name, 'Template name'),
 				$this->args,
 				$context->getEscaper()->export(),
 			)
@@ -101,7 +101,7 @@ class EmbedNode extends StatementNode
 					$this->enterBlockLayer(%dump, get_defined_vars()) %line; %raw
 					$this->copyBlockLayer();
 					try {
-						$this->renderBlock(%node, %node, %dump) %1.line;
+						$this->renderBlock(%raw, %node, %dump) %1.line;
 					} finally {
 						$this->leaveBlockLayer();
 					}
@@ -110,7 +110,7 @@ class EmbedNode extends StatementNode
 				$this->layer,
 				$this->position,
 				$imports,
-				$this->name,
+				$context->ensureString($this->name, 'Block name'),
 				$this->args,
 				$context->getEscaper()->export(),
 			);

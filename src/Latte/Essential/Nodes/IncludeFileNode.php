@@ -58,8 +58,8 @@ class IncludeFileNode extends StatementNode
 	{
 		$noEscape = $this->modifier->hasFilter('noescape');
 		return $context->format(
-			'$this->createTemplate(%node, %node? + $this->params, %dump)->renderToContentType(%raw) %line;',
-			$this->file,
+			'$this->createTemplate(%raw, %node? + $this->params, %dump)->renderToContentType(%raw) %line;',
+			$context->ensureString($this->file, 'Template name'),
 			$this->args,
 			$this->mode,
 			count($this->modifier->filters) > (int) $noEscape

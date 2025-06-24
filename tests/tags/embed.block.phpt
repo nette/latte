@@ -424,3 +424,12 @@ testTemplate(
 
 		XX,
 );
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader);
+Assert::exception(
+	fn() => $latte->renderToString('{embed block (null)/}'),
+	InvalidArgumentException::class,
+	'Block name must be a string, null given.',
+);

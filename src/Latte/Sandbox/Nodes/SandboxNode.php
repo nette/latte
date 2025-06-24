@@ -43,7 +43,7 @@ class SandboxNode extends StatementNode
 			<<<'XX'
 				ob_start(fn() => '');
 				try {
-					$this->createTemplate(%node, %node, 'sandbox')->renderToContentType(%dump) %line;
+					$this->createTemplate(%raw, %node, 'sandbox')->renderToContentType(%dump) %line;
 				} catch (\Throwable $ʟ_e) {
 					if (isset($this->global->coreExceptionHandler)) {
 						ob_clean();
@@ -57,7 +57,7 @@ class SandboxNode extends StatementNode
 
 
 				XX,
-			$this->file,
+			$context->ensureString($this->file, 'Template name'),
 			$this->args,
 			$context->getEscaper()->export(),
 			$this->position,

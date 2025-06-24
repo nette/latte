@@ -59,3 +59,9 @@ Assert::match(
 	' before block 2 after',
 	$latte->renderToString('{define block}block {$var}{/} before {include block true ? "block", var => 2} after'),
 );
+
+Assert::exception(
+	fn() => $latte->renderToString('{include block (null)}'),
+	InvalidArgumentException::class,
+	'Block name must be a string, null given.',
+);
