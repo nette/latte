@@ -7,12 +7,11 @@
 
 declare(strict_types=1);
 
-namespace Latte\Essential\Nodes;
+namespace Latte\Compiler\Nodes;
 
-use Latte\CompileException;
+use Latte;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
@@ -47,7 +46,7 @@ class PrintNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		if ($this->followsQuote && $context->getEscaper()->export() === 'html/raw/js') {
-			throw new CompileException("Do not place {$this->followsQuote} inside quotes in JavaScript.", $this->position);
+			throw new Latte\CompileException("Do not place {$this->followsQuote} inside quotes in JavaScript.", $this->position);
 		}
 		return $context->format(
 			"echo %modify(%node) %line;\n",
@@ -64,3 +63,6 @@ class PrintNode extends StatementNode
 		yield $this->modifier;
 	}
 }
+
+
+class_alias(PrintNode::class, Latte\Essential\Nodes\PrintNode::class);
