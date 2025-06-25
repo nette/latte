@@ -41,7 +41,7 @@
 	"autoload": {
 		"classmap": ["src/"],
 		"psr-4": {
-			"Latte\\": "src"
+			"Latte\\": "src/Latte"
 		}
 	},
 	"minimum-stability": "dev",
