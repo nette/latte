@@ -12,9 +12,9 @@ namespace Latte\Essential;
 use Latte;
 use Latte\Compiler\NodeHelpers;
 use Latte\Compiler\Nodes\Php;
+use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Tag;
 use Latte\Engine;
-use Latte\Essential\Nodes\PrintNode;
 use Nette\Localization\Translator;
 use function array_unshift, is_array, is_string;
 
