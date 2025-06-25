@@ -68,7 +68,7 @@ final class CoreExtension extends Latte\Extension
 			'templateType' => [Nodes\TemplateTypeNode::class, 'create'],
 			'templatePrint' => [Nodes\TemplatePrintNode::class, 'create'],
 
-			'=' => [Nodes\PrintNode::class, 'create'],
+			'=' => [Latte\Compiler\Nodes\PrintNode::class, 'create'],
 			'do' => [Nodes\DoNode::class, 'create'],
 			'php' => [Nodes\DoNode::class, 'create'], // obsolete
 			'contentType' => [Nodes\ContentTypeNode::class, 'create'],

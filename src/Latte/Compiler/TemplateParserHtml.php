@@ -243,7 +243,7 @@ final class TemplateParserHtml
 			if ($stream->is(Token::Latte_TagOpen)) {
 				$save = $stream->getIndex();
 				$statement = $this->parser->parseLatteStatement([$this, 'inTagResolve']);
-				if (!$statement instanceof Latte\Essential\Nodes\PrintNode) {
+				if (!$statement instanceof Nodes\PrintNode) {
 					if (!$parts || $strict) {
 						throw new CompileException('Only expression can be used as a HTML tag name.', $statement->position);
 					}
@@ -346,7 +346,7 @@ final class TemplateParserHtml
 		$stream = $this->parser->getStream();
 		if ($stream->is(Token::Latte_TagOpen)) {
 			$name = $this->parser->parseLatteStatement();
-			if (!$name instanceof Latte\Essential\Nodes\PrintNode) {
+			if (!$name instanceof Nodes\PrintNode) {
 				return $name; // value like '<span {if true}attr1=val{/if}>'
 			}
 		} else {
