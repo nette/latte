@@ -361,3 +361,9 @@ Assert::exception(
 	Latte\CompileException::class,
 	"Unexpected '</li>', expecting </a> for element started on line 2 at column 8 (on line 2 at column 37)",
 );
+
+Assert::exception(
+	fn() => $latte->compile('{0|escape}'),
+	Latte\CompileException::class,
+	"Filter 'escape' is not allowed (on line 1 at column 3)",
+);
