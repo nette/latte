@@ -19,6 +19,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
+use Latte\Helpers;
 use function assert, implode;
 
 
@@ -99,5 +100,6 @@ class VarNode extends StatementNode
 		foreach ($this->assignments as &$assign) {
 			yield $assign;
 		}
+		Helpers::removeNulls($this->assignments);
 	}
 }

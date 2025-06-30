@@ -12,6 +12,7 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class ModifierNode extends Node
@@ -103,5 +104,6 @@ class ModifierNode extends Node
 		foreach ($this->filters as &$filter) {
 			yield $filter;
 		}
+		Helpers::removeNulls($this->filters);
 	}
 }

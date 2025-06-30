@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class MethodCallNode extends ExpressionNode
@@ -46,5 +47,6 @@ class MethodCallNode extends ExpressionNode
 		foreach ($this->args as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->args);
 	}
 }

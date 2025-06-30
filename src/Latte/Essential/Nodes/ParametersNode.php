@@ -18,6 +18,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
+use Latte\Helpers;
 use function is_string;
 
 
@@ -81,5 +82,6 @@ class ParametersNode extends StatementNode
 		foreach ($this->parameters as &$param) {
 			yield $param;
 		}
+		Helpers::removeNulls($this->parameters);
 	}
 }
