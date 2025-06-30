@@ -40,6 +40,7 @@ class ArrayNode extends Node
 		foreach ($this->items as &$item) {
 			yield $item;
 		}
+		Latte\Helpers::removeNulls($this->items);
 	}
 }
 

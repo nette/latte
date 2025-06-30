@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\Helpers;
 
 
 /**
@@ -77,6 +78,7 @@ class ForNode extends StatementNode
 		foreach ($this->init as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->init);
 
 		if ($this->condition) {
 			yield $this->condition;
@@ -85,6 +87,7 @@ class ForNode extends StatementNode
 		foreach ($this->next as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->next);
 
 		yield $this->content;
 	}

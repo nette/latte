@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\ClosureUseNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class ClosureNode extends ExpressionNode
@@ -59,10 +60,12 @@ class ClosureNode extends ExpressionNode
 		foreach ($this->params as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->params);
 
 		foreach ($this->uses as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->uses);
 
 		if ($this->returnType) {
 			yield $this->returnType;
