@@ -11,6 +11,7 @@ namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class UnionTypeNode extends ComplexTypeNode
@@ -35,5 +36,6 @@ class UnionTypeNode extends ComplexTypeNode
 		foreach ($this->types as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->types);
 	}
 }

@@ -136,4 +136,4 @@ $children = [];
 foreach ($arrayNodeForRemoval as $child) {
 	$children[] = $child;
 }
-Assert::equal([$leafNode3, null], $children);
+Assert::equal([$leafNode3], $children);

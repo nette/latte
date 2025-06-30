@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\MatchArmNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class MatchNode extends Php\ExpressionNode
@@ -45,5 +46,6 @@ class MatchNode extends Php\ExpressionNode
 		foreach ($this->arms as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->arms);
 	}
 }

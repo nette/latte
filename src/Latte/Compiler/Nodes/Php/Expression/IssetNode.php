@@ -13,6 +13,7 @@ use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class IssetNode extends ExpressionNode
@@ -50,5 +51,6 @@ class IssetNode extends ExpressionNode
 		foreach ($this->vars as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->vars);
 	}
 }

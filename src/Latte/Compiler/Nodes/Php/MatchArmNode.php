@@ -12,6 +12,7 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class MatchArmNode extends Node
@@ -39,6 +40,7 @@ class MatchArmNode extends Node
 			foreach ($this->conds as &$item) {
 				yield $item;
 			}
+			Helpers::removeNulls($this->conds);
 		}
 		yield $this->body;
 	}

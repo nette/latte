@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Php\ScalarNode;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 use function substr;
 
 
@@ -71,5 +72,6 @@ class InterpolatedStringNode extends ScalarNode
 		foreach ($this->parts as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->parts);
 	}
 }

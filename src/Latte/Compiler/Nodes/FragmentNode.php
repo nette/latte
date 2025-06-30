@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 use function array_merge, count;
 
 
@@ -66,5 +67,6 @@ final class FragmentNode extends AreaNode
 		foreach ($this->children as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->children);
 	}
 }
