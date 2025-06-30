@@ -249,6 +249,15 @@ final class Escaper
 	}
 
 
+	public function escapeContent(string $str): string
+	{
+		return 'LR\Filters::convertTo($ʟ_fi, '
+			. var_export($this->export(), true) . ', '
+			. $str
+			. ')';
+	}
+
+
 	public function check(string $str): string
 	{
 		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
