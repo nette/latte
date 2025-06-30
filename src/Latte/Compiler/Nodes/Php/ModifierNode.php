@@ -79,23 +79,19 @@ class ModifierNode extends Node
 
 	public function printContentAware(PrintContext $context, string $expr): string
 	{
+		$escape = $this->escape;
 		foreach ($this->filters as $filter) {
 			$name = $filter->name->name;
 			if ($name === 'noescape') {
-				$noescape = true;
+				$escape = false;
 			} else {
 				$expr = $filter->printContentAware($context, $expr);
 			}
 		}
 
-		if ($this->escape && empty($noescape)) {
-			$expr = 'LR\Filters::convertTo($ʟ_fi, '
-				. var_export($context->getEscaper()->export(), true) . ', '
-				. $expr
-				. ')';
-		}
-
-		return $expr;
+		return $escape
+			? $context->getEscaper()->escapeContent($expr)
+			: $expr;
 	}
 
 
