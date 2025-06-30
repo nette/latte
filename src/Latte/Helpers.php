@@ -98,4 +98,10 @@ class Helpers
 
 		return $list;
 	}
+
+
+	public static function removeNulls(array &$items): void
+	{
+		$items = array_filter($items, fn($item) => $item !== null);
+	}
 }

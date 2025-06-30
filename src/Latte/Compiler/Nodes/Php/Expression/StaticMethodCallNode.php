@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Helpers;
 
 
 class StaticMethodCallNode extends ExpressionNode
@@ -51,6 +52,7 @@ class StaticMethodCallNode extends ExpressionNode
 		foreach ($this->args as &$item) {
 			yield $item;
 		}
+		Helpers::removeNulls($this->args);
 	}
 }
 

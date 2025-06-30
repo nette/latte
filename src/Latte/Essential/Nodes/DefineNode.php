@@ -20,6 +20,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Compiler\Token;
+use Latte\Helpers;
 use Latte\Runtime\Template;
 use function is_string;
 
@@ -128,6 +129,7 @@ class DefineNode extends StatementNode
 		foreach ($this->block->parameters as &$param) {
 			yield $param;
 		}
+		Helpers::removeNulls($this->block->parameters);
 
 		yield $this->content;
 	}
