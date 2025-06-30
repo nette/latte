@@ -49,7 +49,7 @@ test('inline modifiers', function () {
 
 test('FilterInfo aware modifiers', function () {
 	Assert::same('$this->filters->filterContent(\'mod\', $ʟ_fi, @)', format('|mod', true));
-	Assert::same('$this->filters->filterContent(\'escape\', $ʟ_fi, $this->filters->filterContent(\'mod2\', $ʟ_fi, $this->filters->filterContent(\'mod1\', $ʟ_fi, @)))', format('|mod1|mod2|escape', true));
+	Assert::same('$this->filters->filterContent(\'mod3\', $ʟ_fi, $this->filters->filterContent(\'mod2\', $ʟ_fi, $this->filters->filterContent(\'mod1\', $ʟ_fi, @)))', format('|mod1|mod2|mod3', true));
 });
 
 test('depth', function () {

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Compiler\Nodes\Php;
 
+use Latte\CompileException;
 use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
@@ -23,6 +24,9 @@ class FilterNode extends Node
 		public array $args = [],
 		public ?Position $position = null,
 	) {
+		if ($name->name === 'escape') {
+			throw new CompileException("Filter 'escape' is not allowed.", $position);
+		}
 		(function (ArgumentNode ...$args) {})(...$args);
 	}
 
