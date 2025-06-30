@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Compiler\Nodes;
 
 use Latte;
+use Latte\Compiler\Nodes\Php\Expression\FilterCallNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\PrintContext;
@@ -39,6 +40,7 @@ class PrintNode extends StatementNode
 		$node->expression = $tag->parser->parseExpression();
 		$node->modifier = $tag->parser->parseModifier();
 		$node->modifier->escape = true;
+		$node->applyFilters();
 		return $node;
 	}
 
@@ -54,6 +56,20 @@ class PrintNode extends StatementNode
 			$this->expression,
 			$this->position,
 		);
+	}
+
+
+	private function applyFilters(): void
+	{
+		$filters = &$this->modifier->filters;
+		foreach ($filters as $i => $filter) {
+			$name = $filter->name->name;
+			if (!in_array($name, ['noescape', 'nocheck', 'noCheck'], true)) {
+				$this->expression = new FilterCallNode($this->expression, $filter);
+				unset($filters[$i]);
+			}
+		}
+		$filters = array_values($filters);
 	}
 
 
