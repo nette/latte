@@ -12,15 +12,17 @@ Assert::match(<<<'XX'
 		Fragment:
 		Fragment:
 			Print:
-				Variable:
-					name: var
-				Modifier:
-					Filter:
-						Identifier:
-							name: trim
+				FilterCall:
+					FilterCall:
+						Variable:
+							name: var
+						Filter:
+							Identifier:
+								name: trim
 					Filter:
 						Identifier:
 							name: upper
+				Modifier:
 	XX, exportTraversing('{=$var|trim|upper}'));
 
 
