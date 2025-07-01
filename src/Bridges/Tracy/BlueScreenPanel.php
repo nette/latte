@@ -106,7 +106,7 @@ class BlueScreenPanel
 	/** @return array{file: string, line: int, label: string, active: bool} */
 	public static function mapLatteSourceCode(string $file, int $line): ?array
 	{
-		if (!strpos($file, '.latte--')) {
+		if (!strpos($file, 'latte--')) {
 			return null;
 		}
 
