@@ -119,7 +119,7 @@ class BlueScreenPanel
 		}
 
 		$file = $m[1];
-		$line = $line && preg_match('#/\* line (\d+) \*/#', $lines[$line - 1], $m) ? (int) $m[1] : 0;
+		$line = $line && preg_match('#/\* line (\d+)(:\d+)? \*/#', $lines[$line - 1], $m) ? (int) $m[1] : 0;
 		return ['file' => $file, 'line' => $line, 'label' => 'Latte', 'active' => true];
 	}
 }

@@ -8,7 +8,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(array $ʟ_args): void
 	{
 %A%
-		$this->renderBlock('test', [], 'html') /* line 3 */;
+		$this->renderBlock('test', [], 'html') /* line 3:3 */;
 	}
 
 
@@ -16,7 +16,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 
-		$this->createTemplate('inc', $this->params, "import")->render() /* line 2 */;
+		$this->createTemplate('inc', $this->params, "import")->render() /* line 2:3 */;
 		return get_defined_vars();
 	}
 }

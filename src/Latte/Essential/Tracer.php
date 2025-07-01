@@ -99,7 +99,7 @@ final class Tracer
 		}
 
 		$line = file($compiledFile)[$line - 1];
-		return preg_match('~/\* line (\d+) \*/~', $line, $m)
+		return preg_match('~/\* line (\d+)(:\d+)? \*/~', $line, $m)
 			? (int) $m[1]
 			: 0;
 	}

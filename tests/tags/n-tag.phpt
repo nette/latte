@@ -78,7 +78,7 @@ Assert::match(
 				echo $ʟ_tmp = LR\AttributeHandler::validateTagName(Latte\Essential\Nodes\NTagNode::check('div', 'h' . 1, false)) /* line 1 */;
 				$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
 				echo ' class="bar" ';
-				if (isset($id)) /* line 1 */ {
+				if (isset($id)) /* line 1:18 */ {
 					echo 'id="content"';
 				}
 				echo '>';

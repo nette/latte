@@ -14,22 +14,22 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '
 a) ';
-		$this->renderBlock('test', [1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [1] + [], 'html') /* line %d%:%d% */;
 		echo '
 
 
 b) ';
-		$this->renderBlock('outer', get_defined_vars(), 'html') /* line %d% */;
+		$this->renderBlock('outer', get_defined_vars(), 'html') /* line %d%:%d% */;
 		echo '
 
 ';
-		$var1 = 'outer' /* line %d% */;
+		$var1 = 'outer' /* line %d%:%d% */;
 		echo 'c) ';
-		$this->renderBlock('test', [], 'html') /* line %d% */;
+		$this->renderBlock('test', [], 'html') /* line %d%:%d% */;
 		echo '
 
 d) ';
-		$this->renderBlock('test', [null] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [null] + [], 'html') /* line %d%:%d% */;
 	}
 
 
@@ -43,11 +43,11 @@ d) ';
 		unset($ʟ_args);
 
 		echo '	Variables ';
-		echo LR\Filters::escapeHtmlText($var1) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($var1) /* line %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($var2) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($var2) /* line %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($hello) /* line %d%:%d% */;
 		echo "\n";
 	}
 
@@ -59,6 +59,6 @@ d) ';
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		$this->renderBlock('test', ['hello'] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['hello'] + [], 'html') /* line %d%:%d% */;
 	}
 }
