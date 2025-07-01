@@ -124,7 +124,7 @@ final class PrintContext
 					'node' => $arg ? $arg->print($this) : '',
 					'raw' => (string) $arg,
 					'args' => $this->implode($arg instanceof Expression\ArrayNode ? $arg->toArguments() : $arg),
-					'line' => $arg?->line ? "/* line $arg->line */" : '',
+					'line' => $arg?->line ? "/* line $arg->line" . ($arg->column ? ":$arg->column" : '') . ' */' : '',
 				};
 
 				if ($cond && ($code === '[]' || $code === '')) {

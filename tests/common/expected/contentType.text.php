@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo 'Pure text ';
-		echo ($this->filters->escape)($foo) /* line 1 */;
+		echo ($this->filters->escape)($foo) /* line 1:11 */;
 		echo '
 <a b
 ';

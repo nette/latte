@@ -13,22 +13,22 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo "\n";
-		$this->renderBlock('static', get_defined_vars()) /* line %d% */;
+		$this->renderBlock('static', get_defined_vars()) /* line %d%:%d% */;
 		echo '
 
 ';
-		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) /* line 8 */ {
+		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) /* line %d%:%d% */ {
 			$this->addBlock($ʟ_nm = (is_string($ʟ_tmp = $name) ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockName']], 0);
 			$this->renderBlock($ʟ_nm, get_defined_vars());
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
 		echo "\n";
-		$this->renderBlock('dynamic', ['var' => 20] + [], 'html') /* line %d% */;
+		$this->renderBlock('dynamic', ['var' => 20] + [], 'html') /* line %d%:%d% */;
 		echo "\n";
-		$this->renderBlock('static', ['var' => 30] + get_defined_vars(), 'html') /* line %d% */;
+		$this->renderBlock('static', ['var' => 30] + get_defined_vars(), 'html') /* line %d%:%d% */;
 		echo "\n";
-		$this->renderBlock((is_string($ʟ_tmp = $name . '') ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), ['var' => 40] + [], 'html') /* line 18 */;
+		$this->renderBlock((is_string($ʟ_tmp = $name . '') ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), ['var' => 40] + [], 'html') /* line %d%:%d% */;
 		echo "\n";
 		$this->addBlock($ʟ_nm = (is_string($ʟ_tmp = "word{$name}") ? $ʟ_tmp : throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockWord_name']], 0);
 		$this->renderBlock($ʟ_nm, get_defined_vars());
@@ -57,7 +57,7 @@ final class Template%a% extends Latte\Runtime\Template
 				trigger_error("Variable \$$ʟ_v overwritten in foreach on line $ʟ_l");
 			}
 		}
-		$var = 10 /* line %d% */;
+		$var = 10 /* line %d%:%d% */;
 		return get_defined_vars();
 	}
 
@@ -70,7 +70,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	Static block #';
-		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($var) /* line %d%:%d% */;
 		echo "\n";
 	}
 
@@ -82,7 +82,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '		Dynamic block #';
-		echo LR\Filters::escapeHtmlText($var) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($var) /* line %d%:%d% */;
 		echo "\n";
 	}
 
@@ -90,7 +90,7 @@ final class Template%a% extends Latte\Runtime\Template
 	/** {block "word$name"} on line %d% */
 	public function blockWord_name(array $ʟ_args): void
 	{
-		if (false) /* line %d% */ {
+		if (false) /* line %d%:%d% */ {
 			echo '<div></div>';
 		}
 	}

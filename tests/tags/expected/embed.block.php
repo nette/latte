@@ -17,10 +17,10 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo "\n";
-		$this->enterBlockLayer(1, get_defined_vars()) /* line 2 */;
+		$this->enterBlockLayer(1, get_defined_vars()) /* line 2:3 */;
 		$this->copyBlockLayer();
 		try {
-			$this->renderBlock('embed1', [], 'html') /* line 2 */;
+			$this->renderBlock('embed1', [], 'html') /* line 2:3 */;
 		} finally {
 			$this->leaveBlockLayer();
 		}
@@ -35,10 +35,10 @@ final class Template%a% extends Latte\Runtime\Template
 		extract($ʟ_args);
 		unset($ʟ_args);
 
-		$this->enterBlockLayer(2, get_defined_vars()) /* line 4 */;
+		$this->enterBlockLayer(2, get_defined_vars()) /* line 4:5 */;
 		$this->copyBlockLayer();
 		try {
-			$this->renderBlock('embed1', [], 'html') /* line 4 */;
+			$this->renderBlock('embed1', [], 'html') /* line 4:5 */;
 		} finally {
 			$this->leaveBlockLayer();
 		}
@@ -61,7 +61,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '		embed1-start
 			';
-		$this->renderBlock('a', get_defined_vars()) /* line 12 */;
+		$this->renderBlock('a', get_defined_vars()) /* line 12:4 */;
 		echo '
 		embed1-end
 ';

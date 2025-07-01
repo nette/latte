@@ -10,38 +10,38 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo '<ul>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->h2)(($this->filters->h1)($hello))) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->h2)(($this->filters->h1)($hello))) /* line %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo ($this->filters->h2)(($this->filters->h1)($hello)) /* line %d% */;
+		echo ($this->filters->h2)(($this->filters->h1)($hello)) /* line %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->h1)(($this->filters->h2)($hello))) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->h1)(($this->filters->h2)($hello))) /* line %d%:%d% */;
 		echo '</li>
 </ul>
 
 <ul>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)((int) $hello * 0, 0, 0.0, '0')) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)((int) $hello * 0, 0, 0.0, '0')) /* line %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)((int) $hello * 1, 1, '1')) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)((int) $hello * 1, 1, '1')) /* line %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* line %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* line %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, '', '', "{$hello}")) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, '', '', "{$hello}")) /* line %d%:%d% */;
 		echo '</li>
 </ul>
 
 
 
 ';
-		ob_start(fn() => '') /* line %d% */;
+		ob_start(fn() => '') /* line %d%:%d% */;
 		try {
 			(function () {
 				extract(func_get_arg(0));
@@ -65,12 +65,12 @@ alert();
 
 <p>
 Nested blocks: ';
-		ob_start(fn() => '') /* line %d% */;
+		ob_start(fn() => '') /* line %d%:%d% */;
 		try {
 			(function () {
 				extract(func_get_arg(0));
 				echo ' Outer   ';
-				ob_start(fn() => '') /* line %d% */;
+				ob_start(fn() => '') /* line %d%:%d% */;
 				try {
 					(function () {
 						extract(func_get_arg(0));
@@ -93,7 +93,7 @@ Nested blocks: ';
 
 Breaklines: ';
 		echo LR\Filters::escapeHtmlText(($this->filters->breakLines)('hello
-bar')) /* line %d% */;
+bar')) /* line %d%:%d% */;
 		echo "\n";
 	}
 }
