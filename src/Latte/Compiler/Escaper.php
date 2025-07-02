@@ -41,7 +41,6 @@ final class Escaper
 			self::HtmlAttribute => 'escapeHtmlAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'escapeHtmlAttr',
 			self::HtmlAttribute . '/' . self::Css => 'escapeHtmlAttr',
-			self::HtmlAttribute . '/' . self::Url => 'escapeHtmlAttr',
 			self::HtmlComment => 'escapeHtmlComment',
 			'xml' => 'escapeXml',
 			'xml/attr' => 'escapeXml',
@@ -64,16 +63,11 @@ final class Escaper
 			self::HtmlAttribute => 'convertHtmlToHtmlAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'convertHtmlToHtmlAttr',
 			self::HtmlAttribute . '/' . self::Css => 'convertHtmlToHtmlAttr',
-			self::HtmlAttribute . '/' . self::Url => 'convertHtmlToHtmlAttr',
 			self::HtmlComment => 'escapeHtmlComment',
 			self::HtmlRawText . '/' . self::HtmlText => 'convertHtmlToHtmlRawText',
 		],
 		self::HtmlAttribute => [
 			self::HtmlText => 'convertHtmlToHtmlAttr',
-		],
-		self::HtmlAttribute . '/' . self::Url => [
-			self::HtmlText => 'convertHtmlToHtmlAttr',
-			self::HtmlAttribute => 'nop',
 		],
 	];
 
@@ -167,10 +161,6 @@ final class Escaper
 				$this->subType = self::JavaScript;
 			} elseif ($name === 'style') {
 				$this->subType = self::Css;
-			} elseif ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
-				|| ($name === 'data' && $this->tag === 'object'))
-			) {
-				$this->subType = self::Url;
 			}
 		}
 	}
@@ -195,8 +185,7 @@ final class Escaper
 				self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
 				self::HtmlTag => 'LR\Filters::escapeHtmlTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
-					'',
-					self::Url => 'LR\Filters::escapeHtmlAttr(' . $str . ')',
+					'' => 'LR\Filters::escapeHtmlAttr(' . $str . ')',
 					self::JavaScript => 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(' . $str . '))',
 					self::Css => 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(' . $str . '))',
 				},
@@ -255,15 +244,6 @@ final class Escaper
 			. var_export($this->export(), true) . ', '
 			. $str
 			. ')';
-	}
-
-
-	public function check(string $str): string
-	{
-		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
-			$str = 'LR\Filters::safeUrl(' . $str . ')';
-		}
-		return $str;
 	}
 
 
