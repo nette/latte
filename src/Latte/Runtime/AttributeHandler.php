@@ -71,6 +71,11 @@ final class AttributeHandler
 				'array' => self::formatArray($value, fn($v, $k) => is_string($k) ? $k . ':' . $v : $v, ';'),
 				default => $error(),
 			},
+			str_starts_with($lname, 'on') => match ($type) {
+				'string' => $value,
+				'null' => null,
+				default => $error(),
+			},
 			default => match ($type) {
 				'string', 'int', 'float' => (string) $value,
 				'bool' => $compat ? $value : $error() ?? (string) $value,
