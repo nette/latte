@@ -151,16 +151,18 @@ final class HtmlHelpers
 		$lname = strtolower($name);
 		$value = match (true) {
 			$lname === 'style' => match ($type) {
-				default => (string) $value,
+				'string' => $value,
 				'bool' => $value,
 				'null' => null,
 				'array' => self::formatArray($value, fn($v, $k) => is_string($k) ? $k . ':' . $v : $v, ';'),
+				default => self::triggerError($type, $name),
 			},
 			default => match ($type) {
-				default => (string) $value,
+				'string', 'int', 'float' => (string) $value,
 				'bool' => $value,
 				'null' => null,
 				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+				default => self::triggerError($type, $name),
 			},
 		};
 
@@ -183,6 +185,13 @@ final class HtmlHelpers
 			}
 		}
 		return $res ? implode($separator, $res) : null;
+	}
+
+
+	private static function triggerError($type, $name): void
+	{
+		$source = Latte\SourceReference::fromCallStack();
+		trigger_error(ucfirst($type) . " value in '$name' attribute is not supported" . ($source ? " ($source)" : '.'), E_USER_WARNING);
 	}
 
 

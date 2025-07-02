@@ -67,9 +67,10 @@ test('style attribute', function () {
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
 
-	Assert::same(
-		'style="1"',
-		HtmlHelpers::formatAttribute('style', 1),
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('style', 1)),
+		E_USER_WARNING,
+		"Int value in 'style' attribute is not supported.",
 	);
 });
 
@@ -122,6 +123,7 @@ test('special values (numbers, Infinity, NaN)', function () {
 test('invalid values', function () {
 	Assert::error(
 		fn() => Assert::null(HtmlHelpers::formatAttribute('foo', (object) [])),
-		Error::class,
+		E_USER_WARNING,
+		"StdClass value in 'foo' attribute is not supported.",
 	);
 });
