@@ -9,14 +9,18 @@ declare(strict_types=1);
 
 namespace Latte\Essential;
 
+use Latte;
 use Latte\CompileException;
 use Latte\Compiler\Node;
+use Latte\Compiler\Nodes;
+use Latte\Compiler\Nodes\Html;
+use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PrintContext;
+use Latte\ContentType;
 use Latte\Engine;
 use function array_combine, array_keys, array_map, in_array, is_string, str_starts_with, strtolower;
 
@@ -40,7 +44,7 @@ final class Passes
 
 		(new NodeTraverser)->traverse($node, function (Node $node) use ($names) {
 			if (($node instanceof Expression\FunctionCallNode || $node instanceof Expression\FunctionCallableNode)
-				&& $node->name instanceof NameNode
+				&& $node->name instanceof Php\NameNode
 				&& ($orig = $names[strtolower((string) $node->name)] ?? null)
 			) {
 				if ((string) $node->name !== $orig) {
@@ -68,6 +72,51 @@ final class Passes
 				&& (str_starts_with($node->name, 'ʟ_') || in_array($node->name, $forbidden, true))
 			) {
 				throw new CompileException("Forbidden variable \$$node->name.", $node->position);
+			}
+		});
+	}
+
+
+	/**
+	 * Validates and secures potentially dangerous URLs attributes in HTML elements.
+	 */
+	public function checkUrlsPass(TemplateNode $node): void
+	{
+		if ($node->contentType !== ContentType::Html) {
+			return;
+		}
+
+		$elem = null;
+		(new NodeTraverser)->traverse($node, function (Node $node) use (&$elem) {
+			if ($node instanceof Html\ElementNode) {
+				$elem = $node;
+
+			} elseif ($node instanceof Html\AttributeNode) {
+				if (
+					$node->name instanceof Nodes\TextNode
+					&& Latte\Runtime\AttributeHandler::isUrlAttribute($elem->name, $node->name->content)
+				) {
+					$value = $node->value instanceof Nodes\FragmentNode && $node->value->children
+						? $node->value->children[0]
+						: $node->value;
+
+					(new NodeTraverser)->traverse($value, function (Node $node) {
+						if ($node instanceof Nodes\PrintNode) {
+							$check = true;
+							foreach ($node->modifier->filters as $i => $filter) {
+								match ($filter->name->name) {
+									'nocheck', 'noCheck' => array_splice($node->modifier->filters, $i, 1) && $check = false,
+									'datastream', 'dataStream' => $check = false,
+									default => null,
+								};
+							}
+
+							if ($check) {
+								$node->modifier->filters[] = new Php\FilterNode(new Php\IdentifierNode('checkUrl'));
+							}
+						}
+					});
+				}
 			}
 		});
 	}

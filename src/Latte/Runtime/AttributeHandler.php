@@ -38,6 +38,17 @@ final class AttributeHandler
 
 
 	/**
+	 * Determines if the given HTML attribute is a URL attribute that requires special handling.
+	 */
+	public static function isUrlAttribute(string $tag, string $attr): bool
+	{
+		$attr = strtolower($attr);
+		return in_array($attr, ['href', 'src', 'action', 'formaction'], true)
+			|| ($attr === 'data' && strtolower($tag) === 'object');
+	}
+
+
+	/**
 	 * Checks if the given tag name represents an void (empty) HTML element.
 	 */
 	public static function isVoidElement(string $name): bool
