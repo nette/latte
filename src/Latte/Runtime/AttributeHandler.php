@@ -11,6 +11,7 @@ namespace Latte\Runtime;
 
 use Latte;
 use function in_array, is_array, is_scalar, is_string;
+use const JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
 /**
@@ -55,6 +56,13 @@ final class AttributeHandler
 				'bool' => $compat ? $value : $error() ?? (string) $value,
 				'null' => $compat ? null : '',
 				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+				default => $error(),
+			},
+			str_starts_with($lname, 'data-') => match ($type) {
+				'string', 'int', 'float' => (string) $value,
+				'bool' => $compat ? $value : $error() ?? (string) $value,
+				'null' => $compat ? null : true,
+				'array', 'stdClass' => json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR),
 				default => $error(),
 			},
 			$lname === 'style' => match ($type) {
