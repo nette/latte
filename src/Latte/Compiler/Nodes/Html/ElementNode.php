@@ -115,7 +115,7 @@ class ElementNode extends AreaNode
 
 		if ($this->endTagVar) {
 			$expr = $this->variableName
-				? 'LR\Filters::safeTag('
+				? 'LR\AttributeHandler::validateTagName('
 					. $this->variableName->print($context)
 					. ($this->contentType === ContentType::Xml ? ', true' : '')
 					. ')'
