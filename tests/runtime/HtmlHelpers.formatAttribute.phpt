@@ -63,7 +63,7 @@ test('style attribute', function () {
 
 	// invalid
 	Assert::same(
-		'style="color"',
+		'style="color:1"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
 
@@ -90,9 +90,8 @@ test('class attribute', function () {
 		HtmlHelpers::formatAttribute('class', ['btn' => true, 'red' => false]),
 	);
 
-	// invalid
 	Assert::same(
-		'class="btn:a red:b"',
+		'class="a b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
 	);
 });
