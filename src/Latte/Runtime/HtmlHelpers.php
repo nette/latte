@@ -147,41 +147,50 @@ final class HtmlHelpers
 	 */
 	public static function formatAttribute(string $name, mixed $value): ?string
 	{
-		if ($value === null || $value === false) {
-			return null;
+		$type = get_debug_type($value);
+		$lname = strtolower($name);
+		$value = match (true) {
+			$lname === 'style' => match ($type) {
+				'string' => $value,
+				'bool' => $value,
+				'null' => null,
+				'array' => self::formatArray($value, fn($v, $k) => is_string($k) ? $k . ':' . $v : $v, ';'),
+				default => self::triggerError($type, $name),
+			},
+			default => match ($type) {
+				'string', 'int', 'float' => (string) $value,
+				'bool' => $value,
+				'null' => null,
+				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+				default => self::triggerError($type, $name),
+			},
+		};
 
-		} elseif ($value === true) {
-			return $name;
+		return match ($value) {
+			null, false => null,
+			true => $name,
+			default => $name . '=' . (str_contains($value, '"')
+				? "'" . str_replace(['&', "'"], ['&amp;', '&apos;'], $value) . "'"
+				: '"' . str_replace(['&', '"'], ['&amp;', '&quot;'], $value) . '"'),
+		};
+	}
 
-		} elseif (is_array($value)) {
-			$tmp = null;
-			foreach ($value as $k => $v) {
-				if ($v != null) { // intentionally ==, skip nulls & empty string
-					//  composite 'style' vs. 'others'
-					$tmp[] = $v === true
-						? $k
-						: (is_string($k) ? $k . ':' . $v : $v);
-				}
+
+	private static function formatArray(array $items, \Closure $cb, $separator): ?string
+	{
+		$res = [];
+		foreach ($items as $k => $v) {
+			if ($v != null) { // intentionally ==, skip nulls & empty string
+				$res[] = $cb($v, $k);
 			}
-
-			if ($tmp === null) {
-				return null;
-			}
-
-			$value = implode($name === 'style' || !strncmp($name, 'on', 2) ? ';' : ' ', $tmp);
-
-		} else {
-			$value = (string) $value;
 		}
+		return $res ? implode($separator, $res) : null;
+	}
 
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&apos;', '<'],
-				$value,
-			)
-			. $q;
+
+	private static function triggerError($type, $name): void
+	{
+		trigger_error(ucfirst($type) . " value in '$name' attribute is not supported.", E_USER_WARNING);
 	}
 
 

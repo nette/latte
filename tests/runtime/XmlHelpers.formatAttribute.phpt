@@ -20,7 +20,7 @@ test('regular text attributes', function () {
 		XmlHelpers::formatAttribute('title', 'Hello & Welcome'),
 	);
 	Assert::same(
-		'title=\'"Hello" &amp; &#39;Welcome&#39;\'',
+		'title="&quot;Hello&quot; &amp; &apos;Welcome&apos;"',
 		XmlHelpers::formatAttribute('title', '"Hello" & \'Welcome\''),
 	);
 
@@ -50,12 +50,12 @@ test('special values (numbers, Infinity, NaN)', function () {
 	);
 
 	// invalid UTF-8
-	Assert::same(
-		"a=\"foo \xED\xA0\x80 bar\"",
+	Assert::same( // invalid codepoint high surrogates
+		"a=\"foo \u{FFFD} bar\"",
 		XmlHelpers::formatAttribute('a', "foo \u{D800} bar"),
 	);
-	Assert::same(
-		"a='foo \xE3\x80\" bar'",
+	Assert::same( // stripped UTF
+		"a=\"foo \u{FFFD}&quot; bar\"",
 		XmlHelpers::formatAttribute('a', "foo \xE3\x80\x22 bar"),
 	);
 });
@@ -63,7 +63,14 @@ test('special values (numbers, Infinity, NaN)', function () {
 
 test('invalid values', function () {
 	Assert::error(
+		fn() => Assert::null(XmlHelpers::formatAttribute('foo', [])),
+		E_USER_WARNING,
+		"Array value in 'foo' attribute is not supported.",
+	);
+
+	Assert::error(
 		fn() => Assert::null(XmlHelpers::formatAttribute('foo', (object) [])),
-		Error::class,
+		E_USER_WARNING,
+		"StdClass value in 'foo' attribute is not supported.",
 	);
 });

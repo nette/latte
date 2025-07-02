@@ -63,13 +63,14 @@ test('style attribute', function () {
 
 	// invalid
 	Assert::same(
-		'style="color"',
+		'style="color:1"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
 
-	Assert::same(
-		'style="1"',
-		HtmlHelpers::formatAttribute('style', 1),
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('style', 1)),
+		E_USER_WARNING,
+		"Int value in 'style' attribute is not supported.",
 	);
 });
 
@@ -90,9 +91,8 @@ test('class attribute', function () {
 		HtmlHelpers::formatAttribute('class', ['btn' => true, 'red' => false]),
 	);
 
-	// invalid
 	Assert::same(
-		'class="btn:a red:b"',
+		'class="a b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
 	);
 });
@@ -123,6 +123,7 @@ test('special values (numbers, Infinity, NaN)', function () {
 test('invalid values', function () {
 	Assert::error(
 		fn() => Assert::null(HtmlHelpers::formatAttribute('foo', (object) [])),
-		Error::class,
+		E_USER_WARNING,
+		"StdClass value in 'foo' attribute is not supported.",
 	);
 });

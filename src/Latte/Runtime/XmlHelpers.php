@@ -62,32 +62,12 @@ final class XmlHelpers
 	 */
 	public static function formatAttribute(string $name, mixed $value): ?string
 	{
-		if ($value === null || $value === false) {
-			return null;
-
-		} elseif ($value === true) {
-			return $name . '="' . $name . '"';
-
-		} elseif (is_array($value)) {
-			$value = array_filter($value); // intentionally ==, skip nulls & empty string
-			if (!$value) {
-				return null;
-			}
-
-			$value = implode(' ', $value);
-
-		} else {
-			$value = (string) $value;
-		}
-
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&#39;', '&lt;'],
-				$value,
-			)
-			. $q;
+		return match (true) {
+			$value === null, $value === false => null,
+			$value === true => $name . '="' . $name . '"',
+			is_scalar($value) => $name . '="' . self::escapeText($value) . '"',
+			default => !trigger_error(ucfirst(get_debug_type($value)) . " value in '$name' attribute is not supported.", E_USER_WARNING) ?: null,
+		};
 	}
 
 
