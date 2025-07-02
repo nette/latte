@@ -27,8 +27,9 @@ final class AttributeHandler
 
 	/**
 	 * Formats HTML attribute value based on attribute type and value type.
+	 * Parameter $compat enables compatibility mode with n:attr
 	 */
-	public static function formatHtmlAttribute(string $name, mixed $value): ?string
+	public static function formatHtmlAttribute(string $name, mixed $value, bool $compat = false): ?string
 	{
 		$type = get_debug_type($value);
 		$lname = strtolower($name);
@@ -43,7 +44,7 @@ final class AttributeHandler
 			default => match ($type) {
 				'string', 'int', 'float' => (string) $value,
 				'bool' => $value,
-				'null' => null,
+				'null' => $compat ? null : '',
 				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
 				default => self::triggerError($type, $name),
 			},

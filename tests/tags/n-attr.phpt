@@ -30,7 +30,7 @@ Assert::match(
 				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
 				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
 				foreach ((array) $ʟ_tmp as $ʟ_nm => $ʟ_v) {
-					if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v)) {
+					if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v, true)) {
 						echo ' ', $ʟ_tmp /* line 2:4 */;
 					}
 				}
@@ -40,7 +40,7 @@ Assert::match(
 				$ʟ_tmp = ['checked' => true, 'disabled' => false];
 				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
 				foreach ((array) $ʟ_tmp as $ʟ_nm => $ʟ_v) {
-					if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v)) {
+					if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v, true)) {
 						echo ' ', $ʟ_tmp /* line 4:8 */;
 					}
 				}
