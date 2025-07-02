@@ -39,9 +39,9 @@ test('regular text attributes', function () {
 	Assert::same('title="one&amp;<br>"', HtmlHelpers::formatAttribute('title', new Str));
 
 	// invalid
-	Assert::exception(
-		fn() => HtmlHelpers::formatAttribute('title', (object) []),
-		Error::class,
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('title', (object) [])),
+		E_USER_WARNING,
 	);
 });
 
@@ -59,9 +59,10 @@ test('boolean attributes', function () {
 	Assert::null(HtmlHelpers::formatAttribute('disabled', []));
 
 	// invalid
-	Assert::exception(
-		fn() => HtmlHelpers::formatAttribute('disabled', (object) []),
-		Error::class,
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('disabled', (object) [])),
+		E_USER_WARNING,
+		"StdClass value in 'disabled' attribute is not supported.",
 	);
 });
 
@@ -84,17 +85,26 @@ test('style attribute', function () {
 	Assert::same('style', HtmlHelpers::formatAttribute('style', true));
 	Assert::null(HtmlHelpers::formatAttribute('style', false));
 	Assert::null(HtmlHelpers::formatAttribute('style', null));
-	Assert::same('style="1"', HtmlHelpers::formatAttribute('style', 1));
-	Assert::same('style="0"', HtmlHelpers::formatAttribute('style', 0));
 
 	// invalid
 	Assert::same(
 		'style="color:1"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
-	Assert::exception(
-		fn() => HtmlHelpers::formatAttribute('style', (object) []),
-		Error::class,
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('style', (object) [])),
+		E_USER_WARNING,
+		"StdClass value in 'style' attribute is not supported.",
+	);
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('style', 1)),
+		E_USER_WARNING,
+		"Int value in 'style' attribute is not supported.",
+	);
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('style', 0)),
+		E_USER_WARNING,
+		"Int value in 'style' attribute is not supported.",
 	);
 });
 
@@ -125,9 +135,10 @@ test('space-separated attribute', function () {
 		'class="a b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
 	);
-	Assert::exception(
-		fn() => HtmlHelpers::formatAttribute('class', (object) []),
-		Error::class,
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('class', (object) [])),
+		E_USER_WARNING,
+		"StdClass value in 'class' attribute is not supported.",
 	);
 });
 

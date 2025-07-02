@@ -65,11 +65,13 @@ test('special values', function () {
 
 test('invalid values', function () {
 	Assert::error(
-		fn() => Assert::same('foo="Array"', XmlHelpers::formatAttribute('foo', [])),
-		E_WARNING,
+		fn() => Assert::null(XmlHelpers::formatAttribute('foo', [])),
+		E_USER_WARNING,
+		"Array value in 'foo' attribute is not supported.",
 	);
 	Assert::error(
 		fn() => Assert::null(XmlHelpers::formatAttribute('foo', (object) [])),
-		Error::class,
+		E_USER_WARNING,
+		"StdClass value in 'foo' attribute is not supported.",
 	);
 });

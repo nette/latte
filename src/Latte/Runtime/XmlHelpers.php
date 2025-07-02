@@ -77,7 +77,8 @@ final class XmlHelpers
 		return match (true) {
 			$value === null, $value === false => null,
 			$value === true => $name . '="' . $name . '"',
-			default => $name . '="' . self::escapeText($value) . '"',
+			is_scalar($value) || $value instanceof \Stringable => $name . '="' . self::escapeText($value) . '"',
+			default => !trigger_error(ucfirst(get_debug_type($value)) . " value in '$name' attribute is not supported.", E_USER_WARNING) ?: null,
 		};
 	}
 

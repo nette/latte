@@ -86,8 +86,8 @@ test('boolean attributes', function () use ($latte) {
 test('style attribute', function () use ($latte) {
 	Assert::match(
 		<<<'XX'
-			<span style="0"></span>
-			<span style="123"></span>
+			<span></span>
+			<span></span>
 			<span style=""></span>
 			<span style="one&amp;two"></span>
 			<span style></span>
@@ -97,7 +97,7 @@ test('style attribute', function () use ($latte) {
 			<span style="hello"></span>
 			<span style="hello:one&amp;two"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="style => 0"></span>
 			<span n:attr="style => 123"></span>
 			<span n:attr="style => ''"></span>
