@@ -62,6 +62,13 @@ final class AttributeHandler
 				'array', 'stdClass' => json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR),
 				default => self::triggerError($type, $name),
 			},
+			str_starts_with($lname, 'aria-') => match ($type) {
+				'string', 'int', 'float' => (string) $value,
+				'bool' => $value ? 'true' : 'false',
+				'null' => null,
+				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+				default => self::triggerError($type, $name),
+			},
 			str_starts_with($lname, 'on') => match ($type) {
 				'string' => $value,
 				'null' => null,
