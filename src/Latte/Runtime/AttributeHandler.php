@@ -62,6 +62,11 @@ final class AttributeHandler
 				'array', 'stdClass' => json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR),
 				default => self::triggerError($type, $name),
 			},
+			str_starts_with($lname, 'on') => match ($type) {
+				'string' => $value,
+				'null' => null,
+				default => self::triggerError($type, $name),
+			},
 			$lname === 'style' => match ($type) {
 				'string' => $value,
 				'null' => null,
