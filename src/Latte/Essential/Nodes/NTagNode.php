@@ -17,7 +17,8 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\ContentType;
-use function is_string, preg_match, strtolower;
+use Latte\Runtime\HtmlHelpers;
+use function is_string, preg_match;
 
 
 /**
@@ -56,7 +57,7 @@ final class NTagNode extends StatementNode
 			return $orig;
 		} elseif (!$xml
 			&& is_string($new)
-			&& isset(Latte\Helpers::$emptyElements[strtolower($orig)]) !== isset(Latte\Helpers::$emptyElements[strtolower($new)])
+			&& HtmlHelpers::isVoidElement($orig) !== HtmlHelpers::isVoidElement($new)
 		) {
 			throw new Latte\RuntimeException("Forbidden tag <$orig> change to <$new>");
 		}

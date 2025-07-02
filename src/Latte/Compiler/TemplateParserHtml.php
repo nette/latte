@@ -17,7 +17,7 @@ use Latte\Compiler\Nodes\Html;
 use Latte\ContentType;
 use Latte\Helpers;
 use Latte\SecurityViolationException;
-use function array_keys, array_pop, end, implode, in_array, key, preg_replace, str_starts_with, strlen, strtolower, substr;
+use function array_keys, array_pop, end, implode, in_array, key, preg_replace, str_starts_with, strlen, substr;
 
 
 /**
@@ -315,7 +315,7 @@ final class TemplateParserHtml
 	{
 		if ($elem->contentType !== ContentType::Html) {
 			return $elem->selfClosing;
-		} elseif (isset(Helpers::$emptyElements[strtolower($elem->name)])) {
+		} elseif (Latte\Runtime\HtmlHelpers::isVoidElement($elem->name)) {
 			return true;
 		} elseif ($elem->selfClosing) { // auto-correct
 			$elem->content = new Nodes\NopNode;
