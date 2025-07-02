@@ -36,7 +36,7 @@ Assert::match(
 );
 
 Assert::match(
-	'<style id="&lt;&gt;"></style>',
+	'<style id="<>"></style>',
 	$latte->renderToString('<style id="{="<>"}"></style>'),
 );
 
