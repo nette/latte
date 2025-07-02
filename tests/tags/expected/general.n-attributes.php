@@ -17,7 +17,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
 		$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
 		foreach ((array) $ʟ_tmp as $ʟ_nm => $ʟ_v) {
-			if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v)) {
+			if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v, true)) {
 				echo ' ', $ʟ_tmp /* line %d%:%d% */;
 			}
 		}
@@ -27,7 +27,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$ʟ_tmp = [['title' => 'hello']];
 		$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
 		foreach ((array) $ʟ_tmp as $ʟ_nm => $ʟ_v) {
-			if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v)) {
+			if ($ʟ_tmp = LR\AttributeHandler::formatHtmlAttribute($ʟ_nm, $ʟ_v, true)) {
 				echo ' ', $ʟ_tmp /* line %d%:%d% */;
 			}
 		}
