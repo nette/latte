@@ -4,12 +4,12 @@
 		echo LR\Filters::escapeHtmlText($el2) /* line %d%:%d% */;
 		echo '
 
-<p val="';
-		echo LR\Filters::escapeHtmlAttr($xss) /* line %d%:%d% */;
-		echo '" > </p>
-<p onclick="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d%:%d% */;
-		echo '"> </p>
+<p ';
+		echo LR\AttributeHandler::formatHtmlAttribute('val', $xss) /* line %d%:%d% */;
+		echo ' > </p>
+<p ';
+		echo LR\AttributeHandler::formatHtmlAttribute('onclick', $xss) /* line %d%:%d% */;
+		echo '> </p>
 <p ONCLICK="';
 		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($xss)) /* line %d%:%d% */;
 		echo '" ';

@@ -121,13 +121,13 @@ var html = ';
 		}
 		echo '"> </p>
 
-<p val="';
-		echo LR\Filters::escapeXml($xss) /* line %d%:%d% */;
-		echo '" > </p>
+<p ';
+		echo LR\AttributeHandler::formatXmlAttribute('val', $xss) /* line %d%:%d% */;
+		echo ' > </p>
 
-<p onclick="';
-		echo LR\Filters::escapeXml($xss) /* line %d%:%d% */;
-		echo '"> </p>
+<p ';
+		echo LR\AttributeHandler::formatXmlAttribute('onclick', $xss) /* line %d%:%d% */;
+		echo '> </p>
 ';
 	}
 

@@ -6,15 +6,15 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(array $ʟ_args): void
 	{
 %A%
-		echo '<span title="';
-		echo LR\Filters::escapeHtmlAttr($x) /* line %d%:%d% */;
-		echo '" class="';
-		echo LR\Filters::escapeHtmlAttr($x) /* line %d%:%d% */;
-		echo '"></span>
+		echo '<span ';
+		echo LR\AttributeHandler::formatHtmlAttribute('title', $x) /* line %d%:%d% */;
+		echo ' ';
+		echo LR\AttributeHandler::formatHtmlAttribute('class', $x) /* line %d%:%d% */;
+		echo '></span>
 
-<span title="';
-		echo LR\Filters::escapeHtmlAttr($x) /* line %d%:%d% */;
-		echo '" ';
+<span ';
+		echo LR\AttributeHandler::formatHtmlAttribute('title', $x) /* line %d%:%d% */;
+		echo ' ';
 		echo LR\Filters::escapeHtmlTag($x) /* line %d%:%d% */;
 		echo '></span>
 
@@ -36,9 +36,9 @@ final class Template%a% extends Latte\Runtime\Template
 		echo LR\Filters::escapeHtmlAttr($x) /* line %d%:%d% */;
 		echo 'd"></span>
 
-<span onclick="';
-		echo LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs($x)) /* line %d%:%d% */;
-		echo '" ';
+<span ';
+		echo LR\AttributeHandler::formatHtmlAttribute('onclick', $x) /* line %d%:%d% */;
+		echo ' ';
 		echo LR\Filters::escapeHtmlTag($x) /* line %d%:%d% */;
 		echo '></span>
 
