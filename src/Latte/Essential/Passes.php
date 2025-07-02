@@ -120,6 +120,11 @@ final class Passes
 						}
 					});
 				}
+
+			} elseif ($node instanceof Html\DynamicAttributeNode) {
+				if (Latte\Runtime\HtmlHelpers::isUrlAttribute($elem->name, $node->name)) {
+					$node->value = new Php\Expression\FilterCallNode($node->value, new Php\FilterNode(new Php\IdentifierNode('checkUrl')));
+				}
 			}
 		});
 	}

@@ -64,7 +64,7 @@ Assert::exception(
 );
 
 Assert::match(
-	'<script id="&lt;&gt;"></script>',
+	'<script id="<>"></script>',
 	$latte->renderToString('<script id="{="<>"}"></script>'),
 );
 
@@ -125,13 +125,13 @@ Assert::match(
 
 // attributes
 Assert::match(
-	'<div onclick="&quot;&lt;&gt;&quot;"></div>',
+	'<div onclick="<>"></div>',
 	$latte->renderToString('<div onclick="{="<>"}"></div>'),
 );
 
 Assert::match(
-	'<div onclick="[1,2,3]"></div>',
-	$latte->renderToString('<div onclick="{=[1,2,3]}"></div>'),
+	'<div onclick="foo([1,2,3])"></div>',
+	$latte->renderToString('<div onclick="foo({=[1,2,3]})"></div>'),
 );
 
 // no escape

@@ -363,6 +363,21 @@ final class TemplateParserHtml
 		}
 
 		[$value, $quote] = $this->parseAttributeValue();
+
+		if (
+			$name instanceof Nodes\TextNode
+			&& $value instanceof Nodes\PrintNode
+			&& !$value->modifier->filters
+		) {
+			// TODO: $value->modifier->filters
+			// TODO: whitespacep před
+			return new Html\DynamicAttributeNode(
+				name: $name->content,
+				value: $value->expression,
+				position: $name->position,
+			);
+		}
+
 		return new Html\AttributeNode(
 			name: $name,
 			value: $value,

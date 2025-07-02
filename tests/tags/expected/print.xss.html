@@ -1,9 +1,9 @@
 <div title='1/2"'></div>
 <span title='/"'>foo</span>
 
-<p val="some&amp;&lt;&gt;&quot;&apos;/chars" > </p>
-<p onclick="&quot;some&amp;&lt;&gt;\&quot;&apos;/chars&quot;"> </p>
-<p ONCLICK="&quot;some&amp;&lt;&gt;\&quot;&apos;/chars&quot;" some&amp;&lt;&gt;&quot;&apos;&#47;chars> </p>
+<p val='some&amp;<>"&apos;/chars' > </p>
+<p onclick='some&amp;<>"&apos;/chars'> </p>
+<p ONCLICK='some&amp;<>"&apos;/chars' some&amp;&lt;&gt;&quot;&apos;&#47;chars> </p>
 
 <STYLE type="text/css">
 <!--
@@ -34,9 +34,9 @@ var prop2 = ["John","Mary","Paul","]]\u003E \u003C!--"];
 </SCRIPT>
 
 <p onclick='alert(&quot;some&amp;&lt;&gt;\&quot;&apos;/chars&quot;);alert("hello");'
- title='some&amp;&lt;&gt;&quot;&apos;/chars'
+ title='some&amp;<>"&apos;/chars'
  STYLE="color:some\&amp;\&lt;\&gt;\&quot;\&apos;\/chars;"
- rel="some&amp;&lt;&gt;&quot;&apos;/chars"
+ rel='some&amp;<>"&apos;/chars'
  onblur="alert(&quot;some&amp;&lt;&gt;\&quot;&apos;/chars&quot;)"
  alt='&lt;div title=&apos;1/2&quot;&apos;&gt;&lt;/div&gt; &lt;span title=&apos;/&quot;&apos;&gt;foo&lt;/span&gt;'
  onfocus="alert(&quot;&lt;div title=&apos;1/2\&quot;&apos;&gt;&lt;\/div&gt;&quot;)"
