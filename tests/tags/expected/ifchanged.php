@@ -126,9 +126,9 @@
 			echo ' ';
 			ob_start(fn() => '');
 			try /* line 22:55 */ {
-				echo '<span class="';
-				echo LR\Filters::escapeHtmlAttr($i) /* line 22:49 */;
-				echo '"></span>';
+				echo '<span ';
+				echo LR\AttributeHandler::formatHtmlAttribute('class', $i) /* line %d%:%d% */;
+				echo '></span>';
 			} finally {
 				$ʟ_tmp = ob_get_clean();
 			}

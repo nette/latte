@@ -11,9 +11,11 @@ namespace Latte\Compiler\Nodes\Html;
 
 use Latte\Compiler\NodeHelpers;
 use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\ContentType;
 
 
 class AttributeNode extends AreaNode
@@ -32,6 +34,19 @@ class AttributeNode extends AreaNode
 		$res = $this->name->print($context);
 		if (!$this->value) {
 			return $res;
+
+		} elseif (
+			$this->name instanceof TextNode
+			&& $this->value instanceof PrintNode
+			&& !$this->value->modifier->filters
+		) {
+			return $context->format(
+				'echo LR\AttributeHandler::%raw(%dump, %node) %line;',
+				$context->getEscaper()->getContentType() === ContentType::Html ? 'formatHtmlAttribute' : 'formatXmlAttribute',
+				$this->name->content,
+				$this->value->expression,
+				$this->position,
+			);
 		}
 
 		$res .= "echo '=';";

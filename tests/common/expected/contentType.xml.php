@@ -74,9 +74,9 @@ var html = ';
  style="color:';
 		echo LR\Filters::escapeXml($id) /* line %d%:%d% */;
 		echo ';\'"
- alt=\'';
-		echo LR\Filters::escapeXml($el) /* line %d%:%d% */;
-		echo '\'
+ ';
+		echo LR\AttributeHandler::formatXmlAttribute('alt', $el) /* line %d%:%d% */;
+		echo '
  onfocus="alert(';
 		echo LR\Filters::escapeXml($el) /* line %d%:%d% */;
 		echo ')"
@@ -121,13 +121,13 @@ var html = ';
 		}
 		echo '"> </p>
 
-<p val="';
-		echo LR\Filters::escapeXml($xss) /* line %d%:%d% */;
-		echo '" > </p>
+<p ';
+		echo LR\AttributeHandler::formatXmlAttribute('val', $xss) /* line %d%:%d% */;
+		echo ' > </p>
 
-<p onclick="';
-		echo LR\Filters::escapeXml($xss) /* line %d%:%d% */;
-		echo '"> </p>
+<p ';
+		echo LR\AttributeHandler::formatXmlAttribute('onclick', $xss) /* line %d%:%d% */;
+		echo '> </p>
 ';
 	}
 
