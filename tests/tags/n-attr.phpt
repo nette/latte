@@ -74,6 +74,11 @@ Assert::match(
 $latte->setContentType(Latte\ContentType::Html);
 
 Assert::match(
+	'<input data-a="123" data-b=\'["foo"]\' data-c="[1,2,3]">',
+	$latte->renderToString('<input n:attr="data-a => 123, data-b => [\'foo\'], data-c => [1, 2, 3]">'),
+);
+
+Assert::match(
 	'<input>',
 	$latte->renderToString('<input n:attr="null">'),
 );
