@@ -19,6 +19,10 @@ use function in_array, is_array, is_scalar, is_string;
  */
 final class AttributeHandler
 {
+	private const SpaceSeparatedAttributes = [
+		'accesskey' => 1, 'class' => 1, 'headers' => 1, 'itemprop' => 1, 'ping' => 1, 'rel' => 1, 'role' => 1, 'sandbox' => 1,
+	];
+
 	private const BooleanAttributes = [
 		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
 		'contenteditable' => 1, 'default' => 1, 'defer' => 1, 'disabled' => 1, 'draggable' => 1, 'formnovalidate' => 1,
@@ -43,6 +47,13 @@ final class AttributeHandler
 		$lname = strtolower($name);
 		$value = match (true) {
 			isset(self::BooleanAttributes[$lname]) => (bool) $value,
+			isset(self::SpaceSeparatedAttributes[$lname]) => match ($type) {
+				'string', 'int', 'float' => (string) $value,
+				'bool' => $compat ? $value : self::triggerError($type, $name) ?? (string) $value,
+				'null' => $compat ? null : '',
+				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+				default => self::triggerError($type, $name),
+			},
 			$lname === 'style' => match ($type) {
 				'string' => $value,
 				'null' => null,
@@ -53,7 +64,6 @@ final class AttributeHandler
 				'string', 'int', 'float' => (string) $value,
 				'bool' => $compat ? $value : self::triggerError($type, $name) ?? (string) $value,
 				'null' => $compat ? null : '',
-				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
 				default => self::triggerError($type, $name),
 			},
 		};
