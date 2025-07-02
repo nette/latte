@@ -37,7 +37,6 @@ test('special values', function () {
 	Assert::same('foo="0"', XmlHelpers::formatAttribute('foo', 0));
 	Assert::same('foo="1"', XmlHelpers::formatAttribute('foo', 1));
 	Assert::same('foo="NAN"', XmlHelpers::formatAttribute('foo', NAN));
-	Assert::null(XmlHelpers::formatAttribute('foo', []));
 
 	// invalid UTF-8
 	Assert::same( // invalid codepoint high surrogates
@@ -53,7 +52,13 @@ test('special values', function () {
 
 test('invalid values', function () {
 	Assert::error(
+		fn() => Assert::null(XmlHelpers::formatAttribute('foo', [])),
+		E_USER_WARNING,
+		"Array value in 'foo' attribute is not supported.",
+	);
+	Assert::error(
 		fn() => Assert::null(XmlHelpers::formatAttribute('foo', (object) [])),
-		Error::class,
+		E_USER_WARNING,
+		"StdClass value in 'foo' attribute is not supported.",
 	);
 });
