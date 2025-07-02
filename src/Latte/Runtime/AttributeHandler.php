@@ -19,6 +19,14 @@ use function in_array, is_array, is_scalar, is_string;
  */
 final class AttributeHandler
 {
+	private const BooleanAttributes = [
+		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
+		'contenteditable' => 1, 'default' => 1, 'defer' => 1, 'disabled' => 1, 'draggable' => 1, 'formnovalidate' => 1,
+		'hidden' => 1, 'inert' => 1, 'ismap' => 1, 'itemscope' => 1, 'loop' => 1, 'multiple' => 1, 'muted' => 1,
+		'nomodule' => 1, 'novalidate' => 1, 'open' => 1, 'playsinline' => 1, 'readonly' => 1, 'required' => 1,
+		'reversed' => 1, 'selected' => 1, 'spellcheck' => 1,
+	];
+
 	// https://www.w3.org/TR/xml/#NT-Name
 	private const
 		ReXmlNameStart = ':A-Z_a-z\x{C0}-\x{D6}\x{D8}-\x{F6}\x{F8}-\x{2FF}\x{370}-\x{37D}\x{37F}-\x{1FFF}\x{200C}-\x{200D}\x{2070}-\x{218F}\x{2C00}-\x{2FEF}\x{3001}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFFD}\x{10000}-\x{EFFFF}',
@@ -34,16 +42,16 @@ final class AttributeHandler
 		$type = get_debug_type($value);
 		$lname = strtolower($name);
 		$value = match (true) {
+			isset(self::BooleanAttributes[$lname]) => (bool) $value,
 			$lname === 'style' => match ($type) {
 				'string' => $value,
-				'bool' => $value,
 				'null' => null,
 				'array' => self::formatArray($value, fn($v, $k) => is_string($k) ? $k . ':' . $v : $v, ';'),
 				default => self::triggerError($type, $name),
 			},
 			default => match ($type) {
 				'string', 'int', 'float' => (string) $value,
-				'bool' => $value,
+				'bool' => $compat ? $value : self::triggerError($type, $name) ?? (string) $value,
 				'null' => $compat ? null : '',
 				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
 				default => self::triggerError($type, $name),

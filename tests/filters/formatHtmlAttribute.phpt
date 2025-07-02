@@ -8,11 +8,6 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('skipped attributes', function () {
-	Assert::null(AttributeHandler::formatHtmlAttribute('title', false));
-});
-
-
 test('regular text attributes', function () {
 	Assert::same(
 		'title="Hello &amp; Welcome"',
@@ -36,14 +31,8 @@ test('boolean attributes', function () {
 		AttributeHandler::formatHtmlAttribute('disabled', true),
 	);
 	Assert::null(AttributeHandler::formatHtmlAttribute('disabled', false));
-	Assert::same(
-		'required=""',
-		AttributeHandler::formatHtmlAttribute('required', null),
-	);
-	Assert::same(
-		'readonly="0"',
-		AttributeHandler::formatHtmlAttribute('readonly', 0),
-	);
+	Assert::null(AttributeHandler::formatHtmlAttribute('required', null));
+	Assert::null(AttributeHandler::formatHtmlAttribute('readonly', 0));
 });
 
 
@@ -131,5 +120,11 @@ test('invalid values', function () {
 		fn() => Assert::null(AttributeHandler::formatHtmlAttribute('foo', (object) [])),
 		E_USER_WARNING,
 		"StdClass value in 'foo' attribute is not supported.",
+	);
+
+	Assert::error(
+		fn() => Assert::same('title=""', AttributeHandler::formatHtmlAttribute('title', false)),
+		E_USER_WARNING,
+		"Bool value in 'title' attribute is not supported.",
 	);
 });
