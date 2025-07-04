@@ -45,10 +45,8 @@ class ElementNode extends AreaNode
 		public readonly string $name,
 		public ?Position $position = null,
 		public readonly ?self $parent = null,
-		public ?\stdClass $data = null,
 		public string $contentType = ContentType::Html,
 	) {
-		$this->data ??= new \stdClass;
 		$this->tagNode = new AuxiliaryNode($this->printStartTag(...));
 	}
 
