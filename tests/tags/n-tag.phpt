@@ -89,6 +89,20 @@ Assert::match(
 );
 
 
+Assert::match(
+	<<<'XX'
+		%A%
+				$ʟ_tag[0] = '';
+				echo '<';
+				echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('img', 'b' . 'r', false)) /* line 1 */;
+				$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
+				echo ' class="bar"></img>';
+		%A%
+		XX,
+	$latte->compile('<img class="bar" n:tag="b . r"></img>'),
+);
+
+
 Assert::exception(
 	fn() => $latte->compile('<div n:tag/>'),
 	Latte\CompileException::class,
