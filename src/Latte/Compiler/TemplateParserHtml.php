@@ -376,7 +376,7 @@ final class TemplateParserHtml
 		$this->consumeIgnored();
 		if ($quoteToken = $stream->tryConsume(Token::Quote)) {
 			$this->parser->getLexer()->setState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
-			$value = $this->parser->parseFragment([$this->parser, 'inTextResolve']);
+			$value = $this->parser->parseFragment([$this->parser, 'inTextResolve'])->simplify(allowsNull: false);
 			$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of HTML attribute started $quoteToken->position");
 			$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
 			return [$value, $quoteToken->text];
