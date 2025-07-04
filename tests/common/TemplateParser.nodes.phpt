@@ -149,11 +149,8 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  name: Latte\Compiler\Nodes\TextNode
 	   |  |  |  |  |  |  |  content: 'attr3'
 	   |  |  |  |  |  |  |  position: 3:2 (offset 22)
-	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\FragmentNode
-	   |  |  |  |  |  |  |  children: array (1)
-	   |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
-	   |  |  |  |  |  |  |  |  |  content: 'val'
-	   |  |  |  |  |  |  |  |  |  position: 4:2 (offset 30)
+	   |  |  |  |  |  |  value: Latte\Compiler\Nodes\TextNode
+	   |  |  |  |  |  |  |  content: 'val'
 	   |  |  |  |  |  |  |  position: 4:2 (offset 30)
 	   |  |  |  |  |  |  quote: '''
 	   |  |  |  |  |  |  position: 3:2 (offset 22)
