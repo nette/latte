@@ -33,11 +33,15 @@ final class TemplateParserHtml
 	/** @var array{string, ?Nodes\Php\ExpressionNode} */
 	private ?array $endName = null;
 
+	/** @var \WeakMap<Html\ElementNode, object{tag: mixed, textualName: string, unclosedTags?: array<string>}> */
+	private \WeakMap $elementData;
+
 
 	public function __construct(TemplateParser $parser, array $attrParsers)
 	{
 		$this->parser = $parser;
 		$this->attrParsers = $attrParsers;
+		$this->elementData = new \WeakMap;
 	}
 
 
@@ -88,15 +92,15 @@ final class TemplateParserHtml
 		}
 
 		if ($this->element
-			&& $this->parser->peekTag() === $this->element->data->tag // is directly in the element
+			&& $this->parser->peekTag() === $this->elementData[$this->element]->tag // is directly in the element
 		) {
 			$save = $stream->getIndex();
 			$this->endName = [$endText] = $this->parseEndTag();
-			if ($this->element->is($endText) || $this->element->data->textualName === $endText) {
+			if ($this->element->is($endText) || $this->elementData[$this->element]->textualName === $endText) {
 				return null; // go to parseElement() one level up to close the element
 			}
 			$stream->seek($save);
-			if (!in_array($endText, $this->element->data->unclosedTags ?? [], true)) {
+			if (!in_array($endText, $this->elementData[$this->element]->unclosedTags ?? [], true)) {
 				return null; // go to parseElement() one level up to collapse
 			}
 		}
@@ -133,7 +137,7 @@ final class TemplateParserHtml
 			}
 
 			$innerNodes = $this->openNAttrNodes($attrs[Tag::PrefixInner] ?? []);
-			$elem->data->tag = $this->parser->peekTag();
+			$this->elementData[$elem]->tag = $this->parser->peekTag();
 			$frag = $this->parser->parseFragment($this->inTextResolve(...));
 			$content->append($this->finishNAttrNodes($frag, $innerNodes));
 			if ($elem->isRawText()) {
@@ -142,7 +146,7 @@ final class TemplateParserHtml
 
 			[$endText, $endVariable] = $this->endName;
 			$this->endName = null;
-			if ($endText && ($this->element->is($endText) || $this->element->data->textualName === $endText)) {
+			if ($endText && ($this->element->is($endText) || $this->elementData[$this->element]->textualName === $endText)) {
 				$elem->content = $content;
 				$elem->content->append($this->extractIndentation());
 
@@ -153,14 +157,14 @@ final class TemplateParserHtml
 				|| $elem->isRawText()
 			) {
 				$stream->throwUnexpectedException(
-					addendum: ", expecting </{$elem->data->textualName}> for element started $elem->position",
+					addendum: ", expecting </{$this->elementData[$elem]->textualName}> for element started $elem->position",
 					excerpt: $endText ? "/{$endText}>" : $stream->peek(1)?->text . $stream->peek(2)?->text,
 				);
 			} else { // element collapsed to tags
 				$res->append($content);
 				$this->element = $elem->parent;
 				if ($this->element && !$stream->is(Token::Html_TagOpen)) {
-					$this->element->data->unclosedTags[] = $elem->name;
+					$this->elementData[$this->element]->unclosedTags[] = $elem->name;
 				}
 				return $res;
 			}
@@ -208,13 +212,15 @@ final class TemplateParserHtml
 			name: $variable ? '' : $textual,
 			position: $openToken->position,
 			parent: $this->element,
-			data: (object) ['tag' => $this->parser->peekTag()],
 			contentType: $this->parser->getContentType(),
 		);
+		$this->elementData[$elem] = (object) [
+			'tag' => $this->parser->peekTag(),
+			'textualName' => $textual,
+		];
 		$elem->attributes = $this->parser->parseFragment($this->inTagResolve(...));
 		$elem->selfClosing = (bool) $stream->tryConsume(Token::Slash);
 		$elem->variableName = $variable;
-		$elem->data->textualName = $textual;
 		$stream->consume(Token::Html_TagClose);
 		$lexer->popState();
 		return $elem;
@@ -411,7 +417,7 @@ final class TemplateParserHtml
 		$save = $stream->getIndex();
 		$pos = $stream->peek()->position;
 		$name = substr($nameToken->text, strlen(TemplateLexer::NPrefix));
-		if ($this->parser->peekTag() !== $this->element->data->tag) {
+		if ($this->parser->peekTag() !== $this->elementData[$this->element]->tag) {
 			throw new CompileException("Attribute n:$name must not appear inside {tags}", $nameToken->position);
 
 		} elseif (isset($this->element->nAttributes[$name])) {
