@@ -19,7 +19,6 @@ Assert::match(<<<'XX'
 				Fragment:
 					Element:
 						name: p
-						Auxiliary:
 						Fragment:
 							Text:
 								content: ''

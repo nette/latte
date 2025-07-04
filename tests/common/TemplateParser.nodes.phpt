@@ -115,7 +115,6 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
-	   |  |  |  variableName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (6)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
@@ -158,13 +157,8 @@ Assert::match(<<<'XX'
 	   |  |  |  selfClosing: false
 	   |  |  |  content: null
 	   |  |  |  nAttributes: array (0)
-	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  print: Closure($context)
-	   |  |  |  |  nodes: array (0)
-	   |  |  |  |  position: null
-	   |  |  |  captureTagName: false
+	   |  |  |  dynamicTag: null
 	   |  |  |  breakable: false
-	   |  |  |  endTagVar: unset
 	   |  |  |  name: 'br'
 	   |  |  |  position: 1:1
 	   |  |  |  parent: null
@@ -184,7 +178,6 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
-	   |  |  |  variableName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (6)
 	   |  |  |  |  |  0 => Latte\Compiler\Nodes\TextNode
@@ -227,13 +220,8 @@ Assert::match(<<<'XX'
 	   |  |  |  selfClosing: false
 	   |  |  |  content: null
 	   |  |  |  nAttributes: array (0)
-	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  print: Closure($context)
-	   |  |  |  |  nodes: array (0)
-	   |  |  |  |  position: null
-	   |  |  |  captureTagName: false
+	   |  |  |  dynamicTag: null
 	   |  |  |  breakable: false
-	   |  |  |  endTagVar: unset
 	   |  |  |  name: 'br'
 	   |  |  |  position: 1:1
 	   |  |  |  parent: null
@@ -268,7 +256,6 @@ Assert::match(<<<'XX'
 	   main: Latte\Compiler\Nodes\FragmentNode
 	   |  children: array (1)
 	   |  |  0 => Latte\Compiler\Nodes\Html\ElementNode
-	   |  |  |  variableName: null
 	   |  |  |  attributes: Latte\Compiler\Nodes\FragmentNode
 	   |  |  |  |  children: array (0)
 	   |  |  |  |  position: null
@@ -283,13 +270,8 @@ Assert::match(<<<'XX'
 	   |  |  |  |  |  |  position: 2:1
 	   |  |  |  |  position: 1:4
 	   |  |  |  nAttributes: array (0)
-	   |  |  |  tagNode: Latte\Compiler\Nodes\AuxiliaryNode
-	   |  |  |  |  print: Closure($context)
-	   |  |  |  |  nodes: array (0)
-	   |  |  |  |  position: null
-	   |  |  |  captureTagName: false
+	   |  |  |  dynamicTag: null
 	   |  |  |  breakable: false
-	   |  |  |  endTagVar: unset
 	   |  |  |  name: 'p'
 	   |  |  |  position: 1:1
 	   |  |  |  parent: null

@@ -49,7 +49,6 @@ Assert::match(<<<'XX'
 		Fragment:
 			Element:
 				name: title
-				Auxiliary:
 				Fragment:
 					Text:
 						content: ' '

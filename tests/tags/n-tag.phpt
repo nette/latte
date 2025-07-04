@@ -72,9 +72,9 @@ Assert::match(
 Assert::match(
 	<<<'XX'
 		%A%
-				$ʟ_tag[0] = '';
+				$ʟ_tag = '';
 				$ʟ_tmp = LR\HtmlHelpers::validateTagChange('h' . 1, 'div');
-				$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
+				$ʟ_tag = '</' . $ʟ_tmp . '>' . $ʟ_tag;
 				echo '<', $ʟ_tmp /* line 1 */;
 				echo ' class="bar" ';
 				if (isset($id)) /* line 1 */ {
@@ -82,7 +82,8 @@ Assert::match(
 				}
 
 				echo '>';
-				echo $ʟ_tag[0];
+				$ʟ_tags[0] = $ʟ_tag;
+				echo $ʟ_tags[0];
 		%A%
 		XX,
 	$latte->compile('<div class="bar" {ifset $id}id="content"{/ifset} n:tag="h . 1"></div>'),

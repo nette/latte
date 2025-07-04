@@ -17,7 +17,6 @@ Assert::match(<<<'XX'
 		Fragment:
 			Element:
 				name: input
-				Auxiliary:
 				Fragment:
 					NAttr:
 						Array:
