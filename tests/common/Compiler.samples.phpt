@@ -69,6 +69,11 @@ Assert::match(
 	$latte->renderToString('<span {if true}attr1=val{else}attr2=val{/if}></span>'),
 );
 
+Assert::match(
+	'<span foo empty="" space=" " title disabled="disabled"></span>',
+	$latte->renderToString('<span foo empty="" space=" " title disabled="disabled"></span>'),
+);
+
 
 // latte tag in html tag
 Assert::match(
