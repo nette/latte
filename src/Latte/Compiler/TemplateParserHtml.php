@@ -121,8 +121,9 @@ final class TemplateParserHtml
 		$attrs = $this->prepareNAttrs($elem->nAttributes, $void);
 		$outerNodes = $this->openNAttrNodes($attrs[Tag::PrefixNone] ?? []);
 		$tagNodes = $this->openNAttrNodes($attrs[Tag::PrefixTag] ?? []);
-		$elem->tagNode = $this->finishNAttrNodes($elem->tagNode, $tagNodes);
-		$elem->captureTagName = (bool) $tagNodes;
+		if ($tagNodes) {
+			$elem->dynamicTag = $this->finishNAttrNodes($elem->dynamicTag ?? new Nodes\Html\TagNode($elem), $tagNodes);
+		}
 
 		if (!$void) {
 			$content = new FragmentNode;
@@ -141,9 +142,9 @@ final class TemplateParserHtml
 				$elem->content = $content;
 				$elem->content->append($this->extractIndentation());
 
-			} elseif ($outerNodes || $innerNodes || $tagNodes
+			} elseif ($outerNodes || $innerNodes
+				|| $elem->dynamicTag
 				|| $this->parser->strict
-				|| $elem->variableName
 				|| $endVariable
 				|| $elem->isRawText()
 			) {
@@ -210,7 +211,9 @@ final class TemplateParserHtml
 		];
 		$elem->attributes = $this->parser->parseFragment($this->inTagResolve(...));
 		$elem->selfClosing = (bool) $stream->tryConsume(Token::Slash);
-		$elem->variableName = $variable;
+		if ($variable) {
+			$elem->dynamicTag = new Nodes\Html\TagNode($elem, $variable);
+		}
 		$stream->consume(Token::Html_TagClose);
 		$state = !$elem->selfClosing && $elem->isRawText()
 			? TemplateLexer::StateHtmlRawText
