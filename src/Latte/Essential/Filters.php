@@ -765,4 +765,17 @@ final class Filters
 			? $values[array_rand($values, 1)]
 			: null;
 	}
+
+
+	/**
+	 * Sanitizes string for use inside href attribute.
+	 */
+	public static function checkUrl($s): string
+	{
+		$s = $s instanceof Latte\Runtime\HtmlStringable
+			? Latte\Runtime\Filters::convertHtmlToText((string) $s)
+			: (string) $s;
+
+		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
+	}
 }

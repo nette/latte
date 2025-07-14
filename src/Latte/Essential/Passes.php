@@ -11,10 +11,12 @@ namespace Latte\Essential;
 
 use Latte\CompileException;
 use Latte\Compiler\Node;
+use Latte\Compiler\Nodes\FragmentNode;
+use Latte\Compiler\Nodes\Html\AttributeNode;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
@@ -45,7 +47,7 @@ final class Passes
 
 		(new NodeTraverser)->traverse($node, function (Node $node) use ($names) {
 			if (($node instanceof Expression\FunctionCallNode || $node instanceof Expression\FunctionCallableNode)
-				&& $node->name instanceof NameNode
+				&& $node->name instanceof Php\NameNode
 				&& ($orig = $names[strtolower((string) $node->name)] ?? null)
 			) {
 				if ((string) $node->name !== $orig) {
@@ -98,6 +100,39 @@ final class Passes
 						}
 					}
 					$prev = $child;
+				}
+			}
+		});
+	}
+
+
+	/**
+	 * Validates and secures potentially dangerous URLs attributes in HTML elements.
+	 */
+	public function checkUrlsPass(TemplateNode $node): void
+	{
+		if ($node->contentType !== ContentType::Html) {
+			return;
+		}
+
+		$elem = null;
+		(new NodeTraverser)->traverse($node, function (Node $node) use (&$elem) {
+			if ($node instanceof ElementNode) {
+				$elem = $node;
+
+			} elseif ($node instanceof AttributeNode
+				&& $node->name instanceof TextNode
+				&& HtmlHelpers::isUrlAttribute($elem->name, $node->name->content)
+			) {
+				$attrValue = $node->value instanceof FragmentNode && $node->value->children
+					? $node->value->children[0]
+					: $node->value;
+
+				if ($attrValue instanceof PrintNode && ($modifier = $attrValue->modifier)
+					&& !$modifier->removeFilter('nocheck') && !$modifier->removeFilter('noCheck')
+					&& !$modifier->hasFilter('datastream') && !$modifier->hasFilter('dataStream')
+				) {
+					$attrValue->modifier->filters[] = new Php\FilterNode(new Php\IdentifierNode('checkUrl'));
 				}
 			}
 		});
