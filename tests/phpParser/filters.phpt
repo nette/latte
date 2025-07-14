@@ -10,12 +10,13 @@ require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
 	($a|upper),
-	($a . $b |upper|truncate),
+	($a . $b | upper|truncate),
 	($a |truncate: 10, 20|trim),
 	($a |truncate: 10, (20|round)|trim),
 	($a |truncate: a: 10, b: true),
 	($a |truncate( a: 10, b: true)),
 	($a |truncate( a: 10, )),
+	($a |truncate()),
 	XX;
 
 $node = parseCode($test);
@@ -27,7 +28,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (7)
+   items: array (8)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
@@ -59,16 +60,16 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'upper'
-   |  |  |  |  |  |  position: 2:11
+   |  |  |  |  |  |  position: 2:12
    |  |  |  |  |  args: array (0)
    |  |  |  |  |  position: 2:10
    |  |  |  |  position: 2:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  position: 2:17
+   |  |  |  |  |  position: 2:18
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 2:16
+   |  |  |  |  position: 2:17
    |  |  |  position: 2:2
    |  |  key: null
    |  |  byRef: false
@@ -267,4 +268,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 7:1
+   |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  name: 'a'
+   |  |  |  |  position: 8:2
+   |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
+   |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  name: 'truncate'
+   |  |  |  |  |  position: 8:6
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 8:5
+   |  |  |  position: 8:2
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 8:1
    position: 1:1

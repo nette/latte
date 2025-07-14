@@ -17,7 +17,7 @@ use function count, in_array, strtolower;
 
 class BinaryOpNode extends ExpressionNode
 {
-	private const Ops = ['||', '&&', 'or', 'and', 'xor', '&', '^', '.', '+', '-', '*', '/', '%', '<<', '>>', '**',
+	private const Ops = ['||', '&&', 'or', 'and', 'xor', '|', '&', '^', '.', '+', '-', '*', '/', '%', '<<', '>>', '**',
 		'==', '!=', '===', '!==', '<=>', '<', '<=', '>', '>=', '??', ];
 
 

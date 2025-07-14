@@ -149,6 +149,7 @@ final class TagLexer
 			(?<Php_Coalesce>  \?\?  )|
 			(?<Php_BooleanOr>  \|\|  )|
 			(?<Php_BooleanAnd>  &&  )|
+			(?<Php_FilterPipe>  \| (?= [ \t]* [a-z] )  )|
 			(?<Php_AmpersandFollowed>  & (?= [ \t\r\n]* (\$|\.\.\.) )  )|
 			(?<Php_AmpersandNotFollowed>  &  )|
 			(?<Php_IsIdentical>  ===  )|

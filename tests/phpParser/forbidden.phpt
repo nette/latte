@@ -9,13 +9,6 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-// operator | is used for filters
-Assert::exception(
-	fn() => parseCode('$a | $b'),
-	Latte\CompileException::class,
-	"Unexpected '|' (on line 1 at column 4)",
-);
-
 // function declaration
 Assert::exception(
 	fn() => parseCode('function getArr() {	return [4, 5]; }'),

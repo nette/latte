@@ -15,7 +15,8 @@ $test = <<<'XX'
 		callable $c,
 		E $d,
 	    ?Foo $e,
-	    A|iterable|null $f,
+	    A|iterable| foo|null $f,
+	    A|B|\C | D | \E $f,
 	    A&B $g,
 	): never { return null; }
 	XX;
@@ -33,7 +34,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: false
-   |  |  |  params: array (7)
+   |  |  |  params: array (8)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
@@ -95,10 +96,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  5 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'f'
-   |  |  |  |  |  |  position: 7:21
+   |  |  |  |  |  |  position: 7:26
    |  |  |  |  |  default: null
    |  |  |  |  |  type: Latte\Compiler\Nodes\Php\UnionTypeNode
-   |  |  |  |  |  |  types: array (3)
+   |  |  |  |  |  |  types: array (4)
    |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  |  name: 'A'
    |  |  |  |  |  |  |  |  kind: 1
@@ -106,20 +107,24 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  |  name: 'iterable'
    |  |  |  |  |  |  |  |  position: 7:7
-   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  |  name: 'foo'
+   |  |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  |  position: 7:17
+   |  |  |  |  |  |  |  3 => Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  |  name: 'null'
-   |  |  |  |  |  |  |  |  position: 7:16
+   |  |  |  |  |  |  |  |  position: 7:21
    |  |  |  |  |  |  position: 7:5
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
    |  |  |  |  |  position: 7:5
    |  |  |  |  6 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
-   |  |  |  |  |  |  name: 'g'
-   |  |  |  |  |  |  position: 8:9
+   |  |  |  |  |  |  name: 'f'
+   |  |  |  |  |  |  position: 8:21
    |  |  |  |  |  default: null
-   |  |  |  |  |  type: Latte\Compiler\Nodes\Php\IntersectionTypeNode
-   |  |  |  |  |  |  types: array (2)
+   |  |  |  |  |  type: Latte\Compiler\Nodes\Php\UnionTypeNode
+   |  |  |  |  |  |  types: array (5)
    |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  |  name: 'A'
    |  |  |  |  |  |  |  |  kind: 1
@@ -128,16 +133,47 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  name: 'B'
    |  |  |  |  |  |  |  |  kind: 1
    |  |  |  |  |  |  |  |  position: 8:7
+   |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  |  name: 'C'
+   |  |  |  |  |  |  |  |  kind: 2
+   |  |  |  |  |  |  |  |  position: 8:9
+   |  |  |  |  |  |  |  3 => Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  |  name: 'D'
+   |  |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  |  position: 8:14
+   |  |  |  |  |  |  |  4 => Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  |  name: 'E'
+   |  |  |  |  |  |  |  |  kind: 2
+   |  |  |  |  |  |  |  |  position: 8:18
    |  |  |  |  |  |  position: 8:5
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
    |  |  |  |  |  position: 8:5
+   |  |  |  |  7 => Latte\Compiler\Nodes\Php\ParameterNode
+   |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
+   |  |  |  |  |  |  name: 'g'
+   |  |  |  |  |  |  position: 9:9
+   |  |  |  |  |  default: null
+   |  |  |  |  |  type: Latte\Compiler\Nodes\Php\IntersectionTypeNode
+   |  |  |  |  |  |  types: array (2)
+   |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  |  name: 'A'
+   |  |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  |  position: 9:5
+   |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  |  |  |  name: 'B'
+   |  |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  |  position: 9:7
+   |  |  |  |  |  |  position: 9:5
+   |  |  |  |  |  byRef: false
+   |  |  |  |  |  variadic: false
+   |  |  |  |  |  position: 9:5
    |  |  |  uses: array (0)
    |  |  |  returnType: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'never'
-   |  |  |  |  position: 9:4
+   |  |  |  |  position: 10:4
    |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\NullNode
-   |  |  |  |  position: 9:19
+   |  |  |  |  position: 10:19
    |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
