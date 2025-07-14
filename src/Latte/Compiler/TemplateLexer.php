@@ -35,7 +35,7 @@ final class TemplateLexer
 	public const NPrefix = 'n:';
 
 	/** HTML attribute name/value (\p{C} means \x00-\x1F except space) */
-	private const ReAttrName = '[^\p{C} "\'<>=`/]';
+	public const ReAttrName = '[^\p{C} "\'<>=`/]';
 
 	private string $openDelimiter = '';
 	private string $closeDelimiter = '';
