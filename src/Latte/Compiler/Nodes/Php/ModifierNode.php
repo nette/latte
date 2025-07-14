@@ -17,11 +17,14 @@ use Latte\Helpers;
 
 class ModifierNode extends Node
 {
+	/** @deprecated */
+	public bool $check = true;
+
+
 	public function __construct(
 		/** @var FilterNode[] */
 		public array $filters,
 		public bool $escape = false,
-		public bool $check = true,
 		public ?Position $position = null,
 	) {
 		(function (FilterNode ...$args) {})(...$filters);
@@ -61,31 +64,19 @@ class ModifierNode extends Node
 	public function printSimple(PrintContext $context, string $expr): string
 	{
 		$escape = $this->escape;
-		$check = $this->check;
 		foreach ($this->filters as $filter) {
 			$name = $filter->name->name;
-			if ($name === 'nocheck' || $name === 'noCheck') {
-				$check = false;
-			} elseif ($name === 'noescape') {
+			if ($name === 'noescape') {
 				$escape = false;
 			} else {
-				if ($name === 'datastream' || $name === 'dataStream') {
-					$check = false;
-				}
 				$expr = $filter->printSimple($context, $expr);
 			}
 		}
 
 		$escaper = $context->getEscaper();
-		if ($check) {
-			$expr = $escaper->check($expr);
-		}
-
-		$expr = $escape
+		return $escape
 			? $escaper->escape($expr)
 			: $escaper->escapeMandatory($expr);
-
-		return $expr;
 	}
 
 

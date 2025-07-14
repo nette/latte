@@ -13,7 +13,7 @@ use Latte;
 use Latte\ContentType;
 use Latte\RuntimeException;
 use Nette;
-use function addcslashes, html_entity_decode, htmlspecialchars, json_encode, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtoupper, strtr, substr;
+use function addcslashes, html_entity_decode, htmlspecialchars, json_encode, ord, preg_replace, preg_replace_callback, str_replace, strip_tags, strtoupper, strtr, substr;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -244,18 +244,5 @@ class Filters
 	{
 		$s = strip_tags($s);
 		return html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-	}
-
-
-	/**
-	 * Sanitizes string for use inside href attribute.
-	 */
-	public static function safeUrl($s): string
-	{
-		$s = $s instanceof HtmlStringable
-			? self::convertHtmlToText((string) $s)
-			: (string) $s;
-
-		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
 	}
 }

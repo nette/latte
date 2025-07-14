@@ -34,6 +34,17 @@ final class HtmlHelpers
 
 
 	/**
+	 * Determines if the given HTML attribute is a URL attribute that requires special handling.
+	 */
+	public static function isUrlAttribute(string $tag, string $attr): bool
+	{
+		$attr = strtolower($attr);
+		return in_array($attr, ['href', 'src', 'action', 'formaction'], true)
+			|| ($attr === 'data' && strtolower($tag) === 'object');
+	}
+
+
+	/**
 	 * Classifies script content type based on the MIME type.
 	 */
 	public static function classifyScriptType(string $type): string
