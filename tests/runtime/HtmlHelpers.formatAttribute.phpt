@@ -10,7 +10,6 @@ require __DIR__ . '/../bootstrap.php';
 
 test('skipped attributes', function () {
 	Assert::null(HtmlHelpers::formatAttribute('title', false));
-	Assert::null(HtmlHelpers::formatAttribute('placeholder', null));
 });
 
 
@@ -37,7 +36,10 @@ test('boolean attributes', function () {
 		HtmlHelpers::formatAttribute('disabled', true),
 	);
 	Assert::null(HtmlHelpers::formatAttribute('disabled', false));
-	Assert::null(HtmlHelpers::formatAttribute('required', null));
+	Assert::same(
+		'required=""',
+		HtmlHelpers::formatAttribute('required', null),
+	);
 	Assert::same(
 		'readonly="0"',
 		HtmlHelpers::formatAttribute('readonly', 0),
@@ -99,6 +101,10 @@ test('class attribute', function () {
 
 
 test('special values (numbers, Infinity, NaN)', function () {
+	Assert::same(
+		'placeholder=""',
+		HtmlHelpers::formatAttribute('placeholder', null),
+	);
 	Assert::same(
 		'width="0"',
 		HtmlHelpers::formatAttribute('width', 0),
