@@ -107,6 +107,16 @@ test('on* attributes', function () {
 });
 
 
+test('ARIA attributes', function () {
+	Assert::same('aria-foo="bar"', HtmlHelpers::formatAttribute('aria-foo', 'bar'));
+	Assert::same('aria-foo="true"', HtmlHelpers::formatAttribute('aria-foo', true));
+	Assert::same('aria-foo="false"', HtmlHelpers::formatAttribute('aria-foo', false));
+	Assert::null(HtmlHelpers::formatAttribute('aria-foo', null));
+	Assert::null(HtmlHelpers::formatAttribute('aria-foo', []));
+	Assert::same('aria-foo="a b"', HtmlHelpers::formatAttribute('aria-foo', ['a', 'b']));
+});
+
+
 test('special values (numbers, Infinity, NaN)', function () {
 	Assert::same(
 		'placeholder=""',
