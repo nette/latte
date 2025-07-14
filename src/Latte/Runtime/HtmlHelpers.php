@@ -257,6 +257,17 @@ final class HtmlHelpers
 
 
 	/**
+	 * Determines if the given HTML attribute is a URL attribute that requires special handling.
+	 */
+	public static function isUrlAttribute(string $tag, string $attr): bool
+	{
+		$attr = strtolower($attr);
+		return in_array($attr, ['href', 'src', 'action', 'formaction'], true)
+			|| ($attr === 'data' && strtolower($tag) === 'object');
+	}
+
+
+	/**
 	 * Checks that the HTML tag name can be changed.
 	 */
 	public static function validateTagChange(mixed $name, ?string $origName = null): string
