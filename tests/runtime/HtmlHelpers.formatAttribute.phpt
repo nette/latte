@@ -191,6 +191,36 @@ test('on* attributes', function () {
 });
 
 
+test('data attributes', function () {
+	Assert::same('data-foo=""', HtmlHelpers::formatAttribute('data-foo', ''));
+	Assert::same('data-foo="bar"', HtmlHelpers::formatAttribute('data-foo', 'bar'));
+	Assert::same('data-foo="1"', HtmlHelpers::formatAttribute('data-foo', 1));
+	Assert::same('data-foo="0"', HtmlHelpers::formatAttribute('data-foo', 0));
+
+	Assert::same('data-foo', HtmlHelpers::formatAttribute('data-foo', true, nAttr: true));
+	Assert::null(HtmlHelpers::formatAttribute('data-foo', false, nAttr: true));
+	Assert::null(HtmlHelpers::formatAttribute('data-foo', null, nAttr: true));
+	Assert::same('data-foo', HtmlHelpers::formatAttribute('data-foo', null, nAttr: false));
+
+	Assert::same('data-foo="[]"', HtmlHelpers::formatAttribute('data-foo', []));
+	Assert::same('data-foo="{}"', HtmlHelpers::formatAttribute('data-foo', (object) []));
+	Assert::same(
+		'data-foo=\'{"user":"Karel","age":30,"spec":"&amp;<>\"&apos;\""}\'',
+		HtmlHelpers::formatAttribute('data-foo', ['user' => 'Karel', 'age' => 30, 'spec' => '&<>"\'"']),
+	);
+
+	// invalid
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('data-foo', true),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('data-foo', false),
+		E_USER_WARNING,
+	);
+});
+
+
 test('edge cases', function () {
 	Assert::same('foo="NAN"', HtmlHelpers::formatAttribute('foo', NAN));
 

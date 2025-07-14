@@ -178,12 +178,12 @@ test('data attribute', function () use ($latte) {
 			<span data-foo="123"></span>
 			<span data-foo=""></span>
 			<span data-foo="one&amp;two"></span>
+			<span data-foo></span>
 			<span></span>
 			<span></span>
-			<span></span>
-			<span></span>
-			<span></span>
-			<span></span>
+			<span data-foo="[]"></span>
+			<span data-foo='["hello"]'></span>
+			<span data-foo='{"one&amp;":"two&amp;"}'></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="data-foo => 0"></span>
