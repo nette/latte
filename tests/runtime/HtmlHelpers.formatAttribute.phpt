@@ -26,7 +26,6 @@ test('regular text attributes', function () {
 	Assert::same('title=""', HtmlHelpers::formatAttribute('title', null, compat: false));
 	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
 	Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
-	Assert::null(HtmlHelpers::formatAttribute('title', []));
 
 	// invalid
 	Assert::error(
@@ -35,6 +34,10 @@ test('regular text attributes', function () {
 	);
 	Assert::error(
 		fn() => HtmlHelpers::formatAttribute('title', false),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('title', []),
 		E_USER_WARNING,
 	);
 	Assert::error(
