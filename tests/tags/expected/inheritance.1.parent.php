@@ -19,7 +19,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<title>';
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
 		}) /* line %d% */;
 		echo '</title>
 </head>
@@ -36,15 +36,15 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		$this->renderBlock('content', [], function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
 		}) /* line %d% */;
 		echo '	</div>
 </body>
 </html>
 Parent: ';
-		echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText(basename($this->getReferringTemplate()->getName())) /* line %d% */;
 		echo '/';
-		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText($this->getReferenceType()) /* line %d% */;
 		echo "\n";
 	}
 

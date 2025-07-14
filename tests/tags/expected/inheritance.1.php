@@ -61,7 +61,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* line %d% */ {
 			echo '		<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
+			echo LR\HtmlHelpers::escapeText($person) /* line %d% */;
 			echo '</li>
 ';
 
@@ -69,7 +69,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '	</ul>
 	Parent: ';
-		echo LR\Filters::escapeHtmlText(gettype($this->getReferringTemplate())) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText(gettype($this->getReferringTemplate())) /* line %d% */;
 		echo "\n";
 	}
 }

@@ -48,7 +48,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* line %d% */ {
 			echo '		<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
+			echo LR\HtmlHelpers::escapeText($person) /* line %d% */;
 			echo '</li>
 ';
 

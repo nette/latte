@@ -2,7 +2,7 @@
 %A%
 		while ($i++ < 10) /* line 2 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 3 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 3 */;
 			echo "\n";
 
 		}
@@ -11,7 +11,7 @@
 ';
 		do /* line 7 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 8 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 8 */;
 			echo "\n";
 
 		}
@@ -23,7 +23,7 @@
 			if (true) /* line 13 */ break;
 			if (true) /* line 14 */ continue;
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 15 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 15 */;
 			echo "\n";
 
 		}

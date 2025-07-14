@@ -32,7 +32,7 @@ final class Template%a% extends Latte\Runtime\Template
 { test} {"test} {\'test}
 
 ';
-		echo LR\Filters::escapeHtmlText((string) (bool) (float) (int) (array) 10) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText((string) (bool) (float) (int) (array) 10) /* line %d% */;
 		echo '
 
 
@@ -44,11 +44,11 @@ final class Template%a% extends Latte\Runtime\Template
 				}
 				echo '
 	<li id="item-';
-				echo LR\Filters::escapeHtmlAttr($iterator->getCounter()) /* line %d% */;
+				echo LR\HtmlHelpers::escapeAttr($iterator->getCounter()) /* line %d% */;
 				echo '" class="';
-				echo LR\Filters::escapeHtmlAttr($iterator->isOdd() ? 'odd' : 'even') /* line %d% */;
+				echo LR\HtmlHelpers::escapeAttr($iterator->isOdd() ? 'odd' : 'even') /* line %d% */;
 				echo '">';
-				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
+				echo LR\HtmlHelpers::escapeText($person) /* line %d% */;
 				echo '</li>
 	';
 				if ($iterator->isLast()) /* line %d% */ {
@@ -95,14 +95,14 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($menu, $ʟ_it ?? null) as $item) /* line %d% */ {
 			echo '	<li>';
-			echo LR\Filters::escapeHtmlText($counter++) /* line %d% */;
+			echo LR\HtmlHelpers::escapeText($counter++) /* line %d% */;
 			echo ' ';
 			if (is_array($item)) /* line %d% */ {
 				echo ' ';
 				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'html') /* line %d% */;
 				echo ' ';
 			} else /* line %d% */ {
-				echo LR\Filters::escapeHtmlText($item) /* line %d% */;
+				echo LR\HtmlHelpers::escapeText($item) /* line %d% */;
 			}
 			echo '</li>
 ';

@@ -9,15 +9,15 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		echo '<p>Included file #2 (';
-		echo LR\Filters::escapeHtmlText($localvar) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText($localvar) /* line %d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($hello) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText($hello) /* line %d% */;
 		echo ')</p>
 
 Parent: ';
-		echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText(basename($this->getReferringTemplate()->getName())) /* line %d% */;
 		echo '/';
-		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line %d% */;
+		echo LR\HtmlHelpers::escapeText($this->getReferenceType()) /* line %d% */;
 		echo "\n";
 	}
 }

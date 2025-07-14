@@ -40,7 +40,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	This is definition #';
-		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
+		echo LR\HtmlHelpers::escapeText($var) /* line 4 */;
 		echo "\n";
 	}
 
