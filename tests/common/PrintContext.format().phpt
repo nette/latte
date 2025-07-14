@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 use Latte\Compiler\Nodes\Php\ArrayItemNode;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
+use Latte\Compiler\Nodes\Php\Expression\BinaryOpNode;
 use Latte\Compiler\Nodes\Php\FilterNode;
 use Latte\Compiler\Nodes\Php\IdentifierNode;
 use Latte\Compiler\Nodes\Php\ModifierNode;
+use Latte\Compiler\Nodes\Php\Scalar\IntegerNode;
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
@@ -89,6 +91,11 @@ test('%node', function () {
 	Assert::same(
 		'test(123)',
 		format('test(%node? + 123)', null),
+	);
+
+	Assert::same( // the minimum context is assignment operator
+		'(1 and 2)',
+		format('%node', new BinaryOpNode(new IntegerNode(1), 'and', new IntegerNode(2))),
 	);
 });
 

@@ -122,7 +122,11 @@ final class PrintContext
 
 				$code = match ($format) {
 					'dump' => PhpHelpers::dump($arg),
-					'node' => $arg ? $arg->print($this) : '',
+					'node' => match (true) {
+						!$arg => '',
+						$arg instanceof Nodes\ExpressionNode => $this->parenthesize($arg, $this->operatorPrecedence['='], self::Right),
+						default => $arg->print($this),
+					},
 					'raw' => (string) $arg,
 					'args' => $this->implode($arg instanceof Expression\ArrayNode ? $arg->toArguments() : $arg),
 					'line' => $arg?->line ? "/* line $arg->line */" : '',
