@@ -121,7 +121,7 @@ final class CoreExtension extends Latte\Extension
 				? $this->filters->capitalize(...)
 				: fn() => throw new RuntimeException('Filter |capitalize requires mbstring extension.'),
 			'ceil' => $this->filters->ceil(...),
-			'checkUrl' => Latte\Runtime\Filters::safeUrl(...),
+			'checkUrl' => $this->filters->sanitizeUrl(...),
 			'clamp' => $this->filters->clamp(...),
 			'dataStream' => $this->filters->dataStream(...),
 			'datastream' => $this->filters->dataStream(...),
@@ -209,6 +209,7 @@ final class CoreExtension extends Latte\Extension
 		$passes = new Passes($this->engine);
 		return [
 			'internalVariables' => $passes->forbiddenVariablesPass(...),
+			'checkUrls' => $passes->checkUrlsPass(...),
 			'overwrittenVariables' => Nodes\ForeachNode::overwrittenVariablesPass(...),
 			'customFunctions' => $passes->customFunctionsPass(...),
 			'moveTemplatePrintToHead' => Nodes\TemplatePrintNode::moveToHeadPass(...),
