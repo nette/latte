@@ -18,58 +18,59 @@ use function addcslashes, array_map, array_pop, end, implode, preg_replace, preg
 
 /**
  * PHP printing helpers and context.
- * The parts are based on great nikic/PHP-Parser project by Nikita Popov.
  */
 final class PrintContext
 {
+	/** associativity */
+	private const
+		Left = -1,
+		None = 0,
+		Right = 1;
+
 	public array $paramsExtraction = [];
 	public array $blocks = [];
 
-	private array $exprPrecedenceMap = [
-		// [precedence, associativity] (-1 is %left, 0 is %nonassoc and 1 is %right)
-		Expression\PreOpNode::class              => [10,  1],
-		Expression\PostOpNode::class             => [10, -1],
-		Expression\UnaryOpNode::class            => [10,  1],
-		Expression\CastNode::class               => [10,  1],
-		Expression\ErrorSuppressNode::class      => [10,  1],
-		Expression\InstanceofNode::class         => [20,  0],
-		Expression\NotNode::class                => [30,  1],
-		Expression\TernaryNode::class            => [150,  0],
-		// parser uses %left for assignments, but they really behave as %right
-		Expression\AssignNode::class             => [160,  1],
-		Expression\AssignOpNode::class           => [160,  1],
+	private array $operatorPrecedence = [
+		// [precedence, associativity]
+		'new'        => [270, self::None], // also clone
+		'**'         => [250, self::Right],
+		'++x'        => [240, self::Right],
+		'x++'        => [240, self::Left],
+		'~'          => [240, self::Right], // also unary + -
+		'(type)'     => [240, self::Right],
+		'@'          => [240, self::Right],
+		'!'          => [240, self::Right],
+		'instanceof' => [230, self::None],
+		'*'          => [210, self::Left],
+		'/'          => [210, self::Left],
+		'%'          => [210, self::Left],
+		'+'          => [200, self::Left],
+		'-'          => [200, self::Left],
+		'<<'         => [190, self::Left],
+		'>>'         => [190, self::Left],
+		'.'          => [185, self::Left],
+		'<'          => [180, self::None],
+		'<='         => [180, self::None],
+		'>'          => [180, self::None],
+		'>='         => [180, self::None],
+		'<=>'        => [180, self::None],
+		'=='         => [170, self::None],
+		'!='         => [170, self::None],
+		'==='        => [170, self::None],
+		'!=='        => [170, self::None],
+		'&'          => [160, self::Left],
+		'^'          => [150, self::Left],
+		'|'          => [140, self::Left],
+		'&&'         => [130, self::Left],
+		'||'         => [120, self::Left],
+		'??'         => [110, self::Right],
+		'?:'         => [100, self::None],
+		'='          => [90,  self::Right],
+		'and'        => [50,  self::Left],
+		'xor'        => [40,  self::Left],
+		'or'         => [30,  self::Left],
 	];
 
-	private array $binaryPrecedenceMap = [
-		// [precedence, associativity] (-1 is %left, 0 is %nonassoc and 1 is %right)
-		'**'  => [0, 1],
-		'*'   => [40, -1],
-		'/'   => [40, -1],
-		'%'   => [40, -1],
-		'+'   => [50, -1],
-		'-'   => [50, -1],
-		'.'   => [50, -1],
-		'<<'  => [60, -1],
-		'>>'  => [60, -1],
-		'<'   => [70, 0],
-		'<='  => [70, 0],
-		'>'   => [70, 0],
-		'>='  => [70, 0],
-		'=='  => [80, 0],
-		'!='  => [80, 0],
-		'===' => [80, 0],
-		'!==' => [80, 0],
-		'<=>' => [80, 0],
-		'&'   => [90, -1],
-		'^'   => [100, -1],
-		'|'   => [110, -1],
-		'&&'  => [120, -1],
-		'||'  => [130, -1],
-		'??'  => [140, 1],
-		'and' => [170, -1],
-		'xor' => [180, -1],
-		'or'  => [190, -1],
-	];
 	private int $counter = 0;
 
 	/** @var Escaper[] */
@@ -116,7 +117,7 @@ final class PrintContext
 		return preg_replace_callback(
 			'#([,+]?\s*)? % (\d+) \. ([a-z]{3,}) (\?)? (\s*\+\s*)? ()#xi',
 			function ($m) use ($args) {
-				[, $l, $pos, $format, $cond, $r] = $m;
+				[, $left, $pos, $format, $cond, $right] = $m;
 				$arg = $args[$pos];
 
 				$code = match ($format) {
@@ -128,12 +129,12 @@ final class PrintContext
 				};
 
 				if ($cond && ($code === '[]' || $code === '')) {
-					return $r ? $l : $r;
+					return $right ? $left : $right;
 				}
 
 				return $code === ''
-					? trim($l) . $r
-					: $l . $code . $r;
+					? trim($left) . $right
+					: $left . $code . $right;
 			},
 			$mask,
 		);
@@ -196,10 +197,10 @@ final class PrintContext
 	 */
 	public function infixOp(Node $node, Node $leftNode, string $operatorString, Node $rightNode): string
 	{
-		[$precedence, $associativity] = $this->getPrecedence($node);
-		return $this->prec($leftNode, $precedence, $associativity, -1)
+		$precedence = $this->getPrecedence($node);
+		return $this->parenthesize($leftNode, $precedence, self::Left)
 			. $operatorString
-			. $this->prec($rightNode, $precedence, $associativity, 1);
+			. $this->parenthesize($rightNode, $precedence, self::Right);
 	}
 
 
@@ -208,8 +209,7 @@ final class PrintContext
 	 */
 	public function prefixOp(Node $node, string $operatorString, Node $expr): string
 	{
-		[$precedence, $associativity] = $this->getPrecedence($node);
-		return $operatorString . $this->prec($expr, $precedence, $associativity, 1);
+		return $operatorString . $this->parenthesize($expr, $this->getPrecedence($node), self::Right);
 	}
 
 
@@ -218,20 +218,19 @@ final class PrintContext
 	 */
 	public function postfixOp(Node $node, Node $var, string $operatorString): string
 	{
-		[$precedence, $associativity] = $this->getPrecedence($node);
-		return $this->prec($var, $precedence, $associativity, -1) . $operatorString;
+		return $this->parenthesize($var, $this->getPrecedence($node), self::Left) . $operatorString;
 	}
 
 
 	/**
 	 * Prints an expression node with the least amount of parentheses necessary to preserve the meaning.
 	 */
-	private function prec(Node $node, int $parentPrecedence, int $parentAssociativity, int $childPosition): string
+	private function parenthesize(Node $node, array $parent, int $childPosition): string
 	{
-		$precedence = $this->getPrecedence($node);
-		if ($precedence) {
-			$childPrecedence = $precedence[0];
-			if ($childPrecedence > $parentPrecedence
+		[$childPrecedence] = $this->getPrecedence($node);
+		if ($childPrecedence) {
+			[$parentPrecedence, $parentAssociativity] = $parent;
+			if ($childPrecedence < $parentPrecedence
 				|| ($parentPrecedence === $childPrecedence && $parentAssociativity !== $childPosition)
 			) {
 				return '(' . $node->print($this) . ')';
@@ -244,9 +243,19 @@ final class PrintContext
 
 	private function getPrecedence(Node $node): ?array
 	{
-		return $node instanceof Expression\BinaryOpNode
-			? $this->binaryPrecedenceMap[$node->operator]
-			: $this->exprPrecedenceMap[$node::class] ?? null;
+		return $this->operatorPrecedence[match (true) {
+			$node instanceof Expression\BinaryOpNode => $node->operator,
+			$node instanceof Expression\PreOpNode => '++x',
+			$node instanceof Expression\PostOpNode => 'x++',
+			$node instanceof Expression\UnaryOpNode => '~',
+			$node instanceof Expression\CastNode => '(type)',
+			$node instanceof Expression\ErrorSuppressNode => '@',
+			$node instanceof Expression\InstanceofNode => 'instanceof',
+			$node instanceof Expression\NotNode => '!',
+			$node instanceof Expression\TernaryNode => '?:',
+			$node instanceof Expression\AssignNode, $node instanceof Expression\AssignOpNode => '=',
+			default => null,
+		}] ?? null;
 	}
 
 

@@ -63,8 +63,8 @@ Assert::same(
 __halt_compiler();
 'abc' . 'cde' . 'fgh',
 'abc' . ('cde' . 'fgh'),
-'abc' . (1 + 2) . 'fgh',
-'abc' . (1 + 2) . 'fgh',
+'abc' . 1 + 2 . 'fgh',
+'abc' . 1 + 2 . 'fgh',
 1 * 2 + 3 / 4 % 5 . 6,
 1 * (2 + 3) / (4 % (5 . 6)),
 $a = $b = $c = $d = $f && true,
