@@ -101,6 +101,12 @@ test('data attributes', function () {
 });
 
 
+test('on* attributes', function () {
+	Assert::same('onclick="bar"', HtmlHelpers::formatAttribute('onclick', 'bar'));
+	Assert::null(HtmlHelpers::formatAttribute('onclick', null));
+});
+
+
 test('special values (numbers, Infinity, NaN)', function () {
 	Assert::same(
 		'placeholder=""',
