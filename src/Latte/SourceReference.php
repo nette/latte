@@ -15,6 +15,22 @@ namespace Latte;
  */
 class SourceReference
 {
+	/**
+	 * Attempts to map the compiled template file to the source name and position.
+	 */
+	public static function fromCompiled(string $file, ?int $line = null): ?self
+	{
+		if (Cache::isCacheFile($file)
+			&& ($content = file_get_contents($file))
+			&& preg_match('#^/\*\* source: (\S.+) \*/#m', $content, $source)
+		) {
+			$line && preg_match('~/\* line (\d+) \*/~', explode("\n", $content)[$line - 1], $pos);
+			return new self($source[1], isset($pos[1]) ? (int) $pos[1] : null);
+		}
+		return null;
+	}
+
+
 	public function __construct(
 		public ?string $name,
 		public readonly ?int $line = null,
