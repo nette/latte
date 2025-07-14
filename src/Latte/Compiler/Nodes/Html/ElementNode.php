@@ -115,14 +115,15 @@ class ElementNode extends AreaNode
 		$res = $this->variableName
 			? $context->format(
 				<<<'XX'
-					$ʟ_tmp = LR\%raw::validateTagChange(%node);
+					$ʟ_tmp = LR\%raw::validateTagChange(%node, %dump);
 					echo '<', $ʟ_tmp %line;
-					%raw = '</' . $ʟ_tmp . '>' . %3.raw;
+					%raw = '</' . $ʟ_tmp . '>' . %4.raw;
 					%node
 					echo %dump;
 					XX,
 				$this->contentType === ContentType::Html ? 'HtmlHelpers' : 'XmlHelpers',
 				$this->variableName,
+				$this->name,
 				$this->position,
 				$this->endTagVar,
 				$this->attributes,

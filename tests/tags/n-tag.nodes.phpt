@@ -18,9 +18,8 @@ Assert::match(<<<'XX'
 			Element:
 				name: input
 				Auxiliary:
-				Auxiliary:
-					Variable:
-						name: var
+				Variable:
+					name: var
 				Fragment:
 					Text:
 						content: ''

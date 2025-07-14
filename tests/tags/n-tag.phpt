@@ -74,7 +74,7 @@ Assert::match(
 	<<<'XX'
 		%A%
 				$ʟ_tag[0] = '';
-				$ʟ_tmp = LR\HtmlHelpers::validateTagChange(Latte\Essential\Nodes\NTagNode::check('div', 'h' . 1, false));
+				$ʟ_tmp = LR\HtmlHelpers::validateTagChange('h' . 1, 'div');
 				echo '<', $ʟ_tmp /* line 1 */;
 				$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
 				echo ' class="bar" ';
@@ -142,5 +142,5 @@ Assert::exception(
 Assert::exception(
 	fn() => $latte->renderToString('<span n:tag="br"></span>'),
 	Latte\RuntimeException::class,
-	'Forbidden tag <span> change to <br>',
+	'Forbidden: Cannot change element to <br>',
 );
