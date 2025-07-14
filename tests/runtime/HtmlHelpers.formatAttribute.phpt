@@ -20,8 +20,8 @@ test('regular text attributes', function () {
 	Assert::same('title=""', HtmlHelpers::formatAttribute('title', ''));
 
 	// special values
-	Assert::same('title', HtmlHelpers::formatAttribute('title', true));
-	Assert::null(HtmlHelpers::formatAttribute('title', false));
+	Assert::same('title', HtmlHelpers::formatAttribute('title', true, compat: true));
+	Assert::null(HtmlHelpers::formatAttribute('title', false, compat: true));
 	Assert::null(HtmlHelpers::formatAttribute('title', null, compat: true));
 	Assert::same('title=""', HtmlHelpers::formatAttribute('title', null, compat: false));
 	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
@@ -30,6 +30,14 @@ test('regular text attributes', function () {
 
 	// invalid
 	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('title', true),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('title', false),
+		E_USER_WARNING,
+	);
+	Assert::error(
 		fn() => HtmlHelpers::formatAttribute('title', (object) []),
 		E_USER_WARNING,
 	);
@@ -37,24 +45,20 @@ test('regular text attributes', function () {
 
 
 test('boolean attributes', function () {
-	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', true));
-	Assert::null(HtmlHelpers::formatAttribute('disabled', false));
+	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', true, compat: true));
+	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', true, compat: false));
+	Assert::null(HtmlHelpers::formatAttribute('disabled', false, compat: true));
+	Assert::null(HtmlHelpers::formatAttribute('disabled', false, compat: false));
 	Assert::null(HtmlHelpers::formatAttribute('disabled', null, compat: true));
-	Assert::same('disabled=""', HtmlHelpers::formatAttribute('disabled', null, compat: false)); // TODO
+	Assert::null(HtmlHelpers::formatAttribute('disabled', null, compat: false));
 
 	// special values
-	Assert::same('disabled=""', HtmlHelpers::formatAttribute('disabled', ''));
-	Assert::same('disabled="foo"', HtmlHelpers::formatAttribute('disabled', 'foo'));
-	Assert::same('disabled="1"', HtmlHelpers::formatAttribute('disabled', 1));
-	Assert::same('disabled="0"', HtmlHelpers::formatAttribute('disabled', 0));
+	Assert::null(HtmlHelpers::formatAttribute('disabled', ''));
+	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', 'foo'));
+	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', 1));
+	Assert::null(HtmlHelpers::formatAttribute('disabled', 0));
 	Assert::null(HtmlHelpers::formatAttribute('disabled', []));
-
-	// invalid
-	Assert::error(
-		fn() => HtmlHelpers::formatAttribute('disabled', (object) []),
-		E_USER_WARNING,
-		"StdClass value in 'disabled' attribute is not supported.",
-	);
+	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', (object) []));
 });
 
 
@@ -73,12 +77,18 @@ test('style attribute', function () {
 	);
 
 	// special values
-	Assert::same('style', HtmlHelpers::formatAttribute('style', true));
-	Assert::null(HtmlHelpers::formatAttribute('style', false));
 	Assert::null(HtmlHelpers::formatAttribute('style', null, compat: true));
 	Assert::null(HtmlHelpers::formatAttribute('style', null, compat: false));
 
 	// invalid
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('style', true), // independently of compat
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('style', false), // independently of compat
+		E_USER_WARNING,
+	);
 	Assert::same(
 		'style="color:1"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
@@ -116,14 +126,20 @@ test('class attribute', function () {
 	);
 
 	// special values
-	Assert::same('class', HtmlHelpers::formatAttribute('class', true));
-	Assert::null(HtmlHelpers::formatAttribute('class', false));
 	Assert::null(HtmlHelpers::formatAttribute('class', null, compat: true));
 	Assert::same('class=""', HtmlHelpers::formatAttribute('class', null, compat: false)); // TODO
 	Assert::same('class="1"', HtmlHelpers::formatAttribute('class', 1));
 	Assert::same('class="0"', HtmlHelpers::formatAttribute('class', 0));
 
 	// invalid
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('class', true),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('class', false),
+		E_USER_WARNING,
+	);
 	Assert::same(
 		'class="a b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
