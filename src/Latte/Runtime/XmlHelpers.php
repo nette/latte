@@ -93,4 +93,15 @@ final class XmlHelpers
 		}
 		return $name;
 	}
+
+
+	public static function validateAttributeName(mixed $name): void
+	{
+		if (!is_string($name)) {
+			throw new Latte\RuntimeException('Attribute name must be string, ' . get_debug_type($name) . ' given');
+
+		} elseif (!preg_match('~' . self::ReName . '$~DAu', $name)) {
+			throw new Latte\RuntimeException("Invalid attribute name '$name'");
+		}
+	}
 }
