@@ -42,7 +42,6 @@ final class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
-			self::HtmlAttribute . '/' . self::Url => 'HtmlHelpers::escapeAttr',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			'xml' => 'XmlHelpers::escapeText',
 			'xml/attr' => 'XmlHelpers::escapeText',
@@ -65,16 +64,11 @@ final class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::convertHtmlToAttr',
-			self::HtmlAttribute . '/' . self::Url => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			self::HtmlRawText . '/' . self::HtmlText => 'HtmlHelpers::convertHtmlToRawText',
 		],
 		self::HtmlAttribute => [
 			self::HtmlText => 'HtmlHelpers::convertHtmlToAttr',
-		],
-		self::HtmlAttribute . '/' . self::Url => [
-			self::HtmlText => 'HtmlHelpers::convertHtmlToAttr',
-			self::HtmlAttribute => 'Helpers::nop',
 		],
 	];
 
@@ -168,10 +162,6 @@ final class Escaper
 				$this->subType = self::JavaScript;
 			} elseif ($name === 'style') {
 				$this->subType = self::Css;
-			} elseif ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
-				|| ($name === 'data' && $this->tag === 'object'))
-			) {
-				$this->subType = self::Url;
 			}
 		}
 	}
@@ -196,8 +186,7 @@ final class Escaper
 				self::HtmlText => 'LR\HtmlHelpers::escapeText(' . $str . ')',
 				self::HtmlTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
-					'',
-					self::Url => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
+					'' => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
 					self::JavaScript => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs(' . $str . '))',
 					self::Css => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss(' . $str . '))',
 				},
@@ -256,15 +245,6 @@ final class Escaper
 			. var_export($this->export(), true) . ', '
 			. $str
 			. ')';
-	}
-
-
-	public function check(string $str): string
-	{
-		if ($this->state === self::HtmlAttribute && $this->subType === self::Url) {
-			$str = 'LR\Filters::safeUrl(' . $str . ')';
-		}
-		return $str;
 	}
 
 
