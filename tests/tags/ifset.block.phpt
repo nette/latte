@@ -13,10 +13,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader);
 // {ifset ... }
 Assert::contains("if (\$this->hasBlock('block')) ", $latte->compile('{ifset #block/}'));
 Assert::contains("if (\$this->hasBlock('block')) ", $latte->compile('{ifset block/}'));
-Assert::match('%A%if ($this->hasBlock((is_string($ʟ_tmp = $foo) %A%', $latte->compile('{ifset #$foo/}'));
+Assert::match('%A%if ($this->hasBlock((LR\Helpers::stringOrNull($ʟ_tmp = $foo) %A%', $latte->compile('{ifset #$foo/}'));
 Assert::contains("if (\$this->hasBlock('foo')) ", $latte->compile('{ifset block foo/}'));
-Assert::match('%A%if ($this->hasBlock((is_string($ʟ_tmp = $foo) %A%', $latte->compile('{ifset block $foo/}'));
-Assert::match("%A%if (\$this->hasBlock((is_string(\$ʟ_tmp = 'f' . 'oo') %A%", $latte->compile('{ifset block "f" . "oo"/}'));
+Assert::match('%A%if ($this->hasBlock((LR\Helpers::stringOrNull($ʟ_tmp = $foo) %A%', $latte->compile('{ifset block $foo/}'));
+Assert::match("%A%if (\$this->hasBlock((LR\\Helpers::stringOrNull(\$ʟ_tmp = 'f' . 'oo') %A%", $latte->compile('{ifset block "f" . "oo"/}'));
 Assert::contains(
 	"if (\$this->hasBlock('foo') && \$this->hasBlock('block') && isset(\$item)) ",
 	$latte->compile('{ifset block foo, block, $item/}'),
