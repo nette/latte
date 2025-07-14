@@ -346,9 +346,12 @@ final class PrintContext
 	 */
 	public function ensureString(Nodes\ExpressionNode $name, string $entity): string
 	{
-		$code = $name->print($this);
 		return $name instanceof Scalar\StringNode
-			? $code
-			: '(is_string($ʟ_tmp = ' . $code . ') ? $ʟ_tmp : throw new InvalidArgumentException(sprintf(' . $this->encodeString($entity . ' must be a string, %s given.') . ', get_debug_type($ʟ_tmp))))';
+			? $name->print($this)
+			: $this->format(
+				'(LR\Helpers::stringOrNull($ʟ_tmp = %node) ?? throw new InvalidArgumentException(sprintf(%dump, get_debug_type($ʟ_tmp))))',
+				$name,
+				$entity . ' must be a string, %s given.',
+			);
 	}
 }
