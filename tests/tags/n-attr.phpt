@@ -82,10 +82,17 @@ Assert::match(
 	$latte->renderToString('<input n:attr="$attrs">', ['attrs' => ['a' => '<>"', 'b' => "'"]]),
 );
 
-// misuse of
-Assert::error(
+// invalid
+Assert::exception(
+	fn() => $latte->renderToString('<input n:attr="2 => true">'),
+	Latte\RuntimeException::class,
+	'Attribute name must be string, int given',
+);
+
+Assert::exception(
 	fn() => $latte->renderToString('<input n:attr="\'rowspan=2\' => true">'),
-	E_USER_WARNING,
+	Latte\RuntimeException::class,
+	"Invalid attribute name 'rowspan=2'",
 );
 
 

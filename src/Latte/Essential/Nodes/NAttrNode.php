@@ -65,8 +65,9 @@ final class NAttrNode extends StatementNode
 	}
 
 
-	public static function formatHtmlAttribute(string $name, mixed $value): string
+	public static function formatHtmlAttribute(mixed $name, mixed $value): string
 	{
+		LR\HtmlHelpers::validateAttributeName($name);
 		$type = LR\HtmlHelpers::classifyAttributeType($name);
 		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria')) {
 			return '';
@@ -77,8 +78,9 @@ final class NAttrNode extends StatementNode
 	}
 
 
-	public static function formatXmlAttribute(string $name, mixed $value): string
+	public static function formatXmlAttribute(mixed $name, mixed $value): string
 	{
+		LR\XmlHelpers::validateAttributeName($name);
 		return $value === false ? '' : LR\XmlHelpers::formatAttribute($name, $value);
 	}
 

@@ -334,4 +334,15 @@ final class HtmlHelpers
 		}
 		return $name;
 	}
+
+
+	public static function validateAttributeName(mixed $name): void
+	{
+		if (!is_string($name)) {
+			throw new Latte\RuntimeException('Attribute name must be string, ' . get_debug_type($name) . ' given');
+
+		} elseif (!preg_match('~' . Latte\Compiler\TemplateLexer::ReAttrName . '+$~DAu', $name)) {
+			throw new Latte\RuntimeException("Invalid attribute name '$name'");
+		}
+	}
 }
