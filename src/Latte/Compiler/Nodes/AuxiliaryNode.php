@@ -16,7 +16,7 @@ use Latte\Compiler\PrintContext;
 class AuxiliaryNode extends AreaNode
 {
 	public function __construct(
-		public /*readonly*/ \Closure $print,
+		public readonly \Closure $print,
 		/** @var (?Node)[] */
 		public array $nodes = [],
 	) {

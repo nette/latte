@@ -26,9 +26,9 @@ final class Block
 
 
 	public function __construct(
-		public /*readonly*/ ExpressionNode $name,
-		public /*readonly*/ int|string $layer,
-		public /*readonly*/ Tag $tag,
+		public readonly ExpressionNode $name,
+		public readonly int|string $layer,
+		public readonly Tag $tag,
 	) {
 	}
 

@@ -21,7 +21,7 @@ final class TokenStream
 {
 	/** @var Token[] */
 	private array $tokens = [];
-	private \Iterator /*readonly*/ $source;
+	private readonly \Iterator $source;
 	private int $index = 0;
 
 
