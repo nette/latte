@@ -45,10 +45,10 @@ class SourceReference
 
 
 	public function __construct(
-		public /*readonly*/ ?string $name,
-		public /*readonly*/ ?int $line = null,
-		public /*readonly*/ ?int $column = null,
-		public /*readonly*/ ?string $code = null,
+		public ?string $name,
+		public ?int $line = null,
+		public ?int $column = null,
+		public ?string $code = null,
 	) {
 		$this->name = str_contains($name ?? '', "\n") ? null : $name; // caused by StringLoader
 	}
