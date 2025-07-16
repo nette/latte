@@ -23,7 +23,7 @@ class BinaryOpNode extends ExpressionNode
 
 	public function __construct(
 		public ExpressionNode $left,
-		public /*readonly*/ string $operator,
+		public string $operator,
 		public ExpressionNode $right,
 		public ?Position $position = null,
 	) {

@@ -20,7 +20,7 @@ class CastNode extends ExpressionNode
 
 
 	public function __construct(
-		public /*readonly*/ string $type,
+		public string $type,
 		public ExpressionNode $expr,
 		public ?Position $position = null,
 	) {

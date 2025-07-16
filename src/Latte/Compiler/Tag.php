@@ -35,16 +35,16 @@ final class Tag
 
 
 	public function __construct(
-		public /*readonly*/ string $name,
+		public string $name,
 		array $tokens,
-		public /*readonly*/ Position $position,
-		public /*readonly*/ bool $void = false,
-		public /*readonly*/ bool $closing = false,
-		public /*readonly*/ bool $inHead = false,
-		public /*readonly*/ bool $inTag = false,
-		public /*readonly*/ ?ElementNode $htmlElement = null,
+		public Position $position,
+		public bool $void = false,
+		public bool $closing = false,
+		public bool $inHead = false,
+		public bool $inTag = false,
+		public ?ElementNode $htmlElement = null,
 		public ?self $parent = null,
-		public /*readonly*/ ?string $prefix = null,
+		public ?string $prefix = null,
 		public ?AreaNode $node = null,
 		public ?AreaNode $nAttributeNode = null,
 	) {

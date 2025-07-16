@@ -22,7 +22,7 @@ use function is_array, is_bool, is_float, is_int, is_string;
 final class ExpressionBuilder
 {
 	public function __construct(
-		private /*readonly*/ ExpressionNode|NameNode $expr,
+		private ExpressionNode|NameNode $expr,
 	) {
 	}
 

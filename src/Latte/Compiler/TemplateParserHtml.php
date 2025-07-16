@@ -26,9 +26,9 @@ use function array_keys, array_pop, end, implode, in_array, key, preg_replace, s
 final class TemplateParserHtml
 {
 	/** @var array<string, callable(Tag, TemplateParser): (Node|\Generator|void)> */
-	private array /*readonly*/ $attrParsers;
+	private array $attrParsers;
 	private ?Html\ElementNode $element = null;
-	private TemplateParser /*readonly*/ $parser;
+	private TemplateParser $parser;
 
 	/** @var array{string, ?Nodes\Php\ExpressionNode} */
 	private ?array $endName = null;

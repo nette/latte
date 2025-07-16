@@ -23,7 +23,7 @@ class AssignOpNode extends ExpressionNode
 
 	public function __construct(
 		public ExpressionNode $var,
-		public /*readonly*/ string $operator,
+		public string $operator,
 		public ExpressionNode $expr,
 		public ?Position $position = null,
 	) {

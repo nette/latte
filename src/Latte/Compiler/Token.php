@@ -234,9 +234,9 @@ final class Token
 
 
 	public function __construct(
-		public /*readonly*/ int $type,
-		public /*readonly*/ string $text,
-		public /*readonly*/ ?Position $position = null,
+		public int $type,
+		public string $text,
+		public ?Position $position = null,
 	) {
 	}
 

@@ -21,7 +21,7 @@ class UnaryOpNode extends ExpressionNode
 
 	public function __construct(
 		public ExpressionNode $expr,
-		public /*readonly*/ string $operator,
+		public string $operator,
 		public ?Position $position = null,
 	) {
 		if (!isset(self::Ops[$this->operator])) {
