@@ -21,12 +21,6 @@ interface Loader
 	function getContent(string $name): string;
 
 	/**
-	 * Checks whether template is expired.
-	 * @deprecated
-	 */
-	function isExpired(string $name, int $time): bool;
-
-	/**
 	 * Returns referred template name.
 	 */
 	function getReferredName(string $name, string $referringName): string;

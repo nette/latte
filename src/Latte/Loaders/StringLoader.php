@@ -45,12 +45,6 @@ class StringLoader implements Latte\Loader
 	}
 
 
-	public function isExpired(string $name, int $time): bool
-	{
-		return false;
-	}
-
-
 	/**
 	 * Returns referred template name.
 	 */

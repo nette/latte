@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Loaders;
 
 use Latte;
-use function array_pop, end, explode, file_get_contents, implode, is_file, preg_match, str_starts_with, strtr, time, touch;
+use function array_pop, end, explode, file_get_contents, implode, is_file, preg_match, str_starts_with, strtr;
 use const DIRECTORY_SEPARATOR;
 
 
@@ -39,20 +39,9 @@ class FileLoader implements Latte\Loader
 
 		} elseif (!is_file($file)) {
 			throw new Latte\TemplateNotFoundException("Missing template file '$file'.");
-
-		} elseif ($this->isExpired($fileName, time())) {
-			if (@touch($file) === false) {
-				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
-			}
 		}
 
 		return file_get_contents($file);
-	}
-
-
-	public function isExpired(string $file, int $time): bool
-	{
-		return false;
 	}
 
 
