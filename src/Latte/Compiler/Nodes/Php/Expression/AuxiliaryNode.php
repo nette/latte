@@ -17,7 +17,7 @@ use Latte\Compiler\PrintContext;
 class AuxiliaryNode extends ExpressionNode
 {
 	public function __construct(
-		public /*readonly*/ \Closure $print,
+		public \Closure $print,
 		/** @var (?Node)[] */
 		public array $nodes = [],
 	) {
