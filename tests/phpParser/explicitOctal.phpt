@@ -31,35 +31,35 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 83
    |  |  |  kind: 8
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 83
    |  |  |  kind: 8
-   |  |  |  position: 2:1 (offset 7)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 7)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 83
    |  |  |  kind: 8
-   |  |  |  position: 3:1 (offset 14)
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 14)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 9.223372036854776e+18
-   |  |  |  position: 4:1 (offset 23)
+   |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 23)
-   position: 1:1 (offset 0)
+   |  |  position: 4:1
+   position: 1:1

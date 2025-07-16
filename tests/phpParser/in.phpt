@@ -30,56 +30,56 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:1
    |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 1:7 (offset 6)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:7
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  left: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 4:1 (offset 28)
+   |  |  |  |  |  position: 4:1
    |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 4:7 (offset 34)
-   |  |  |  |  position: 4:1 (offset 28)
+   |  |  |  |  |  position: 4:7
+   |  |  |  |  position: 4:1
    |  |  |  operator: '||'
    |  |  |  right: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'c'
-   |  |  |  |  |  position: 4:13 (offset 40)
+   |  |  |  |  |  position: 4:13
    |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'd'
-   |  |  |  |  |  position: 4:19 (offset 46)
-   |  |  |  |  position: 4:13 (offset 40)
-   |  |  |  position: 4:1 (offset 28)
+   |  |  |  |  |  position: 4:19
+   |  |  |  |  position: 4:13
+   |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 28)
+   |  |  position: 4:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 5:1 (offset 50)
+   |  |  |  |  position: 5:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 5:6 (offset 55)
+   |  |  |  |  |  position: 5:6
    |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'c'
-   |  |  |  |  |  position: 5:12 (offset 61)
-   |  |  |  |  position: 5:6 (offset 55)
+   |  |  |  |  |  position: 5:12
+   |  |  |  |  position: 5:6
    |  |  |  byRef: false
-   |  |  |  position: 5:1 (offset 50)
+   |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 50)
-   position: 1:1 (offset 0)
+   |  |  position: 5:1
+   position: 1:1

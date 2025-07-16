@@ -35,70 +35,70 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  value: true
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  value: false
-   |  |  |  position: 2:1 (offset 6)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 6)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\NullNode
-   |  |  |  position: 3:1 (offset 13)
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 13)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  value: true
-   |  |  |  position: 5:1 (offset 20)
+   |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 20)
+   |  |  position: 5:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  value: false
-   |  |  |  position: 6:1 (offset 26)
+   |  |  |  position: 6:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1 (offset 26)
+   |  |  position: 6:1
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\NullNode
-   |  |  |  position: 7:1 (offset 33)
+   |  |  |  position: 7:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 7:1 (offset 33)
+   |  |  position: 7:1
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  value: true
-   |  |  |  position: 9:1 (offset 40)
+   |  |  |  position: 9:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 9:1 (offset 40)
+   |  |  position: 9:1
    |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  value: false
-   |  |  |  position: 10:1 (offset 46)
+   |  |  |  position: 10:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 10:1 (offset 46)
+   |  |  position: 10:1
    |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\NullNode
-   |  |  |  position: 11:1 (offset 53)
+   |  |  |  position: 11:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 11:1 (offset 53)
-   position: 1:1 (offset 0)
+   |  |  position: 11:1
+   position: 1:1

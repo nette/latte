@@ -30,88 +30,88 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:1
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 1:6 (offset 5)
+   |  |  |  |  position: 1:6
    |  |  |  nullsafe: true
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 2:1 (offset 8)
+   |  |  |  |  position: 2:1
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 2:6 (offset 13)
+   |  |  |  |  position: 2:6
    |  |  |  args: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'c'
-   |  |  |  |  |  |  position: 2:8 (offset 15)
+   |  |  |  |  |  |  position: 2:8
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  name: null
-   |  |  |  |  |  position: 2:8 (offset 15)
+   |  |  |  |  |  position: 2:8
    |  |  |  nullsafe: true
-   |  |  |  position: 2:1 (offset 8)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 8)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 3:5 (offset 24)
+   |  |  |  |  |  position: 3:5
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 3:10 (offset 29)
+   |  |  |  |  |  position: 3:10
    |  |  |  |  nullsafe: true
-   |  |  |  |  position: 3:5 (offset 24)
+   |  |  |  |  position: 3:5
    |  |  |  args: array (0)
-   |  |  |  position: 3:1 (offset 20)
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 20)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 4:3 (offset 34)
+   |  |  |  |  |  |  position: 4:3
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  position: 4:8 (offset 39)
+   |  |  |  |  |  |  position: 4:8
    |  |  |  |  |  nullsafe: true
-   |  |  |  |  |  position: 4:3 (offset 34)
-   |  |  |  position: 4:1 (offset 32)
+   |  |  |  |  |  position: 4:3
+   |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 32)
+   |  |  position: 4:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 5:2 (offset 45)
+   |  |  |  |  |  |  position: 5:2
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  position: 5:7 (offset 50)
+   |  |  |  |  |  |  position: 5:7
    |  |  |  |  |  nullsafe: true
-   |  |  |  |  |  position: 5:2 (offset 45)
-   |  |  |  position: 5:1 (offset 44)
+   |  |  |  |  |  position: 5:2
+   |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 44)
-   position: 1:1 (offset 0)
+   |  |  position: 5:1
+   position: 1:1

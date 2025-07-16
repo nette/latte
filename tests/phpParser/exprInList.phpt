@@ -29,25 +29,25 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  |  position: 1:7 (offset 6)
+   |  |  |  |  |  |  |  position: 1:7
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 1:6 (offset 5)
+   |  |  |  |  |  |  position: 1:6
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  position: 1:15 (offset 14)
+   |  |  |  |  |  |  |  position: 1:15
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 1:12 (offset 11)
-   |  |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  |  |  position: 1:12
+   |  |  |  |  position: 1:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 1:24 (offset 23)
+   |  |  |  |  position: 1:24
    |  |  |  byRef: false
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
-   position: 1:1 (offset 0)
+   |  |  position: 1:1
+   position: 1:1

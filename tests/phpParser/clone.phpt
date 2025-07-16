@@ -26,10 +26,10 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\CloneNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 1:7 (offset 6)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:7
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
-   position: 1:1 (offset 0)
+   |  |  position: 1:1
+   position: 1:1

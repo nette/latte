@@ -32,239 +32,239 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 1:2 (offset 1)
+   |  |  |  |  position: 1:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'upper'
-   |  |  |  |  |  position: 1:5 (offset 4)
+   |  |  |  |  |  position: 1:5
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 1:4 (offset 3)
-   |  |  |  position: 1:2 (offset 1)
+   |  |  |  |  position: 1:4
+   |  |  |  position: 1:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 2:2 (offset 13)
+   |  |  |  |  |  |  position: 2:2
    |  |  |  |  |  operator: '.'
    |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  position: 2:7 (offset 18)
-   |  |  |  |  |  position: 2:2 (offset 13)
+   |  |  |  |  |  |  position: 2:7
+   |  |  |  |  |  position: 2:2
    |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'upper'
-   |  |  |  |  |  |  position: 2:11 (offset 22)
+   |  |  |  |  |  |  position: 2:11
    |  |  |  |  |  args: array (0)
-   |  |  |  |  |  position: 2:10 (offset 21)
-   |  |  |  |  position: 2:2 (offset 13)
+   |  |  |  |  |  position: 2:10
+   |  |  |  |  position: 2:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  position: 2:17 (offset 28)
+   |  |  |  |  |  position: 2:17
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 2:16 (offset 27)
-   |  |  |  position: 2:2 (offset 13)
+   |  |  |  |  position: 2:16
+   |  |  |  position: 2:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 12)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 3:2 (offset 40)
+   |  |  |  |  |  position: 3:2
    |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  |  position: 3:6 (offset 44)
+   |  |  |  |  |  |  position: 3:6
    |  |  |  |  |  args: array (2)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  value: 10
    |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  position: 3:16 (offset 54)
+   |  |  |  |  |  |  |  |  position: 3:16
    |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
-   |  |  |  |  |  |  |  position: 3:16 (offset 54)
+   |  |  |  |  |  |  |  position: 3:16
    |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  position: 3:20 (offset 58)
+   |  |  |  |  |  |  |  |  position: 3:20
    |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
-   |  |  |  |  |  |  |  position: 3:20 (offset 58)
-   |  |  |  |  |  position: 3:5 (offset 43)
-   |  |  |  |  position: 3:2 (offset 40)
+   |  |  |  |  |  |  |  position: 3:20
+   |  |  |  |  |  position: 3:5
+   |  |  |  |  position: 3:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'trim'
-   |  |  |  |  |  position: 3:23 (offset 61)
+   |  |  |  |  |  position: 3:23
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 3:22 (offset 60)
-   |  |  |  position: 3:2 (offset 40)
+   |  |  |  |  position: 3:22
+   |  |  |  position: 3:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 39)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 4:2 (offset 69)
+   |  |  |  |  |  position: 4:2
    |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  |  position: 4:6 (offset 73)
+   |  |  |  |  |  |  position: 4:6
    |  |  |  |  |  args: array (2)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  value: 10
    |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  position: 4:16 (offset 83)
+   |  |  |  |  |  |  |  |  position: 4:16
    |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
-   |  |  |  |  |  |  |  position: 4:16 (offset 83)
+   |  |  |  |  |  |  |  position: 4:16
    |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 4:21 (offset 88)
+   |  |  |  |  |  |  |  |  |  position: 4:21
    |  |  |  |  |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  |  |  |  position: 4:24 (offset 91)
+   |  |  |  |  |  |  |  |  |  |  position: 4:24
    |  |  |  |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  |  |  |  position: 4:23 (offset 90)
-   |  |  |  |  |  |  |  |  position: 4:21 (offset 88)
+   |  |  |  |  |  |  |  |  |  position: 4:23
+   |  |  |  |  |  |  |  |  position: 4:21
    |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
-   |  |  |  |  |  |  |  position: 4:20 (offset 87)
-   |  |  |  |  |  position: 4:5 (offset 72)
-   |  |  |  |  position: 4:2 (offset 69)
+   |  |  |  |  |  |  |  position: 4:20
+   |  |  |  |  |  position: 4:5
+   |  |  |  |  position: 4:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'trim'
-   |  |  |  |  |  position: 4:31 (offset 98)
+   |  |  |  |  |  position: 4:31
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 4:30 (offset 97)
-   |  |  |  position: 4:2 (offset 69)
+   |  |  |  |  position: 4:30
+   |  |  |  position: 4:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 68)
+   |  |  position: 4:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 5:2 (offset 106)
+   |  |  |  |  position: 5:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  position: 5:6 (offset 110)
+   |  |  |  |  |  position: 5:6
    |  |  |  |  args: array (2)
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 10
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 5:19 (offset 123)
+   |  |  |  |  |  |  |  position: 5:19
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  |  position: 5:16 (offset 120)
-   |  |  |  |  |  |  position: 5:16 (offset 120)
+   |  |  |  |  |  |  |  position: 5:16
+   |  |  |  |  |  |  position: 5:16
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  |  |  |  |  value: true
-   |  |  |  |  |  |  |  position: 5:26 (offset 130)
+   |  |  |  |  |  |  |  position: 5:26
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  position: 5:23 (offset 127)
-   |  |  |  |  |  |  position: 5:23 (offset 127)
-   |  |  |  |  position: 5:5 (offset 109)
-   |  |  |  position: 5:2 (offset 106)
+   |  |  |  |  |  |  |  position: 5:23
+   |  |  |  |  |  |  position: 5:23
+   |  |  |  |  position: 5:5
+   |  |  |  position: 5:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 105)
+   |  |  position: 5:1
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 6:2 (offset 138)
+   |  |  |  |  position: 6:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  position: 6:6 (offset 142)
+   |  |  |  |  |  position: 6:6
    |  |  |  |  args: array (2)
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 10
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 6:19 (offset 155)
+   |  |  |  |  |  |  |  position: 6:19
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  |  position: 6:16 (offset 152)
-   |  |  |  |  |  |  position: 6:16 (offset 152)
+   |  |  |  |  |  |  |  position: 6:16
+   |  |  |  |  |  |  position: 6:16
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\BooleanNode
    |  |  |  |  |  |  |  value: true
-   |  |  |  |  |  |  |  position: 6:26 (offset 162)
+   |  |  |  |  |  |  |  position: 6:26
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  position: 6:23 (offset 159)
-   |  |  |  |  |  |  position: 6:23 (offset 159)
-   |  |  |  |  position: 6:5 (offset 141)
-   |  |  |  position: 6:2 (offset 138)
+   |  |  |  |  |  |  |  position: 6:23
+   |  |  |  |  |  |  position: 6:23
+   |  |  |  |  position: 6:5
+   |  |  |  position: 6:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1 (offset 137)
+   |  |  position: 6:1
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 7:2 (offset 171)
+   |  |  |  |  position: 7:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  name: 'truncate'
-   |  |  |  |  |  position: 7:6 (offset 175)
+   |  |  |  |  |  position: 7:6
    |  |  |  |  args: array (1)
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 10
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 7:19 (offset 188)
+   |  |  |  |  |  |  |  position: 7:19
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  |  position: 7:16 (offset 185)
-   |  |  |  |  |  |  position: 7:16 (offset 185)
-   |  |  |  |  position: 7:5 (offset 174)
-   |  |  |  position: 7:2 (offset 171)
+   |  |  |  |  |  |  |  position: 7:16
+   |  |  |  |  |  |  position: 7:16
+   |  |  |  |  position: 7:5
+   |  |  |  position: 7:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 7:1 (offset 170)
-   position: 1:1 (offset 0)
+   |  |  position: 7:1
+   position: 1:1

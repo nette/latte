@@ -32,56 +32,56 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 6.674083e-11
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 299792458
    |  |  |  kind: 10
-   |  |  |  position: 2:1 (offset 15)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 15)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 3405705229
    |  |  |  kind: 16
-   |  |  |  position: 3:1 (offset 28)
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 28)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 95
    |  |  |  kind: 2
-   |  |  |  position: 4:1 (offset 41)
+   |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 41)
+   |  |  position: 4:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 48673
    |  |  |  kind: 8
-   |  |  |  position: 5:1 (offset 54)
+   |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 54)
+   |  |  position: 5:1
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: '_100'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 8:1 (offset 101)
-   |  |  |  position: 8:1 (offset 101)
+   |  |  |  |  position: 8:1
+   |  |  |  position: 8:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 8:1 (offset 101)
-   position: 1:1 (offset 0)
+   |  |  position: 8:1
+   position: 1:1

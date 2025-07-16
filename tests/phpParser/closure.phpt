@@ -35,22 +35,22 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 1:11 (offset 10)
+   |  |  |  |  |  |  position: 1:11
    |  |  |  |  |  default: null
    |  |  |  |  |  type: null
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
-   |  |  |  |  |  position: 1:11 (offset 10)
+   |  |  |  |  |  position: 1:11
    |  |  |  uses: array (0)
    |  |  |  returnType: null
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 1:24 (offset 23)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:24
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: false
@@ -58,22 +58,22 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 2:11 (offset 40)
+   |  |  |  |  |  |  position: 2:11
    |  |  |  |  |  default: null
    |  |  |  |  |  type: null
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
-   |  |  |  |  |  position: 2:11 (offset 40)
+   |  |  |  |  |  position: 2:11
    |  |  |  uses: array (0)
    |  |  |  returnType: null
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 2:24 (offset 53)
-   |  |  |  position: 2:1 (offset 30)
+   |  |  |  |  position: 2:24
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 30)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: false
@@ -81,26 +81,26 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 3:11 (offset 70)
+   |  |  |  |  |  |  position: 3:11
    |  |  |  |  |  default: null
    |  |  |  |  |  type: null
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
-   |  |  |  |  |  position: 3:11 (offset 70)
+   |  |  |  |  |  position: 3:11
    |  |  |  uses: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  position: 3:20 (offset 79)
+   |  |  |  |  |  |  position: 3:20
    |  |  |  |  |  byRef: false
-   |  |  |  |  |  position: 3:20 (offset 79)
+   |  |  |  |  |  position: 3:20
    |  |  |  returnType: null
    |  |  |  expr: null
-   |  |  |  position: 3:1 (offset 60)
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 60)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: false
@@ -109,22 +109,22 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 4:18 (offset 105)
+   |  |  |  |  |  |  position: 4:18
    |  |  |  |  |  byRef: false
-   |  |  |  |  |  position: 4:18 (offset 105)
+   |  |  |  |  |  position: 4:18
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  position: 4:23 (offset 110)
+   |  |  |  |  |  |  position: 4:23
    |  |  |  |  |  byRef: true
-   |  |  |  |  |  position: 4:22 (offset 109)
+   |  |  |  |  |  position: 4:22
    |  |  |  returnType: null
    |  |  |  expr: null
-   |  |  |  position: 4:1 (offset 88)
+   |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 88)
+   |  |  position: 4:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: true
@@ -132,20 +132,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 5:12 (offset 138)
+   |  |  |  |  |  |  position: 5:12
    |  |  |  |  |  default: null
    |  |  |  |  |  type: null
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
-   |  |  |  |  |  position: 5:12 (offset 138)
+   |  |  |  |  |  position: 5:12
    |  |  |  uses: array (0)
    |  |  |  returnType: null
    |  |  |  expr: null
-   |  |  |  position: 5:1 (offset 127)
+   |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 127)
+   |  |  position: 5:1
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: false
@@ -153,23 +153,23 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ParameterNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 6:11 (offset 165)
+   |  |  |  |  |  |  position: 6:11
    |  |  |  |  |  default: null
    |  |  |  |  |  type: null
    |  |  |  |  |  byRef: false
    |  |  |  |  |  variadic: false
-   |  |  |  |  |  position: 6:11 (offset 165)
+   |  |  |  |  |  position: 6:11
    |  |  |  uses: array (0)
    |  |  |  returnType: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'array'
-   |  |  |  |  position: 6:17 (offset 171)
+   |  |  |  |  position: 6:17
    |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\NullNode
-   |  |  |  |  position: 6:32 (offset 186)
-   |  |  |  position: 6:1 (offset 155)
+   |  |  |  |  position: 6:32
+   |  |  |  position: 6:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1 (offset 155)
+   |  |  position: 6:1
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ClosureNode
    |  |  |  byRef: false
@@ -178,18 +178,18 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ClosureUseNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 7:18 (offset 212)
+   |  |  |  |  |  |  position: 7:18
    |  |  |  |  |  byRef: false
-   |  |  |  |  |  position: 7:18 (offset 212)
+   |  |  |  |  |  position: 7:18
    |  |  |  returnType: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'Foo\Bar'
    |  |  |  |  kind: 2
-   |  |  |  |  position: 7:25 (offset 219)
+   |  |  |  |  position: 7:25
    |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\NullNode
-   |  |  |  |  position: 7:43 (offset 237)
-   |  |  |  position: 7:1 (offset 195)
+   |  |  |  |  position: 7:43
+   |  |  |  position: 7:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 7:1 (offset 195)
-   position: 1:1 (offset 0)
+   |  |  position: 7:1
+   position: 1:1

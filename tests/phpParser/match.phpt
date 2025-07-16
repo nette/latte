@@ -49,64 +49,64 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  cond: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 1
    |  |  |  |  kind: 10
-   |  |  |  |  position: 1:8 (offset 7)
+   |  |  |  |  position: 1:8
    |  |  |  arms: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: array (1)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 2:5 (offset 16)
+   |  |  |  |  |  |  |  position: 2:5
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'Foo'
-   |  |  |  |  |  |  position: 2:10 (offset 21)
-   |  |  |  |  |  position: 2:5 (offset 16)
+   |  |  |  |  |  |  position: 2:10
+   |  |  |  |  |  position: 2:5
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: array (1)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 3:5 (offset 32)
+   |  |  |  |  |  |  |  position: 3:5
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'Bar'
-   |  |  |  |  |  |  position: 3:10 (offset 37)
-   |  |  |  |  |  position: 3:5 (offset 32)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  |  |  position: 3:10
+   |  |  |  |  |  position: 3:5
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MatchNode
    |  |  |  cond: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 1
    |  |  |  |  kind: 10
-   |  |  |  |  position: 6:8 (offset 55)
+   |  |  |  |  position: 6:8
    |  |  |  arms: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: array (2)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 8:5 (offset 93)
+   |  |  |  |  |  |  |  position: 8:5
    |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 8:8 (offset 96)
+   |  |  |  |  |  |  |  position: 8:8
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'Foo'
-   |  |  |  |  |  |  position: 8:13 (offset 101)
-   |  |  |  |  |  position: 8:5 (offset 93)
-   |  |  |  position: 6:1 (offset 48)
+   |  |  |  |  |  |  position: 8:13
+   |  |  |  |  |  position: 8:5
+   |  |  |  position: 6:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1 (offset 48)
+   |  |  position: 6:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MatchNode
    |  |  |  cond: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'operator'
-   |  |  |  |  position: 11:8 (offset 119)
+   |  |  |  |  position: 11:8
    |  |  |  arms: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: array (1)
@@ -114,83 +114,83 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  |  name: 'BinaryOperator'
    |  |  |  |  |  |  |  |  kind: 1
-   |  |  |  |  |  |  |  |  position: 12:5 (offset 136)
+   |  |  |  |  |  |  |  |  position: 12:5
    |  |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  |  name: 'ADD'
-   |  |  |  |  |  |  |  |  position: 12:21 (offset 152)
-   |  |  |  |  |  |  |  position: 12:5 (offset 136)
+   |  |  |  |  |  |  |  |  position: 12:21
+   |  |  |  |  |  |  |  position: 12:5
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  |  |  left: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'lhs'
-   |  |  |  |  |  |  |  position: 12:28 (offset 159)
+   |  |  |  |  |  |  |  position: 12:28
    |  |  |  |  |  |  operator: '+'
    |  |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'rhs'
-   |  |  |  |  |  |  |  position: 12:35 (offset 166)
-   |  |  |  |  |  |  position: 12:28 (offset 159)
-   |  |  |  |  |  position: 12:5 (offset 136)
-   |  |  |  position: 11:1 (offset 112)
+   |  |  |  |  |  |  |  position: 12:35
+   |  |  |  |  |  |  position: 12:28
+   |  |  |  |  |  position: 12:5
+   |  |  |  position: 11:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 11:1 (offset 112)
+   |  |  position: 11:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MatchNode
    |  |  |  cond: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'char'
-   |  |  |  |  position: 15:8 (offset 183)
+   |  |  |  |  position: 15:8
    |  |  |  arms: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: array (1)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 16:5 (offset 196)
+   |  |  |  |  |  |  |  position: 16:5
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: '1'
-   |  |  |  |  |  |  position: 16:10 (offset 201)
-   |  |  |  |  |  position: 16:5 (offset 196)
+   |  |  |  |  |  |  position: 16:10
+   |  |  |  |  |  position: 16:5
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: null
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'default'
-   |  |  |  |  |  |  position: 17:16 (offset 221)
-   |  |  |  |  |  position: 17:5 (offset 210)
-   |  |  |  position: 15:1 (offset 176)
+   |  |  |  |  |  |  position: 17:16
+   |  |  |  |  |  position: 17:5
+   |  |  |  position: 15:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 15:1 (offset 176)
+   |  |  position: 15:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MatchNode
    |  |  |  cond: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 1
    |  |  |  |  kind: 10
-   |  |  |  |  position: 20:8 (offset 242)
+   |  |  |  |  position: 20:8
    |  |  |  arms: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: array (2)
    |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 21:5 (offset 251)
+   |  |  |  |  |  |  |  position: 21:5
    |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 21:8 (offset 254)
+   |  |  |  |  |  |  |  position: 21:8
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'Foo'
-   |  |  |  |  |  |  position: 21:14 (offset 260)
-   |  |  |  |  |  position: 21:5 (offset 251)
+   |  |  |  |  |  |  position: 21:14
+   |  |  |  |  |  position: 21:5
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\MatchArmNode
    |  |  |  |  |  conds: null
    |  |  |  |  |  body: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'Bar'
-   |  |  |  |  |  |  position: 22:17 (offset 283)
-   |  |  |  |  |  position: 22:5 (offset 271)
-   |  |  |  position: 20:1 (offset 235)
+   |  |  |  |  |  |  position: 22:17
+   |  |  |  |  |  position: 22:5
+   |  |  |  position: 20:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 20:1 (offset 235)
-   position: 1:1 (offset 0)
+   |  |  position: 20:1
+   position: 1:1

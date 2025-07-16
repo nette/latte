@@ -32,20 +32,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 1:7 (offset 6)
+   |  |  |  |  |  |  |  position: 1:7
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 1:6 (offset 5)
-   |  |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  |  |  position: 1:6
+   |  |  |  |  position: 1:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 1:13 (offset 12)
+   |  |  |  |  position: 1:13
    |  |  |  byRef: false
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -53,22 +53,22 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 2:14 (offset 29)
+   |  |  |  |  |  |  |  position: 2:14
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'k'
-   |  |  |  |  |  |  |  position: 2:6 (offset 21)
+   |  |  |  |  |  |  |  position: 2:6
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 2:6 (offset 21)
-   |  |  |  |  position: 2:1 (offset 16)
+   |  |  |  |  |  |  position: 2:6
+   |  |  |  |  position: 2:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 2:20 (offset 35)
+   |  |  |  |  position: 2:20
    |  |  |  byRef: false
-   |  |  |  position: 2:1 (offset 16)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 16)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -76,20 +76,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 3:3 (offset 41)
+   |  |  |  |  |  |  |  position: 3:3
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 3:2 (offset 40)
-   |  |  |  |  position: 3:1 (offset 39)
+   |  |  |  |  |  |  position: 3:2
+   |  |  |  |  position: 3:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 3:9 (offset 47)
+   |  |  |  |  position: 3:9
    |  |  |  byRef: false
-   |  |  |  position: 3:1 (offset 39)
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 39)
+   |  |  position: 3:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -97,20 +97,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 4:10 (offset 60)
+   |  |  |  |  |  |  |  position: 4:10
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'k'
-   |  |  |  |  |  |  |  position: 4:2 (offset 52)
+   |  |  |  |  |  |  |  position: 4:2
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 4:2 (offset 52)
-   |  |  |  |  position: 4:1 (offset 51)
+   |  |  |  |  |  |  position: 4:2
+   |  |  |  |  position: 4:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 4:16 (offset 66)
+   |  |  |  |  position: 4:16
    |  |  |  byRef: false
-   |  |  |  position: 4:1 (offset 51)
+   |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1 (offset 51)
-   position: 1:1 (offset 0)
+   |  |  position: 4:1
+   position: 1:1

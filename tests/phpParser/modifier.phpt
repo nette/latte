@@ -32,41 +32,41 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'truncate'
-   |  |  |  position: 1:2 (offset 1)
+   |  |  |  position: 1:2
    |  |  args: array (2)
    |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 10
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 1:12 (offset 11)
+   |  |  |  |  |  position: 1:12
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:12 (offset 11)
+   |  |  |  |  position: 1:12
    |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:17 (offset 16)
+   |  |  |  |  |  |  position: 1:17
    |  |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  position: 1:20 (offset 19)
+   |  |  |  |  |  |  |  position: 1:20
    |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  position: 1:19 (offset 18)
-   |  |  |  |  |  position: 1:17 (offset 16)
+   |  |  |  |  |  |  position: 1:19
+   |  |  |  |  |  position: 1:17
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:16 (offset 15)
-   |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:16
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'trim'
-   |  |  |  position: 1:27 (offset 26)
+   |  |  |  position: 1:27
    |  |  args: array (0)
-   |  |  position: 1:26 (offset 25)
+   |  |  position: 1:26
    escape: false
    check: true
-   position: 1:1 (offset 0)
+   position: 1:1

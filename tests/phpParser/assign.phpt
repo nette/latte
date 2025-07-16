@@ -54,280 +54,280 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 2:1 (offset 20)
+   |  |  |  |  position: 2:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 2:6 (offset 25)
+   |  |  |  |  position: 2:6
    |  |  |  byRef: false
-   |  |  |  position: 2:1 (offset 20)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 20)
+   |  |  position: 2:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 5:1 (offset 52)
+   |  |  |  |  position: 5:1
    |  |  |  operator: '&'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 5:7 (offset 58)
-   |  |  |  position: 5:1 (offset 52)
+   |  |  |  |  position: 5:7
+   |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1 (offset 52)
+   |  |  position: 5:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 6:1 (offset 62)
+   |  |  |  |  position: 6:1
    |  |  |  operator: '|'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 6:7 (offset 68)
-   |  |  |  position: 6:1 (offset 62)
+   |  |  |  |  position: 6:7
+   |  |  |  position: 6:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1 (offset 62)
+   |  |  position: 6:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 7:1 (offset 72)
+   |  |  |  |  position: 7:1
    |  |  |  operator: '^'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 7:7 (offset 78)
-   |  |  |  position: 7:1 (offset 72)
+   |  |  |  |  position: 7:7
+   |  |  |  position: 7:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 7:1 (offset 72)
+   |  |  position: 7:1
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 8:1 (offset 82)
+   |  |  |  |  position: 8:1
    |  |  |  operator: '.'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 8:7 (offset 88)
-   |  |  |  position: 8:1 (offset 82)
+   |  |  |  |  position: 8:7
+   |  |  |  position: 8:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 8:1 (offset 82)
+   |  |  position: 8:1
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 9:1 (offset 92)
+   |  |  |  |  position: 9:1
    |  |  |  operator: '/'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 9:7 (offset 98)
-   |  |  |  position: 9:1 (offset 92)
+   |  |  |  |  position: 9:7
+   |  |  |  position: 9:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 9:1 (offset 92)
+   |  |  position: 9:1
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 10:1 (offset 102)
+   |  |  |  |  position: 10:1
    |  |  |  operator: '-'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 10:7 (offset 108)
-   |  |  |  position: 10:1 (offset 102)
+   |  |  |  |  position: 10:7
+   |  |  |  position: 10:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 10:1 (offset 102)
+   |  |  position: 10:1
    |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 11:1 (offset 112)
+   |  |  |  |  position: 11:1
    |  |  |  operator: '%'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 11:7 (offset 118)
-   |  |  |  position: 11:1 (offset 112)
+   |  |  |  |  position: 11:7
+   |  |  |  position: 11:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 11:1 (offset 112)
+   |  |  position: 11:1
    |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 12:1 (offset 122)
+   |  |  |  |  position: 12:1
    |  |  |  operator: '*'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 12:7 (offset 128)
-   |  |  |  position: 12:1 (offset 122)
+   |  |  |  |  position: 12:7
+   |  |  |  position: 12:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 12:1 (offset 122)
+   |  |  position: 12:1
    |  9 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 13:1 (offset 132)
+   |  |  |  |  position: 13:1
    |  |  |  operator: '+'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 13:7 (offset 138)
-   |  |  |  position: 13:1 (offset 132)
+   |  |  |  |  position: 13:7
+   |  |  |  position: 13:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 13:1 (offset 132)
+   |  |  position: 13:1
    |  10 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 14:1 (offset 142)
+   |  |  |  |  position: 14:1
    |  |  |  operator: '<<'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 14:8 (offset 149)
-   |  |  |  position: 14:1 (offset 142)
+   |  |  |  |  position: 14:8
+   |  |  |  position: 14:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 14:1 (offset 142)
+   |  |  position: 14:1
    |  11 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 15:1 (offset 153)
+   |  |  |  |  position: 15:1
    |  |  |  operator: '>>'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 15:8 (offset 160)
-   |  |  |  position: 15:1 (offset 153)
+   |  |  |  |  position: 15:8
+   |  |  |  position: 15:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 15:1 (offset 153)
+   |  |  position: 15:1
    |  12 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 16:1 (offset 164)
+   |  |  |  |  position: 16:1
    |  |  |  operator: '**'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 16:8 (offset 171)
-   |  |  |  position: 16:1 (offset 164)
+   |  |  |  |  position: 16:8
+   |  |  |  position: 16:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 16:1 (offset 164)
+   |  |  position: 16:1
    |  13 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 17:1 (offset 175)
+   |  |  |  |  position: 17:1
    |  |  |  operator: '??'
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 17:8 (offset 182)
-   |  |  |  position: 17:1 (offset 175)
+   |  |  |  |  position: 17:8
+   |  |  |  position: 17:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 17:1 (offset 175)
+   |  |  position: 17:1
    |  14 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 20:1 (offset 208)
+   |  |  |  |  position: 20:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 20:6 (offset 213)
+   |  |  |  |  |  position: 20:6
    |  |  |  |  operator: '*'
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\AssignOpNode
    |  |  |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'c'
-   |  |  |  |  |  |  position: 20:12 (offset 219)
+   |  |  |  |  |  |  position: 20:12
    |  |  |  |  |  operator: '**'
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'd'
-   |  |  |  |  |  |  position: 20:19 (offset 226)
-   |  |  |  |  |  position: 20:12 (offset 219)
-   |  |  |  |  position: 20:6 (offset 213)
+   |  |  |  |  |  |  position: 20:19
+   |  |  |  |  |  position: 20:12
+   |  |  |  |  position: 20:6
    |  |  |  byRef: false
-   |  |  |  position: 20:1 (offset 208)
+   |  |  |  position: 20:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 20:1 (offset 208)
+   |  |  position: 20:1
    |  15 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 23:1 (offset 251)
+   |  |  |  |  position: 23:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 23:7 (offset 257)
+   |  |  |  |  position: 23:7
    |  |  |  byRef: true
-   |  |  |  position: 23:1 (offset 251)
+   |  |  |  position: 23:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 23:1 (offset 251)
+   |  |  position: 23:1
    |  16 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\PreOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 26:3 (offset 278)
+   |  |  |  |  position: 26:3
    |  |  |  operator: '++'
-   |  |  |  position: 26:1 (offset 276)
+   |  |  |  position: 26:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 26:1 (offset 276)
+   |  |  position: 26:1
    |  17 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\PostOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 27:1 (offset 282)
+   |  |  |  |  position: 27:1
    |  |  |  operator: '++'
-   |  |  |  position: 27:1 (offset 282)
+   |  |  |  position: 27:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 27:1 (offset 282)
+   |  |  position: 27:1
    |  18 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\PreOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 28:3 (offset 290)
+   |  |  |  |  position: 28:3
    |  |  |  operator: '--'
-   |  |  |  position: 28:1 (offset 288)
+   |  |  |  position: 28:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 28:1 (offset 288)
+   |  |  position: 28:1
    |  19 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\PostOpNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 29:1 (offset 294)
+   |  |  |  |  position: 29:1
    |  |  |  operator: '--'
-   |  |  |  position: 29:1 (offset 294)
+   |  |  |  position: 29:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 29:1 (offset 294)
-   position: 2:1 (offset 20)
+   |  |  position: 29:1
+   position: 2:1

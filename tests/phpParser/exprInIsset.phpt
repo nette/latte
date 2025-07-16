@@ -27,13 +27,13 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  vars: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 1:8 (offset 7)
+   |  |  |  |  |  position: 1:8
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 1:15 (offset 14)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  |  position: 1:15
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
-   position: 1:1 (offset 0)
+   |  |  position: 1:1
+   position: 1:1

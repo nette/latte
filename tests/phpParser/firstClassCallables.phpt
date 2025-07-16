@@ -29,37 +29,37 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'foo'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 1:1 (offset 0)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:1
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallableNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'this'
-   |  |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  position: 2:1
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'foo'
-   |  |  |  |  position: 2:8 (offset 17)
-   |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  position: 2:8
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 10)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallableNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 3:1 (offset 27)
+   |  |  |  |  position: 3:1
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'foo'
-   |  |  |  |  position: 3:4 (offset 30)
-   |  |  |  position: 3:1 (offset 27)
+   |  |  |  |  position: 3:4
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 27)
-   position: 1:1 (offset 0)
+   |  |  position: 3:1
+   position: 1:1

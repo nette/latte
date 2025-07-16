@@ -35,36 +35,36 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  |  position: 1:9 (offset 8)
+   |  |  |  |  |  |  |  |  |  |  position: 1:9
    |  |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  |  position: 1:9 (offset 8)
+   |  |  |  |  |  |  |  |  |  position: 1:9
    |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  |  position: 1:12 (offset 11)
+   |  |  |  |  |  |  |  |  |  |  position: 1:12
    |  |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  |  position: 1:12 (offset 11)
-   |  |  |  |  |  |  |  position: 1:8 (offset 7)
+   |  |  |  |  |  |  |  |  |  position: 1:12
+   |  |  |  |  |  |  |  position: 1:8
    |  |  |  |  |  |  operator: '+'
    |  |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  items: array (0)
-   |  |  |  |  |  |  |  position: 1:17 (offset 16)
-   |  |  |  |  |  |  position: 1:8 (offset 7)
+   |  |  |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  position: 1:8
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:21 (offset 20)
-   |  |  |  |  |  position: 1:7 (offset 6)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  |  |  position: 1:21
+   |  |  |  |  |  position: 1:7
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
@@ -74,39 +74,39 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  value: 'b'
-   |  |  |  |  |  |  |  |  |  position: 2:15 (offset 39)
+   |  |  |  |  |  |  |  |  |  position: 2:15
    |  |  |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  value: 'a'
-   |  |  |  |  |  |  |  |  |  position: 2:8 (offset 32)
+   |  |  |  |  |  |  |  |  |  position: 2:8
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 2:8 (offset 32)
-   |  |  |  |  |  |  position: 2:7 (offset 31)
+   |  |  |  |  |  |  |  |  position: 2:8
+   |  |  |  |  |  |  position: 2:7
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 2:21 (offset 45)
+   |  |  |  |  |  |  position: 2:21
    |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  position: 2:7 (offset 31)
-   |  |  |  position: 2:1 (offset 25)
+   |  |  |  |  |  position: 2:7
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 25)
+   |  |  position: 2:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'str'
-   |  |  |  |  |  |  position: 3:7 (offset 55)
+   |  |  |  |  |  |  position: 3:7
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 3:14 (offset 62)
+   |  |  |  |  |  |  position: 3:14
    |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  position: 3:7 (offset 55)
-   |  |  |  position: 3:1 (offset 49)
+   |  |  |  |  |  position: 3:7
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 49)
-   position: 1:1 (offset 0)
+   |  |  position: 3:1
+   position: 1:1

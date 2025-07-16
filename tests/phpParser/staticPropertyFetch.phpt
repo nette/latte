@@ -32,46 +32,46 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 2:1 (offset 31)
+   |  |  |  |  position: 2:1
    |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 2:4 (offset 34)
-   |  |  |  position: 2:1 (offset 31)
+   |  |  |  |  position: 2:4
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 31)
+   |  |  position: 2:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 3:1 (offset 38)
+   |  |  |  |  position: 3:1
    |  |  |  name: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'b'
-   |  |  |  |  position: 3:6 (offset 43)
-   |  |  |  position: 3:1 (offset 38)
+   |  |  |  |  position: 3:6
+   |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1 (offset 38)
+   |  |  position: 3:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 6:1 (offset 69)
+   |  |  |  |  |  position: 6:1
    |  |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 6:4 (offset 72)
-   |  |  |  |  position: 6:1 (offset 69)
+   |  |  |  |  |  position: 6:4
+   |  |  |  |  position: 6:1
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'c'
-   |  |  |  |  position: 6:7 (offset 75)
-   |  |  |  position: 6:1 (offset 69)
+   |  |  |  |  position: 6:7
+   |  |  |  position: 6:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1 (offset 69)
-   position: 2:1 (offset 31)
+   |  |  position: 6:1
+   position: 2:1

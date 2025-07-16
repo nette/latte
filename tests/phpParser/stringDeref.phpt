@@ -27,40 +27,40 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'abc'
-   |  |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:1
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 2
    |  |  |  |  kind: 10
-   |  |  |  |  position: 1:7 (offset 6)
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  position: 1:7
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'abc'
-   |  |  |  |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  |  |  position: 2:1
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 2:7 (offset 16)
-   |  |  |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  |  |  position: 2:7
+   |  |  |  |  |  position: 2:1
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 0
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 2:10 (offset 19)
-   |  |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  |  position: 2:10
+   |  |  |  |  position: 2:1
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 2:13 (offset 22)
-   |  |  |  position: 2:1 (offset 10)
+   |  |  |  |  position: 2:13
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 10)
-   position: 1:1 (offset 0)
+   |  |  position: 2:1
+   position: 1:1

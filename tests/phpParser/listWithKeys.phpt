@@ -30,32 +30,32 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  position: 1:13 (offset 12)
+   |  |  |  |  |  |  |  position: 1:13
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'a'
-   |  |  |  |  |  |  |  position: 1:6 (offset 5)
+   |  |  |  |  |  |  |  position: 1:6
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 1:6 (offset 5)
-   |  |  |  |  position: 1:1 (offset 0)
+   |  |  |  |  |  |  position: 1:6
+   |  |  |  |  position: 1:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  items: array (1)
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'b'
-   |  |  |  |  |  |  |  position: 1:27 (offset 26)
+   |  |  |  |  |  |  |  position: 1:27
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'a'
-   |  |  |  |  |  |  |  position: 1:20 (offset 19)
+   |  |  |  |  |  |  |  position: 1:20
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 1:20 (offset 19)
-   |  |  |  |  position: 1:19 (offset 18)
+   |  |  |  |  |  |  position: 1:20
+   |  |  |  |  position: 1:19
    |  |  |  byRef: false
-   |  |  |  position: 1:1 (offset 0)
+   |  |  |  position: 1:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1 (offset 0)
+   |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -66,35 +66,35 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  |  |  |  name: 'c'
-   |  |  |  |  |  |  |  |  |  |  position: 2:24 (offset 55)
+   |  |  |  |  |  |  |  |  |  |  position: 2:24
    |  |  |  |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  |  |  |  position: 2:18 (offset 49)
+   |  |  |  |  |  |  |  |  |  |  position: 2:18
    |  |  |  |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  |  |  |  position: 2:18 (offset 49)
-   |  |  |  |  |  |  |  position: 2:13 (offset 44)
+   |  |  |  |  |  |  |  |  |  position: 2:18
+   |  |  |  |  |  |  |  position: 2:13
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'a'
-   |  |  |  |  |  |  |  position: 2:6 (offset 37)
+   |  |  |  |  |  |  |  position: 2:6
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 2:6 (offset 37)
+   |  |  |  |  |  |  position: 2:6
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'e'
-   |  |  |  |  |  |  |  position: 2:36 (offset 67)
+   |  |  |  |  |  |  |  position: 2:36
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'd'
-   |  |  |  |  |  |  |  position: 2:29 (offset 60)
+   |  |  |  |  |  |  |  position: 2:29
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 2:29 (offset 60)
-   |  |  |  |  position: 2:1 (offset 32)
+   |  |  |  |  |  |  position: 2:29
+   |  |  |  |  position: 2:1
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 2:42 (offset 73)
+   |  |  |  |  position: 2:42
    |  |  |  byRef: false
-   |  |  |  position: 2:1 (offset 32)
+   |  |  |  position: 2:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1 (offset 32)
-   position: 1:1 (offset 0)
+   |  |  position: 2:1
+   position: 1:1

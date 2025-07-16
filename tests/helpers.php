@@ -62,7 +62,7 @@ function exportNode(Node $node): string
 {
 	$exporters = [
 		Position::class => function (Position $pos, Tracy\Dumper\Value $value) {
-			$value->value = $pos->line . ':' . $pos->column . ' (offset ' . $pos->offset . ')';
+			$value->value = $pos->line . ':' . $pos->column;
 		},
 	];
 	$dump = Dumper::toText($node, [Dumper::HASH => false, Dumper::DEPTH => 20, Dumper::OBJECT_EXPORTERS => $exporters]);
