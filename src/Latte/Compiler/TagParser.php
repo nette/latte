@@ -33,12 +33,12 @@ final class TagParser extends TagParserData
 
 	private const SymbolNone = -1;
 
-	public TokenStream /*readonly*/ $stream;
+	public TokenStream $stream;
 	public string $text;
 
 	/** @var \SplObjectStorage<Expression\ArrayNode> */
 	protected \SplObjectStorage $shortArrays;
-	private int /*readonly*/ $offsetDelta;
+	private int $offsetDelta;
 
 
 	public function __construct(array $tokens)
