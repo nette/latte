@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Runtime;
 
-use function strtolower;
+use function implode, is_array, is_string, str_contains, str_replace, strncmp, strtolower;
 
 
 /**
@@ -18,6 +18,49 @@ use function strtolower;
  */
 final class HtmlHelpers
 {
+	/**
+	 * Formats HTML attribute value based on attribute type and value type.
+	 */
+	public static function formatAttribute(string $name, mixed $value): ?string
+	{
+		if ($value === null || $value === false) {
+			return null;
+
+		} elseif ($value === true) {
+			return $name;
+
+		} elseif (is_array($value)) {
+			$tmp = null;
+			foreach ($value as $k => $v) {
+				if ($v != null) { // intentionally ==, skip nulls & empty string
+					//  composite 'style' vs. 'others'
+					$tmp[] = $v === true
+						? $k
+						: (is_string($k) ? $k . ':' . $v : $v);
+				}
+			}
+
+			if ($tmp === null) {
+				return null;
+			}
+
+			$value = implode($name === 'style' || !strncmp($name, 'on', 2) ? ';' : ' ', $tmp);
+
+		} else {
+			$value = (string) $value;
+		}
+
+		$q = !str_contains($value, '"') ? '"' : "'";
+		return $name . '=' . $q
+			. str_replace(
+				['&', $q, '<'],
+				['&amp;', $q === '"' ? '&quot;' : '&apos;', '<'],
+				$value,
+			)
+			. $q;
+	}
+
+
 	/**
 	 * Checks if the given tag name represents a void (empty) HTML element.
 	 */
