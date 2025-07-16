@@ -22,7 +22,7 @@ class PreOpNode extends ExpressionNode
 
 	public function __construct(
 		public ExpressionNode $var,
-		public /*readonly*/ string $operator,
+		public string $operator,
 		public ?Position $position = null,
 	) {
 		if (!isset(self::Ops[$this->operator])) {

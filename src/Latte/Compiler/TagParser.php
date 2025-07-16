@@ -35,12 +35,12 @@ final class TagParser
 
 	private const SymbolNone = -1;
 
-	public TokenStream /*readonly*/ $stream;
+	public readonly TokenStream $stream;
 	public string $text;
 
 	/** @var \SplObjectStorage<Expression\ArrayNode> */
 	protected \SplObjectStorage $shortArrays;
-	private int /*readonly*/ $offsetDelta;
+	private readonly int $offsetDelta;
 
 
 	public function __construct(array $tokens)
