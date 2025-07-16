@@ -85,24 +85,28 @@ class ElementNode extends AreaNode
 
 	public function print(PrintContext $context): string
 	{
-		$res = $this->endTagVar = null;
+		$this->endTagVar = null;
+		if (!$this->content) {
+			return $this->tagNode->print($context);
+		}
+
 		if ($this->captureTagName || $this->variableName) {
 			$endTag = $this->endTagVar = '$ʟ_tag[' . $context->generateId() . ']';
 			$res = "$this->endTagVar = '';";
 		} else {
 			$endTag = var_export('</' . $this->name . '>', true);
+			$res = '';
 		}
 
 		$res .= $this->tagNode->print($context); // calls $this->printStartTag()
 
-		if ($this->content) {
-			$context->beginEscape()->enterHtmlText($this);
-			$content = $this->content->print($context);
-			$context->restoreEscape();
-			$res .= $this->breakable
-				? 'try { ' . $content . ' } finally { echo ' . $endTag . '; } '
-				: $content . 'echo ' . $endTag . ';';
-		}
+		$context->beginEscape()->enterHtmlText($this);
+		$content = $this->content->print($context);
+		$context->restoreEscape();
+
+		$res .= $this->breakable
+			? 'try { ' . $content . ' } finally { echo ' . $endTag . '; } '
+			: $content . ' echo ' . $endTag . ';';
 
 		return $res;
 	}
@@ -111,26 +115,31 @@ class ElementNode extends AreaNode
 	private function printStartTag(PrintContext $context): string
 	{
 		$context->beginEscape()->enterHtmlTag($this->name);
-		$res = "echo '<';";
 
-		if ($this->endTagVar) {
-			$expr = $this->variableName
-				? 'LR\Filters::safeTag('
-					. $this->variableName->print($context)
-					. ($this->contentType === ContentType::Xml ? ', true' : '')
-					. ')'
-				: var_export($this->name, true);
-			$res .= "echo \$ʟ_tmp = $expr /* line {$this->position->line} */;"
-				. "{$this->endTagVar} = '</' . \$ʟ_tmp . '>' . {$this->endTagVar};";
-		} else {
-			$res .= 'echo ' . var_export($this->name, true) . ';';
-		}
+		$res = $this->variableName
+			? $context->format(
+				<<<'XX'
+					$ʟ_tmp = LR\Filters::safeTag(%node, %raw?);
+					%raw
+					echo '<', $ʟ_tmp %line;
+					%node
+					echo %dump;
+					XX,
+				$this->variableName,
+				$this->contentType === ContentType::Xml ? 'true' : '',
+				$this->endTagVar ? "$this->endTagVar = '</' . \$ʟ_tmp . '>' . $this->endTagVar;" : '',
+				$this->position,
+				$this->attributes,
+				$this->selfClosing ? '/>' : '>',
+			)
+			: $context->format(
+				'%raw echo %dump; %node echo %dump;',
+				$this->endTagVar ? $this->endTagVar . ' = ' . $context->encodeString("</$this->name>") . " . $this->endTagVar;" : '',
+				"<$this->name",
+				$this->attributes,
+				$this->selfClosing ? '/>' : '>',
+			);
 
-		foreach ($this->attributes?->children ?? [] as $attr) {
-			$res .= $attr->print($context);
-		}
-
-		$res .= "echo '" . ($this->selfClosing ? '/>' : '>') . "';";
 		$context->restoreEscape();
 		return $res;
 	}

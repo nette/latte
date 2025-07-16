@@ -118,10 +118,8 @@ final class Template%a% extends Latte\Runtime\Template
 	';
 		$ʟ_tag[0] = '';
 		if (true) /* line %d% */ {
-			echo '<';
-			echo $ʟ_tmp = 'li' /* line %d% */;
-			$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
-			echo '>';
+			$ʟ_tag[0] = '</li>' . $ʟ_tag[0];
+			echo '<li>';
 		}
 		echo '
 		';
@@ -237,20 +235,16 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		$ʟ_tag[1] = '';
 		if (true) /* line %d% */ {
-			echo '<';
-			echo $ʟ_tmp = 'b' /* line %d% */;
-			$ʟ_tag[1] = '</' . $ʟ_tmp . '>' . $ʟ_tag[1];
-			echo '>';
+			$ʟ_tag[1] = '</b>' . $ʟ_tag[1];
+			echo '<b>';
 		}
 		echo 'bold';
 		echo $ʟ_tag[1];
 		echo ' ';
 		$ʟ_tag[2] = '';
 		if (false) /* line %d% */ {
-			echo '<';
-			echo $ʟ_tmp = 'b' /* line %d% */;
-			$ʟ_tag[2] = '</' . $ʟ_tmp . '>' . $ʟ_tag[2];
-			echo '>';
+			$ʟ_tag[2] = '</b>' . $ʟ_tag[2];
+			echo '<b>';
 		}
 		echo 'normal';
 		echo $ʟ_tag[2];
@@ -259,9 +253,8 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		$ʟ_tag[3] = '';
 		if (true) /* line %d% */ {
-			echo '<';
-			echo $ʟ_tmp = 'b' /* line %d% */;
-			$ʟ_tag[3] = '</' . $ʟ_tmp . '>' . $ʟ_tag[3];
+			$ʟ_tag[3] = '</b>' . $ʟ_tag[3];
+			echo '<b';
 			echo ($ʟ_tmp = array_filter(['first'])) ? ' class="' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* line %d% */;
 			echo '>';
 		}
@@ -283,10 +276,8 @@ final class Template%a% extends Latte\Runtime\Template
 				$ʟ_tag[4] = '';
 				foreach ([1] as $foo) /* line %d% */ {
 					if (0) /* line %d% */ {
-						echo '<';
-						echo $ʟ_tmp = 'span' /* line %d% */;
-						$ʟ_tag[4] = '</' . $ʟ_tmp . '>' . $ʟ_tag[4];
-						echo '>';
+						$ʟ_tag[4] = '</span>' . $ʟ_tag[4];
+						echo '<span>';
 					}
 
 				}
@@ -309,10 +300,8 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		$ʟ_tag[5] = '';
 		if (true) /* line %d% */ {
-			echo '<';
-			echo $ʟ_tmp = 'div' /* line %d% */;
-			$ʟ_tag[5] = '</' . $ʟ_tmp . '>' . $ʟ_tag[5];
-			echo '>';
+			$ʟ_tag[5] = '</div>' . $ʟ_tag[5];
+			echo '<div>';
 		}
 		echo "\n";
 		$ʟ_try[6] = [$ʟ_it ?? null];
@@ -321,10 +310,8 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '	';
 			$ʟ_tag[7] = '';
 			if (false) /* line %d% */ {
-				echo '<';
-				echo $ʟ_tmp = 'span' /* line %d% */;
-				$ʟ_tag[7] = '</' . $ʟ_tmp . '>' . $ʟ_tag[7];
-				echo '>';
+				$ʟ_tag[7] = '</span>' . $ʟ_tag[7];
+				echo '<span>';
 			}
 			echo "\n";
 			throw new Latte\Essential\RollbackException;
@@ -340,7 +327,8 @@ final class Template%a% extends Latte\Runtime\Template
 		} finally {
 			echo ob_get_clean();
 			$iterator = $ʟ_it = $ʟ_try[6][0];
-		}echo $ʟ_tag[5];
+		}
+		echo $ʟ_tag[5];
 		echo '
 
 
@@ -349,8 +337,8 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
 			try {
-				echo LR\Filters::escapeHtmlText($person) /* line 107 */;
-				if (true) /* line 107 */ break;
+				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
+				if (true) /* line %d% */ break;
 			} finally {
 				echo '</li>';
 			}
@@ -365,8 +353,8 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* line %d% */ {
 			echo '	<li>';
 			try {
-				echo LR\Filters::escapeHtmlText($person) /* line 111 */;
-				if (true) /* line 111 */ continue;
+				echo LR\Filters::escapeHtmlText($person) /* line %d% */;
+				if (true) /* line %d% */ continue;
 			} finally {
 				echo '</li>';
 			}
@@ -404,9 +392,9 @@ final class Template%a% extends Latte\Runtime\Template
 		ob_start(fn() => '');
 		try {
 			$ʟ_tag[8] = '';
-			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
+			$ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false));
 			$ʟ_tag[8] = '</' . $ʟ_tmp . '>' . $ʟ_tag[8];
+			echo '<', $ʟ_tmp /* line %d% */;
 			echo '>';
 			ob_start();
 			try {
@@ -429,9 +417,9 @@ final class Template%a% extends Latte\Runtime\Template
 		ob_start(fn() => '');
 		try {
 			$ʟ_tag[9] = '';
-			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
+			$ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false));
 			$ʟ_tag[9] = '</' . $ʟ_tmp . '>' . $ʟ_tag[9];
+			echo '<', $ʟ_tmp /* line %d% */;
 			echo '>';
 			ob_start();
 			try {
@@ -453,18 +441,18 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		if (1) /* line %d% */ {
 			$ʟ_tag[10] = '';
-			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
+			$ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false));
 			$ʟ_tag[10] = '</' . $ʟ_tmp . '>' . $ʟ_tag[10];
+			echo '<', $ʟ_tmp /* line %d% */;
 			echo '>n:tag & n:if=1';
 			echo $ʟ_tag[10];
 			echo "\n";
 		}
 		if (0) /* line %d% */ {
 			$ʟ_tag[11] = '';
-			echo '<';
-			echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false)) /* line %d% */;
+			$ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'span', false));
 			$ʟ_tag[11] = '</' . $ʟ_tmp . '>' . $ʟ_tag[11];
+			echo '<', $ʟ_tmp /* line %d% */;
 			echo '>n:tag & n:if=0';
 			echo $ʟ_tag[11];
 			echo "\n";
@@ -485,7 +473,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	/** n:block="bl" on line 18 */
+	/** n:block="bl" on line %d% */
 	public function blockBl(array $ʟ_args): void
 	{
 		extract($this->params);
