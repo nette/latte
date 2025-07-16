@@ -14,7 +14,6 @@ use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use function implode, is_array, is_string, str_contains, str_replace, strncmp;
 
 
 /**
@@ -36,65 +35,23 @@ final class NAttrNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
+		// [$ʟ_tmp[0] ?? null] === $ʟ_tmp checks if the value is an array, e.g. n:attr="$attrs"
+		$html = $context->getEscaper()->getContentType() === Latte\ContentType::Html;
 		return $context->format(
-			'$ʟ_tmp = %node;
-			echo %raw::attrs(isset($ʟ_tmp[0]) && is_array($ʟ_tmp[0]) ? $ʟ_tmp[0] : $ʟ_tmp, %dump) %line;',
-			$this->args,
-			self::class,
-			$context->getEscaper()->getContentType() === Latte\ContentType::Xml,
-			$this->position,
-		);
-	}
-
-
-	/** @internal */
-	public static function attrs($attrs, bool $xml): string
-	{
-		if (!is_array($attrs)) {
-			return '';
-		}
-
-		$s = '';
-		foreach ($attrs as $key => $value) {
-			if ($value === null || $value === false) {
-				continue;
-
-			} elseif ($value === true) {
-				$s .= ' ' . $key . ($xml ? '="' . $key . '"' : '');
-				continue;
-
-			} elseif (is_array($value)) {
-				$tmp = null;
-				foreach ($value as $k => $v) {
-					if ($v != null) { // intentionally ==, skip nulls & empty string
-						//  composite 'style' vs. 'others'
-						$tmp[] = $v === true
-							? $k
-							: (is_string($k) ? $k . ':' . $v : $v);
+			<<<'XX'
+				$ʟ_tmp = %node;
+				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
+				foreach ((array) $ʟ_tmp as $ʟ_nm => $ʟ_v) {
+					if ($ʟ_tmp = LR\%raw::formatAttribute($ʟ_nm, $ʟ_v)) {
+						echo ' ', $ʟ_tmp %line;
 					}
 				}
 
-				if ($tmp === null) {
-					continue;
-				}
-
-				$value = implode($key === 'style' || !strncmp($key, 'on', 2) ? ';' : ' ', $tmp);
-
-			} else {
-				$value = (string) $value;
-			}
-
-			$q = !str_contains($value, '"') ? '"' : "'";
-			$s .= ' ' . $key . '=' . $q
-				. str_replace(
-					['&', $q, '<'],
-					['&amp;', $q === '"' ? '&quot;' : '&#39;', $xml ? '&lt;' : '<'],
-					$value,
-				)
-				. $q;
-		}
-
-		return $s;
+				XX,
+			$this->args,
+			$html ? 'HtmlHelpers' : 'XmlHelpers',
+			$this->position,
+		);
 	}
 
 
