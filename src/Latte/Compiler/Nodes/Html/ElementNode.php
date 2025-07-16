@@ -111,26 +111,31 @@ class ElementNode extends AreaNode
 	private function printStartTag(PrintContext $context): string
 	{
 		$context->beginEscape()->enterHtmlTag($this->name);
-		$res = "echo '<';";
 
-		if ($this->endTagVar) {
-			$expr = $this->variableName
-				? 'LR\Filters::safeTag('
-					. $this->variableName->print($context)
-					. ($this->contentType === ContentType::Xml ? ', true' : '')
-					. ')'
-				: var_export($this->name, true);
-			$res .= "echo \$ʟ_tmp = $expr /* line {$this->position->line} */;"
-				. "{$this->endTagVar} = '</' . \$ʟ_tmp . '>' . {$this->endTagVar};";
-		} else {
-			$res .= 'echo ' . var_export($this->name, true) . ';';
-		}
+		$res = $this->variableName
+			? $context->format(
+				<<<'XX'
+					$ʟ_tmp = LR\Filters::safeTag(%node, %raw?);
+					echo '<', $ʟ_tmp %line;
+					%raw = '</' . $ʟ_tmp . '>' . %3.raw;
+					%node
+					echo %dump;
+					XX,
+				$this->variableName,
+				$this->contentType === ContentType::Xml ? 'true' : '',
+				$this->position,
+				$this->endTagVar,
+				$this->attributes,
+				$this->selfClosing ? '/>' : '>',
+			)
+			: $context->format(
+				'echo %dump; %node echo %dump; %raw',
+				"<$this->name",
+				$this->attributes,
+				$this->selfClosing ? '/>' : '>',
+				$this->endTagVar ? $this->endTagVar . ' = ' . $context->encodeString("</$this->name>") . " . $this->endTagVar;" : '',
+			);
 
-		foreach ($this->attributes?->children ?? [] as $attr) {
-			$res .= $attr->print($context);
-		}
-
-		$res .= "echo '" . ($this->selfClosing ? '/>' : '>') . "';";
 		$context->restoreEscape();
 		return $res;
 	}

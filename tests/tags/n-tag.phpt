@@ -74,13 +74,14 @@ Assert::match(
 	<<<'XX'
 		%A%
 				$ʟ_tag[0] = '';
-				echo '<';
-				echo $ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'h' . 1, false)) /* line 1 */;
+				$ʟ_tmp = LR\Filters::safeTag(Latte\Essential\Nodes\NTagNode::check('div', 'h' . 1, false));
+				echo '<', $ʟ_tmp /* line 1 */;
 				$ʟ_tag[0] = '</' . $ʟ_tmp . '>' . $ʟ_tag[0];
 				echo ' class="bar" ';
 				if (isset($id)) /* line 1 */ {
 					echo 'id="content"';
 				}
+
 				echo '>';
 				echo $ʟ_tag[0];
 		%A%
