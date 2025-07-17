@@ -62,8 +62,9 @@ final class XmlHelpers
 	/**
 	 * Checks that the HTML tag name can be changed.
 	 */
-	public static function validateTagChange(mixed $name): string
+	public static function validateTagChange(mixed $name, ?string $origName = null): string
 	{
+		$name ??= $origName;
 		if (!is_string($name)) {
 			throw new Latte\RuntimeException('Tag name must be string, ' . get_debug_type($name) . ' given');
 
