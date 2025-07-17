@@ -13,7 +13,7 @@ use Latte;
 use Latte\ContentType;
 use Latte\RuntimeException;
 use Nette;
-use function addcslashes, get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_string, json_encode, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtoupper, strtr, substr;
+use function addcslashes, html_entity_decode, htmlspecialchars, json_encode, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtoupper, strtr, substr;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -257,21 +257,5 @@ class Filters
 			: (string) $s;
 
 		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';
-	}
-
-
-	/**
-	 * Validates HTML tag name.
-	 */
-	public static function safeTag(mixed $name, bool $xml = false): string
-	{
-		if (!is_string($name)) {
-			throw new Latte\RuntimeException('Tag name must be string, ' . get_debug_type($name) . ' given');
-		} elseif (!preg_match('~' . Latte\Compiler\TemplateLexer::ReTagName . '$~DA', $name)) {
-			throw new Latte\RuntimeException("Invalid tag name '$name'");
-		} elseif (!$xml && in_array(strtolower($name), ['style', 'script'], true)) {
-			throw new Latte\RuntimeException("Forbidden variable tag name <$name>");
-		}
-		return $name;
 	}
 }

@@ -9,7 +9,8 @@ declare(strict_types=1);
 
 namespace Latte\Runtime;
 
-use function implode, is_array, is_string, str_contains, str_replace, strncmp, strtolower;
+use Latte;
+use function get_debug_type, implode, in_array, is_array, is_string, preg_match, str_contains, str_replace, strncmp, strtolower;
 
 
 /**
@@ -71,5 +72,23 @@ final class HtmlHelpers
 			'col' => 1, 'link' => 1, 'param' => 1, 'basefont' => 1, 'frame' => 1, 'isindex' => 1, 'wbr' => 1, 'command' => 1, 'track' => 1,
 		];
 		return isset($names[strtolower($name)]);
+	}
+
+
+	/**
+	 * Checks that the HTML tag name can be changed.
+	 */
+	public static function validateTagChange(mixed $name): string
+	{
+		if (!is_string($name)) {
+			throw new Latte\RuntimeException('Tag name must be string, ' . get_debug_type($name) . ' given');
+
+		} elseif (!preg_match('~' . Latte\Compiler\TemplateLexer::ReTagName . '$~DAu', $name)) {
+			throw new Latte\RuntimeException("Invalid tag name '$name'");
+
+		} elseif (in_array(strtolower($name), ['style', 'script'], true)) {
+			throw new Latte\RuntimeException("Forbidden: Cannot change element to <$name>");
+		}
+		return $name;
 	}
 }
