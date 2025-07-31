@@ -9,10 +9,10 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	A->length,
-	A->length(),
-	A[0],
-	A[0][1][2],
+	\A->length,
+	\A->length(),
+	\A[0],
+	\A[0][1][2],
 	x\foo[0],
 
 	A::B[0],
@@ -39,10 +39,10 @@ Assert::same(
 );
 
 __halt_compiler();
-A->length,
-A->length(),
-A[0],
-A[0][1][2],
+\A->length,
+\A->length(),
+\A[0],
+\A[0][1][2],
 x\foo[0],
 A::B[0],
 A::B[0][1][2],
