@@ -49,7 +49,7 @@ Assert::exception(
 // constant
 const FOO = 123;
 
-$node = parse('FOO');
+$node = parse('\FOO');
 Assert::exception(
 	fn() => NodeHelpers::toValue($node),
 	InvalidArgumentException::class,
@@ -60,7 +60,7 @@ Assert::equal(
 	NodeHelpers::toValue($node, constants: true),
 );
 
-$node = parse('BAR');
+$node = parse('\BAR');
 Assert::exception(
 	fn() => NodeHelpers::toValue($node, constants: true),
 	InvalidArgumentException::class,

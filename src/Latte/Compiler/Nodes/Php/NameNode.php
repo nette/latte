@@ -35,6 +35,9 @@ class NameNode extends Node
 			$this->kind = self::KindFullyQualified;
 			$this->name = substr($name, 1);
 		} else {
+			if ($kind === -1 && !str_starts_with($name, '__')) {
+				trigger_error("Using unqualified constant '$name' is deprecated. Use '\\$name' with a leading backslash $position", E_USER_DEPRECATED);
+			}
 			$this->kind = self::KindNormal;
 		}
 	}

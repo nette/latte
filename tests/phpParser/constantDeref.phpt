@@ -9,10 +9,10 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	A->length,
-	A->length(),
-	A[0],
-	A[0][1][2],
+	\A->length,
+	\A->length(),
+	\A[0],
+	\A[0][1][2],
 	x\foo[0],
 
 	A::B[0],
@@ -45,12 +45,12 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
-   |  |  |  |  |  kind: 1
+   |  |  |  |  |  kind: 2
    |  |  |  |  |  position: 1:1
    |  |  |  |  position: 1:1
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'length'
-   |  |  |  |  position: 1:4
+   |  |  |  |  position: 1:5
    |  |  |  nullsafe: false
    |  |  |  position: 1:1
    |  |  key: null
@@ -62,12 +62,12 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
-   |  |  |  |  |  kind: 1
+   |  |  |  |  |  kind: 2
    |  |  |  |  |  position: 2:1
    |  |  |  |  position: 2:1
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'length'
-   |  |  |  |  position: 2:4
+   |  |  |  |  position: 2:5
    |  |  |  args: array (0)
    |  |  |  nullsafe: false
    |  |  |  position: 2:1
@@ -80,13 +80,13 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
-   |  |  |  |  |  kind: 1
+   |  |  |  |  |  kind: 2
    |  |  |  |  |  position: 3:1
    |  |  |  |  position: 3:1
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 3:3
+   |  |  |  |  position: 3:4
    |  |  |  position: 3:1
    |  |  key: null
    |  |  byRef: false
@@ -99,23 +99,23 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  |  name: 'A'
-   |  |  |  |  |  |  |  kind: 1
+   |  |  |  |  |  |  |  kind: 2
    |  |  |  |  |  |  |  position: 4:1
    |  |  |  |  |  |  position: 4:1
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 4:3
+   |  |  |  |  |  |  position: 4:4
    |  |  |  |  |  position: 4:1
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 1
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 4:6
+   |  |  |  |  |  position: 4:7
    |  |  |  |  position: 4:1
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 2
    |  |  |  |  kind: 10
-   |  |  |  |  position: 4:9
+   |  |  |  |  position: 4:10
    |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
