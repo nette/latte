@@ -64,9 +64,9 @@ final class Passes
 		(new NodeTraverser)->traverse($node, function (Node $node) {
 			if ($node instanceof VariableNode
 				&& is_string($node->name)
-				&& (preg_match('/ʟ_|GLOBALS$|this$/A', $node->name))
+				&& (preg_match('/ʟ_|__|GLOBALS$|this$/A', $node->name))
 			) {
-				if ($node->name === 'this' && !$this->engine->isStrictParsing()) {
+				if (preg_match('/__|this$/A', $node->name) && !$this->engine->isStrictParsing()) {
 					trigger_error("Using the \$$node->name variable in the template is deprecated ($node->position)", E_USER_DEPRECATED);
 					return;
 				}
