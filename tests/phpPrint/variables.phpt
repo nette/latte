@@ -36,6 +36,7 @@ $test = <<<'XX'
 	(new A)->b,
 	(new A())->b(),
 	(new $a->b)->c,
+	new A()->foo(),
 	XX;
 
 $node = parseCode($test);
@@ -73,4 +74,5 @@ $a->b()[$c],
 $a::$b()[$c],
 (new A)->b,
 (new A)->b(),
-(new $a->b)->c
+(new $a->b)->c,
+(new A)->foo()

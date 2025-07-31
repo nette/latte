@@ -29,6 +29,15 @@ $test = <<<'XX'
 	new $test::$className,
 	new $weird[0]->foo::$className,
 
+	/* New dereference without parentheses */
+	new A()->foo,
+	new A()->foo(),
+	new A()::FOO,
+	new A()::foo(),
+	new A()::$foo,
+	new A()[0],
+	new A()(),
+
 	/* test regression introduces by new dereferencing syntax */
 	(new A),
 	XX;
@@ -42,7 +51,7 @@ Assert::same(
 
 __halt_compiler();
 Latte\Compiler\Nodes\Php\Expression\ArrayNode
-   items: array (15)
+   items: array (22)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
@@ -287,15 +296,137 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 19:1
    |  14 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
-   |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
-   |  |  |  |  name: 'A'
-   |  |  |  |  kind: 1
-   |  |  |  |  position: 22:6
-   |  |  |  args: array (0)
-   |  |  |  position: 22:2
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 22:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 22:1
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'foo'
+   |  |  |  |  position: 22:10
+   |  |  |  nullsafe: false
+   |  |  |  position: 22:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 22:1
+   |  15 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
+   |  |  |  object: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 23:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 23:1
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'foo'
+   |  |  |  |  position: 23:10
+   |  |  |  args: array (0)
+   |  |  |  nullsafe: false
+   |  |  |  position: 23:1
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 23:1
+   |  16 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ClassConstantFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 24:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 24:1
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'FOO'
+   |  |  |  |  position: 24:10
+   |  |  |  position: 24:1
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 24:1
+   |  17 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 25:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 25:1
+   |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
+   |  |  |  |  name: 'foo'
+   |  |  |  |  position: 25:10
+   |  |  |  args: array (0)
+   |  |  |  position: 25:1
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 25:1
+   |  18 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 26:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 26:1
+   |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
+   |  |  |  |  name: 'foo'
+   |  |  |  |  position: 26:10
+   |  |  |  position: 26:1
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 26:1
+   |  19 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 27:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 27:1
+   |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
+   |  |  |  |  value: 0
+   |  |  |  |  kind: 10
+   |  |  |  |  position: 27:9
+   |  |  |  position: 27:1
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 27:1
+   |  20 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
+   |  |  |  name: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  |  name: 'A'
+   |  |  |  |  |  kind: 1
+   |  |  |  |  |  position: 28:5
+   |  |  |  |  args: array (0)
+   |  |  |  |  position: 28:1
+   |  |  |  args: array (0)
+   |  |  |  position: 28:1
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 28:1
+   |  21 => Latte\Compiler\Nodes\Php\ArrayItemNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
+   |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
+   |  |  |  |  name: 'A'
+   |  |  |  |  kind: 1
+   |  |  |  |  position: 31:6
+   |  |  |  args: array (0)
+   |  |  |  position: 31:2
+   |  |  key: null
+   |  |  byRef: false
+   |  |  unpack: false
+   |  |  position: 31:1
    position: 1:1
