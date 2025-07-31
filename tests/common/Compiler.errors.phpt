@@ -291,6 +291,12 @@ Assert::exception(
 );
 
 Assert::error(
+	fn() => $latte->compile('{$__tmp}'),
+	E_USER_DEPRECATED,
+	'Using the $__tmp variable in the template is deprecated (on line 1 at column 2)',
+);
+
+Assert::error(
 	fn() => $latte->compile('{$this}'),
 	E_USER_DEPRECATED,
 	'Using the $this variable in the template is deprecated (on line 1 at column 2)',
