@@ -113,7 +113,7 @@ $template = <<<'EOD'
 	{=$obj::CONST}
 	{=($obj::CONST)()}
 	{=$obj::CONST[0]()}
-	{=CONST[0]()}
+	{=\CONST[0]()}
 	-
 	EOD;
 
