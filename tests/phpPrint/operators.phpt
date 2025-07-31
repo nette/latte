@@ -79,6 +79,12 @@ $test = <<<'XX'
 	$a instanceof $b,
 
 	$a in $b,
+
+	$a |> $b |> $c,
+	$a |> $b == $c,
+	$c == $a |> $b,
+	($a == $b) |> ($c == $d),
+	$a . ($b |> $c) . $d,
 	XX;
 
 $node = parseCode($test);
@@ -152,4 +158,9 @@ $a xor $b,
 $a or $b,
 $a instanceof Foo,
 $a instanceof $b,
-in_array($a, $b, true)
+in_array($a, $b, true),
+$a |> $b |> $c,
+$a |> $b == $c,
+$c == $a |> $b,
+($a == $b) |> ($c == $d),
+$a . ($b |> $c) . $d
