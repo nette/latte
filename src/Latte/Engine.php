@@ -300,11 +300,10 @@ class Engine
 	}
 
 
-	/**
-	 * Registers filter loader.
-	 */
+	#[\Deprecated('Use addFilter() instead.')]
 	public function addFilterLoader(callable $loader): static
 	{
+		trigger_error('Filter loader is deprecated, use addFilter() instead.', E_USER_DEPRECATED);
 		$this->filters->add(null, $loader);
 		return $this;
 	}
