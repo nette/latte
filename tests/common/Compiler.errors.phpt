@@ -290,6 +290,12 @@ Assert::exception(
 	'Forbidden variable $ʟ_tmp (on line 1 at column 2)',
 );
 
+Assert::error(
+	fn() => $latte->compile('{$this}'),
+	E_USER_DEPRECATED,
+	'Using the $this variable in the template is deprecated (on line 1 at column 2)',
+);
+
 Assert::exception(
 	fn() => $latte->compile('{$GLOBALS}'),
 	Latte\CompileException::class,

@@ -25,7 +25,7 @@ use Latte\Compiler\PrintContext;
 use Latte\ContentType;
 use Latte\Engine;
 use Latte\Runtime\HtmlHelpers;
-use function in_array, is_string, str_starts_with;
+use function is_string;
 
 
 final class Passes
@@ -61,12 +61,15 @@ final class Passes
 	 */
 	public function forbiddenVariablesPass(TemplateNode $node): void
 	{
-		$forbidden = $this->engine->isStrictParsing() ? ['GLOBALS', 'this'] : ['GLOBALS'];
-		(new NodeTraverser)->traverse($node, function (Node $node) use ($forbidden) {
+		(new NodeTraverser)->traverse($node, function (Node $node) {
 			if ($node instanceof VariableNode
 				&& is_string($node->name)
-				&& (str_starts_with($node->name, 'ʟ_') || in_array($node->name, $forbidden, true))
+				&& (preg_match('/ʟ_|GLOBALS$|this$/A', $node->name))
 			) {
+				if ($node->name === 'this' && !$this->engine->isStrictParsing()) {
+					trigger_error("Using the \$$node->name variable in the template is deprecated ($node->position)", E_USER_DEPRECATED);
+					return;
+				}
 				throw new CompileException("Forbidden variable \$$node->name.", $node->position);
 			}
 		});
