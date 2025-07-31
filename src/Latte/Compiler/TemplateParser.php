@@ -421,6 +421,16 @@ final class TemplateParser
 	{
 		return $this->lexer;
 	}
+	
+
+	/**
+	 * Sets tag syntax for lexer
+	 */
+	public function setSyntax(?string $syntax): static
+	{
+		$this->lexer->setSyntax($syntax);
+		return $this;
+	}
 
 
 	public function peekTag(): ?Tag
