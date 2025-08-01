@@ -425,7 +425,7 @@ final class TagParser extends TagParserData
 
 	public function convertArrayToList(Expression\ArrayNode $array): Node\ListNode
 	{
-		$this->shortArrays->detach($array);
+		unset($this->shortArrays[$array]);
 		$items = [];
 		foreach ($array->items as $item) {
 			$value = $item->value;
@@ -434,7 +434,7 @@ final class TagParser extends TagParserData
 			}
 			$value = match (true) {
 				$value instanceof Expression\TemporaryNode => $value->value,
-				$value instanceof Expression\ArrayNode && $this->shortArrays->contains($value) => $this->convertArrayToList($value),
+				$value instanceof Expression\ArrayNode && isset($this->shortArrays[$value]) => $this->convertArrayToList($value),
 				default => $value,
 			};
 			$items[] = $value
