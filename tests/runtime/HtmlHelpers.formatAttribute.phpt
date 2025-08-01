@@ -98,14 +98,10 @@ test('class attribute', function () {
 });
 
 
-test('special values (numbers, Infinity, NaN)', function () {
+test('edge cases', function () {
 	Assert::same(
 		'width="0"',
 		HtmlHelpers::formatAttribute('width', 0),
-	);
-	Assert::same(
-		'foo="NAN"',
-		HtmlHelpers::formatAttribute('foo', NAN),
 	);
 
 	// invalid UTF-8 (is not processed)

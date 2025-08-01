@@ -259,7 +259,7 @@ final class PrintContext
 			$node instanceof Expression\NotNode => '!',
 			$node instanceof Expression\TernaryNode => '?:',
 			$node instanceof Expression\AssignNode, $node instanceof Expression\AssignOpNode => '=',
-			default => null,
+			default => '',
 		}] ?? null;
 	}
 

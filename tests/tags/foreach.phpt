@@ -29,7 +29,7 @@ $template = <<<'EOD'
 
 	---
 
-	{foreach [a, b] as list($a, , [$b, list($c)])}{/foreach}
+	{foreach [['a', null, null]] as list($a, , [$b, list($c)])}{/foreach}
 
 	EOD;
 

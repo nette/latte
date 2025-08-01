@@ -558,7 +558,7 @@ abstract class TagParserData
 			206 => fn() => $this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
 			207 => function () use ($pos) {
 				$this->semValue = $this->semStack[$pos];
-				$this->shortArrays->attach($this->semValue);
+				$this->shortArrays->offsetSet($this->semValue);
 			},
 			208 => fn() => $this->semValue = Scalar\StringNode::parse($this->semStack[$pos], $this->startTokenStack[$pos]->position),
 			209 => fn() => $this->semValue = Scalar\InterpolatedStringNode::parse($this->semStack[$pos - 1], $this->startTokenStack[$pos - 2]->position),

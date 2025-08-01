@@ -222,7 +222,8 @@ final class Filters
 		if ($format === null) {
 			$xlt = ['' => \IntlDateFormatter::NONE, 'full' => \IntlDateFormatter::FULL, 'long' => \IntlDateFormatter::LONG, 'medium' => \IntlDateFormatter::MEDIUM, 'short' => \IntlDateFormatter::SHORT,
 				'relative-full' => \IntlDateFormatter::RELATIVE_FULL, 'relative-long' => \IntlDateFormatter::RELATIVE_LONG, 'relative-medium' => \IntlDateFormatter::RELATIVE_MEDIUM, 'relative-short' => \IntlDateFormatter::RELATIVE_SHORT];
-			$date ??= $time === null ? 'long' : null;
+			$time ??= '';
+			$date ??= $time === '' ? 'long' : '';
 			$formatter = new \IntlDateFormatter($this->locale, $xlt[$date], $xlt[$time]);
 		} else {
 			$formatter = new \IntlDateFormatter($this->locale, pattern: (new \IntlDatePatternGenerator($this->locale))->getBestPattern($format));
@@ -712,7 +713,7 @@ final class Filters
 	public static function last(string|array $value): mixed
 	{
 		return is_array($value)
-			? ($value[array_key_last($value)] ?? null)
+			? ($value ? $value[array_key_last($value)] : null)
 			: self::substring($value, -1);
 	}
 

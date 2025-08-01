@@ -24,6 +24,6 @@
 ---
 
 ';
-		foreach (['a', 'b'] as [$a, , [$b, [$c]]]) /* line 15 */ {
+		foreach ([['a', null, null]] as [$a, , [$b, [$c]]]) /* line 15 */ {
 		}
 %A%

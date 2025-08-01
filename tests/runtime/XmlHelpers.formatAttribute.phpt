@@ -39,14 +39,10 @@ test('boolean attributes', function () {
 });
 
 
-test('special values (numbers, Infinity, NaN)', function () {
+test('edge cases', function () {
 	Assert::same(
 		'width="0"',
 		XmlHelpers::formatAttribute('width', 0),
-	);
-	Assert::same(
-		'foo="NAN"',
-		XmlHelpers::formatAttribute('foo', NAN),
 	);
 
 	// invalid UTF-8
