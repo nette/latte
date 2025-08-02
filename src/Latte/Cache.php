@@ -33,7 +33,7 @@ final class Cache
 		// 1) We want to do as little as possible IO calls on production and also directory and file can be not writable
 		// so on Linux we include the file directly without shared lock, therefore, the file must be created atomically by renaming.
 		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
-		$file = $engine->getCacheFile($name);
+		$file = $this->generateFilePath($engine, $name);
 		$signature = $this->autoRefresh
 			? hash('xxh128', serialize($this->generateRefreshSignature($engine, $name)))
 			: null;
