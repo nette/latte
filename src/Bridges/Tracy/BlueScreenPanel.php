@@ -64,20 +64,6 @@ class BlueScreenPanel
 					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
 					. '</div></pre>',
 			];
-
-		} elseif (
-			$e
-			&& ($file = $e->getFile())
-			&& (version_compare(Tracy\Debugger::VERSION, '2.9.0', '<'))
-			&& ($mapped = self::mapLatteSourceCode($file, $e->getLine()))
-		) {
-			return [
-				'tab' => 'Template',
-				'panel' => '<p><b>File:</b> ' . Helpers::editorLink($mapped['file'], $mapped['line']) . '</p>'
-					. ($mapped['line']
-						? BlueScreen::highlightFile($mapped['file'], $mapped['line'])
-						: ''),
-			];
 		}
 
 		return null;
