@@ -103,7 +103,7 @@ final class Template%a% extends Latte\Runtime\Template
 	}
 
 
-	/** {block rand() < 5 ? a : b} on line %d% */
+	/** {block (rand() < 5 ? a : b)} on line %d% */
 	public function blockRand_5_a_b(array $ʟ_args): void
 	{
 		echo ' expression ';

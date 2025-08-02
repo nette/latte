@@ -34,7 +34,7 @@ $template = <<<'EOD'
 
 	{include static var => 30}
 
-	{include #$name . '', var => 40}
+	{include #($name . ''), var => 40}
 
 	{block local "word$name"}<div n:if="false"></div>{/block}
 

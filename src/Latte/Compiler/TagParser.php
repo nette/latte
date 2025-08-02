@@ -84,11 +84,25 @@ final class TagParser extends TagParserData
 	public function parseUnquotedStringOrExpression(bool $colon = true): ExpressionNode
 	{
 		$position = $this->stream->peek()->position;
+		$index = $this->stream->getIndex();
 		$lexer = new TagLexer;
 		$tokens = $lexer->tokenizeUnquotedString($this->text, $position, $colon, $this->offsetDelta);
 
 		if (!$tokens) {
-			return $this->parseExpression();
+			$expr = $this->parseExpression();
+			$offset = $position->offset;
+			if ($this->text[$offset - $this->offsetDelta] !== '(') {
+				for ($i = $index - $this->stream->getIndex(); $i < 0; $i++) {
+					$token = $this->stream->peek($i);
+					if ($offset < $token->position->offset) {
+						$exprText = substr($this->text, $position->offset - $this->offsetDelta, $this->stream->peek()->position->offset - $position->offset);
+						trigger_error('Expression should be placed in parentheses: (' . $exprText . ') ' . $position, E_USER_DEPRECATED);
+						break;
+					}
+					$offset += strlen($token->text);
+				}
+			}
+			return $expr;
 		}
 
 		$parser = new self($tokens);

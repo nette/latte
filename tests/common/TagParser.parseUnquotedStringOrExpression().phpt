@@ -66,9 +66,15 @@ Assert::same("'fo:o'", format('fo:o ()'));
 Assert::same("'fo:o'", format('fo:o ""'));
 Assert::same("'fo:o'", format('fo:o \foo'));
 
-// non-unquoted & following chars
-Assert::same('true ? false : null', format('true ? false'));
-Assert::same('true . false', format('true . false'));
+// non-unquoted & parentheses
+Assert::same('true ? false : null', format('(true ? false)'));
+Assert::same('true . false', format('(true . false)'));
+Assert::error(
+	fn() => format('true ? false'),
+	E_USER_DEPRECATED,
+	'Expression should be placed in parentheses: (true ? false) on line 1 at column 1',
+);
+Assert::same("' '", format("' '")); // no parentheses error
 
 // no colon
 Assert::same("'Foo'", format('Foo:CONST', false));

@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 
 	'main' => <<<'XX'
 
-		{extends true ? $ext : "undefined"}
+		{extends (true ? $ext : "undefined")}
 
 		{block content}
 			Content
