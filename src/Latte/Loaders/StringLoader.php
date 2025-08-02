@@ -65,4 +65,13 @@ class StringLoader implements Latte\Loader
 	{
 		return $this->getContent($name);
 	}
+
+
+	/**
+	 * Returns identifier used in template doc comment.
+	 */
+	public function getSourceName(string $name): ?string
+	{
+		return $this->templates === null ? null : $name;
+	}
 }

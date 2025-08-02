@@ -138,12 +138,12 @@ class Engine
 				$e = new CompileException("Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			$e->setSource(new SourceReference($name, $e->getSource()?->line, $e->getSource()?->column, $template));
+			$e->setSource(new SourceReference($this->getSourceName($name), $e->getSource()?->line, $e->getSource()?->column, $template));
 			throw $e;
 		}
 
 		if ($this->phpBinary) {
-			Compiler\PhpHelpers::checkCode($this->phpBinary, $compiled, "(compiled $name)");
+			Compiler\PhpHelpers::checkCode($this->phpBinary, $compiled, "(compiled {$this->getSourceName($name)})");
 		}
 
 		return $compiled;
@@ -195,7 +195,11 @@ class Engine
 	{
 		$generator = new Compiler\TemplateGenerator;
 		$generator->buildClass($node);
-		return $generator->generateCode($this->getTemplateClass($name), $name, $this->strictTypes);
+		return $generator->generateCode(
+			$this->getTemplateClass($name),
+			$this->getSourceName($name),
+			$this->strictTypes,
+		);
 	}
 
 
@@ -224,8 +228,8 @@ class Engine
 			$compiled = $this->compile($name);
 			if (@eval(substr($compiled, 5)) === false) { // @ is escalated to exception, substr removes <?php
 				throw new CompileException(
-					'Error in template: ' . error_get_last()['message'],
-					new SourceReference("$name (compiled)", code: $compiled),
+					'Error in compiled template: ' . error_get_last()['message'],
+					new SourceReference($this->getSourceName($name), code: $compiled),
 				);
 			}
 		}
@@ -561,5 +565,13 @@ class Engine
 		}
 
 		return $res;
+	}
+
+
+	private function getSourceName(string $name): ?string
+	{
+		return method_exists($this->getLoader(), 'getSourceName') // back compatibility
+			? $this->getLoader()->getSourceName($name)
+			: $name;
 	}
 }

@@ -29,4 +29,9 @@ interface Loader
 	 * Returns unique identifier for caching.
 	 */
 	function getUniqueId(string $name): string;
+
+	/**
+	 * Returns identifier used in template doc comment.
+	 */
+	//function getSourceName(string $name): ?string;
 }

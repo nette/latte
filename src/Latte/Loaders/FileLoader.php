@@ -63,7 +63,16 @@ class FileLoader implements Latte\Loader
 	 */
 	public function getUniqueId(string $file): string
 	{
-		return $this->baseDir . strtr($file, '/', DIRECTORY_SEPARATOR);
+		return $this->getSourceName($file);
+	}
+
+
+	/**
+	 * Returns identifier used in template doc comment.
+	 */
+	public function getSourceName(string $name): ?string
+	{
+		return $this->baseDir . strtr($name, '/', DIRECTORY_SEPARATOR);
 	}
 
 
