@@ -23,6 +23,10 @@ final class Cache
 	public bool $autoRefresh = true;
 
 
+	/**
+	 * Loads existing cache or compiles template if needed.
+	 * Uses file locking to ensure atomic operations and prevent race conditions.
+	 */
 	public function loadOrCreate(Engine $engine, string $name): void
 	{
 		// Solving atomicity to work everywhere is really pain in the ass.
@@ -31,7 +35,7 @@ final class Cache
 		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
 		$file = $engine->getCacheFile($name);
 		$signature = $this->autoRefresh
-			? md5(serialize($this->generateSignature($engine, $name)))
+			? md5(serialize($this->generateRefreshSignature($engine, $name)))
 			: null;
 		$lock = defined('PHP_WINDOWS_VERSION_BUILD') || $signature
 			? $this->acquireLock("$file.lock", LOCK_SH)
@@ -63,7 +67,7 @@ final class Cache
 			}
 
 			fseek($lock, 0);
-			fwrite($lock, $signature ?? md5(serialize($this->generateSignature($engine, $name))));
+			fwrite($lock, $signature ?? md5(serialize($this->generateRefreshSignature($engine, $name))));
 			ftruncate($lock, ftell($lock));
 
 			if (function_exists('opcache_invalidate')) {
@@ -98,7 +102,11 @@ final class Cache
 	}
 
 
-	public function generateFileName(string $name, string $hash): string
+	/**
+	 * Returns the file path where compiled template will be cached.
+	 * Different configurations produce different file paths.
+	 */
+	public function generateFilePath(Engine $engine, string $name): string
 	{
 		$base = preg_match('#([/\\\][\w@.-]{3,35}){1,3}$#D', '/' . $name, $m)
 			? preg_replace('#[^\w@.-]+#', '-', substr($m[0], 1))
@@ -106,14 +114,15 @@ final class Cache
 		if (!str_ends_with($base, 'latte')) {
 			$base .= 'latte';
 		}
-		return $this->directory . '/' . $base . '--' . $hash . '.php';
+		return $this->directory . '/' . $base . '--' . $engine->generateTemplateHash($name) . '.php';
 	}
 
 
 	/**
-	 * Values that check the expiration of the compiled template.
+	 * Returns values used to detect if cached template needs recompilation when autoRefresh is enabled.
+	 * Triggers recompilation when template code, Latte engine, or any extension changes.
 	 */
-	protected function generateSignature(Engine $engine, string $name): array
+	protected function generateRefreshSignature(Engine $engine, string $name): array
 	{
 		return [
 			Engine::Version,
