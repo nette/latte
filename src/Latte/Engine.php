@@ -264,12 +264,10 @@ class Engine
 	{
 		return [
 			$this->contentType,
+			$this->strictTypes,
+			$this->strictParsing,
 			array_map(
-				fn($extension) => [
-					get_debug_type($extension),
-					$extension->getCacheKey($this),
-					filemtime((new \ReflectionObject($extension))->getFileName()),
-				],
+				fn($extension) => [get_debug_type($extension), $extension->getCacheKey($this)],
 				$this->extensions,
 			),
 		];
