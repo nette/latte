@@ -21,7 +21,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 		XX,
 	'main-dynamic' => <<<'XX'
 
-				{import "i" . "nc"}
+				{import ("i" . "nc")}
 				{include test}
 
 		XX,

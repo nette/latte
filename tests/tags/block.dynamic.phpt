@@ -32,13 +32,13 @@ $template = <<<'EOD'
 
 	{include static var => 30}
 
-	{include #$name . '', var => 40}
+	{include #($name . ''), var => 40}
 
 	{block "word$name"}<div n:if="false"></div>{/block}
 
 	{block "strip$name"|striptags}<span>hello</span>{/block}
 
-	{block rand() < 5 ? a : b} expression {/block}
+	{block (rand() < 5 ? a : b)} expression {/block}
 	EOD;
 
 Assert::matchFile(

@@ -33,7 +33,7 @@ testTemplate('keyword file', [
 
 
 testTemplate('expression', [
-	'main' => '{embed true ? embed : none}{/embed}',
+	'main' => '{embed (true ? embed : none)}{/embed}',
 	'embed' => 'embed',
 ], 'embed');
 

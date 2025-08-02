@@ -18,7 +18,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main3' => 'before {include inc.latte var => 1|striptags|noescape} after',
 	'main4' => 'before {include inc.latte var: named} after',
 	'main5' => 'before {include file inc2 var => 1} after',
-	'main6' => 'before {include file "inc" . 2, var => 1} after',
+	'main6' => 'before {include file ("inc" . 2), var => 1} after',
 	'main7' => '{include inc.latte $a = 1, var => 2}',
 	'main8' => '{include (null)}',
 

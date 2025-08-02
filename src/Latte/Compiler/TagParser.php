@@ -88,7 +88,12 @@ final class TagParser extends TagParserData
 		$tokens = $lexer->tokenizeUnquotedString($this->text, $position, $colon, $this->offsetDelta);
 
 		if (!$tokens) {
-			return $this->parseExpression();
+			$expr = $this->parseExpression();
+			$exprText = substr($this->text, $position->offset - $this->offsetDelta, $this->stream->peek()->position->offset - $position->offset);
+			if ($exprText[0] !== '(' && preg_match('/\s/', trim($exprText))) {
+				trigger_error('Expression should be placed in parentheses: (' . $exprText . ') ' . $position, E_USER_DEPRECATED);
+			}
+			return $expr;
 		}
 
 		$parser = new self($tokens);

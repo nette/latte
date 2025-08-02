@@ -57,7 +57,7 @@ Assert::match(
 
 Assert::match(
 	' before block 2 after',
-	$latte->renderToString('{define block}block {$var}{/} before {include block true ? "block", var => 2} after'),
+	$latte->renderToString('{define block}block {$var}{/} before {include block (true ? "block"), var => 2} after'),
 );
 
 Assert::exception(

@@ -66,9 +66,9 @@ Assert::same("'fo:o'", format('fo:o ()'));
 Assert::same("'fo:o'", format('fo:o ""'));
 Assert::same("'fo:o'", format('fo:o \foo'));
 
-// non-unquoted & following chars
-Assert::same('true ? false : null', format('true ? false'));
-Assert::same('true . false', format('true . false'));
+// non-unquoted & parentheses
+Assert::same('true ? false : null', format('(true ? false)'));
+Assert::same('true . false', format('(true . false)'));
 
 // no colon
 Assert::same("'Foo'", format('Foo:CONST', false));

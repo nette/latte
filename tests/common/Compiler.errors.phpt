@@ -362,3 +362,11 @@ Assert::exception(
 	Latte\CompileException::class,
 	"Filter 'escape' is not allowed (on line 1 at column 3)",
 );
+
+
+// deprecations
+Assert::error(
+	fn() => $latte->compile('{import true ? 1 : 0}'),
+	E_USER_DEPRECATED,
+	'Expression should be placed in parentheses: (true ? 1 : 0) on line 1 at column 9',
+);
