@@ -9,6 +9,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
+$latte->setTempDirectory(getTempDir());
 $latte->setLoader(new Latte\Loaders\StringLoader);
 $latte->setExceptionHandler(function () use (&$args) {
 	$args = func_get_args();
@@ -50,7 +51,12 @@ Assert::match(
 	$latte->renderToString('main'),
 );
 Assert::type(Latte\SecurityViolationException::class, $args[0]);
-Assert::null($args[0]->getSource());
+Assert::equal(new SourceReference(
+	name: 'inc.latte',
+	line: 1,
+	column: null,
+	code: null,
+), $args[0]->getSource());
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 
