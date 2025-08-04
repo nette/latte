@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Latte\SourceReference;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -27,6 +28,12 @@ Assert::match(
 	$latte->renderToString('main'),
 );
 Assert::type(Latte\SecurityViolationException::class, $args[0]);
+Assert::equal(new SourceReference(
+	name: 'inc.latte',
+	line: 1,
+	column: 1,
+	code: '{if}',
+), $args[0]->getSource());
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 
@@ -43,6 +50,7 @@ Assert::match(
 	$latte->renderToString('main'),
 );
 Assert::type(Latte\SecurityViolationException::class, $args[0]);
+Assert::null($args[0]->getSource());
 Assert::type(Latte\Runtime\Template::class, $args[1]);
 
 

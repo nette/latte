@@ -15,14 +15,21 @@ use Latte\Compiler\Position;
 /** @internal */
 trait PositionAwareException
 {
+	/** @deprecated */
 	public ?string $sourceCode = null;
+
+	/** @deprecated */
 	public ?string $sourceName = null;
+
+	/** @deprecated */
 	public ?Position $position = null;
+	private ?SourceReference $source = null;
 	private string $origMessage;
 
 
 	public function setSource(string $code, ?string $name = null): self
 	{
+		$this->source = new SourceReference($name, $this->source?->line, $this->source?->column, $code);
 		$this->sourceCode = $code;
 		$this->sourceName = $name;
 		$this->generateMessage();
@@ -30,18 +37,18 @@ trait PositionAwareException
 	}
 
 
+	public function getSource(): ?SourceReference
+	{
+		return $this->source;
+	}
+
+
 	private function generateMessage(): void
 	{
 		$this->origMessage ??= $this->message;
-		$info = [];
-		if ($this->sourceName && @is_file($this->sourceName)) { // @ - may trigger error
-			$info[] = "in '" . str_replace(dirname($this->sourceName, 2), '...', $this->sourceName) . "'";
-		}
-		if ($this->position) {
-			$info[] = $this->position;
-		}
+		$info = (string) $this->source;
 		$this->message = $info
-			? rtrim($this->origMessage, '.') . ' (' . implode(' ', $info) . ')'
+			? rtrim($this->origMessage, '.') . ' (' . $info . ')'
 			: $this->origMessage;
 	}
 }
