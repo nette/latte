@@ -105,8 +105,9 @@ final class Linter
 			if ($this->debug) {
 				echo $e;
 			}
-			$pos = $e->position?->line ? ':' . $e->position->line : '';
-			$pos .= $e->position?->column ? ':' . $e->position->column : '';
+			$source = $e->getSource();
+			$pos = $source?->line ? ':' . $source->line : '';
+			$pos .= $source?->column ? ':' . $source->column : '';
 			fwrite(STDERR, "[ERROR]      $file$pos    {$e->getMessage()}\n");
 			return false;
 
