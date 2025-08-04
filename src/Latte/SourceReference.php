@@ -31,6 +31,19 @@ class SourceReference
 	}
 
 
+	/** Tries to guess the position in the template from the backtrace */
+	public static function fromCallStack(): ?self
+	{
+		$trace = debug_backtrace();
+		foreach ($trace as $item) {
+			if (isset($item['file']) && ($source = self::fromCompiled($item['file'], $item['line']))) {
+				return $source;
+			}
+		}
+		return null;
+	}
+
+
 	public function __construct(
 		public ?string $name,
 		public readonly ?int $line = null,

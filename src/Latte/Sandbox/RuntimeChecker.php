@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Sandbox;
 
 use Latte;
+use Latte\SourceReference;
 use function count, explode, is_array, is_callable, is_object, is_string;
 
 
@@ -39,10 +40,10 @@ final class RuntimeChecker
 			return null;
 
 		} elseif (!is_object($object) || !is_string($method)) {
-			throw new Latte\SecurityViolationException('Invalid callable.');
+			throw new Latte\SecurityViolationException('Invalid callable.', SourceReference::fromCallStack());
 
 		} elseif (!$this->policy->isMethodAllowed($class = $object::class, $method)) {
-			throw new Latte\SecurityViolationException("Calling $class::$method() is not allowed.");
+			throw new Latte\SecurityViolationException("Calling $class::$method() is not allowed.", SourceReference::fromCallStack());
 		}
 
 		self::args(...$args);
@@ -65,7 +66,7 @@ final class RuntimeChecker
 				&& is_callable($arg, true, $text)
 				&& !$this->policy->isMethodAllowed(is_object($arg[0]) ? $arg[0]::class : $arg[0], $arg[1])
 			) {
-				throw new Latte\SecurityViolationException("Calling $text() is not allowed.");
+				throw new Latte\SecurityViolationException("Calling $text() is not allowed.", SourceReference::fromCallStack());
 			}
 		}
 
@@ -77,7 +78,7 @@ final class RuntimeChecker
 	{
 		$class = is_object($object) ? $object::class : $object;
 		if (is_string($class) && !$this->policy->isPropertyAllowed($class, (string) $property)) {
-			throw new Latte\SecurityViolationException("Access to '$property' property on a $class object is not allowed.");
+			throw new Latte\SecurityViolationException("Access to '$property' property on a $class object is not allowed.", SourceReference::fromCallStack());
 		}
 
 		return $object;
@@ -87,7 +88,7 @@ final class RuntimeChecker
 	private function checkCallable(mixed $callable): void
 	{
 		if (!is_callable($callable)) {
-			throw new Latte\SecurityViolationException('Invalid callable.');
+			throw new Latte\SecurityViolationException('Invalid callable.', SourceReference::fromCallStack());
 
 		} elseif (is_string($callable)) {
 			$parts = explode('::', $callable);
@@ -99,9 +100,7 @@ final class RuntimeChecker
 			$allowed = $this->policy->isMethodAllowed(is_object($callable[0]) ? $callable[0]::class : $callable[0], $callable[1]);
 
 		} elseif (is_object($callable)) {
-			$allowed = $callable instanceof \Closure
-				? true
-				: $this->policy->isMethodAllowed($callable::class, '__invoke');
+			$allowed = $callable instanceof \Closure || $this->policy->isMethodAllowed($callable::class, '__invoke');
 
 		} else {
 			$allowed = false;
@@ -109,7 +108,7 @@ final class RuntimeChecker
 
 		if (!$allowed) {
 			is_callable($callable, false, $text);
-			throw new Latte\SecurityViolationException("Calling $text() is not allowed.");
+			throw new Latte\SecurityViolationException("Calling $text() is not allowed.", SourceReference::fromCallStack());
 		}
 	}
 }
