@@ -43,7 +43,7 @@ final class TagParser extends TagParserData
 
 	public function __construct(array $tokens)
 	{
-		$this->offsetDelta = $tokens[0]->position->offset ?? 0;
+		$this->offsetDelta = $tokens[0]->position->offset;
 		$tokens = $this->filterTokens($tokens);
 		$this->stream = new TokenStream(new \ArrayIterator($tokens));
 	}

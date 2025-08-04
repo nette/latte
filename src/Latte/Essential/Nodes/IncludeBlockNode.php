@@ -53,7 +53,6 @@ class IncludeBlockNode extends StatementNode
 
 		if ($stream->tryConsume('from')) {
 			$node->from = $tag->parser->parseUnquotedStringOrExpression();
-			$stream->tryConsume(',');
 		}
 
 		$stream->tryConsume(',');
