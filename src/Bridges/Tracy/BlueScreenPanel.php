@@ -50,18 +50,18 @@ class BlueScreenPanel
 
 	public static function renderError(?\Throwable $e): ?array
 	{
-		if ($e instanceof Latte\CompileException && $e->sourceName) {
+		if ($e instanceof Latte\CompileException && $e->getSource()) {
+			$source = $e->getSource();
 			return [
 				'tab' => 'Template',
-				'panel' => (preg_match('#\n|\?#', $e->sourceName)
-						? ''
-						: '<p>'
-							. (@is_file($e->sourceName) // @ - may trigger error
-								? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->position?->line)
-								: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
-							. '</p>')
+				'panel' =>
+					match (true) {
+						$source->isFile() => '<p><b>File:</b> ' . Helpers::editorLink($source->name, $source->line) . '</p>',
+						(bool) $source->name => '<p><b>' . htmlspecialchars($source->name . ($source->line ? ':' . $source->line : '')) . '</b></p>',
+						default => '',
+					}
 					. '<pre class="code tracy-code"><div>'
-					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
+					. BlueScreen::highlightLine(htmlspecialchars($source->getCode(), ENT_IGNORE, 'UTF-8'), $source->line ?? 0, 15, $source->column ?? 0)
 					. '</div></pre>',
 			];
 		}
@@ -74,13 +74,13 @@ class BlueScreenPanel
 	{
 		if (
 			$e instanceof Latte\CompileException
-			&& $e->sourceName
-			&& @is_file($e->sourceName) // @ - may trigger error
+			&& ($source = $e->getSource())
+			&& $source->isFile()
 			&& (preg_match('#Unknown tag (\{\w+)\}, did you mean (\{\w+)\}\?#A', $e->getMessage(), $m)
 				|| preg_match('#Unknown attribute (n:\w+), did you mean (n:\w+)\?#A', $e->getMessage(), $m))
 		) {
 			return [
-				'link' => Helpers::editorUri($e->sourceName, $e->position?->line, 'fix', $m[1], $m[2]),
+				'link' => Helpers::editorUri($source->name, $source->line, 'fix', $m[1], $m[2]),
 				'label' => 'fix it',
 			];
 		}
