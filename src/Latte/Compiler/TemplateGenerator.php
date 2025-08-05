@@ -56,10 +56,6 @@ final class TemplateGenerator
 			$this->addConstant('ContentType', $node->contentType);
 		}
 
-		if ($templateName !== null && !preg_match('#\n|\?#', $templateName)) {
-			$this->addConstant('Source', $templateName);
-		}
-
 		$this->generateBlocks($context->blocks, $context);
 
 		$members = [];
