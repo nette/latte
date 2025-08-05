@@ -30,34 +30,21 @@ final class TemplateGenerator
 
 
 	/**
-	 * Compiles nodes to PHP file
+	 * Builds template class.
 	 */
-	public function generate(
-		Nodes\TemplateNode $node,
-		string $className,
-		?string $templateName = null,
-		bool $strictMode = false,
-	): string
+	public function buildClass(Nodes\TemplateNode $node): void
 	{
 		$context = new PrintContext($node->contentType);
-		$code = $node->main->print($context);
-		$code = self::buildParams($code, [], '$ʟ_args', $context);
-		$this->addMethod('main', $code, 'array $ʟ_args');
+		$this->generateBase($node, $context);
+		$this->generateBlocks($context);
+	}
 
-		$head = (new NodeTraverser)->traverse($node->head, fn(Node $node) => $node instanceof Nodes\TextNode ? new Nodes\NopNode : $node);
-		$code = $head->print($context);
-		if ($code || $context->paramsExtraction) {
-			$code .= 'return get_defined_vars();';
-			$code = self::buildParams($code, $context->paramsExtraction, '$this->params', $context);
-			$this->addMethod('prepare', $code, '', 'array');
-		}
 
-		if ($node->contentType !== ContentType::Html) {
-			$this->addConstant('ContentType', $node->contentType);
-		}
-
-		$this->generateBlocks($context->blocks, $context);
-
+	/**
+	 * Compiles to PHP file
+	 */
+	public function generateCode(string $className, ?string $templateName, bool $strictMode): string
+	{
 		$members = [];
 		foreach ($this->constants as $name => $value) {
 			$members[] = "\tpublic const $name = " . PhpHelpers::dump($value, true) . ';';
@@ -90,11 +77,34 @@ final class TemplateGenerator
 	}
 
 
+	private function generateBase(Nodes\TemplateNode $node, PrintContext $context): void
+	{
+		$code = $node->main->print($context);
+		$code = self::buildParams($code, [], '$ʟ_args', $context);
+		$this->addMethod('main', $code, 'array $ʟ_args');
+
+		$head = (new NodeTraverser)->traverse(
+			$node->head,
+			fn(Node $node) => $node instanceof Nodes\TextNode ? new Nodes\NopNode : $node,
+		);
+		$code = $head->print($context);
+		if ($code || $context->paramsExtraction) {
+			$code .= 'return get_defined_vars();';
+			$code = self::buildParams($code, $context->paramsExtraction, '$this->params', $context);
+			$this->addMethod('prepare', $code, '', 'array');
+		}
+
+		if ($node->contentType !== ContentType::Html) {
+			$this->addConstant('ContentType', $node->contentType);
+		}
+	}
+
+
 	/** @param  Block[]  $blocks */
-	private function generateBlocks(array $blocks, PrintContext $context): void
+	private function generateBlocks(PrintContext $context): void
 	{
 		$contentType = $context->getEscaper()->getContentType();
-		foreach ($blocks as $block) {
+		foreach ($context->blocks as $block) {
 			if (!$block->isDynamic()) {
 				$meta[$block->layer][$block->name->value] = $contentType === $block->escaping
 					? $block->method
