@@ -139,7 +139,8 @@ class Engine
 				$e = new CompileException("Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			throw $e->setSource($template, $name);
+			$e->setSource(new SourceReference($name, $e->getSource()?->line, $e->getSource()?->column, $template));
+			throw $e;
 		}
 
 		if ($this->phpBinary) {
