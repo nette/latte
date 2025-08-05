@@ -29,13 +29,18 @@ class CompileException extends \Exception implements Exception
 	public ?int $sourceLine;
 
 
-	public function __construct(string $message, ?Compiler\Position $position = null, ?\Throwable $previous = null)
-	{
+	public function __construct(
+		string $message,
+		Compiler\Position|SourceReference|null $source = null,
+		?\Throwable $previous = null,
+	) {
 		parent::__construct($message, 0, $previous);
-		$this->source = $position ? new SourceReference(null, $position->line, $position->column) : null;
-		$this->position = $position;
-		$this->sourceLine = $position?->line;
-		$this->generateMessage();
+		if ($source) {
+			$this->setSource($source instanceof Compiler\Position
+				? new SourceReference(null, $source->line, $source->column)
+				: $source);
+			$this->sourceLine = $this->source?->line;
+		}
 	}
 }
 
@@ -63,11 +68,13 @@ class SecurityViolationException extends \Exception implements Exception
 {
 	use PositionAwareException;
 
-	public function __construct(string $message, ?Compiler\Position $position = null)
+	public function __construct(string $message, Compiler\Position|SourceReference|null $source = null)
 	{
 		parent::__construct($message);
-		$this->source = $position ? new SourceReference(null, $position->line, $position->column) : null;
-		$this->position = $position;
-		$this->generateMessage();
+		if ($source) {
+			$this->setSource($source instanceof Compiler\Position
+				? new SourceReference(null, $source->line, $source->column)
+				: $source);
+		}
 	}
 }
