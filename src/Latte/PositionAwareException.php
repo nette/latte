@@ -27,11 +27,8 @@ trait PositionAwareException
 	private string $origMessage;
 
 
-	public function setSource(SourceReference|string $source, ?string $name = null): self
+	public function setSource(SourceReference $source): self
 	{
-		if (is_string($source)) {
-			$source = new SourceReference($name, $this->source?->line, $this->source?->column, $source);
-		}
 		$this->source = $source;
 		$this->sourceCode = $source->code;
 		$this->sourceName = $source->name;
