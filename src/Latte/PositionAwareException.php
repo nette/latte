@@ -27,11 +27,15 @@ trait PositionAwareException
 	private string $origMessage;
 
 
-	public function setSource(string $code, ?string $name = null): self
+	public function setSource(SourceReference|string $source, ?string $name = null): self
 	{
-		$this->source = new SourceReference($name, $this->source?->line, $this->source?->column, $code);
-		$this->sourceCode = $code;
-		$this->sourceName = $name;
+		if (is_string($source)) {
+			$source = new SourceReference($name, $this->source?->line, $this->source?->column, $source);
+		}
+		$this->source = $source;
+		$this->sourceCode = $source->code;
+		$this->sourceName = $source->name;
+		$this->position = $source->line ? new Compiler\Position($source->line, (int) $source->column) : null;
 		$this->generateMessage();
 		return $this;
 	}
