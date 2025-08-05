@@ -195,12 +195,8 @@ class Engine
 	public function generate(TemplateNode $node, string $name): string
 	{
 		$generator = new Compiler\TemplateGenerator;
-		return $generator->generate(
-			$node,
-			$this->getTemplateClass($name),
-			$name,
-			$this->strictTypes,
-		);
+		$generator->buildClass($node);
+		return $generator->generateCode($this->getTemplateClass($name), $name, $this->strictTypes);
 	}
 
 
