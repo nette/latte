@@ -2,8 +2,6 @@
 %A%
 final class Template%a% extends Latte\Runtime\Template
 {
-	public const Source = 'main';
-
 
 	public function main(array $ʟ_args): void
 	{

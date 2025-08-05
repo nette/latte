@@ -9,8 +9,6 @@ use Latte\Runtime as LR;
 /** source: %A% */
 final class Template%a% extends Latte\Runtime\Template
 {
-	public const Source = '%a%.latte';
-
 	public const Blocks = [
 		['menu' => 'blockMenu'],
 	];
