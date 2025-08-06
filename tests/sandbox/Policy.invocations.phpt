@@ -50,7 +50,6 @@ $template = <<<'EOD'
 	{=[$obj, $method]()}
 
 	{=$obj?->foo()}
-	{=$obj??->foo()}
 	EOD;
 
 // compile-time
@@ -72,7 +71,6 @@ Assert::same(
 	[
 		'functions' => ['trim', 'trim'],
 		'methods' => [
-			['MyClass', 'foo'],
 			['MyClass', 'foo'],
 			['MyClass', 'foo'],
 			['MyClass', 'foo'],

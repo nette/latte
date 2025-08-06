@@ -64,7 +64,7 @@ test('optionalChainingPass', function () {
 	);
 	Assert::same(
 		'($this->filters->mod)(@, (((($var ?? null)?->prop ?? null)?->elem[1] ?? null)?->call(2) ?? null)?->item)',
-		format('|mod:$var??->prop??->elem[1]??->call(2)??->item'),
+		@format('|mod:$var??->prop??->elem[1]??->call(2)??->item'), // deprecated ??->
 	);
 });
 

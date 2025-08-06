@@ -15,7 +15,6 @@ $test = <<<'XX'
 	$a::foo;
 	$b->x;
 	$b?->x;
-	$b??->x;
 	XX;
 
 $tokens = (new TagLexer)->tokenize($test);
@@ -51,9 +50,4 @@ __halt_compiler();
 #5:3   Php_NullsafeObjectOperator '?->'
 #5:6   Php_Identifier  'x'
 #5:7   ';'
-#5:8   Php_Whitespace  '\n'
-#6:1   Php_Variable    '$b'
-#6:3   Php_UndefinedsafeObjectOperator '??->'
-#6:7   Php_Identifier  'x'
-#6:8   ';'
-#6:9   End             ''
+#5:8   End             ''
