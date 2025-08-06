@@ -577,10 +577,16 @@ trait TagParserData
 			239 => fn() => $this->semValue = new Expression\MethodCallNode($this->semStack[$pos - 3], $this->semStack[$pos - 1], $this->semStack[$pos], false, $this->startTokenStack[$pos - 3]->position),
 			240 => fn() => $this->semValue = new Expression\MethodCallableNode($this->semStack[$pos - 5], $this->semStack[$pos - 3], $this->startTokenStack[$pos - 5]->position),
 			241 => fn() => $this->semValue = new Expression\MethodCallNode($this->semStack[$pos - 3], $this->semStack[$pos - 1], $this->semStack[$pos], true, $this->startTokenStack[$pos - 3]->position),
-			242 => fn() => $this->semValue = new Expression\MethodCallNode(new Expression\BinaryOpNode($this->semStack[$pos - 3], '??', new Scalar\NullNode($this->startTokenStack[$pos - 3]->position), $this->startTokenStack[$pos - 3]->position), $this->semStack[$pos - 1], $this->semStack[$pos], true, $this->startTokenStack[$pos - 3]->position),
+			242 => function () use ($pos) {
+				$this->semValue = new Expression\MethodCallNode(new Expression\BinaryOpNode($this->semStack[$pos - 3], '??', new Scalar\NullNode($this->startTokenStack[$pos - 3]->position), $this->startTokenStack[$pos - 3]->position), $this->semStack[$pos - 1], $this->semStack[$pos], true, $this->startTokenStack[$pos - 3]->position);
+				trigger_error('Latte: undefined-nullsafe operator ??-> is deprecated, used ' . $this->startTokenStack[$pos - 3]->position);
+			},
 			245, 254, 289 => fn() => $this->semValue = new Expression\PropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], false, $this->startTokenStack[$pos - 2]->position),
 			246, 255, 290 => fn() => $this->semValue = new Expression\PropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], true, $this->startTokenStack[$pos - 2]->position),
-			247, 256, 291 => fn() => $this->semValue = new Expression\PropertyFetchNode(new Expression\BinaryOpNode($this->semStack[$pos - 2], '??', new Scalar\NullNode($this->startTokenStack[$pos - 2]->position), $this->startTokenStack[$pos - 2]->position), $this->semStack[$pos], true, $this->startTokenStack[$pos - 2]->position),
+			247, 256, 291 => function () use ($pos) {
+				$this->semValue = new Expression\PropertyFetchNode(new Expression\BinaryOpNode($this->semStack[$pos - 2], '??', new Scalar\NullNode($this->startTokenStack[$pos - 2]->position), $this->startTokenStack[$pos - 2]->position), $this->semStack[$pos], true, $this->startTokenStack[$pos - 2]->position);
+				trigger_error('Latte: undefined-nullsafe operator ??-> is deprecated, used ' . $this->startTokenStack[$pos - 2]->position);
+			},
 			249 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->startTokenStack[$pos - 3]->position),
 			250 => function () use ($pos) {
 				$var = $this->semStack[$pos]->name;

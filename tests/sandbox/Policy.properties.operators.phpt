@@ -35,7 +35,6 @@ $template = <<<'EOD'
 
 	{=$obj?->bar}
 	{=$obj?->$prop}
-	{=$obj??->bar}
 	EOD;
 
 $latte->compile($template);
@@ -53,7 +52,6 @@ Assert::equal(
 		'tags' => Expect::type('array'),
 		'properties' => [
 			['MyClass', 'static'],
-			['MyClass', 'bar'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
 			['MyClass', 'bar'],
