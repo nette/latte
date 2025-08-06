@@ -2,7 +2,7 @@
 %A%
 		$ʟ_try[0] = [$ʟ_it ?? null];
 		ob_start(fn() => '');
-		try /* line 1 */ {
+		try /* line 1:1 */ {
 			echo '	a
 ';
 			throw new Latte\Essential\RollbackException;
