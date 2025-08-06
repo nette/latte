@@ -34,7 +34,7 @@ final class Filters
 	{
 		$info->validate([null, 'html', 'html/attr', 'xml', 'xml/attr'], __FUNCTION__);
 		$info->contentType = ContentType::Text;
-		return Latte\Runtime\Filters::convertHtmlToText((string) $s);
+		return Latte\Runtime\HtmlHelpers::convertHtmlToText((string) $s);
 	}
 
 
