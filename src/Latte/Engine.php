@@ -257,7 +257,7 @@ class Engine
 	 */
 	public function generateTemplateHash(string $name): string
 	{
-		$hash = $this->configurationHash ?? hash('xxh128', serialize($this->getCacheKey()));
+		$hash = $this->configurationHash ?? hash('xxh128', serialize($this->generateConfigurationSignature()));
 		$hash .= $this->getLoader()->getUniqueId($name);
 		return substr(hash('xxh128', $hash), 0, 10);
 	}
@@ -267,7 +267,7 @@ class Engine
 	 * Returns values that determine isolation for different configurations.
 	 * When any of these values change, a new compiled template is created to avoid conflicts.
 	 */
-	protected function getCacheKey(): array
+	protected function generateConfigurationSignature(): array
 	{
 		return [
 			$this->contentType,
