@@ -46,7 +46,7 @@ final class Tag
 		public ?self $parent = null,
 		public readonly ?string $prefix = null,
 		public ?AreaNode $node = null,
-		public ?AreaNode $nAttributeNode = null,
+		public ?AreaNode $nAttribute = null,
 	) {
 		$this->parser = new TagParser($tokens);
 	}
@@ -111,7 +111,7 @@ final class Tag
 
 	public function replaceNAttribute(AreaNode $node): void
 	{
-		$index = array_search($this->nAttributeNode, $this->htmlElement->attributes->children, true);
-		$this->htmlElement->attributes->children[$index] = $this->nAttributeNode = $node;
+		$index = array_search($this->nAttribute, $this->htmlElement->attributes->children, true);
+		$this->htmlElement->attributes->children[$index] = $this->nAttribute = $node;
 	}
 }

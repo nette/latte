@@ -446,7 +446,7 @@ final class TemplateParserHtml
 			prefix: $this->getPrefix($name),
 			inTag: true,
 			htmlElement: $this->element,
-			nAttributeNode: $node = new Nodes\TextNode(''),
+			nAttribute: $node = new Nodes\TextNode(''),
 		);
 		return $node;
 	}
