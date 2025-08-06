@@ -21,9 +21,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	Parent: ';
-		echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line %d%:%d% */;
-		echo '/';
-		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line %d%:%d% */;
+		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* line 3:10 */;
 		echo "\n";
 	}
 }

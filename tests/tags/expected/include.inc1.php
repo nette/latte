@@ -18,9 +18,7 @@ pre
 </textarea>
 
 Parent: ';
-		echo LR\Filters::escapeHtmlText(basename($this->getReferringTemplate()->getName())) /* line 11:9 */;
-		echo '/';
-		echo LR\Filters::escapeHtmlText($this->getReferenceType()) /* line 11:62 */;
+		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* line 11:9 */;
 		echo "\n";
 	}
 }

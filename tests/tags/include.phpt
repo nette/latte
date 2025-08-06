@@ -6,6 +6,7 @@
 
 declare(strict_types=1);
 
+use Latte\Runtime\Template;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -13,6 +14,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = new Latte\Engine;
 $latte->setTempDirectory(getTempDir());
+$latte->addFunction('info', fn(Template $template) => basename($template->getReferringTemplate()->getName()) . '/' . $template->getReferenceType());
 
 Assert::matchFile(
 	__DIR__ . '/expected/include.php',
