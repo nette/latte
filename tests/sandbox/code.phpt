@@ -191,9 +191,7 @@ $template = <<<'EOD'
 	optional chaining
 
 	{=$obj?->prop}
-	{=$obj??->prop}
 	{=$obj?->bar()}
-	{=$obj??->bar()}
 	-
 	EOD;
 
