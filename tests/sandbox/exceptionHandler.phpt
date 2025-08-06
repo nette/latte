@@ -54,7 +54,7 @@ Assert::type(Latte\SecurityViolationException::class, $args[0]);
 Assert::equal(new SourceReference(
 	name: 'inc.latte',
 	line: 1,
-	column: null,
+	column: 1,
 	code: null,
 ), $args[0]->getSource());
 Assert::type(Latte\Runtime\Template::class, $args[1]);

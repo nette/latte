@@ -11,23 +11,23 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1 */;%A%',
+	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1:1 */;%A%',
 	$latte->compile('{test(function () { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1 */;%A%',
+	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1:1 */;%A%',
 	$latte->compile('{test(function () use ($a) { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1 */;%A%',
+	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* line 1:1 */;%A%',
 	$latte->compile('{test(fn () => 1)}'),
 );
 
 Assert::match(
 	"%A%
-		if (1) /* line 1 */ {
+		if (1) /* line 1:1 */ {
 			echo 'xxx';
 		}
 %A%",
