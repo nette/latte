@@ -80,7 +80,7 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $latte->renderToString('{=$obj??->error(123)}', ['obj' => new Test]),
+	fn() => @$latte->renderToString('{=$obj??->error(123)}', ['obj' => new Test]), // deprecated ??->
 	Latte\SecurityViolationException::class,
 	'Calling Test::error() is not allowed.',
 );
@@ -104,7 +104,7 @@ Assert::exception(
 );
 
 Assert::exception(
-	fn() => $latte->renderToString('{=$obj??->error}', ['obj' => new Test]),
+	fn() => @$latte->renderToString('{=$obj??->error}', ['obj' => new Test]), // deprecated ??->
 	Latte\SecurityViolationException::class,
 	"Access to 'error' property on a Test object is not allowed.",
 );
