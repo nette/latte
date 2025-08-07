@@ -30,7 +30,7 @@ class FileLoader implements Latte\Loader
 
 	public function load(string $file): Latte\LoadedContent
 	{
-		$path = $this->baseDir . $file;
+		$path = $this->getUniqueId($file);
 		if ($this->baseDir && !str_starts_with($this->normalizePath($path), $this->baseDir)) {
 			throw new Latte\RuntimeException("Template '$path' is not within the allowed path '{$this->baseDir}'.");
 
@@ -38,7 +38,7 @@ class FileLoader implements Latte\Loader
 			throw new Latte\TemplateNotFoundException("Missing template file '$path'.");
 		}
 
-		return new Latte\LoadedContent(file_get_contents($path));
+		return new Latte\LoadedContent(file_get_contents($path), sourceName: $path);
 	}
 
 

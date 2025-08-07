@@ -35,7 +35,7 @@ class StringLoader implements Latte\Loader
 		if ($this->templates === null) {
 			return new Latte\LoadedContent($name);
 		} elseif (isset($this->templates[$name])) {
-			return new Latte\LoadedContent($this->templates[$name]);
+			return new Latte\LoadedContent($this->templates[$name], sourceName: $name);
 		} else {
 			throw new Latte\TemplateNotFoundException("Missing template '$name'.");
 		}
