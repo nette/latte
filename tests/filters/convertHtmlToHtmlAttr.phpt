@@ -15,6 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 Assert::same('', Filters::convertHtmlToHtmlAttr(''));
 Assert::same('string', Filters::convertHtmlToHtmlAttr('string'));
 Assert::same('&lt; &amp; &apos; &quot; &gt;', Filters::convertHtmlToHtmlAttr('< & \' " >'));
+Assert::same('hello', Filters::convertHtmlToHtmlAttr('<span>hello</span>'));
 Assert::same('&quot;', Filters::convertHtmlToHtmlAttr('&quot;'));
 
 // invalid UTF-8
