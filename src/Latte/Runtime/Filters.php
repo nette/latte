@@ -229,9 +229,18 @@ class Filters
 
 
 	/**
-	 * Converts HTML text to quoted attribute. The quotation marks need to be escaped.
+	 * Converts HTML text to quoted attribute.
 	 */
 	public static function convertHtmlToHtmlAttr(string $s): string
+	{
+		return self::escapeHtmlAttr(strip_tags($s), false);
+	}
+
+
+	/**
+	 * Converts HTML attribute to HTML text. The < > chars need to be escaped.
+	 */
+	public static function convertHtmlAttrToHtml(string $s): string
 	{
 		return self::escapeHtmlAttr($s, false);
 	}
