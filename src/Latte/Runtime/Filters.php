@@ -54,11 +54,13 @@ class Filters
 	/**
 	 * Escapes string for use inside HTML attribute value.
 	 */
-	public static function escapeHtmlAttr($s, bool $double = true): string
+	public static function escapeHtmlAttr($s): string
 	{
-		$double = $double && $s instanceof HtmlStringable ? false : $double;
+		if ($s instanceof HtmlStringable) {
+			$s = self::convertHtmlToText($s->__toString());
+		}
 		$s = (string) $s;
-		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8', $double);
+		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
 		$s = str_replace('{', '&#123;', $s);
 		return $s;
 	}
@@ -229,11 +231,20 @@ class Filters
 
 
 	/**
-	 * Converts HTML text to quoted attribute. The quotation marks need to be escaped.
+	 * Converts HTML text to quoted attribute.
 	 */
 	public static function convertHtmlToHtmlAttr(string $s): string
 	{
-		return self::escapeHtmlAttr($s, false);
+		return self::escapeHtmlAttr(self::convertHtmlToText($s));
+	}
+
+
+	/**
+	 * Converts HTML attribute to HTML text. The < > chars need to be escaped.
+	 */
+	public static function convertHtmlAttrToHtml(string $s): string
+	{
+		return self::escapeHtmlAttr(html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 	}
 
 
