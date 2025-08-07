@@ -20,7 +20,7 @@ $e = Assert::exception(
 	Latte\CompileException::class,
 );
 Assert::equal(new SourceReference(
-	name: 'templates/error.latte',
+	name: 'templates' . DIRECTORY_SEPARATOR . 'error.latte',
 	line: 1,
 	column: 2,
 	code: '{',

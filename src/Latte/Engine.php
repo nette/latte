@@ -132,19 +132,19 @@ class Engine
 		try {
 			$node = $this->parse($source->content);
 			$this->applyPasses($node);
-			$compiled = $this->generate($node, $name);
+			$compiled = $this->generate($node, $this->getTemplateClass($name), $source->sourceName);
 
 		} catch (\Throwable $e) {
 			if (!$e instanceof CompileException && !$e instanceof SecurityViolationException) {
 				$e = new CompileException("Thrown exception '{$e->getMessage()}'", previous: $e);
 			}
 
-			$e->setSource(new SourceReference($name, $e->getSource()?->line, $e->getSource()?->column, $source->content));
+			$e->setSource(new SourceReference($source->sourceName, $e->getSource()?->line, $e->getSource()?->column, $source->content));
 			throw $e;
 		}
 
 		if ($this->phpBinary) {
-			Compiler\PhpHelpers::checkCode($this->phpBinary, $compiled, "(compiled $name)");
+			Compiler\PhpHelpers::checkCode($this->phpBinary, $compiled, "(compiled $source->sourceName)");
 		}
 
 		return $compiled;
@@ -193,11 +193,15 @@ class Engine
 	/**
 	 * Generates compiled PHP code.
 	 */
-	public function generate(TemplateNode $node, string $name): string
+	public function generate(TemplateNode $node, string $className, ?string $sourceName): string
 	{
 		$generator = new Compiler\TemplateGenerator;
 		$generator->buildClass($node);
-		return $generator->generateCode($this->getTemplateClass($name), $name, $this->strictTypes);
+		return $generator->generateCode(
+			$className,
+			$sourceName,
+			$this->strictTypes,
+		);
 	}
 
 
