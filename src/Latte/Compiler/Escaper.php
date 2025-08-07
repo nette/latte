@@ -69,10 +69,10 @@ final class Escaper
 			self::HtmlRawText . '/' . self::HtmlText => 'convertHtmlToHtmlRawText',
 		],
 		self::HtmlAttribute => [
-			self::HtmlText => 'convertHtmlToHtmlAttr',
+			self::HtmlText => 'convertHtmlAttrToHtml',
 		],
 		self::HtmlAttribute . '/' . self::Url => [
-			self::HtmlText => 'convertHtmlToHtmlAttr',
+			self::HtmlText => 'convertHtmlAttrToHtml',
 			self::HtmlAttribute => 'nop',
 		],
 	];
