@@ -61,6 +61,7 @@ final class Escaper
 			self::HtmlComment => 'escapeHtmlComment',
 		],
 		self::HtmlText => [
+			self::Text => 'convertHtmlToText',
 			self::HtmlAttribute => 'convertHtmlToHtmlAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'convertHtmlToHtmlAttr',
 			self::HtmlAttribute . '/' . self::Css => 'convertHtmlToHtmlAttr',
