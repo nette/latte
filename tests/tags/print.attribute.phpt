@@ -30,10 +30,10 @@ test('text attributes', function () use ($latte) {
 			<span title="1"></span>
 			<span title=""></span>
 			<span title=""></span>
-			<span title="one&amp;&lt;br&gt;"></span>
+			<span title="one&amp;"></span>
 			<span title="one&amp;&lt;br&gt; &quot;&apos;"></span>
 
-			<span title="123 -- one&amp;two&apos;&quot; -- 1 --  --  -- one&amp;&lt;br&gt; -- one&amp;&lt;br&gt; &quot;&apos;"></span>
+			<span title="123 -- one&amp;two&apos;&quot; -- 1 --  --  -- one&amp; -- one&amp;&lt;br&gt; &quot;&apos;"></span>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<span title="{=0}"></span>
