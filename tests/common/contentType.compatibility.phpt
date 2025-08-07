@@ -263,6 +263,16 @@ Assert::same('<!-- </script>-->', $latte->renderToString('context6'));
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
+	'html.latte' => '<div>hello &amp;</div>',
+	'context1' => '{contentType text} * {include html.latte} *',
+]));
+
+Assert::same(' * hello & *', $latte->renderToString('context1'));
+
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
 	'html.latte' => '<hr><script></script> " &quot; &lt;',
 
 	'context1' => '<p>{include html.latte}</p>',
