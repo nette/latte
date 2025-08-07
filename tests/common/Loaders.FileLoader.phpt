@@ -38,7 +38,7 @@ Assert::same(file_get_contents(__FILE__), $loader->load('common/' . basename(__F
 Assert::exception(
 	fn() => $loader->load('common/.././../file'),
 	Latte\RuntimeException::class,
-	"Template '%a%common/.././../file' is not within the allowed path '%a%'.",
+	"Template '%a%common%ds%..%ds%.%ds%..%ds%file' is not within the allowed path '%a%'.",
 );
 
 Assert::same('common' . DIRECTORY_SEPARATOR . 'new', $loader->getReferredName('new', 'common/file'));
