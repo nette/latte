@@ -18,7 +18,7 @@ Assert::same('1', Filters::escapeHtmlAttr(1));
 Assert::same('string', Filters::escapeHtmlAttr('string'));
 Assert::same('&lt; &amp; &apos; &quot; &gt;', Filters::escapeHtmlAttr('< & \' " >'));
 Assert::same('&amp;quot;', Filters::escapeHtmlAttr('&quot;'));
-Assert::same('&lt;br&gt; &quot;', Filters::escapeHtmlAttr(new Latte\Runtime\Html('<br> &quot;')));
+Assert::same(' &quot;', Filters::escapeHtmlAttr(new Latte\Runtime\Html('<br> &quot;')));
 
 // invalid UTF-8
 Assert::same("foo \u{FFFD} bar", Filters::escapeHtmlAttr("foo \u{D800} bar")); // invalid codepoint high surrogates

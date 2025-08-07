@@ -38,12 +38,12 @@ Assert::match(
 );
 
 Assert::match(
-	'<div title="&lt;b&gt;block 1&lt;/b&gt;">',
+	'<div title="block 1">',
 	$latte->renderToString('main3'),
 );
 
 Assert::match(
-	'<div title="&lt;b&gt;block 1&lt;/b&gt;">',
+	'<div title="block 1">',
 	$latte->renderToString('main3q'),
 );
 

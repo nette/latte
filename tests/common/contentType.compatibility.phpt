@@ -15,7 +15,7 @@ test('block type compatibility in HTML contexts', function () {
 	$latte = createLatte();
 
 	Assert::same(
-		'<meta content="b&quot;ar&quot;&lt;&gt;&amp;">b"ar"<>&amp;',
+		'<meta content="b&quot;ar&quot;&amp;">b"ar"<>&amp;',
 		$latte->renderToString('<meta content="{include foo}">{block foo}{$value}"<>&amp;{/block}', ['value' => 'b"ar']),
 	);
 
@@ -144,7 +144,7 @@ test('template inheritance with content type checks', function () {
 
 	Assert::match('<meta name="b&quot;ar">', $latte->renderToString('context6', ['foo' => 'b"ar']));
 
-	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&lt;&gt;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
+	Assert::match('<meta name="b&quot;ar b&quot;ar &quot;&amp;">', $latte->renderToString('context7', ['foo' => 'b"ar']));
 
 	Assert::exception(
 		fn() => $latte->renderToString('context8', ['foo' => 'b"ar']),
@@ -286,13 +286,13 @@ Assert::same('<p><hr><script></script> " &quot; &lt;</p>', $latte->renderToStrin
 Assert::same('<p> " " &lt;</p>', $latte->renderToString('context1b'));
 Assert::same('<p> " " <</p>', $latte->renderToString('context1c'));
 
-Assert::same('<p title="&lt;hr&gt;&lt;script&gt;&lt;/script&gt; &quot; &quot; &lt;"></p>', $latte->renderToString('context2'));
+Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2'));
 
 Assert::same('<p title="<hr><script></script> " &quot; &lt;"></p>', $latte->renderToString('context2a'));
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2b'));
 Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
 
-Assert::same('<p title="&lt;hr&gt;&lt;script&gt;&lt;/script&gt; &quot; &quot; &lt;"></p>', $latte->renderToString('context3'));
+Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context3'));
 
 Assert::exception(
 	fn() => $latte->renderToString('context4'),
