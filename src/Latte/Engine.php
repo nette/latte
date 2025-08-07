@@ -52,6 +52,7 @@ class Engine
 	private ?string $phpBinary = null;
 	private ?string $configurationHash;
 	private ?string $locale = null;
+	private ?string $syntax = null;
 
 
 	public function __construct()
@@ -146,6 +147,7 @@ class Engine
 	public function parse(string $template): TemplateNode
 	{
 		$parser = new Compiler\TemplateParser;
+		$parser->getLexer()->setSyntax($this->syntax);
 		$parser->strict = $this->strictParsing;
 
 		foreach ($this->extensions as $extension) {
@@ -266,6 +268,7 @@ class Engine
 			$this->contentType,
 			$this->strictTypes,
 			$this->strictParsing,
+			$this->syntax,
 			array_map(
 				fn($extension) => [get_debug_type($extension), $extension->getCacheKey($this)],
 				$this->extensions,
@@ -517,6 +520,16 @@ class Engine
 	public function enablePhpLinter(?string $phpBinary): static
 	{
 		$this->phpBinary = $phpBinary;
+		return $this;
+	}
+
+
+	/**
+	 * Sets default Latte syntax. Available options: 'single', 'double', 'off'
+	 */
+	public function setSyntax(string $syntax): static
+	{
+		$this->syntax = $syntax;
 		return $this;
 	}
 

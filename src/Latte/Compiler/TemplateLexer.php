@@ -283,7 +283,7 @@ final class TemplateLexer
 
 		$this->delimiters[] = [$this->openDelimiter, $this->closeDelimiter];
 		[$this->openDelimiter, $this->closeDelimiter] = match ($type) {
-			null => [$left, '\}'], // {...}
+			null, 'single' => [$left, '\}'], // {...}
 			'off' => [$endTag ? '(?=' . $end . ')\{' : '(?!x)x', '\}'],
 			'double' => $endTag // {{...}}
 				? ['(?:\{' . $left . '|(?=' . $end . ')\{)', '\}(?:\}|(?<=' . $end . '))']
