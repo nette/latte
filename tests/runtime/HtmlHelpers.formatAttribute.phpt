@@ -22,7 +22,8 @@ test('regular text attributes', function () {
 	// special values
 	Assert::same('title', HtmlHelpers::formatAttribute('title', true));
 	Assert::null(HtmlHelpers::formatAttribute('title', false));
-	Assert::null(HtmlHelpers::formatAttribute('title', null));
+	Assert::null(HtmlHelpers::formatAttribute('title', null, compat: true));
+	Assert::same('title=""', HtmlHelpers::formatAttribute('title', null, compat: false));
 	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
 	Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
 	Assert::null(HtmlHelpers::formatAttribute('title', []));
@@ -38,7 +39,8 @@ test('regular text attributes', function () {
 test('boolean attributes', function () {
 	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', true));
 	Assert::null(HtmlHelpers::formatAttribute('disabled', false));
-	Assert::null(HtmlHelpers::formatAttribute('disabled', null));
+	Assert::null(HtmlHelpers::formatAttribute('disabled', null, compat: true));
+	Assert::same('disabled=""', HtmlHelpers::formatAttribute('disabled', null, compat: false)); // TODO
 
 	// special values
 	Assert::same('disabled=""', HtmlHelpers::formatAttribute('disabled', ''));
@@ -73,7 +75,8 @@ test('style attribute', function () {
 	// special values
 	Assert::same('style', HtmlHelpers::formatAttribute('style', true));
 	Assert::null(HtmlHelpers::formatAttribute('style', false));
-	Assert::null(HtmlHelpers::formatAttribute('style', null));
+	Assert::null(HtmlHelpers::formatAttribute('style', null, compat: true));
+	Assert::null(HtmlHelpers::formatAttribute('style', null, compat: false));
 
 	// invalid
 	Assert::same(
@@ -115,7 +118,8 @@ test('class attribute', function () {
 	// special values
 	Assert::same('class', HtmlHelpers::formatAttribute('class', true));
 	Assert::null(HtmlHelpers::formatAttribute('class', false));
-	Assert::null(HtmlHelpers::formatAttribute('class', null));
+	Assert::null(HtmlHelpers::formatAttribute('class', null, compat: true));
+	Assert::same('class=""', HtmlHelpers::formatAttribute('class', null, compat: false)); // TODO
 	Assert::same('class="1"', HtmlHelpers::formatAttribute('class', 1));
 	Assert::same('class="0"', HtmlHelpers::formatAttribute('class', 0));
 
