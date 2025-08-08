@@ -35,7 +35,7 @@ test('regular text attributes', function () {
 	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
 	Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
 	Assert::null(HtmlHelpers::formatAttribute('title', []));
-	Assert::same('title="one&amp;amp;<br>"', HtmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
+	Assert::same('title="one&amp;"', HtmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>')));
 	Assert::same('title="one&amp;<br>"', HtmlHelpers::formatAttribute('title', new Str));
 
 	// invalid
@@ -89,7 +89,7 @@ test('style attribute', function () {
 
 	// invalid
 	Assert::same(
-		'style="color"',
+		'style="color:1"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
 	Assert::exception(
@@ -122,7 +122,7 @@ test('space-separated attribute', function () {
 
 	// invalid
 	Assert::same(
-		'class="btn:a red:b"',
+		'class="a b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
 	);
 	Assert::exception(

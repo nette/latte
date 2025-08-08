@@ -159,41 +159,45 @@ final class HtmlHelpers
 	 */
 	public static function formatAttribute(string $name, mixed $value): ?string
 	{
-		if ($value === null || $value === false) {
-			return null;
-
-		} elseif ($value === true) {
-			return $name;
-
-		} elseif (is_array($value)) {
-			$tmp = null;
-			foreach ($value as $k => $v) {
-				if ($v != null) { // intentionally ==, skip nulls & empty string
-					//  composite 'style' vs. 'others'
-					$tmp[] = $v === true
-						? $k
-						: (is_string($k) ? $k . ':' . $v : $v);
-				}
-			}
-
-			if ($tmp === null) {
-				return null;
-			}
-
-			$value = implode($name === 'style' || !strncmp($name, 'on', 2) ? ';' : ' ', $tmp);
-
-		} else {
-			$value = (string) $value;
+		if ($value instanceof \Stringable) {
+			$value = $value instanceof HtmlStringable ? self::convertHtmlToText((string) $value) : (string) $value;
 		}
+		$type = get_debug_type($value);
+		$lname = strtolower($name);
+		$value = match (true) {
+			$lname === 'style' => match ($type) {
+				default => (string) $value,
+				'bool' => $value,
+				'null' => null,
+				'array' => self::formatArray($value, fn($v, $k) => is_string($k) ? $k . ':' . $v : $v, ';'),
+			},
+			default => match ($type) {
+				default => (string) $value,
+				'bool' => $value,
+				'null' => null,
+				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+			},
+		};
 
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&apos;', '<'],
-				$value,
-			)
-			. $q;
+		return match ($value) {
+			null, false => null,
+			true => $name,
+			default => $name . '=' . (str_contains($value, '"')
+				? "'" . str_replace(['&', "'"], ['&amp;', '&apos;'], $value) . "'"
+				: '"' . str_replace(['&', '"'], ['&amp;', '&quot;'], $value) . '"'),
+		};
+	}
+
+
+	private static function formatArray(array $items, \Closure $cb, $separator): ?string
+	{
+		$res = [];
+		foreach ($items as $k => $v) {
+			if ($v != null) { // intentionally ==, skip nulls & empty string
+				$res[] = $cb($v, $k);
+			}
+		}
+		return $res ? implode($separator, $res) : null;
 	}
 
 

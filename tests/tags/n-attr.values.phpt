@@ -35,7 +35,7 @@ test('text attributes', function () use ($latte) {
 			<span></span>
 			<span></span>
 			<span title="hello"></span>
-			<span title="one&amp;amp;<br>"></span>
+			<span title="one&amp;"></span>
 			<span title="one&amp;<br>"></span>
 			XX,
 		$latte->renderToString(<<<'XX'
@@ -183,7 +183,7 @@ test('data attribute', function () use ($latte) {
 			<span></span>
 			<span></span>
 			<span data-foo="hello"></span>
-			<span data-foo="one&amp;:two&amp;"></span>
+			<span data-foo="two&amp;"></span>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<span n:attr="data-foo => 0"></span>
