@@ -78,7 +78,7 @@ test('style attribute', function () {
 
 	// invalid
 	Assert::same(
-		'style="color"',
+		'style="color:1"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
 	Assert::exception(
@@ -111,7 +111,7 @@ test('class attribute', function () {
 
 	// invalid
 	Assert::same(
-		'class="btn:a red:b"',
+		'class="a b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
 	);
 	Assert::exception(
