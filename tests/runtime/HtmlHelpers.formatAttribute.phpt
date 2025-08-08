@@ -8,12 +8,6 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('skipped attributes', function () {
-	Assert::null(HtmlHelpers::formatAttribute('title', false));
-	Assert::null(HtmlHelpers::formatAttribute('placeholder', null));
-});
-
-
 test('regular text attributes', function () {
 	Assert::same(
 		'title="Hello &amp; Welcome"',
@@ -23,33 +17,47 @@ test('regular text attributes', function () {
 		'title=\'"Hello" &amp; &apos;Welcome&apos;\'',
 		HtmlHelpers::formatAttribute('title', '"Hello" & \'Welcome\''),
 	);
+	Assert::same('title=""', HtmlHelpers::formatAttribute('title', ''));
 
-	Assert::same(
-		'placeholder=""',
-		HtmlHelpers::formatAttribute('placeholder', ''),
+	// special values
+	Assert::same('title', HtmlHelpers::formatAttribute('title', true));
+	Assert::null(HtmlHelpers::formatAttribute('title', false));
+	Assert::null(HtmlHelpers::formatAttribute('title', null));
+	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
+	Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
+	Assert::null(HtmlHelpers::formatAttribute('title', []));
+
+	// invalid
+	Assert::exception(
+		fn() => HtmlHelpers::formatAttribute('title', (object) []),
+		Error::class,
 	);
 });
 
 
 test('boolean attributes', function () {
-	Assert::same(
-		'disabled',
-		HtmlHelpers::formatAttribute('disabled', true),
-	);
+	Assert::same('disabled', HtmlHelpers::formatAttribute('disabled', true));
 	Assert::null(HtmlHelpers::formatAttribute('disabled', false));
-	Assert::null(HtmlHelpers::formatAttribute('required', null));
-	Assert::same(
-		'readonly="0"',
-		HtmlHelpers::formatAttribute('readonly', 0),
+	Assert::null(HtmlHelpers::formatAttribute('disabled', null));
+
+	// special values
+	Assert::same('disabled=""', HtmlHelpers::formatAttribute('disabled', ''));
+	Assert::same('disabled="foo"', HtmlHelpers::formatAttribute('disabled', 'foo'));
+	Assert::same('disabled="1"', HtmlHelpers::formatAttribute('disabled', 1));
+	Assert::same('disabled="0"', HtmlHelpers::formatAttribute('disabled', 0));
+	Assert::null(HtmlHelpers::formatAttribute('disabled', []));
+
+	// invalid
+	Assert::exception(
+		fn() => HtmlHelpers::formatAttribute('disabled', (object) []),
+		Error::class,
 	);
 });
 
 
 test('style attribute', function () {
-	Assert::same(
-		'style="color:red;"',
-		HtmlHelpers::formatAttribute('style', 'color:red;'),
-	);
+	Assert::same('style=""', HtmlHelpers::formatAttribute('style', ''));
+	Assert::same('style="color:red;"', HtmlHelpers::formatAttribute('style', 'color:red;'));
 	Assert::null(HtmlHelpers::formatAttribute('style', []));
 
 	Assert::same(
@@ -61,24 +69,28 @@ test('style attribute', function () {
 		HtmlHelpers::formatAttribute('style', ['color: red', 'font-size: 16px']),
 	);
 
+	// special values
+	Assert::same('style', HtmlHelpers::formatAttribute('style', true));
+	Assert::null(HtmlHelpers::formatAttribute('style', false));
+	Assert::null(HtmlHelpers::formatAttribute('style', null));
+	Assert::same('style="1"', HtmlHelpers::formatAttribute('style', 1));
+	Assert::same('style="0"', HtmlHelpers::formatAttribute('style', 0));
+
 	// invalid
 	Assert::same(
 		'style="color"',
 		HtmlHelpers::formatAttribute('style', ['color' => true]),
 	);
-
-	Assert::same(
-		'style="1"',
-		HtmlHelpers::formatAttribute('style', 1),
+	Assert::exception(
+		fn() => HtmlHelpers::formatAttribute('style', (object) []),
+		Error::class,
 	);
 });
 
 
 test('class attribute', function () {
-	Assert::same(
-		'class="btn btn-primary"',
-		HtmlHelpers::formatAttribute('class', 'btn btn-primary'),
-	);
+	Assert::same('class=""', HtmlHelpers::formatAttribute('class', ''));
+	Assert::same('class="btn btn-primary"', HtmlHelpers::formatAttribute('class', 'btn btn-primary'));
 	Assert::null(HtmlHelpers::formatAttribute('class', []));
 
 	Assert::same(
@@ -90,23 +102,27 @@ test('class attribute', function () {
 		HtmlHelpers::formatAttribute('class', ['btn' => true, 'red' => false]),
 	);
 
+	// special values
+	Assert::same('class', HtmlHelpers::formatAttribute('class', true));
+	Assert::null(HtmlHelpers::formatAttribute('class', false));
+	Assert::null(HtmlHelpers::formatAttribute('class', null));
+	Assert::same('class="1"', HtmlHelpers::formatAttribute('class', 1));
+	Assert::same('class="0"', HtmlHelpers::formatAttribute('class', 0));
+
 	// invalid
 	Assert::same(
 		'class="btn:a red:b"',
 		HtmlHelpers::formatAttribute('class', ['btn' => 'a', 'red' => 'b']),
 	);
+	Assert::exception(
+		fn() => HtmlHelpers::formatAttribute('class', (object) []),
+		Error::class,
+	);
 });
 
 
-test('special values (numbers, Infinity, NaN)', function () {
-	Assert::same(
-		'width="0"',
-		HtmlHelpers::formatAttribute('width', 0),
-	);
-	Assert::same(
-		'foo="NAN"',
-		HtmlHelpers::formatAttribute('foo', NAN),
-	);
+test('edge cases', function () {
+	Assert::same('foo="NAN"', HtmlHelpers::formatAttribute('foo', NAN));
 
 	// invalid UTF-8 (is not processed)
 	Assert::same( // invalid codepoint high surrogates
@@ -116,13 +132,5 @@ test('special values (numbers, Infinity, NaN)', function () {
 	Assert::same( // stripped UTF
 		"a='foo \xE3\x80\x22 bar'",
 		HtmlHelpers::formatAttribute('a', "foo \xE3\x80\x22 bar"),
-	);
-});
-
-
-test('invalid values', function () {
-	Assert::error(
-		fn() => Assert::null(HtmlHelpers::formatAttribute('foo', (object) [])),
-		Error::class,
 	);
 });
