@@ -146,8 +146,8 @@ test('space-separated attribute', function () use ($latte) {
 test('on* attribute', function () use ($latte) {
 	Assert::match(
 		<<<'XX'
-			<span onclick="0"></span>
-			<span onclick="123"></span>
+			<span></span>
+			<span></span>
 			<span onclick=""></span>
 			<span onclick="one&amp;two"></span>
 			<span></span>

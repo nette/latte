@@ -185,6 +185,11 @@ final class HtmlHelpers
 				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
 				default => self::triggerError($type, $name),
 			},
+			str_starts_with($lname, 'on') => match ($type) {
+				'string' => $value,
+				'null' => null,
+				default => self::triggerError($type, $name),
+			},
 			$lname === 'style' => match ($type) {
 				'string' => $value,
 				'null' => null,
