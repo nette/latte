@@ -170,7 +170,7 @@ final class HtmlHelpers
 	/**
 	 * Formats HTML attribute value based on attribute type and value type.
 	 */
-	public static function formatAttribute(string $name, mixed $value): ?string
+	public static function formatAttribute(string $name, mixed $value, bool $nAttr = false): ?string
 	{
 		if ($value instanceof \Stringable) {
 			$value = $value instanceof HtmlStringable ? self::convertHtmlToText((string) $value) : (string) $value;
