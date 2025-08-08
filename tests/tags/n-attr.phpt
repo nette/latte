@@ -93,12 +93,6 @@ Assert::match(
 	$latte->renderToString('<input n:attr="$attrs">', ['attrs' => ['a' => '<>"', 'b' => "'"]]),
 );
 
-// misuse of
-Assert::match(
-	'<input rowspan=2>',
-	$latte->renderToString('<input n:attr="\'rowspan=2\' => true">'),
-);
-
 
 Assert::exception(
 	fn() => $latte->compile('<div n:attr/>'),

@@ -21,6 +21,15 @@ use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE;
  */
 final class HtmlHelpers
 {
+	private const BooleanAttributes = [
+		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
+		'contenteditable' => 1, 'default' => 1, 'defer' => 1, 'disabled' => 1, 'draggable' => 1, 'formnovalidate' => 1,
+		'hidden' => 1, 'inert' => 1, 'ismap' => 1, 'itemscope' => 1, 'loop' => 1, 'multiple' => 1, 'muted' => 1,
+		'nomodule' => 1, 'novalidate' => 1, 'open' => 1, 'playsinline' => 1, 'readonly' => 1, 'required' => 1,
+		'reversed' => 1, 'selected' => 1, 'spellcheck' => 1,
+	];
+
+
 	/**
 	 * Escapes string for use inside HTML text.
 	 */
@@ -165,16 +174,15 @@ final class HtmlHelpers
 		$type = get_debug_type($value);
 		$lname = strtolower($name);
 		$value = match (true) {
+			isset(self::BooleanAttributes[$lname]) => (bool) $value,
 			$lname === 'style' => match ($type) {
 				'string' => $value,
-				'bool' => $value,
 				'null' => null,
 				'array' => self::formatArray($value, fn($v, $k) => is_string($k) ? $k . ':' . $v : $v, ';'),
 				default => self::triggerError($type, $name),
 			},
 			default => match ($type) {
 				'string', 'int', 'float' => (string) $value,
-				'bool' => $value,
 				'null' => null,
 				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
 				default => self::triggerError($type, $name),

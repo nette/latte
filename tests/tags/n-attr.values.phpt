@@ -30,7 +30,7 @@ test('text attributes', function () use ($latte) {
 			<span title="123"></span>
 			<span title=""></span>
 			<span title="one&amp;two"></span>
-			<span title></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
@@ -38,7 +38,7 @@ test('text attributes', function () use ($latte) {
 			<span title="one&amp;"></span>
 			<span title="one&amp;<br>"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="title => 0"></span>
 			<span n:attr="title => 123"></span>
 			<span n:attr="title => ''"></span>
@@ -58,15 +58,15 @@ test('text attributes', function () use ($latte) {
 test('boolean attributes', function () use ($latte) {
 	Assert::match(
 		<<<'XX'
-			<span disabled="0"></span>
-			<span disabled="123"></span>
-			<span disabled=""></span>
-			<span disabled="one&amp;two"></span>
+			<span></span>
+			<span disabled></span>
+			<span></span>
+			<span disabled></span>
 			<span disabled></span>
 			<span></span>
 			<span></span>
 			<span></span>
-			<span disabled="hello"></span>
+			<span disabled></span>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<span n:attr="disabled => 0"></span>
@@ -90,7 +90,7 @@ test('style attribute', function () use ($latte) {
 			<span></span>
 			<span style=""></span>
 			<span style="one&amp;two"></span>
-			<span style></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
@@ -120,14 +120,14 @@ test('space-separated attribute', function () use ($latte) {
 			<span class="123"></span>
 			<span class=""></span>
 			<span class="one&amp;two"></span>
-			<span class></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span class="hello"></span>
 			<span class="hello"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="class => 0"></span>
 			<span n:attr="class => 123"></span>
 			<span n:attr="class => ''"></span>
@@ -150,13 +150,13 @@ test('on* attribute', function () use ($latte) {
 			<span onclick="123"></span>
 			<span onclick=""></span>
 			<span onclick="one&amp;two"></span>
-			<span onclick></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span onclick="hello"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="onclick => 0"></span>
 			<span n:attr="onclick => 123"></span>
 			<span n:attr="onclick => ''"></span>
@@ -178,14 +178,14 @@ test('data attribute', function () use ($latte) {
 			<span data-foo="123"></span>
 			<span data-foo=""></span>
 			<span data-foo="one&amp;two"></span>
-			<span data-foo></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span data-foo="hello"></span>
 			<span data-foo="two&amp;"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="data-foo => 0"></span>
 			<span n:attr="data-foo => 123"></span>
 			<span n:attr="data-foo => ''"></span>
@@ -208,14 +208,14 @@ test('ARIA attribute', function () use ($latte) {
 			<span aria-foo="123"></span>
 			<span aria-foo=""></span>
 			<span aria-foo="one&amp;two"></span>
-			<span aria-foo></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span aria-foo="hello"></span>
 			<span aria-foo="hello"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="aria-foo => 0"></span>
 			<span n:attr="aria-foo => 123"></span>
 			<span n:attr="aria-foo => ''"></span>
