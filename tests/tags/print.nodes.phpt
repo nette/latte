@@ -41,3 +41,35 @@ Assert::match(<<<'XX'
 							name: upper
 				Modifier:
 	XX, exportTraversing('{=($var|trim|upper)}'));
+
+
+Assert::match(<<<'XX'
+	Template:
+		Fragment:
+		Fragment:
+			Element:
+				name: title
+				Auxiliary:
+				Fragment:
+					Text:
+						content: ' '
+					Attribute:
+						Text:
+							content: 'foo'
+						Print:
+							Variable:
+								name: foo
+							Modifier:
+					Text:
+						content: ' '
+					Attribute:
+						Text:
+							content: 'bar'
+						Fragment:
+							Text:
+								content: ' '
+							Print:
+								Variable:
+									name: bar
+								Modifier:
+	XX, exportTraversing('<title foo="{$foo}" bar=" {$bar}">'));

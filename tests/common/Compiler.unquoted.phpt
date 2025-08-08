@@ -15,6 +15,8 @@ $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader);
 
 $template = <<<'EOD'
+	<span title=hello></span>
+
 	<span title={$x} class={$x}></span>
 
 	<span title={$x} {$x}></span>
