@@ -221,6 +221,28 @@ test('data attributes', function () {
 });
 
 
+test('ARIA attributes', function () {
+	Assert::same('aria-foo=""', HtmlHelpers::formatAttribute('aria-foo', ''));
+	Assert::same('aria-foo="bar"', HtmlHelpers::formatAttribute('aria-foo', 'bar'));
+	Assert::same('aria-foo="1"', HtmlHelpers::formatAttribute('aria-foo', 1));
+	Assert::same('aria-foo="0"', HtmlHelpers::formatAttribute('aria-foo', 0));
+
+	Assert::same('aria-foo="true"', HtmlHelpers::formatAttribute('aria-foo', true));
+	Assert::same('aria-foo="false"', HtmlHelpers::formatAttribute('aria-foo', false));
+	Assert::null(HtmlHelpers::formatAttribute('aria-foo', null));
+
+	Assert::null(HtmlHelpers::formatAttribute('aria-foo', []));
+	Assert::same('aria-foo="a b"', HtmlHelpers::formatAttribute('aria-foo', ['a', 'b']));
+	Assert::same('aria-foo="Karel"', HtmlHelpers::formatAttribute('aria-foo', ['user' => 'Karel']));
+
+	// invalid
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('aria-foo', (object) []),
+		E_USER_WARNING,
+	);
+});
+
+
 test('edge cases', function () {
 	Assert::same('foo="NAN"', HtmlHelpers::formatAttribute('foo', NAN));
 
