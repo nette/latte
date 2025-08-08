@@ -185,6 +185,39 @@ test('data attributes', function () {
 });
 
 
+test('on* attributes', function () {
+	Assert::same('onclick=""', HtmlHelpers::formatAttribute('onclick', ''));
+	Assert::same('onclick="bar"', HtmlHelpers::formatAttribute('onclick', 'bar'));
+	Assert::null(HtmlHelpers::formatAttribute('onclick', null));
+
+	// invalid
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('onclick', 1),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('onclick', 0),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('onclick', true),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('onclick', false),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('onclick', []),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => HtmlHelpers::formatAttribute('onclick', (object) []),
+		E_USER_WARNING,
+	);
+});
+
+
 test('edge cases', function () {
 	Assert::same('foo="NAN"', HtmlHelpers::formatAttribute('foo', NAN));
 
