@@ -31,7 +31,7 @@ Assert::match(
 				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
 				foreach ((array) $ʟ_tmp as $ʟ_an => $ʟ_av) {
 					if ($ʟ_tmp = LR\HtmlHelpers::formatAttribute($ʟ_an, $ʟ_av)) {
-						echo ' ', $ʟ_tmp /* line 2 */;
+						echo ' ', $ʟ_tmp /* line 2:4 */;
 					}
 				}
 				echo '> </p>
@@ -41,7 +41,7 @@ Assert::match(
 				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
 				foreach ((array) $ʟ_tmp as $ʟ_an => $ʟ_av) {
 					if ($ʟ_tmp = LR\HtmlHelpers::formatAttribute($ʟ_an, $ʟ_av)) {
-						echo ' ', $ʟ_tmp /* line 4 */;
+						echo ' ', $ʟ_tmp /* line 4:8 */;
 					}
 				}
 				echo '>
