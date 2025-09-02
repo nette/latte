@@ -34,11 +34,11 @@ b) ';
 		unset($ʟ_args);
 
 		echo '	Variables ';
-		echo LR\Filters::escapeHtmlText($var1) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var1) /* line %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText(($this->filters->implode)($var2)) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->implode)($var2)) /* line %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($var3) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var3) /* line %d%:%d% */;
 		echo "\n";
 	}
 }

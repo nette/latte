@@ -12,7 +12,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="';
-		echo LR\Filters::escapeXmlText($id) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeTag($id) /* line %d%:%d% */;
 		echo '"?>
 
 <script>';
@@ -24,29 +24,29 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul>
 	<li>Escaped: ';
-		echo LR\Filters::escapeXmlText($hello) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeText($hello) /* line %d%:%d% */;
 		echo '</li>
 	<li>Non-escaped: ';
 		echo $hello /* line %d%:%d% */;
 		echo '</li>
 	<li>Escaped expression: ';
-		echo LR\Filters::escapeXmlText('<' . 'b' . '>hello' . '</b>') /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeText('<' . 'b' . '>hello' . '</b>') /* line %d%:%d% */;
 		echo '</li>
 	<li>Non-escaped expression: ';
 		echo '<' . 'b' . '>hello' . '</b>' /* line %d%:%d% */;
 		echo '</li>
 	<li>Array access: ';
-		echo LR\Filters::escapeXmlText($people[1]) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeText($people[1]) /* line %d%:%d% */;
 		echo '</li>
 	<li>Html: ';
-		echo LR\Filters::escapeXmlText($el) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeText($el) /* line %d%:%d% */;
 		echo '</li>
 </ul>
 
 <style type="text/css">
 <!--
 #';
-		echo LR\Filters::escapeHtmlComment($id) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeComment($id) /* line %d%:%d% */;
 		echo ' {
 	background: blue;
 }
@@ -57,32 +57,32 @@ final class Template%a% extends Latte\Runtime\Template
 <script>
 <!--
 var html = ';
-		echo LR\Filters::escapeHtmlComment($el) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeComment($el) /* line %d%:%d% */;
 		echo ';
 -->
 </script>
 
 
 <p onclick=\'alert(';
-		echo LR\Filters::escapeXmlAttr($id) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($id) /* line %d%:%d% */;
 		echo ');alert("hello");\'
  title=\'';
-		echo LR\Filters::escapeXmlAttr($id) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($id) /* line %d%:%d% */;
 		echo '"\'
  style="color:';
-		echo LR\Filters::escapeXmlAttr($id) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($id) /* line %d%:%d% */;
 		echo ';\'"
  alt=\'';
-		echo LR\Filters::escapeXmlAttr($el) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($el) /* line %d%:%d% */;
 		echo '\'
  onfocus="alert(';
-		echo LR\Filters::escapeXmlAttr($el) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($el) /* line %d%:%d% */;
 		echo ')"
 >click on me</p>
 
 
 <!-- ';
-		echo LR\Filters::escapeHtmlComment($comment) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeComment($comment) /* line %d%:%d% */;
 		echo ' -->
 
 
@@ -93,7 +93,7 @@ var html = ';
 ';
 		foreach ($people as $person) /* line %d%:%d% */ {
 			echo '	<li>';
-			echo LR\Filters::escapeXmlText($person) /* line %d%:%d% */;
+			echo LR\XmlHelpers::escapeText($person) /* line %d%:%d% */;
 			echo '</li>
 ';
 
@@ -120,11 +120,11 @@ var html = ';
 		echo '"> </p>
 
 <p val="';
-		echo LR\Filters::escapeXmlAttr($xss) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
 		echo '" > </p>
 
 <p onclick="';
-		echo LR\Filters::escapeXmlAttr($xss) /* line %d%:%d% */;
+		echo LR\XmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
 		echo '"> </p>
 ';
 	}
