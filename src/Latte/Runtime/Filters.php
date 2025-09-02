@@ -125,7 +125,7 @@ class Filters
 	/**
 	 * Escapes string for use everywhere inside XML (except for comments and tags).
 	 */
-	public static function escapeXml($s): string
+	public static function escapeXmlText($s): string
 	{
 		if ($s instanceof HtmlStringable) {
 			return $s->__toString();
@@ -140,11 +140,23 @@ class Filters
 
 
 	/**
+	 * Escapes string for use inside XML attribute value.
+	 */
+	public static function escapeXmlAttr($s): string
+	{
+		if ($s instanceof HtmlStringable) {
+			$s = self::convertHtmlToText($s->__toString());
+		}
+		return self::escapeXmlText($s);
+	}
+
+
+	/**
 	 * Escapes string for use inside XML tag.
 	 */
 	public static function escapeXmlTag($s): string
 	{
-		$s = self::escapeXml((string) $s);
+		$s = self::escapeXmlText((string) $s);
 		return preg_replace_callback(
 			'#[=/\s]#',
 			fn($m) => '&#' . ord($m[0]) . ';',

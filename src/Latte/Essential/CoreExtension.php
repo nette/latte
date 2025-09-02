@@ -133,7 +133,7 @@ final class CoreExtension extends Latte\Extension
 			'escapeICal' => [Latte\Runtime\Filters::class, 'escapeICal'],
 			'escapeJs' => [Latte\Runtime\Filters::class, 'escapeJs'],
 			'escapeUrl' => 'rawurlencode',
-			'escapeXml' => [Latte\Runtime\Filters::class, 'escapeXml'],
+			'escapeXml' => [Latte\Runtime\Filters::class, 'escapeXmlText'],
 			'explode' => [$this->filters, 'explode'],
 			'filter' => [$this->filters, 'filter'],
 			'first' => [$this->filters, 'first'],
