@@ -34,7 +34,7 @@ test('text attributes', function () use ($latte) {
 			<span></span>
 			<span></span>
 			<span></span>
-			<span title="hello"></span>
+			<span></span>
 			<span title="one&amp;"></span>
 			<span title="one&amp;<br>"></span>
 			XX,
@@ -154,7 +154,7 @@ test('on* attribute', function () use ($latte) {
 			<span></span>
 			<span></span>
 			<span></span>
-			<span onclick="hello"></span>
+			<span></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="onclick => 0"></span>
@@ -182,8 +182,8 @@ test('data attribute', function () use ($latte) {
 			<span></span>
 			<span></span>
 			<span></span>
-			<span data-foo="hello"></span>
-			<span data-foo="two&amp;"></span>
+			<span></span>
+			<span></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="data-foo => 0"></span>
@@ -212,8 +212,8 @@ test('ARIA attribute', function () use ($latte) {
 			<span></span>
 			<span></span>
 			<span></span>
-			<span aria-foo="hello"></span>
-			<span aria-foo="hello"></span>
+			<span></span>
+			<span></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="aria-foo => 0"></span>

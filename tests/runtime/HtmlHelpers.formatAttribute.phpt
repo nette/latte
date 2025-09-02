@@ -32,7 +32,6 @@ test('regular text attributes', function () {
 	Assert::null(HtmlHelpers::formatAttribute('title', null));
 	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
 	Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
-	Assert::null(HtmlHelpers::formatAttribute('title', []));
 	Assert::same('title="one&amp;"', HtmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>')));
 	Assert::same('title="one&amp;<br>"', HtmlHelpers::formatAttribute('title', new Str));
 
@@ -43,6 +42,10 @@ test('regular text attributes', function () {
 	);
 	Assert::error(
 		fn() => Assert::null(HtmlHelpers::formatAttribute('title', false)),
+		E_USER_WARNING,
+	);
+	Assert::error(
+		fn() => Assert::null(HtmlHelpers::formatAttribute('title', [])),
 		E_USER_WARNING,
 	);
 	Assert::error(

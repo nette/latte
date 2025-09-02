@@ -29,6 +29,10 @@ final class HtmlHelpers
 		'reversed' => 1, 'selected' => 1, 'spellcheck' => 1,
 	];
 
+	private const SpaceSeparatedAttributes = [
+		'accesskey' => 1, 'class' => 1, 'headers' => 1, 'itemprop' => 1, 'ping' => 1, 'rel' => 1, 'role' => 1, 'sandbox' => 1,
+	];
+
 
 	/**
 	 * Escapes string for use inside HTML text.
@@ -175,6 +179,12 @@ final class HtmlHelpers
 		$lname = strtolower($name);
 		$value = match (true) {
 			isset(self::BooleanAttributes[$lname]) => (bool) $value,
+			isset(self::SpaceSeparatedAttributes[$lname]) => match ($type) {
+				'string', 'int', 'float' => (string) $value,
+				'null' => null,
+				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
+				default => self::triggerError($type, $name),
+			},
 			$lname === 'style' => match ($type) {
 				'string' => $value,
 				'null' => null,
@@ -184,7 +194,6 @@ final class HtmlHelpers
 			default => match ($type) {
 				'string', 'int', 'float' => (string) $value,
 				'null' => null,
-				'array' => self::formatArray($value, fn($v, $k) => $v === true ? $k : $v, ' '),
 				default => self::triggerError($type, $name),
 			},
 		};
