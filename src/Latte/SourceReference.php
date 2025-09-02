@@ -24,8 +24,8 @@ class SourceReference
 			&& ($content = file_get_contents($file))
 			&& preg_match('#^/\*\* source: (\S.+) \*/#m', $content, $source)
 		) {
-			$line && preg_match('~/\* line (\d+) \*/~', explode("\n", $content)[$line - 1], $pos);
-			return new self($source[1], isset($pos[1]) ? (int) $pos[1] : null);
+			$line && preg_match('~/\* line (\d+)(?::(\d+))? \*/~', explode("\n", $content)[$line - 1], $pos);
+			return new self($source[1], isset($pos[1]) ? (int) $pos[1] : null, isset($pos[2]) ? (int) $pos[2] : null);
 		}
 		return null;
 	}
