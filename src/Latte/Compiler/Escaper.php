@@ -42,8 +42,8 @@ final class Escaper
 			self::HtmlAttribute . '/' . self::JavaScript => 'escapeHtmlAttr',
 			self::HtmlAttribute . '/' . self::Css => 'escapeHtmlAttr',
 			self::HtmlComment => 'escapeHtmlComment',
-			'xml' => 'escapeXml',
-			'xml/attr' => 'escapeXml',
+			'xml' => 'escapeXmlText',
+			'xml/attr' => 'escapeXmlAttr',
 		],
 		self::JavaScript => [
 			self::HtmlText => 'escapeHtmlText',
@@ -195,8 +195,8 @@ final class Escaper
 			},
 			ContentType::Xml => match ($this->state) {
 				self::HtmlText,
-				self::HtmlBogusTag => 'LR\Filters::escapeXml(' . $str . ')',
-				self::HtmlAttribute => 'LR\Filters::escapeXml(' . $str . ')',
+				self::HtmlBogusTag => 'LR\Filters::escapeXmlText(' . $str . ')',
+				self::HtmlAttribute => 'LR\Filters::escapeXmlAttr(' . $str . ')',
 				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
 				self::HtmlTag => 'LR\Filters::escapeXmlTag(' . $str . ')',
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
