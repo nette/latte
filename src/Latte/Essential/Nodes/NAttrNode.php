@@ -41,8 +41,8 @@ final class NAttrNode extends StatementNode
 			<<<'XX'
 				$ʟ_tmp = %node;
 				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
-				foreach ((array) $ʟ_tmp as $ʟ_nm => $ʟ_v) {
-					if ($ʟ_tmp = LR\%raw::formatAttribute($ʟ_nm, $ʟ_v)) {
+				foreach ((array) $ʟ_tmp as $ʟ_an => $ʟ_av) {
+					if ($ʟ_tmp = LR\%raw::formatAttribute($ʟ_an, $ʟ_av)) {
 						echo ' ', $ʟ_tmp %line;
 					}
 				}
