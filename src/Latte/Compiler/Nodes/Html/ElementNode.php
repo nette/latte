@@ -55,10 +55,10 @@ class ElementNode extends AreaNode
 
 	public function getAttribute(string $name): string|Node|bool|null
 	{
-		foreach ($this->attributes?->children as $child) {
+		foreach ($this->attributes?->children ?? [] as $child) {
 			if ($child instanceof AttributeNode
 				&& $child->name instanceof Nodes\TextNode
-				&& strcasecmp($name, $child->name->content) === 0
+				&& $this->matchesIdentifier($name, $child->name->content)
 			) {
 				return NodeHelpers::toText($child->value) ?? $child->value ?? true;
 			}
@@ -70,9 +70,15 @@ class ElementNode extends AreaNode
 
 	public function is(string $name): bool
 	{
+		return $this->matchesIdentifier($this->name, $name);
+	}
+
+
+	private function matchesIdentifier(string $a, string $b): bool
+	{
 		return $this->contentType === ContentType::Html
-			? strcasecmp($this->name, $name) === 0
-			: $this->name === $name;
+			? strcasecmp($a, $b) === 0
+			: $a === $b;
 	}
 
 
