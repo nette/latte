@@ -145,7 +145,7 @@ final class Escaper
 	public function enterHtmlTag(string $name): void
 	{
 		$this->state = self::HtmlTag;
-		$this->tag = strtolower($name);
+		$this->tag = $name;
 	}
 
 
@@ -168,7 +168,7 @@ final class Escaper
 			} elseif ($name === 'style') {
 				$this->subType = self::Css;
 			} elseif ((in_array($name, ['href', 'src', 'action', 'formaction'], true)
-				|| ($name === 'data' && $this->tag === 'object'))
+				|| ($name === 'data' && strcasecmp($this->tag, 'object') === 0))
 			) {
 				$this->subType = self::Url;
 			}
