@@ -96,6 +96,12 @@ final class XmlHelpers
 	}
 
 
+	public static function formatCommonAttribute(string $namePart, mixed $value): string
+	{
+		return $namePart . '="' . self::escapeAttr($value) . '"';
+	}
+
+
 	/**
 	 * Checks that the HTML tag name can be changed.
 	 */

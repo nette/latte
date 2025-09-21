@@ -4,15 +4,15 @@
 		echo LR\HtmlHelpers::escapeText($el2) /* line %d%:%d% */;
 		echo '
 
-<p val="';
-		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
-		echo '" > </p>
-<p onclick="';
-		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
-		echo '"> </p>
-<p ONCLICK="';
-		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
-		echo '" ';
+<p';
+		echo LR\HtmlHelpers::formatCommonAttribute(' val', $xss) /* line %d%:%d% */;
+		echo ' > </p>
+<p';
+		echo LR\HtmlHelpers::formatCommonAttribute(' onclick', $xss) /* line %d%:%d% */;
+		echo '> </p>
+<p';
+		echo LR\HtmlHelpers::formatCommonAttribute(' ONCLICK', $xss) /* line %d%:%d% */;
+		echo ' ';
 		echo LR\HtmlHelpers::escapeTag($xss) /* line %d%:%d% */;
 		echo '> </p>
 
@@ -58,16 +58,16 @@ var prop2 = ';
 
 <p onclick=\'alert(';
 		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* line %d%:%d% */;
-		echo ');alert("hello");\'
- title="';
-		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
-		echo '"
+		echo ');alert("hello");\'';
+		echo LR\HtmlHelpers::formatCommonAttribute('
+ title', $xss) /* line %d%:%d% */;
+		echo '
  STYLE="color:';
 		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss($xss)) /* line %d%:%d% */;
-		echo ';"
- rel="';
-		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
-		echo '"
+		echo ';"';
+		echo LR\HtmlHelpers::formatCommonAttribute('
+ rel', $xss) /* line %d%:%d% */;
+		echo '
  onblur="alert(';
 		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* line %d%:%d% */;
 		echo ')"
