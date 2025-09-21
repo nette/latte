@@ -11,13 +11,18 @@ namespace Latte\Essential;
 
 use Latte\CompileException;
 use Latte\Compiler\Node;
+use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\NameNode;
+use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Nodes\TemplateNode;
+use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PrintContext;
+use Latte\ContentType;
 use Latte\Engine;
+use Latte\Runtime\HtmlHelpers;
 use function array_combine, array_keys, array_map, in_array, is_string, str_starts_with, strtolower;
 
 
@@ -68,6 +73,32 @@ final class Passes
 				&& (str_starts_with($node->name, 'ʟ_') || in_array($node->name, $forbidden, true))
 			) {
 				throw new CompileException("Forbidden variable \$$node->name.", $node->position);
+			}
+		});
+	}
+
+
+	/**
+	 * Validate PrintNode inside <script> - prevent quotes after PrintNode
+	 */
+	public function scriptTagQuotesPass(TemplateNode $node): void
+	{
+		if ($node->contentType !== ContentType::Html) {
+			return;
+		}
+		(new NodeTraverser)->traverse($node, function (Node $node) {
+			if ($node instanceof ElementNode && $node->is('script')
+				&& HtmlHelpers::classifyScriptType((string) $node->getAttribute('type')) === ContentType::JavaScript
+			) {
+				$prev = null;
+				foreach ($node->content ?? [] as $child) {
+					if ($prev instanceof PrintNode && $child instanceof TextNode) {
+						if (preg_match('/^["\']/', $child->content)) {
+							throw new CompileException('Do not place print statement {...} inside quotes in JavaScript.', $prev->position);
+						}
+					}
+					$prev = $child;
+				}
 			}
 		});
 	}
