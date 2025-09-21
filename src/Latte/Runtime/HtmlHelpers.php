@@ -52,14 +52,7 @@ final class HtmlHelpers
 			$value = (string) $value;
 		}
 
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&apos;', '<'],
-				$value,
-			)
-			. $q;
+		return $name . '="' . Filters::escapeHtmlAttr($value) . '"';
 	}
 
 
