@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
+use Latte\ContentType;
 use function get_debug_type, implode, in_array, is_array, is_string, preg_match, str_contains, str_replace, strncmp, strtolower;
 
 
@@ -72,6 +73,22 @@ final class HtmlHelpers
 			'col' => 1, 'link' => 1, 'param' => 1, 'basefont' => 1, 'frame' => 1, 'isindex' => 1, 'wbr' => 1, 'command' => 1, 'track' => 1,
 		];
 		return isset($names[strtolower($name)]);
+	}
+
+
+	/**
+	 * Classifies script content type based on the MIME type.
+	 */
+	public static function classifyScriptType(string $type): string
+	{
+		if (preg_match('#((application|text)/(((x-)?java|ecma|j|live)script|json)|application/.+\+json|text/plain|module|importmap|)$#Ai', $type)) {
+			return ContentType::JavaScript;
+
+		} elseif (preg_match('#text/((x-)?template|html)$#Ai', $type)) {
+			return ContentType::Html;
+		}
+
+		return ContentType::Text;
 	}
 
 
