@@ -14,7 +14,8 @@ use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use function implode, is_array, is_string, str_contains, str_replace, strncmp;
+use Latte\Runtime\Filters;
+use function implode, is_array, is_string, strncmp;
 
 
 /**
@@ -93,14 +94,7 @@ final class NAttrNode extends StatementNode
 			$value = (string) $value;
 		}
 
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&apos;', '<'],
-				$value,
-			)
-			. $q;
+		return $name . '="' . Filters::escapeHtmlAttr($value) . '"';
 	}
 
 
@@ -124,14 +118,7 @@ final class NAttrNode extends StatementNode
 			$value = (string) $value;
 		}
 
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&#39;', '&lt;'],
-				$value,
-			)
-			. $q;
+		return $name . '="' . Filters::escapeXmlAttr($value) . '"';
 	}
 
 
