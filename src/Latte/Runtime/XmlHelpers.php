@@ -48,14 +48,7 @@ final class XmlHelpers
 			$value = (string) $value;
 		}
 
-		$q = !str_contains($value, '"') ? '"' : "'";
-		return $name . '=' . $q
-			. str_replace(
-				['&', $q, '<'],
-				['&amp;', $q === '"' ? '&quot;' : '&#39;', '&lt;'],
-				$value,
-			)
-			. $q;
+		return $name . '="' . Filters::escapeXmlAttr($value) . '"';
 	}
 
 

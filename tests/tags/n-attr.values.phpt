@@ -29,7 +29,7 @@ test('text attributes', function () use ($latte) {
 			<span title="0"></span>
 			<span title="123"></span>
 			<span title=""></span>
-			<span title="one&amp;two '"></span>
+			<span title="one&amp;two &apos;"></span>
 			<span title></span>
 			<span></span>
 			<span></span>
@@ -37,8 +37,8 @@ test('text attributes', function () use ($latte) {
 			<span title="hello one&amp;two"></span>
 			<span title="hello:one&amp;two"></span>
 			<span title="hello"></span>
-			<span title="one&amp;amp;<br> '"></span>
-			<span title='one&amp;<br> "&apos;'></span>
+			<span title="one&amp;amp;&lt;br&gt; &apos;"></span>
+			<span title="one&amp;&lt;br&gt; &quot;&apos;"></span>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<span n:attr="title => 0"></span>

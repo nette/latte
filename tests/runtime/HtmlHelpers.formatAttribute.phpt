@@ -23,7 +23,7 @@ test('regular text attributes', function () {
 		HtmlHelpers::formatAttribute('title', 'Hello & Welcome'),
 	);
 	Assert::same(
-		'title=\'"Hello" &amp; &apos;Welcome&apos;\'',
+		'title="&quot;Hello&quot; &amp; &apos;Welcome&apos;"',
 		HtmlHelpers::formatAttribute('title', '"Hello" & \'Welcome\''),
 	);
 	Assert::same('title=""', HtmlHelpers::formatAttribute('title', ''));
@@ -35,8 +35,8 @@ test('regular text attributes', function () {
 	Assert::same('title="1"', HtmlHelpers::formatAttribute('title', 1));
 	Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
 	Assert::null(HtmlHelpers::formatAttribute('title', []));
-	Assert::same('title="one&amp;amp;<br>"', HtmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
-	Assert::same('title="one&amp;<br>"', HtmlHelpers::formatAttribute('title', new Str));
+	Assert::same('title="one&amp;amp;&lt;br&gt;"', HtmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
+	Assert::same('title="one&amp;&lt;br&gt;"', HtmlHelpers::formatAttribute('title', new Str));
 
 	// invalid
 	Assert::exception(
@@ -133,13 +133,13 @@ test('space-separated attribute', function () {
 
 
 test('edge cases', function () {
-	// invalid UTF-8 (is not processed)
+	// invalid UTF-8
 	Assert::same( // invalid codepoint high surrogates
-		"a=\"foo \u{D800} bar\"",
+		"a=\"foo \u{FFFD} bar\"",
 		HtmlHelpers::formatAttribute('a', "foo \u{D800} bar"),
 	);
 	Assert::same( // stripped UTF
-		"a='foo \xE3\x80\x22 bar'",
+		"a=\"foo \u{FFFD}&quot; bar\"",
 		HtmlHelpers::formatAttribute('a', "foo \xE3\x80\x22 bar"),
 	);
 });

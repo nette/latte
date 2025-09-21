@@ -29,14 +29,14 @@ test('regular text attributes', function () {
 		XmlHelpers::formatAttribute('foo', 'Hello & Welcome'),
 	);
 	Assert::same(
-		'title=\'"Hello" &amp; &#39;Welcome&#39;\'',
-		XmlHelpers::formatAttribute('title', '"Hello" & \'Welcome\''),
+		'foo="&quot;Hello&quot; &amp; &apos;Welcome&apos;"',
+		XmlHelpers::formatAttribute('foo', '"Hello" & \'Welcome\''),
 	);
 	Assert::same('foo=""', XmlHelpers::formatAttribute('foo', ''));
 
 	// special values
-	Assert::same('foo="one&amp;amp;&lt;br>"', XmlHelpers::formatAttribute('foo', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
-	Assert::same('foo="one&amp;&lt;br>"', XmlHelpers::formatAttribute('foo', new Str));
+	Assert::same('foo="one&amp;amp;&lt;br&gt;"', XmlHelpers::formatAttribute('foo', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
+	Assert::same('foo="one&amp;&lt;br&gt;"', XmlHelpers::formatAttribute('foo', new Str));
 });
 
 
@@ -53,11 +53,11 @@ test('special values', function () {
 
 	// invalid UTF-8
 	Assert::same( // invalid codepoint high surrogates
-		"a=\"foo \xED\xA0\x80 bar\"",
+		"a=\"foo \u{FFFD} bar\"",
 		XmlHelpers::formatAttribute('a', "foo \u{D800} bar"),
 	);
 	Assert::same( // stripped UTF
-		"a='foo \xE3\x80\" bar'",
+		"a=\"foo \u{FFFD}&quot; bar\"",
 		XmlHelpers::formatAttribute('a', "foo \xE3\x80\x22 bar"),
 	);
 });
