@@ -39,7 +39,7 @@ test('ElementNode::getAttribute() - no attributes', function () {
 
 test('ElementNode::getAttribute() - existing attribute with text value', function () {
 	$element = new ElementNode('div');
-	$element->attributes = new FragmentNode([
+	$element->attributes->children = [
 		new AttributeNode(
 			new TextNode('class'),
 			new TextNode('container'),
@@ -48,7 +48,7 @@ test('ElementNode::getAttribute() - existing attribute with text value', functio
 			new TextNode('id'),
 			new TextNode('main'),
 		),
-	]);
+	];
 
 	Assert::same('container', $element->getAttribute('class'));
 	Assert::same('main', $element->getAttribute('id'));
@@ -57,12 +57,12 @@ test('ElementNode::getAttribute() - existing attribute with text value', functio
 
 test('ElementNode::getAttribute() - HTML content type case insensitive attribute names', function () {
 	$element = new ElementNode('div', contentType: ContentType::Html);
-	$element->attributes = new FragmentNode([
+	$element->attributes->children = [
 		new AttributeNode(
 			new TextNode('CLASS'),
 			new TextNode('container'),
 		),
-	]);
+	];
 
 	Assert::same('container', $element->getAttribute('class'));
 	Assert::same('container', $element->getAttribute('CLASS'));
@@ -72,7 +72,7 @@ test('ElementNode::getAttribute() - HTML content type case insensitive attribute
 
 test('ElementNode::getAttribute() - non-HTML content type case sensitive attribute names', function () {
 	$element = new ElementNode('element', contentType: ContentType::Xml);
-	$element->attributes = new FragmentNode([
+	$element->attributes->children = [
 		new AttributeNode(
 			new TextNode('CLASS'),
 			new TextNode('container'),
@@ -81,7 +81,7 @@ test('ElementNode::getAttribute() - non-HTML content type case sensitive attribu
 			new TextNode('class'),
 			new TextNode('other'),
 		),
-	]);
+	];
 
 	Assert::same('container', $element->getAttribute('CLASS'));
 	Assert::same('other', $element->getAttribute('class'));
@@ -91,11 +91,11 @@ test('ElementNode::getAttribute() - non-HTML content type case sensitive attribu
 
 test('ElementNode::getAttribute() - boolean attribute (no value)', function () {
 	$element = new ElementNode('input');
-	$element->attributes = new FragmentNode([
+	$element->attributes->children = [
 		new AttributeNode(
 			new TextNode('disabled'),
 		),
-	]);
+	];
 
 	Assert::same(true, $element->getAttribute('disabled'));
 });
@@ -103,12 +103,12 @@ test('ElementNode::getAttribute() - boolean attribute (no value)', function () {
 
 test('ElementNode::getAttribute() - non-existent attribute', function () {
 	$element = new ElementNode('div');
-	$element->attributes = new FragmentNode([
+	$element->attributes->children = [
 		new AttributeNode(
 			new TextNode('class'),
 			new TextNode('container'),
 		),
-	]);
+	];
 
 	Assert::null($element->getAttribute('id'));
 	Assert::null($element->getAttribute('nonexistent'));
