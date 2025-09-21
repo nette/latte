@@ -213,6 +213,7 @@ final class CoreExtension extends Latte\Extension
 			'customFunctions' => [$passes, 'customFunctionsPass'],
 			'moveTemplatePrintToHead' => [Nodes\TemplatePrintNode::class, 'moveToHeadPass'],
 			'nElse' => [Nodes\NElseNode::class, 'processPass'],
+			'scriptTagQuotes' => [$passes, 'scriptTagQuotesPass'],
 		];
 	}
 

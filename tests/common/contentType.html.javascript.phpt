@@ -48,19 +48,29 @@ Assert::match(
 Assert::exception(
 	fn() => $latte->compile('<script>"{=123|noescape}"</script>'),
 	Latte\CompileException::class,
-	'Do not place {=123|noescape} inside quotes in JavaScript (on line 1 at column 10)',
+	'Do not place print statement {...} inside quotes in JavaScript (on line 1 at column 10)',
 );
 
 Assert::exception(
 	fn() => $latte->compile('<script> "{$var}" </script>'),
 	Latte\CompileException::class,
-	'Do not place {=$var} inside quotes in JavaScript (on line 1 at column 11)',
+	'Do not place print statement {...} inside quotes in JavaScript (on line 1 at column 11)',
 );
 
 Assert::exception(
 	fn() => $latte->compile("<script> '{\$var}' </script>"),
 	Latte\CompileException::class,
-	'Do not place {=$var} inside quotes in JavaScript (on line 1 at column 11)',
+	'Do not place print statement {...} inside quotes in JavaScript (on line 1 at column 11)',
+);
+
+// Test that PrintNode with following non-quote text is allowed
+Assert::noError(
+	fn() => $latte->compile('<script>{=$foo}test</script>'),
+);
+
+// Test that quotes in other contexts (not script tags) are allowed
+Assert::noError(
+	fn() => $latte->compile('<div>{=$foo}"test"</div>'),
 );
 
 Assert::match(
