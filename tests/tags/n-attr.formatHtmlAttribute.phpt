@@ -23,7 +23,7 @@ test('regular text attributes', function () {
 		NAttrNode::formatHtmlAttribute('title', 'Hello & Welcome'),
 	);
 	Assert::same(
-		'title=\'"Hello" &amp; &apos;Welcome&apos;\'',
+		'title="&quot;Hello&quot; &amp; &apos;Welcome&apos;"',
 		NAttrNode::formatHtmlAttribute('title', '"Hello" & \'Welcome\''),
 	);
 	Assert::same('title=""', NAttrNode::formatHtmlAttribute('title', ''));
@@ -35,8 +35,11 @@ test('regular text attributes', function () {
 	Assert::same('title="1"', NAttrNode::formatHtmlAttribute('title', 1));
 	Assert::same('title="0"', NAttrNode::formatHtmlAttribute('title', 0));
 	Assert::null(NAttrNode::formatHtmlAttribute('title', []));
-	Assert::same('title="one&amp;amp;<br>"', NAttrNode::formatHtmlAttribute('title', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
-	Assert::same('title="one&amp;<br>"', NAttrNode::formatHtmlAttribute('title', new StringObject));
+	Assert::same(
+		'title="one&amp;amp;&lt;br&gt;"',
+		NAttrNode::formatHtmlAttribute('title', new Latte\Runtime\Html('one&amp;<br>')),
+	); // not supported
+	Assert::same('title="one&amp;&lt;br&gt;"', NAttrNode::formatHtmlAttribute('title', new StringObject));
 
 	// invalid
 	Assert::exception(
@@ -133,13 +136,13 @@ test('space-separated attribute', function () {
 
 
 test('edge cases', function () {
-	// invalid UTF-8 (is not processed)
+	// invalid UTF-8
 	Assert::same( // invalid codepoint high surrogates
-		"a=\"foo \u{D800} bar\"",
+		"a=\"foo \u{FFFD} bar\"",
 		NAttrNode::formatHtmlAttribute('a', "foo \u{D800} bar"),
 	);
 	Assert::same( // stripped UTF
-		"a='foo \xE3\x80\x22 bar'",
+		"a=\"foo \u{FFFD}&quot; bar\"",
 		NAttrNode::formatHtmlAttribute('a', "foo \xE3\x80\x22 bar"),
 	);
 });

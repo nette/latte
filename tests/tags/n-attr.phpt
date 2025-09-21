@@ -50,6 +50,7 @@ Assert::match(
 	$latte->renderToString($template),
 );
 
+$latte->setContentType(Latte\ContentType::Xml);
 Assert::match(
 	<<<'XX'
 
@@ -57,7 +58,34 @@ Assert::match(
 
 		<input checked="checked">
 		XX,
-	$latte->setContentType(Latte\ContentType::Xml)->renderToString($template),
+	$latte->renderToString($template),
+);
+$latte->setContentType(Latte\ContentType::Html);
+
+Assert::match(
+	'<input>',
+	$latte->renderToString('<input n:attr="null">'),
+);
+
+Assert::match(
+	'<input>',
+	$latte->renderToString('<input n:attr="[]">'),
+);
+
+Assert::match(
+	'<input checked>',
+	$latte->renderToString('<input n:attr="[checked: true]">'),
+);
+
+Assert::match(
+	'<input a="&lt;&gt;&quot;" b="&apos;">',
+	$latte->renderToString('<input n:attr="$attrs">', ['attrs' => ['a' => '<>"', 'b' => "'"]]),
+);
+
+// misuse of
+Assert::match(
+	'<input rowspan=2>',
+	$latte->renderToString('<input n:attr="\'rowspan=2\' => true">'),
 );
 
 
