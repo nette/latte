@@ -25,7 +25,7 @@ use Latte\ContentType;
  */
 class ElementNode extends AreaNode
 {
-	public ?FragmentNode $attributes = null;
+	public FragmentNode $attributes;
 	public bool $selfClosing = false;
 	public ?AreaNode $content = null;
 
@@ -41,12 +41,13 @@ class ElementNode extends AreaNode
 		public readonly ?self $parent = null,
 		public string $contentType = ContentType::Html,
 	) {
+		$this->attributes = new FragmentNode;
 	}
 
 
 	public function getAttribute(string $name): string|Node|bool|null
 	{
-		foreach ($this->attributes?->children ?? [] as $child) {
+		foreach ($this->attributes->children as $child) {
 			if ($child instanceof AttributeNode
 				&& $child->name instanceof Nodes\TextNode
 				&& $this->matchesIdentifier($name, $child->name->content)
@@ -111,9 +112,7 @@ class ElementNode extends AreaNode
 		if ($this->dynamicTag) {
 			yield $this->dynamicTag;
 		}
-		if ($this->attributes) {
-			yield $this->attributes;
-		}
+		yield $this->attributes;
 		if ($this->content) {
 			yield $this->content;
 		}
