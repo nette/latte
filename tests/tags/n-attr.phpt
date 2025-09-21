@@ -89,7 +89,7 @@ Assert::match(
 );
 
 Assert::match(
-	'<input a=\'<>"\' b="\'">',
+	'<input a="&lt;&gt;&quot;" b="&apos;">',
 	$latte->renderToString('<input n:attr="$attrs">', ['attrs' => ['a' => '<>"', 'b' => "'"]]),
 );
 

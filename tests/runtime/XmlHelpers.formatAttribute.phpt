@@ -20,8 +20,8 @@ test('regular text attributes', function () {
 		XmlHelpers::formatAttribute('title', 'Hello & Welcome'),
 	);
 	Assert::same(
-		'title=\'"Hello" &amp; &#39;Welcome&#39;\'',
-		XmlHelpers::formatAttribute('title', '"Hello" & \'Welcome\''),
+		'foo="&quot;Hello&quot; &amp; &apos;Welcome&apos;"',
+		XmlHelpers::formatAttribute('foo', '"Hello" & \'Welcome\''),
 	);
 
 	Assert::same(
@@ -51,11 +51,11 @@ test('special values (numbers, Infinity, NaN)', function () {
 
 	// invalid UTF-8
 	Assert::same(
-		"a=\"foo \xED\xA0\x80 bar\"",
+		"a=\"foo \u{FFFD} bar\"",
 		XmlHelpers::formatAttribute('a', "foo \u{D800} bar"),
 	);
 	Assert::same(
-		"a='foo \xE3\x80\" bar'",
+		"a=\"foo \u{FFFD}&quot; bar\"",
 		XmlHelpers::formatAttribute('a', "foo \xE3\x80\x22 bar"),
 	);
 });

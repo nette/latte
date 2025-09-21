@@ -20,7 +20,7 @@ test('regular text attributes', function () {
 		HtmlHelpers::formatAttribute('title', 'Hello & Welcome'),
 	);
 	Assert::same(
-		'title=\'"Hello" &amp; &apos;Welcome&apos;\'',
+		'title="&quot;Hello&quot; &amp; &apos;Welcome&apos;"',
 		HtmlHelpers::formatAttribute('title', '"Hello" & \'Welcome\''),
 	);
 
@@ -108,13 +108,13 @@ test('special values (numbers, Infinity, NaN)', function () {
 		HtmlHelpers::formatAttribute('foo', NAN),
 	);
 
-	// invalid UTF-8 (is not processed)
+	// invalid UTF-8
 	Assert::same( // invalid codepoint high surrogates
-		"a=\"foo \u{D800} bar\"",
+		"a=\"foo \u{FFFD} bar\"",
 		HtmlHelpers::formatAttribute('a', "foo \u{D800} bar"),
 	);
 	Assert::same( // stripped UTF
-		"a='foo \xE3\x80\x22 bar'",
+		"a=\"foo \u{FFFD}&quot; bar\"",
 		HtmlHelpers::formatAttribute('a', "foo \xE3\x80\x22 bar"),
 	);
 });
