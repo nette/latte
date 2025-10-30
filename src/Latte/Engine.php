@@ -19,8 +19,8 @@ use const PHP_VERSION_ID;
  */
 class Engine
 {
-	public const Version = '3.0.23';
-	public const VersionId = 30023;
+	public const Version = '3.0.24';
+	public const VersionId = 30024;
 
 	/** @deprecated use Engine::Version */
 	public const
