@@ -348,6 +348,12 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('{="\400"}'),
+	Latte\CompileException::class,
+	'Octal escape sequence \400 is greater than \377',
+);
+
+Assert::exception(
 	fn() => $latte->compile(<<<'XX'
 				{foreach [] as $item}
 					<li><a n:tag-if="$iterator->odd"></li>

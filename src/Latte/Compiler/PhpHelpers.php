@@ -207,7 +207,11 @@ final class PhpHelpers
 				} elseif ($ch[0] === 'u') {
 					return self::codePointToUtf8(hexdec($matches[2]));
 				} else {
-					return chr(octdec($ch));
+					$num = octdec($ch);
+					if ($num > 255) {
+						throw new CompileException("Octal escape sequence \\$ch is greater than \\377");
+					}
+					return chr($num);
 				}
 			},
 			$str,

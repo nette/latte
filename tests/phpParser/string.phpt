@@ -15,7 +15,7 @@ $test = <<<'XX'
 	"Hi",
 	'!\'!\\!\a!',
 	"!\"!\\!\$!\n!\r!\t!\f!\v!\e!\a",
-	"!\xFF!\377!\400!\0!",
+	"!\xFF!\377!\0!",
 	XX;
 
 $node = parseCode($test);
@@ -80,7 +80,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  position: 6:1
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
-   |  |  |  value: '!\xFF!\xFF!\x00!\x00!'
+   |  |  |  value: '!\xFF!\xFF!\x00!'
    |  |  |  position: 7:1
    |  |  key: null
    |  |  byRef: false
