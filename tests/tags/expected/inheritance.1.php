@@ -69,7 +69,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '	</ul>
 	Parent: ';
-		echo LR\Filters::escapeHtmlText(gettype($this->getReferringTemplate())) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->global->fn->info2)($this, )) /* line %d% */;
 		echo "\n";
 	}
 }
