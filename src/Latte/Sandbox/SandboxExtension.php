@@ -84,6 +84,9 @@ final class SandboxExtension extends Latte\Extension
 
 			return $node;
 
+		} elseif ($node instanceof Latte\Compiler\Nodes\PrintNode && !$node->modifier->escape) {
+			throw new SecurityViolationException('Filter |noescape is not allowed.', $node->modifier->position);
+
 		} elseif ($node instanceof Expression\NewNode) {
 			throw new SecurityViolationException("Forbidden keyword 'new'", $node->position);
 

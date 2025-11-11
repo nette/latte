@@ -21,6 +21,11 @@ Assert::contains(
 );
 
 Assert::contains(
+	'echo ($this->filters->translate)(\'var\') /*',
+	$latte->compile('{_var|noescape}'),
+);
+
+Assert::contains(
 	'echo LR\HtmlHelpers::escapeText(($this->filters->translate)(\'messages.hello\', 10, 20)) /* pos 1:1 */;',
 	$latte->compile('{_messages.hello, 10, 20}'),
 );

@@ -63,18 +63,12 @@ class ModifierNode extends Node
 
 	public function printSimple(PrintContext $context, string $expr): string
 	{
-		$escape = $this->escape;
 		foreach ($this->filters as $filter) {
-			$name = $filter->name->name;
-			if ($name === 'noescape') {
-				$escape = false;
-			} else {
-				$expr = $filter->printSimple($context, $expr);
-			}
+			$expr = $filter->printSimple($context, $expr);
 		}
 
 		$escaper = $context->getEscaper();
-		return $escape
+		return $this->escape
 			? $escaper->escape($expr)
 			: $escaper->escapeMandatory($expr, $this->position);
 	}
@@ -82,17 +76,11 @@ class ModifierNode extends Node
 
 	public function printContentAware(PrintContext $context, string $expr): string
 	{
-		$escape = $this->escape;
 		foreach ($this->filters as $filter) {
-			$name = $filter->name->name;
-			if ($name === 'noescape') {
-				$escape = false;
-			} else {
-				$expr = $filter->printContentAware($context, $expr);
-			}
+			$expr = $filter->printContentAware($context, $expr);
 		}
 
-		return $escape
+		return $this->escape
 			? $context->getEscaper()->escapeContent($expr)
 			: $expr;
 	}

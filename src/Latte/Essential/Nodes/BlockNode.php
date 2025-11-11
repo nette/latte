@@ -21,7 +21,6 @@ use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Compiler\Token;
 use Latte\Runtime\Template;
-use function count;
 
 
 /**
@@ -55,10 +54,11 @@ class BlockNode extends StatementNode
 		}
 
 		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = (bool) $node->modifier->filters;
-		if ($node->modifier->hasFilter('noescape') && count($node->modifier->filters) === 1) {
+		$noEscape = $node->modifier->removeFilter('noescape');
+		if ($noEscape && !$node->modifier->filters) {
 			throw new CompileException('Filter |noescape is not expected here.', $tag->position);
 		}
+		$node->modifier->escape = $node->modifier->filters && !$noEscape;
 
 		[$node->content, $endTag] = yield;
 

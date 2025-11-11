@@ -21,7 +21,6 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Runtime\Template;
-use function count;
 
 
 /**
@@ -58,7 +57,6 @@ class IncludeBlockNode extends StatementNode
 		$stream->tryConsume(',');
 		$node->args = $tag->parser->parseArguments();
 		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = (bool) $node->modifier->filters;
 
 		$node->parent = $tokenName->is('parent');
 		if ($node->parent && $node->modifier->filters) {
@@ -76,6 +74,7 @@ class IncludeBlockNode extends StatementNode
 			$node->name = $item->node->block->name;
 		}
 
+		$node->modifier->escape = !$node->modifier->removeFilter('noescape') && !$node->parent;
 		$node->blocks = &$parser->blocks;
 		$node->layer = $parser->blockLayer;
 		return $node;
@@ -84,13 +83,12 @@ class IncludeBlockNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$noEscape = $this->modifier->hasFilter('noescape');
-		$contentFilter = count($this->modifier->filters) > (int) $noEscape
+		$contentFilter = $this->modifier->filters
 			? $context->format(
 				'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
 				$this->modifier,
 			)
-			: ($noEscape || $this->parent ? '' : PhpHelpers::dump($context->getEscaper()->export()));
+			: ($this->modifier->escape ? PhpHelpers::dump($context->getEscaper()->export()) : '');
 
 		return $this->from
 			? $this->printBlockFrom($context, $contentFilter)

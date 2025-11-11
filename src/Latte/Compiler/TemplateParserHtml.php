@@ -372,7 +372,7 @@ final class TemplateParserHtml
 		}
 
 		[$value, $quote] = $this->parseAttributeValue();
-		if ($name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && !$value->modifier->hasFilter('noescape')) {
+		if ($name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && $value->modifier->escape) {
 			if (($indent = end($fragment->children)) instanceof Nodes\TextNode && $indent->isWhitespace()) {
 				array_pop($fragment->children);
 			}
