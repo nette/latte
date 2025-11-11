@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Latte;
 
-use function array_map, defined, dirname, file_put_contents, filemtime, flock, fopen, fseek, ftell, ftruncate, function_exists, fwrite, is_dir, is_file, md5, mkdir, preg_match, preg_replace, rename, serialize, stream_get_contents, strlen, substr, unlink;
+use function array_map, defined, dirname, file_put_contents, filemtime, flock, fopen, fseek, ftell, ftruncate, function_exists, fwrite, is_dir, is_file, mkdir, preg_match, preg_replace, rename, serialize, stream_get_contents, strlen, substr, unlink;
 use const LOCK_EX, LOCK_SH, LOCK_UN;
 
 
@@ -35,7 +35,7 @@ final class Cache
 		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
 		$file = $engine->getCacheFile($name);
 		$signature = $this->autoRefresh
-			? md5(serialize($this->generateRefreshSignature($engine, $name)))
+			? hash('xxh128', serialize($this->generateRefreshSignature($engine, $name)))
 			: null;
 		$lock = defined('PHP_WINDOWS_VERSION_BUILD') || $signature
 			? $this->acquireLock("$file.lock", LOCK_SH)
@@ -67,7 +67,7 @@ final class Cache
 			}
 
 			fseek($lock, 0);
-			fwrite($lock, $signature ?? md5(serialize($this->generateRefreshSignature($engine, $name))));
+			fwrite($lock, $signature ?? hash('xxh128', serialize($this->generateRefreshSignature($engine, $name))));
 			ftruncate($lock, ftell($lock));
 
 			if (function_exists('opcache_invalidate')) {
