@@ -79,7 +79,7 @@ final class TranslatorExtension extends Latte\Extension
 		}
 
 		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = true;
+		$node->modifier->escape = !$node->modifier->removeFilter('noescape');
 
 		if ($this->translator
 			&& $this->key

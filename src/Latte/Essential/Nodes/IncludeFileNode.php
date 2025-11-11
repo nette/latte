@@ -49,25 +49,24 @@ class IncludeFileNode extends StatementNode
 		$stream->tryConsume(',');
 		$node->args = $tag->parser->parseArguments();
 		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = (bool) $node->modifier->filters;
+		$node->modifier->escape = !$node->modifier->removeFilter('noescape');
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		$noEscape = $this->modifier->hasFilter('noescape');
 		return $context->format(
 			'$this->createTemplate(%raw, %node? + $this->params, %dump)->renderToContentType(%raw) %line;',
 			$context->ensureString($this->file, 'Template name'),
 			$this->args,
 			$this->mode,
-			count($this->modifier->filters) > (int) $noEscape
+			$this->modifier->filters
 				? $context->format(
 					'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
 					$this->modifier,
 				)
-				: PhpHelpers::dump($noEscape ? null : $context->getEscaper()->export()),
+				: PhpHelpers::dump($this->modifier->escape ? $context->getEscaper()->export() : null),
 			$this->position,
 		);
 	}

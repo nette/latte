@@ -33,7 +33,7 @@ class PrintNode extends StatementNode
 		$node = new static;
 		$node->expression = $tag->parser->parseExpression();
 		$node->modifier = $tag->parser->parseModifier();
-		$node->modifier->escape = true;
+		$node->modifier->escape = !$node->modifier->removeFilter('noescape');
 		return $node;
 	}
 

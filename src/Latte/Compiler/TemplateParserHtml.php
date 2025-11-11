@@ -377,7 +377,7 @@ final class TemplateParserHtml
 		}
 
 		[$value, $quote] = $this->parseAttributeValue();
-		return $name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && !$value->modifier->hasFilter('noescape')
+		return $name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && $value->modifier->escape
 			? new Html\ExpressionAttributeNode(
 				name: $name->content,
 				value: $value->expression,
