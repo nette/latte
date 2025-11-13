@@ -4,7 +4,7 @@
 		$i < 10;
 		$i++) /* line 2:1 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 3:2 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 3:2 */;
 			echo "\n";
 
 		}
@@ -15,7 +15,7 @@
 		;
 		) /* line 7:1 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 8:2 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 8:2 */;
 			echo "\n";
 
 		}
@@ -26,7 +26,7 @@
 		$i < 10;
 		$i++, $a++) /* line 12:1 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 13:2 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 13:2 */;
 			echo "\n";
 
 		}
@@ -39,7 +39,7 @@
 			if (true) /* line 18:2 */ break;
 			if (true) /* line 19:2 */ continue;
 			echo '	';
-			echo LR\Filters::escapeHtmlText($i) /* line 20:2 */;
+			echo LR\HtmlHelpers::escapeText($i) /* line 20:2 */;
 			echo "\n";
 
 		}
