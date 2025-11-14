@@ -34,6 +34,11 @@ Assert::same('title="one&amp;&lt;br&gt;"', HtmlHelpers::formatAttribute('title',
 
 // skipped
 Assert::same('', HtmlHelpers::formatAttribute('title', null));
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatAttribute('title', null, migrationWarnings: true)),
+	E_USER_WARNING,
+	'Behavior change for attribute \'title\' with value null: previously it rendered as title="", now the attribute is omitted.',
+);
 
 // invalid
 Assert::error(

@@ -32,9 +32,9 @@ final class TemplateGenerator
 	/**
 	 * Builds template class.
 	 */
-	public function buildClass(Nodes\TemplateNode $node): void
+	public function buildClass(Nodes\TemplateNode $node, bool $migrationWarnings): void
 	{
-		$context = new PrintContext($node->contentType);
+		$context = new PrintContext($node->contentType, $migrationWarnings);
 		$this->generateBase($node, $context);
 		$this->generateBlocks($context);
 	}

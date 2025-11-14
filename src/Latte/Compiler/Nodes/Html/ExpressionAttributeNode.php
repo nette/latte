@@ -34,13 +34,14 @@ class ExpressionAttributeNode extends AreaNode
 	{
 		$this->modifier->escape = false;
 		return $context->format(
-			'echo %raw(%dump, %modify(%node)) %line;',
+			'echo %raw(%dump, %modify(%node), %dump?) %line;',
 			$context->getEscaper()->getContentType() === ContentType::Html
 				? 'LR\HtmlHelpers::format' . ucfirst(LR\HtmlHelpers::classifyAttributeType($this->name)) . 'Attribute'
 				: 'LR\XmlHelpers::formatAttribute',
 			$this->indentation . $this->name,
 			$this->modifier,
 			$this->value,
+			$context->migrationWarnings ?: null,
 			$this->value->position,
 		);
 	}

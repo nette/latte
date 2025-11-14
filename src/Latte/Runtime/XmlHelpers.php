@@ -69,8 +69,11 @@ final class XmlHelpers
 	}
 
 
-	public static function formatAttribute(string $namePart, mixed $value): string
+	public static function formatAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
+		if ($migrationWarnings && $value === null) {
+			HtmlHelpers::triggerMigrationWarning(trim($namePart), $value);
+		}
 		return match (true) {
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
 			$value === null => '',

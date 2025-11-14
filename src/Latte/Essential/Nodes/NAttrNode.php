@@ -39,16 +39,17 @@ final class NAttrNode extends StatementNode
 	{
 		return $context->format(
 			'$ʟ_tmp = %node;
-			echo %raw::attrs($ʟ_tmp, %dump) %line;',
+			echo %raw::attrs($ʟ_tmp, %dump, %dump?) %line;',
 			$this->args,
 			self::class,
 			$context->getEscaper()->getContentType() === Latte\ContentType::Xml,
+			$context->migrationWarnings ?: null,
 			$this->position,
 		);
 	}
 
 
-	public static function attrs(mixed $attrs, bool $xml): string
+	public static function attrs(mixed $attrs, bool $xml, bool $migrationWarnings = false): string
 	{
 		$attrs = $attrs === [$attrs[0] ?? null] ? $attrs[0] : $attrs; // checks if the value is an array, e.g. n:attr="$attrs"
 		if (!is_array($attrs)) {
@@ -57,7 +58,7 @@ final class NAttrNode extends StatementNode
 
 		$res = '';
 		foreach ($attrs as $name => $value) {
-			$attr = $xml ? self::formatXmlAttribute($name, $value) : self::formatHtmlAttribute($name, $value);
+			$attr = $xml ? self::formatXmlAttribute($name, $value) : self::formatHtmlAttribute($name, $value, $migrationWarnings);
 			$res .= $attr ? ' ' . $attr : '';
 		}
 
@@ -65,14 +66,17 @@ final class NAttrNode extends StatementNode
 	}
 
 
-	public static function formatHtmlAttribute(mixed $name, mixed $value): string
+	public static function formatHtmlAttribute(mixed $name, mixed $value, bool $migrationWarnings = false): string
 	{
 		LR\HtmlHelpers::validateAttributeName($name);
 		$type = LR\HtmlHelpers::classifyAttributeType($name);
 		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria')) {
 			return '';
+		} elseif ($migrationWarnings && is_array($value) && $type === 'data') {
+			$source = Latte\Helpers::guessTemplatePosition();
+			trigger_error("Behavior change for attribute '$name' with value array: previously it rendered as $name=\"val1 val2\", now the attribute is JSON-encoded" . ($source ? " ($source)" : '.'), E_USER_WARNING);
 		}
-		return LR\HtmlHelpers::{"format{$type}Attribute"}($name, $value);
+		return LR\HtmlHelpers::{"format{$type}Attribute"}($name, $value, $migrationWarnings);
 	}
 
 

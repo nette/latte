@@ -36,6 +36,17 @@ Assert::same('aria-foo="one&amp;&lt;br&gt;"', HtmlHelpers::formatAriaAttribute('
 Assert::same('aria-foo="true"', HtmlHelpers::formatAriaAttribute('aria-foo', true));
 Assert::same('aria-foo="false"', HtmlHelpers::formatAriaAttribute('aria-foo', false));
 
+Assert::error(
+	fn() => Assert::same('aria-foo="true"', HtmlHelpers::formatAriaAttribute('aria-foo', true, migrationWarnings: true)),
+	E_USER_WARNING,
+	'Behavior change for attribute \'aria-foo\' with value true: previously it rendered as aria-foo="1", now it renders as aria-foo="true".',
+);
+Assert::error(
+	fn() => Assert::same('aria-foo="false"', HtmlHelpers::formatAriaAttribute('aria-foo', false, migrationWarnings: true)),
+	E_USER_WARNING,
+	'Behavior change for attribute \'aria-foo\' with value false: previously it rendered as aria-foo="", now it renders as aria-foo="false".',
+);
+
 // array
 Assert::same('', HtmlHelpers::formatAriaAttribute('aria-foo', []));
 Assert::same('aria-foo="a b"', HtmlHelpers::formatAriaAttribute('aria-foo', ['a', 'b']));
