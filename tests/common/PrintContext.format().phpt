@@ -56,8 +56,8 @@ test('%dump', function () {
 	);
 
 	Assert::same(
-		"test('hello', null)",
-		format('test(%dump, %dump?)', 'hello', null),
+		"test('hello')",
+		format('test(%dump, %dump?, %dump?)', 'hello', [], null),
 	);
 
 	Assert::match(
