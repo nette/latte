@@ -237,12 +237,12 @@ test('ARIA attribute', function () {
 			<span aria-foo="123"></span>
 			<span aria-foo=""></span>
 			<span aria-foo="one&amp;two"></span>
-			<span aria-foo="1"></span>
+			<span aria-foo="true"></span>
+			<span aria-foo="false"></span>
 			<span aria-foo=""></span>
-			<span aria-foo=""></span>
-			<span aria-foo="Array"></span>
-			<span aria-foo="Array"></span>
-			<span aria-foo="Array"></span>
+			<span></span>
+			<span aria-foo="b"></span>
+			<span aria-foo="a b"></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span aria-foo={=0}></span>
