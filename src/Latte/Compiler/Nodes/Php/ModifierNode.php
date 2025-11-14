@@ -40,6 +40,18 @@ class ModifierNode extends Node
 	}
 
 
+	public function removeFilter(string $name): ?FilterNode
+	{
+		foreach ($this->filters as $i => $filter) {
+			if ($filter->name->name === $name) {
+				return array_splice($this->filters, $i, 1)[0];
+			}
+		}
+
+		return null;
+	}
+
+
 	public function print(PrintContext $context): string
 	{
 		throw new \LogicException('Cannot directly print ModifierNode');
