@@ -8,10 +8,10 @@
 		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
 		echo '" > </p>
 <p onclick="';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
 		echo '"> </p>
 <p ONCLICK="';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* line %d%:%d% */;
+		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
 		echo '" ';
 		echo LR\HtmlHelpers::escapeTag($xss) /* line %d%:%d% */;
 		echo '> </p>
