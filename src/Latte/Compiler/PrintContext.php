@@ -133,7 +133,7 @@ final class PrintContext
 					'line' => $arg?->line ? "/* pos $arg->line" . ($arg->column ? ":$arg->column" : '') . ' */' : '',
 				};
 
-				if ($cond && ($code === '[]' || $code === '')) {
+				if ($cond && ($code === '[]' || $code === '' || $code === 'null')) {
 					return $right ? $left : $right;
 				}
 
