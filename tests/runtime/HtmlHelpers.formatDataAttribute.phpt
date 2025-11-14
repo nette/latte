@@ -40,6 +40,17 @@ Assert::same('data-foo="one&amp;&lt;br&gt;"', HtmlHelpers::formatDataAttribute('
 Assert::same('data-foo="true"', HtmlHelpers::formatDataAttribute('data-foo', true));
 Assert::same('data-foo="false"', HtmlHelpers::formatDataAttribute('data-foo', false));
 
+Assert::error(
+	fn() => Assert::same('data-foo="true"', HtmlHelpers::formatDataAttribute('data-foo', true, migrationWarnings: true)),
+	E_USER_WARNING,
+	'Behavior change for attribute \'data-foo\' with value true: previously it rendered as data-foo="1", now it renders as data-foo="true".',
+);
+Assert::error(
+	fn() => Assert::same('data-foo="false"', HtmlHelpers::formatDataAttribute('data-foo', false, migrationWarnings: true)),
+	E_USER_WARNING,
+	'Behavior change for attribute \'data-foo\' with value false: previously it rendered as data-foo="", now it renders as data-foo="false".',
+);
+
 // array
 Assert::same('data-foo="[]"', HtmlHelpers::formatDataAttribute('data-foo', []));
 Assert::same('data-foo=\'["a","b"]\'', HtmlHelpers::formatDataAttribute('data-foo', ['a', 'b']));
@@ -51,6 +62,11 @@ Assert::same('data-foo=\'{"a":"b"}\'', HtmlHelpers::formatDataAttribute('data-fo
 
 // skipped
 Assert::same('', HtmlHelpers::formatDataAttribute('data-foo', null));
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatDataAttribute('data-foo', null, migrationWarnings: true)),
+	E_USER_WARNING,
+	'Behavior change for attribute \'data-foo\' with value null: previously it rendered as data-foo="", now the attribute is omitted.',
+);
 
 // invalid
 Assert::error(

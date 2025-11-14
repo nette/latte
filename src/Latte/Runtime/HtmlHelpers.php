@@ -184,8 +184,15 @@ final class HtmlHelpers
 	/**
 	 * Formats common HTML attribute.
 	 */
-	public static function formatAttribute(string $namePart, mixed $value): string
+	public static function formatAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
+		if ($migrationWarnings) {
+			if ($value === null) {
+				self::triggerMigrationWarning(trim($namePart), $value);
+			} elseif (is_string($value) && str_starts_with($name = ltrim($namePart), 'on')) {
+				self::triggerMigrationWarning($name, 'string value: previously it was JSON-encoded, now it is rendered as a string');
+			}
+		}
 		return match (true) {
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
@@ -230,8 +237,11 @@ final class HtmlHelpers
 	/**
 	 * Formats data-* HTML attribute.
 	 */
-	public static function formatDataAttribute(string $namePart, mixed $value): string
+	public static function formatDataAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
+		if ($migrationWarnings && (is_bool($value) || $value === null)) {
+			self::triggerMigrationWarning(trim($namePart), $value);
+		}
 		$escape = fn($value) => str_contains($value, '"')
 			? "'" . str_replace(['&', "'"], ['&amp;', '&apos;'], $value) . "'"
 			: '"' . str_replace(['&', '"'], ['&amp;', '&quot;'], $value) . '"';
@@ -246,8 +256,11 @@ final class HtmlHelpers
 	/**
 	 * Formats aria-* HTML attribute.
 	 */
-	public static function formatAriaAttribute(string $namePart, mixed $value): string
+	public static function formatAriaAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
+		if ($migrationWarnings && is_bool($value)) {
+			self::triggerMigrationWarning(trim($namePart), $value);
+		}
 		return match (true) {
 			is_bool($value) => $namePart . '="' . ($value ? 'true' : 'false') . '"',
 			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => $v === true ? $k : $v, ' '),
@@ -273,6 +286,19 @@ final class HtmlHelpers
 		$source = Latte\Helpers::guessTemplatePosition();
 		$type = get_debug_type($value);
 		trigger_error("Invalid value for attribute '$name': $type is not allowed" . ($source ? " ($source)" : '.'), E_USER_WARNING);
+	}
+
+
+	public static function triggerMigrationWarning(string $name, mixed $value): void
+	{
+		$source = Latte\Helpers::guessTemplatePosition();
+		$message = match ($value) {
+			null => "value null: previously it rendered as $name=\"\", now the attribute is omitted",
+			true => "value true: previously it rendered as $name=\"1\", now it renders as $name=\"true\"",
+			false => "value false: previously it rendered as $name=\"\", now it renders as $name=\"false\"",
+			default => $value,
+		};
+		trigger_error("Behavior change for attribute '$name' with $message" . ($source ? " ($source)" : '.'), E_USER_WARNING);
 	}
 
 

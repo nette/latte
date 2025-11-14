@@ -62,6 +62,7 @@ class Engine
 	private ?string $configurationHash;
 	private ?string $locale = null;
 	private ?string $syntax = null;
+	private bool $migrationWarnings = false;
 
 
 	public function __construct()
@@ -195,7 +196,7 @@ class Engine
 	public function generate(TemplateNode $node, string $name): string
 	{
 		$generator = new Compiler\TemplateGenerator;
-		$generator->buildClass($node);
+		$generator->buildClass($node, $this->migrationWarnings);
 		return $generator->generateCode($this->getTemplateClass($name), $name, $this->strictTypes);
 	}
 
@@ -534,6 +535,13 @@ class Engine
 	public function setSyntax(string $syntax): static
 	{
 		$this->syntax = $syntax;
+		return $this;
+	}
+
+
+	public function setMigrationWarnings(bool $state = true): static
+	{
+		$this->migrationWarnings = $state;
 		return $this;
 	}
 

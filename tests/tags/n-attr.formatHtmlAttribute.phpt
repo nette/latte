@@ -153,6 +153,13 @@ test('data attributes', function () {
 		'data-foo=\'{"user":"Karel","age":30,"spec":"&amp;<>\"&apos;\""}\'',
 		NAttrNode::formatHtmlAttribute('data-foo', ['user' => 'Karel', 'age' => 30, 'spec' => '&<>"\'"']),
 	);
+
+	// migration warnings
+	Assert::error(
+		fn() => Assert::same('data-foo="[]"', NAttrNode::formatHtmlAttribute('data-foo', [], migrationWarnings: true)),
+		E_USER_WARNING,
+		'Behavior change for attribute \'data-foo\' with array value: previously it rendered as data-foo="val1 val2 ...", now the attribute is JSON-encoded.',
+	);
 });
 
 
@@ -169,6 +176,13 @@ test('ARIA attributes', function () {
 	Assert::same('', NAttrNode::formatHtmlAttribute('aria-foo', []));
 	Assert::same('aria-foo="a b"', NAttrNode::formatHtmlAttribute('aria-foo', ['a', 'b']));
 	Assert::same('aria-foo="Karel"', NAttrNode::formatHtmlAttribute('aria-foo', ['user' => 'Karel']));
+
+	// migration warnings
+	Assert::error(
+		fn() => Assert::same('aria-foo="true"', NAttrNode::formatHtmlAttribute('aria-foo', true, migrationWarnings: true)),
+		E_USER_WARNING,
+		'Behavior change for attribute \'aria-foo\' with value true: previously it rendered as aria-foo="1", now it renders as aria-foo="true".',
+	);
 
 	// invalid
 	Assert::error(

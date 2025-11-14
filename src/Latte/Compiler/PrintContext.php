@@ -78,8 +78,10 @@ final class PrintContext
 	private array $escaperStack = [];
 
 
-	public function __construct(string $contentType = ContentType::Html)
-	{
+	public function __construct(
+		string $contentType = ContentType::Html,
+		public bool $migrationWarnings = false,
+	) {
 		$this->escaperStack[] = new Escaper($contentType);
 	}
 
