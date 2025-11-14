@@ -59,9 +59,9 @@ var prop2 = ';
 <p onclick=\'alert(';
 		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* line %d%:%d% */;
 		echo ');alert("hello");\'
- title=\'';
+ title="';
 		echo LR\HtmlHelpers::escapeAttr($xss) /* line %d%:%d% */;
-		echo '\'
+		echo '"
  STYLE="color:';
 		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss($xss)) /* line %d%:%d% */;
 		echo ';"

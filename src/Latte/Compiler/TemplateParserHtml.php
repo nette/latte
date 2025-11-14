@@ -210,6 +210,7 @@ final class TemplateParserHtml
 			'textualName' => $textual,
 		];
 		$elem->attributes = $this->parser->parseFragment($this->inTagResolve(...));
+		$this->relocateAttributeIndentation($elem->attributes);
 		$elem->selfClosing = (bool) $stream->tryConsume(Token::Slash);
 		if ($variable) {
 			$elem->dynamicTag = new Nodes\Html\TagNode($elem, $variable);
@@ -220,6 +221,19 @@ final class TemplateParserHtml
 			: TemplateLexer::StateHtmlText;
 		$this->parser->getLexer()->setState($state, $elem->name);
 		return $elem;
+	}
+
+
+	private function relocateAttributeIndentation(FragmentNode $node): void
+	{
+		foreach ($node->children as $i => $child) {
+			$next = $node->children[$i + 1] ?? null;
+			if ($child instanceof Nodes\TextNode && $child->isWhitespace() && $next instanceof Html\ExpressionAttributeNode) {
+				$next->indentation = $child->content;
+				unset($node->children[$i]);
+			}
+		}
+		$node->children = array_values($node->children);
 	}
 
 
@@ -363,12 +377,19 @@ final class TemplateParserHtml
 		}
 
 		[$value, $quote] = $this->parseAttributeValue();
-		return new Html\AttributeNode(
-			name: $name,
-			value: $value,
-			quote: $quote,
-			position: $name->position,
-		);
+		return $name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && !$value->modifier->hasFilter('noescape')
+			? new Html\ExpressionAttributeNode(
+				name: $name->content,
+				value: $value->expression,
+				modifier: $value->modifier,
+				position: $name->position,
+			)
+			: new Html\AttributeNode(
+				name: $name,
+				value: $value,
+				quote: $quote,
+				position: $name->position,
+			);
 	}
 
 

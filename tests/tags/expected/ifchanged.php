@@ -127,7 +127,7 @@
 			ob_start(fn() => '');
 			try /* line 22:55 */ {
 				echo '<span class="';
-				echo LR\HtmlHelpers::escapeAttr($i) /* line 22:49 */;
+				echo LR\HtmlHelpers::escapeAttr($i) /* line 22:50 */;
 				echo '"></span>';
 			} finally {
 				$ʟ_tmp = ob_get_clean();

@@ -72,9 +72,9 @@ var html = ';
  style="color:';
 		echo LR\XmlHelpers::escapeAttr($id) /* line %d%:%d% */;
 		echo ';\'"
- alt=\'';
+ alt="';
 		echo LR\XmlHelpers::escapeAttr($el) /* line %d%:%d% */;
-		echo '\'
+		echo '"
  onfocus="alert(';
 		echo LR\XmlHelpers::escapeAttr($el) /* line %d%:%d% */;
 		echo ')"

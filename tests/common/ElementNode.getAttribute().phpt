@@ -5,6 +5,9 @@ declare(strict_types=1);
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\Html\AttributeNode;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\Compiler\Nodes\Html\ExpressionAttributeNode;
+use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\ContentType;
 use Tester\Assert;
@@ -112,4 +115,36 @@ test('ElementNode::getAttribute() - non-existent attribute', function () {
 
 	Assert::null($element->getAttribute('id'));
 	Assert::null($element->getAttribute('nonexistent'));
+});
+
+
+test('ElementNode::getAttribute() - ExpressionAttributeNode HTML case insensitive', function () {
+	$element = new ElementNode('div', contentType: ContentType::Html);
+	$element->attributes = new FragmentNode([
+		new ExpressionAttributeNode(
+			'CLASS',
+			new VariableNode('foo'),
+			new ModifierNode([]),
+		),
+	]);
+
+	Assert::same(true, $element->getAttribute('class'));
+	Assert::same(true, $element->getAttribute('CLASS'));
+	Assert::same(true, $element->getAttribute('Class'));
+});
+
+
+test('ElementNode::getAttribute() - ExpressionAttributeNode non-HTML case sensitive', function () {
+	$element = new ElementNode('element', contentType: ContentType::Xml);
+	$element->attributes = new FragmentNode([
+		new ExpressionAttributeNode(
+			'CLASS',
+			new VariableNode('foo'),
+			new ModifierNode([]),
+		),
+	]);
+
+	Assert::same(true, $element->getAttribute('CLASS'));
+	Assert::null($element->getAttribute('class'));
+	Assert::null($element->getAttribute('Class'));
 });
