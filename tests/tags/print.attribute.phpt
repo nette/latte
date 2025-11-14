@@ -206,12 +206,12 @@ test('data attribute', function () {
 			<span data-foo="123"></span>
 			<span data-foo=""></span>
 			<span data-foo="one&amp;two"></span>
-			<span data-foo="1"></span>
+			<span data-foo="true"></span>
+			<span data-foo="false"></span>
 			<span data-foo=""></span>
-			<span data-foo=""></span>
-			<span data-foo="Array"></span>
-			<span data-foo="Array"></span>
-			<span data-foo="Array"></span>
+			<span data-foo="[]"></span>
+			<span data-foo='{"a":"b"}'></span>
+			<span data-foo='["a","b"]'></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span data-foo={=0}></span>
