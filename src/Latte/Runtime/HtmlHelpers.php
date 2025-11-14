@@ -173,6 +173,7 @@ final class HtmlHelpers
 		return match (true) {
 			isset(self::BooleanAttributes[$name]) => 'bool',
 			isset(self::SpaceSeparatedAttributes[$name]) => 'list',
+			str_starts_with($name, 'data-') => 'data',
 			$name === 'style' => 'style',
 			default => '',
 		};
@@ -216,6 +217,22 @@ final class HtmlHelpers
 	{
 		return match (true) {
 			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => is_string($k) ? $k . ': ' . $v : $v, '; '),
+			default => self::formatAttribute($namePart, $value),
+		};
+	}
+
+
+	/**
+	 * Formats data-* HTML attribute.
+	 */
+	public static function formatDataAttribute(string $namePart, mixed $value): string
+	{
+		$escape = fn($value) => str_contains($value, '"')
+			? "'" . str_replace(['&', "'"], ['&amp;', '&apos;'], $value) . "'"
+			: '"' . str_replace(['&', '"'], ['&amp;', '&quot;'], $value) . '"';
+		return match (true) {
+			is_bool($value) => $namePart . '="' . ($value ? 'true' : 'false') . '"',
+			is_array($value) || $value instanceof \stdClass => $namePart . '=' . $escape(json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR)),
 			default => self::formatAttribute($namePart, $value),
 		};
 	}
