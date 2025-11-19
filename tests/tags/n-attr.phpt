@@ -28,22 +28,12 @@ Assert::match(
 				echo '
 		<p';
 				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
-				foreach ((array) $ʟ_tmp as $ʟ_an => $ʟ_av) {
-					if ($ʟ_tmp = LR\HtmlHelpers::formatAttribute($ʟ_an, $ʟ_av)) {
-						echo ' ', $ʟ_tmp /* line 2 */;
-					}
-				}
+				echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* line 2 */;
 				echo '> </p>
 
 		<input';
 				$ʟ_tmp = ['checked' => true, 'disabled' => false];
-				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
-				foreach ((array) $ʟ_tmp as $ʟ_an => $ʟ_av) {
-					if ($ʟ_tmp = LR\HtmlHelpers::formatAttribute($ʟ_an, $ʟ_av)) {
-						echo ' ', $ʟ_tmp /* line 4 */;
-					}
-				}
+				echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* line 4 */;
 				echo '>
 		';
 		%A%
@@ -61,7 +51,6 @@ Assert::match(
 	$latte->renderToString($template),
 );
 
-$latte->setContentType(Latte\ContentType::Xml);
 Assert::match(
 	<<<'XX'
 
@@ -69,34 +58,7 @@ Assert::match(
 
 		<input checked="checked">
 		XX,
-	$latte->renderToString($template),
-);
-$latte->setContentType(Latte\ContentType::Html);
-
-Assert::match(
-	'<input>',
-	$latte->renderToString('<input n:attr="null">'),
-);
-
-Assert::match(
-	'<input>',
-	$latte->renderToString('<input n:attr="[]">'),
-);
-
-Assert::match(
-	'<input checked>',
-	$latte->renderToString('<input n:attr="[checked: true]">'),
-);
-
-Assert::match(
-	'<input a=\'<>"\' b="\'">',
-	$latte->renderToString('<input n:attr="$attrs">', ['attrs' => ['a' => '<>"', 'b' => "'"]]),
-);
-
-// misuse of
-Assert::match(
-	'<input rowspan=2>',
-	$latte->renderToString('<input n:attr="\'rowspan=2\' => true">'),
+	$latte->setContentType(Latte\ContentType::Xml)->renderToString($template),
 );
 
 

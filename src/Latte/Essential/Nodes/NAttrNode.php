@@ -14,6 +14,7 @@ use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use function implode, is_array, is_string, str_contains, str_replace, strncmp;
 
 
 /**
@@ -35,23 +36,102 @@ final class NAttrNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		// [$ʟ_tmp[0] ?? null] === $ʟ_tmp checks if the value is an array, e.g. n:attr="$attrs"
-		$html = $context->getEscaper()->getContentType() === Latte\ContentType::Html;
 		return $context->format(
-			<<<'XX'
-				$ʟ_tmp = %node;
-				$ʟ_tmp = [$ʟ_tmp[0] ?? null] === $ʟ_tmp ? $ʟ_tmp[0] : $ʟ_tmp;
-				foreach ((array) $ʟ_tmp as $ʟ_an => $ʟ_av) {
-					if ($ʟ_tmp = LR\%raw::formatAttribute($ʟ_an, $ʟ_av)) {
-						echo ' ', $ʟ_tmp %line;
-					}
-				}
-
-				XX,
+			'$ʟ_tmp = %node;
+			echo %raw::attrs($ʟ_tmp, %dump) %line;',
 			$this->args,
-			$html ? 'HtmlHelpers' : 'XmlHelpers',
+			self::class,
+			$context->getEscaper()->getContentType() === Latte\ContentType::Xml,
 			$this->position,
 		);
+	}
+
+
+	public static function attrs(mixed $attrs, bool $xml): string
+	{
+		$attrs = $attrs === [$attrs[0] ?? null] ? $attrs[0] : $attrs; // checks if the value is an array, e.g. n:attr="$attrs"
+		if (!is_array($attrs)) {
+			return '';
+		}
+
+		$res = '';
+		foreach ($attrs as $name => $value) {
+			$attr = $xml ? self::formatXmlAttribute($name, $value) : self::formatHtmlAttribute($name, $value);
+			$res .= $attr ? ' ' . $attr : '';
+		}
+
+		return $res;
+	}
+
+
+	public static function formatHtmlAttribute(string $name, mixed $value): ?string
+	{
+		if ($value === null || $value === false) {
+			return null;
+
+		} elseif ($value === true) {
+			return $name;
+
+		} elseif (is_array($value)) {
+			$tmp = null;
+			foreach ($value as $k => $v) {
+				if ($v != null) { // intentionally ==, skip nulls & empty string
+					//  composite 'style' vs. 'others'
+					$tmp[] = $v === true
+						? $k
+						: (is_string($k) ? $k . ':' . $v : $v);
+				}
+			}
+
+			if ($tmp === null) {
+				return null;
+			}
+
+			$value = implode($name === 'style' || !strncmp($name, 'on', 2) ? ';' : ' ', $tmp);
+
+		} else {
+			$value = (string) $value;
+		}
+
+		$q = !str_contains($value, '"') ? '"' : "'";
+		return $name . '=' . $q
+			. str_replace(
+				['&', $q, '<'],
+				['&amp;', $q === '"' ? '&quot;' : '&apos;', '<'],
+				$value,
+			)
+			. $q;
+	}
+
+
+	public static function formatXmlAttribute(string $name, mixed $value): ?string
+	{
+		if ($value === null || $value === false) {
+			return null;
+
+		} elseif ($value === true) {
+			return $name . '="' . $name . '"';
+
+		} elseif (is_array($value)) {
+			$value = array_filter($value); // intentionally ==, skip nulls & empty string
+			if (!$value) {
+				return null;
+			}
+
+			$value = implode(' ', $value);
+
+		} else {
+			$value = (string) $value;
+		}
+
+		$q = !str_contains($value, '"') ? '"' : "'";
+		return $name . '=' . $q
+			. str_replace(
+				['&', $q, '<'],
+				['&amp;', $q === '"' ? '&quot;' : '&#39;', '&lt;'],
+				$value,
+			)
+			. $q;
 	}
 
 
