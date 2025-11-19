@@ -21,7 +21,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	Parent: ';
-		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* pos 3:10 */;
+		echo LR\HtmlHelpers::escapeText(($this->global->fn->info)($this, )) /* pos %d%:%d% */;
 		echo "\n";
 	}
 }

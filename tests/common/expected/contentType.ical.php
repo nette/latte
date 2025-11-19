@@ -16,16 +16,16 @@ PRODID:-//example.org//iCal 4.0.3//CS
 METHOD:PUBLISH
 BEGIN:VEVENT
 DTSTAMP:';
-		echo LR\Filters::escapeIcal(($this->filters->date)($start, 'Ymd\\THis')) /* pos %d%:%d% */;
+		echo LR\Helpers::escapeIcal(($this->filters->date)($start, 'Ymd\\THis')) /* pos %d%:%d% */;
 		echo '
 DTSTART;TZID=Europe/Prague:';
-		echo LR\Filters::escapeIcal(($this->filters->date)($start, 'Ymd\\THis')) /* pos %d%:%d% */;
+		echo LR\Helpers::escapeIcal(($this->filters->date)($start, 'Ymd\\THis')) /* pos %d%:%d% */;
 		echo '
 DTEND;TZID=Europe/Prague:';
-		echo LR\Filters::escapeIcal(($this->filters->date)($end, 'Ymd\\THis')) /* pos %d%:%d% */;
+		echo LR\Helpers::escapeIcal(($this->filters->date)($end, 'Ymd\\THis')) /* pos %d%:%d% */;
 		echo '
 SUMMARY;LANGUAGE=cs:';
-		echo LR\Filters::escapeIcal($info) /* pos %d%:%d% */;
+		echo LR\Helpers::escapeIcal($info) /* pos %d%:%d% */;
 		echo '
 DESCRIPTION:
 CLASS:PUBLIC

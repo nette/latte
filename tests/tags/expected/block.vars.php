@@ -1,13 +1,13 @@
 <?php
 %A%
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo '
 
 
 ';
 		$this->renderBlock('b', get_defined_vars()) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo '
 
 
@@ -17,16 +17,16 @@
 			(function () {
 				extract(func_get_arg(0));
 				echo '	';
-				echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+				echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 				echo "\n";
 				$var = 'blockmod' /* pos %d%:%d% */;
 			})(get_defined_vars());
 		} finally {
 			$ʟ_fi = new LR\FilterInfo('html');
-			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
+			echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
 		}
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo '
 
 
@@ -36,7 +36,7 @@
 			(function () {
 				extract(func_get_arg(0));
 				echo '	';
-				echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+				echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 				echo "\n";
 				$var = 'block' /* pos %d%:%d% */;
 			})(get_defined_vars());
@@ -45,7 +45,7 @@
 			echo ob_get_clean();
 		}
 		echo "\n";
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 	}
 
 
@@ -66,7 +66,7 @@
 		unset($ʟ_args);
 
 		echo '	';
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo "\n";
 		$var = 'define' /* pos %d%:%d% */;
 	}
@@ -80,7 +80,7 @@
 		unset($ʟ_args);
 
 		echo '	';
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo "\n";
 		$var = 'blocknamed' /* pos %d%:%d% */;
 	}

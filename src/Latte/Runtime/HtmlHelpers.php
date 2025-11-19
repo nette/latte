@@ -11,7 +11,9 @@ namespace Latte\Runtime;
 
 use Latte;
 use Latte\ContentType;
-use function get_debug_type, in_array, is_string, preg_match, strtolower;
+use Nette;
+use function get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_string, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtr, substr;
+use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE;
 
 
 /**
@@ -20,6 +22,138 @@ use function get_debug_type, in_array, is_string, preg_match, strtolower;
  */
 final class HtmlHelpers
 {
+	/**
+	 * Escapes string for use inside HTML text.
+	 */
+	public static function escapeText($s): string
+	{
+		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
+			return $s->__toString();
+		}
+
+		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		$s = strtr($s, ['{{' => '{<!-- -->{', '{' => '&#123;']);
+		return $s;
+	}
+
+
+	/**
+	 * Escapes string for use inside HTML attribute value.
+	 */
+	public static function escapeAttr($s): string
+	{
+		if ($s instanceof HtmlStringable) {
+			$s = self::convertHtmlToText($s->__toString());
+		}
+		$s = (string) $s;
+		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+		$s = str_replace('{', '&#123;', $s);
+		return $s;
+	}
+
+
+	/**
+	 * Escapes string for use inside HTML tag.
+	 */
+	public static function escapeTag($s): string
+	{
+		$s = (string) $s;
+		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+		return preg_replace_callback(
+			'#[=/\s]#',
+			fn($m) => '&#' . ord($m[0]) . ';',
+			$s,
+		);
+	}
+
+
+	/**
+	 * Escapes string for use inside HTML/XML comments.
+	 */
+	public static function escapeComment($s): string
+	{
+		$s = (string) $s;
+		if ($s && ($s[0] === '-' || $s[0] === '>' || $s[0] === '!')) {
+			$s = ' ' . $s;
+		}
+
+		$s = str_replace('--', '- - ', $s);
+		if (substr($s, -1) === '-') {
+			$s .= ' ';
+		}
+
+		return $s;
+	}
+
+
+	/**
+	 * Escapes HTML for usage in <script type=text/html>
+	 */
+	public static function escapeRawHtml($s): string
+	{
+		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
+			return self::convertHtmlToRawText($s->__toString());
+		}
+
+		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+	}
+
+
+	/**
+	 * Escapes only quotes.
+	 */
+	public static function escapeQuotes($s): string
+	{
+		return strtr((string) $s, ['"' => '&quot;', "'" => '&apos;']);
+	}
+
+
+	/**
+	 * Converts JS and CSS for usage in <script> or <style>
+	 */
+	public static function convertJSToRawText($s): string
+	{
+		return preg_replace('#</(script|style)#i', '<\/$1', (string) $s);
+	}
+
+
+	/**
+	 * Sanitizes <script> in <script type=text/html>
+	 */
+	public static function convertHtmlToRawText(string $s): string
+	{
+		return preg_replace('#(</?)(script)#i', '$1x-$2', $s);
+	}
+
+
+	/**
+	 * Converts HTML text to quoted attribute.
+	 */
+	public static function convertHtmlToAttr(string $s): string
+	{
+		return self::escapeAttr(self::convertHtmlToText($s));
+	}
+
+
+	/**
+	 * Converts HTML attribute to HTML text. The < > chars need to be escaped.
+	 */
+	public static function convertAttrToHtml(string $s): string
+	{
+		return self::escapeAttr(html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+	}
+
+
+	/**
+	 * Converts HTML to plain text.
+	 */
+	public static function convertHtmlToText(string $s): string
+	{
+		$s = strip_tags($s);
+		return html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+	}
+
+
 	/**
 	 * Checks if the given tag name represents a void (empty) HTML element.
 	 */
