@@ -69,6 +69,12 @@ final class XmlHelpers
 	}
 
 
+	public static function formatAttribute(string $namePart, mixed $value): string
+	{
+		return $namePart . '="' . self::escapeAttr($value) . '"';
+	}
+
+
 	/**
 	 * Checks that the HTML tag name can be changed.
 	 */
