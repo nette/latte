@@ -8,15 +8,14 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo '<span title=hello></span>
 
-<span title="';
-		echo LR\HtmlHelpers::escapeAttr($x) /* pos %d%:%d% */;
-		echo '" class="';
-		echo LR\HtmlHelpers::escapeAttr($x) /* pos %d%:%d% */;
-		echo '"></span>
+<span';
+		echo LR\HtmlHelpers::formatAttribute(' title', $x) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::formatAttribute(' class', $x) /* pos %d%:%d% */;
+		echo '></span>
 
-<span title="';
-		echo LR\HtmlHelpers::escapeAttr($x) /* pos %d%:%d% */;
-		echo '" ';
+<span';
+		echo LR\HtmlHelpers::formatAttribute(' title', $x) /* pos %d%:%d% */;
+		echo ' ';
 		echo LR\HtmlHelpers::escapeTag($x) /* pos %d%:%d% */;
 		echo '></span>
 
@@ -38,9 +37,9 @@ final class Template%a% extends Latte\Runtime\Template
 		echo LR\HtmlHelpers::escapeAttr($x) /* pos %d%:%d% */;
 		echo 'd"></span>
 
-<span onclick="';
-		echo LR\HtmlHelpers::escapeAttr($x) /* pos %d%:%d% */;
-		echo '" ';
+<span';
+		echo LR\HtmlHelpers::formatAttribute(' onclick', $x) /* pos %d%:%d% */;
+		echo ' ';
 		echo LR\HtmlHelpers::escapeTag($x) /* pos %d%:%d% */;
 		echo '></span>
 

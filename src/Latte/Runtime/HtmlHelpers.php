@@ -154,6 +154,21 @@ final class HtmlHelpers
 	}
 
 
+	public static function classifyAttributeType(string $name): string
+	{
+		return '';
+	}
+
+
+	/**
+	 * Formats common HTML attribute.
+	 */
+	public static function formatAttribute(string $namePart, mixed $value): string
+	{
+		return $namePart . '="' . self::escapeAttr($value) . '"';
+	}
+
+
 	/**
 	 * Checks if the given tag name represents a void (empty) HTML element.
 	 */

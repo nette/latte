@@ -14,6 +14,8 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\ContentType;
+use Latte\Runtime as LR;
 
 
 class ExpressionAttributeNode extends AreaNode
@@ -30,17 +32,20 @@ class ExpressionAttributeNode extends AreaNode
 
 	public function print(PrintContext $context): string
 	{
-		$escaper = $context->beginEscape();
-		$escaper->enterHtmlAttribute();
-		$res = $context->format(
-			'echo %dump; echo %modify(%node) %line; echo \'"\';',
-			$this->indentation . $this->name . '="',
+		if ($context->getEscaper()->getContentType() === ContentType::Html) {
+			$type = LR\HtmlHelpers::classifyAttributeType($this->name);
+			$method = 'LR\HtmlHelpers::format' . ucfirst($type) . 'Attribute';
+		} else {
+			$method = 'LR\XmlHelpers::formatAttribute';
+		}
+		return $context->format(
+			'echo %raw(%dump, %modify(%node)) %line;',
+			$method,
+			$this->indentation . $this->name,
 			$this->modifier,
 			$this->value,
 			$this->value->position,
 		);
-		$context->restoreEscape();
-		return $res;
 	}
 
 

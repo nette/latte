@@ -376,6 +376,7 @@ final class TemplateParserHtml
 			if (($indent = end($fragment->children)) instanceof Nodes\TextNode && $indent->isWhitespace()) {
 				array_pop($fragment->children);
 			}
+			$value->modifier->escape = false;
 			return new Html\ExpressionAttributeNode(
 				name: $name->content,
 				value: $value->expression,
