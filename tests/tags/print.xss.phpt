@@ -8,8 +8,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 
 $template = <<<'EOD'
 	{$el}

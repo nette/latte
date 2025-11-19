@@ -17,8 +17,7 @@ function error()
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 
 // only try
 Assert::match(

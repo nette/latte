@@ -11,8 +11,7 @@ if (str_contains(PHP_BINARY, 'phpdbg')) {
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->enablePhpLinter(PHP_BINARY);
 
 Assert::exception(

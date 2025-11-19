@@ -22,8 +22,7 @@ function error()
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->setExceptionHandler(function () use (&$args) {
 	$args = func_get_args();
 });

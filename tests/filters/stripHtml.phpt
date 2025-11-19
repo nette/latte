@@ -7,7 +7,6 @@
 declare(strict_types=1);
 
 use Latte\ContentType;
-use Latte\Engine;
 use Latte\Essential\Filters;
 use Latte\Runtime\FilterInfo;
 use Tester\Assert;
@@ -15,8 +14,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 Assert::same(
 	'"',
 	$latte->renderToString('{="<br>&quot;"|stripHtml}'),

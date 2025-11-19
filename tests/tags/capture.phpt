@@ -11,8 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 
 Assert::match(
 	'',
@@ -34,7 +33,8 @@ Assert::match(
 	$latte->renderToString('{capture$var|stripHtml|upper}<b>Test</b>{/capture}{=$var}'),
 );
 
-Assert::noError(function () use ($latte) { // uses keyword new
+Assert::noError(function () { // uses keyword new
+	$latte = createLatte();
 	$latte->setPolicy(Latte\Sandbox\SecurityPolicy::createSafePolicy());
 	$latte->setSandboxMode();
 	$latte->renderToString('{capture $var}<html>{/capture}');

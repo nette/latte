@@ -8,8 +8,7 @@ require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/Policy.Logger.php';
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->setPolicy(new PolicyLogger);
 $latte->setSandboxMode();
 

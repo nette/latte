@@ -11,8 +11,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->addFilter('datastream', 'Latte\Essential\Filters::dataStream');
 $params['url1'] = 'javascript:alert(1)';
 $params['url2'] = ' javascript:alert(1)';
@@ -92,13 +91,13 @@ Assert::match(
 
 // accepts Stringable
 Assert::match(
-	'<img src="&lt;a&gt;">',
+	'<img src="">',
 	$latte->renderToString(
 		'<img src="{$url}">',
 		['url' => new class {
 			public function __toString()
 			{
-				return '<a>';
+				return 'javascript:foo';
 			}
 		}],
 	),

@@ -17,8 +17,7 @@ function xml($v)
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 
 Assert::contains('<?xml version="3.0"?>', $latte->compile('<?xml version="3.0"?>'));
 Assert::match(<<<'XX'

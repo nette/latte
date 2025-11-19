@@ -7,8 +7,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=']));
 
 Assert::noError(fn() => $latte->compile('{var $abc}'));

@@ -22,8 +22,7 @@ class TemplateParamsWithHooks
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->setTempDirectory(getTempDir());
 
 Assert::same(

@@ -15,8 +15,7 @@ class Test
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->setPolicy((new Latte\Sandbox\SecurityPolicy)->allowTags(['=', 'do', 'var', 'parameters']));
 $latte->setSandboxMode();
 

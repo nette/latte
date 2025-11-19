@@ -7,8 +7,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->addExtension(new Latte\Essential\TranslatorExtension(null));
 
 Assert::match(
@@ -67,8 +66,7 @@ function translate($message, ...$parameters): string
 }
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 $latte->addExtension(new Latte\Essential\TranslatorExtension('translate'));
 Assert::contains(
 	'echo LR\Filters::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'translate\', $ʟ_fi, \'a&b\', 1, 2))',

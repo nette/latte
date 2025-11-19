@@ -138,8 +138,15 @@ function exportAST(Node $node)
 
 function exportTraversing(string $template, ?Latte\Engine $latte = null): string
 {
-	$latte ??= new Latte\Engine;
-	$latte->setLoader(new Latte\Loaders\StringLoader);
+	$latte ??= createLatte();
 	$node = $latte->parse($template);
 	return exportAST($node);
+}
+
+
+function createLatte(): Latte\Engine
+{
+	$latte = new Latte\Engine;
+	$latte->setLoader(new Latte\Loaders\StringLoader);
+	return $latte;
 }

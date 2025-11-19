@@ -921,8 +921,7 @@ testTemplate(
 );
 
 
-$latte = new Latte\Engine;
-$latte->setLoader(new Latte\Loaders\StringLoader);
+$latte = createLatte();
 Assert::exception(
 	fn() => $latte->renderToString('{embed (null)/}'),
 	InvalidArgumentException::class,

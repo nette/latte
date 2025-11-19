@@ -11,9 +11,8 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-$latte = new Latte\Engine;
+$latte = createLatte();
 $latte->setStrictParsing();
-$latte->setLoader(new Latte\Loaders\StringLoader);
 
 Assert::exception(
 	fn() => $latte->compile('{$this}'),

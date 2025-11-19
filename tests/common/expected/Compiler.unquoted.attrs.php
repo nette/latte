@@ -6,7 +6,9 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(array $ʟ_args): void
 	{
 %A%
-		echo '<span title="';
+		echo '<span title=hello></span>
+
+<span title="';
 		echo LR\Filters::escapeHtmlAttr($x) /* line %d% */;
 		echo '" class="';
 		echo LR\Filters::escapeHtmlAttr($x) /* line %d% */;
