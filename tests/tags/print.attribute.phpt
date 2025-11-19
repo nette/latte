@@ -257,7 +257,7 @@ test('href attribute', function () use ($latte) {
 	Assert::match(
 		<<<'XX'
 			<a href=""></a>
-			<a href=""></a>
+			<a href="javascript:foo"></a>
 			<a href="javascript:foo"></a>
 			<a href=""></a>
 			XX,

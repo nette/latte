@@ -11,9 +11,8 @@ namespace Latte\Essential;
 
 use Latte\CompileException;
 use Latte\Compiler\Node;
-use Latte\Compiler\Nodes\FragmentNode;
-use Latte\Compiler\Nodes\Html\AttributeNode;
 use Latte\Compiler\Nodes\Html\ElementNode;
+use Latte\Compiler\Nodes\Html\ExpressionAttributeNode;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
@@ -116,20 +115,12 @@ final class Passes
 			if ($node instanceof ElementNode) {
 				$elem = $node;
 
-			} elseif ($node instanceof AttributeNode
-				&& $node->name instanceof TextNode
-				&& HtmlHelpers::isUrlAttribute($elem->name, $node->name->content)
+			} elseif ($node instanceof ExpressionAttributeNode
+				&& HtmlHelpers::isUrlAttribute($elem->name, $node->name)
+				&& !$node->modifier->removeFilter('nocheck') && !$node->modifier->removeFilter('noCheck')
+				&& !$node->modifier->hasFilter('datastream') && !$node->modifier->hasFilter('dataStream')
 			) {
-				$attrValue = $node->value instanceof FragmentNode && $node->value->children
-					? $node->value->children[0]
-					: $node->value;
-
-				if ($attrValue instanceof PrintNode && ($modifier = $attrValue->modifier)
-					&& !$modifier->removeFilter('nocheck') && !$modifier->removeFilter('noCheck')
-					&& !$modifier->hasFilter('datastream') && !$modifier->hasFilter('dataStream')
-				) {
-					$attrValue->modifier->filters[] = new Php\FilterNode(new Php\IdentifierNode('checkUrl'));
-				}
+				$node->modifier->filters[] = new Php\FilterNode(new Php\IdentifierNode('checkUrl'));
 			}
 		});
 	}

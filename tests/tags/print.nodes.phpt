@@ -50,15 +50,10 @@ Assert::match(<<<'XX'
 			Element:
 				name: title
 				Fragment:
-					Text:
-						content: ' '
-					Attribute:
-						Text:
-							content: 'foo'
-						Print:
-							Variable:
-								name: foo
-							Modifier:
+					ExpressionAttribute:
+						Variable:
+							name: foo
+						Modifier:
 					Text:
 						content: ' '
 					Attribute:
