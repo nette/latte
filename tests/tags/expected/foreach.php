@@ -12,13 +12,13 @@
 ';
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['a', 'b'], $ʟ_it ?? null) as $item) /* pos 8:1 */ {
 			echo '	';
-			echo LR\Filters::escapeHtmlText($iterator->counter) /* pos 9:2 */;
+			echo LR\HtmlHelpers::escapeText($iterator->counter) /* pos 9:2 */;
 			echo "\n";
 
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
-		echo LR\Filters::escapeHtmlText($iterator === null ? 'is null' : null) /* pos 11:1 */;
+		echo LR\HtmlHelpers::escapeText($iterator === null ? 'is null' : null) /* pos 11:1 */;
 		echo '
 
 ---

@@ -17,7 +17,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<title>';
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
 		}) /* pos %d%:%d% */;
 		echo '</title>
 </head>
@@ -34,13 +34,13 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		$this->renderBlock('content', [], function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
 		}) /* pos %d%:%d% */;
 		echo '	</div>
 </body>
 </html>
 Parent: ';
-		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->global->fn->info)($this, )) /* pos %d%:%d% */;
 		echo "\n";
 	}
 
@@ -51,7 +51,7 @@ Parent: ';
 
 		$class ??= array_key_exists('class', get_defined_vars()) ? null : null;
 		$namespace ??= array_key_exists('namespace', get_defined_vars()) ? null : null;
-		$top ??= array_key_exists('top', get_defined_vars()) ? null : true /* pos %d%:%d% */;
+		$top ??= array_key_exists('top', get_defined_vars()) ? null : true /* pos 1:1 */;
 		return get_defined_vars();
 	}
 

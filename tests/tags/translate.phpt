@@ -14,14 +14,14 @@ Assert::match(
 	<<<'XX'
 		%A%
 				$ʟ_fi = new LR\FilterInfo('html');
-				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('translate', $ʟ_fi, 'abc')) /* pos 1:1 */;
+				echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('translate', $ʟ_fi, 'abc')) /* pos 1:1 */;
 		%A%
 		XX,
 	$latte->compile('{translate}abc{/translate}'),
 );
 
 Assert::contains(
-	'echo LR\Filters::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'translate\', $ʟ_fi, \'abc\', 10, 20)) /* pos 1:1 */;',
+	'echo LR\Helpers::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'translate\', $ʟ_fi, \'abc\', 10, 20)) /* pos 1:1 */;',
 	$latte->compile('{translate 10, 20}abc{/translate}'),
 );
 
@@ -29,7 +29,7 @@ Assert::match(
 	<<<'XX'
 		%A%
 				$ʟ_fi = new LR\FilterInfo('html');
-				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('filter', $ʟ_fi, $this->filters->filterContent('translate', $ʟ_fi, 'abc'))) /* pos 1:1 */;
+				echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('filter', $ʟ_fi, $this->filters->filterContent('translate', $ʟ_fi, 'abc'))) /* pos 1:1 */;
 		%A%
 		XX,
 	$latte->compile('{translate|filter}abc{/translate}'),
@@ -48,7 +48,7 @@ Assert::match(
 					$ʟ_tmp = ob_get_clean();
 				}
 				$ʟ_fi = new LR\FilterInfo('html');
-				echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('translate', $ʟ_fi, $ʟ_tmp)) /* pos 1:1 */;
+				echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('translate', $ʟ_fi, $ʟ_tmp)) /* pos 1:1 */;
 		%A%
 		XX,
 	$latte->compile('{translate}{if true}abc{/if}{/translate}'),
@@ -69,7 +69,7 @@ function translate($message, ...$parameters): string
 $latte = createLatte();
 $latte->addExtension(new Latte\Essential\TranslatorExtension('translate'));
 Assert::contains(
-	'echo LR\Filters::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'translate\', $ʟ_fi, \'a&b\', 1, 2))',
+	'echo LR\Helpers::convertTo($ʟ_fi, \'html\', $this->filters->filterContent(\'translate\', $ʟ_fi, \'a&b\', 1, 2))',
 	$latte->compile('{translate 1,2}a&b{/translate}'),
 );
 Assert::same(
@@ -80,7 +80,7 @@ Assert::same(
 
 $latte->addExtension(new Latte\Essential\TranslatorExtension('translate', 'en'));
 Assert::contains(
-	'echo LR\Filters::convertTo($ʟ_fi, \'html\', \'b&a1,2\')',
+	'echo LR\Helpers::convertTo($ʟ_fi, \'html\', \'b&a1,2\')',
 	$latte->compile('{translate 1,2}a&b{/translate}'),
 );
 Assert::same(

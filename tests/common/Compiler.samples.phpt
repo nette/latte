@@ -10,17 +10,17 @@ require __DIR__ . '/../bootstrap.php';
 $latte = createLatte();
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* pos 1:1 */;%A%',
+	'%A%echo LR\HtmlHelpers::escapeText(test(fn() => 1)) /* pos 1:1 */;%A%',
 	$latte->compile('{test(function () { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* pos 1:1 */;%A%',
+	'%A%echo LR\HtmlHelpers::escapeText(test(fn() => 1)) /* pos 1:1 */;%A%',
 	$latte->compile('{test(function () use ($a) { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\Filters::escapeHtmlText(test(fn() => 1)) /* pos 1:1 */;%A%',
+	'%A%echo LR\HtmlHelpers::escapeText(test(fn() => 1)) /* pos 1:1 */;%A%',
 	$latte->compile('{test(fn () => 1)}'),
 );
 
@@ -89,21 +89,21 @@ Assert::match(
 
 // tag name vs content
 Assert::contains(
-	"escapeHtmlText(trim('a'))",
+	"HtmlHelpers::escapeText(trim('a'))",
 	$latte->compile('{trim("a")}'),
 );
 
 Assert::contains(
-	"escapeHtmlText(\\trim('a'))",
+	"HtmlHelpers::escapeText(\\trim('a'))",
 	$latte->compile('{\trim("a")}'),
 );
 
 Assert::contains(
-	'escapeHtmlText(MyClass::foo)',
+	'HtmlHelpers::escapeText(MyClass::foo)',
 	$latte->compile('{MyClass::foo}'),
 );
 
 Assert::contains(
-	'escapeHtmlText(My\Class::foo)',
+	'HtmlHelpers::escapeText(My\Class::foo)',
 	$latte->compile('{My\Class::foo}'),
 );

@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '(';
 			}
 			echo ' ';
-			echo LR\Filters::escapeHtmlText($person) /* pos 3:19 */;
+			echo LR\HtmlHelpers::escapeText($person) /* pos 3:19 */;
 			if (!$iterator->isLast()) /* pos 3:28 */ {
 				echo ', ';
 			}
@@ -37,7 +37,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '[';
 			}
 			echo ' ';
-			echo LR\Filters::escapeHtmlText($person) /* pos 8:26 */;
+			echo LR\HtmlHelpers::escapeText($person) /* pos 8:26 */;
 			if (!$iterator->isLast()) /* pos 8:35 */ {
 				echo ', ';
 			} else /* pos 8:42 */ {
@@ -63,7 +63,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '(';
 			}
 			echo ' ';
-			echo LR\Filters::escapeHtmlText($person) /* pos 13:21 */;
+			echo LR\HtmlHelpers::escapeText($person) /* pos 13:21 */;
 			if (!$iterator->isLast(2)) /* pos 13:30 */ {
 				echo ', ';
 			}
@@ -85,7 +85,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '(';
 			}
 			echo ' ';
-			echo LR\Filters::escapeHtmlText($person) /* pos 18:21 */;
+			echo LR\HtmlHelpers::escapeText($person) /* pos 18:21 */;
 			if (!$iterator->isLast(1)) /* pos 18:30 */ {
 				echo ', ';
 			}
@@ -106,7 +106,7 @@ final class Template%a% extends Latte\Runtime\Template
 				echo '	<span>(</span>';
 			}
 			echo ' ';
-			echo LR\Filters::escapeHtmlText($person) /* pos 23:27 */;
+			echo LR\HtmlHelpers::escapeText($person) /* pos 23:27 */;
 			if (!$iterator->isLast()) /* pos 23:42 */ {
 				echo '<span>, </span>';
 			}

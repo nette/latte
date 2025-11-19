@@ -40,11 +40,11 @@ c) ';
 		unset($ʟ_args);
 
 		echo '	Variables ';
-		echo LR\Filters::escapeHtmlText($var1) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var1) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($var2) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var2) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($var3) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var3) /* pos %d%:%d% */;
 		echo "\n";
 	}
 }

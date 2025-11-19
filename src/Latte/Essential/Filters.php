@@ -34,7 +34,7 @@ final class Filters
 	{
 		$info->validate([null, 'html', 'html/attr', 'xml', 'xml/attr'], __FUNCTION__);
 		$info->contentType = ContentType::Text;
-		return Latte\Runtime\Filters::convertHtmlToText((string) $s);
+		return Latte\Runtime\HtmlHelpers::convertHtmlToText((string) $s);
 	}
 
 
@@ -767,7 +767,7 @@ final class Filters
 	public static function checkUrl($s): string
 	{
 		$s = $s instanceof Latte\Runtime\HtmlStringable
-			? Latte\Runtime\Filters::convertHtmlToText((string) $s)
+			? Latte\Runtime\HtmlHelpers::convertHtmlToText((string) $s)
 			: (string) $s;
 
 		return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|(?:mailto|tel|sms):.+|[/?#].*|[^:]+)$~Di', $s) ? $s : '';

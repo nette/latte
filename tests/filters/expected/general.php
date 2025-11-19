@@ -8,31 +8,31 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo '<ul>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->h2)(($this->filters->h1)($hello))) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->h2)(($this->filters->h1)($hello))) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
 		echo ($this->filters->h2)(($this->filters->h1)($hello)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->h1)(($this->filters->h2)($hello))) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->h1)(($this->filters->h2)($hello))) /* pos %d%:%d% */;
 		echo '</li>
 </ul>
 
 <ul>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)((int) $hello * 0, 0, 0.0, '0')) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->types)((int) $hello * 0, 0, 0.0, '0')) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)((int) $hello * 1, 1, '1')) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->types)((int) $hello * 1, 1, '1')) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->types)($hello, true, null, false)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, true, null, false)) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->types)($hello, true, null, false)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\Filters::escapeHtmlText(($this->filters->types)($hello, '', '', "{$hello}")) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText(($this->filters->types)($hello, '', '', "{$hello}")) /* pos %d%:%d% */;
 		echo '</li>
 </ul>
 
@@ -56,7 +56,7 @@ alert();
 			})(get_defined_vars());
 		} finally {
 			$ʟ_fi = new LR\FilterInfo('html');
-			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('strip', $ʟ_fi, ob_get_clean()));
+			echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('strip', $ʟ_fi, ob_get_clean()));
 		}
 		echo '
 
@@ -77,20 +77,20 @@ Nested blocks: ';
 					})(get_defined_vars());
 				} finally {
 					$ʟ_fi = new LR\FilterInfo('html');
-					echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean())));
+					echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean())));
 				}
 				echo '  Block ';
 
 			})(get_defined_vars());
 		} finally {
 			$ʟ_fi = new LR\FilterInfo('html');
-			echo LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('truncate', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean()), 20));
+			echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('truncate', $ʟ_fi, $this->filters->filterContent('striphtml', $ʟ_fi, ob_get_clean()), 20));
 		}
 		echo '
 </p>
 
 Breaklines: ';
-		echo LR\Filters::escapeHtmlText(($this->filters->breakLines)('hello
+		echo LR\HtmlHelpers::escapeText(($this->filters->breakLines)('hello
 bar')) /* pos %d%:%d% */;
 		echo "\n";
 	}

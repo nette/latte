@@ -18,7 +18,7 @@ pre
 </textarea>
 
 Parent: ';
-		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* pos 11:9 */;
+		echo LR\HtmlHelpers::escapeText(($this->global->fn->info)($this, )) /* pos 11:9 */;
 		echo "\n";
 	}
 }

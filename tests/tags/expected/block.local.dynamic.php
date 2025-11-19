@@ -38,7 +38,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = "strip{$name}") ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockStrip_name']], 'local');
 		$this->renderBlock($ʟ_nm, get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Filters::convertTo($ʟ_fi, 'html', $this->filters->filterContent('striptags', $ʟ_fi, $s));
+			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('striptags', $ʟ_fi, $s));
 		});
 		echo "\n";
 	}
@@ -66,7 +66,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	Static block #';
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo "\n";
 	}
 
@@ -78,7 +78,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '		Dynamic block #';
-		echo LR\Filters::escapeHtmlText($var) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo "\n";
 	}
 

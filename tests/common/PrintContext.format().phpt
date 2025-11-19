@@ -182,7 +182,7 @@ test('%modifyContent', function () {
 
 test('%escape', function () {
 	Assert::same(
-		'test1(LR\Filters::escapeHtmlText(test()), 123)',
+		'test1(LR\HtmlHelpers::escapeText(test()), 123)',
 		format('test1(%escape(test()), %dump)', 123),
 	);
 });

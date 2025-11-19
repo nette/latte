@@ -12,7 +12,7 @@ namespace Latte\Compiler;
 use Latte;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
-use Latte\Runtime\Filters;
+use Latte\Runtime\Helpers;
 use Latte\Runtime\HtmlHelpers;
 use function in_array, is_string, str_starts_with, strtolower;
 
@@ -38,38 +38,38 @@ final class Escaper
 
 	private const Convertors = [
 		self::Text => [
-			self::HtmlText => 'escapeHtmlText',
-			self::HtmlAttribute => 'escapeHtmlAttr',
-			self::HtmlAttribute . '/' . self::JavaScript => 'escapeHtmlAttr',
-			self::HtmlAttribute . '/' . self::Css => 'escapeHtmlAttr',
-			self::HtmlComment => 'escapeHtmlComment',
-			'xml' => 'escapeXmlText',
-			'xml/attr' => 'escapeXmlAttr',
+			self::HtmlText => 'HtmlHelpers::escapeText',
+			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
+			self::HtmlComment => 'HtmlHelpers::escapeComment',
+			'xml' => 'XmlHelpers::escapeText',
+			'xml/attr' => 'XmlHelpers::escapeAttr',
 		],
 		self::JavaScript => [
-			self::HtmlText => 'escapeHtmlText',
-			self::HtmlAttribute => 'escapeHtmlAttr',
-			self::HtmlAttribute . '/' . self::JavaScript => 'escapeHtmlAttr',
-			self::HtmlRawText . '/' . self::JavaScript => 'convertJSToHtmlRawText',
-			self::HtmlComment => 'escapeHtmlComment',
+			self::HtmlText => 'HtmlHelpers::escapeText',
+			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
+			self::HtmlRawText . '/' . self::JavaScript => 'HtmlHelpers::convertJSToRawText',
+			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
 		self::Css => [
-			self::HtmlText => 'escapeHtmlText',
-			self::HtmlAttribute => 'escapeHtmlAttr',
-			self::HtmlAttribute . '/' . self::Css => 'escapeHtmlAttr',
-			self::HtmlRawText . '/' . self::Css => 'convertJSToHtmlRawText',
-			self::HtmlComment => 'escapeHtmlComment',
+			self::HtmlText => 'HtmlHelpers::escapeText',
+			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
+			self::HtmlRawText . '/' . self::Css => 'HtmlHelpers::convertJSToRawText',
+			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
 		self::HtmlText => [
-			self::Text => 'convertHtmlToText',
-			self::HtmlAttribute => 'convertHtmlToHtmlAttr',
-			self::HtmlAttribute . '/' . self::JavaScript => 'convertHtmlToHtmlAttr',
-			self::HtmlAttribute . '/' . self::Css => 'convertHtmlToHtmlAttr',
-			self::HtmlComment => 'escapeHtmlComment',
-			self::HtmlRawText . '/' . self::HtmlText => 'convertHtmlToHtmlRawText',
+			self::Text => 'HtmlHelpers::convertHtmlToText',
+			self::HtmlAttribute => 'HtmlHelpers::convertHtmlToAttr',
+			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::convertHtmlToAttr',
+			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::convertHtmlToAttr',
+			self::HtmlComment => 'HtmlHelpers::escapeComment',
+			self::HtmlRawText . '/' . self::HtmlText => 'HtmlHelpers::convertHtmlToRawText',
 		],
 		self::HtmlAttribute => [
-			self::HtmlText => 'convertHtmlAttrToHtml',
+			self::HtmlText => 'HtmlHelpers::convertAttrToHtml',
 		],
 	];
 
@@ -177,34 +177,34 @@ final class Escaper
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
-				self::HtmlText => 'LR\Filters::escapeHtmlText(' . $str . ')',
-				self::HtmlTag => 'LR\Filters::escapeHtmlTag(' . $str . ')',
+				self::HtmlText => 'LR\HtmlHelpers::escapeText(' . $str . ')',
+				self::HtmlTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
-					'' => 'LR\Filters::escapeHtmlAttr(' . $str . ')',
-					self::JavaScript => 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeJs(' . $str . '))',
-					self::Css => 'LR\Filters::escapeHtmlAttr(LR\Filters::escapeCss(' . $str . '))',
+					'' => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
+					self::JavaScript => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs(' . $str . '))',
+					self::Css => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss(' . $str . '))',
 				},
-				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
-				self::HtmlBogusTag => 'LR\Filters::escapeHtml(' . $str . ')',
+				self::HtmlComment => 'LR\HtmlHelpers::escapeComment(' . $str . ')',
+				self::HtmlBogusTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
 				self::HtmlRawText => match ($this->subType) {
-					self::Text => 'LR\Filters::convertJSToHtmlRawText(' . $str . ')', // sanitization, escaping is not possible
-					self::HtmlText => 'LR\Filters::escapeHtmlRawTextHtml(' . $str . ')',
-					self::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
-					self::Css => 'LR\Filters::escapeCss(' . $str . ')',
+					self::Text => 'LR\HtmlHelpers::convertJSToRawText(' . $str . ')', // sanitization, escaping is not possible
+					self::HtmlText => 'LR\HtmlHelpers::escapeRawHtml(' . $str . ')',
+					self::JavaScript => 'LR\Helpers::escapeJs(' . $str . ')',
+					self::Css => 'LR\Helpers::escapeCss(' . $str . ')',
 				},
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
 			ContentType::Xml => match ($this->state) {
-				self::HtmlText,
-				self::HtmlBogusTag => 'LR\Filters::escapeXmlText(' . $str . ')',
-				self::HtmlAttribute => 'LR\Filters::escapeXmlAttr(' . $str . ')',
-				self::HtmlComment => 'LR\Filters::escapeHtmlComment(' . $str . ')',
-				self::HtmlTag => 'LR\Filters::escapeXmlTag(' . $str . ')',
+				self::HtmlText => 'LR\XmlHelpers::escapeText(' . $str . ')',
+				self::HtmlBogusTag => 'LR\XmlHelpers::escapeTag(' . $str . ')',
+				self::HtmlAttribute => 'LR\XmlHelpers::escapeAttr(' . $str . ')',
+				self::HtmlComment => 'LR\HtmlHelpers::escapeComment(' . $str . ')',
+				self::HtmlTag => 'LR\XmlHelpers::escapeTag(' . $str . ')',
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
-			ContentType::JavaScript => 'LR\Filters::escapeJs(' . $str . ')',
-			ContentType::Css => 'LR\Filters::escapeCss(' . $str . ')',
-			ContentType::ICal => 'LR\Filters::escapeIcal(' . $str . ')',
+			ContentType::JavaScript => 'LR\Helpers::escapeJs(' . $str . ')',
+			ContentType::Css => 'LR\Helpers::escapeCss(' . $str . ')',
+			ContentType::ICal => 'LR\Helpers::escapeIcal(' . $str . ')',
 			ContentType::Text => '($this->filters->escape)(' . $str . ')',
 			default => throw new \LogicException("Unknown content-type $this->contentType."),
 		};
@@ -215,16 +215,16 @@ final class Escaper
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
-				self::HtmlAttribute => "LR\\Filters::escapeHtmlQuotes($str)",
+				self::HtmlAttribute => "LR\\HtmlHelpers::escapeQuotes($str)",
 				self::HtmlRawText => match ($this->subType) {
-					self::HtmlText => 'LR\Filters::convertHtmlToHtmlRawText(' . $str . ')',
-					default => "LR\\Filters::convertJSToHtmlRawText($str)",
+					self::HtmlText => 'LR\HtmlHelpers::convertHtmlToRawText(' . $str . ')',
+					default => "LR\\HtmlHelpers::convertJSToRawText($str)",
 				},
 				self::HtmlComment => throw new Latte\CompileException('Using |noescape is not allowed in this context.', $position),
 				default => $str,
 			},
 			ContentType::Xml => match ($this->state) {
-				self::HtmlAttribute => "LR\\Filters::escapeHtmlQuotes($str)",
+				self::HtmlAttribute => "LR\\HtmlHelpers::escapeQuotes($str)",
 				self::HtmlComment => throw new Latte\CompileException('Using |noescape is not allowed in this context.', $position),
 				default => $str,
 			},
@@ -235,7 +235,7 @@ final class Escaper
 
 	public function escapeContent(string $str): string
 	{
-		return 'LR\Filters::convertTo($ʟ_fi, '
+		return 'LR\Helpers::convertTo($ʟ_fi, '
 			. var_export($this->export(), true) . ', '
 			. $str
 			. ')';
@@ -245,8 +245,8 @@ final class Escaper
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
 		return match (true) {
-			$source === $dest => Filters::nop(...),
-			isset(self::Convertors[$source][$dest]) => [Filters::class, self::Convertors[$source][$dest]],
+			$source === $dest => Helpers::nop(...),
+			isset(self::Convertors[$source][$dest]) => 'Latte\Runtime\\' . self::Convertors[$source][$dest],
 			default => null,
 		};
 	}

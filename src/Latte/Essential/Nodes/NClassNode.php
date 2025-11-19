@@ -40,7 +40,7 @@ final class NClassNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		return $context->format(
-			'echo ($ʟ_tmp = array_filter(%node)) ? \' class="\' . LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) . \'"\' : "" %line;',
+			'echo ($ʟ_tmp = array_filter(%node)) ? \' class="\' . LR\HtmlHelpers::escapeAttr(implode(" ", array_unique($ʟ_tmp))) . \'"\' : "" %line;',
 			$this->args,
 			$this->position,
 		);
