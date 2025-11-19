@@ -15,8 +15,8 @@ use Latte\Compiler\Nodes\Php\Scalar;
 use function array_pop, count, is_string, substr;
 
 
-/** @internal generated trait used by TagParser */
-abstract class TagParserData
+/** @internal generated part of TagParser */
+trait TagParserData
 {
 	/** Symbol number of error recovery token */
 	protected const ErrorSymbol = 1;

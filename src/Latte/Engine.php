@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
-use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, get_object_vars, is_array, md5, preg_match, serialize, strpos, substr;
+use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, get_object_vars, is_array, preg_match, serialize, strpos, substr;
 use const PHP_VERSION_ID;
 
 
@@ -252,9 +252,9 @@ class Engine
 	 */
 	public function generateTemplateHash(string $name): string
 	{
-		$hash = $this->configurationHash ?? md5(serialize($this->getCacheKey()));
+		$hash = $this->configurationHash ?? hash('xxh128', serialize($this->getCacheKey()));
 		$hash .= $this->getLoader()->getUniqueId($name);
-		return substr(md5($hash), 0, 10);
+		return substr(hash('xxh128', $hash), 0, 10);
 	}
 
 

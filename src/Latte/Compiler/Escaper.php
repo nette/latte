@@ -244,7 +244,7 @@ final class Escaper
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
 		return match (true) {
-			$source === $dest => [Filters::class, 'nop'],
+			$source === $dest => Filters::nop(...),
 			isset(self::Convertors[$source][$dest]) => [Filters::class, self::Convertors[$source][$dest]],
 			default => null,
 		};
