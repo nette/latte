@@ -33,13 +33,13 @@ class BlueScreenPanel
 		self::$initialized = true;
 
 		$blueScreen ??= Tracy\Debugger::getBlueScreen();
-		$blueScreen->addPanel([self::class, 'renderError']);
-		$blueScreen->addAction([self::class, 'renderUnknownMacro']);
+		$blueScreen->addPanel(self::renderError(...));
+		$blueScreen->addAction(self::renderUnknownMacro(...));
 		if (
 			version_compare(Tracy\Debugger::VERSION, '2.9.0', '>=')
 			&& version_compare(Tracy\Debugger::VERSION, '3.0', '<')
 		) {
-			Tracy\Debugger::addSourceMapper([self::class, 'mapLatteSourceCode']);
+			Tracy\Debugger::addSourceMapper(self::mapLatteSourceCode(...));
 			$blueScreen->addFileGenerator(fn(string $file) => substr($file, -6) === '.latte'
 					? "{block content}\n\$END\$"
 					: null);

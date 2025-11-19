@@ -20,7 +20,7 @@ final class RawPhpExtension extends Latte\Extension
 	public function getTags(): array
 	{
 		return [
-			'php' => [Nodes\RawPhpNode::class, 'create'],
+			'php' => Nodes\RawPhpNode::create(...),
 		];
 	}
 }

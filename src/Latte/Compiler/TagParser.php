@@ -23,8 +23,10 @@ use function count, is_int, ord, preg_match, preg_replace, preg_replace_callback
  * Parser for PHP-like expression language used in tags.
  * Based on works by Nikita Popov, Moriyoshi Koizumi and Masato Bito.
  */
-final class TagParser extends TagParserData
+final class TagParser
 {
+	use TagParserData;
+
 	private const
 		SchemaExpression = 'e',
 		SchemaArguments = 'a',
