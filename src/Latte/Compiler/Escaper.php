@@ -13,7 +13,7 @@ use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Filters;
 use Latte\Runtime\HtmlHelpers;
-use function in_array, is_string, preg_match, str_starts_with, strtolower;
+use function in_array, is_string, str_starts_with, strtolower;
 
 
 /**
