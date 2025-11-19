@@ -18,3 +18,4 @@ Assert::same('1', Filters::escapeHtmlQuotes(1));
 Assert::same('string', Filters::escapeHtmlQuotes('string'));
 Assert::same('< & &apos; &quot; >', Filters::escapeHtmlQuotes('< & \' " >'));
 Assert::same('&quot;', Filters::escapeHtmlQuotes('&quot;'));
+Assert::same('<br> &quot; &quot; &apos;', Filters::escapeHtmlQuotes(new Latte\Runtime\Html('<br> &quot; " \'')));

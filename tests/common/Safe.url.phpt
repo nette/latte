@@ -92,13 +92,13 @@ Assert::match(
 
 // accepts Stringable
 Assert::match(
-	'<img src="&lt;a&gt;">',
+	'<img src="">',
 	$latte->renderToString(
 		'<img src="{$url}">',
 		['url' => new class {
 			public function __toString()
 			{
-				return '<a>';
+				return 'javascript:foo';
 			}
 		}],
 	),
