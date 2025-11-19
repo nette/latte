@@ -115,7 +115,7 @@ test('style attribute', function () {
 			<span style="0"></span>
 			<span style="123"></span>
 			<span style=""></span>
-			<span style="one\&amp;two"></span>
+			<span style="one&amp;two"></span>
 			<span style="1"></span>
 			<span style=""></span>
 			<span style=""></span>
@@ -176,11 +176,11 @@ test('on* attribute', function () {
 		<<<'XX'
 			<span onclick="0"></span>
 			<span onclick="123"></span>
-			<span onclick="&quot;&quot;"></span>
-			<span onclick="&quot;one&amp;two&quot;"></span>
-			<span onclick="true"></span>
-			<span onclick="false"></span>
-			<span onclick="null"></span>
+			<span onclick=""></span>
+			<span onclick="one&amp;two"></span>
+			<span onclick="1"></span>
+			<span onclick=""></span>
+			<span onclick=""></span>
 
 			<span onclick="123 -- &quot;one&amp;two&apos;\&quot;&quot; -- true -- false -- null -- &quot;one&amp;amp;&lt;br&gt;&quot; -- &#123;}"></span>
 			XX,

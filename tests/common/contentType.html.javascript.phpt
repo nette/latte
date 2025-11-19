@@ -134,13 +134,8 @@ Assert::match(
 
 // attributes
 Assert::match(
-	'<div onclick="&quot;&lt;&gt;&quot;"></div>',
+	'<div onclick="&lt;&gt;"></div>',
 	$latte->renderToString('<div onclick="{="<>"}"></div>'),
-);
-
-Assert::match(
-	'<div onclick="[1,2,3]"></div>',
-	$latte->renderToString('<div onclick="{=[1,2,3]}"></div>'),
 );
 
 // no escape

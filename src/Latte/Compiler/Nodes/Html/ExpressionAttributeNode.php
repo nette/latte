@@ -31,7 +31,7 @@ class ExpressionAttributeNode extends AreaNode
 	public function print(PrintContext $context): string
 	{
 		$escaper = $context->beginEscape();
-		$escaper->enterHtmlAttribute($this->name);
+		$escaper->enterHtmlAttribute();
 		$res = $context->format(
 			'echo %dump; echo %modify(%node) %line; echo \'"\';',
 			$this->indentation . $this->name . '="',

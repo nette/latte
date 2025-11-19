@@ -39,7 +39,7 @@ final class Template%a% extends Latte\Runtime\Template
 		echo 'd"></span>
 
 <span onclick="';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($x)) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeAttr($x) /* pos %d%:%d% */;
 		echo '" ';
 		echo LR\HtmlHelpers::escapeTag($x) /* pos %d%:%d% */;
 		echo '></span>
