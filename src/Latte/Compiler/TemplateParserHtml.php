@@ -64,15 +64,15 @@ final class TemplateParserHtml
 	}
 
 
-	public function inTagResolve(): ?Node
+	public function inTagResolve(FragmentNode $fragment): ?Node
 	{
 		$stream = $this->parser->getStream();
 		$token = $stream->peek();
 		return match ($token->type) {
 			Token::Html_Name => str_starts_with($token->text, TemplateLexer::NPrefix)
 				? $this->parseNAttribute()
-				: $this->parseAttribute(),
-			Token::Latte_TagOpen => $this->parseAttribute(),
+				: $this->parseAttribute($fragment),
+			Token::Latte_TagOpen => $this->parseAttribute($fragment),
 			Token::Whitespace => $this->parseAttributeWhitespace(),
 			Token::Html_TagClose => null,
 			default => $this->parser->inTextResolve(),
@@ -359,7 +359,7 @@ final class TemplateParserHtml
 	}
 
 
-	private function parseAttribute(): ?Node
+	private function parseAttribute(FragmentNode $fragment): ?Node
 	{
 		$stream = $this->parser->getStream();
 		if ($stream->is(Token::Latte_TagOpen)) {
@@ -372,6 +372,19 @@ final class TemplateParserHtml
 		}
 
 		[$value, $quote] = $this->parseAttributeValue();
+		if ($name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && !$value->modifier->hasFilter('noescape')) {
+			if (($indent = end($fragment->children)) instanceof Nodes\TextNode && $indent->isWhitespace()) {
+				array_pop($fragment->children);
+			}
+			return new Html\ExpressionAttributeNode(
+				name: $name->content,
+				value: $value->expression,
+				modifier: $value->modifier,
+				indentation: $indent->content ?? null,
+				position: $name->position,
+			);
+		}
+
 		return new Html\AttributeNode(
 			name: $name,
 			value: $value,

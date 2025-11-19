@@ -53,6 +53,10 @@ class ElementNode extends AreaNode
 				&& $this->matchesIdentifier($name, $child->name->content)
 			) {
 				return NodeHelpers::toText($child->value) ?? $child->value ?? true;
+			} elseif ($child instanceof ExpressionAttributeNode
+				&& $this->matchesIdentifier($name, $child->name)
+			) {
+				return true;
 			}
 		}
 
