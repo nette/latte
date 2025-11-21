@@ -57,9 +57,9 @@ Assert::match(
 
 		<p title="hello"> </p>
 
-		<input checked="checked">
+		<input>
 		XX,
-	$latte->renderToString($template),
+	@$latte->renderToString($template),
 );
 $latte->setContentType(Latte\ContentType::Html);
 
@@ -84,9 +84,9 @@ Assert::match(
 );
 
 // misuse of
-Assert::match(
-	'<input rowspan=2>',
-	$latte->renderToString('<input n:attr="\'rowspan=2\' => true">'),
+Assert::error(
+	fn() => $latte->renderToString('<input n:attr="\'rowspan=2\' => true">'),
+	E_USER_WARNING,
 );
 
 

@@ -30,17 +30,17 @@ test('text attributes', function () use ($latte) {
 			<span title="123"></span>
 			<span title=""></span>
 			<span title="one&amp;two &apos;"></span>
-			<span title></span>
 			<span></span>
 			<span></span>
 			<span></span>
-			<span title="hello one&amp;two"></span>
-			<span title="hello:one&amp;two"></span>
-			<span title="hello"></span>
-			<span title="one&amp;amp;&lt;br&gt; &apos;"></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span title="one&amp; &apos;"></span>
 			<span title="one&amp;&lt;br&gt; &quot;&apos;"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="title => 0"></span>
 			<span n:attr="title => 123"></span>
 			<span n:attr="title => ''"></span>
@@ -62,15 +62,15 @@ test('text attributes', function () use ($latte) {
 test('boolean attributes', function () use ($latte) {
 	Assert::match(
 		<<<'XX'
-			<span checked="0"></span>
-			<span checked="123"></span>
-			<span checked=""></span>
-			<span checked="one&amp;two"></span>
+			<span></span>
+			<span checked></span>
+			<span></span>
+			<span checked></span>
 			<span checked></span>
 			<span></span>
 			<span></span>
 			<span></span>
-			<span checked="hello"></span>
+			<span checked></span>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<span n:attr="checked => 0"></span>
@@ -94,15 +94,15 @@ test('style attribute', function () use ($latte) {
 			<span style="123"></span>
 			<span style=""></span>
 			<span style="one&amp;two"></span>
-			<span style></span>
 			<span></span>
 			<span></span>
 			<span></span>
-			<span style="hello;one&amp;two"></span>
-			<span style="hello:one&amp;two"></span>
-			<span style="hello"></span>
+			<span></span>
+			<span style="hello; one&amp;two"></span>
+			<span style="hello: one&amp;two"></span>
+			<span style="hello: 1"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="style => 0"></span>
 			<span n:attr="style => 123"></span>
 			<span n:attr="style => ''"></span>
@@ -126,15 +126,15 @@ test('space-separated attribute', function () use ($latte) {
 			<span class="123"></span>
 			<span class=""></span>
 			<span class="one&amp;two"></span>
-			<span class></span>
+			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span class="hello one&amp;two"></span>
-			<span class="hello:one&amp;two"></span>
+			<span class="one&amp;two"></span>
 			<span class="hello"></span>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			<span n:attr="class => 0"></span>
 			<span n:attr="class => 123"></span>
 			<span n:attr="class => ''"></span>
@@ -158,12 +158,12 @@ test('data attribute', function () use ($latte) {
 			<span data-foo="123"></span>
 			<span data-foo=""></span>
 			<span data-foo="one&amp;two"></span>
-			<span data-foo></span>
+			<span data-foo="true"></span>
+			<span data-foo="false"></span>
 			<span></span>
-			<span></span>
-			<span></span>
-			<span data-foo="hello one&amp;two"></span>
-			<span data-foo="hello&amp;:one&amp;two"></span>
+			<span data-foo="[]"></span>
+			<span data-foo='["hello","one&amp;two"]'></span>
+			<span data-foo='{"hello&amp;":"one&amp;two"}'></span>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<span n:attr="data-foo => 0"></span>
@@ -188,8 +188,8 @@ test('ARIA attribute', function () use ($latte) {
 			<span aria-foo="123"></span>
 			<span aria-foo=""></span>
 			<span aria-foo="one&amp;two"></span>
-			<span aria-foo></span>
-			<span></span>
+			<span aria-foo="true"></span>
+			<span aria-foo="false"></span>
 			<span></span>
 			<span></span>
 			<span aria-foo="hello one&amp;two"></span>
@@ -231,15 +231,15 @@ test('XML', function () use ($latte) {
 			<bar foo="123"></bar>
 			<bar foo=""></bar>
 			<bar foo="one&amp;two"></bar>
-			<bar foo="foo"></bar>
 			<bar></bar>
 			<bar></bar>
 			<bar></bar>
-			<bar foo="hello one&amp;two"></bar>
-			<bar foo="one&amp;two"></bar>
-			<bar foo="1"></bar>
+			<bar></bar>
+			<bar></bar>
+			<bar></bar>
+			<bar></bar>
 			XX,
-		$latte->renderToString(<<<'XX'
+		@$latte->renderToString(<<<'XX'
 			{contentType xml}
 			<bar n:attr="foo => 0"></bar>
 			<bar n:attr="foo => 123"></bar>
