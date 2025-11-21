@@ -42,17 +42,24 @@ Assert::same(
 	HtmlHelpers::formatStyleAttribute('style', ['color: red', 'font-size: 16px']),
 );
 
-// special values
-Assert::same('style="1"', HtmlHelpers::formatStyleAttribute('style', true));
-Assert::same('style=""', HtmlHelpers::formatStyleAttribute('style', false));
-
 // skipped
 Assert::same('', HtmlHelpers::formatStyleAttribute('style', null));
 
 // invalid
 Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatStyleAttribute('style', true)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'style': bool is not allowed.",
+);
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatStyleAttribute('style', false)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'style': bool is not allowed.",
+);
+Assert::error(
 	fn() => Assert::same('', HtmlHelpers::formatStyleAttribute('style', (object) [])),
-	Error::class,
+	E_USER_WARNING,
+	"Invalid value for attribute 'style': stdClass is not allowed.",
 );
 
 // invalid UTF-8

@@ -47,7 +47,8 @@ Assert::same('', HtmlHelpers::formatAriaAttribute('aria-foo', null));
 // invalid
 Assert::error(
 	fn() => Assert::same('', HtmlHelpers::formatAriaAttribute('aria-foo', (object) [])),
-	Error::class,
+	E_USER_WARNING,
+	"Invalid value for attribute 'aria-foo': stdClass is not allowed.",
 );
 
 // invalid UTF-8

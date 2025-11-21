@@ -12,7 +12,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Nette;
-use function get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_string, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtr, substr;
+use function get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_array, is_bool, is_float, is_int, is_scalar, is_string, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtr, substr;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE;
 
 
@@ -187,8 +187,9 @@ final class HtmlHelpers
 	public static function formatAttribute(string $namePart, mixed $value): string
 	{
 		return match (true) {
-			default => $namePart . '="' . self::escapeAttr($value) . '"',
+			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
+			default => self::triggerInvalidValue(trim($namePart), $value) ?? '',
 		};
 	}
 
@@ -264,6 +265,14 @@ final class HtmlHelpers
 			}
 		}
 		return $res ? $namePart . '="' . self::escapeAttr(implode($separator, $res)) . '"' : '';
+	}
+
+
+	public static function triggerInvalidValue(string $name, mixed $value): void
+	{
+		$source = Latte\Helpers::guessTemplatePosition();
+		$type = get_debug_type($value);
+		trigger_error("Invalid value for attribute '$name': $type is not allowed" . ($source ? " ($source)" : '.'), E_USER_WARNING);
 	}
 
 

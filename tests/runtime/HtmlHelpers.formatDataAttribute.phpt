@@ -55,7 +55,8 @@ Assert::same('', HtmlHelpers::formatDataAttribute('data-foo', null));
 // invalid
 Assert::error(
 	fn() => Assert::same('', HtmlHelpers::formatDataAttribute('data-foo', new NonSerializable)),
-	Error::class,
+	E_USER_WARNING,
+	"Invalid value for attribute 'data-foo': NonSerializable is not allowed.",
 );
 
 // invalid UTF-8

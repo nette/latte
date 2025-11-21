@@ -32,21 +32,29 @@ Assert::same('title="0"', XmlHelpers::formatAttribute('title', 0));
 Assert::same('title="one&amp;"', XmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>')));
 Assert::same('title="one&amp;&lt;br&gt;"', XmlHelpers::formatAttribute('title', new StringObject));
 
-// special values
-Assert::same('title="1"', XmlHelpers::formatAttribute('title', true));
-Assert::same('title=""', XmlHelpers::formatAttribute('title', false));
-
 // skipped
 Assert::same('', XmlHelpers::formatAttribute('title', null));
 
 // invalid
 Assert::error(
-	fn() => Assert::same('title="Array"', XmlHelpers::formatAttribute('title', [])),
-	E_WARNING,
+	fn() => Assert::same('', XmlHelpers::formatAttribute('title', true)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': bool is not allowed.",
 );
-Assert::exception(
-	fn() => XmlHelpers::formatAttribute('title', (object) []),
-	Error::class,
+Assert::error(
+	fn() => Assert::same('', XmlHelpers::formatAttribute('title', false)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': bool is not allowed.",
+);
+Assert::error(
+	fn() => Assert::same('', XmlHelpers::formatAttribute('title', [])),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': array is not allowed.",
+);
+Assert::error(
+	fn() => Assert::same('', XmlHelpers::formatAttribute('title', (object) [])),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': stdClass is not allowed.",
 );
 
 // invalid UTF-8

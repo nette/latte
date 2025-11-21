@@ -32,21 +32,29 @@ Assert::same('title="0"', HtmlHelpers::formatAttribute('title', 0));
 Assert::same('title="one&amp;"', HtmlHelpers::formatAttribute('title', new Latte\Runtime\Html('one&amp;<br>')));
 Assert::same('title="one&amp;&lt;br&gt;"', HtmlHelpers::formatAttribute('title', new StringObject));
 
-// special values
-Assert::same('title="1"', HtmlHelpers::formatAttribute('title', true));
-Assert::same('title=""', HtmlHelpers::formatAttribute('title', false));
-
 // skipped
 Assert::same('', HtmlHelpers::formatAttribute('title', null));
 
 // invalid
 Assert::error(
-	fn() => Assert::same('title="Array"', HtmlHelpers::formatAttribute('title', [])),
-	E_WARNING,
+	fn() => Assert::same('', HtmlHelpers::formatAttribute('title', true)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': bool is not allowed.",
 );
-Assert::exception(
-	fn() => HtmlHelpers::formatAttribute('title', (object) []),
-	Error::class,
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatAttribute('title', false)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': bool is not allowed.",
+);
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatAttribute('title', [])),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': array is not allowed.",
+);
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatAttribute('title', (object) [])),
+	E_USER_WARNING,
+	"Invalid value for attribute 'title': stdClass is not allowed.",
 );
 
 // invalid UTF-8

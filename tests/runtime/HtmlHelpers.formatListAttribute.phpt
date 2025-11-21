@@ -37,17 +37,24 @@ Assert::same('', HtmlHelpers::formatListAttribute('class', []));
 Assert::same('class="a b"', HtmlHelpers::formatListAttribute('class', ['a', 'b']));
 Assert::same('class="k1"', HtmlHelpers::formatListAttribute('class', ['k1' => true, 'k2' => false]));
 
-// special values
-Assert::same('class="1"', HtmlHelpers::formatListAttribute('class', true));
-Assert::same('class=""', HtmlHelpers::formatListAttribute('class', false));
-
 // skipped
 Assert::same('', HtmlHelpers::formatListAttribute('class', null));
 
 // invalid
 Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatListAttribute('class', true)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'class': bool is not allowed.",
+);
+Assert::error(
+	fn() => Assert::same('', HtmlHelpers::formatListAttribute('class', false)),
+	E_USER_WARNING,
+	"Invalid value for attribute 'class': bool is not allowed.",
+);
+Assert::error(
 	fn() => Assert::same('', HtmlHelpers::formatListAttribute('class', (object) [])),
-	Error::class,
+	E_USER_WARNING,
+	"Invalid value for attribute 'class': stdClass is not allowed.",
 );
 
 // invalid UTF-8
