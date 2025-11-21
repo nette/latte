@@ -22,6 +22,15 @@ use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE;
  */
 final class HtmlHelpers
 {
+	private const BooleanAttributes = [
+		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
+		'contenteditable' => 1, 'default' => 1, 'defer' => 1, 'disabled' => 1, 'draggable' => 1, 'formnovalidate' => 1,
+		'hidden' => 1, 'inert' => 1, 'ismap' => 1, 'itemscope' => 1, 'loop' => 1, 'multiple' => 1, 'muted' => 1,
+		'nomodule' => 1, 'novalidate' => 1, 'open' => 1, 'playsinline' => 1, 'readonly' => 1, 'required' => 1,
+		'reversed' => 1, 'selected' => 1, 'spellcheck' => 1,
+	];
+
+
 	/**
 	 * Escapes string for use inside HTML text.
 	 */
@@ -156,7 +165,11 @@ final class HtmlHelpers
 
 	public static function classifyAttributeType(string $name): string
 	{
-		return '';
+		$name = strtolower($name);
+		return match (true) {
+			isset(self::BooleanAttributes[$name]) => 'bool',
+			default => '',
+		};
 	}
 
 
@@ -166,6 +179,15 @@ final class HtmlHelpers
 	public static function formatAttribute(string $namePart, mixed $value): string
 	{
 		return $namePart . '="' . self::escapeAttr($value) . '"';
+	}
+
+
+	/**
+	 * Formats boolean HTML attribute.
+	 */
+	public static function formatBoolAttribute(string $namePart, mixed $value): string
+	{
+		return $value ? $namePart : '';
 	}
 
 

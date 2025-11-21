@@ -83,15 +83,15 @@ test('boolean attributes', function () {
 	$latte = createLatte();
 	Assert::match(
 		<<<'XX'
-			<span checked="0"></span>
-			<span checked="123"></span>
-			<span checked=""></span>
-			<span checked="one&amp;two"></span>
-			<span checked="1"></span>
-			<span checked=""></span>
-			<span checked=""></span>
-			<span checked="Array"></span>
-			<span checked="Array"></span>
+			<span></span>
+			<span checked></span>
+			<span></span>
+			<span checked></span>
+			<span checked></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span checked></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span checked={=0}></span>
