@@ -45,7 +45,9 @@ Assert::same(
 // special values
 Assert::same('style="1"', HtmlHelpers::formatStyleAttribute('style', true));
 Assert::same('style=""', HtmlHelpers::formatStyleAttribute('style', false));
-Assert::same('style=""', HtmlHelpers::formatStyleAttribute('style', null));
+
+// skipped
+Assert::same('', HtmlHelpers::formatStyleAttribute('style', null));
 
 // invalid
 Assert::error(

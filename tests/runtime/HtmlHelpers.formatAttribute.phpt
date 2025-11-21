@@ -35,7 +35,9 @@ Assert::same('title="one&amp;&lt;br&gt;"', HtmlHelpers::formatAttribute('title',
 // special values
 Assert::same('title="1"', HtmlHelpers::formatAttribute('title', true));
 Assert::same('title=""', HtmlHelpers::formatAttribute('title', false));
-Assert::same('title=""', HtmlHelpers::formatAttribute('title', null));
+
+// skipped
+Assert::same('', HtmlHelpers::formatAttribute('title', null));
 
 // invalid
 Assert::error(

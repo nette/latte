@@ -41,8 +41,8 @@ Assert::same('', HtmlHelpers::formatAriaAttribute('aria-foo', []));
 Assert::same('aria-foo="a b"', HtmlHelpers::formatAriaAttribute('aria-foo', ['a', 'b']));
 Assert::same('aria-foo="v1 v2"', HtmlHelpers::formatAriaAttribute('aria-foo', ['k1' => 'v1', 'k2' => 'v2']));
 
-// special values
-Assert::same('aria-foo=""', HtmlHelpers::formatAriaAttribute('aria-foo', null));
+// skipped
+Assert::same('', HtmlHelpers::formatAriaAttribute('aria-foo', null));
 
 // invalid
 Assert::error(
