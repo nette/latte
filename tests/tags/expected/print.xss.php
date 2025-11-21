@@ -65,7 +65,7 @@ var prop2 = ';
  STYLE="color:';
 		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss($xss)) /* pos %d%:%d% */;
 		echo ';"';
-		echo LR\HtmlHelpers::formatAttribute('
+		echo LR\HtmlHelpers::formatListAttribute('
  rel', $xss) /* pos %d%:%d% */;
 		echo '
  onblur="alert(';

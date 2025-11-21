@@ -127,7 +127,7 @@
 			ob_start(fn() => '');
 			try /* pos 22:55 */ {
 				echo '<span';
-				echo LR\HtmlHelpers::formatAttribute(' class', $i) /* pos 22:50 */;
+				echo LR\HtmlHelpers::formatListAttribute(' class', $i) /* pos 22:50 */;
 				echo '></span>';
 			} finally {
 				$ʟ_tmp = ob_get_clean();

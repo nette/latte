@@ -30,6 +30,10 @@ final class HtmlHelpers
 		'reversed' => 1, 'selected' => 1, 'spellcheck' => 1,
 	];
 
+	private const SpaceSeparatedAttributes = [
+		'accesskey' => 1, 'class' => 1, 'headers' => 1, 'itemprop' => 1, 'ping' => 1, 'rel' => 1, 'role' => 1, 'sandbox' => 1,
+	];
+
 
 	/**
 	 * Escapes string for use inside HTML text.
@@ -168,6 +172,7 @@ final class HtmlHelpers
 		$name = strtolower($name);
 		return match (true) {
 			isset(self::BooleanAttributes[$name]) => 'bool',
+			isset(self::SpaceSeparatedAttributes[$name]) => 'list',
 			default => '',
 		};
 	}
@@ -188,6 +193,30 @@ final class HtmlHelpers
 	public static function formatBoolAttribute(string $namePart, mixed $value): string
 	{
 		return $value ? $namePart : '';
+	}
+
+
+	/**
+	 * Formats space separated HTML attribute.
+	 */
+	public static function formatListAttribute(string $namePart, mixed $value): string
+	{
+		return match (true) {
+			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => $v === true ? $k : $v, ' '),
+			default => self::formatAttribute($namePart, $value),
+		};
+	}
+
+
+	private static function formatArrayAttribute(string $namePart, array $items, \Closure $cb, $separator): string
+	{
+		$res = [];
+		foreach ($items as $k => $v) {
+			if ($v != null) { // intentionally ==, skip nulls & empty string
+				$res[] = $cb($v, $k);
+			}
+		}
+		return $res ? $namePart . '="' . self::escapeAttr(implode($separator, $res)) . '"' : '';
 	}
 
 
