@@ -116,9 +116,9 @@ test('style attribute', function () use ($latte) {
 			<span style="1"></span>
 			<span style=""></span>
 			<span style=""></span>
-			<span style="Array"></span>
-			<span style="Array"></span>
-			<span style="Array"></span>
+			<span></span>
+			<span style="a: b"></span>
+			<span style="a; b"></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span style="{=0}"></span>

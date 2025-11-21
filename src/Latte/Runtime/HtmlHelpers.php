@@ -173,6 +173,7 @@ final class HtmlHelpers
 		return match (true) {
 			isset(self::BooleanAttributes[$name]) => 'bool',
 			isset(self::SpaceSeparatedAttributes[$name]) => 'list',
+			$name === 'style' => 'style',
 			default => '',
 		};
 	}
@@ -203,6 +204,18 @@ final class HtmlHelpers
 	{
 		return match (true) {
 			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => $v === true ? $k : $v, ' '),
+			default => self::formatAttribute($namePart, $value),
+		};
+	}
+
+
+	/**
+	 * Formats HTML attribute 'style'.
+	 */
+	public static function formatStyleAttribute(string $namePart, mixed $value): string
+	{
+		return match (true) {
+			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => is_string($k) ? $k . ': ' . $v : $v, '; '),
 			default => self::formatAttribute($namePart, $value),
 		};
 	}
