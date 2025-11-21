@@ -35,7 +35,9 @@ Assert::same('title="one&amp;&lt;br&gt;"', XmlHelpers::formatAttribute('title', 
 // special values
 Assert::same('title="1"', XmlHelpers::formatAttribute('title', true));
 Assert::same('title=""', XmlHelpers::formatAttribute('title', false));
-Assert::same('title=""', XmlHelpers::formatAttribute('title', null));
+
+// skipped
+Assert::same('', XmlHelpers::formatAttribute('title', null));
 
 // invalid
 Assert::error(

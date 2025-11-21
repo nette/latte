@@ -40,7 +40,9 @@ Assert::same('class="k1"', HtmlHelpers::formatListAttribute('class', ['k1' => tr
 // special values
 Assert::same('class="1"', HtmlHelpers::formatListAttribute('class', true));
 Assert::same('class=""', HtmlHelpers::formatListAttribute('class', false));
-Assert::same('class=""', HtmlHelpers::formatListAttribute('class', null));
+
+// skipped
+Assert::same('', HtmlHelpers::formatListAttribute('class', null));
 
 // invalid
 Assert::error(

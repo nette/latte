@@ -186,7 +186,10 @@ final class HtmlHelpers
 	 */
 	public static function formatAttribute(string $namePart, mixed $value): string
 	{
-		return $namePart . '="' . self::escapeAttr($value) . '"';
+		return match (true) {
+			default => $namePart . '="' . self::escapeAttr($value) . '"',
+			$value === null => '',
+		};
 	}
 
 

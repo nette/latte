@@ -30,7 +30,7 @@ test('text attributes', function () {
 			<span title="ONE&amp;TWO&apos;&quot;"></span>
 			<span title="1"></span>
 			<span title=""></span>
-			<span title=""></span>
+			<span></span>
 			<span title="one&amp;"></span>
 			<span title="one&amp;&lt;br&gt; &quot;&apos;"></span>
 			<span title="Array"></span>
@@ -118,7 +118,7 @@ test('style attribute', function () {
 			<span style="one&amp;two"></span>
 			<span style="1"></span>
 			<span style=""></span>
-			<span style=""></span>
+			<span></span>
 			<span></span>
 			<span style="a: b"></span>
 			<span style="a; b"></span>
@@ -149,7 +149,7 @@ test('space-separated attribute', function () {
 			<span class="one&amp;two"></span>
 			<span class="1"></span>
 			<span class=""></span>
-			<span class=""></span>
+			<span></span>
 			<span></span>
 			<span class="b"></span>
 			<span class="a b"></span>
@@ -180,7 +180,7 @@ test('on* attribute', function () {
 			<span onclick="one&amp;two"></span>
 			<span onclick="1"></span>
 			<span onclick=""></span>
-			<span onclick=""></span>
+			<span></span>
 
 			<span onclick="123 -- &quot;one&amp;two&apos;\&quot;&quot; -- true -- false -- null -- &quot;one&amp;amp;&lt;br&gt;&quot; -- &#123;}"></span>
 			XX,
@@ -208,7 +208,7 @@ test('data attribute', function () {
 			<span data-foo="one&amp;two"></span>
 			<span data-foo="true"></span>
 			<span data-foo="false"></span>
-			<span data-foo=""></span>
+			<span></span>
 			<span data-foo="[]"></span>
 			<span data-foo='{"a":"b"}'></span>
 			<span data-foo='["a","b"]'></span>
@@ -239,7 +239,7 @@ test('ARIA attribute', function () {
 			<span aria-foo="one&amp;two"></span>
 			<span aria-foo="true"></span>
 			<span aria-foo="false"></span>
-			<span aria-foo=""></span>
+			<span></span>
 			<span></span>
 			<span aria-foo="b"></span>
 			<span aria-foo="a b"></span>
@@ -291,7 +291,7 @@ test('XML', function () {
 			<bar foo="one&amp;two"></bar>
 			<bar foo="1"></bar>
 			<bar foo=""></bar>
-			<bar foo=""></bar>
+			<bar></bar>
 			<bar foo="Array"></bar>
 			XX,
 		@$latte->renderToString(<<<'XX'

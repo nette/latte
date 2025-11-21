@@ -49,8 +49,8 @@ Assert::same('data-foo=\'{"k1":"v1","k2":"v2"}\'', HtmlHelpers::formatDataAttrib
 Assert::same('data-foo="{}"', HtmlHelpers::formatDataAttribute('data-foo', (object) []));
 Assert::same('data-foo=\'{"a":"b"}\'', HtmlHelpers::formatDataAttribute('data-foo', (object) ['a' => 'b']));
 
-// special values
-Assert::same('data-foo=""', HtmlHelpers::formatDataAttribute('data-foo', null));
+// skipped
+Assert::same('', HtmlHelpers::formatDataAttribute('data-foo', null));
 
 // invalid
 Assert::error(
