@@ -10,7 +10,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 <span';
 		echo LR\HtmlHelpers::formatAttribute(' title', $x) /* pos %d%:%d% */;
-		echo LR\HtmlHelpers::formatAttribute(' class', $x) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::formatListAttribute(' class', $x) /* pos %d%:%d% */;
 		echo '></span>
 
 <span';

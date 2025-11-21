@@ -150,9 +150,9 @@ test('space-separated attribute', function () {
 			<span class="1"></span>
 			<span class=""></span>
 			<span class=""></span>
-			<span class="Array"></span>
-			<span class="Array"></span>
-			<span class="Array"></span>
+			<span></span>
+			<span class="b"></span>
+			<span class="a b"></span>
 			XX,
 		@$latte->renderToString(<<<'XX'
 			<span class={=0}></span>
