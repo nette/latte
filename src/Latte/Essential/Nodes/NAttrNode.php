@@ -15,7 +15,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Runtime as LR;
-use function implode, is_array, is_string, strncmp;
+use function is_array;
 
 
 /**
@@ -65,60 +65,21 @@ final class NAttrNode extends StatementNode
 	}
 
 
-	public static function formatHtmlAttribute(string $name, mixed $value): ?string
+	public static function formatHtmlAttribute(string $name, mixed $value): string
 	{
-		if ($value === null || $value === false) {
-			return null;
-
-		} elseif ($value === true) {
+		$type = LR\HtmlHelpers::classifyAttributeType($name);
+		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria')) {
+			return '';
+		} elseif ($value === true && $type === '') {
 			return $name;
-
-		} elseif (is_array($value)) {
-			$tmp = null;
-			foreach ($value as $k => $v) {
-				if ($v != null) { // intentionally ==, skip nulls & empty string
-					//  composite 'style' vs. 'others'
-					$tmp[] = $v === true
-						? $k
-						: (is_string($k) ? $k . ':' . $v : $v);
-				}
-			}
-
-			if ($tmp === null) {
-				return null;
-			}
-
-			$value = implode($name === 'style' || !strncmp($name, 'on', 2) ? ';' : ' ', $tmp);
-
-		} else {
-			$value = (string) $value;
 		}
-
-		return $name . '="' . LR\HtmlHelpers::escapeAttr($value) . '"';
+		return LR\HtmlHelpers::{"format{$type}Attribute"}($name, $value);
 	}
 
 
-	public static function formatXmlAttribute(string $name, mixed $value): ?string
+	public static function formatXmlAttribute(string $name, mixed $value): string
 	{
-		if ($value === null || $value === false) {
-			return null;
-
-		} elseif ($value === true) {
-			return $name . '="' . $name . '"';
-
-		} elseif (is_array($value)) {
-			$value = array_filter($value); // intentionally ==, skip nulls & empty string
-			if (!$value) {
-				return null;
-			}
-
-			$value = implode(' ', $value);
-
-		} else {
-			$value = (string) $value;
-		}
-
-		return $name . '="' . LR\XmlHelpers::escapeAttr($value) . '"';
+		return $value === false ? '' : LR\XmlHelpers::formatAttribute($name, $value);
 	}
 
 

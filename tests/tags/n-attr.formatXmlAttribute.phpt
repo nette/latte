@@ -18,8 +18,8 @@ class StringObject
 
 
 test('skipped attributes', function () {
-	Assert::null(NAttrNode::formatXmlAttribute('foo', false));
-	Assert::null(NAttrNode::formatXmlAttribute('foo', null));
+	Assert::same('', NAttrNode::formatXmlAttribute('foo', false));
+	Assert::same('', NAttrNode::formatXmlAttribute('foo', null));
 });
 
 
@@ -35,21 +35,14 @@ test('regular text attributes', function () {
 	Assert::same('foo=""', NAttrNode::formatXmlAttribute('foo', ''));
 
 	// special values
-	Assert::same('foo="one&amp;amp;&lt;br&gt;"', NAttrNode::formatXmlAttribute('foo', new Latte\Runtime\Html('one&amp;<br>'))); // not supported
+	Assert::same('foo="one&amp;"', NAttrNode::formatXmlAttribute('foo', new Latte\Runtime\Html('one&amp;')));
 	Assert::same('foo="one&amp;&lt;br&gt;"', NAttrNode::formatXmlAttribute('foo', new StringObject));
-});
-
-
-test('boolean attributes', function () {
-	Assert::same('foo="foo"', NAttrNode::formatXmlAttribute('foo', true));
-	Assert::null(NAttrNode::formatXmlAttribute('foo', false));
 });
 
 
 test('special values', function () {
 	Assert::same('foo="0"', NAttrNode::formatXmlAttribute('foo', 0));
 	Assert::same('foo="1"', NAttrNode::formatXmlAttribute('foo', 1));
-	Assert::null(NAttrNode::formatXmlAttribute('foo', []));
 
 	// invalid UTF-8
 	Assert::same( // invalid codepoint high surrogates
@@ -65,7 +58,18 @@ test('special values', function () {
 
 test('invalid values', function () {
 	Assert::error(
-		fn() => Assert::null(NAttrNode::formatXmlAttribute('foo', (object) [])),
-		Error::class,
+		fn() => Assert::same('', NAttrNode::formatXmlAttribute('foo', true)),
+		E_USER_WARNING,
+		"Invalid value for attribute 'foo': bool is not allowed.",
+	);
+	Assert::error(
+		fn() => Assert::same('', NAttrNode::formatXmlAttribute('foo', [])),
+		E_USER_WARNING,
+		"Invalid value for attribute 'foo': array is not allowed.",
+	);
+	Assert::error(
+		fn() => Assert::same('', NAttrNode::formatXmlAttribute('foo', (object) [])),
+		E_USER_WARNING,
+		"Invalid value for attribute 'foo': stdClass is not allowed.",
 	);
 });
