@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Latte\Runtime;
 
 use Latte;
-use function get_debug_type, htmlspecialchars, is_string, ord, preg_match, preg_replace, preg_replace_callback;
+use function get_debug_type, htmlspecialchars, is_float, is_int, is_string, ord, preg_match, preg_replace, preg_replace_callback;
 use const ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1;
 
 
@@ -72,8 +72,9 @@ final class XmlHelpers
 	public static function formatAttribute(string $namePart, mixed $value): string
 	{
 		return match (true) {
-			default => $namePart . '="' . self::escapeAttr($value) . '"',
+			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
+			default => HtmlHelpers::triggerInvalidValue(trim($namePart), $value) ?? '',
 		};
 	}
 

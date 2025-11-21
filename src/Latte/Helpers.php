@@ -115,4 +115,26 @@ class Helpers
 		$column = isset($pos[2]) ? (int) $pos[2] : null;
 		return $name || $line ? compact('name', 'line', 'column') : null;
 	}
+
+
+	/**
+	 * Tries to guess the position in the template from the backtrace
+	 */
+	public static function guessTemplatePosition(): ?string
+	{
+		$trace = debug_backtrace();
+		foreach ($trace as $item) {
+			if (isset($item['file']) && ($source = self::mapCompiledToSource($item['file'], $item['line']))) {
+				$res = [];
+				if ($source['name'] && is_file($source['name'])) {
+					$res[] = "in '" . str_replace(dirname($source['name'], 2), '...', $source['name']) . "'";
+				}
+				if ($source['line']) {
+					$res[] = 'on line ' . $source['line'] . ($source['column'] ? ' at column ' . $source['column'] : '');
+				}
+				return implode(' ', $res);
+			}
+		}
+		return null;
+	}
 }
