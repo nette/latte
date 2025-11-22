@@ -25,7 +25,7 @@ use Latte\Compiler\PrintContext;
 use Latte\ContentType;
 use Latte\Engine;
 use Latte\Runtime\HtmlHelpers;
-use function array_combine, array_keys, array_map, in_array, is_string, str_starts_with, strtolower;
+use function in_array, is_string, str_starts_with;
 
 
 final class Passes
@@ -42,20 +42,13 @@ final class Passes
 	public function customFunctionsPass(TemplateNode $node): void
 	{
 		$functions = $this->engine->getFunctions();
-		$names = array_keys($functions);
-		$names = array_combine(array_map('strtolower', $names), $names);
-
-		(new NodeTraverser)->traverse($node, function (Node $node) use ($names) {
+		(new NodeTraverser)->traverse($node, function (Node $node) use ($functions) {
 			if (($node instanceof Expression\FunctionCallNode || $node instanceof Expression\FunctionCallableNode)
 				&& $node->name instanceof Php\NameNode
-				&& ($orig = $names[strtolower((string) $node->name)] ?? null)
+				&& isset($functions[$node->name->name])
 			) {
-				if ((string) $node->name !== $orig) {
-					trigger_error("Case mismatch on function name '{$node->name}', correct name is '$orig'.", E_USER_WARNING);
-				}
-
 				return new Expression\AuxiliaryNode(
-					fn(PrintContext $context, ...$args) => '($this->global->fn->' . $orig . ')($this, ' . $context->implode($args) . ')',
+					fn(PrintContext $context, ...$args) => '($this->global->fn->' . $node->name . ')($this, ' . $context->implode($args) . ')',
 					$node->args,
 				);
 			}
