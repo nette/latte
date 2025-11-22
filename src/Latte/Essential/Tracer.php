@@ -11,6 +11,7 @@ namespace Latte\Essential;
 
 use Latte;
 use Latte\Engine;
+use Latte\Helpers;
 use Latte\Runtime\Template;
 use function count, is_string;
 
@@ -24,9 +25,10 @@ final class Tracer
 	{
 		$e = new Latte\RuntimeException('Your location in Latte templates');
 		$trace = debug_backtrace();
+		$source = Helpers::mapCompiledToSource($trace[0]['file'], $trace[0]['line']);
 		$props = [
-			'file' => $trace[1]['object']->getName(),
-			'line' => self::getSourceLine($trace[0]['file'], $trace[0]['line']),
+			'file' => $source['name'],
+			'line' => $source['line'] ?? 0,
 			'trace' => self::generateTrace($trace),
 		];
 		foreach ($props as $name => $value) {
@@ -70,7 +72,7 @@ final class Tracer
 
 				} elseif ($method === 'renderToContentType') {
 					// {include file}, extends, embed, sandbox, ...
-					$res[count($res) - 1]['line'] = self::getSourceLine($item['file'], $item['line']);
+					$res[count($res) - 1]['line'] = Helpers::mapCompiledToSource($item['file'], $item['line'])['line'] ?? 0;
 
 				} elseif ($method === 'renderBlock' || $method === 'renderParentBlock') {
 					// {include block}
@@ -80,7 +82,7 @@ final class Tracer
 						$res[] = [
 							'function' => '{include ' . ($method === 'renderParentBlock' ? 'parent' : $item['args'][0]) . '}',
 							'file' => $object->getName(),
-							'line' => self::getSourceLine($item['file'], $item['line']),
+							'line' => Helpers::mapCompiledToSource($item['file'], $item['line'])['line'] ?? 0,
 							'args' => self::filterParams($item['args'][1]),
 						];
 					}
@@ -91,19 +93,6 @@ final class Tracer
 		}
 
 		return $res;
-	}
-
-
-	private static function getSourceLine(string $compiledFile, int $line): int
-	{
-		if (!is_file($compiledFile)) {
-			return 0;
-		}
-
-		$line = file($compiledFile)[$line - 1];
-		return preg_match('~/\* line (\d+) \*/~', $line, $m)
-			? (int) $m[1]
-			: 0;
 	}
 
 

@@ -97,4 +97,21 @@ class Helpers
 	{
 		$items = array_filter($items, fn($item) => $item !== null);
 	}
+
+
+	/**
+	 * Attempts to map the compiled template to the source.
+	 */
+	public static function mapCompiledToSource(string $compiledFile, ?int $compiledLine = null): ?array
+	{
+		if (!Cache::isCacheFile($compiledFile)) {
+			return null;
+		}
+
+		$content = file_get_contents($compiledFile);
+		$name = preg_match('#^/\*\* source: (\S.+) \*/#m', $content, $m) ? $m[1] : null;
+		$compiledLine && preg_match('~/\* line (\d+) \*/~', explode("\n", $content)[$compiledLine - 1], $pos);
+		$line = isset($pos[1]) ? (int) $pos[1] : null;
+		return $name || $line ? ['name' => $name, 'line' => $line] : null;
+	}
 }
