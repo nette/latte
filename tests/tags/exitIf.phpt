@@ -35,7 +35,7 @@ Assert::match(
 	<<<'XX'
 		%A%
 			{
-				if (true) /* line 1 */ return;
+				if (true) /* pos 1:1 */ return;
 				echo 'c';
 			}
 		%A%
@@ -58,10 +58,10 @@ Assert::match(
 			{
 				echo 'a
 		';
-				if (true) /* line 2 */ return;
+				if (true) /* pos 2:1 */ return;
 				echo 'b
 		';
-				if (false) /* line 4 */ return;
+				if (false) /* pos 4:1 */ return;
 				echo 'c';
 			}
 		%A%
@@ -86,10 +86,10 @@ Assert::match(
 			{
 				echo '	a
 		';
-				if (true) /* line 3 */ return;
+				if (true) /* pos 3:2 */ return;
 				echo '	b
 		';
-				if (false) /* line 5 */ return;
+				if (false) /* pos 5:2 */ return;
 				echo '	c
 		';
 			}
@@ -115,10 +115,10 @@ Assert::match(
 			{
 				echo '	a
 		';
-				if (true) /* line 3 */ return;
+				if (true) /* pos 3:2 */ return;
 				echo '	b
 		';
-				if (false) /* line 5 */ return;
+				if (false) /* pos 5:2 */ return;
 				echo '	c
 		';
 			}
@@ -137,7 +137,7 @@ Assert::match(
 		%A%
 				echo '<div>';
 				try {
-					if (true) /* line 1 */ return;
+					if (true) /* pos 1:6 */ return;
 				} finally {
 					echo '</div>';
 				}

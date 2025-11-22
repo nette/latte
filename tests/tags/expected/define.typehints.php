@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo "\n";
-		$this->renderBlock('test', [1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [1] + [], 'html') /* pos %d%:%d% */;
 	}
 
 

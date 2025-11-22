@@ -16,11 +16,11 @@ final class Template%a% extends Latte\Runtime\Template
 
 
 a) ';
-		$this->renderBlock('test', [1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', [1] + [], 'html') /* pos %d%:%d% */;
 		echo '
 
 b) ';
-		$this->renderBlock('test', ['var1' => 1] + [], 'html') /* line %d% */;
+		$this->renderBlock('test', ['var1' => 1] + [], 'html') /* pos %d%:%d% */;
 	}
 
 
@@ -34,11 +34,11 @@ b) ';
 		unset($ʟ_args);
 
 		echo '	Variables ';
-		echo LR\Filters::escapeHtmlText($var1) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($var1) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText(($this->filters->implode)($var2)) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->filters->implode)($var2)) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\Filters::escapeHtmlText($var3) /* line %d% */;
+		echo LR\Filters::escapeHtmlText($var3) /* pos %d%:%d% */;
 		echo "\n";
 	}
 }

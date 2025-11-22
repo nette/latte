@@ -148,8 +148,8 @@ test('%line', function () {
 	);
 
 	Assert::same(
-		'test() /* line 1 */;',
-		format('test() %line;', new Position(1, 0)),
+		'test() /* pos 1:1 */;',
+		format('test() %line;', new Position(1, 1)),
 	);
 });
 

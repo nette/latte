@@ -75,9 +75,9 @@ Assert::match(
 				$ʟ_tag = '';
 				$ʟ_tmp = LR\HtmlHelpers::validateTagChange('h' . 1, 'div');
 				$ʟ_tag = '</' . $ʟ_tmp . '>' . $ʟ_tag;
-				echo '<', $ʟ_tmp /* line 1 */;
+				echo '<', $ʟ_tmp /* pos 1:1 */;
 				echo ' class="bar" ';
-				if (isset($id)) /* line 1 */ {
+				if (isset($id)) /* pos 1:18 */ {
 					echo 'id="content"';
 				}
 
@@ -94,7 +94,7 @@ Assert::match(
 	<<<'XX'
 		%A%
 				$ʟ_tmp = LR\HtmlHelpers::validateTagChange('b' . 'r', 'img');
-				echo '<', $ʟ_tmp /* line 1 */;
+				echo '<', $ʟ_tmp /* pos 1:1 */;
 				echo ' class="bar"></img>';
 		%A%
 		XX,

@@ -10,13 +10,13 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(array $ʟ_args): void
 	{
 %A%
-		$this->createTemplate('inc', $this->params, 'includeblock')->renderToContentType('html') /* line %d% */;
+		$this->createTemplate('inc', $this->params, 'includeblock')->renderToContentType('html') /* pos %d%:%d% */;
 		echo "\n";
-		$this->renderBlock('title', get_defined_vars()) /* line %d% */;
+		$this->renderBlock('title', get_defined_vars()) /* pos %d%:%d% */;
 		echo '
 
 ';
-		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
+		$this->renderBlock('content', get_defined_vars()) /* pos %d%:%d% */;
 	}
 
 
@@ -30,7 +30,7 @@ final class Template%a% extends Latte\Runtime\Template
 			}
 		}
 		$this->parentName = 'parent';
-		$this->createTemplate('inc', $this->params, "import")->render() /* line %d% */;
+		$this->createTemplate('inc', $this->params, "import")->render() /* pos %d%:%d% */;
 		return get_defined_vars();
 	}
 
@@ -43,8 +43,8 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo 'Homepage | ';
-		$this->renderParentBlock('title', get_defined_vars()) /* line %d% */;
-		$this->renderParentBlock('title', get_defined_vars()) /* line %d% */;
+		$this->renderParentBlock('title', get_defined_vars()) /* pos %d%:%d% */;
+		$this->renderParentBlock('title', get_defined_vars()) /* pos %d%:%d% */;
 	}
 
 
@@ -57,9 +57,9 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '	<ul>
 ';
-		foreach ($people as $person) /* line %d% */ {
+		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '		<li>';
-			echo LR\Filters::escapeHtmlText($person) /* line %d% */;
+			echo LR\Filters::escapeHtmlText($person) /* pos %d%:%d% */;
 			echo '</li>
 ';
 
@@ -67,7 +67,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '	</ul>
 	Parent: ';
-		echo LR\Filters::escapeHtmlText(($this->global->fn->info2)($this, )) /* line %d% */;
+		echo LR\Filters::escapeHtmlText(($this->global->fn->info2)($this, )) /* pos %d%:%d% */;
 		echo "\n";
 	}
 }

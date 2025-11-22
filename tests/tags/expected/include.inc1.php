@@ -9,16 +9,16 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '<p>Included file #1</p>
 
 ';
-		$this->createTemplate('include2.latte', ['localvar' => 20] + $this->params, 'include')->renderToContentType('html') /* line 3 */;
+		$this->createTemplate('include2.latte', ['localvar' => 20] + $this->params, 'include')->renderToContentType('html') /* pos 3:1 */;
 		echo "\n";
-		$this->createTemplate('../include3.latte', $this->params, 'include')->renderToContentType('html') /* line 5 */;
+		$this->createTemplate('../include3.latte', $this->params, 'include')->renderToContentType('html') /* pos 5:1 */;
 		echo '
 <textarea>
 pre
 </textarea>
 
 Parent: ';
-		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* line 11 */;
+		echo LR\Filters::escapeHtmlText(($this->global->fn->info)($this, )) /* pos 11:9 */;
 		echo "\n";
 	}
 }

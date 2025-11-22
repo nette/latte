@@ -1,12 +1,12 @@
 <?php
 %A%
-		foreach ([0, 1] as $i) /* line %d% */ {
+		foreach ([0, 1] as $i) /* pos %d%:%d% */ {
 			echo '<div>';
 			try {
 				echo '
 	<span>';
 				try {
-					if (true) /* line %d% */ break;
+					if (true) /* pos %d%:%d% */ break;
 				} finally {
 					echo '</span>';
 				}
@@ -21,10 +21,10 @@
 		echo '
 <div>
 ';
-		foreach ([0, 1] as $i) /* line %d% */ {
+		foreach ([0, 1] as $i) /* pos %d%:%d% */ {
 			echo '		<span>';
 			try {
-				if (true) /* line %d% */ break;
+				if (true) /* pos %d%:%d% */ break;
 			} finally {
 				echo '</span>';
 			}

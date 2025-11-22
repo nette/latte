@@ -92,7 +92,7 @@ class BlueScreenPanel
 	public static function mapLatteSourceCode(string $file, int $line): ?array
 	{
 		return ($source = Latte\Helpers::mapCompiledToSource($file, $line)) && @is_file($source['name']) // @ - may trigger error
-			? ['file' => $source['name'], 'line' => $source['line'] ?? 0, 'label' => 'Latte', 'active' => true]
+			? ['file' => $source['name'], 'line' => $source['line'] ?? 0, 'column' => $source['column'] ?? 0, 'label' => 'Latte', 'active' => true]
 			: null;
 	}
 }

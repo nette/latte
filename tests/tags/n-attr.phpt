@@ -27,12 +27,12 @@ Assert::match(
 				echo '
 		<p';
 				$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-				echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* line 2 */;
+				echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* pos 2:4 */;
 				echo '> </p>
 
 		<input';
 				$ʟ_tmp = ['checked' => true, 'disabled' => false];
-				echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* line 4 */;
+				echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* pos 4:8 */;
 				echo '>
 		';
 		%A%
