@@ -112,9 +112,15 @@ final class Cache
 			? preg_replace('#[^\w@.-]+#', '-', substr($m[0], 1))
 			: '';
 		if (!str_ends_with($base, 'latte')) {
-			$base .= 'latte';
+			$base .= '-latte';
 		}
 		return $this->directory . '/' . $base . '--' . $engine->generateTemplateHash($name) . '.php';
+	}
+
+
+	public static function isCacheFile(string $file): bool
+	{
+		return (bool) preg_match('/latte--\w{10}\.php$/', $file);
 	}
 
 
