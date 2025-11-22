@@ -12,11 +12,11 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="';
-		echo LR\Filters::escapeXmlText($id) /* line %d% */;
+		echo LR\Filters::escapeXmlText($id) /* pos %d%:%d% */;
 		echo '"?>
 
 <script>';
-		if (1) /* line %d% */ {
+		if (1) /* pos %d%:%d% */ {
 			echo '<meta />';
 		}
 		echo '</script>
@@ -24,29 +24,29 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul>
 	<li>Escaped: ';
-		echo LR\Filters::escapeXmlText($hello) /* line %d% */;
+		echo LR\Filters::escapeXmlText($hello) /* pos %d%:%d% */;
 		echo '</li>
 	<li>Non-escaped: ';
-		echo $hello /* line %d% */;
+		echo $hello /* pos %d%:%d% */;
 		echo '</li>
 	<li>Escaped expression: ';
-		echo LR\Filters::escapeXmlText('<' . 'b' . '>hello' . '</b>') /* line %d% */;
+		echo LR\Filters::escapeXmlText('<' . 'b' . '>hello' . '</b>') /* pos %d%:%d% */;
 		echo '</li>
 	<li>Non-escaped expression: ';
-		echo '<' . 'b' . '>hello' . '</b>' /* line %d% */;
+		echo '<' . 'b' . '>hello' . '</b>' /* pos %d%:%d% */;
 		echo '</li>
 	<li>Array access: ';
-		echo LR\Filters::escapeXmlText($people[1]) /* line %d% */;
+		echo LR\Filters::escapeXmlText($people[1]) /* pos %d%:%d% */;
 		echo '</li>
 	<li>Html: ';
-		echo LR\Filters::escapeXmlText($el) /* line %d% */;
+		echo LR\Filters::escapeXmlText($el) /* pos %d%:%d% */;
 		echo '</li>
 </ul>
 
 <style type="text/css">
 <!--
 #';
-		echo LR\Filters::escapeHtmlComment($id) /* line %d% */;
+		echo LR\Filters::escapeHtmlComment($id) /* pos %d%:%d% */;
 		echo ' {
 	background: blue;
 }
@@ -57,32 +57,32 @@ final class Template%a% extends Latte\Runtime\Template
 <script>
 <!--
 var html = ';
-		echo LR\Filters::escapeHtmlComment($el) /* line %d% */;
+		echo LR\Filters::escapeHtmlComment($el) /* pos %d%:%d% */;
 		echo ';
 -->
 </script>
 
 
 <p onclick=\'alert(';
-		echo LR\Filters::escapeXmlAttr($id) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($id) /* pos %d%:%d% */;
 		echo ');alert("hello");\'
  title=\'';
-		echo LR\Filters::escapeXmlAttr($id) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($id) /* pos %d%:%d% */;
 		echo '"\'
  style="color:';
-		echo LR\Filters::escapeXmlAttr($id) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($id) /* pos %d%:%d% */;
 		echo ';\'"
  alt=\'';
-		echo LR\Filters::escapeXmlAttr($el) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($el) /* pos %d%:%d% */;
 		echo '\'
  onfocus="alert(';
-		echo LR\Filters::escapeXmlAttr($el) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($el) /* pos %d%:%d% */;
 		echo ')"
 >click on me</p>
 
 
 <!-- ';
-		echo LR\Filters::escapeHtmlComment($comment) /* line %d% */;
+		echo LR\Filters::escapeHtmlComment($comment) /* pos %d%:%d% */;
 		echo ' -->
 
 
@@ -91,9 +91,9 @@ var html = ';
 
 <ul>
 ';
-		foreach ($people as $person) /* line %d% */ {
+		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '	<li>';
-			echo LR\Filters::escapeXmlText($person) /* line %d% */;
+			echo LR\Filters::escapeXmlText($person) /* pos %d%:%d% */;
 			echo '</li>
 ';
 
@@ -102,7 +102,7 @@ var html = ';
 		echo '</ul>
 
 ';
-		if (true) /* line %d% */ {
+		if (true) /* pos %d%:%d% */ {
 			echo '<p>
 	<div><p>true</div>
 </p>
@@ -112,19 +112,19 @@ var html = ';
 <input/> <input />
 
 <p val="';
-		if (true) /* line %d% */ {
+		if (true) /* pos %d%:%d% */ {
 			echo 'a';
-		} else /* line %d% */ {
+		} else /* pos %d%:%d% */ {
 			echo 'b';
 		}
 		echo '"> </p>
 
 <p val="';
-		echo LR\Filters::escapeXmlAttr($xss) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($xss) /* pos %d%:%d% */;
 		echo '" > </p>
 
 <p onclick="';
-		echo LR\Filters::escapeXmlAttr($xss) /* line %d% */;
+		echo LR\Filters::escapeXmlAttr($xss) /* pos %d%:%d% */;
 		echo '"> </p>
 ';
 	}
@@ -140,7 +140,7 @@ var html = ';
 			}
 		}
 		if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ['extends', null], true)) {
-			header('Content-Type: application/xml; charset=utf-8') /* line %d% */;
+			header('Content-Type: application/xml; charset=utf-8') /* pos %d%:%d% */;
 		}
 		return get_defined_vars();
 	}

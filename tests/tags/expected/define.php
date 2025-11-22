@@ -15,11 +15,11 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 
 ';
-		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html') /* line 7 */;
+		$this->renderBlock('test', ['var' => 20] + get_defined_vars(), 'html') /* pos 7:1 */;
 		echo '
 
 ';
-		$this->renderBlock('true', get_defined_vars(), 'html') /* line 10 */;
+		$this->renderBlock('true', get_defined_vars(), 'html') /* pos 10:1 */;
 	}
 
 
@@ -27,7 +27,7 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 		extract($this->params);
 
-		$var = 10 /* line 1 */;
+		$var = 10 /* pos 1:1 */;
 		return get_defined_vars();
 	}
 
@@ -40,7 +40,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	This is definition #';
-		echo LR\Filters::escapeHtmlText($var) /* line 4 */;
+		echo LR\Filters::escapeHtmlText($var) /* pos 4:22 */;
 		echo "\n";
 	}
 

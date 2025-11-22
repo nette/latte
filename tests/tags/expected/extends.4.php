@@ -10,7 +10,7 @@ final class Template%a% extends Latte\Runtime\Template
 	public function main(array $ʟ_args): void
 	{
 %A%
-		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
+		$this->renderBlock('content', get_defined_vars()) /* pos %d%:%d% */;
 	}
 
 

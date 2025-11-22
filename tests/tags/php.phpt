@@ -18,7 +18,7 @@ $latte->addExtension(new Latte\Essential\RawPhpExtension);
 Assert::match(
 	<<<'XX'
 		%A%
-				/* line 1 */;
+				/* pos 1:1 */;
 				if ($a) {
 					echo 10;
 				}

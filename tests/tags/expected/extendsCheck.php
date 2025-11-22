@@ -9,9 +9,9 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo "\n";
-		ob_start(fn() => '') /* line %d% */;
+		ob_start(fn() => '') /* pos %d%:%d% */;
 		try {
-			$this->renderBlock('bar', get_defined_vars()) /* line %d% */;
+			$this->renderBlock('bar', get_defined_vars()) /* pos %d%:%d% */;
 		} finally {
 			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
 		}
@@ -19,7 +19,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$foo = $ʟ_tmp;
 
 		echo "\n";
-		$this->renderBlock('content', get_defined_vars()) /* line %d% */;
+		$this->renderBlock('content', get_defined_vars()) /* pos %d%:%d% */;
 	}
 
 

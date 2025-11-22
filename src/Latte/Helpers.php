@@ -110,8 +110,9 @@ class Helpers
 
 		$content = file_get_contents($compiledFile);
 		$name = preg_match('#^/\*\* source: (\S.+) \*/#m', $content, $m) ? $m[1] : null;
-		$compiledLine && preg_match('~/\* line (\d+) \*/~', explode("\n", $content)[$compiledLine - 1], $pos);
+		$compiledLine && preg_match('~/\* pos (\d+)(?::(\d+))? \*/~', explode("\n", $content)[$compiledLine - 1], $pos);
 		$line = isset($pos[1]) ? (int) $pos[1] : null;
-		return $name || $line ? ['name' => $name, 'line' => $line] : null;
+		$column = isset($pos[2]) ? (int) $pos[2] : null;
+		return $name || $line ? compact('name', 'line', 'column') : null;
 	}
 }

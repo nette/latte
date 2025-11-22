@@ -96,7 +96,7 @@ Assert::match(
 				ob_start(fn() => '');
 				try {
 					echo '<div class="bar" ';
-					if (isset($id)) /* line 1 */ {
+					if (isset($id)) /* pos 1:18 */ {
 						echo 'id="content"';
 					}
 					echo '>';
