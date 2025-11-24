@@ -279,7 +279,7 @@ final class TemplateParser
 	}
 
 
-	private function consumeTag(): array
+	public function consumeTag(): array
 	{
 		$res = [];
 		while ($this->stream->peek()->isPhpKind()) {

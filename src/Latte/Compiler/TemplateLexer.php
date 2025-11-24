@@ -19,6 +19,7 @@ final class TemplateLexer
 	public const
 		StatePlain = 'Plain',
 		StateLatteTag = 'LatteTag',
+		StateLatteContent = 'LatteContent',
 		StateLatteComment = 'LatteComment',
 		StateHtmlText = 'HtmlText',
 		StateHtmlTag = 'HtmlTag',
@@ -99,6 +100,14 @@ final class TemplateLexer
 			(?<Latte_Name> = | _(?!_) | [a-z]\w*+(?:[.:-]\w+)*+(?!::|\(|\\\))?   # name, /name, but not function( or class:: or namespace\
 		~xsiAu');
 
+		$tokens[] = $this->stateLatteContent();
+
+		return array_merge(...$tokens);
+	}
+
+
+	private function stateLatteContent(): array
+	{
 		$tokens[] = $this->tagLexer->tokenizePartially($this->input, $this->position);
 
 		$tokens[] = $this->match('~

@@ -107,3 +107,15 @@ Assert::contains(
 	'HtmlHelpers::escapeText(My\Class::foo)',
 	$latte->compile('{My\Class::foo}'),
 );
+
+
+// n:attributes
+Assert::match(
+	'<a></a>',
+	$latte->renderToString('<a n:if = "1"></a>'),
+);
+
+Assert::match(
+	'<a></a>',
+	$latte->renderToString('<a n:if = {trim("{}")}></a>'),
+);

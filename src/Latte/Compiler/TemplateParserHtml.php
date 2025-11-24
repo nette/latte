@@ -451,10 +451,16 @@ final class TemplateParserHtml
 				$pos = $stream->peek()->position;
 				$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of n:attribute started $quoteToken->position");
 				$lexer->popState();
+				$tokens = $valueToken ? (new TagLexer)->tokenize($valueToken->text, $valueToken->position) : null;
+
+			} elseif ($openToken = $stream->tryConsume(Token::Latte_TagOpen)) {
+				$lexer->pushState(TemplateLexer::StateLatteContent);
+				$tokens = $this->parser->consumeTag();
+				$stream->tryConsume(Token::Latte_TagClose) || $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
+				$lexer->popState();
+
 			} else {
 				$valueToken = $stream->consume(Token::Html_Name);
-			}
-			if ($valueToken) {
 				$tokens = (new TagLexer)->tokenize($valueToken->text, $valueToken->position);
 			}
 		} else {
