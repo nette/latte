@@ -106,6 +106,7 @@ final class CoreExtension extends Latte\Extension
 			'ifchanged' => Nodes\IfChangedNode::create(...),
 			'n:ifcontent' => Nodes\IfContentNode::create(...),
 			'n:else' => Nodes\NElseNode::create(...),
+			'n:elseif' => Nodes\NElseNode::create(...),
 			'switch' => Nodes\SwitchNode::create(...),
 		];
 	}

@@ -21,6 +21,12 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => $latte->compile('<span n:elseif=1></span>'),
+	Latte\CompileException::class,
+	'n:else must be immediately after n:if, n:foreach etc (on line 1 at column 7)',
+);
+
+Assert::exception(
 	fn() => $latte->compile('<div n:if=1>in</div> ... <span n:else></span>'),
 	Latte\CompileException::class,
 	'n:else must be immediately after n:if, n:foreach etc (on line 1 at column 32)',
@@ -37,6 +43,13 @@ Assert::exception(
 	Latte\CompileException::class,
 	'Multiple "else" found (on line 1 at column 34)',
 );
+
+Assert::exception(
+	fn() => $latte->compile('<div n:if=0>if</div><p n:else>else</p><span n:elseif=1>elseif</span>'),
+	Latte\CompileException::class,
+	'n:else must be immediately after n:if, n:foreach etc (on line 1 at column 45)',
+);
+
 
 
 // n:if & n:else
@@ -67,6 +80,65 @@ Assert::match(
 		<<<'XX'
 			begin
 			<div n:if=0>in1</div>
+			<p n:else>else</p>
+			end
+			XX,
+	),
+);
+
+
+// if & n:elseif
+Assert::match(
+	<<<'XX'
+		begin
+		<div>if true</div>
+		end
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+			begin
+			<div n:if=1>if true</div>
+
+			<p n:elseif=1>elseif 1</p>
+
+			<p n:elseif=1>elseif 2</p>
+			end
+			XX,
+	),
+);
+
+Assert::match(
+	<<<'XX'
+		begin
+		<p>elseif 2</p>
+		end
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+			begin
+			<div n:if=0>if false</div>
+
+			<p n:elseif=0>elseif 1</p>
+
+			<p n:elseif=1>elseif 2</p>
+			end
+			XX,
+	),
+);
+
+Assert::match(
+	<<<'XX'
+		begin
+		<p>else</p>
+		end
+		XX,
+	$latte->renderToString(
+		<<<'XX'
+			begin
+			<div n:if=0>if false</div>
+
+			<p n:elseif=0>elseif true</p>
+
 			<p n:else>else</p>
 			end
 			XX,
