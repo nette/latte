@@ -79,6 +79,35 @@ test('|noescape', function () {
 });
 
 
+test('boolean attributes', function () {
+	$latte = createLatte();
+	Assert::match(
+		<<<'XX'
+			<span checked="0"></span>
+			<span checked="123"></span>
+			<span checked=""></span>
+			<span checked="one&amp;two"></span>
+			<span checked="1"></span>
+			<span checked=""></span>
+			<span checked=""></span>
+			<span checked="Array"></span>
+			<span checked="Array"></span>
+			XX,
+		@$latte->renderToString(<<<'XX'
+			<span checked={=0}></span>
+			<span checked={=123}></span>
+			<span checked={=''}></span>
+			<span checked={='one&two'}></span>
+			<span checked={=true}></span>
+			<span checked={=false}></span>
+			<span checked={=null}></span>
+			<span checked={=[]}></span>
+			<span checked={=[1]}></span>
+			XX),
+	);
+});
+
+
 test('style attribute', function () {
 	$latte = createLatte();
 	Assert::match(
@@ -110,6 +139,37 @@ test('style attribute', function () {
 });
 
 
+test('space-separated attribute', function () {
+	$latte = createLatte();
+	Assert::match(
+		<<<'XX'
+			<span class="0"></span>
+			<span class="123"></span>
+			<span class=""></span>
+			<span class="one&amp;two"></span>
+			<span class="1"></span>
+			<span class=""></span>
+			<span class=""></span>
+			<span class="Array"></span>
+			<span class="Array"></span>
+			<span class="Array"></span>
+			XX,
+		@$latte->renderToString(<<<'XX'
+			<span class={=0}></span>
+			<span class={=123}></span>
+			<span class={=''}></span>
+			<span class={='one&two'}></span>
+			<span class={=true}></span>
+			<span class={=false}></span>
+			<span class={=null}></span>
+			<span class={=[]}></span>
+			<span class={=['a' => 'b']}></span>
+			<span class={=['a', 'b']}></span>
+			XX),
+	);
+});
+
+
 test('on* attribute', function () {
 	$latte = createLatte();
 	Assert::match(
@@ -134,6 +194,67 @@ test('on* attribute', function () {
 			<span onclick={=null}></span>
 
 			<span onclick="{=123} -- {='one&two\'"'} -- {=true} -- {=false} -- {=null} -- {=new Latte\Runtime\Html('one&amp;<br>')} -- {=new StringObject}"></span>
+			XX),
+	);
+});
+
+test('data attribute', function () {
+	$latte = createLatte();
+	Assert::match(
+		<<<'XX'
+			<span data-foo="0"></span>
+			<span data-foo="123"></span>
+			<span data-foo=""></span>
+			<span data-foo="one&amp;two"></span>
+			<span data-foo="1"></span>
+			<span data-foo=""></span>
+			<span data-foo=""></span>
+			<span data-foo="Array"></span>
+			<span data-foo="Array"></span>
+			<span data-foo="Array"></span>
+			XX,
+		@$latte->renderToString(<<<'XX'
+			<span data-foo={=0}></span>
+			<span data-foo={=123}></span>
+			<span data-foo={=''}></span>
+			<span data-foo={='one&two'}></span>
+			<span data-foo={=true}></span>
+			<span data-foo={=false}></span>
+			<span data-foo={=null}></span>
+			<span data-foo={=[]}></span>
+			<span data-foo={=['a' => 'b']}></span>
+			<span data-foo={=['a', 'b']}></span>
+			XX),
+	);
+});
+
+
+test('ARIA attribute', function () {
+	$latte = createLatte();
+	Assert::match(
+		<<<'XX'
+			<span aria-foo="0"></span>
+			<span aria-foo="123"></span>
+			<span aria-foo=""></span>
+			<span aria-foo="one&amp;two"></span>
+			<span aria-foo="1"></span>
+			<span aria-foo=""></span>
+			<span aria-foo=""></span>
+			<span aria-foo="Array"></span>
+			<span aria-foo="Array"></span>
+			<span aria-foo="Array"></span>
+			XX,
+		@$latte->renderToString(<<<'XX'
+			<span aria-foo={=0}></span>
+			<span aria-foo={=123}></span>
+			<span aria-foo={=''}></span>
+			<span aria-foo={='one&two'}></span>
+			<span aria-foo={=true}></span>
+			<span aria-foo={=false}></span>
+			<span aria-foo={=null}></span>
+			<span aria-foo={=[]}></span>
+			<span aria-foo={=['a' => 'b']}></span>
+			<span aria-foo={=['a', 'b']}></span>
 			XX),
 	);
 });
