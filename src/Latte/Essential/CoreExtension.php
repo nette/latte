@@ -43,7 +43,8 @@ final class CoreExtension extends Latte\Extension
 
 	public function beforeRender(Runtime\Template $template): void
 	{
-		$this->filters->locale = $template->getEngine()->getLocale();
+		$this->engine = $template->getEngine();
+		$this->filters->locale = $this->engine->getLocale();
 	}
 
 
