@@ -40,7 +40,7 @@ test('filter registration and invocation', function () {
 	Assert::exception(
 		fn() => ($filters->F1)(''),
 		LogicException::class,
-		"Filter 'F1' is not defined, did you mean 'f1'?",
+		"Filter 'F1' is not defined or not allowed here, did you mean 'f1'?",
 	);
 
 	$filters->add('f1', 'trim');
@@ -70,7 +70,7 @@ test('dynamic filter resolution', function () {
 	Assert::exception(
 		fn() => ($filters->unknown)(''),
 		LogicException::class,
-		"Filter 'unknown' is not defined.",
+		"Filter 'unknown' is not defined or not allowed here.",
 	);
 });
 
@@ -87,7 +87,7 @@ test('dynamic filters with content type awareness', function () {
 	Assert::exception(
 		fn() => $filters->filterContent('unknown', new FilterInfo, ''),
 		LogicException::class,
-		"Filter 'unknown' is not defined.",
+		"Filter 'unknown' is not defined or not allowed here.",
 	);
 });
 
