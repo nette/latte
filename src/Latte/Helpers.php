@@ -95,7 +95,7 @@ class Helpers
 
 	public static function removeNulls(array &$items): void
 	{
-		$items = array_filter($items, fn($item) => $item !== null);
+		$items = array_values(array_filter($items, fn($item) => $item !== null));
 	}
 
 
