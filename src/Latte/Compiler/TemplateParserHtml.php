@@ -79,8 +79,11 @@ final class TemplateParserHtml
 	private function parseTag(): ?Node
 	{
 		$stream = $this->parser->getStream();
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
-		if (!$stream->peek(1)?->is(Token::Slash)) {
+		$lexer = $this->parser->getLexer();
+		$lexer->pushState(TemplateLexer::StateHtmlTag);
+		$closing = $stream->peek(1)?->is(Token::Slash);
+		$lexer->popState();
+		if (!$closing) {
 			return $this->parseElement();
 		}
 
@@ -121,6 +124,9 @@ final class TemplateParserHtml
 		$elem->captureTagName = (bool) $tagNodes;
 
 		if (!$void) {
+			if ($elem->isRawText()) {
+				$this->parser->getLexer()->pushState(TemplateLexer::StateHtmlRawText, $elem->name);
+			}
 			$content = new FragmentNode;
 			if ($token = $stream->tryConsume(Token::Newline)) {
 				$content->append(new Nodes\TextNode($token->text, $token->position));
@@ -130,6 +136,9 @@ final class TemplateParserHtml
 			$elem->data->tag = $this->parser->peekTag();
 			$frag = $this->parser->parseFragment([$this, 'inTextResolve']);
 			$content->append($this->finishNAttrNodes($frag, $innerNodes));
+			if ($elem->isRawText()) {
+				$this->parser->getLexer()->popState();
+			}
 
 			[$endText, $endVariable] = $this->endName;
 			$this->endName = null;
@@ -182,8 +191,9 @@ final class TemplateParserHtml
 	private function parseStartTag(&$elem = null): Html\ElementNode
 	{
 		$stream = $this->parser->getStream();
+		$lexer = $this->parser->getLexer();
 		$openToken = $stream->consume(Token::Html_TagOpen);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
+		$lexer->pushState(TemplateLexer::StateHtmlTag);
 
 		[$textual, $variable] = $this->parseTagName($this->parser->strict);
 		if (($this->parser->strict || $variable)
@@ -206,10 +216,7 @@ final class TemplateParserHtml
 		$elem->variableName = $variable;
 		$elem->data->textualName = $textual;
 		$stream->consume(Token::Html_TagClose);
-		$state = !$elem->selfClosing && $elem->isRawText()
-			? TemplateLexer::StateHtmlRawText
-			: TemplateLexer::StateHtmlText;
-		$this->parser->getLexer()->setState($state, $elem->name);
+		$lexer->popState();
 		return $elem;
 	}
 
@@ -220,7 +227,7 @@ final class TemplateParserHtml
 		$stream = $this->parser->getStream();
 		$lexer = $this->parser->getLexer();
 		$stream->consume(Token::Html_TagOpen);
-		$lexer->setState(TemplateLexer::StateHtmlTag);
+		$lexer->pushState(TemplateLexer::StateHtmlTag);
 		$stream->consume(Token::Slash);
 		if (isset($this->element->nAttributes['syntax'])) {  // hardcoded
 			$lexer->popSyntax();
@@ -228,7 +235,7 @@ final class TemplateParserHtml
 		$name = $this->parseTagName();
 		$stream->tryConsume(Token::Whitespace);
 		$stream->consume(Token::Html_TagClose);
-		$lexer->setState(TemplateLexer::StateHtmlText);
+		$lexer->popState();
 		return $name;
 	}
 
@@ -278,8 +285,9 @@ final class TemplateParserHtml
 	private function parseBogusEndTag(): ?Html\BogusTagNode
 	{
 		$stream = $this->parser->getStream();
+		$lexer = $this->parser->getLexer();
 		$openToken = $stream->consume(Token::Html_TagOpen);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
+		$lexer->pushState(TemplateLexer::StateHtmlTag);
 		$this->parser->lastIndentation = null;
 		$this->parser->inHead = false;
 		$node = new Html\BogusTagNode(
@@ -288,7 +296,7 @@ final class TemplateParserHtml
 			endDelimiter: $stream->consume(Token::Html_TagClose)->text,
 			position: $openToken->position,
 		);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
+		$lexer->popState();
 		return $node;
 	}
 
@@ -296,12 +304,13 @@ final class TemplateParserHtml
 	private function parseBogusTag(): Html\BogusTagNode
 	{
 		$stream = $this->parser->getStream();
+		$lexer = $this->parser->getLexer();
 		$openToken = $stream->consume(Token::Html_BogusOpen);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlBogus);
+		$lexer->pushState(TemplateLexer::StateHtmlBogus);
 		$this->parser->lastIndentation = null;
 		$this->parser->inHead = false;
 		$content = $this->parser->parseFragment([$this->parser, 'inTextResolve']);
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
+		$lexer->popState();
 		return new Html\BogusTagNode(
 			openDelimiter: $openToken->text,
 			content: $content,
@@ -375,10 +384,11 @@ final class TemplateParserHtml
 
 		$this->consumeIgnored();
 		if ($quoteToken = $stream->tryConsume(Token::Quote)) {
-			$this->parser->getLexer()->setState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
+			$lexer = $this->parser->getLexer();
+			$lexer->pushState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
 			$value = $this->parser->parseFragment([$this->parser, 'inTextResolve'])->simplify(allowsNull: false);
 			$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of HTML attribute started $quoteToken->position");
-			$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
+			$lexer->popState();
 			return [$value, $quoteToken->text];
 		}
 
@@ -410,13 +420,14 @@ final class TemplateParserHtml
 
 		$this->consumeIgnored();
 		if ($stream->tryConsume(Token::Equals)) {
+			$lexer = $this->parser->getLexer();
 			$this->consumeIgnored();
 			if ($quoteToken = $stream->tryConsume(Token::Quote)) {
-				$this->parser->getLexer()->setState(TemplateLexer::StateHtmlQuotedNAttrValue, $quoteToken->text);
+				$lexer->pushState(TemplateLexer::StateHtmlQuotedNAttrValue, $quoteToken->text);
 				$valueToken = $stream->tryConsume(Token::Text);
 				$pos = $stream->peek()->position;
 				$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of n:attribute started $quoteToken->position");
-				$this->parser->getLexer()->setState(TemplateLexer::StateHtmlTag);
+				$lexer->popState();
 			} else {
 				$valueToken = $stream->consume(Token::Html_Name);
 			}
@@ -443,9 +454,10 @@ final class TemplateParserHtml
 
 	private function parseComment(): Html\CommentNode
 	{
+		$lexer = $this->parser->getLexer();
 		$this->parser->lastIndentation = null;
 		$this->parser->inHead = false;
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlComment);
+		$lexer->pushState(TemplateLexer::StateHtmlComment);
 		$stream = $this->parser->getStream();
 		$openToken = $stream->consume(Token::Html_CommentOpen);
 		$node = new Html\CommentNode(
@@ -453,7 +465,7 @@ final class TemplateParserHtml
 			content: $this->parser->parseFragment([$this->parser, 'inTextResolve']),
 		);
 		$stream->tryConsume(Token::Html_CommentClose) || $stream->throwUnexpectedException([Token::Html_CommentClose], addendum: " started $openToken->position");
-		$this->parser->getLexer()->setState(TemplateLexer::StateHtmlText);
+		$lexer->popState();
 		return $node;
 	}
 
@@ -461,15 +473,16 @@ final class TemplateParserHtml
 	private function consumeIgnored(): void
 	{
 		$stream = $this->parser->getStream();
+		$lexer = $this->parser->getLexer();
 		do {
 			if ($stream->tryConsume(Token::Whitespace)) {
 				continue;
 			}
 			if ($stream->tryConsume(Token::Latte_CommentOpen)) {
-				$this->parser->getLexer()->pushState(TemplateLexer::StateLatteComment);
+				$lexer->pushState(TemplateLexer::StateLatteComment);
 				$stream->consume(Token::Text);
 				$stream->consume(Token::Latte_CommentClose);
-				$this->parser->getLexer()->popState();
+				$lexer->popState();
 				$stream->tryConsume(Token::Newline);
 				continue;
 			}
