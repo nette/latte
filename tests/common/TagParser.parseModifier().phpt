@@ -56,6 +56,12 @@ test('depth', function () {
 	Assert::same('($this->filters->mod)(@, 1 ? 2 : 3)', format('|mod:(1?2:3)'));
 });
 
+test('nullsafe filter', function () {
+	Assert::same(
+		'(($ʟ_tmp = (($ʟ_tmp = @) === null ? null : ($this->filters->mod2)(($this->filters->mod1)($ʟ_tmp)))) === null ? null : ($this->filters->mod3)($ʟ_tmp))',
+		format('?|mod1|mod2?|mod3'),
+	);
+});
 
 test('optionalChainingPass', function () {
 	Assert::same(

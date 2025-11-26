@@ -147,6 +147,7 @@ final class TagLexer
 			(?<Php_PowEqual>  \*\*=  )|
 			(?<Php_CoalesceEqual>  \?\?=  )|
 			(?<Php_Coalesce>  \?\?  )|
+			(?<Php_NullsafePipe>  \?\|  )|
 			(?<Php_BooleanOr>  \|\|  )|
 			(?<Php_BooleanAnd>  &&  )|
 			(?<Php_Pipe>  \|>  )|

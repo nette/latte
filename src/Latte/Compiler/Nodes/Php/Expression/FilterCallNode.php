@@ -27,7 +27,12 @@ class FilterCallNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		return $this->filter->printSimple($context, $this->expr->print($context));
+		$filters = [];
+		for ($node = $this; $node instanceof self; $node = $node->expr) {
+			array_unshift($filters, $node->filter);
+		}
+
+		return Php\FilterNode::printSimple($context, $filters, $node->print($context));
 	}
 
 

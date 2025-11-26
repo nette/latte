@@ -39,6 +39,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'upper'
    |  |  |  |  |  position: 1:5
    |  |  |  |  args: array (0)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 1:4
    |  |  |  position: 1:2
    |  |  key: null
@@ -62,6 +63,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  name: 'upper'
    |  |  |  |  |  |  position: 2:12
    |  |  |  |  |  args: array (0)
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 2:10
    |  |  |  |  position: 2:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
@@ -69,6 +71,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'truncate'
    |  |  |  |  |  position: 2:18
    |  |  |  |  args: array (0)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 2:17
    |  |  |  position: 2:2
    |  |  key: null
@@ -104,6 +107,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
    |  |  |  |  |  |  |  position: 3:20
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 3:5
    |  |  |  |  position: 3:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
@@ -111,6 +115,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'trim'
    |  |  |  |  |  position: 3:23
    |  |  |  |  args: array (0)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 3:22
    |  |  |  position: 3:2
    |  |  key: null
@@ -148,12 +153,14 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  |  name: 'round'
    |  |  |  |  |  |  |  |  |  |  position: 4:24
    |  |  |  |  |  |  |  |  |  args: array (0)
+   |  |  |  |  |  |  |  |  |  nullsafe: false
    |  |  |  |  |  |  |  |  |  position: 4:23
    |  |  |  |  |  |  |  |  position: 4:21
    |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  unpack: false
    |  |  |  |  |  |  |  name: null
    |  |  |  |  |  |  |  position: 4:20
+   |  |  |  |  |  nullsafe: false
    |  |  |  |  |  position: 4:5
    |  |  |  |  position: 4:2
    |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
@@ -161,6 +168,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'trim'
    |  |  |  |  |  position: 4:31
    |  |  |  |  args: array (0)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 4:30
    |  |  |  position: 4:2
    |  |  key: null
@@ -198,6 +206,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  |  position: 5:23
    |  |  |  |  |  |  position: 5:23
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 5:5
    |  |  |  position: 5:2
    |  |  key: null
@@ -235,6 +244,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  name: 'b'
    |  |  |  |  |  |  |  position: 6:23
    |  |  |  |  |  |  position: 6:23
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 6:5
    |  |  |  position: 6:2
    |  |  key: null
@@ -262,6 +272,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  name: 'a'
    |  |  |  |  |  |  |  position: 7:16
    |  |  |  |  |  |  position: 7:16
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 7:5
    |  |  |  position: 7:2
    |  |  key: null
@@ -278,6 +289,7 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  name: 'truncate'
    |  |  |  |  |  position: 8:6
    |  |  |  |  args: array (0)
+   |  |  |  |  nullsafe: false
    |  |  |  |  position: 8:5
    |  |  |  position: 8:2
    |  |  key: null

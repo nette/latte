@@ -18,7 +18,7 @@ $template = <<<'EOD'
 	Condition: {$hello ? yes} {=$hello ? yes}
 	Array: {$hello ? ([a, b, c])|join} {=[a, b, $hello ? c]|join}
 
-	filter: {$hello |lower}
+	filter: {$hello ?|lower}
 	{$hello |truncate:"10"|lower}
 	{$hello |types , '' , ""	,	"$hello"  }
 	EOD;
@@ -53,7 +53,7 @@ Assert::match(
 				echo '
 
 		filter: ';
-				echo LR\HtmlHelpers::escapeText(($this->filters->lower)($hello)) /* pos 9:9 */;
+				echo LR\HtmlHelpers::escapeText((($ʟ_tmp = $hello) === null ? null : ($this->filters->lower)($ʟ_tmp))) /* pos 9:9 */;
 				echo "\n";
 				echo LR\HtmlHelpers::escapeText(($this->filters->lower)(($this->filters->truncate)($hello, '10'))) /* pos 10:1 */;
 				echo "\n";

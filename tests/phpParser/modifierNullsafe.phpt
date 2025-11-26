@@ -10,7 +10,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 $test = <<<'XX'
-	|truncate: 10, (20|round)|trim
+	?|truncate: 10, (20?|round)?|trim
 	XX;
 
 $code = normalizeNl($test);
@@ -33,43 +33,43 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'truncate'
-   |  |  |  position: 1:2
+   |  |  |  position: 1:3
    |  |  args: array (2)
    |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 10
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 1:12
+   |  |  |  |  |  position: 1:13
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:12
+   |  |  |  |  position: 1:13
    |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  position: 1:18
    |  |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  position: 1:20
+   |  |  |  |  |  |  |  position: 1:22
    |  |  |  |  |  |  args: array (0)
-   |  |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  |  position: 1:19
-   |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  nullsafe: true
+   |  |  |  |  |  |  position: 1:20
+   |  |  |  |  |  position: 1:18
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:16
-   |  |  nullsafe: false
+   |  |  |  |  position: 1:17
+   |  |  nullsafe: true
    |  |  position: 1:1
    |  1 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'trim'
-   |  |  |  position: 1:27
+   |  |  |  position: 1:30
    |  |  args: array (0)
-   |  |  nullsafe: false
-   |  |  position: 1:26
+   |  |  nullsafe: true
+   |  |  position: 1:28
    escape: false
    position: 1:1

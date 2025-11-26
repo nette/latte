@@ -63,9 +63,7 @@ class ModifierNode extends Node
 
 	public function printSimple(PrintContext $context, string $expr): string
 	{
-		foreach ($this->filters as $filter) {
-			$expr = $filter->printSimple($context, $expr);
-		}
+		$expr = FilterNode::printSimple($context, $this->filters, $expr);
 
 		$escaper = $context->getEscaper();
 		return $this->escape
