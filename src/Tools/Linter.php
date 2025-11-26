@@ -66,6 +66,10 @@ final class Linter
 			$engine->addExtension(new Nette\Bridges\FormsLatte\FormsExtension);
 		}
 
+		if (class_exists(Nette\Bridges\AssetsLatte\LatteExtension::class)) {
+			$engine->addExtension(new Nette\Bridges\AssetsLatte\LatteExtension(new Nette\Assets\Registry));
+		}
+
 		return $engine;
 	}
 
