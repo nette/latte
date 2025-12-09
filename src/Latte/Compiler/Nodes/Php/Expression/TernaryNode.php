@@ -11,11 +11,12 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\NameNode;
+use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class TernaryNode extends ExpressionNode
+class TernaryNode extends ExpressionNode implements OperatorNode
 {
 	public function __construct(
 		public ExpressionNode $cond,
@@ -34,6 +35,12 @@ class TernaryNode extends ExpressionNode
 			' ?' . ($this->if !== null ? ' ' . $this->if->print($context) . ' ' : '') . ': ',
 			$this->else ?? new NameNode('null'),
 		);
+	}
+
+
+	public function getOperatorPrecedence(): array
+	{
+		return [100, self::AssocNone];
 	}
 
 
