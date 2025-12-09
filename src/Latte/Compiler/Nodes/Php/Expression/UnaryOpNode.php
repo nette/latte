@@ -41,7 +41,10 @@ class UnaryOpNode extends ExpressionNode implements OperatorNode
 
 	public function getOperatorPrecedence(): array
 	{
-		return [240, self::AssocRight];
+		return match ($this->operator) {
+			'+', '-', '~', '@' => [240, self::AssocRight],
+			'!' => [220, self::AssocRight],
+		};
 	}
 
 

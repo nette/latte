@@ -76,6 +76,7 @@ $test = <<<'XX'
 	$a or $b,
 
 	$a instanceof Foo,
+	!$a instanceof Foo,
 	$a instanceof $b,
 
 	$a in $b,
@@ -157,6 +158,7 @@ $a and $b,
 $a xor $b,
 $a or $b,
 $a instanceof Foo,
+!$a instanceof Foo,
 $a instanceof $b,
 in_array($a, $b, true),
 $a |> $b |> $c,
