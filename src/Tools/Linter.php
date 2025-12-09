@@ -80,6 +80,8 @@ final class Linter
 			$engine->addExtension(new Nette\Bridges\AssetsLatte\LatteExtension(new Nette\Assets\Registry));
 		}
 
+		$engine->addExtension(new LinterExtension);
+
 		return $engine;
 	}
 
