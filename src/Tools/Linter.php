@@ -17,6 +17,9 @@ use const PHP_BINARY, STDERR;
 
 final class Linter
 {
+	public array $excludedDirs = ['.*', '*.tmp', 'temp', 'vendor', 'node_modules'];
+
+
 	public function __construct(
 		private ?Latte\Engine $engine = null,
 		private bool $debug = false,
@@ -144,17 +147,32 @@ final class Linter
 
 	private function getFiles(string $path): \Iterator
 	{
-		if (is_file($path)) {
-			return new \ArrayIterator([$path]);
+		$it = match (true) {
+			is_file($path) => new \ArrayIterator([$path]),
+			is_dir($path) => $this->findLatteFiles($path),
+			preg_match('~[*?]~', $path) => new \GlobIterator($path),
+			default => throw new \InvalidArgumentException("File or directory '$path' not found."),
+		};
+		$it = new \CallbackFilterIterator($it, fn($file) => is_file((string) $file));
+		return $it;
+	}
 
-		} elseif (preg_match('~[*?]~', $path)) {
-			return new \GlobIterator($path);
 
-		} else {
-			$it = new \RecursiveDirectoryIterator($path);
-			$it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::LEAVES_ONLY, \RecursiveIteratorIterator::CATCH_GET_CHILD);
-			$it = new \RegexIterator($it, '~\.latte$~');
-			return $it;
+	private function findLatteFiles(string $dir): \Generator
+	{
+		foreach (scandir($dir) as $name) {
+			$path = ($dir === '.' ? '' : $dir . DIRECTORY_SEPARATOR) . $name;
+			if ($name !== '.' && $name !== '..' && is_dir($path)) {
+				foreach ($this->excludedDirs as $pattern) {
+					if (fnmatch($pattern, $name)) {
+						continue 2;
+					}
+				}
+				yield from $this->findLatteFiles($path);
+
+			} elseif (str_ends_with($name, '.latte')) {
+				yield $path;
+			}
 		}
 	}
 
