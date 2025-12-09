@@ -30,11 +30,18 @@ final class Linter
 
 	public function scanDirectory(string $path): bool
 	{
+		echo "Scanning $path\n";
+		return $this->scanFiles($this->getFiles($path));
+	}
+
+
+	/**
+	 * @param  iterable<\Stringable>  $files
+	 */
+	public function scanFiles(iterable $files): bool
+	{
 		$this->initialize();
 
-		echo "Scanning $path\n";
-
-		$files = $this->getFiles($path);
 		$counter = 0;
 		$errors = 0;
 		foreach ($files as $file) {
