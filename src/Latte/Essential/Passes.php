@@ -20,7 +20,6 @@ use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\NodeTraverser;
-use Latte\Compiler\PrintContext;
 use Latte\ContentType;
 use Latte\Engine;
 use Latte\Runtime\HtmlHelpers;
@@ -46,10 +45,7 @@ final class Passes
 				&& $node->name instanceof Php\NameNode
 				&& isset($functions[$node->name->name])
 			) {
-				return new Expression\AuxiliaryNode(
-					fn(PrintContext $context, ...$args) => '($this->global->fn->' . $node->name . ')($this, ' . $context->implode($args) . ')',
-					$node->args,
-				);
+				return new Nodes\CustomFunctionCallNode($node->name, $node->args, $node->position);
 			}
 		});
 	}
