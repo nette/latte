@@ -268,6 +268,7 @@ test('href attribute', function () {
 			<a href="javascript:foo"></a>
 			<a href="javascript:foo"></a>
 			<a href=""></a>
+			<a href="javascript:foo#foo"></a>
 			XX,
 		$latte->renderToString(
 			<<<'XX'
@@ -275,6 +276,7 @@ test('href attribute', function () {
 				<a href={='javascript:foo'|noescape}></a>
 				<a href={='javascript:foo'|nocheck}></a>
 				<a href={='javascript:foo'|trim}></a>
+				<a href="{='javascript:foo'}#foo"></a>
 				XX,
 		),
 	);
