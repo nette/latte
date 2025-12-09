@@ -11,6 +11,7 @@ namespace Latte\Compiler;
 
 use Latte\Compiler\Nodes\Php as Nodes;
 use Latte\Compiler\Nodes\Php\Expression;
+use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\ContentType;
 use function addcslashes, array_map, array_pop, end, implode, preg_replace, preg_replace_callback, strtolower, substr, trim, ucfirst;
@@ -21,57 +22,8 @@ use function addcslashes, array_map, array_pop, end, implode, preg_replace, preg
  */
 final class PrintContext
 {
-	/** associativity */
-	private const
-		Left = -1,
-		None = 0,
-		Right = 1;
-
 	public array $paramsExtraction = [];
 	public array $blocks = [];
-
-	private array $operatorPrecedence = [
-		// [precedence, associativity]
-		'new'        => [270, self::None], // also clone
-		'**'         => [250, self::Right],
-		'++x'        => [240, self::Right],
-		'x++'        => [240, self::Left],
-		'~'          => [240, self::Right], // also unary + -
-		'(type)'     => [240, self::Right],
-		'@'          => [240, self::Right],
-		'!'          => [240, self::Right],
-		'instanceof' => [230, self::None],
-		'*'          => [210, self::Left],
-		'/'          => [210, self::Left],
-		'%'          => [210, self::Left],
-		'+'          => [200, self::Left],
-		'-'          => [200, self::Left],
-		'<<'         => [190, self::Left],
-		'>>'         => [190, self::Left],
-		'.'          => [185, self::Left],
-		'|>'         => [183, self::Left],
-		'<'          => [180, self::None],
-		'<='         => [180, self::None],
-		'>'          => [180, self::None],
-		'>='         => [180, self::None],
-		'<=>'        => [180, self::None],
-		'=='         => [170, self::None],
-		'!='         => [170, self::None],
-		'==='        => [170, self::None],
-		'!=='        => [170, self::None],
-		'&'          => [160, self::Left],
-		'^'          => [150, self::Left],
-		'|'          => [140, self::Left],
-		'&&'         => [130, self::Left],
-		'||'         => [120, self::Left],
-		'??'         => [110, self::Right],
-		'?:'         => [100, self::None],
-		'='          => [90,  self::Right],
-		'and'        => [50,  self::Left],
-		'xor'        => [40,  self::Left],
-		'or'         => [30,  self::Left],
-	];
-
 	private int $counter = 0;
 
 	/** @var Escaper[] */
@@ -127,7 +79,7 @@ final class PrintContext
 					'dump' => PhpHelpers::dump($arg),
 					'node' => match (true) {
 						!$arg => '',
-						$arg instanceof Nodes\ExpressionNode && ($prec = $this->getPrecedence($arg)) && $prec < $this->operatorPrecedence['='] => '(' . $arg->print($this) . ')',
+						$arg instanceof OperatorNode && $arg->getOperatorPrecedence() < Expression\AssignNode::Precedence => '(' . $arg->print($this) . ')',
 						default => $arg->print($this),
 					},
 					'raw' => (string) $arg,
@@ -204,9 +156,9 @@ final class PrintContext
 	 */
 	public function infixOp(Node $node, Node $leftNode, string $operatorString, Node $rightNode): string
 	{
-		return $this->parenthesize($node, $leftNode, self::Left)
+		return $this->parenthesize($node, $leftNode, OperatorNode::AssocLeft)
 			. $operatorString
-			. $this->parenthesize($node, $rightNode, self::Right);
+			. $this->parenthesize($node, $rightNode, OperatorNode::AssocRight);
 	}
 
 
@@ -215,7 +167,7 @@ final class PrintContext
 	 */
 	public function prefixOp(Node $node, string $operatorString, Node $expr): string
 	{
-		return $operatorString . $this->parenthesize($node, $expr, self::Right);
+		return $operatorString . $this->parenthesize($node, $expr, OperatorNode::AssocRight);
 	}
 
 
@@ -224,36 +176,20 @@ final class PrintContext
 	 */
 	public function postfixOp(Node $node, Node $var, string $operatorString): string
 	{
-		return $this->parenthesize($node, $var, self::Left) . $operatorString;
+		return $this->parenthesize($node, $var, OperatorNode::AssocLeft) . $operatorString;
 	}
 
 
 	/**
 	 * Prints an expression node with the least amount of parentheses necessary to preserve the meaning.
 	 */
-	private function parenthesize(Node $parentNode, Node $childNode, int $childPosition): string
+	private function parenthesize(OperatorNode $parentNode, Node $childNode, int $childPosition): string
 	{
-		[$parentPrec, $parentAssoc] = $this->getPrecedence($parentNode);
-		[$childPrec] = $this->getPrecedence($childNode);
+		[$parentPrec, $parentAssoc] = $parentNode->getOperatorPrecedence();
+		[$childPrec] = $childNode instanceof OperatorNode ? $childNode->getOperatorPrecedence() : null;
 		return $childPrec && ($childPrec < $parentPrec || ($parentPrec === $childPrec && $parentAssoc !== $childPosition))
 			? '(' . $childNode->print($this) . ')'
 			: $childNode->print($this);
-	}
-
-
-	private function getPrecedence(Node $node): ?array
-	{
-		return $this->operatorPrecedence[match (true) {
-			$node instanceof Expression\BinaryOpNode => $node->operator,
-			$node instanceof Expression\PreOpNode => '++x',
-			$node instanceof Expression\PostOpNode => 'x++',
-			$node instanceof Expression\UnaryOpNode => '~',
-			$node instanceof Expression\CastNode => '(type)',
-			$node instanceof Expression\InstanceofNode => 'instanceof',
-			$node instanceof Expression\TernaryNode => '?:',
-			$node instanceof Expression\AssignNode, $node instanceof Expression\AssignOpNode => '=',
-			default => '',
-		}] ?? null;
 	}
 
 

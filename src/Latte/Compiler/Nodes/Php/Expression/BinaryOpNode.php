@@ -10,12 +10,13 @@ declare(strict_types=1);
 namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use function count, in_array, strtolower;
 
 
-class BinaryOpNode extends ExpressionNode
+class BinaryOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['||', '&&', 'or', 'and', 'xor', '|', '&', '^', '.', '+', '-', '*', '/', '%', '<<', '>>', '**',
 		'==', '!=', '===', '!==', '<=>', '<', '<=', '>', '>=', '??', '|>'];
@@ -55,6 +56,30 @@ class BinaryOpNode extends ExpressionNode
 	public function print(PrintContext $context): string
 	{
 		return $context->infixOp($this, $this->left, ' ' . $this->operator . ' ', $this->right);
+	}
+
+
+	public function getOperatorPrecedence(): array
+	{
+		return match (strtolower($this->operator)) {
+			'**' => [250, self::AssocRight],
+			'*', '/', '%' => [210, self::AssocLeft],
+			'+', '-' => [200, self::AssocLeft],
+			'<<', '>>' => [190, self::AssocLeft],
+			'.' => [185, self::AssocLeft],
+			'|>' => [183, self::AssocLeft],
+			'<', '<=', '>', '>=', '<=>' => [180, self::AssocNone],
+			'==', '!=', '===', '!==' => [170, self::AssocNone],
+			'&' => [160, self::AssocLeft],
+			'^' => [150, self::AssocLeft],
+			'|' => [140, self::AssocLeft],
+			'&&' => [130, self::AssocLeft],
+			'||' => [120, self::AssocLeft],
+			'??' => [110, self::AssocRight],
+			'and' => [50, self::AssocLeft],
+			'xor' => [40, self::AssocLeft],
+			'or' => [30, self::AssocLeft],
+		};
 	}
 
 

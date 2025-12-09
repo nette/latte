@@ -11,11 +11,12 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class PreOpNode extends ExpressionNode
+class PreOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['++' => 1, '--' => 1];
 
@@ -36,6 +37,12 @@ class PreOpNode extends ExpressionNode
 	{
 		$this->validate();
 		return $context->prefixOp($this, $this->operator, $this->var);
+	}
+
+
+	public function getOperatorPrecedence(): array
+	{
+		return [240, self::AssocRight];
 	}
 
 
