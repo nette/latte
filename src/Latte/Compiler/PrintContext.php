@@ -37,8 +37,8 @@ final class PrintContext
 		'~'          => [240, self::Right], // also unary + -
 		'(type)'     => [240, self::Right],
 		'@'          => [240, self::Right],
-		'!'          => [240, self::Right],
 		'instanceof' => [230, self::None],
+		'!'          => [220, self::Right],
 		'*'          => [210, self::Left],
 		'/'          => [210, self::Left],
 		'%'          => [210, self::Left],
