@@ -86,7 +86,8 @@ final class Linter
 		set_error_handler(function (int $severity, string $message) use ($file) {
 			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
 				$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
-				fwrite(STDERR, "[DEPRECATED] $file$pos    $message\n");
+				$label = $severity === E_USER_DEPRECATED ? 'DEPRECATED' : 'WARNING';
+				$this->writeError($label, $file . $pos, $message);
 				return null;
 			}
 			return false;
@@ -97,7 +98,7 @@ final class Linter
 		}
 		$s = file_get_contents($file);
 		if (substr($s, 0, 3) === "\xEF\xBB\xBF") {
-			fwrite(STDERR, "[WARNING]    $file    contains BOM\n");
+			$this->writeError('WARNING', $file, 'contains BOM');
 		}
 
 		try {
@@ -111,7 +112,7 @@ final class Linter
 			}
 			$pos = $e->position?->line ? ':' . $e->position->line : '';
 			$pos .= $e->position?->column ? ':' . $e->position->column : '';
-			fwrite(STDERR, "[ERROR]      $file$pos    {$e->getMessage()}\n");
+			$this->writeError('ERROR', $file . $pos, $e->getMessage());
 			return false;
 
 		} finally {
@@ -155,5 +156,11 @@ final class Linter
 			$it = new \RegexIterator($it, '~\.latte$~');
 			return $it;
 		}
+	}
+
+
+	private function writeError(string $label, string $file, string $message): void
+	{
+		fwrite(STDERR, str_pad("[$label]", 13) . ' ' . $file . '    ' . $message . "\n");
 	}
 }
