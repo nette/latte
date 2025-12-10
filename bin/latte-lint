@@ -30,6 +30,13 @@ if ($strict = in_array('--strict', $argv, true)) {
 }
 
 $path = $argv[1];
-$linter = new Latte\Tools\Linter(debug: $debug, strict: $strict);
-$ok = $linter->scanDirectory($path);
-exit($ok ? 0 : 1);
+
+try {
+	$linter = new Latte\Tools\Linter(debug: $debug, strict: $strict);
+	$ok = $linter->scanDirectory($path);
+	exit($ok ? 0 : 1);
+
+} catch (Throwable $e) {
+	fwrite(STDERR, $debug ? "\n$e\n" : "\nError: {$e->getMessage()}\n");
+	exit(2);
+}
