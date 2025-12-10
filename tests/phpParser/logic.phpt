@@ -67,22 +67,25 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  unpack: false
    |  |  position: 3:1
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\NotNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\UnaryOpNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
    |  |  |  |  position: 4:2
+   |  |  |  operator: '!'
    |  |  |  position: 4:1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
    |  |  position: 4:1
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
-   |  |  value: Latte\Compiler\Nodes\Php\Expression\NotNode
-   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NotNode
+   |  |  value: Latte\Compiler\Nodes\Php\Expression\UnaryOpNode
+   |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\UnaryOpNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
    |  |  |  |  |  position: 5:3
+   |  |  |  |  operator: '!'
    |  |  |  |  position: 5:2
+   |  |  |  operator: '!'
    |  |  |  position: 5:1
    |  |  key: null
    |  |  byRef: false

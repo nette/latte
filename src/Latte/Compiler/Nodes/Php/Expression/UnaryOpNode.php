@@ -16,7 +16,7 @@ use Latte\Compiler\PrintContext;
 
 class UnaryOpNode extends ExpressionNode
 {
-	private const Ops = ['+' => 1, '-' => 1, '~' => 1];
+	private const Ops = ['+' => 1, '-' => 1, '~' => 1, '@' => 1, '!' => 1];
 
 
 	public function __construct(
