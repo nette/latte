@@ -151,9 +151,7 @@ final class PrintContext
 	}
 
 
-	/**
-	 * Prints an infix operation while taking precedence into account.
-	 */
+	#[\Deprecated]
 	public function infixOp(Node $node, Node $leftNode, string $operatorString, Node $rightNode): string
 	{
 		return $this->parenthesize($node, $leftNode, OperatorNode::AssocLeft)
@@ -162,18 +160,14 @@ final class PrintContext
 	}
 
 
-	/**
-	 * Prints a prefix operation while taking precedence into account.
-	 */
+	#[\Deprecated]
 	public function prefixOp(Node $node, string $operatorString, Node $expr): string
 	{
 		return $operatorString . $this->parenthesize($node, $expr, OperatorNode::AssocRight);
 	}
 
 
-	/**
-	 * Prints a postfix operation while taking precedence into account.
-	 */
+	#[\Deprecated]
 	public function postfixOp(Node $node, Node $var, string $operatorString): string
 	{
 		return $this->parenthesize($node, $var, OperatorNode::AssocLeft) . $operatorString;
@@ -183,7 +177,7 @@ final class PrintContext
 	/**
 	 * Prints an expression node with the least amount of parentheses necessary to preserve the meaning.
 	 */
-	private function parenthesize(OperatorNode $parentNode, Node $childNode, int $childPosition): string
+	public function parenthesize(OperatorNode $parentNode, Node $childNode, int $childPosition): string
 	{
 		[$parentPrec, $parentAssoc] = $parentNode->getOperatorPrecedence();
 		[$childPrec] = $childNode instanceof OperatorNode ? $childNode->getOperatorPrecedence() : null;

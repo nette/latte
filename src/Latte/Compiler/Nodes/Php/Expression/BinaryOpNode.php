@@ -55,7 +55,9 @@ class BinaryOpNode extends ExpressionNode implements OperatorNode
 
 	public function print(PrintContext $context): string
 	{
-		return $context->infixOp($this, $this->left, ' ' . $this->operator . ' ', $this->right);
+		return $context->parenthesize($this, $this->left, self::AssocLeft)
+			. ' ' . $this->operator . ' '
+			. $context->parenthesize($this, $this->right, self::AssocRight);
 	}
 
 

@@ -28,7 +28,8 @@ class InstanceofNode extends ExpressionNode implements OperatorNode
 
 	public function print(PrintContext $context): string
 	{
-		return $context->postfixOp($this, $this->expr, ' instanceof ')
+		return $context->parenthesize($this, $this->expr, self::AssocLeft)
+			. ' instanceof '
 			. $context->dereferenceExpr($this->class);
 	}
 

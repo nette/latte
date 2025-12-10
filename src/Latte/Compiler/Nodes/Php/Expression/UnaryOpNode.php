@@ -33,9 +33,8 @@ class UnaryOpNode extends ExpressionNode implements OperatorNode
 
 	public function print(PrintContext $context): string
 	{
-		return $this->expr instanceof self || $this->expr instanceof PreOpNode
-			? $this->operator . '(' . $this->expr->print($context) . ')' // Enforce -(-$expr) instead of --$expr
-			: $context->prefixOp($this, $this->operator, $this->expr);
+		$pos = $this->expr instanceof self || $this->expr instanceof PreOpNode ? self::AssocLeft : self::AssocRight; // Enforce -(-$expr) instead of --$expr
+		return $this->operator . $context->parenthesize($this, $this->expr, $pos);
 	}
 
 

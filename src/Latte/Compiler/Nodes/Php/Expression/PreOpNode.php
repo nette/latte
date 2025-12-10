@@ -36,7 +36,7 @@ class PreOpNode extends ExpressionNode implements OperatorNode
 	public function print(PrintContext $context): string
 	{
 		$this->validate();
-		return $context->prefixOp($this, $this->operator, $this->var);
+		return $this->operator . $context->parenthesize($this, $this->var, self::AssocRight);
 	}
 
 
