@@ -127,7 +127,7 @@ final class PrintContext
 					'dump' => PhpHelpers::dump($arg),
 					'node' => match (true) {
 						!$arg => '',
-						$arg instanceof Nodes\ExpressionNode => $this->parenthesize($arg, $this->operatorPrecedence['='], self::Right),
+						$arg instanceof Nodes\ExpressionNode && ($prec = $this->getPrecedence($arg)) && $prec < $this->operatorPrecedence['='] => '(' . $arg->print($this) . ')',
 						default => $arg->print($this),
 					},
 					'raw' => (string) $arg,
@@ -204,10 +204,9 @@ final class PrintContext
 	 */
 	public function infixOp(Node $node, Node $leftNode, string $operatorString, Node $rightNode): string
 	{
-		$precedence = $this->getPrecedence($node);
-		return $this->parenthesize($leftNode, $precedence, self::Left)
+		return $this->parenthesize($node, $leftNode, self::Left)
 			. $operatorString
-			. $this->parenthesize($rightNode, $precedence, self::Right);
+			. $this->parenthesize($node, $rightNode, self::Right);
 	}
 
 
@@ -216,7 +215,7 @@ final class PrintContext
 	 */
 	public function prefixOp(Node $node, string $operatorString, Node $expr): string
 	{
-		return $operatorString . $this->parenthesize($expr, $this->getPrecedence($node), self::Right);
+		return $operatorString . $this->parenthesize($node, $expr, self::Right);
 	}
 
 
@@ -225,26 +224,20 @@ final class PrintContext
 	 */
 	public function postfixOp(Node $node, Node $var, string $operatorString): string
 	{
-		return $this->parenthesize($var, $this->getPrecedence($node), self::Left) . $operatorString;
+		return $this->parenthesize($node, $var, self::Left) . $operatorString;
 	}
 
 
 	/**
 	 * Prints an expression node with the least amount of parentheses necessary to preserve the meaning.
 	 */
-	private function parenthesize(Node $node, array $parent, int $childPosition): string
+	private function parenthesize(Node $parentNode, Node $childNode, int $childPosition): string
 	{
-		[$childPrecedence] = $this->getPrecedence($node);
-		if ($childPrecedence) {
-			[$parentPrecedence, $parentAssociativity] = $parent;
-			if ($childPrecedence < $parentPrecedence
-				|| ($parentPrecedence === $childPrecedence && $parentAssociativity !== $childPosition)
-			) {
-				return '(' . $node->print($this) . ')';
-			}
-		}
-
-		return $node->print($this);
+		[$parentPrec, $parentAssoc] = $this->getPrecedence($parentNode);
+		[$childPrec] = $this->getPrecedence($childNode);
+		return $childPrec && ($childPrec < $parentPrec || ($parentPrec === $childPrec && $parentAssoc !== $childPosition))
+			? '(' . $childNode->print($this) . ')'
+			: $childNode->print($this);
 	}
 
 
