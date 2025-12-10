@@ -38,7 +38,9 @@ class AssignOpNode extends ExpressionNode implements OperatorNode
 	public function print(PrintContext $context): string
 	{
 		$this->validate();
-		return $context->infixOp($this, $this->var, ' ' . $this->operator . '= ', $this->expr);
+		return $context->parenthesize($this, $this->var, self::AssocLeft)
+			. ' ' . $this->operator . '= '
+			. $context->parenthesize($this, $this->expr, self::AssocRight);
 	}
 
 

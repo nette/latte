@@ -33,7 +33,7 @@ class CastNode extends ExpressionNode implements OperatorNode
 
 	public function print(PrintContext $context): string
 	{
-		return $context->prefixOp($this, '(' . $this->type . ') ', $this->expr);
+		return '(' . $this->type . ') ' . $context->parenthesize($this, $this->expr, self::AssocRight);
 	}
 
 

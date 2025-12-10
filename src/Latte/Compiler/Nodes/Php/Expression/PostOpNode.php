@@ -36,7 +36,7 @@ class PostOpNode extends ExpressionNode implements OperatorNode
 	public function print(PrintContext $context): string
 	{
 		$this->validate();
-		return $context->postfixOp($this, $this->var, $this->operator);
+		return $context->parenthesize($this, $this->var, self::AssocLeft) . $this->operator;
 	}
 
 
