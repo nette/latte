@@ -12,7 +12,9 @@ $test = <<<'XX'
 	isset($a, $a[$b]),
 	empty($a),
 	empty('foo'),
-	clone $foo
+	clone $foo,
+	clone($foo, $array),
+	clone(...),
 	XX;
 
 $node = parseCode($test);
@@ -27,4 +29,6 @@ __halt_compiler();
 isset($a, $a[$b]),
 empty($a),
 empty('foo'),
-clone $foo
+clone $foo,
+clone($foo, $array),
+clone(...)
