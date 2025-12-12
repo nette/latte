@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Sandbox\Nodes;
 
+use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
@@ -23,13 +24,14 @@ class StaticMethodCallNode extends Expression\StaticMethodCallNode
 
 	public function print(PrintContext $context): string
 	{
-		return $this->isPartialFunction()
-			? '$this->global->sandbox->closure(['
-				. $context->memberAsString($this->class) . ', '
-				. $context->memberAsString($this->name) . '])'
-			: '$this->global->sandbox->call(['
-				. $context->memberAsString($this->class) . ', '
-				. $context->memberAsString($this->name) . '], '
-				. $context->argumentsAsArray($this->args) . ')';
+		$pair = '[' . $context->memberAsString($this->class) . ', ' . $context->memberAsString($this->name) . ']';
+		if (!$this->isPartialFunction()) {
+			return '$this->global->sandbox->call(' . $pair . ', ' . $context->argumentsAsArray($this->args)[0] . ')';
+		} elseif ($this->args[0] instanceof Php\VariadicPlaceholderNode) {
+			return '$this->global->sandbox->closure(' . $pair . ')';
+		} else {
+			[$args, $params] = $context->argumentsAsArray($this->args);
+			return '(fn(' . $params . ') => $this->global->sandbox->call(' . $pair . ', ' . $args . '))';
+		}
 	}
 }

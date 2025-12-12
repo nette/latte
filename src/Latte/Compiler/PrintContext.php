@@ -266,13 +266,49 @@ final class PrintContext
 	}
 
 
-	/**
-	 * @param  Nodes\ArgumentNode[]  $args
-	 */
-	public function argumentsAsArray(array $args): string
+	/** @param  array<Nodes\ArgumentNode|Nodes\VariadicPlaceholderNode|Nodes\ArgumentPlaceholderNode>  $args */
+	public function callPartial(string $expr, array $args): string
 	{
-		$items = array_map(fn(Nodes\ArgumentNode $arg) => $arg->toArrayItem(), $args);
-		return '[' . $this->implode($items) . ']';
+		$params = $pArgs = [];
+		foreach ($args as $arg) {
+			if ($arg instanceof Nodes\ArgumentNode) {
+				$pArgs[] = $arg->print($this);
+			} elseif ($arg instanceof Nodes\VariadicPlaceholderNode) {
+				if (!$pArgs) {
+					$pArgs[] = '...';
+				} else {
+					$params[] = $pArgs[] = '...$__' . count($params);
+				}
+			} elseif ($arg instanceof Nodes\ArgumentPlaceholderNode) {
+				$params[] = $var = '$__' . count($params);
+				$pArgs[] = ($arg->name ? $arg->name . ': ' : '') . $var;
+			}
+		}
+
+		$expr .= '(' . implode(', ', $pArgs) . ')';
+		return $params ? '(static fn(' . implode(', ', $params) . ') => ' . $expr . ')' : $expr;
+	}
+
+
+	/**
+	 * @param  array<Nodes\ArgumentNode|Nodes\VariadicPlaceholderNode|Nodes\ArgumentPlaceholderNode>  $args
+	 * @return array{string, string}  [array code, params for closure]
+	 */
+	public function argumentsAsArray(array $args): array
+	{
+		$params = $items = [];
+		foreach ($args as $arg) {
+			if ($arg instanceof Nodes\ArgumentNode) {
+				$items[] = $arg->toArrayItem()->print($this);
+			} elseif ($arg instanceof Nodes\VariadicPlaceholderNode) {
+				$params[] = $items[] = '...$__' . count($params);
+			} elseif ($arg instanceof Nodes\ArgumentPlaceholderNode) {
+				$params[] = $var = '$__' . count($params);
+				$items[] = ($arg->name ? var_export((string) $arg->name, true) . ' => ' : '') . $var;
+			}
+		}
+
+		return ['[' . implode(', ', $items) . ']', implode(', ', $params)];
 	}
 
 

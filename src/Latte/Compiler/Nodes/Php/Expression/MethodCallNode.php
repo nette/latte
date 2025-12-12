@@ -23,18 +23,18 @@ class MethodCallNode extends ExpressionNode
 	public function __construct(
 		public ExpressionNode $object,
 		public IdentifierNode|ExpressionNode $name,
-		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode> */
+		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode|Php\ArgumentPlaceholderNode> */
 		public array $args = [],
 		public bool $nullsafe = false,
 		public ?Position $position = null,
 	) {
-		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {})(...$args);
+		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode|Php\ArgumentPlaceholderNode ...$args) {})(...$args);
 	}
 
 
 	public function isPartialFunction(): bool
 	{
-		return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
+		return (bool) array_filter($this->args, fn($arg) => !$arg instanceof Php\ArgumentNode);
 	}
 
 
@@ -43,10 +43,12 @@ class MethodCallNode extends ExpressionNode
 		if ($this->nullsafe && $this->isPartialFunction()) {
 			throw new CompileException('Cannot combine nullsafe operator with Closure creation', $this->position);
 		}
-		return $context->dereferenceExpr($this->object)
-			. ($this->nullsafe ? '?->' : '->')
-			. $context->objectProperty($this->name)
-			. '(' . $context->implode($this->args) . ')';
+		return $context->callPartial(
+			$context->dereferenceExpr($this->object)
+				. ($this->nullsafe ? '?->' : '->')
+				. $context->objectProperty($this->name),
+			$this->args,
+		);
 	}
 
 

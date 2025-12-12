@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte\Sandbox\Nodes;
 
+use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
@@ -23,10 +24,14 @@ class FunctionCallNode extends Expression\FunctionCallNode
 
 	public function print(PrintContext $context): string
 	{
-		return $this->isPartialFunction()
-			? '$this->global->sandbox->closure(' . $context->memberAsString($this->name) . ')'
-			: '$this->global->sandbox->call('
-				. $context->memberAsString($this->name) . ', '
-				. $context->argumentsAsArray($this->args) . ')';
+		$name = $context->memberAsString($this->name);
+		if (!$this->isPartialFunction()) {
+			return '$this->global->sandbox->call(' . $name . ', ' . $context->argumentsAsArray($this->args)[0] . ')';
+		} elseif ($this->args[0] instanceof Php\VariadicPlaceholderNode) {
+			return '$this->global->sandbox->closure(' . $name . ')';
+		} else {
+			[$args, $params] = $context->argumentsAsArray($this->args);
+			return '(fn(' . $params . ') => $this->global->sandbox->call(' . $name . ', ' . $args . '))';
+		}
 	}
 }
