@@ -100,10 +100,12 @@ final class SandboxExtension extends Latte\Extension
 		} elseif (
 			$node instanceof Expression\FunctionCallNode
 			&& $node->name instanceof Php\NameNode
-			&& !$node->isPartialApplication()
 		) {
 			if (!$this->policy->isFunctionAllowed((string) $node->name)) {
 				throw new SecurityViolationException("Function $node->name() is not allowed.", $node->position);
+
+			} elseif ($node->isPartialApplication()) {
+				$this->guardBoundArguments($node->args);
 
 			} elseif ($node->args) {
 				$arg = new Expression\AuxiliaryNode(
@@ -150,6 +152,13 @@ final class SandboxExtension extends Latte\Extension
 			|| $node instanceof Expression\MethodCallNode
 			|| $node instanceof Expression\StaticMethodCallNode
 		) {
+			if (!$node instanceof Expression\PropertyFetchNode
+				&& !$node instanceof Expression\StaticPropertyFetchNode
+				&& $node->isPartialApplication()
+			) {
+				$this->guardBoundArguments($node->args);
+			}
+
 			$class = namespace\Nodes::class . strrchr($node::class, '\\');
 			$result = new $class($node);
 			assert($result instanceof Node);
@@ -157,6 +166,23 @@ final class SandboxExtension extends Latte\Extension
 
 		} else {
 			return $node;
+		}
+	}
+
+
+	/**
+	 * Routes the arguments bound by a partial application through the runtime args() guard.
+	 * @param  array<Php\ArgumentNode|Php\VariadicPlaceholderNode|Php\ArgumentPlaceholderNode>  $args
+	 */
+	private function guardBoundArguments(array $args): void
+	{
+		foreach ($args as $arg) {
+			if ($arg instanceof Php\ArgumentNode) {
+				$arg->value = new Expression\AuxiliaryNode(
+					fn(PrintContext $context, Node $value) => '$this->global->sandbox->args(' . $value->print($context) . ')[0]',
+					[$arg->value],
+				);
+			}
 		}
 	}
 }

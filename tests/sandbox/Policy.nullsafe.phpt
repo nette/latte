@@ -66,3 +66,18 @@ test('arguments are passed', function () use ($latte) {
 	Assert::same('ab', $latte->renderToString('{=$obj->join("a", "b")}', ['obj' => new Obj]));
 	Assert::same('ab', $latte->renderToString('{=$obj->join(...["a", "b"])}', ['obj' => new Obj]));
 });
+
+
+test('nullsafe cannot create a closure', function () use ($latte) {
+	Assert::exception(
+		fn() => $latte->compile('{$obj?->join(...)}'),
+		Latte\CompileException::class,
+		'Cannot combine nullsafe operator with Closure creation (on line 1 at column 2)',
+	);
+
+	Assert::exception(
+		fn() => $latte->compile('{$obj?->prop->join(...)}'),
+		Latte\CompileException::class,
+		'Cannot combine nullsafe operator with Closure creation (on line 1 at column 2)',
+	);
+});

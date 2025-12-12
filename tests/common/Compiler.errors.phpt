@@ -383,3 +383,9 @@ Assert::exception(
 	Latte\CompileException::class,
 	'Cannot combine nullsafe operator with Closure creation (on line 1 at column 2)',
 );
+
+Assert::exception(
+	fn() => $latte->compile('{$foo?->bar[0]->foo(...)}'),
+	Latte\CompileException::class,
+	'Cannot combine nullsafe operator with Closure creation (on line 1 at column 2)',
+);

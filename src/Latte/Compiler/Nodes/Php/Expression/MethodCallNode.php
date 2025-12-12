@@ -21,27 +21,27 @@ class MethodCallNode extends ExpressionNode
 	public function __construct(
 		public ExpressionNode $object,
 		public IdentifierNode|ExpressionNode $name,
-		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode> */
+		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode|Php\ArgumentPlaceholderNode> */
 		public array $args = [],
 		public bool $nullsafe = false,
 		public ?Position $position = null,
 		public ?Position $end = null,
 	) {
-		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {})(...$args);
+		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode|Php\ArgumentPlaceholderNode ...$args) {})(...$args);
+		if ($this->isPartialApplication() && $this->hasNullsafe()) {
+			throw new CompileException('Cannot combine nullsafe operator with Closure creation', $position);
+		}
 	}
 
 
 	public function isPartialApplication(): bool
 	{
-		return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
+		return (bool) array_filter($this->args, fn($arg) => !$arg instanceof Php\ArgumentNode);
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->nullsafe && $this->isPartialApplication()) {
-			throw new CompileException('Cannot combine nullsafe operator with Closure creation', $this->position);
-		}
 		return $context->dereferenceExpr($this->object)
 			. ($this->nullsafe ? '?->' : '->')
 			. $context->objectProperty($this->name)
@@ -53,7 +53,10 @@ class MethodCallNode extends ExpressionNode
 	{
 		yield $this->object;
 		yield $this->name;
-		foreach (self::walk($this->args, fn(Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) => null) as &$item) {
+		foreach (self::walk(
+			$this->args,
+			fn(Php\ArgumentNode|Php\VariadicPlaceholderNode|Php\ArgumentPlaceholderNode ...$args) => null,
+		) as &$item) {
 			yield $item;
 		}
 	}

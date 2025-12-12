@@ -40,7 +40,7 @@ $latte->compile($template);
 Assert::equal(
 	[
 		'tags' => ['var', '=', '=', '=', '=', '='],
-		'functions' => ['preg_replace_callback', 'preg_replace_callback'],
+		'functions' => ['preg_replace_callback', 'preg_replace_callback', 'trim'],
 	],
 	$policy->log,
 );
@@ -58,7 +58,6 @@ Assert::equal(
 			['MyClass', 'b'],
 			['MyClass', 'foo'],
 		],
-		'functions' => ['trim'],
 	],
 	$policy->log,
 );

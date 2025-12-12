@@ -25,9 +25,11 @@ class StaticMethodCallNode extends Expression\StaticMethodCallNode
 	public function print(PrintContext $context): string
 	{
 		if ($this->isPartialApplication()) {
+			$args = $context->implode($this->args);
 			return '$this->global->sandbox->closure(['
 				. $context->memberAsString($this->class) . ', '
-				. $context->memberAsString($this->name) . '])';
+				. $context->memberAsString($this->name) . '])'
+				. ($args === '...' ? '' : "($args)");
 		}
 
 		/** @var array<ArgumentNode> $args */

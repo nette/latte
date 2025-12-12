@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Runtime\HtmlHelpers;
 use function is_string;
+use const PHP_VERSION_ID;
 
 
 /**
@@ -39,16 +40,14 @@ final readonly class Passes
 				&& $node->name instanceof Php\NameNode
 				&& isset($functions[$node->name->name])
 			) {
-				if ($node->isPartialApplication()) {
+				if ($node->isPartialApplication() && PHP_VERSION_ID < 80600) {
 					throw new CompileException(
-						"Custom function '{$node->name->name}' cannot be used as partial function.",
+						"Partial application of custom function '{$node->name->name}' requires PHP 8.6.",
 						$node->position,
 					);
 				}
 
-				/** @var array<Php\ArgumentNode> $args */
-				$args = $node->args;
-				return new Nodes\CustomFunctionCallNode($node->name, $args, $node->position);
+				return new Nodes\CustomFunctionCallNode($node->name, $node->args, $node->position);
 			}
 		});
 	}

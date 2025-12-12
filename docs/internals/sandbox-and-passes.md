@@ -12,9 +12,10 @@ other pass), that traverses the AST in the **`leave`** phase and:
   *allowed* functions and filters get their arguments rewritten through a runtime
   `args()` guard (wrapped in an `AuxiliaryNode`);
 - **replaces** property/method fetches and calls with `Sandbox\Nodes\*` wrappers that
-  emit a **runtime** `RuntimeChecker` call (`method`/`prop`/`call`; first-class
-  callable syntax emits `closure()`) — so method/property access is enforced at
-  render time, not compile time;
+  emit a **runtime** `RuntimeChecker` call (`method`/`prop`/`call`; a partial
+  application, first-class callable syntax included, emits `closure()` and applies
+  the placeholders to the closure it returns, each bound argument passing through
+  `args()`) — so method/property access is enforced at render time, not compile time;
 - refuses `(array)` of an object at runtime and checks every public property of a
   non-Traversable object iterated by `{foreach}` (`castToArray`/`iterable`; a foreach
   by reference uses `iterableByRef`, which keeps the reference).
