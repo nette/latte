@@ -379,3 +379,9 @@ Assert::exception(
 	Latte\CompileException::class,
 	"Filter 'escape' is not allowed (on line 1 at column 3)",
 );
+
+Assert::exception(
+	fn() => $latte->compile('{$foo?->foo(...)}'),
+	Latte\CompileException::class,
+	'Cannot combine nullsafe operator with Closure creation (on line 1 at column 2)',
+);

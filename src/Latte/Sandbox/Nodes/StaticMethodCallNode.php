@@ -23,6 +23,12 @@ class StaticMethodCallNode extends Expression\StaticMethodCallNode
 
 	public function print(PrintContext $context): string
 	{
+		if ($this->isPartialFunction()) {
+			return '$this->global->sandbox->closure(['
+				. $context->memberAsString($this->class) . ', '
+				. $context->memberAsString($this->name) . '])';
+		}
+
 		return '$this->global->sandbox->call(['
 			. $context->memberAsString($this->class) . ', '
 			. $context->memberAsString($this->name) . '], '

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Latte;
 
+use Latte\Compiler\Nodes\Php;
 use function array_filter, array_keys, array_search, array_slice, array_unique, count, is_array, is_object, is_string, levenshtein, max, min, strlen, strpos;
 use const PHP_VERSION_ID;
 
@@ -96,6 +97,12 @@ class Helpers
 	public static function removeNulls(array &$items): void
 	{
 		$items = array_values(array_filter($items, fn($item) => $item !== null));
+	}
+
+
+	public static function isPartialFunction(array $args): bool
+	{
+		return ($args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
 	}
 
 
