@@ -23,10 +23,14 @@ class MethodCallNode extends Expression\MethodCallNode
 
 	public function print(PrintContext $context): string
 	{
-		return '$this->global->sandbox->callMethod('
-			. $this->object->print($context) . ', '
-			. $context->memberAsString($this->name) . ', '
-			. $context->argumentsAsArray($this->args)
-			. ', ' . var_export($this->nullsafe, true) . ')';
+		return $this->isPartialFunction()
+			? '$this->global->sandbox->closure(['
+				. $this->object->print($context) . ', '
+				. $context->memberAsString($this->name) . '])'
+			: '$this->global->sandbox->callMethod('
+				. $this->object->print($context) . ', '
+				. $context->memberAsString($this->name) . ', '
+				. $context->argumentsAsArray($this->args)
+				. ', ' . var_export($this->nullsafe, true) . ')';
 	}
 }

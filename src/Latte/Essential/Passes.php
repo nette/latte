@@ -42,7 +42,7 @@ final class Passes
 	{
 		$functions = $this->engine->getFunctions();
 		(new NodeTraverser)->traverse($node, function (Node $node) use ($functions) {
-			if (($node instanceof Expression\FunctionCallNode || $node instanceof Expression\FunctionCallableNode)
+			if (($node instanceof Expression\FunctionCallNode)
 				&& $node->name instanceof Php\NameNode
 				&& isset($functions[$node->name->name])
 			) {

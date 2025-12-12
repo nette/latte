@@ -7,18 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Latte\Compiler\Nodes\Php\Expression;
+namespace Latte\Compiler\Nodes\Php;
 
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\NameNode;
+use Latte\Compiler\Node;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
-class FunctionCallableNode extends ExpressionNode
+class VariadicPlaceholderNode extends Node
 {
 	public function __construct(
-		public NameNode|ExpressionNode $name,
 		public ?Position $position = null,
 	) {
 	}
@@ -26,12 +24,12 @@ class FunctionCallableNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		return $context->callExpr($this->name) . '(...)';
+		return '...';
 	}
 
 
 	public function &getIterator(): \Generator
 	{
-		yield $this->name;
+		false && yield;
 	}
 }

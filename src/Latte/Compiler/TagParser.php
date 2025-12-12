@@ -297,9 +297,7 @@ final class TagParser
 	}
 
 
-	protected function checkFunctionName(
-		Expression\FunctionCallNode|Expression\FunctionCallableNode $func,
-	): ExpressionNode
+	protected function checkFunctionName(Expression\FunctionCallNode $func): ExpressionNode
 	{
 		if ($func->name instanceof NameNode && $func->name->isKeyword()) {
 			$this->throwReservedKeywordException(new Token(0, (string) $func->name, $func->name->position));

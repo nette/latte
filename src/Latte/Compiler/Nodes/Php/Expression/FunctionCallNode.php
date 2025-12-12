@@ -21,11 +21,17 @@ class FunctionCallNode extends ExpressionNode
 {
 	public function __construct(
 		public NameNode|ExpressionNode $name,
-		/** @var array<Php\ArgumentNode> */
+		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode> */
 		public array $args = [],
 		public ?Position $position = null,
 	) {
-		(function (Php\ArgumentNode ...$args) {})(...$args);
+		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {})(...$args);
+	}
+
+
+	public function isPartialFunction(): bool
+	{
+		return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
 	}
 
 

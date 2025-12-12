@@ -23,8 +23,10 @@ class FunctionCallNode extends Expression\FunctionCallNode
 
 	public function print(PrintContext $context): string
 	{
-		return '$this->global->sandbox->call('
-			. $context->memberAsString($this->name) . ', '
-			. $context->argumentsAsArray($this->args) . ')';
+		return $this->isPartialFunction()
+			? '$this->global->sandbox->closure(' . $context->memberAsString($this->name) . ')'
+			: '$this->global->sandbox->call('
+				. $context->memberAsString($this->name) . ', '
+				. $context->argumentsAsArray($this->args) . ')';
 	}
 }
