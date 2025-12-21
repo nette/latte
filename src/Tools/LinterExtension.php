@@ -60,7 +60,9 @@ final class LinterExtension extends Latte\Extension
 				&& $node->class instanceof Php\NameNode
 				&& $node->name instanceof Php\IdentifierNode
 			) {
-				$this->validateClassConstant($node);
+				$node->name->name === 'class'
+					? $this->validateClassType($node->class)
+					: $this->validateClassConstant($node);
 
 			} elseif ($node instanceof Expression\ConstantFetchNode) {
 				$this->validateConstant($node);
@@ -112,6 +114,15 @@ final class LinterExtension extends Latte\Extension
 		$methodName = $node->name->name;
 		if (!method_exists($className, $methodName)) {
 			trigger_error("Unknown method $className::$methodName() $node->position", E_USER_WARNING);
+		}
+	}
+
+
+	private function validateClassType(Php\NameNode $node): void
+	{
+		$className = (string) $node;
+		if (!class_exists($className) && !interface_exists($className) && !trait_exists($className)) {
+			trigger_error("Unknown class $className $node->position", E_USER_WARNING);
 		}
 	}
 

@@ -35,5 +35,6 @@ test('detects unknown filters, functions, classes, methods, constants', function
 		'Unknown constant UNKNOWN_GLOBAL_CONSTANT on line 20 at column 3',
 		'Unknown class UnknownClass in instanceof on line 21 at column 5',
 		'Unknown static property DateTime::$unknownProperty on line 22 at column 3',
+		'Unknown class UnknownClass on line 23 at column 3',
 	], $warnings);
 });
