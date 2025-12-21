@@ -120,9 +120,14 @@ final class LinterExtension extends Latte\Extension
 
 	private function validateClassConstant(Expression\ClassConstantFetchNode $node): void
 	{
-		$name = "{$node->class}::{$node->name->name}";
-		if (!defined($name)) {
-			trigger_error("Unknown class constant $name $node->position", E_USER_WARNING);
+		$className = (string) $node->class;
+		$constantName = $node->name->name;
+		if ($constantName === 'class') {
+			if (!class_exists($className) && !interface_exists($className) && !trait_exists($className)) {
+				trigger_error("Unknown class $className $node->position", E_USER_WARNING);
+			}
+		} elseif (!defined("$className::$constantName")) {
+			trigger_error("Unknown class constant $className::$constantName $node->position", E_USER_WARNING);
 		}
 	}
 

@@ -32,5 +32,6 @@ Assert::error(
 		[E_USER_WARNING, 'Unknown constant UNKNOWN_GLOBAL_CONSTANT on line 9 at column 3'],
 		[E_USER_WARNING, 'Unknown class UnknownClass in instanceof on line 10 at column 5'],
 		[E_USER_WARNING, 'Unknown static property DateTime::$unknownProperty on line 11 at column 3'],
+		[E_USER_WARNING, 'Unknown class UnknownClass on line 12 at column 3'],
 	],
 );
