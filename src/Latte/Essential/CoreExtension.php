@@ -124,6 +124,7 @@ final class CoreExtension extends Latte\Extension
 			'checkUrl' => $this->filters->checkUrl(...),
 			'clamp' => $this->filters->clamp(...),
 			'column' => $this->filters->column(...),
+			'commas' => $this->filters->commas(...),
 			'dataStream' => $this->filters->dataStream(...),
 			'datastream' => $this->filters->dataStream(...),
 			'date' => $this->filters->date(...),
