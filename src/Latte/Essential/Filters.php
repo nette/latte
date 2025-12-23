@@ -146,6 +146,21 @@ final class Filters
 
 
 	/**
+	 * Join array elements with a comma and space.
+	 * @param  string[]  $arr
+	 */
+	public static function commas(array $arr, ?string $lastGlue = null): string
+	{
+		if ($lastGlue === null || count($arr) < 2) {
+			return implode(', ', $arr);
+		}
+
+		$last = array_pop($arr);
+		return implode(', ', $arr) . $lastGlue . $last;
+	}
+
+
+	/**
 	 * Splits a string by a string.
 	 * @return list<string>
 	 */
