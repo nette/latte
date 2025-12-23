@@ -514,6 +514,17 @@ final class Filters
 
 
 	/**
+	 * Returns the values from a single column in the input array.
+	 * @param  iterable<mixed>  $data
+	 * @return mixed[]
+	 */
+	public static function column(iterable $data, string|int|null $columnKey, string|int|null $indexKey = null): array
+	{
+		return array_column(iterator_to_array($data), $columnKey, $indexKey);
+	}
+
+
+	/**
 	 * Chunks items by returning an array of arrays with the given number of items.
 	 * @param  iterable<mixed>  $list
 	 * @return \Generator<int, array<mixed>>
