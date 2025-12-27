@@ -12,7 +12,7 @@ namespace Latte\Compiler;
 use function in_array;
 
 
-final class Token
+final readonly class Token
 {
 	public const
 		End = 0,
@@ -236,17 +236,17 @@ final class Token
 
 
 	public function __construct(
-		public readonly int $type,
-		public readonly string $text,
-		public readonly ?Position $position = null,
+		public int $type,
+		public string $text,
+		public ?Position $position = null,
 	) {
 	}
 
 
 	public function is(int|string ...$kind): bool
 	{
-		return in_array($this->type, $kind, true)
-			|| in_array($this->text, $kind, true);
+		return in_array($this->type, $kind, strict: true)
+			|| in_array($this->text, $kind, strict: true);
 	}
 
 

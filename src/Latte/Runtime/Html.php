@@ -15,7 +15,7 @@ namespace Latte\Runtime;
  */
 class Html implements HtmlStringable
 {
-	private string $value;
+	private readonly string $value;
 
 
 	public function __construct($value)

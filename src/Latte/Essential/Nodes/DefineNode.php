@@ -61,6 +61,9 @@ class DefineNode extends StatementNode
 	}
 
 
+	/**
+	 * @return ParameterNode[]
+	 */
 	private static function parseParameters(Tag $tag): array
 	{
 		$stream = $tag->parser->stream;

@@ -80,7 +80,7 @@ class SecurityPolicy implements Latte\Policy
 	 */
 	public function allowTags(array $tags): self
 	{
-		$this->tags += array_flip(array_map('strtolower', $tags));
+		$this->tags += array_flip(array_map(strtolower(...), $tags));
 		return $this;
 	}
 
@@ -90,7 +90,7 @@ class SecurityPolicy implements Latte\Policy
 	 */
 	public function allowFilters(array $filters): self
 	{
-		$this->filters += array_flip(array_map('strtolower', $filters));
+		$this->filters += array_flip(array_map(strtolower(...), $filters));
 		return $this;
 	}
 
@@ -100,7 +100,7 @@ class SecurityPolicy implements Latte\Policy
 	 */
 	public function allowFunctions(array $functions): self
 	{
-		$this->functions += array_flip(array_map('strtolower', $functions));
+		$this->functions += array_flip(array_map(strtolower(...), $functions));
 		return $this;
 	}
 
@@ -111,7 +111,7 @@ class SecurityPolicy implements Latte\Policy
 	public function allowMethods(string $class, array $methods): self
 	{
 		$this->methodCache = [];
-		$this->methods[$class] = array_flip(array_map('strtolower', $methods));
+		$this->methods[$class] = array_flip(array_map(strtolower(...), $methods));
 		return $this;
 	}
 
@@ -122,7 +122,7 @@ class SecurityPolicy implements Latte\Policy
 	public function allowProperties(string $class, array $properties): self
 	{
 		$this->propertyCache = [];
-		$this->properties[$class] = array_flip(array_map('strtolower', $properties));
+		$this->properties[$class] = array_flip(array_map(strtolower(...), $properties));
 		return $this;
 	}
 
@@ -155,7 +155,7 @@ class SecurityPolicy implements Latte\Policy
 		}
 
 		foreach ($this->methods as $c => $methods) {
-			if (is_a($class, $c, true) && (isset($methods[$method]) || isset($methods['*']))) {
+			if (is_a($class, $c, allow_string: true) && (isset($methods[$method]) || isset($methods['*']))) {
 				return $res = true;
 			}
 		}
@@ -174,7 +174,7 @@ class SecurityPolicy implements Latte\Policy
 		}
 
 		foreach ($this->properties as $c => $properties) {
-			if (is_a($class, $c, true) && (isset($properties[$property]) || isset($properties['*']))) {
+			if (is_a($class, $c, allow_string: true) && (isset($properties[$property]) || isset($properties['*']))) {
 				return $res = true;
 			}
 		}

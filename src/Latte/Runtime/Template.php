@@ -29,14 +29,6 @@ class Template
 
 	public const Blocks = [];
 
-	/** global accumulators for intermediate results */
-	public \stdClass $global;
-
-	/** @var mixed[]  @internal */
-	protected array $params = [];
-
-	protected FilterExecutor $filters;
-
 	/** @internal */
 	protected string|false|null $parentName = null;
 
@@ -48,9 +40,6 @@ class Template
 
 	/** @var mixed[][] */
 	private array $blockStack = [];
-
-	private Engine $engine;
-	private string $name;
 	private ?Template $referringTemplate = null;
 	private ?string $referenceType = null;
 
@@ -59,17 +48,12 @@ class Template
 	 * @param  mixed[]  $params
 	 */
 	public function __construct(
-		Engine $engine,
-		array $params,
-		FilterExecutor $filters,
-		\stdClass $providers,
-		string $name,
+		private readonly Engine $engine,
+		protected array $params,
+		protected FilterExecutor $filters,
+		public \stdClass $global,
+		private readonly string $name,
 	) {
-		$this->engine = $engine;
-		$this->params = $params;
-		$this->filters = $filters;
-		$this->name = $name;
-		$this->global = $providers;
 		$this->initBlockLayer(self::LayerTop);
 		$this->initBlockLayer(self::LayerLocal);
 		$this->initBlockLayer(self::LayerSnippet);
@@ -191,7 +175,7 @@ class Template
 		$child->referenceType = $relation;
 		$child->global = $this->global;
 
-		if (in_array($relation, ['extends', 'includeblock', 'import', 'embed'], true)) {
+		if (in_array($relation, ['extends', 'includeblock', 'import', 'embed'], strict: true)) {
 			foreach ($child->blocks[self::LayerTop] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType, $block->functions);
 			}

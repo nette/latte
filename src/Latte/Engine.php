@@ -218,7 +218,7 @@ class Engine
 	private function loadTemplate(string $name): string
 	{
 		$class = $this->getTemplateClass($name);
-		if (class_exists($class, false)) {
+		if (class_exists($class, autoload: false)) {
 			// nothing
 		} elseif ($this->cache->directory) {
 			$this->cache->loadOrCreate($this, $name);

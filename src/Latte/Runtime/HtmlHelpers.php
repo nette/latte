@@ -91,7 +91,7 @@ final class HtmlHelpers
 		}
 
 		$s = str_replace('--', '- - ', $s);
-		if (substr($s, -1) === '-') {
+		if (str_ends_with($s, '-')) {
 			$s .= ' ';
 		}
 
@@ -269,7 +269,7 @@ final class HtmlHelpers
 	}
 
 
-	private static function formatArrayAttribute(string $namePart, array $items, \Closure $cb, $separator): string
+	private static function formatArrayAttribute(string $namePart, array $items, \Closure $cb, string $separator): string
 	{
 		$res = [];
 		foreach ($items as $k => $v) {
@@ -321,7 +321,7 @@ final class HtmlHelpers
 	public static function isUrlAttribute(string $tag, string $attr): bool
 	{
 		$attr = strtolower($attr);
-		return in_array($attr, ['href', 'src', 'action', 'formaction'], true)
+		return in_array($attr, ['href', 'src', 'action', 'formaction'], strict: true)
 			|| ($attr === 'data' && strtolower($tag) === 'object');
 	}
 
@@ -355,7 +355,7 @@ final class HtmlHelpers
 			throw new Latte\RuntimeException("Invalid tag name '$name'");
 
 		} elseif (self::isVoidElement($name) !== self::isVoidElement($origName ?? 'div') // non-void is default
-			|| in_array(strtolower($name), ['style', 'script'], true)) {
+			|| in_array(strtolower($name), ['style', 'script'], strict: true)) {
 			throw new Latte\RuntimeException("Forbidden: Cannot change element to <$name>");
 		}
 		return $name;
