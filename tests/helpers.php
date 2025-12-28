@@ -31,12 +31,6 @@ function getTempDir(): string
 }
 
 
-function test(string $title, Closure $function): void
-{
-	$function();
-}
-
-
 function normalizeNl(string $s): string
 {
 	return str_replace("\r\n", "\n", $s);

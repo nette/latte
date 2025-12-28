@@ -9,7 +9,6 @@ require __DIR__ . '/../bootstrap.php';
 
 class TemplateParamsWithHooks
 {
-	private $private = 'x';
 	public $public { get => $this->private; }
 
 	public $writeOnly {
@@ -17,6 +16,7 @@ class TemplateParamsWithHooks
 			$this->private = $value;
 		}
 	}
+	private $private = 'x';
 }
 
 

@@ -6,35 +6,30 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-test('detects unknown filters, functions, classes, methods, constants', function () {
-	$warnings = [];
-	set_error_handler(function (int $severity, string $message) use (&$warnings) {
-		if ($severity === E_USER_WARNING) {
-			$warnings[] = $message;
-			return true;
-		}
-		return false;
-	});
+Assert::noError(function () {
+	$latte = createLatte();
+	$latte->addExtension(new LinterExtension);
+	$latte->compile(file_get_contents(__DIR__ . '/templates/known.latte'));
+});
 
-	try {
+
+Assert::error(
+	function () {
 		$latte = createLatte();
 		$latte->addExtension(new LinterExtension);
 		$latte->compile(file_get_contents(__DIR__ . '/templates/unknown.latte'));
-	} finally {
-		restore_error_handler();
-	}
-
-	Assert::same([
-		'Unknown filter |unknownFilter on line 13 at column 7',
-		'Unknown function unknownFunction() on line 14 at column 3',
-		'Unknown function unknownFunction() on line 15 at column 3',
-		'Unknown class UnknownClass on line 16 at column 13',
-		'Unknown method DateTime::unknownMethod() on line 17 at column 3',
-		'Unknown method DateTime::unknownMethod() on line 18 at column 3',
-		'Unknown class constant DateTime::UNKNOWN_CONSTANT on line 19 at column 3',
-		'Unknown constant UNKNOWN_GLOBAL_CONSTANT on line 20 at column 3',
-		'Unknown class UnknownClass in instanceof on line 21 at column 5',
-		'Unknown static property DateTime::$unknownProperty on line 22 at column 3',
-		'Unknown class UnknownClass on line 23 at column 3',
-	], $warnings);
-});
+	},
+	[
+		[E_USER_WARNING, 'Unknown filter |unknownFilter on line 2 at column 7'],
+		[E_USER_WARNING, 'Unknown function unknownFunction() on line 3 at column 3'],
+		[E_USER_WARNING, 'Unknown function unknownFunction() on line 4 at column 3'],
+		[E_USER_WARNING, 'Unknown class UnknownClass on line 5 at column 13'],
+		[E_USER_WARNING, 'Unknown method DateTime::unknownMethod() on line 6 at column 3'],
+		[E_USER_WARNING, 'Unknown method DateTime::unknownMethod() on line 7 at column 3'],
+		[E_USER_WARNING, 'Unknown class constant DateTime::UNKNOWN_CONSTANT on line 8 at column 3'],
+		[E_USER_WARNING, 'Unknown constant UNKNOWN_GLOBAL_CONSTANT on line 9 at column 3'],
+		[E_USER_WARNING, 'Unknown class UnknownClass in instanceof on line 10 at column 5'],
+		[E_USER_WARNING, 'Unknown static property DateTime::$unknownProperty on line 11 at column 3'],
+		[E_USER_WARNING, 'Unknown class UnknownClass on line 12 at column 3'],
+	],
+);
