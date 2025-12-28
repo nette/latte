@@ -9,6 +9,7 @@ require __DIR__ . '/helpers.php';
 
 // configure environment
 Tester\Environment::setup();
+Tester\Environment::setupFunctions();
 date_default_timezone_set('Europe/Prague');
 
 // output buffer level check

@@ -20,7 +20,7 @@
 		"ext-tokenizer": "*"
 	},
 	"require-dev": {
-		"nette/tester": "^2.5",
+		"nette/tester": "^2.6",
 		"tracy/tracy": "^2.10",
 		"nette/utils": "^4.0",
 		"nette/php-generator": "^4.0",
