@@ -72,7 +72,6 @@ final class Escaper
 	];
 
 	private string $state = '';
-	private string $tag = '';
 	private string $subType = '';
 
 
@@ -132,7 +131,6 @@ final class Escaper
 	public function enterHtmlTag(string $name): void
 	{
 		$this->state = self::HtmlTag;
-		$this->tag = $name;
 	}
 
 

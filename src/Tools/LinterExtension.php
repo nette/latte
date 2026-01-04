@@ -48,7 +48,7 @@ final class LinterExtension extends Latte\Extension
 				$this->validateFunction($node);
 
 			} elseif ($node instanceof Expression\NewNode && $node->class instanceof Php\NameNode) {
-				$this->validateClass($node);
+				$this->validateNewObject($node);
 
 			} elseif ($node instanceof Expression\StaticMethodCallNode
 				&& $node->class instanceof Php\NameNode
@@ -99,10 +99,10 @@ final class LinterExtension extends Latte\Extension
 	}
 
 
-	private function validateClass(Expression\NewNode $node): void
+	private function validateNewObject(Expression\NewNode $node): void
 	{
 		$className = (string) $node->class;
-		if (!class_exists($className) && !interface_exists($className)) {
+		if (!class_exists($className)) {
 			trigger_error("Unknown class $className $node->position", E_USER_WARNING);
 		}
 	}
