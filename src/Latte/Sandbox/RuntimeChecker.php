@@ -53,7 +53,7 @@ final class RuntimeChecker
 	public function closure(mixed $callable): \Closure
 	{
 		self::checkCallable($callable);
-		return \Closure::fromCallable($callable);
+		return $callable(...);
 	}
 
 

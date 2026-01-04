@@ -28,11 +28,11 @@ class BogusTagNode extends AreaNode
 
 	public function print(PrintContext $context): string
 	{
-		$res = 'echo ' . var_export($this->openDelimiter, true) . ';';
+		$res = 'echo ' . var_export($this->openDelimiter, return: true) . ';';
 		$context->beginEscape()->enterHtmlBogusTag();
 		$res .= $this->content->print($context);
 		$context->restoreEscape();
-		$res .= 'echo ' . var_export($this->endDelimiter, true) . ';';
+		$res .= 'echo ' . var_export($this->endDelimiter, return: true) . ';';
 		return $res;
 	}
 

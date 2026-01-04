@@ -38,7 +38,7 @@ class BlueScreenPanel
 			&& version_compare(Tracy\Debugger::VERSION, '3.0', '<')
 		) {
 			Tracy\Debugger::addSourceMapper(self::mapLatteSourceCode(...));
-			$blueScreen->addFileGenerator(fn(string $file) => substr($file, -6) === '.latte'
+			$blueScreen->addFileGenerator(fn(string $file) => str_ends_with($file, '.latte')
 					? "{block content}\n\$END\$"
 					: null);
 		}

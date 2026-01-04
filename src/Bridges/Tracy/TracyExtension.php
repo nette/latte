@@ -17,7 +17,7 @@ use Tracy;
  */
 class TracyExtension extends Extension
 {
-	private LattePanel $panel;
+	private readonly LattePanel $panel;
 
 
 	public function __construct(?string $name = null)

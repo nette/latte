@@ -18,7 +18,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 ';
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['dynamic', 'static'], $ʟ_it ?? null) as $name) /* pos %d%:%d% */ {
-			$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = $name) ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockName']], 'local');
+			$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = $name) ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [$this->blockName(...)], 'local');
 			$this->renderBlock($ʟ_nm, get_defined_vars());
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
@@ -30,12 +30,12 @@ final class Template%a% extends Latte\Runtime\Template
 		echo "\n";
 		$this->renderBlock((LR\Helpers::stringOrNull($ʟ_tmp = $name . '') ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), ['var' => 40] + [], 'html') /* pos %d%:%d% */;
 		echo "\n";
-		$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = "word{$name}") ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockWord_name']], 'local');
+		$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = "word{$name}") ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [$this->blockWord_name(...)], 'local');
 		$this->renderBlock($ʟ_nm, get_defined_vars());
 		echo '
 
 ';
-		$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = "strip{$name}") ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [[$this, 'blockStrip_name']], 'local');
+		$this->addBlock($ʟ_nm = (LR\Helpers::stringOrNull($ʟ_tmp = "strip{$name}") ?? throw new InvalidArgumentException(sprintf('Block name must be a string, %s given.', get_debug_type($ʟ_tmp)))), 'html', [$this->blockStrip_name(...)], 'local');
 		$this->renderBlock($ʟ_nm, get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
 			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('striptags', $ʟ_fi, $s));

@@ -114,7 +114,7 @@ class DefineNode extends StatementNode
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 
 		return $context->format(
-			'$this->addBlock(%raw, %dump, [[$this, %dump]], %dump);',
+			'$this->addBlock(%raw, %dump, [$this->%raw(...)], %dump);',
 			$context->ensureString($this->block->name, 'Block name'),
 			$context->getEscaper()->export(),
 			$this->block->method,

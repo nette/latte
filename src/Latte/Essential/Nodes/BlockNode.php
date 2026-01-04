@@ -132,7 +132,7 @@ class BlockNode extends StatementNode
 		$this->modifier->escape = $this->modifier->escape || $escaper->getState() === Escaper::HtmlAttribute;
 
 		return $context->format(
-			'$this->addBlock($ʟ_nm = %raw, %dump, [[$this, %dump]], %dump);
+			'$this->addBlock($ʟ_nm = %raw, %dump, [$this->%raw(...)], %dump);
 			$this->renderBlock($ʟ_nm, get_defined_vars()'
 			. ($this->modifier->filters || $this->modifier->escape
 				? ', function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }'

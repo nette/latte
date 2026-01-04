@@ -340,7 +340,7 @@ final class Filters
 	public static function breaklines(string|Stringable|null $s): Html
 	{
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
-		return new Html(nl2br($s, false));
+		return new Html(nl2br($s, use_xhtml: false));
 	}
 
 
@@ -434,7 +434,7 @@ final class Filters
 	 */
 	public static function length(array|\Countable|\Traversable|string $val): int
 	{
-		if (is_array($val) || $val instanceof \Countable) {
+		if (is_countable($val)) {
 			return count($val);
 		} elseif ($val instanceof \Traversable) {
 			return iterator_count($val);
@@ -607,7 +607,7 @@ final class Filters
 		foreach ($data as $k => $v) {
 			$groupKey = $fn($v, $k);
 			if (!$groups || $prevKey !== $groupKey) {
-				$index = array_search($groupKey, $keys, true);
+				$index = array_search($groupKey, $keys, strict: true);
 				if ($index === false) {
 					$index = count($keys);
 					$keys[$index] = $groupKey;

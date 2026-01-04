@@ -169,7 +169,7 @@ final class TemplateParser
 	{
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		if ($this->stream->peek(1)->is(Token::Slash)
-			|| (isset($this->tag, $this->lookFor[$this->tag]) && in_array($this->stream->peek(1)->text, $this->lookFor[$this->tag], true))
+			|| (isset($this->tag, $this->lookFor[$this->tag]) && in_array($this->stream->peek(1)->text, $this->lookFor[$this->tag], strict: true))
 		) {
 			$this->lexer->popState();
 			return null; // go back to previous parseLatteStatement()
@@ -215,13 +215,13 @@ final class TemplateParser
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
 						break;
-					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], true)) {
+					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], strict: true)) {
 						$this->pushTag($tag);
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
 						$this->popTag();
 					} else {
-						throw new CompileException('Unexpected tag ' . substr($tag->getNotation(true), 0, -1) . '}', $tag->position);
+						throw new CompileException('Unexpected tag ' . substr($tag->getNotation(withArgs: true), 0, -1) . '}', $tag->position);
 					}
 				}
 			}
@@ -233,7 +233,7 @@ final class TemplateParser
 			$node = $res->getReturn();
 
 		} elseif ($startTag->void) {
-			throw new CompileException('Unexpected /} in tag ' . substr($startTag->getNotation(true), 0, -1) . '/}', $startTag->position);
+			throw new CompileException('Unexpected /} in tag ' . substr($startTag->getNotation(withArgs: true), 0, -1) . '/}', $startTag->position);
 
 		} else {
 			$this->ensureIsConsumed($startTag);
@@ -263,13 +263,13 @@ final class TemplateParser
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 
-		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], true);
+		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], strict: true);
 		$openToken = $stream->consume(Token::Latte_TagOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$tag = new Tag(
 			position: $openToken->position,
 			closing: $closing = (bool) $stream->tryConsume(Token::Slash),
-			name: $stream->tryConsume(Token::Latte_Name)?->text ?? ($closing ? '' : '='),
+			name: $stream->tryConsume(Token::Latte_Name)->text ?? ($closing ? '' : '='),
 			tokens: $this->consumeTag(),
 			void: (bool) $stream->tryConsume(Token::Slash),
 			inHead: $this->inHead,

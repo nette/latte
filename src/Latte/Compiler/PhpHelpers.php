@@ -47,7 +47,7 @@ final class PhpHelpers
 				} elseif ($name === T_WHITESPACE) {
 					$prev = $tokens[$n - 1];
 					$lines = substr_count($token, "\n");
-					if ($prev === '}' && in_array($next[0], [T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY], true)) {
+					if ($prev === '}' && in_array($next[0], [T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY], strict: true)) {
 						$token = ' ';
 					} elseif ($prev === '{' || $prev === '}' || $prev === ';' || $lines) {
 						$token = str_repeat("\n", max(1, $lines)) . str_repeat("\t", $level); // indent last line
@@ -68,7 +68,7 @@ final class PhpHelpers
 					throw new \LogicException('Unexpected token');
 
 				} else {
-					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true)) {
+					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], strict: true)) {
 						$level++;
 					}
 
@@ -116,7 +116,7 @@ final class PhpHelpers
 		} elseif ($value === null) {
 			return 'null';
 		} else {
-			return var_export($value, true);
+			return var_export($value, return: true);
 		}
 	}
 
@@ -145,7 +145,7 @@ final class PhpHelpers
 				if ($str !== '') {
 					$res = substr_replace(
 						$res,
-						'echo ' . ($str === "\n" ? '"\n"' : var_export($str, true)),
+						'echo ' . ($str === "\n" ? '"\n"' : var_export($str, return: true)),
 						$start,
 						strlen($res) - $start,
 					);

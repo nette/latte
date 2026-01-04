@@ -71,7 +71,7 @@ final class Cache
 			ftruncate($lock, ftell($lock));
 
 			if (function_exists('opcache_invalidate')) {
-				@opcache_invalidate($file, true); // @ can be restricted
+				@opcache_invalidate($file, force: true); // @ can be restricted
 			}
 		}
 

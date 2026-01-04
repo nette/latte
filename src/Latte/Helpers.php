@@ -72,7 +72,7 @@ class Helpers
 				if ($target === '*') {
 					$best = 0;
 				} elseif (isset($list[$target])) {
-					$pos = array_search($target, $names, true);
+					$pos = array_search($target, $names, strict: true);
 					$best = min($pos, $best ?? $pos);
 				}
 			}
@@ -81,14 +81,14 @@ class Helpers
 				if ($target === '*') {
 					$best = count($names);
 				} elseif (isset($list[$target])) {
-					$pos = array_search($target, $names, true);
+					$pos = array_search($target, $names, strict: true);
 					$best = max($pos + 1, $best);
 				}
 			}
 
-			$list = array_slice($list, 0, $best, true)
+			$list = array_slice($list, 0, $best, preserve_keys: true)
 				+ [$name => $info]
-				+ array_slice($list, $best, null, true);
+				+ array_slice($list, $best, null, preserve_keys: true);
 		}
 
 		return $list;

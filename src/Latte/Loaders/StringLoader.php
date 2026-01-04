@@ -15,16 +15,10 @@ use Latte;
  */
 class StringLoader implements Latte\Loader
 {
-	/** @var string[]|null  [name => content] */
-	private ?array $templates = null;
-
-
-	/**
-	 * @param  string[]  $templates
-	 */
-	public function __construct(?array $templates = null)
-	{
-		$this->templates = $templates;
+	public function __construct(
+		/** @var array<string, string>|null */
+		private ?array $templates = null,
+	) {
 	}
 
 

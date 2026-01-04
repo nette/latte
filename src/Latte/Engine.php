@@ -217,7 +217,7 @@ class Engine
 	private function loadTemplate(string $name): string
 	{
 		$class = $this->getTemplateClass($name);
-		if (class_exists($class, false)) {
+		if (class_exists($class, autoload: false)) {
 			// nothing
 		} elseif ($this->cache->directory) {
 			$this->cache->loadOrCreate($this, $name);
@@ -567,11 +567,11 @@ class Engine
 		$methods = $rc->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {
 			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
-				$this->addFilter($method->name, [$params, $method->name]);
+				$this->addFilter($method->name, $method->getClosure($params));
 			}
 
 			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
-				$this->addFunction($method->name, [$params, $method->name]);
+				$this->addFunction($method->name, $method->getClosure($params));
 			}
 		}
 
