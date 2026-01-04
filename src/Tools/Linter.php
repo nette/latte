@@ -161,7 +161,7 @@ final class Linter
 		$it = match (true) {
 			is_file($path) => new \ArrayIterator([$path]),
 			is_dir($path) => $this->findLatteFiles($path),
-			preg_match('~[*?]~', $path) => new \GlobIterator($path),
+			(bool) preg_match('~[*?]~', $path) => new \GlobIterator($path),
 			default => throw new \InvalidArgumentException("File or directory '$path' not found."),
 		};
 		$it = new \CallbackFilterIterator($it, fn($file) => is_file((string) $file));

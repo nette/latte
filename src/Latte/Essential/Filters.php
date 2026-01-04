@@ -502,13 +502,9 @@ final class Filters
 	 */
 	public static function reverse(string|iterable $val, bool $preserveKeys = false): string|array
 	{
-		if (is_array($val)) {
-			return array_reverse($val, $preserveKeys);
-		} elseif ($val instanceof \Traversable) {
-			return array_reverse(iterator_to_array($val), $preserveKeys);
-		} else {
-			return iconv('UTF-32LE', 'UTF-8', strrev(iconv('UTF-8', 'UTF-32BE', (string) $val)));
-		}
+		return is_string($val)
+			? iconv('UTF-32LE', 'UTF-8', strrev(iconv('UTF-8', 'UTF-32BE', $val)))
+			: array_reverse(iterator_to_array($val), $preserveKeys);
 	}
 
 
