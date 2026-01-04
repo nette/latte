@@ -90,7 +90,7 @@ final class Tag
 	{
 		$tag = $this->parent;
 		while ($tag && (
-			!in_array($tag->node ? $tag->node::class : null, $classes, true)
+			!in_array($tag->node ? $tag->node::class : null, $classes, strict: true)
 			|| ($condition && !$condition($tag))
 		)) {
 			$tag = $tag->parent;
@@ -110,7 +110,7 @@ final class Tag
 
 	public function replaceNAttribute(AreaNode $node): void
 	{
-		$index = array_search($this->nAttribute, $this->htmlElement->attributes->children, true);
+		$index = array_search($this->nAttribute, $this->htmlElement->attributes->children, strict: true);
 		$this->htmlElement->attributes->children[$index] = $this->nAttribute = $node;
 	}
 }

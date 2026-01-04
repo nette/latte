@@ -101,7 +101,7 @@ function loadContent(string $file, int $offset): string
 function exportAST(Node $node): string
 {
 	$prop = match (true) {
-		$node instanceof Nodes\TextNode => 'content: ' . var_export($node->content, true),
+		$node instanceof Nodes\TextNode => 'content: ' . var_export($node->content, return: true),
 		$node instanceof Nodes\Html\ElementNode,
 			$node instanceof Nodes\Php\IdentifierNode,
 			$node instanceof Nodes\Php\NameNode => 'name: ' . $node->name,

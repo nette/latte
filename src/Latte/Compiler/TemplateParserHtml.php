@@ -23,10 +23,7 @@ use function array_keys, array_pop, end, implode, in_array, key, preg_replace, s
  */
 final class TemplateParserHtml
 {
-	/** @var array<string, callable(Tag, TemplateParser): (Node|\Generator|void)> */
-	private readonly array $attrParsers;
 	private ?Html\ElementNode $element = null;
-	private readonly TemplateParser $parser;
 
 	/** @var array{string, ?Nodes\Php\ExpressionNode}|null */
 	private ?array $endName = null;
@@ -35,10 +32,11 @@ final class TemplateParserHtml
 	private \WeakMap $elementData;
 
 
-	public function __construct(TemplateParser $parser, array $attrParsers)
-	{
-		$this->parser = $parser;
-		$this->attrParsers = $attrParsers;
+	public function __construct(
+		private readonly TemplateParser $parser,
+		/** @var array<string, callable(Tag, TemplateParser): (Node|\Generator|void)> */
+		private readonly array $attrParsers,
+	) {
 		$this->elementData = new \WeakMap;
 	}
 
@@ -98,7 +96,7 @@ final class TemplateParserHtml
 				return null; // go to parseElement() one level up to close the element
 			}
 			$stream->seek($save);
-			if (!in_array($endText, $this->elementData[$this->element]->unclosedTags ?? [], true)) {
+			if (!in_array($endText, $this->elementData[$this->element]->unclosedTags ?? [], strict: true)) {
 				return null; // go to parseElement() one level up to collapse
 			}
 		}

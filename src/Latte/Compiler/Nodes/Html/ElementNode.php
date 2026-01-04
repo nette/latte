@@ -94,7 +94,7 @@ class ElementNode extends AreaNode
 				$endTag = '$ʟ_tags[' . ($context->generateId()) . ']';
 				$res = "\$ʟ_tag = ''; $res $endTag = \$ʟ_tag;";
 			} else {
-				$endTag = var_export('</' . $this->name . '>', true);
+				$endTag = var_export('</' . $this->name . '>', return: true);
 			}
 
 			$context->beginEscape()->enterHtmlText($this);

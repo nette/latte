@@ -45,11 +45,11 @@ final class TemplateGenerator
 	{
 		$members = [];
 		foreach ($this->constants as $name => $value) {
-			$members[] = "\tpublic const $name = " . PhpHelpers::dump($value, true) . ';';
+			$members[] = "\tpublic const $name = " . PhpHelpers::dump($value, multiline: true) . ';';
 		}
 
 		foreach ($this->properties as $name => $value) {
-			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, true) . ';';
+			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, multiline: true) . ';';
 		}
 
 		foreach (array_filter($this->methods) as $name => $method) {

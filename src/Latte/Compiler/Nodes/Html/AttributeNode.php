@@ -37,13 +37,13 @@ class AttributeNode extends AreaNode
 
 		$res .= "echo '=';";
 		$quote = $this->quote ?? ($this->value instanceof TextNode ? null : '"');
-		$res .= $quote ? 'echo ' . var_export($quote, true) . ';' : '';
+		$res .= $quote ? 'echo ' . var_export($quote, return: true) . ';' : '';
 
 		$escaper = $context->beginEscape();
 		$escaper->enterHtmlAttribute(NodeHelpers::toText($this->name));
 		$res .= $this->value->print($context);
 		$context->restoreEscape();
-		$res .= $quote ? 'echo ' . var_export($quote, true) . ';' : '';
+		$res .= $quote ? 'echo ' . var_export($quote, return: true) . ';' : '';
 		return $res;
 	}
 

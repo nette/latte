@@ -139,7 +139,7 @@ final class Blueprint
 				. ($param->isReference() ? '&' : '')
 				. ($variadic ? '...' : '')
 				. '$' . $param->getName()
-				. ($param->hasDefaultValue() && !$variadic ? ' = ' . var_export($param->getDefaultValue(), true) : '');
+				. ($param->hasDefaultValue() && !$variadic ? ' = ' . var_export($param->getDefaultValue(), return: true) : '');
 		}
 
 		return '(' . implode(', ', $params) . ')';

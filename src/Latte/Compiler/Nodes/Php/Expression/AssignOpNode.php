@@ -29,7 +29,7 @@ class AssignOpNode extends ExpressionNode implements OperatorNode
 		public ExpressionNode $expr,
 		public ?Position $position = null,
 	) {
-		if (!in_array($this->operator, self::Ops, true)) {
+		if (!in_array($this->operator, self::Ops, strict: true)) {
 			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");
 		}
 		$this->validate();

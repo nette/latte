@@ -10,7 +10,7 @@ namespace Latte\Tools;
 use Latte;
 use Nette;
 use function in_array, strlen;
-use const PHP_BINARY, STDERR;
+use const DIRECTORY_SEPARATOR, PHP_BINARY, STDERR;
 
 
 /**
@@ -24,8 +24,8 @@ final class Linter
 
 	public function __construct(
 		private ?Latte\Engine $engine = null,
-		private bool $debug = false,
-		private bool $strict = false,
+		private readonly bool $debug = false,
+		private readonly bool $strict = false,
 	) {
 	}
 
@@ -98,7 +98,7 @@ final class Linter
 	public function lintLatte(string $file): bool
 	{
 		set_error_handler(function (int $severity, string $message) use ($file) {
-			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
+			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], strict: true)) {
 				$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
 				$label = $severity === E_USER_DEPRECATED ? 'DEPRECATED' : 'WARNING';
 				$this->writeError($label, $file . $pos, $message);
@@ -111,7 +111,7 @@ final class Linter
 			echo $file, "\n";
 		}
 		$s = file_get_contents($file);
-		if (substr($s, 0, 3) === "\xEF\xBB\xBF") {
+		if (str_starts_with($s, "\xEF\xBB\xBF")) {
 			$this->writeError('WARNING', $file, 'contains BOM');
 		}
 
@@ -140,13 +140,13 @@ final class Linter
 	private function initialize(): void
 	{
 		if (function_exists('pcntl_signal')) {
-			pcntl_signal(SIGINT, function (): void {
+			pcntl_signal(SIGINT, function (): never {
 				pcntl_signal(SIGINT, SIG_DFL);
 				echo "Terminated\n";
 				exit(1);
 			});
 		} elseif (function_exists('sapi_windows_set_ctrl_handler')) {
-			sapi_windows_set_ctrl_handler(function () {
+			sapi_windows_set_ctrl_handler(function (): never {
 				echo "Terminated\n";
 				exit(1);
 			});

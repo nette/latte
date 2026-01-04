@@ -21,7 +21,7 @@ class AuxiliaryIterator implements \IteratorAggregate, \Countable
 {
 	public function __construct(
 		/** @var  array<array{K, V}> */
-		private array $pairs,
+		private readonly array $pairs,
 	) {
 	}
 

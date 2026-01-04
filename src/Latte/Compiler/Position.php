@@ -10,12 +10,12 @@ namespace Latte\Compiler;
 use function strlen, strrpos, substr_count;
 
 
-final class Position
+final readonly class Position
 {
 	public function __construct(
-		public readonly int $line = 1,
-		public readonly int $column = 1,
-		public readonly int $offset = 0,
+		public int $line = 1,
+		public int $column = 1,
+		public int $offset = 0,
 	) {
 	}
 

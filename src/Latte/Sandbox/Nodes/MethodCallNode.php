@@ -32,6 +32,6 @@ class MethodCallNode extends Expression\MethodCallNode
 				. $this->object->print($context) . ', '
 				. $context->memberAsString($this->name) . ', '
 				. $context->argumentsAsArray($this->args)
-				. ', ' . var_export($this->nullsafe, true) . ')';
+				. ', ' . var_export($this->nullsafe, return: true) . ')';
 	}
 }

@@ -16,12 +16,9 @@ use function in_array, strtoupper;
  */
 class FilterInfo
 {
-	public ?string $contentType = null;
-
-
-	public function __construct(?string $contentType = null)
-	{
-		$this->contentType = $contentType;
+	public function __construct(
+		public ?string $contentType = null,
+	) {
 	}
 
 
@@ -31,7 +28,7 @@ class FilterInfo
 	 */
 	public function validate(array $contentTypes, ?string $name = null): void
 	{
-		if (!in_array($this->contentType, $contentTypes, true)) {
+		if (!in_array($this->contentType, $contentTypes, strict: true)) {
 			$name = $name ? " |$name" : $name;
 			$type = $this->contentType ? ' ' . strtoupper($this->contentType) : '';
 			throw new Latte\RuntimeException("Filter{$name} used with incompatible type{$type}.");

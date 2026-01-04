@@ -19,13 +19,12 @@ final class TokenStream
 {
 	/** @var Token[] */
 	private array $tokens = [];
-	private readonly \Iterator $source;
 	private int $index = 0;
 
 
-	public function __construct(\Iterator $source)
-	{
-		$this->source = $source;
+	public function __construct(
+		private readonly \Iterator $source,
+	) {
 	}
 
 

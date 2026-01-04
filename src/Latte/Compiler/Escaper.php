@@ -78,7 +78,7 @@ final class Escaper
 	public function __construct(
 		private string $contentType,
 	) {
-		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], true)
+		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], strict: true)
 			? self::HtmlText
 			: $contentType;
 	}
@@ -232,7 +232,7 @@ final class Escaper
 	public function escapeContent(string $str): string
 	{
 		return 'LR\Helpers::convertTo($ʟ_fi, '
-			. var_export($this->export(), true) . ', '
+			. var_export($this->export(), return: true) . ', '
 			. $str
 			. ')';
 	}

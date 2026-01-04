@@ -28,7 +28,7 @@ class TextNode extends AreaNode
 	{
 		return $this->content === ''
 			? ''
-			: 'echo ' . var_export($this->content, true) . ";\n";
+			: 'echo ' . var_export($this->content, return: true) . ";\n";
 	}
 
 
