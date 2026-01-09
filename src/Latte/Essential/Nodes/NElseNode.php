@@ -27,7 +27,7 @@ final class NElseNode extends StatementNode
 	public ?ExpressionNode $condition = null;
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
 		$node = $tag->node = new static;
@@ -67,6 +67,10 @@ final class NElseNode extends StatementNode
 	}
 
 
+	/**
+	 * @param  AreaNode[]  $children
+	 * @return AreaNode[]
+	 */
 	private static function processFragment(array $children): array
 	{
 		$currentNode = null;

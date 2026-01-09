@@ -18,7 +18,7 @@ final class FragmentNode extends AreaNode
 	public array $children = [];
 
 
-	/** @param AreaNode[] $children */
+	/** @param AreaNode[]  $children */
 	public function __construct(array $children = [])
 	{
 		foreach ($children as $child) {

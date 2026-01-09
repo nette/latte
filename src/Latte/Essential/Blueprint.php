@@ -17,6 +17,7 @@ use const DIRECTORY_SEPARATOR;
  */
 final class Blueprint
 {
+	/** @param array<string, mixed> $params */
 	public function generateTemplateClass(
 		array $params,
 		?string $name = 'Template',

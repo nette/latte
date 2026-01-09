@@ -147,6 +147,7 @@ final class Filters
 
 	/**
 	 * Splits a string by a string.
+	 * @return list<string>
 	 */
 	public static function explode(string $value, string $separator = ''): array
 	{
@@ -285,6 +286,8 @@ final class Filters
 
 	/**
 	 * Performs a search and replace.
+	 * @param  string|array<string, string>|array<string>  $search
+	 * @param  string|array<string>|null  $replace
 	 */
 	public static function replace(
 		FilterInfo $info,
@@ -425,6 +428,7 @@ final class Filters
 
 	/**
 	 * Returns length of string or iterable.
+	 * @param  array<mixed>|\Countable|\Traversable<mixed>|string  $val
 	 */
 	public static function length(array|\Countable|\Traversable|string $val): int
 	{
@@ -489,6 +493,10 @@ final class Filters
 
 	/**
 	 * Reverses string or array.
+	 * @template K
+	 * @template V
+	 * @param  iterable<K, V>|string  $val
+	 * @return ($val is string ? string : array<K, V>)
 	 */
 	public static function reverse(string|iterable $val, bool $preserveKeys = false): string|array
 	{
@@ -504,6 +512,8 @@ final class Filters
 
 	/**
 	 * Chunks items by returning an array of arrays with the given number of items.
+	 * @param  iterable<mixed>  $list
+	 * @return \Generator<int, array<mixed>>
 	 */
 	public static function batch(iterable $list, int $length, $rest = null): \Generator
 	{
@@ -533,6 +543,9 @@ final class Filters
 	 * @template K
 	 * @template V
 	 * @param  iterable<K, V>  $data
+	 * @param  ?(\Closure(V, V): int)  $comparison
+	 * @param  string|int|(\Closure(V): mixed)|null  $by
+	 * @param  string|int|(\Closure(K): mixed)|bool  $byKey
 	 * @return iterable<K, V>
 	 */
 	public function sort(
@@ -585,6 +598,7 @@ final class Filters
 	 * @template K
 	 * @template V
 	 * @param  iterable<K, V>  $data
+	 * @param  string|int|(\Closure(V, K): mixed)  $by
 	 * @return iterable<iterable<K, V>>
 	 */
 	public static function group(iterable $data, string|int|\Closure $by): iterable
@@ -646,6 +660,7 @@ final class Filters
 
 	/**
 	 * Generates URL-encoded query string
+	 * @param  string|array<mixed>  $data
 	 */
 	public static function query(string|array $data): string
 	{
@@ -684,6 +699,8 @@ final class Filters
 
 	/**
 	 * Returns the first element in an array or character in a string, or null if none.
+	 * @param  string|iterable<mixed>  $value
+	 * @return ($value is string ? string : mixed)
 	 */
 	public static function first(string|iterable $value): mixed
 	{
@@ -701,6 +718,8 @@ final class Filters
 
 	/**
 	 * Returns the last element in an array or character in a string, or null if none.
+	 * @param  string|array<mixed>  $value
+	 * @return ($value is string ? string : mixed)
 	 */
 	public static function last(string|array $value): mixed
 	{
@@ -712,6 +731,8 @@ final class Filters
 
 	/**
 	 * Extracts a slice of an array or string.
+	 * @param  string|array<mixed>  $value
+	 * @return ($value is string ? string : array<mixed>)
 	 */
 	public static function slice(
 		string|array $value,
@@ -746,6 +767,8 @@ final class Filters
 
 	/**
 	 * Picks random element/char.
+	 * @param  string|array<mixed>  $values
+	 * @return ($values is string ? string : mixed)
 	 */
 	public static function random(string|array $values): mixed
 	{

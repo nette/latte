@@ -16,7 +16,10 @@ use function array_merge, constant, defined;
 
 final class NodeHelpers
 {
-	/** @return Node[] */
+	/**
+	 * @param callable(Node): bool  $filter
+	 * @return Node[]
+	 */
 	public static function find(Node $node, callable $filter): array
 	{
 		$found = [];
@@ -30,6 +33,7 @@ final class NodeHelpers
 	}
 
 
+	/** @param callable(Node): bool  $filter */
 	public static function findFirst(Node $node, callable $filter): ?Node
 	{
 		$found = null;

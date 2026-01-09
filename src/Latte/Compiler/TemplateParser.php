@@ -41,6 +41,8 @@ final class TemplateParser
 	private int $counter = 0;
 	private ?Tag $tag = null;
 	private $lastResolver;
+
+	/** @var \WeakMap<Tag, ?list<string>> */
 	private \WeakMap $lookFor;
 
 
@@ -277,6 +279,7 @@ final class TemplateParser
 	}
 
 
+	/** @return Token[] */
 	public function consumeTag(): array
 	{
 		$res = [];
@@ -327,6 +330,7 @@ final class TemplateParser
 	}
 
 
+	/** @return array<string, \Closure(Tag, self): (Node|\Generator|void)> */
 	private function completeAttrParsers(): array
 	{
 		$list = Helpers::sortBeforeAfter($this->attrParsersInfo);

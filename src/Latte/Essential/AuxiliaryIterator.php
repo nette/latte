@@ -19,10 +19,8 @@ use function count;
  */
 class AuxiliaryIterator implements \IteratorAggregate, \Countable
 {
-	/**
-	 * @param  array<array{K, V}>  $pairs
-	 */
 	public function __construct(
+		/** @var  array<array{K, V}> */
 		private array $pairs,
 	) {
 	}

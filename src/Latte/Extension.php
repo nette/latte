@@ -65,7 +65,7 @@ abstract class Extension
 
 	/**
 	 * Returns a list of providers.
-	 * @return array<mixed>
+	 * @return array<string, mixed>
 	 */
 	public function getProviders(): array
 	{
@@ -90,6 +90,11 @@ abstract class Extension
 	}
 
 
+	/**
+	 * Wraps callable with ordering metadata for tags and passes.
+	 * @param  array<string>|string  $before
+	 * @param  array<string>|string  $after
+	 */
 	public static function order(callable $subject, array|string $before = [], array|string $after = []): \stdClass
 	{
 		return (object) get_defined_vars();

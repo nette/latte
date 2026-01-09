@@ -43,6 +43,7 @@ class VarNode extends StatementNode
 	}
 
 
+	/** @return AssignNode[] */
 	private static function parseAssignments(Tag $tag, bool $default): array
 	{
 		$stream = $tag->parser->stream;

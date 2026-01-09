@@ -20,7 +20,7 @@ use function array_column, array_combine, array_keys, array_unshift, strtoupper;
 #[\AllowDynamicProperties]
 class FilterExecutor
 {
-	/** @var callable[] */
+	/** @var array<callable> */
 	private array $_dynamic = [];
 
 	/** @var array<string, array{callable, ?bool}> */
@@ -45,7 +45,7 @@ class FilterExecutor
 
 	/**
 	 * Returns all run-time filters.
-	 * @return callable[]
+	 * @return array<string, callable>
 	 */
 	public function getAll(): array
 	{

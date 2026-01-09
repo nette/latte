@@ -36,11 +36,12 @@ final class TagParser
 	public readonly TokenStream $stream;
 	public string $text;
 
-	/** @var \SplObjectStorage<Expression\ArrayNode> */
+	/** @var \SplObjectStorage<Expression\ArrayNode, null> */
 	protected \SplObjectStorage $shortArrays;
 	private readonly int $offsetDelta;
 
 
+	/** @param array<int, mixed>  $tokens */
 	public function __construct(array $tokens)
 	{
 		$this->offsetDelta = $tokens[0]->position->offset;
@@ -122,6 +123,7 @@ final class TagParser
 
 	/**
 	 * Parses variables used in foreach.
+	 * @return array{?Nodes\Php\ExpressionNode, Nodes\Php\ExpressionNode|Nodes\Php\ListNode, bool}
 	 * @internal
 	 */
 	public function parseForeach(): array
@@ -333,7 +335,7 @@ final class TagParser
 	}
 
 
-	/** @param ExpressionNode[] $parts */
+	/** @param ExpressionNode[]  $parts */
 	protected function parseDocString(
 		string $startToken,
 		array $parts,
@@ -456,7 +458,10 @@ final class TagParser
 	}
 
 
-	/** @param  Token[]  $tokens */
+	/**
+	 * @param  Token[]  $tokens
+	 * @return Token[]
+	 */
 	private function filterTokens(array $tokens): array
 	{
 		$this->text = '';

@@ -19,19 +19,19 @@ class SecurityPolicy implements Latte\Policy
 	public const All = ['*'];
 	public const ALL = self::All;
 
-	/** @var string[] */
+	/** @var array<string, int> */
 	private array $tags = [];
 
-	/** @var string[] */
+	/** @var array<string, int> */
 	private array $filters = [];
 
-	/** @var string[] */
+	/** @var array<string, int> */
 	private array $functions = [];
 
-	/** @var string[][] */
+	/** @var array<string, array<string, int>> */
 	private array $methods = [];
 
-	/** @var string[][] */
+	/** @var array<string, array<string, int>> */
 	private array $properties = [];
 
 	/** @var array<string, array<string, bool>> */

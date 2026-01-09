@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
+use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
@@ -24,11 +25,11 @@ class SwitchNode extends StatementNode
 {
 	public ?ExpressionNode $expression;
 
-	/** @var array<array{?ArrayNode, int, FragmentNode}> */
+	/** @var array<array{?ArrayNode, Position, FragmentNode}> */
 	public array $cases = [];
 
 
-	/** @return \Generator<int, ?array, array{FragmentNode, Tag}, static> */
+	/** @return \Generator<int, ?list<string>, array{FragmentNode, Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
 		if ($tag->isNAttribute()) {

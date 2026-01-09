@@ -29,7 +29,7 @@ class TranslateNode extends StatementNode
 	public ModifierNode $modifier;
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|NopNode> */
+	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static|NopNode> */
 	public static function create(Tag $tag, ?callable $translator): \Generator
 	{
 		$tag->outputMode = $tag::OutputKeepIndentation;

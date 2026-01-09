@@ -41,7 +41,7 @@ class ForeachNode extends StatementNode
 	public bool $checkArgs = true;
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static|NopNode> */
+	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
 		$tag->expectArguments();

@@ -426,7 +426,7 @@ trait TagParserData
 	/** Semantic value stack (contains values of tokens and semantic action results) */
 	protected array $semStack;
 
-	/** @var Token[] Start attribute stack */
+	/** @var array<int, ?Token> Start attribute stack */
 	protected array $startTokenStack;
 
 
