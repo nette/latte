@@ -32,7 +32,7 @@ class EmbedNode extends StatementNode
 	public int|string|null $layer;
 
 
-	/** @return \Generator<int, ?array, array{FragmentNode, ?Tag}, static> */
+	/** @return \Generator<int, ?list<string>, array{FragmentNode, ?Tag}, static> */
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		if ($tag->isNAttribute()) {

@@ -259,7 +259,7 @@ class Template
 
 	/**
 	 * Returns array of all parameters.
-	 * @return mixed[]
+	 * @return array<string, mixed>
 	 */
 	public function getParameters(): array
 	{
@@ -285,14 +285,14 @@ class Template
 	}
 
 
-	/** @return mixed[] */
+	/** @return array<string, mixed> */
 	public function prepare(): array
 	{
 		return $this->params;
 	}
 
 
-	/** @param mixed[] $params */
+	/** @param mixed[]  $params */
 	public function main(array $params): void
 	{
 	}
@@ -303,7 +303,7 @@ class Template
 
 	/**
 	 * Creates block if doesn't exist and checks if content type is the same.
-	 * @param  callable[]  $functions
+	 * @param  \Closure[]  $functions
 	 * @internal
 	 */
 	protected function addBlock(
@@ -336,9 +336,7 @@ class Template
 	}
 
 
-	/**
-	 * @return string[]
-	 */
+	/** @return list<string> */
 	public function getBlockNames(int|string $layer = self::LayerTop): array
 	{
 		return array_keys($this->blocks[$layer] ?? []);
@@ -356,6 +354,7 @@ class Template
 	}
 
 
+	/** @param array<string, mixed> $vars */
 	protected function enterBlockLayer(int $staticId, array $vars): void
 	{
 		$this->blockStack[] = $this->blocks[self::LayerTop];

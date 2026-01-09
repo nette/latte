@@ -25,6 +25,10 @@ class FilterInfo
 	}
 
 
+	/**
+	 * Validates content type is allowed for this filter.
+	 * @param  list<string|null>  $contentTypes
+	 */
 	public function validate(array $contentTypes, ?string $name = null): void
 	{
 		if (!in_array($this->contentType, $contentTypes, true)) {

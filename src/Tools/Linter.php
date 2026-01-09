@@ -15,6 +15,7 @@ use const PHP_BINARY, STDERR;
 
 final class Linter
 {
+	/** @var string[] */
 	public array $excludedDirs = ['.*', '*.tmp', 'temp', 'vendor', 'node_modules'];
 
 

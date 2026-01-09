@@ -213,6 +213,7 @@ class Engine
 	}
 
 
+	/** @return class-string<Runtime\Template> */
 	private function loadTemplate(string $name): string
 	{
 		$class = $this->getTemplateClass($name);
@@ -265,6 +266,7 @@ class Engine
 	/**
 	 * Returns values that determine isolation for different configurations.
 	 * When any of these values change, a new compiled template is created to avoid conflicts.
+	 * @return list<mixed>
 	 */
 	protected function generateConfigurationSignature(): array
 	{
@@ -306,7 +308,7 @@ class Engine
 
 	/**
 	 * Returns all run-time filters.
-	 * @return callable[]
+	 * @return array<string, callable>
 	 */
 	public function getFilters(): array
 	{
@@ -345,7 +347,7 @@ class Engine
 	}
 
 
-	/** @return Extension[] */
+	/** @return list<Extension> */
 	public function getExtensions(): array
 	{
 		return $this->extensions;
@@ -377,7 +379,7 @@ class Engine
 
 
 	/**
-	 * @return callable[]
+	 * @return array<string, callable>
 	 */
 	public function getFunctions(): array
 	{
@@ -401,7 +403,7 @@ class Engine
 
 	/**
 	 * Returns all providers.
-	 * @return mixed[]
+	 * @return array<string, mixed>
 	 */
 	public function getProviders(): array
 	{
@@ -553,7 +555,7 @@ class Engine
 
 	/**
 	 * @param  object|mixed[]  $params
-	 * @return mixed[]
+	 * @return array<string, mixed>
 	 */
 	private function processParams(object|array $params): array
 	{

@@ -28,7 +28,7 @@ final class TemplateParserHtml
 	private ?Html\ElementNode $element = null;
 	private readonly TemplateParser $parser;
 
-	/** @var array{string, ?Nodes\Php\ExpressionNode} */
+	/** @var array{string, ?Nodes\Php\ExpressionNode}|null */
 	private ?array $endName = null;
 
 	/** @var \WeakMap<Html\ElementNode, object{tag: mixed, textualName: string, unclosedTags?: array<string>}> */
@@ -191,6 +191,7 @@ final class TemplateParserHtml
 	}
 
 
+	/** @param-out Html\ElementNode $elem */
 	private function parseStartTag(&$elem = null): Html\ElementNode
 	{
 		$stream = $this->parser->getStream();
@@ -393,6 +394,7 @@ final class TemplateParserHtml
 	}
 
 
+	/** @return ?array{AreaNode|Nodes\PrintNode, ?string} */
 	private function parseAttributeValue(): ?array
 	{
 		$stream = $this->parser->getStream();
@@ -518,6 +520,10 @@ final class TemplateParserHtml
 	}
 
 
+	/**
+	 * @param  array<Tag>  $attrs
+	 * @return array<string, list<Tag>>
+	 */
 	private function prepareNAttrs(array $attrs, bool $void): array
 	{
 		$res = [];

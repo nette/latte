@@ -53,6 +53,10 @@ class Helpers
 	}
 
 
+	/**
+	 * @param  array<string, mixed|\stdClass>  $list
+	 * @return array<string, mixed|\stdClass>
+	 */
 	public static function sortBeforeAfter(array $list): array
 	{
 		foreach ($list as $name => $info) {
@@ -91,6 +95,7 @@ class Helpers
 	}
 
 
+	/** @param  mixed[]  $items */
 	public static function removeNulls(array &$items): void
 	{
 		$items = array_values(array_filter($items, fn($item) => $item !== null));
@@ -99,6 +104,7 @@ class Helpers
 
 	/**
 	 * Attempts to map the compiled template to the source.
+	 * @return array{name: ?string, line: ?int, column: ?int}|null
 	 */
 	public static function mapCompiledToSource(string $compiledFile, ?int $compiledLine = null): ?array
 	{

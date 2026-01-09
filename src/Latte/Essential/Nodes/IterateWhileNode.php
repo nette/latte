@@ -28,7 +28,7 @@ class IterateWhileNode extends StatementNode
 	public bool $postTest;
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag): \Generator
 	{
 		$foreach = $tag->closestTag([ForeachNode::class])?->node;

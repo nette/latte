@@ -23,6 +23,8 @@ class LattePanel implements Tracy\IBarPanel
 
 	/** @var Template[] */
 	private array $templates = [];
+
+	/** @var \stdClass[] */
 	private array $list;
 	private ?string $name = null;
 

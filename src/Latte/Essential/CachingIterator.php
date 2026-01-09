@@ -23,6 +23,7 @@ use function get_debug_type, is_array, max, method_exists, sprintf;
  * @property-read mixed $nextKey
  * @property-read mixed $nextValue
  * @property-read ?self $parent
+ * @extends \CachingIterator<mixed, mixed, \Iterator<mixed, mixed>>
  * @internal
  */
 class CachingIterator extends \CachingIterator implements \Countable

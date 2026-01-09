@@ -32,7 +32,7 @@ class DefineNode extends StatementNode
 	public AreaNode $content;
 
 
-	/** @return \Generator<int, ?array, array{AreaNode, ?Tag}, static> */
+	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
 	public static function create(Tag $tag, TemplateParser $parser): \Generator
 	{
 		$tag->expectArguments();
@@ -59,6 +59,7 @@ class DefineNode extends StatementNode
 	}
 
 
+	/** @return ParameterNode[] */
 	private static function parseParameters(Tag $tag): array
 	{
 		$stream = $tag->parser->stream;

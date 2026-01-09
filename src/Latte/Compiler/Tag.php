@@ -32,6 +32,7 @@ final class Tag
 	public int $outputMode = self::OutputNone;
 
 
+	/** @param list<Token> $tokens */
 	public function __construct(
 		public readonly string $name,
 		array $tokens,

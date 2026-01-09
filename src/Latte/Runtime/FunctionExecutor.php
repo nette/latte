@@ -18,10 +18,10 @@ use function array_keys;
 #[\AllowDynamicProperties]
 class FunctionExecutor
 {
-	/** @var callable[] */
+	/** @var array<string, callable> */
 	private array $_list = [];
 
-	/** @var bool[] */
+	/** @var array<string, bool> */
 	private array $_aware = [];
 
 
@@ -38,7 +38,7 @@ class FunctionExecutor
 
 	/**
 	 * Returns all run-time functions.
-	 * @return callable[]
+	 * @return array<string, callable>
 	 */
 	public function getAll(): array
 	{

@@ -122,7 +122,7 @@ final class TokenStream
 
 	/**
 	 * @throws CompileException
-	 * @return never
+	 * @param  array<string|int>  $expected
 	 */
 	public function throwUnexpectedException(array $expected = [], string $addendum = '', string $excerpt = ''): void
 	{

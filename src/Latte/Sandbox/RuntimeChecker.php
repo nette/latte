@@ -20,6 +20,7 @@ final class RuntimeChecker
 	}
 
 
+	/** @param  array<mixed>  $args */
 	public function call(mixed $callable, array $args): mixed
 	{
 		self::checkCallable($callable);
@@ -28,6 +29,7 @@ final class RuntimeChecker
 	}
 
 
+	/** @param  array<mixed>  $args */
 	public function callMethod(mixed $object, mixed $method, array $args, bool $nullsafe = false): mixed
 	{
 		if ($object === null) {
@@ -55,6 +57,7 @@ final class RuntimeChecker
 	}
 
 
+	/** @return list<mixed> */
 	public function args(...$args): array
 	{
 		foreach ($args as $arg) {

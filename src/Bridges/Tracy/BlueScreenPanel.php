@@ -45,6 +45,7 @@ class BlueScreenPanel
 	}
 
 
+	/** @return ?array{tab: string, panel: string} */
 	public static function renderError(?\Throwable $e): ?array
 	{
 		if ($e instanceof Latte\CompileException && $e->sourceName) {
@@ -67,6 +68,7 @@ class BlueScreenPanel
 	}
 
 
+	/** @return ?array{link: string, label: string} */
 	public static function renderUnknownMacro(?\Throwable $e): ?array
 	{
 		if (

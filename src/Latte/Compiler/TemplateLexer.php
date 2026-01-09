@@ -38,6 +38,8 @@ final class TemplateLexer
 
 	private string $openDelimiter = '';
 	private string $closeDelimiter = '';
+
+	/** @var array{string, string}[] */
 	private array $delimiters = [];
 	private TagLexer $tagLexer;
 
@@ -77,6 +79,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function statePlain(): array
 	{
 		return $this->match('~
@@ -91,6 +94,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateLatteTag(): array
 	{
 		$tokens[] = $this->match('~
@@ -104,6 +108,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateLatteContent(): array
 	{
 		$tokens[] = $this->tagLexer->tokenizePartially($this->input, $this->position);
@@ -118,6 +123,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateLatteComment(): array
 	{
 		return $this->match('~
@@ -130,6 +136,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlText(): array
 	{
 		return $this->match('~(?J)
@@ -146,6 +153,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlTag(): array
 	{
 		return $this->match('~(?J)
@@ -163,6 +171,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlQuotedValue(string $quote): array
 	{
 		return $this->match('~
@@ -177,6 +186,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlQuotedNAttrValue(string $quote): array
 	{
 		return $this->match('~
@@ -189,6 +199,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlRawText(string $tagName): array
 	{
 		return $this->match('~
@@ -204,6 +215,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlComment(): array
 	{
 		return $this->match('~(?J)
@@ -218,6 +230,7 @@ final class TemplateLexer
 	}
 
 
+	/** @return Token[] */
 	private function stateHtmlBogus(): array
 	{
 		return $this->match('~

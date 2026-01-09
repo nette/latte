@@ -267,6 +267,7 @@ final class HtmlHelpers
 	}
 
 
+	/** @param  array<mixed>  $items */
 	private static function formatArrayAttribute(string $namePart, array $items, \Closure $cb, $separator): string
 	{
 		$res = [];

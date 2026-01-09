@@ -98,7 +98,6 @@ final class TemplateGenerator
 	}
 
 
-	/** @param  Block[]  $blocks */
 	private function generateBlocks(PrintContext $context): void
 	{
 		$contentType = $context->getEscaper()->getContentType();
@@ -130,6 +129,7 @@ final class TemplateGenerator
 	}
 
 
+	/** @param Nodes\Php\ParameterNode[] $params */
 	private function buildParams(string $body, array $params, string $cont, PrintContext $context): string
 	{
 		if (!str_contains($body, '$') && !str_contains($body, 'get_defined_vars()')) {
