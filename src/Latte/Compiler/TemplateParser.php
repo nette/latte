@@ -42,7 +42,7 @@ final class TemplateParser
 	private string $contentType;
 	private int $counter = 0;
 	private ?Tag $tag = null;
-	private $lastResolver;
+	private ?\Closure $lastResolver = null;
 	private \WeakMap $lookFor;
 
 
@@ -83,11 +83,15 @@ final class TemplateParser
 	}
 
 
-	public function parseFragment(callable $resolver, ?callable $after = null): FragmentNode
+	/**
+	 * @param  \Closure(FragmentNode): ?Node  $resolver
+	 * @param  (\Closure(FragmentNode): void)|null  $after
+	 */
+	public function parseFragment(\Closure $resolver, ?\Closure $after = null): FragmentNode
 	{
 		$res = new FragmentNode;
 		$save = [$this->lastResolver, $this->tag];
-		$this->lastResolver = $resolver;
+		$this->lastResolver = $resolver(...);
 		try {
 			while (!$this->stream->peek()->isEnd()) {
 				if ($node = $resolver($res)) {
