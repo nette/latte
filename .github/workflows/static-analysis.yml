@@ -1,9 +1,6 @@
-name: Static Analysis (only informative)
+name: Static Analysis
 
-on:
-    push:
-        branches:
-          - master
+on: [push, pull_request]
 
 jobs:
     phpstan:
@@ -13,9 +10,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.2
+                  php-version: 8.5
                   coverage: none
 
             - run: composer install --no-progress --prefer-dist
             - run: composer phpstan -- --no-progress
-              continue-on-error: true # is only informative
