@@ -24,7 +24,9 @@
 		"tracy/tracy": "^2.10",
 		"nette/utils": "^4.0",
 		"nette/php-generator": "^4.0",
-		"phpstan/phpstan-nette": "^2.0@stable"
+		"phpstan/phpstan": "^2.1@stable",
+		"phpstan/extension-installer": "^1.4@stable",
+		"nette/phpstan-rules": "^1.0"
 	},
 	"suggest": {
 		"ext-iconv": "to use filters |reverse, |substring",
@@ -53,6 +55,11 @@
 	"extra": {
 		"branch-alias": {
 			"dev-master": "3.1-dev"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
 		}
 	}
 }
