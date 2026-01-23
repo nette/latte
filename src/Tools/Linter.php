@@ -49,7 +49,7 @@ final class Linter
 	{
 		$engine = new Latte\Engine;
 		$engine->enablePhpLinter(PHP_BINARY);
-		$engine->setStrictParsing($this->strict);
+		$engine->setFeature(Latte\Feature::StrictParsing, $this->strict);
 		$engine->addExtension(new Latte\Essential\TranslatorExtension(null));
 
 		if (class_exists(Nette\Bridges\ApplicationLatte\UIExtension::class)) {

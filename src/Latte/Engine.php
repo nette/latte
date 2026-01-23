@@ -43,8 +43,13 @@ class Engine
 	private array $extensions = [];
 	private string $contentType = ContentType::Html;
 	private Cache $cache;
-	private bool $strictTypes = false;
-	private bool $strictParsing = false;
+
+	/** @var array<string, bool> */
+	private array $features = [
+		Feature::StrictTypes => false,
+		Feature::StrictParsing => false,
+	];
+
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
@@ -146,7 +151,7 @@ class Engine
 	{
 		$parser = new Compiler\TemplateParser;
 		$parser->getLexer()->setSyntax($this->syntax);
-		$parser->strict = $this->strictParsing;
+		$parser->strict = $this->features[Feature::StrictParsing];
 
 		foreach ($this->extensions as $extension) {
 			$extension->beforeCompile($this);
@@ -188,7 +193,7 @@ class Engine
 			$node,
 			$this->getTemplateClass($name),
 			$name,
-			$this->strictTypes,
+			$this->features[Feature::StrictTypes],
 		);
 	}
 
@@ -264,8 +269,7 @@ class Engine
 	{
 		return [
 			$this->contentType,
-			$this->strictTypes,
-			$this->strictParsing,
+			$this->features,
 			$this->syntax,
 			array_map(
 				fn($extension) => [get_debug_type($extension), $extension->getCacheKey($this)],
@@ -461,25 +465,42 @@ class Engine
 
 
 	/**
+	 * Enables or disables an engine feature.
+	 */
+	public function setFeature(string $feature, bool $state = true): static
+	{
+		$this->features[$feature] = $state;
+		return $this;
+	}
+
+
+	/**
+	 * Checks if a feature is enabled.
+	 */
+	public function hasFeature(string $feature): bool
+	{
+		return $this->features[$feature] ?? throw new \LogicException("Unknown feature '$feature'.");
+	}
+
+
+	/**
 	 * Enables declare(strict_types=1) in templates.
 	 */
 	public function setStrictTypes(bool $state = true): static
 	{
-		$this->strictTypes = $state;
-		return $this;
+		return $this->setFeature(Feature::StrictTypes, $state);
 	}
 
 
 	public function setStrictParsing(bool $state = true): static
 	{
-		$this->strictParsing = $state;
-		return $this;
+		return $this->setFeature(Feature::StrictParsing, $state);
 	}
 
 
 	public function isStrictParsing(): bool
 	{
-		return $this->strictParsing;
+		return $this->hasFeature(Feature::StrictParsing);
 	}
 
 
