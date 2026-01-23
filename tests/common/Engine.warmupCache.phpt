@@ -12,7 +12,7 @@ test('', function () {
 	$template = __DIR__ . '/templates/block.latte';
 
 	$latte = new Latte\Engine;
-	$latte->setTempDirectory(getTempDir());
+	$latte->setCacheDirectory(getTempDir());
 
 	$cachedFile = $latte->getCacheFile($template);
 	Assert::false(file_exists($cachedFile));

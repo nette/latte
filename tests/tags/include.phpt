@@ -10,7 +10,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(getTempDir());
+$latte->setCacheDirectory(getTempDir());
 
 Assert::matchFile(
 	__DIR__ . '/expected/include.php',
