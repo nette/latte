@@ -12,7 +12,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(getTempDir());
+$latte->setCacheDirectory(getTempDir());
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'parent' => <<<'X'
 

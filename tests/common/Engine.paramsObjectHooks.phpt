@@ -23,7 +23,7 @@ class TemplateParamsWithHooks
 
 
 $latte = createLatte();
-$latte->setTempDirectory(getTempDir());
+$latte->setCacheDirectory(getTempDir());
 
 Assert::same(
 	'x',

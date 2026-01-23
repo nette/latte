@@ -449,10 +449,16 @@ class Engine
 	/**
 	 * Sets path to cache directory.
 	 */
-	public function setTempDirectory(?string $path): static
+	public function setCacheDirectory(?string $path): static
 	{
 		$this->cache->directory = $path;
 		return $this;
+	}
+
+
+	public function setTempDirectory(?string $path): static
+	{
+		return $this->setCacheDirectory($path);
 	}
 
 

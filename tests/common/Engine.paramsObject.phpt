@@ -37,7 +37,7 @@ class TemplateParams
 
 
 $latte = createLatte();
-$latte->setTempDirectory(getTempDir());
+$latte->setCacheDirectory(getTempDir());
 
 Assert::same(
 	'%*123*% ##123## ',

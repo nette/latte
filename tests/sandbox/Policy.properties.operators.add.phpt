@@ -16,7 +16,7 @@ class MyClass
 
 
 $latte = createLatte();
-$latte->setTempDirectory(getTempDir());
+$latte->setCacheDirectory(getTempDir());
 
 $policy = new PolicyLogger;
 $latte->setPolicy($policy);
