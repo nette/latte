@@ -22,6 +22,7 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TagParser;
+use Latte\Feature;
 use function array_map, array_unshift, implode, is_string, preg_match;
 
 
@@ -110,6 +111,26 @@ class ForeachNode extends StatementNode
 			$code .= '$iterator = $ʟ_it = $ʟ_it->getParent();' . "\n";
 		}
 
+		$vars = array_merge($this->key ? $this->collectVariables($this->key) : [], $this->collectVariables($this->value));
+		if ($vars && !$this->byRef && $context->hasFeature(Feature::ScopedLoopVariables)) {
+			$backup = '$ʟ_fe_' . $context->generateId();
+			$unsetList = implode(', ', array_map(fn($var) => $var->print($context), $vars));
+			$restoreCode = implode('', array_map(fn($var) => $context->format("if (array_key_exists(%dump, $backup)) { %node = &{$backup}[%0.dump]; }\n", $var->name, $var), $vars));
+			$code = <<<XX
+				try {
+					$backup = get_defined_vars();
+					unset($unsetList);
+
+					$code
+				} finally {
+					unset($unsetList);
+					$restoreCode
+					unset($backup);
+				}
+
+				XX;
+		}
+
 		return $code . "\n";
 	}
 
@@ -119,6 +140,24 @@ class ForeachNode extends StatementNode
 		return ($this->key ? $this->key->print($context) . ' => ' : '')
 			. ($this->byRef ? '&' : '')
 			. $this->value->print($context);
+	}
+
+
+	/**
+	 * Recursively collects variable names from a node (handles ListNode destructuring).
+	 * @return VariableNode[]
+	 */
+	private function collectVariables(ExpressionNode|ListNode $node): array
+	{
+		$res = [];
+		if ($node instanceof VariableNode && is_string($node->name)) {
+			$res[] = $node;
+		} elseif ($node instanceof ListNode) {
+			foreach ($node->items as $item) {
+				$res = array_merge($res, $item ? $this->collectVariables($item->value) : []);
+			}
+		}
+		return $res;
 	}
 
 

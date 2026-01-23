@@ -21,4 +21,7 @@ enum Feature
 
 	/** Shows warnings for deprecated Latte 3.0 syntax */
 	case MigrationWarnings;
+
+	/** Variables from {foreach} exist only within the loop */
+	case ScopedLoopVariables;
 }
