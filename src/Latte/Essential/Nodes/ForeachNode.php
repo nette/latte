@@ -85,46 +85,32 @@ class ForeachNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		$content = $this->content->print($context);
-		$iterator = $this->else || ($this->iterator ?? preg_match('#\$iterator\W|\Wget_defined_vars\W#', $content));
+		$useIterator = $this->else || ($this->iterator ?? preg_match('#\$iterator\W|\Wget_defined_vars\W#', $content));
+
+		$code = $context->format(
+			"foreach (%raw as %raw) %line { %raw\n}\n",
+			$useIterator
+				? $context->format('$iterator = $ʟ_it = new Latte\Essential\CachingIterator(%node, $ʟ_it ?? null)', $this->expression)
+				: $this->expression->print($context),
+			$this->printArgs($context),
+			$this->position,
+			$content,
+		);
 
 		if ($this->else) {
-			$content .= $context->format(
-				'} if ($iterator->isEmpty()) %line { ',
+			$code .= $context->format(
+				"if (%raw) %line { %node\n}\n",
+				$useIterator ? '$iterator->isEmpty()' : $context->format('empty(%node)', $this->expression),
 				$this->elseLine,
-			) . $this->else->print($context);
-		}
-
-		if ($iterator) {
-			return $context->format(
-				<<<'XX'
-					foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(%node, $ʟ_it ?? null) as %raw) %line {
-						%raw
-					}
-					$iterator = $ʟ_it = $ʟ_it->getParent();
-
-
-					XX,
-				$this->expression,
-				$this->printArgs($context),
-				$this->position,
-				$content,
-			);
-
-		} else {
-			return $context->format(
-				<<<'XX'
-					foreach (%node as %raw) %line {
-						%raw
-					}
-
-
-					XX,
-				$this->expression,
-				$this->printArgs($context),
-				$this->position,
-				$content,
+				$this->else,
 			);
 		}
+
+		if ($useIterator) {
+			$code .= '$iterator = $ʟ_it = $ʟ_it->getParent();' . "\n";
+		}
+
+		return $code . "\n";
 	}
 
 
