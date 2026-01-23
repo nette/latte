@@ -3,6 +3,7 @@
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['a'], $ʟ_it ?? null) as $item) /* pos 2:1 */ {
 			echo '	item
 ';
+
 		}
 		if ($iterator->isEmpty()) /* pos 4:2 */ {
 			echo '	empty
