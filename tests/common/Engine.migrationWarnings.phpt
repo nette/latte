@@ -6,7 +6,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = createLatte();
-$latte->setTempDirectory(getTempDir()); // is required to output position
+$latte->setCacheDirectory(getTempDir()); // is required to output position
 $latte->setMigrationWarnings();
 
 Assert::error(

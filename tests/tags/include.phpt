@@ -11,7 +11,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->setTempDirectory(getTempDir());
+$latte->setCacheDirectory(getTempDir());
 $latte->addFunction('info', fn(Template $template) => basename($template->getReferringTemplate()->getName()) . '/' . $template->getReferenceType());
 
 Assert::matchFile(
