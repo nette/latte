@@ -41,7 +41,7 @@ final class NAttrNode extends StatementNode
 			$this->args,
 			self::class,
 			$context->getEscaper()->getContentType() === Latte\ContentType::Xml,
-			$context->migrationWarnings ?: null,
+			$context->hasFeature(Latte\Feature::MigrationWarnings) ?: null,
 			$this->position,
 		);
 	}

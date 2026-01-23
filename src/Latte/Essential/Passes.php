@@ -20,6 +20,7 @@ use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\NodeTraverser;
 use Latte\ContentType;
 use Latte\Engine;
+use Latte\Feature;
 use Latte\Runtime\HtmlHelpers;
 use function is_string;
 
@@ -68,7 +69,7 @@ final class Passes
 				&& is_string($node->name)
 				&& (preg_match('/ʟ_|__|GLOBALS$|this$/A', $node->name))
 			) {
-				if (preg_match('/__|this$/A', $node->name) && !$this->engine->isStrictParsing()) {
+				if (preg_match('/__|this$/A', $node->name) && !$this->engine->hasFeature(Feature::StrictParsing)) {
 					trigger_error("Using the \$$node->name variable in the template is deprecated ($node->position)", E_USER_DEPRECATED);
 					return;
 				}

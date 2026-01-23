@@ -13,6 +13,7 @@ use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\ContentType;
+use Latte\Feature;
 use Latte\Runtime as LR;
 
 
@@ -45,7 +46,7 @@ class ExpressionAttributeNode extends AreaNode
 			$this->indentation . $this->name,
 			$this->modifier,
 			$this->value,
-			(!$this->modifier->removeFilter('accept') && $context->migrationWarnings) ?: null,
+			(!$this->modifier->removeFilter('accept') && $context->hasFeature(Feature::MigrationWarnings)) ?: null,
 			$this->value->position,
 		);
 	}

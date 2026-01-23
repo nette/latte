@@ -52,15 +52,18 @@ class Engine
 	private array $extensions = [];
 	private string $contentType = ContentType::Html;
 	private Runtime\Cache $cache;
-	private bool $strictTypes = true;
-	private bool $strictParsing = false;
+
+	/** @var array<string, bool> */
+	private array $features = [
+		Feature::StrictTypes->name => true,
+	];
+
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
 	private ?string $configurationHash;
 	private ?string $locale = null;
 	private ?string $syntax = null;
-	private bool $migrationWarnings = false;
 
 
 	public function __construct()
@@ -156,7 +159,7 @@ class Engine
 	{
 		$parser = new Compiler\TemplateParser;
 		$parser->getLexer()->setSyntax($this->syntax);
-		$parser->strict = $this->strictParsing;
+		$parser->strict = $this->hasFeature(Feature::StrictParsing);
 
 		foreach ($this->extensions as $extension) {
 			$extension->beforeCompile($this);
@@ -194,8 +197,8 @@ class Engine
 	public function generate(TemplateNode $node, string $name): string
 	{
 		$generator = new Compiler\TemplateGenerator;
-		$generator->buildClass($node, $this->migrationWarnings);
-		return $generator->generateCode($this->getTemplateClass($name), $name, $this->strictTypes);
+		$generator->buildClass($node, $this->features);
+		return $generator->generateCode($this->getTemplateClass($name), $name, $this->hasFeature(Feature::StrictTypes));
 	}
 
 
@@ -272,8 +275,7 @@ class Engine
 	{
 		return [
 			$this->contentType,
-			$this->strictTypes,
-			$this->strictParsing,
+			$this->features,
 			$this->syntax,
 			array_map(
 				fn($extension) => [get_debug_type($extension), $extension->getCacheKey($this)],
@@ -475,25 +477,45 @@ class Engine
 
 
 	/**
+	 * Enables or disables an engine feature.
+	 */
+	public function setFeature(Feature $feature, bool $state = true): static
+	{
+		$this->features[$feature->name] = $state;
+		return $this;
+	}
+
+
+	/**
+	 * Checks if a feature is enabled.
+	 */
+	public function hasFeature(Feature $feature): bool
+	{
+		return $this->features[$feature->name] ?? false;
+	}
+
+
+	/**
 	 * Enables declare(strict_types=1) in templates.
+	 * @deprecated use setFeature(Feature::StrictTypes, ...) instead
 	 */
 	public function setStrictTypes(bool $state = true): static
 	{
-		$this->strictTypes = $state;
-		return $this;
+		return $this->setFeature(Feature::StrictTypes, $state);
 	}
 
 
+	/** @deprecated use setFeature(Feature::StrictParsing, ...) instead */
 	public function setStrictParsing(bool $state = true): static
 	{
-		$this->strictParsing = $state;
-		return $this;
+		return $this->setFeature(Feature::StrictParsing, $state);
 	}
 
 
+	/** @deprecated use hasFeature(Feature::StrictParsing) instead */
 	public function isStrictParsing(): bool
 	{
-		return $this->strictParsing;
+		return $this->hasFeature(Feature::StrictParsing);
 	}
 
 
@@ -546,10 +568,10 @@ class Engine
 	}
 
 
+	/** @deprecated use setFeature(Feature::MigrationWarnings, ...) instead */
 	public function setMigrationWarnings(bool $state = true): static
 	{
-		$this->migrationWarnings = $state;
-		return $this;
+		return $this->setFeature(Feature::MigrationWarnings, $state);
 	}
 
 

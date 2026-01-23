@@ -7,7 +7,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $latte = createLatte();
 $latte->setCacheDirectory(getTempDir()); // is required to output position
-$latte->setMigrationWarnings();
+$latte->setFeature(Latte\Feature::MigrationWarnings);
 
 Assert::error(
 	fn() => $latte->renderToString('<input title="{=null}">'),

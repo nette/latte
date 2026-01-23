@@ -10,7 +10,7 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = createLatte();
-$latte->setStrictParsing();
+$latte->setFeature(Latte\Feature::StrictParsing);
 
 Assert::exception(
 	fn() => $latte->compile('{$this}'),

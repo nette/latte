@@ -12,7 +12,8 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\ContentType;
-use function addcslashes, array_map, array_pop, end, implode, preg_replace, preg_replace_callback, strtolower, substr, trim, ucfirst;
+use Latte\Feature;
+use function addcslashes, array_pop, end, implode, preg_replace, preg_replace_callback, strtolower, substr, trim, ucfirst;
 
 
 /**
@@ -33,7 +34,8 @@ final class PrintContext
 
 	public function __construct(
 		string $contentType = ContentType::Html,
-		public bool $migrationWarnings = false,
+		/** @var array<string, bool> */
+		private array $features = [],
 	) {
 		$this->escaperStack[] = new Escaper($contentType);
 	}
@@ -149,6 +151,12 @@ final class PrintContext
 	public function generateId(): int
 	{
 		return $this->counter++;
+	}
+
+
+	public function hasFeature(Feature $feature): bool
+	{
+		return $this->features[$feature->name] ?? false;
 	}
 
 
