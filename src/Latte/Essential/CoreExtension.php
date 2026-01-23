@@ -213,7 +213,11 @@ final class CoreExtension extends Latte\Extension
 		return [
 			'internalVariables' => $passes->forbiddenVariablesPass(...),
 			'checkUrls' => $passes->checkUrlsPass(...),
-			'overwrittenVariables' => Nodes\ForeachNode::overwrittenVariablesPass(...),
+			'overwrittenVariables' => function (Latte\Compiler\Nodes\TemplateNode $node): void {
+				if (!$this->engine->hasFeature(Latte\Feature::ScopedLoopVariables)) {
+					Nodes\ForeachNode::overwrittenVariablesPass($node);
+				}
+			},
 			'customFunctions' => $passes->customFunctionsPass(...),
 			'moveTemplatePrintToHead' => Nodes\TemplatePrintNode::moveToHeadPass(...),
 			'nElse' => Nodes\NElseNode::processPass(...),
