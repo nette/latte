@@ -8,7 +8,7 @@ require __DIR__ . '/../bootstrap.php';
 $latte = createLatte();
 Assert::contains('declare(strict_types=1)', $latte->compile(''));
 
-$latte->setStrictTypes(false);
+$latte->setFeature(Latte\Feature::StrictTypes, false);
 Assert::notContains('declare(strict_types=1)', $latte->compile(''));
 
 Assert::noError(fn() => $latte->render(''));
