@@ -34,7 +34,7 @@ class Helpers
 	/**
 	 * Escapes string for use inside CSS template.
 	 */
-	public static function escapeCss($s): string
+	public static function escapeCss(mixed $s): string
 	{
 		// http://www.w3.org/TR/2006/WD-CSS21-20060411/syndata.html#q6
 		return addcslashes((string) $s, "\x00..\x1F!\"#$%&'()*+,./:;<=>?@[\\]^`{|}~");
@@ -58,7 +58,7 @@ class Helpers
 	/**
 	 * Escapes string for use inside iCal template.
 	 */
-	public static function escapeICal($s): string
+	public static function escapeICal(mixed $s): string
 	{
 		// https://www.ietf.org/rfc/rfc5545.txt
 		$s = str_replace("\r", '', (string) $s);
@@ -84,7 +84,7 @@ class Helpers
 	}
 
 
-	public static function nop($s): string
+	public static function nop(mixed $s): string
 	{
 		return (string) $s;
 	}

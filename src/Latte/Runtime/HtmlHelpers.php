@@ -36,7 +36,7 @@ final class HtmlHelpers
 	/**
 	 * Escapes string for use inside HTML text.
 	 */
-	public static function escapeText($s): string
+	public static function escapeText(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
 			return $s->__toString();
@@ -51,7 +51,7 @@ final class HtmlHelpers
 	/**
 	 * Escapes string for use inside HTML attribute value.
 	 */
-	public static function escapeAttr($s): string
+	public static function escapeAttr(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable) {
 			$s = self::convertHtmlToText($s->__toString());
@@ -66,7 +66,7 @@ final class HtmlHelpers
 	/**
 	 * Escapes string for use inside HTML tag.
 	 */
-	public static function escapeTag($s): string
+	public static function escapeTag(mixed $s): string
 	{
 		$s = (string) $s;
 		$s = htmlspecialchars($s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
@@ -81,7 +81,7 @@ final class HtmlHelpers
 	/**
 	 * Escapes string for use inside HTML/XML comments.
 	 */
-	public static function escapeComment($s): string
+	public static function escapeComment(mixed $s): string
 	{
 		$s = (string) $s;
 		if ($s && ($s[0] === '-' || $s[0] === '>' || $s[0] === '!')) {
@@ -100,7 +100,7 @@ final class HtmlHelpers
 	/**
 	 * Escapes HTML for usage in <script type=text/html>
 	 */
-	public static function escapeRawHtml($s): string
+	public static function escapeRawHtml(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
 			return self::convertHtmlToRawText($s->__toString());
@@ -113,7 +113,7 @@ final class HtmlHelpers
 	/**
 	 * Escapes only quotes.
 	 */
-	public static function escapeQuotes($s): string
+	public static function escapeQuotes(mixed $s): string
 	{
 		return strtr((string) $s, ['"' => '&quot;', "'" => '&apos;']);
 	}
@@ -122,7 +122,7 @@ final class HtmlHelpers
 	/**
 	 * Converts JS and CSS for usage in <script> or <style>
 	 */
-	public static function convertJSToRawText($s): string
+	public static function convertJSToRawText(mixed $s): string
 	{
 		return preg_replace('#</(script|style)#i', '<\/$1', (string) $s);
 	}
@@ -268,7 +268,7 @@ final class HtmlHelpers
 
 
 	/** @param  array<mixed>  $items */
-	private static function formatArrayAttribute(string $namePart, array $items, \Closure $cb, $separator): string
+	private static function formatArrayAttribute(string $namePart, array $items, \Closure $cb, string $separator): string
 	{
 		$res = [];
 		foreach ($items as $k => $v) {

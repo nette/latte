@@ -271,13 +271,13 @@ final class TemplateLexer
 	}
 
 
-	public function setState(string $state, ...$args): void
+	public function setState(string $state, mixed ...$args): void
 	{
 		$this->states[0] = ['name' => $state, 'args' => $args];
 	}
 
 
-	public function pushState(string $state, ...$args): void
+	public function pushState(string $state, mixed ...$args): void
 	{
 		array_unshift($this->states, null);
 		$this->setState($state, ...$args);

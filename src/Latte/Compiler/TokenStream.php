@@ -124,7 +124,7 @@ final class TokenStream
 	 * @throws CompileException
 	 * @param  array<string|int>  $expected
 	 */
-	public function throwUnexpectedException(array $expected = [], string $addendum = '', string $excerpt = ''): void
+	public function throwUnexpectedException(array $expected = [], string $addendum = '', string $excerpt = ''): never
 	{
 		$token = ($this->tryPeek()->text ?? '') . $excerpt;
 		$expected = array_map(fn($item) => is_int($item) ? Token::Names[$item] : $item, $expected);

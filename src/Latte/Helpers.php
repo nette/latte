@@ -37,7 +37,7 @@ class Helpers
 
 
 	/** intentionally without callable typehint, because it generates bad error messages */
-	public static function toReflection($callable): \ReflectionFunctionAbstract
+	public static function toReflection(mixed $callable): \ReflectionFunctionAbstract
 	{
 		if (is_string($callable) && strpos($callable, '::')) {
 			return PHP_VERSION_ID < 80300
