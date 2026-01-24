@@ -7,6 +7,8 @@
 
 namespace Latte\Compiler\Nodes;
 
+use Latte\Compiler\Range;
+
 
 /**
  * Base for Latte tags like {if}, {foreach}, {block}.
@@ -16,4 +18,6 @@ namespace Latte\Compiler\Nodes;
  */
 abstract class StatementNode extends AreaNode
 {
+	/** @var list<Range> positions of all tags (opening, intermediate like {else}, closing) */
+	public array $tagRanges = [];
 }

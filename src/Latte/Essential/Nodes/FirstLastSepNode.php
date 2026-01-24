@@ -10,7 +10,6 @@ namespace Latte\Essential\Nodes;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
@@ -25,7 +24,6 @@ class FirstLastSepNode extends StatementNode
 	public ?ExpressionNode $width;
 	public AreaNode $then;
 	public ?AreaNode $else = null;
-	public ?Position $elseLine = null;
 
 
 	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
@@ -37,7 +35,6 @@ class FirstLastSepNode extends StatementNode
 
 		[$node->then, $nextTag] = yield ['else'];
 		if ($nextTag?->name === 'else') {
-			$node->elseLine = $nextTag->position;
 			[$node->else] = yield;
 		}
 
@@ -59,7 +56,7 @@ class FirstLastSepNode extends StatementNode
 			$this->width,
 			$this->position,
 			$this->then,
-			$this->elseLine,
+			$this->tagRanges[1] ?? null,
 			$this->else,
 		);
 	}
