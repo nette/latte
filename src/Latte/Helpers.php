@@ -102,7 +102,7 @@ class Helpers
 	 */
 	public static function mapCompiledToSource(string $compiledFile, ?int $compiledLine = null): ?array
 	{
-		if (!Cache::isCacheFile($compiledFile)) {
+		if (!Runtime\Cache::isCacheFile($compiledFile)) {
 			return null;
 		}
 

@@ -42,7 +42,7 @@ class Engine
 	/** @var Extension[] */
 	private array $extensions = [];
 	private string $contentType = ContentType::Html;
-	private Cache $cache;
+	private Runtime\Cache $cache;
 
 	/** @var array<string, bool> */
 	private array $features = [
@@ -60,7 +60,7 @@ class Engine
 
 	public function __construct()
 	{
-		$this->cache = new Cache;
+		$this->cache = new Runtime\Cache;
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new Runtime\FunctionExecutor;
 		$this->providers = new \stdClass;
