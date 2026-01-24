@@ -28,7 +28,7 @@ final class Filters
 	/**
 	 * Converts HTML to plain text.
 	 */
-	public static function stripHtml(FilterInfo $info, $s): string
+	public static function stripHtml(FilterInfo $info, string|Stringable|null $s): string
 	{
 		$info->validate([null, 'html', 'html/attr', 'xml', 'xml/attr'], __FUNCTION__);
 		$info->contentType = ContentType::Text;
@@ -39,7 +39,7 @@ final class Filters
 	/**
 	 * Removes tags from HTML (but remains HTML entities).
 	 */
-	public static function stripTags(FilterInfo $info, $s): string
+	public static function stripTags(FilterInfo $info, string|Stringable|null $s): string
 	{
 		$info->contentType ??= ContentType::Html;
 		$info->validate(['html', 'html/attr', 'xml', 'xml/attr'], __FUNCTION__);
@@ -160,7 +160,7 @@ final class Filters
 	/**
 	 * Repeats text.
 	 */
-	public static function repeat(FilterInfo $info, $s, int $count): string
+	public static function repeat(FilterInfo $info, string|Stringable|null $s, int $count): string
 	{
 		return str_repeat((string) $s, $count);
 	}
@@ -291,12 +291,11 @@ final class Filters
 	 */
 	public static function replace(
 		FilterInfo $info,
-		string|array $subject,
+		string $subject,
 		string|array $search,
 		string|array|null $replace = null,
 	): string
 	{
-		$subject = (string) $subject;
 		if (is_array($search)) {
 			if (is_array($replace)) {
 				return strtr($subject, array_combine($search, $replace));
@@ -385,7 +384,7 @@ final class Filters
 	/**
 	 * Convert to lower case.
 	 */
-	public static function lower($s): string
+	public static function lower(string|Stringable|null $s): string
 	{
 		return mb_strtolower((string) $s, 'UTF-8');
 	}
@@ -394,7 +393,7 @@ final class Filters
 	/**
 	 * Convert to upper case.
 	 */
-	public static function upper($s): string
+	public static function upper(string|Stringable|null $s): string
 	{
 		return mb_strtoupper((string) $s, 'UTF-8');
 	}
@@ -403,7 +402,7 @@ final class Filters
 	/**
 	 * Convert first character to lower case.
 	 */
-	public static function firstLower($s): string
+	public static function firstLower(string|Stringable|null $s): string
 	{
 		$s = (string) $s;
 		return self::lower(self::substring($s, 0, 1)) . self::substring($s, 1);
@@ -413,7 +412,7 @@ final class Filters
 	/**
 	 * Convert first character to upper case.
 	 */
-	public static function firstUpper($s): string
+	public static function firstUpper(string|Stringable|null $s): string
 	{
 		$s = (string) $s;
 		return self::upper(self::substring($s, 0, 1)) . self::substring($s, 1);
@@ -423,7 +422,7 @@ final class Filters
 	/**
 	 * Capitalize string.
 	 */
-	public static function capitalize($s): string
+	public static function capitalize(string|Stringable|null $s): string
 	{
 		return mb_convert_case((string) $s, MB_CASE_TITLE, 'UTF-8');
 	}
@@ -473,7 +472,7 @@ final class Filters
 	/**
 	 * Pad a string to a certain length with another string.
 	 */
-	public static function padLeft($s, int $length, string $append = ' '): string
+	public static function padLeft(string|Stringable|null $s, int $length, string $append = ' '): string
 	{
 		$s = (string) $s;
 		$length = max(0, $length - self::strLength($s));
@@ -485,7 +484,7 @@ final class Filters
 	/**
 	 * Pad a string to a certain length with another string.
 	 */
-	public static function padRight($s, int $length, string $append = ' '): string
+	public static function padRight(string|Stringable|null $s, int $length, string $append = ' '): string
 	{
 		$s = (string) $s;
 		$length = max(0, $length - self::strLength($s));
@@ -518,7 +517,7 @@ final class Filters
 	 * @param  iterable<mixed>  $list
 	 * @return \Generator<int, array<mixed>>
 	 */
-	public static function batch(iterable $list, int $length, $rest = null): \Generator
+	public static function batch(iterable $list, int $length, mixed $rest = null): \Generator
 	{
 		$batch = [];
 		foreach ($list as $key => $value) {
@@ -797,7 +796,7 @@ final class Filters
 	/**
 	 * Sanitizes string for use inside href attribute.
 	 */
-	public static function checkUrl($s): string
+	public static function checkUrl(mixed $s): string
 	{
 		$s = $s instanceof Latte\Runtime\HtmlStringable
 			? Latte\Runtime\HtmlHelpers::convertHtmlToText((string) $s)

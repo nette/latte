@@ -27,7 +27,7 @@ final class XmlHelpers
 	/**
 	 * Escapes string for use everywhere inside XML (except for comments and tags).
 	 */
-	public static function escapeText($s): string
+	public static function escapeText(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable) {
 			return $s->__toString();
@@ -44,7 +44,7 @@ final class XmlHelpers
 	/**
 	 * Escapes string for use inside XML attribute value.
 	 */
-	public static function escapeAttr($s): string
+	public static function escapeAttr(mixed $s): string
 	{
 		if ($s instanceof HtmlStringable) {
 			$s = HtmlHelpers::convertHtmlToText($s->__toString());
@@ -56,7 +56,7 @@ final class XmlHelpers
 	/**
 	 * Escapes string for use inside XML tag.
 	 */
-	public static function escapeTag($s): string
+	public static function escapeTag(mixed $s): string
 	{
 		$s = self::escapeText((string) $s);
 		return preg_replace_callback(

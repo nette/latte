@@ -98,7 +98,7 @@ function loadContent(string $file, int $offset): string
 }
 
 
-function exportAST(Node $node)
+function exportAST(Node $node): string
 {
 	$prop = match (true) {
 		$node instanceof Nodes\TextNode => 'content: ' . var_export($node->content, true),

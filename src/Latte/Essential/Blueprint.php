@@ -176,7 +176,7 @@ final class Blueprint
 	}
 
 
-	private function getType($value): string
+	private function getType(mixed $value): string
 	{
 		return $value === null ? 'mixed' : get_debug_type($value);
 	}

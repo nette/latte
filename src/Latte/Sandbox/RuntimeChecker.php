@@ -58,7 +58,7 @@ final class RuntimeChecker
 
 
 	/** @return list<mixed> */
-	public function args(...$args): array
+	public function args(mixed ...$args): array
 	{
 		foreach ($args as $arg) {
 			if (

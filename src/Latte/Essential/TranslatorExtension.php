@@ -10,6 +10,7 @@ namespace Latte\Essential;
 use Latte;
 use Latte\Compiler\NodeHelpers;
 use Latte\Compiler\Nodes\Php;
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Tag;
 use Latte\Engine;
@@ -94,7 +95,7 @@ final class TranslatorExtension extends Latte\Extension
 	}
 
 
-	public static function toValue($args): mixed
+	public static function toValue(ExpressionNode $args): mixed
 	{
 		try {
 			return NodeHelpers::toValue($args, constants: true);
