@@ -18,7 +18,6 @@ use Latte\Compiler\Nodes\Php\ListNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TemplateNode;
 use Latte\Compiler\NodeTraverser;
-use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TagParser;
@@ -38,7 +37,6 @@ class ForeachNode extends StatementNode
 	public ExpressionNode|ListNode $value;
 	public AreaNode $content;
 	public ?AreaNode $else = null;
-	public ?Position $elseLine = null;
 	public ?bool $iterator = null;
 	public bool $checkArgs = true;
 
@@ -66,7 +64,6 @@ class ForeachNode extends StatementNode
 
 		[$node->content, $nextTag] = yield ['else'];
 		if ($nextTag?->name === 'else') {
-			$node->elseLine = $nextTag->position;
 			[$node->else] = yield;
 		}
 
@@ -102,7 +99,7 @@ class ForeachNode extends StatementNode
 			$code .= $context->format(
 				"if (%raw) %line { %node\n}\n",
 				$useIterator ? '$iterator->isEmpty()' : $context->format('empty(%node)', $this->expression),
-				$this->elseLine,
+				$this->tagPositions[1] ?? null,
 				$this->else,
 			);
 		}
