@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Literal part of interpolated string.
+ */
 class InterpolatedStringPartNode extends Node
 {
 	public function __construct(

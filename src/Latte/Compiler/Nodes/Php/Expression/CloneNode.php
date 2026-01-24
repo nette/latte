@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Object cloning (clone $obj).
+ */
 class CloneNode extends ExpressionNode implements OperatorNode
 {
 	public function __construct(

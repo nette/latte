@@ -13,6 +13,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Match expression arm with conditions and body.
+ */
 class MatchArmNode extends Node
 {
 	public function __construct(

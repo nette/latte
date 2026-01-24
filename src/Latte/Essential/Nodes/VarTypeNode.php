@@ -14,7 +14,8 @@ use Latte\Compiler\Token;
 
 
 /**
- * {varType type $var}
+ * {varType Type $name}
+ * Declares variable type for IDE autocompletion.
  */
 class VarTypeNode extends StatementNode
 {

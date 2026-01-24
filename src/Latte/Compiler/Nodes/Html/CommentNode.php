@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * HTML comment (<!-- ... -->).
+ */
 class CommentNode extends AreaNode
 {
 	public function __construct(

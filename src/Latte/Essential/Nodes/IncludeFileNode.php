@@ -17,7 +17,7 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {include [file] "file" [with blocks] [,] [params]}
+ * {include 'file.latte' [with blocks]}
  */
 class IncludeFileNode extends StatementNode
 {

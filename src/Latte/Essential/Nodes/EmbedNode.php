@@ -21,7 +21,7 @@ use function count, preg_match;
 
 
 /**
- * {embed [block|file] name [,] [params]}
+ * {embed 'file.latte'|#block} ... {/embed}
  */
 class EmbedNode extends StatementNode
 {

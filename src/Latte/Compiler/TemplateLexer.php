@@ -12,6 +12,9 @@ use function array_merge, array_pop, array_shift, array_unshift, constant, deche
 use const PREG_UNMATCHED_AS_NULL;
 
 
+/**
+ * Tokenizes Latte template source code.
+ */
 final class TemplateLexer
 {
 	public const

@@ -8,6 +8,9 @@
 namespace Latte\Compiler\Nodes\Php;
 
 
+/**
+ * Base for literal value nodes (strings, numbers, booleans, null).
+ */
 abstract class ScalarNode extends ExpressionNode
 {
 	public function &getIterator(): \Generator

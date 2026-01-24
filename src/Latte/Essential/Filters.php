@@ -335,6 +335,9 @@ final class Filters
 	}
 
 
+	/**
+	 * Converts newlines to HTML <br> tags.
+	 */
 	public static function breaklines(string|Stringable|null $s): Html
 	{
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -747,18 +750,27 @@ final class Filters
 	}
 
 
+	/**
+	 * Rounds number to specified precision.
+	 */
 	public static function round(float $value, int $precision = 0): float
 	{
 		return round($value, $precision);
 	}
 
 
+	/**
+	 * Rounds number down to specified precision.
+	 */
 	public static function floor(float $value, int $precision = 0): float
 	{
 		return floor($value * 10 ** $precision) / 10 ** $precision;
 	}
 
 
+	/**
+	 * Rounds number up to specified precision.
+	 */
 	public static function ceil(float $value, int $precision = 0): float
 	{
 		return ceil($value * 10 ** $precision) / 10 ** $precision;

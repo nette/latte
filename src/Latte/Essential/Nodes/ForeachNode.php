@@ -26,7 +26,8 @@ use function array_map, array_unshift, implode, preg_match;
 
 
 /**
- * {foreach $expr as $key => $value} & {else}
+ * {foreach $array as $item} ... {/foreach}
+ * {foreach $array as $key => $value} ... {else} ... {/foreach}
  */
 class ForeachNode extends StatementNode
 {

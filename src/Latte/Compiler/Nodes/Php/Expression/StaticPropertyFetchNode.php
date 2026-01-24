@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Static property access (Foo::$prop).
+ */
 class StaticPropertyFetchNode extends ExpressionNode
 {
 	public function __construct(

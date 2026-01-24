@@ -14,7 +14,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {do expression}
+ * {do $expr}
+ * Executes expression without output.
  */
 class DoNode extends StatementNode
 {

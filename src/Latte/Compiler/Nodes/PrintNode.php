@@ -16,7 +16,8 @@ use Latte\Compiler\TemplateParser;
 
 
 /**
- * {= ...}
+ * {= $expr|filter}
+ * Outputs escaped expression.
  */
 class PrintNode extends StatementNode
 {

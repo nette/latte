@@ -16,7 +16,8 @@ use Latte\ContentType;
 
 
 /**
- * {contentType ...}
+ * {contentType html|xml|js|css|text|...}
+ * Switches escaping mode and optionally sends HTTP header.
  */
 class ContentTypeNode extends StatementNode
 {

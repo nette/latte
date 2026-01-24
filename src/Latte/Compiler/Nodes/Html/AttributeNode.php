@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * HTML attribute with name, optional value, and quote style.
+ */
 class AttributeNode extends AreaNode
 {
 	public function __construct(

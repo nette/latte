@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Array item with optional key, reference, and spread operator.
+ */
 class ArrayItemNode extends Node
 {
 	public function __construct(

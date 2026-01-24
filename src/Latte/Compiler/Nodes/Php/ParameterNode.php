@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Function parameter with type, default value, and variadic support.
+ */
 class ParameterNode extends Node
 {
 	public function __construct(

@@ -16,6 +16,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Object instantiation (new ClassName or new $expr).
+ */
 class NewNode extends ExpressionNode implements OperatorNode
 {
 	public function __construct(

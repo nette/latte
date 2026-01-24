@@ -17,6 +17,9 @@ use Latte\Helpers;
 use function substr;
 
 
+/**
+ * Double-quoted string with embedded expressions ("Hello $name").
+ */
 class InterpolatedStringNode extends ScalarNode
 {
 	public function __construct(

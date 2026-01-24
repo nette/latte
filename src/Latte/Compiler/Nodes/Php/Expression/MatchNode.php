@@ -14,6 +14,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Match expression.
+ */
 class MatchNode extends Php\ExpressionNode
 {
 	public function __construct(

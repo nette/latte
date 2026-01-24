@@ -12,6 +12,9 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Code generator hidden from compiler passes. Pass child nodes for traversal.
+ */
 class AuxiliaryNode extends ExpressionNode
 {
 	public function __construct(

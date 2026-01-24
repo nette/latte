@@ -15,6 +15,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Assignment ($var = expr or $var = &$ref).
+ */
 class AssignNode extends ExpressionNode implements OperatorNode
 {
 	public const Precedence = [90, self::AssocRight];

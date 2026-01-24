@@ -15,7 +15,7 @@ use Latte\Helpers;
 
 
 /**
- * Custom function call node.
+ * Wrapper for custom function calls in Latte expressions.
  */
 class CustomFunctionCallNode extends ExpressionNode
 {

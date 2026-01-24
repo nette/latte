@@ -18,7 +18,8 @@ use function array_unshift;
 
 
 /**
- * {templatePrint [ParentClass]}
+ * {templatePrint [ClassName]}
+ * Suggests parameter class for {templateType}.
  */
 class TemplatePrintNode extends StatementNode
 {

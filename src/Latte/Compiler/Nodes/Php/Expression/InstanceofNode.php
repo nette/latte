@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * instanceof type check.
+ */
 class InstanceofNode extends ExpressionNode implements OperatorNode
 {
 	public function __construct(

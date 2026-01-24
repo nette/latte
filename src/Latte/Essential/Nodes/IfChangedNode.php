@@ -16,7 +16,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {ifchanged [$var]} ... {else}
+ * {ifchanged [$var]} ... {/ifchanged}
+ * Renders content only when value changes between iterations.
  */
 class IfChangedNode extends StatementNode
 {

@@ -15,7 +15,8 @@ use Latte\ContentType;
 
 
 /**
- * {spaceless}
+ * {spaceless} ... {/spaceless}
+ * Removes whitespace between HTML tags.
  */
 class SpacelessNode extends StatementNode
 {

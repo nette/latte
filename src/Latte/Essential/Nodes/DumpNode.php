@@ -15,6 +15,7 @@ use Latte\Compiler\Tag;
 
 /**
  * {dump [$var]}
+ * Dumps variable or all variables to Tracy Bar.
  */
 class DumpNode extends StatementNode
 {

@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Function/method argument with optional name, reference, and unpacking.
+ */
 class ArgumentNode extends Node
 {
 	public function __construct(

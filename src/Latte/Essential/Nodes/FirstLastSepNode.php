@@ -16,9 +16,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {first [$width]}
- * {last [$width]}
- * {sep [$width]}
+ * {first} ... {/first}, {last} ... {/last}, {sep} ... {/sep}
+ * Loop iteration helpers inside {foreach}.
  */
 class FirstLastSepNode extends StatementNode
 {

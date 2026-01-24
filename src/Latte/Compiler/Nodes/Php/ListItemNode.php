@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Array destructuring item.
+ */
 class ListItemNode extends Node
 {
 	public function __construct(

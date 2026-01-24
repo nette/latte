@@ -12,6 +12,9 @@ use Latte\Compiler\PrintContext;
 use function trim, var_export;
 
 
+/**
+ * Literal text content in template.
+ */
 class TextNode extends AreaNode
 {
 	public function __construct(

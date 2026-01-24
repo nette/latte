@@ -13,7 +13,7 @@ use Latte\Compiler\PrintContext;
 
 
 /**
- * Only for parser needs.
+ * Temporary container for partial parsing results (e.g., array destructuring).
  * @internal
  */
 class TemporaryNode extends ExpressionNode

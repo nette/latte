@@ -17,8 +17,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {extends none | auto | "file"}
- * {layout none | auto | "file"}
+ * {extends 'parent.latte'}
+ * {layout 'layout.latte'}
  */
 class ExtendsNode extends StatementNode
 {

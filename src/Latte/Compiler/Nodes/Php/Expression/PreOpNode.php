@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Prefix increment/decrement (++$var, --$var).
+ */
 class PreOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['++' => 1, '--' => 1];

@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Postfix increment/decrement ($var++, $var--).
+ */
 class PostOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['++' => 1, '--' => 1];

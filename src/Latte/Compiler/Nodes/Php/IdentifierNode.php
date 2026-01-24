@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Simple identifier (unqualified name).
+ */
 class IdentifierNode extends Node
 {
 	public function __construct(

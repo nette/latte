@@ -10,6 +10,9 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Node;
 
 
+/**
+ * Base for complex type declarations (nullable, union, intersection).
+ */
 abstract class ComplexTypeNode extends Node
 {
 }

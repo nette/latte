@@ -11,6 +11,9 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Property access routed through sandbox security policy.
+ */
 class PropertyFetchNode extends Expression\PropertyFetchNode
 {
 	public function __construct(Expression\PropertyFetchNode $from)

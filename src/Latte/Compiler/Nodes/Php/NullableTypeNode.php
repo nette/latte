@@ -11,6 +11,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Nullable type (?Type).
+ */
 class NullableTypeNode extends ComplexTypeNode
 {
 	public function __construct(

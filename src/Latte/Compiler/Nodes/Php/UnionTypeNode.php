@@ -12,6 +12,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Union type (Type1|Type2).
+ */
 class UnionTypeNode extends ComplexTypeNode
 {
 	public function __construct(

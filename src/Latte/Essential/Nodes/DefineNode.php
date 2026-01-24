@@ -24,7 +24,8 @@ use function is_string;
 
 
 /**
- * {define [local] name}
+ * {define name($params)} ... {/define}
+ * Defines reusable block with parameters.
  */
 class DefineNode extends StatementNode
 {

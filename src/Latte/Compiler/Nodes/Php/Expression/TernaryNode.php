@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Ternary conditional ($cond ? $then : $else) or elvis operator ($a ?: $b).
+ */
 class TernaryNode extends ExpressionNode implements OperatorNode
 {
 	public function __construct(

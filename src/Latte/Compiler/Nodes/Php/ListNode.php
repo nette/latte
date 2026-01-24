@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Array destructuring ([$a, $b] = $arr).
+ */
 class ListNode extends Node
 {
 	public function __construct(

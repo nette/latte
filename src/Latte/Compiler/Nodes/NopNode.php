@@ -10,6 +10,9 @@ namespace Latte\Compiler\Nodes;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Placeholder for removed or filtered-out content.
+ */
 class NopNode extends AreaNode
 {
 	public function print(PrintContext $context): string

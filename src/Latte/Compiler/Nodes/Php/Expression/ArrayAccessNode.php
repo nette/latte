@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Array or string element access ($arr[$key]).
+ */
 class ArrayAccessNode extends ExpressionNode
 {
 	public function __construct(

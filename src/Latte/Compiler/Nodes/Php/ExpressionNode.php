@@ -10,6 +10,9 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Node;
 
 
+/**
+ * Base for PHP expression nodes (variables, operators, calls, literals).
+ */
 abstract class ExpressionNode extends Node
 {
 	public function isWritable(): bool

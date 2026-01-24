@@ -12,7 +12,7 @@ use function array_flip, array_map, assert, is_a, is_bool, strtolower;
 
 
 /**
- * Default-deny policy.
+ * Default-deny security policy. Whitelist allowed tags, filters, functions, methods and properties.
  */
 class SecurityPolicy implements Latte\Policy
 {
@@ -41,6 +41,9 @@ class SecurityPolicy implements Latte\Policy
 	private array $propertyCache = [];
 
 
+	/**
+	 * Creates policy with safe defaults for user-generated templates.
+	 */
 	public static function createSafePolicy(): self
 	{
 		$policy = new self;

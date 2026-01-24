@@ -13,6 +13,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Chain of filters with auto-escape flag.
+ */
 class ModifierNode extends Node
 {
 	/** @deprecated */

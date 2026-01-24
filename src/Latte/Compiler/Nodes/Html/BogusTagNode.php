@@ -13,7 +13,7 @@ use Latte\Compiler\PrintContext;
 
 
 /**
- * HTML bogus tag.
+ * DOCTYPE or bogus HTML tags.
  */
 class BogusTagNode extends AreaNode
 {

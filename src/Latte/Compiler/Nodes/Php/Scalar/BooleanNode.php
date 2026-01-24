@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Boolean literal (true/false).
+ */
 class BooleanNode extends ScalarNode
 {
 	public function __construct(

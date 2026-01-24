@@ -14,7 +14,7 @@ use function preg_match, trim;
 
 
 /**
- * {php statement; statement; ...}
+ * {php code} (requires RawPhpExtension)
  */
 class RawPhpNode extends StatementNode
 {

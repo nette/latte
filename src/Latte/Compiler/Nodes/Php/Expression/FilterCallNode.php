@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Expression with filter applied ($expr|filter).
+ */
 class FilterCallNode extends ExpressionNode
 {
 	public function __construct(

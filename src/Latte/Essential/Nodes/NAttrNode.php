@@ -17,7 +17,7 @@ use function is_array;
 
 
 /**
- * n:attr="..."
+ * <div n:attr="class => $class, id => $id">
  */
 final class NAttrNode extends StatementNode
 {

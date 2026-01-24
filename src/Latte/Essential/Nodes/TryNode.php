@@ -14,7 +14,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {try} ... {else}
+ * {try} ... {else} ... {/try}
+ * Discards block output on exception, renders {else} instead.
  */
 class TryNode extends StatementNode
 {

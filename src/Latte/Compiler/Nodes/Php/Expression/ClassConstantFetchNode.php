@@ -14,6 +14,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Class constant access (Foo::CONST or Foo::class).
+ */
 class ClassConstantFetchNode extends ExpressionNode
 {
 	public function __construct(

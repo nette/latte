@@ -11,6 +11,9 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Method call routed through sandbox security policy.
+ */
 class MethodCallNode extends Expression\MethodCallNode
 {
 	public function __construct(Expression\MethodCallNode $from)

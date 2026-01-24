@@ -14,6 +14,9 @@ use Latte\Compiler\PrintContext;
 use function count, in_array, strtolower;
 
 
+/**
+ * Binary operation: arithmetic, logical, bitwise, comparison, null-coalescing, or pipe.
+ */
 class BinaryOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['||', '&&', 'or', 'and', 'xor', '|', '&', '^', '.', '+', '-', '*', '/', '%', '<<', '>>', '**',

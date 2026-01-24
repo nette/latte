@@ -14,7 +14,7 @@ use function array_keys, array_merge, array_pop, end, in_array, is_array, next, 
 
 
 /**
- * Template.
+ * Base class for compiled templates.
  */
 class Template
 {

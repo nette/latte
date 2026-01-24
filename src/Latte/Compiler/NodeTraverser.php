@@ -8,6 +8,9 @@
 namespace Latte\Compiler;
 
 
+/**
+ * Traverses and transforms AST nodes using visitor pattern.
+ */
 final class NodeTraverser
 {
 	public const DontTraverseChildren = 1;

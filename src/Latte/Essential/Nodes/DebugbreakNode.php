@@ -15,6 +15,7 @@ use Latte\Compiler\Tag;
 
 /**
  * {debugbreak [$cond]}
+ * Triggers debugger breakpoint.
  */
 class DebugbreakNode extends StatementNode
 {

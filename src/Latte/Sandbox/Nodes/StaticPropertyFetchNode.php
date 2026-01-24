@@ -11,6 +11,9 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Static property access routed through sandbox security policy.
+ */
 class StaticPropertyFetchNode extends Expression\StaticPropertyFetchNode
 {
 	public function __construct(Expression\StaticPropertyFetchNode $from)

@@ -15,6 +15,9 @@ use Latte\Compiler\PrintContext;
 use const PHP_INT_MAX;
 
 
+/**
+ * Integer literal in decimal, hex, octal, or binary notation.
+ */
 class IntegerNode extends ScalarNode
 {
 	public const KindBinary = 2;

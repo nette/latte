@@ -10,6 +10,9 @@ namespace Latte\Compiler\Nodes\Php;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Identifier for static property name in Foo::$bar syntax.
+ */
 class VarLikeIdentifierNode extends IdentifierNode
 {
 	public function print(PrintContext $context): string

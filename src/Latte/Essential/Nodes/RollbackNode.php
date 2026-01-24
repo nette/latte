@@ -15,6 +15,7 @@ use Latte\Compiler\Tag;
 
 /**
  * {rollback}
+ * Discards {try} block output and jumps to {else}.
  */
 class RollbackNode extends StatementNode
 {

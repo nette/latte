@@ -12,6 +12,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Intersection type (Type1&Type2).
+ */
 class IntersectionTypeNode extends ComplexTypeNode
 {
 	public function __construct(

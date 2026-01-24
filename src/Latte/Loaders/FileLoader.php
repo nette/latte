@@ -13,7 +13,7 @@ use const DIRECTORY_SEPARATOR;
 
 
 /**
- * Template loader.
+ * Loads templates from filesystem.
  */
 class FileLoader implements Latte\Loader
 {

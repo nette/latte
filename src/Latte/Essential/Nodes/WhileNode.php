@@ -15,7 +15,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {while $cond}
+ * {while $cond} ... {/while}
+ * {while} ... {/while $cond}
  */
 class WhileNode extends StatementNode
 {

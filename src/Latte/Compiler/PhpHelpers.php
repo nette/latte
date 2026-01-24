@@ -98,6 +98,9 @@ final class PhpHelpers
 	}
 
 
+	/**
+	 * Exports value to PHP code representation.
+	 */
 	public static function dump(mixed $value, bool $multiline = false): string
 	{
 		if (is_array($value)) {
@@ -118,6 +121,9 @@ final class PhpHelpers
 	}
 
 
+	/**
+	 * Optimizes consecutive echo statements into single call.
+	 */
 	public static function optimizeEcho(string $source): string
 	{
 		$res = '';
@@ -156,6 +162,9 @@ final class PhpHelpers
 	}
 
 
+	/**
+	 * Decodes number string to int or float value.
+	 */
 	public static function decodeNumber(string $str, &$base = null): int|float|null
 	{
 		$str = str_replace('_', '', $str);

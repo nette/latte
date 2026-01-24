@@ -22,7 +22,8 @@ use Latte\Runtime\Template;
 
 
 /**
- * {block [local] [name]}
+ * {block [local] name} ... {/block}
+ * {block|filter} ... {/block}  (anonymous filter block)
  */
 class BlockNode extends StatementNode
 {

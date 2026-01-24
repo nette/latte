@@ -10,6 +10,9 @@ namespace Latte\Compiler;
 use function in_array;
 
 
+/**
+ * Token produced by lexers.
+ */
 final class Token
 {
 	public const

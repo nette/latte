@@ -18,6 +18,9 @@ use Latte\SecurityViolationException;
 use function array_keys, array_splice, count, end, in_array, preg_match, str_ends_with, str_starts_with, substr, trim, ucfirst;
 
 
+/**
+ * Parses Latte template tokens into AST.
+ */
 final class TemplateParser
 {
 	/** @var Block[][] */
