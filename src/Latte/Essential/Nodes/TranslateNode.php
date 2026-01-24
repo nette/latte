@@ -22,6 +22,7 @@ use function array_unshift, is_array, is_string;
 
 /**
  * {translate} ... {/translate}
+ * Translates block content.
  */
 class TranslateNode extends StatementNode
 {

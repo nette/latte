@@ -15,6 +15,9 @@ use Latte\Compiler\PrintContext;
 use function in_array;
 
 
+/**
+ * Compound assignment ($var += expr, $var .= expr, etc.).
+ */
 class AssignOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['+', '-', '*', '/', '.', '%', '&', '|', '^', '<<', '>>', '**', '??'];

@@ -13,6 +13,9 @@ use function in_array, strlen;
 use const PHP_BINARY, STDERR;
 
 
+/**
+ * Validates Latte template syntax.
+ */
 final class Linter
 {
 	/** @var string[] */

@@ -19,7 +19,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {switch} ... {case} ... {default}
+ * {switch $expr} {case $val} ... {default} ... {/switch}
+ * Uses strict comparison (===) without fallthrough.
  */
 class SwitchNode extends StatementNode
 {

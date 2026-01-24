@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Placeholder ... for partial function application or first-class callable creation.
+ */
 class VariadicPlaceholderNode extends Node
 {
 	public function __construct(

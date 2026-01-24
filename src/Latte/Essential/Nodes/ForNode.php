@@ -16,7 +16,7 @@ use Latte\Helpers;
 
 
 /**
- * {for $init; $cond; $next}
+ * {for $i = 0; $i < 10; $i++} ... {/for}
  */
 class ForNode extends StatementNode
 {

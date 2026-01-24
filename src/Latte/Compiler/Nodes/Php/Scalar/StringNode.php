@@ -14,6 +14,9 @@ use Latte\Compiler\PrintContext;
 use function strtr, substr;
 
 
+/**
+ * String literal, single or double quoted.
+ */
 class StringNode extends ScalarNode
 {
 	public function __construct(

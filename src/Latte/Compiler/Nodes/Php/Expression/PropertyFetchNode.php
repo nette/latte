@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Property access with nullsafe support ($obj->prop, $obj?->prop).
+ */
 class PropertyFetchNode extends ExpressionNode
 {
 	public function __construct(

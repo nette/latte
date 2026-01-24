@@ -4,6 +4,11 @@ namespace Latte\Compiler;
 
 
 /**
+ * Base class for AST nodes representing parsed template structure.
+ *
+ * Each node must implement print() to generate PHP code and getIterator()
+ * to yield child nodes for compiler passes.
+ *
  * @implements \IteratorAggregate<Node>
  */
 abstract class Node implements \IteratorAggregate

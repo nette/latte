@@ -24,6 +24,9 @@ use Latte\Runtime\HtmlHelpers;
 use function is_string;
 
 
+/**
+ * Built-in compiler passes.
+ */
 final class Passes
 {
 	public function __construct(

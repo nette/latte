@@ -12,6 +12,9 @@ use Latte\Helpers;
 use function array_merge, count;
 
 
+/**
+ * Container for sequence of child nodes.
+ */
 final class FragmentNode extends AreaNode
 {
 	/** @var AreaNode[] */

@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Global constant access (CONST or \CONST).
+ */
 class ConstantFetchNode extends ExpressionNode
 {
 	public function __construct(

@@ -10,12 +10,18 @@ namespace Latte\Attributes;
 use Attribute;
 
 
+/**
+ * Marks method as a template function.
+ */
 #[Attribute(Attribute::TARGET_METHOD)]
 class TemplateFunction
 {
 }
 
 
+/**
+ * Marks method as a template filter.
+ */
 #[Attribute(Attribute::TARGET_METHOD)]
 class TemplateFilter
 {

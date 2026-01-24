@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Latte's `in` operator compiled to in_array() with strict mode.
+ */
 class InNode extends ExpressionNode
 {
 	public function __construct(

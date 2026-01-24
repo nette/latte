@@ -16,6 +16,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Method call with nullsafe support, partial application, or first-class callable.
+ */
 class MethodCallNode extends ExpressionNode
 {
 	public function __construct(

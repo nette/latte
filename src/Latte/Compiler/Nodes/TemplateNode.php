@@ -11,6 +11,9 @@ use Latte\Compiler\Node;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Root of template AST containing head declarations and main content fragment.
+ */
 final class TemplateNode extends Node
 {
 	public FragmentNode $head;

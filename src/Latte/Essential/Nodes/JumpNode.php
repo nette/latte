@@ -15,10 +15,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {breakIf ...}
- * {continueIf ...}
- * {skipIf ...}
- * {exitIf ...}
+ * {breakIf $cond}, {continueIf $cond}, {skipIf $cond}, {exitIf $cond}
+ * Note: {skipIf} is like {continueIf} but doesn't increment $iterator->counter.
  */
 class JumpNode extends StatementNode
 {

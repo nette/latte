@@ -15,6 +15,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Function call with partial application or first-class callable support.
+ */
 class FunctionCallNode extends ExpressionNode
 {
 	public function __construct(

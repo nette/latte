@@ -16,7 +16,7 @@ use function addcslashes, array_map, array_pop, end, implode, preg_replace, preg
 
 
 /**
- * PHP printing helpers and context.
+ * Context for PHP code generation with escaping management.
  */
 final class PrintContext
 {
@@ -101,12 +101,18 @@ final class PrintContext
 	}
 
 
+	/**
+	 * Pushes current escaper onto stack.
+	 */
 	public function beginEscape(): Escaper
 	{
 		return $this->escaperStack[] = $this->getEscaper();
 	}
 
 
+	/**
+	 * Restores previous escaper from stack.
+	 */
 	public function restoreEscape(): void
 	{
 		array_pop($this->escaperStack);
@@ -135,6 +141,9 @@ final class PrintContext
 	}
 
 
+	/**
+	 * Generates unique ID for temporary variables.
+	 */
 	public function generateId(): int
 	{
 		return $this->counter++;

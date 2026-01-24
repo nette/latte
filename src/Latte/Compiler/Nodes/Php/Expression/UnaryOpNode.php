@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Unary prefix operation (+, -, ~, @, !).
+ */
 class UnaryOpNode extends ExpressionNode implements OperatorNode
 {
 	private const Ops = ['+' => 1, '-' => 1, '~' => 1, '@' => 1, '!' => 1];

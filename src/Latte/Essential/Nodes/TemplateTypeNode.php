@@ -14,7 +14,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {templateType ClassName}
+ * {templateType App\MyTemplateClass}
+ * Declares parameter types via class for IDE autocompletion.
  */
 class TemplateTypeNode extends StatementNode
 {

@@ -16,7 +16,7 @@ use function get_defined_vars;
 abstract class Extension
 {
 	/**
-	 * Initializes before template is compiler.
+	 * Initializes before template is compiled.
 	 */
 	public function beforeCompile(Engine $engine): void
 	{
@@ -34,7 +34,7 @@ abstract class Extension
 
 
 	/**
-	 * Returns a list of parsers for Latte tags.
+	 * Returns a list of compiler passes.
 	 * @return array<string, callable(Compiler\Nodes\TemplateNode): void|\stdClass>
 	 */
 	public function getPasses(): array

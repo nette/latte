@@ -15,7 +15,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {sandbox "file" [,] [params]}
+ * {sandbox 'file.latte'}
+ * Isolated template rendering with sandbox policy.
  */
 class SandboxNode extends StatementNode
 {

@@ -14,6 +14,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Single filter with name, arguments, and nullsafe flag (|name:arg).
+ */
 class FilterNode extends Node
 {
 	public function __construct(

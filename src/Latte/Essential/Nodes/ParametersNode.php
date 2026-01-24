@@ -21,7 +21,8 @@ use function is_string;
 
 
 /**
- * {parameters [type] $var, ...}
+ * {parameters [Type] $name [= default], ...}
+ * Declares and filters template parameters.
  */
 class ParametersNode extends StatementNode
 {

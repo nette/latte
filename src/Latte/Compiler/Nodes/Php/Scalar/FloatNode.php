@@ -15,6 +15,9 @@ use function is_finite, preg_match, sprintf, str_replace, strpbrk;
 use const INF;
 
 
+/**
+ * Floating-point literal including infinity and NaN.
+ */
 class FloatNode extends ScalarNode
 {
 	public function __construct(

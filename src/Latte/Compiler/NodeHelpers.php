@@ -14,6 +14,9 @@ use Latte\Compiler\Nodes\Php\Scalar;
 use function array_merge, constant, defined;
 
 
+/**
+ * Utility functions for working with AST nodes.
+ */
 final class NodeHelpers
 {
 	/**

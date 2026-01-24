@@ -12,7 +12,7 @@ use function in_array, strtoupper;
 
 
 /**
- * Filter runtime info
+ * Content type context for contextual filters.
  */
 class FilterInfo
 {

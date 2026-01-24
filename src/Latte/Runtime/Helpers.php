@@ -68,7 +68,7 @@ class Helpers
 
 
 	/**
-	 * Converts ... to ...
+	 * Converts content between content types.
 	 */
 	public static function convertTo(FilterInfo $info, string $dest, string $s): string
 	{

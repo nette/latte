@@ -14,6 +14,7 @@ use Latte\Compiler\Tag;
 
 /**
  * {trace}
+ * Throws exception with template stack trace.
  */
 class TraceNode extends StatementNode
 {

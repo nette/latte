@@ -8,6 +8,9 @@
 namespace Latte;
 
 
+/**
+ * Security policy for sandbox mode.
+ */
 interface Policy
 {
 	function isTagAllowed(string $tag): bool;

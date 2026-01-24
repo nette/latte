@@ -11,6 +11,9 @@ use Latte\Compiler\Node;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Code generator hidden from compiler passes. Pass child nodes for traversal.
+ */
 class AuxiliaryNode extends AreaNode
 {
 	public function __construct(

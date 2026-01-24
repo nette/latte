@@ -16,6 +16,9 @@ use Latte\ContentType;
 use Latte\Runtime as LR;
 
 
+/**
+ * Dynamic HTML attribute generated from expression.
+ */
 class ExpressionAttributeNode extends AreaNode
 {
 	public function __construct(

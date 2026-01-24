@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Type cast (int), (string), (array), etc.
+ */
 class CastNode extends ExpressionNode implements OperatorNode
 {
 	private const Types = ['int' => 1, 'float' => 1, 'string' => 1, 'array' => 1, 'object' => 1, 'bool' => 1];

@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * empty() language construct.
+ */
 class EmptyNode extends ExpressionNode
 {
 	public function __construct(

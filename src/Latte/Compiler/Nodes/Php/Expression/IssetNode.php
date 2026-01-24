@@ -14,6 +14,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * isset() language construct.
+ */
 class IssetNode extends ExpressionNode
 {
 	public function __construct(

@@ -19,7 +19,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * n:else & n:elseif
+ * <div n:if="$cond"> ... <div n:else>
+ * <div n:if="$cond"> ... <div n:elseif="$cond2">
  */
 final class NElseNode extends StatementNode
 {

@@ -15,7 +15,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {import "file"[, args]}
+ * {import 'file.latte'}
+ * Imports block definitions from another template.
  */
 class ImportNode extends StatementNode
 {

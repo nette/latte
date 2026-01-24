@@ -22,10 +22,8 @@ use function in_array;
 
 
 /**
- * {if $cond} & {elseif $cond} & {else}
- * {if} & {/if $cond}
- * {ifset $var} & {elseifset $var}
- * {ifset block} & {elseifset block}
+ * {if $cond} ... {elseif $cond} ... {else} ... {/if}
+ * {ifset $var} ... {elseifset $var} ... {/ifset}
  */
 class IfNode extends StatementNode
 {

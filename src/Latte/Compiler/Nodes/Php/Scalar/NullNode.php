@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Null literal.
+ */
 class NullNode extends ScalarNode
 {
 	public function __construct(

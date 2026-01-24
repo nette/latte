@@ -11,6 +11,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Type not expressible in native PHP syntax (e.g., int[], array<K,V>).
+ */
 class SuperiorTypeNode extends ComplexTypeNode
 {
 	public function __construct(

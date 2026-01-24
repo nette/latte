@@ -14,7 +14,7 @@ use function array_search, in_array;
 
 
 /**
- * Latte tag or n:attribute.
+ * Represents a Latte tag or n:attribute during parsing.
  */
 final class Tag
 {

@@ -14,6 +14,7 @@ use Latte\Compiler\Tag;
 
 /**
  * {varPrint [all]}
+ * Suggests {varType} declarations for variables.
  */
 class VarPrintNode extends StatementNode
 {

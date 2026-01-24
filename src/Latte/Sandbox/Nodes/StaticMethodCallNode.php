@@ -11,6 +11,9 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Static method call routed through sandbox security policy.
+ */
 class StaticMethodCallNode extends Expression\StaticMethodCallNode
 {
 	public function __construct(Expression\StaticMethodCallNode $from)

@@ -18,7 +18,8 @@ use Latte\Compiler\TemplateParser;
 
 
 /**
- * n:ifcontent
+ * <div n:ifcontent> ... </div>
+ * Omits element if content is empty or whitespace only.
  */
 class IfContentNode extends StatementNode
 {

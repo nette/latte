@@ -16,6 +16,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Static method call with partial application or first-class callable support.
+ */
 class StaticMethodCallNode extends ExpressionNode
 {
 	public function __construct(

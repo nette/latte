@@ -12,6 +12,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Variable access ($name or ${expr} for variable variables).
+ */
 class VariableNode extends ExpressionNode
 {
 	public function __construct(

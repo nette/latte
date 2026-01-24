@@ -22,8 +22,8 @@ use function assert, implode;
 
 
 /**
- * {var [type] $var = value, ...}
- * {default [type] $var = value, ...}
+ * {var [type] $name = value}
+ * {default $name = value}
  */
 class VarNode extends StatementNode
 {

@@ -15,6 +15,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Closure or arrow function (fn($x) => $x or function($x) use ($y) {}).
+ */
 class ClosureNode extends ExpressionNode
 {
 	public function __construct(

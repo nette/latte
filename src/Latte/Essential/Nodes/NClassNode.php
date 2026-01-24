@@ -15,7 +15,7 @@ use Latte\Compiler\Tag;
 
 
 /**
- * n:class="..."
+ * <div n:class="$isActive ? active, highlight">
  */
 final class NClassNode extends StatementNode
 {

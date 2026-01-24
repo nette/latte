@@ -15,6 +15,9 @@ use Latte\Compiler\PrintContext;
 use Latte\Helpers;
 
 
+/**
+ * Array literal.
+ */
 class ArrayNode extends ExpressionNode
 {
 	public function __construct(

@@ -13,6 +13,9 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 
 
+/**
+ * Closure use variable ($var or &$var).
+ */
 class ClosureUseNode extends Node
 {
 	public function __construct(

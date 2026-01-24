@@ -18,7 +18,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {capture $variable}
+ * {capture $var} ... {/capture}
+ * Captures block output into variable.
  */
 class CaptureNode extends StatementNode
 {

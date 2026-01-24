@@ -19,7 +19,7 @@ use Latte\ContentType;
 
 
 /**
- * HTML element node.
+ * HTML/XML element with attributes, content, and n:attribute support.
  */
 class ElementNode extends AreaNode
 {

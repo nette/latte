@@ -16,7 +16,7 @@ use function preg_match;
 
 
 /**
- * n:tag="..."
+ * <div n:tag="$useSpan ? span">
  */
 final class NTagNode extends StatementNode
 {

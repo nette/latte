@@ -17,7 +17,8 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {iterateWhile $cond}
+ * {iterateWhile [$cond]} ... {/iterateWhile [$cond]}
+ * Groups consecutive items in {foreach} by condition.
  */
 class IterateWhileNode extends StatementNode
 {

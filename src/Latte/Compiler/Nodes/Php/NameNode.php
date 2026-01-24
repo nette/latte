@@ -13,6 +13,9 @@ use Latte\Compiler\PrintContext;
 use function array_flip, str_starts_with, strtolower, substr;
 
 
+/**
+ * Qualified name for functions, classes, or constants (\Foo\Bar).
+ */
 class NameNode extends Node
 {
 	public const

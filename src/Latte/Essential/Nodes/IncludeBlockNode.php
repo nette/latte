@@ -22,7 +22,7 @@ use Latte\Runtime\Template;
 
 
 /**
- * {include [block] name [from file] [, args]}
+ * {include #name|parent|this [from 'file.latte']}
  */
 class IncludeBlockNode extends StatementNode
 {
