@@ -194,6 +194,7 @@ final class TemplateParser
 
 		$token = $this->stream->peek();
 		$startTag = $this->pushTag($this->parseLatteTag());
+		$tagRanges = [$startTag->position];
 
 		$parser = $this->getTagParser($startTag->name, $token->position);
 		$res = $parser($startTag, $this);
@@ -231,10 +232,12 @@ final class TemplateParser
 
 					if ($tag->closing) {
 						$this->checkEndTag($startTag, $tag);
+						$tagRanges[] = $tag->position;
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
 						break;
 					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], strict: true)) {
+						$tagRanges[] = $tag->position;
 						$this->pushTag($tag);
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
@@ -273,6 +276,11 @@ final class TemplateParser
 		$node->position = isset($tag) && $tag->closing
 			? Range::span($startTag->position, $tag->position)
 			: $startTag->position;
+
+		if ($node instanceof Nodes\StatementNode) {
+			$node->tagRanges = $tagRanges;
+		}
+
 		return $node;
 	}
 

@@ -10,7 +10,6 @@ namespace Latte\Essential\Nodes;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
@@ -24,7 +23,6 @@ class IfChangedNode extends StatementNode
 	public ArrayNode $conditions;
 	public AreaNode $then;
 	public ?AreaNode $else = null;
-	public ?Position $elseLine = null;
 
 
 	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
@@ -35,7 +33,6 @@ class IfChangedNode extends StatementNode
 
 		[$node->then, $nextTag] = yield ['else'];
 		if ($nextTag?->name === 'else') {
-			$node->elseLine = $nextTag->position;
 			[$node->else] = yield;
 		}
 
@@ -68,7 +65,7 @@ class IfChangedNode extends StatementNode
 				$context->generateId(),
 				$this->conditions,
 				$this->then,
-				$this->elseLine,
+				$this->tagRanges[1] ?? null,
 				$this->else,
 			)
 			: $context->format(
@@ -107,7 +104,7 @@ class IfChangedNode extends StatementNode
 				$this->position,
 				$this->then,
 				$context->generateId(),
-				$this->elseLine,
+				$this->tagRanges[1] ?? null,
 				$this->else,
 			)
 			: $context->format(

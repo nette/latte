@@ -13,7 +13,6 @@ use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
-use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 
@@ -26,7 +25,7 @@ class SwitchNode extends StatementNode
 {
 	public ?ExpressionNode $expression;
 
-	/** @var array<array{?ArrayNode, Position, FragmentNode}> */
+	/** @var array<array{?ArrayNode, FragmentNode}> */
 	public array $cases = [];
 
 
@@ -53,17 +52,16 @@ class SwitchNode extends StatementNode
 		while (true) {
 			if ($nextTag->name === 'case') {
 				$nextTag->expectArguments();
-				[$case, $line] = [$nextTag->parser->parseArguments(), $nextTag->position];
+				$case = $nextTag->parser->parseArguments();
 				[$content, $nextTag] = yield ['case', 'default'];
-				$node->cases[] = [$case, $line, $content];
+				$node->cases[] = [$case, $content];
 
 			} elseif ($nextTag->name === 'default') {
 				if ($default++) {
 					throw new CompileException('Tag {switch} may only contain one {default} clause.', $nextTag->position);
 				}
-				$line = $nextTag->position;
 				[$content, $nextTag] = yield ['case', 'default'];
-				$node->cases[] = [null, $line, $content];
+				$node->cases[] = [null, $content];
 
 			} else {
 				return $node;
@@ -81,7 +79,7 @@ class SwitchNode extends StatementNode
 		);
 		$first = true;
 		$default = null;
-		foreach ($this->cases as [$case, $line, $content]) {
+		foreach ($this->cases as $i => [$case, $content]) {
 			if (!$case) {
 				$default = $content->print($context);
 				continue;
@@ -93,7 +91,7 @@ class SwitchNode extends StatementNode
 			$res .= $context->format(
 				'if (in_array($ʟ_switch, %node, true)) %line { %node } ',
 				$case,
-				$line,
+				$this->tagRanges[$i + 1] ?? null,
 				$content,
 			);
 		}
@@ -110,7 +108,7 @@ class SwitchNode extends StatementNode
 		if ($this->expression) {
 			yield $this->expression;
 		}
-		foreach ($this->cases as [&$case, , &$stmt]) {
+		foreach ($this->cases as [&$case, &$stmt]) {
 			if ($case) {
 				yield $case;
 			}
