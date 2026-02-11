@@ -152,6 +152,7 @@ final class CoreExtension extends Latte\Extension
 			'join' => $this->filters->implode(...),
 			'last' => $this->filters->last(...),
 			'length' => $this->filters->length(...),
+			'limit' => fn(iterable $value, int $length, int $offset = 0) => Filters::slice($value, $offset, $length, preserveKeys: true),
 			'localDate' => $this->filters->localDate(...),
 			'lower' => extension_loaded('mbstring')
 				? $this->filters->lower(...)

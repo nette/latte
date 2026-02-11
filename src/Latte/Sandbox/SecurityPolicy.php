@@ -62,7 +62,7 @@ class SecurityPolicy implements Latte\Policy
 			'batch', 'breaklines', 'breakLines', 'bytes', 'capitalize', 'ceil', 'clamp', 'date', 'escapeCss', 'escapeHtml',
 			'escapeHtmlComment', 'escapeICal', 'escapeJs', 'escapeUrl', 'escapeXml', 'explode', 'first',
 			'firstUpper', 'floor', 'checkUrl', 'implode', 'indent', 'join', 'last', 'length', 'lower',
-			'number', 'padLeft', 'padRight', 'query', 'random', 'repeat', 'replace', 'replaceRe', 'reverse',
+			'limit', 'number', 'padLeft', 'padRight', 'query', 'random', 'repeat', 'replace', 'replaceRe', 'reverse',
 			'round', 'slice', 'sort', 'spaceless', 'split', 'strip', 'striphtml', 'stripHtml', 'striptags', 'stripTags', 'substr',
 			'trim', 'truncate', 'upper', 'webalize',
 		]);
