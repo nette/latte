@@ -759,20 +759,41 @@ final class Filters
 
 
 	/**
-	 * Extracts a slice of an array or string.
-	 * @param  string|array<mixed>  $value
-	 * @return ($value is string ? string : array<mixed>)
+	 * Extracts a slice of an array, string or iterator.
+	 * @param  string|iterable<mixed>  $value
+	 * @return ($value is string ? string : ($value is array ? array<mixed> : \Generator))
 	 */
 	public static function slice(
-		string|array $value,
+		string|iterable $value,
 		int $start,
 		?int $length = null,
 		bool $preserveKeys = false,
-	): string|array
+	): string|array|\Generator
 	{
-		return is_array($value)
-			? array_slice($value, $start, $length, $preserveKeys)
-			: self::substring($value, $start, $length);
+		if (is_string($value)) {
+			return self::substring($value, $start, $length);
+		} elseif (is_array($value)) {
+			return array_slice($value, $start, $length, $preserveKeys);
+		}
+
+		return (function () use ($value, $start, $length, $preserveKeys) {
+			$i = 0;
+			$count = 0;
+			foreach ($value as $key => $val) {
+				if ($i++ < $start) {
+					continue;
+				}
+				if ($length !== null && $count >= $length) {
+					break;
+				}
+				if ($preserveKeys) {
+					yield $key => $val;
+				} else {
+					yield $val;
+				}
+				$count++;
+			}
+		})();
 	}
 
 
