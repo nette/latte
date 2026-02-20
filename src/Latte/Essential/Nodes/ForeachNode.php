@@ -22,7 +22,7 @@ use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TagParser;
-use function array_map, array_unshift, implode, preg_match;
+use function array_map, array_unshift, implode, is_string, preg_match;
 
 
 /**
@@ -159,8 +159,8 @@ class ForeachNode extends StatementNode
 		(new NodeTraverser)->traverse($node, function (Node $node) use (&$vars) {
 			if ($node instanceof self && $node->checkArgs) {
 				foreach ([$node->key, $node->value] as $var) {
-					if ($var instanceof VariableNode) {
-						$vars[$var->name][] = $node->position->line;
+					if ($var instanceof VariableNode && is_string($var->name)) {
+						$vars[$var->name][] = $node->position?->line;
 					}
 				}
 			}

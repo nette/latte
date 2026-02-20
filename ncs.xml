@@ -11,9 +11,9 @@
 		<exclude-pattern>*.phpt</exclude-pattern>
 	</rule>
 
-	<!-- public foo /*readonly*/ $foo -->
-	<rule ref="Squiz.Commenting.VariableComment.WrongStyle">
-		<exclude-pattern>*.php</exclude-pattern>
+	<!-- bug in sniffer -->
+	<rule ref="Squiz.PHP.NonExecutableCode.Unreachable">
+		<exclude-pattern>./src/Latte/Essential/Nodes/JumpNode.php</exclude-pattern>
 	</rule>
 
 	<!-- strfime() -->

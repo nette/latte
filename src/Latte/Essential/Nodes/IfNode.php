@@ -67,6 +67,7 @@ class IfNode extends StatementNode
 		}
 
 		if ($node->capture) {
+			assert($nextTag !== null);
 			$node->condition = $nextTag->parser->parseExpression();
 		}
 

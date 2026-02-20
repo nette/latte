@@ -110,6 +110,7 @@ final class Tag
 
 	public function replaceNAttribute(AreaNode $node): void
 	{
+		assert($this->htmlElement !== null);
 		$index = array_search($this->nAttribute, $this->htmlElement->attributes->children, strict: true);
 		$this->htmlElement->attributes->children[$index] = $this->nAttribute = $node;
 	}

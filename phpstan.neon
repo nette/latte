@@ -1,12 +1,138 @@
 parameters:
-	level: 5
+	level: 8
 
 	paths:
 		- src
 
+	excludePaths:
+		analyse:
+			- src/Latte/Compiler/TagParserData.php
+
+	fileExtensions:
+		- php
+		- phtml
+
 	ignoreErrors:
-		- '#Unsafe usage of new static\(\)#'
-		- '#Match expression does not handle remaining value.*#'
+		# --- Celý projekt ---
+
+		-	# Factory/derive pattern — new static() je záměrný
+			'#Unsafe usage of new static\(\)#'
+
+		-	# Match s exhaustivním else branchem jako safety net
+			'#Match expression does not handle remaining value.*#'
+
+		-	# Latte callback systém — callable nemá fixní signaturu
+			'#no signature specified for (callable|Closure)#'
+
+		# --- AST Node třídy: match() výrazy s exhaustivním typováním ---
+
+		-	# PHPStan vidí redundantní větve v match/ternary na nullable/union properties
+			message: '#(Left side of && is always false|Result of && is always false|always evaluate to (true|false)|Ternary operator condition is always true)#'
+			paths:
+				- src/Latte/Compiler/Nodes/
+				- src/Latte/Essential/Nodes/
+
+		-	# getIterator() yield null pro nepovinné child nody
+			message: '#Generator expects value type Latte\\Compiler\\Node, null given#'
+			paths:
+				- src/Latte/Compiler/Nodes/
+				- src/Latte/Essential/Nodes/
+
+		# --- Parsery: lookahead tokeny mohou být null ---
+
+		-	# Parser pracuje s nullable tokeny při lookahead/backtrack
+			message: '#Latte\\Compiler\\(Position|Token)\|null#'
+			paths:
+				- src/Latte/Compiler/TagParser.php
+				- src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParser: nullable Tag při zpracování vnořených tagů
+			message: '#on Latte\\Compiler\\Tag\|null#'
+			path: src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParser: nullable Closure pro volitelné callbacks
+			message: '#Closure\|null given#'
+			path: src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParser: dynamický přístup k expression node properties
+			message: '#(undefined property.*ExpressionNode|Variable \$name might not be defined)#'
+			path: src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParserHtml: dynamické HTML element objekty a destructuring
+			message: '#(object\{tag:.*not writable|undefined property.*object\{|has parameter \$elem with no type|array destructuring on list)#'
+			path: src/Latte/Compiler/TemplateParserHtml.php
+
+		# --- TagParser: generovaný trait TagParserData ---
+
+		-	# Metody volané z generovaného traitu TagParserData (excluded z analýzy)
+			message: '#^(Static method|Method) Latte\\Compiler\\TagParser::(checkFunctionName|handleBuiltinTypes|parseOffset|parseDocString)\(\) is unused\.$#'
+			path: src/Latte/Compiler/TagParser.php
+
+		-	# Interní parser state machine — typy z regex výsledků a token operací
+			message: '#^(Cannot access offset 0 on|Cannot use array destructuring on|Instanceof between.*InterpolatedStringPartNode will always evaluate to false|Offset.*might not exist on|Unary operation.*on string results in an error)#'
+			path: src/Latte/Compiler/TagParser.php
+
+		# --- PrintContext::format() — regex-based code generation ---
+
+		-	# Regex skupiny garantují existenci offsetů, PHPStan to nevidí
+			message: '#^Offset [1-5] (does not|might not) exist on array\{#'
+			path: src/Latte/Compiler/PrintContext.php
+
+		-	# OperatorNode je abstract, print() existuje na konkrétních podtřídách
+			message: '#(OperatorNode::print\(\)|parenthesize\(\) expects Latte\\Compiler\\Nodes\\Php\\OperatorNode, Latte\\Compiler\\Node given)#'
+			path: src/Latte/Compiler/PrintContext.php
+
+		# --- SecurityPolicy: reference-based caching pattern ---
+
+		-	# $res = &$cache[...] — PHPStan neumí analyzovat auto-vivification a stav reference
+			message: '#(always evaluate to (true|false)|Result of \|\| is always true|is never read, only written|Unreachable statement|always exists and is not nullable)#'
+			path: src/Latte/Sandbox/SecurityPolicy.php
+
+		# --- Tracy bridge ---
+
+		-	# Záměrné version_compare() guardy pro kompatibilitu s Tracy
+			message: '#side of && is always true#'
+			path: src/Bridges/Tracy/BlueScreenPanel.php
+
+		-	# Anonymní Extension třída pro sběr renderovaných šablon (write-only by design)
+			message: '#Extension@anonymous.*LattePanel#'
+			path: src/Bridges/Tracy/LattePanel.php
+
+		-	# Compiled phtml šablona — stdClass z Tracy kontextu
+			message: '#on stdClass\|false#'
+			path: src/Bridges/Tracy/dist/panel.phtml
+
+		# --- Ostatní ---
+
+		-	# Linter: dynamické načítání Nette bridge extensions
+			identifier: class.notFound
+			path: src/Tools/Linter.php
+		-
+			message: '#expects Latte\\Extension, Nette\\#'
+			path: src/Tools/Linter.php
+
+		-	# Blueprint: nullable typ z reflexe
+			message: '#expects string, string\|null given#'
+			path: src/Latte/Essential/Blueprint.php
+
+		-	# class_alias pro zpětnou kompatibilitu
+			identifier: class.notFound
+			path: src/Latte/Compiler/Nodes/PrintNode.php
+
+		-	# codePointToUtf8: bitové operace ztrácejí range informaci pro chr()
+			# decodeNumber: $str + 0 je standardní PHP idiom pro konverzi stringu na číslo
+			message: '#(chr expects int\<0, 255\>|string.*results in an error)#'
+			path: src/Latte/Compiler/PhpHelpers.php
+
+		-	# flock/ftruncate: PHPStan vyžaduje specifičtější int range
+			message: '#(flock expects int\<0, 7\>|ftruncate expects int\<0, max\>)#'
+			path: src/Latte/Runtime/Cache.php
+
+		-	# array_slice() vrací array, ne list
+			message: '#expects list<Latte\\Compiler\\Token>, array<Latte\\Compiler\\Token> given#'
+			paths:
+				- src/Latte/Compiler/TemplateParser.php
+				- src/Latte/Compiler/TemplateParserHtml.php
 
 includes:
 	- phpstan-baseline.neon

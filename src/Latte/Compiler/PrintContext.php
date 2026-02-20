@@ -64,7 +64,7 @@ final class PrintContext
 				return match ($fn) {
 					'modify' => $args[$pos]->printSimple($this, $var),
 					'modifyContent' => $args[$pos]->printContentAware($this, $var),
-					'escape' => end($this->escaperStack)->escape($var),
+					'escape' => $this->getEscaper()->escape($var),
 				};
 			},
 			$mask,
@@ -121,7 +121,9 @@ final class PrintContext
 
 	public function getEscaper(): Escaper
 	{
-		return clone end($this->escaperStack);
+		$escaper = end($this->escaperStack);
+		assert($escaper instanceof Escaper);
+		return clone $escaper;
 	}
 
 
@@ -190,7 +192,7 @@ final class PrintContext
 	public function parenthesize(OperatorNode $parentNode, Node $childNode, int $childPosition): string
 	{
 		[$parentPrec, $parentAssoc] = $parentNode->getOperatorPrecedence();
-		[$childPrec] = $childNode instanceof OperatorNode ? $childNode->getOperatorPrecedence() : null;
+		[$childPrec] = $childNode instanceof OperatorNode ? $childNode->getOperatorPrecedence() : [null];
 		return $childPrec && ($childPrec < $parentPrec || ($parentPrec === $childPrec && $parentAssoc !== $childPosition))
 			? '(' . $childNode->print($this) . ')'
 			: $childNode->print($this);

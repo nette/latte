@@ -77,7 +77,8 @@ class LattePanel implements Tracy\IBarPanel
 		}
 
 		return Tracy\Helpers::capture(function () {
-			$name = $this->name ?? basename(reset($this->templates)->getName());
+			$first = reset($this->templates);
+			$name = $this->name ?? ($first ? basename($first->getName()) : '');
 			require __DIR__ . '/dist/tab.phtml';
 		});
 	}

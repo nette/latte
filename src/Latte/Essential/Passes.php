@@ -87,17 +87,20 @@ final class Passes
 			return;
 		}
 		(new NodeTraverser)->traverse($node, function (Node $node) {
-			if ($node instanceof ElementNode && $node->is('script')
-				&& HtmlHelpers::classifyScriptType((string) $node->getAttribute('type')) === ContentType::JavaScript
-			) {
-				$prev = null;
-				foreach ($node->content ?? [] as $child) {
-					if ($prev instanceof PrintNode && $child instanceof TextNode) {
-						if (preg_match('/^["\']/', $child->content)) {
-							throw new CompileException('Do not place print statement {...} inside quotes in JavaScript.', $prev->position);
+			if ($node instanceof ElementNode && $node->is('script')) {
+				$type = $node->getAttribute('type');
+				if ((is_string($type) || $type === null)
+					&& HtmlHelpers::classifyScriptType((string) $type) === ContentType::JavaScript
+				) {
+					$prev = null;
+					foreach ($node->content ?? [] as $child) {
+						if ($prev instanceof PrintNode && $child instanceof TextNode) {
+							if (preg_match('/^["\']/', $child->content)) {
+								throw new CompileException('Do not place print statement {...} inside quotes in JavaScript.', $prev->position);
+							}
 						}
+						$prev = $child;
 					}
-					$prev = $child;
 				}
 			}
 		});
@@ -119,7 +122,7 @@ final class Passes
 				$elem = $node;
 
 			} elseif ($node instanceof ExpressionAttributeNode
-				&& HtmlHelpers::isUrlAttribute($elem->name, $node->name)
+				&& $elem && HtmlHelpers::isUrlAttribute($elem->name, $node->name)
 				&& !$node->modifier->removeFilter('nocheck') && !$node->modifier->removeFilter('noCheck')
 				&& !$node->modifier->hasFilter('datastream') && !$node->modifier->hasFilter('dataStream')
 			) {

@@ -316,7 +316,7 @@ final class Filters
 	public static function replaceRe(string $subject, string $pattern, string $replacement = ''): string
 	{
 		$res = preg_replace($pattern, $replacement, $subject);
-		if (preg_last_error()) {
+		if (preg_last_error() || $res === null) {
 			throw new Latte\RuntimeException(preg_last_error_msg());
 		}
 
@@ -329,7 +329,12 @@ final class Filters
 	 */
 	public static function dataStream(string $data, ?string $type = null): string
 	{
-		$type ??= finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $data);
+		if ($type === null) {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			if ($finfo) {
+				$type = finfo_buffer($finfo, $data) ?: null;
+			}
+		}
 		return 'data:' . ($type ? "$type;" : '') . 'base64,' . base64_encode($data);
 	}
 
@@ -352,7 +357,7 @@ final class Filters
 		$s = (string) $s;
 		return match (true) {
 			extension_loaded('mbstring') => mb_substr($s, $start, $length, 'UTF-8'),
-			extension_loaded('iconv') => iconv_substr($s, $start, $length, 'UTF-8'),
+			extension_loaded('iconv') => (string) iconv_substr($s, $start, $length, 'UTF-8'),
 			default => throw new Latte\RuntimeException("Filter |substr requires 'mbstring' or 'iconv' extension."),
 		};
 	}
@@ -448,7 +453,7 @@ final class Filters
 	{
 		return match (true) {
 			extension_loaded('mbstring') => mb_strlen($s, 'UTF-8'),
-			extension_loaded('iconv') => iconv_strlen($s, 'UTF-8'),
+			extension_loaded('iconv') => (int) iconv_strlen($s, 'UTF-8'),
 			default => strlen(@utf8_decode($s)), // deprecated
 		};
 	}
@@ -461,7 +466,7 @@ final class Filters
 	{
 		$charlist = preg_quote($charlist, '#');
 		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '', (string) $s);
-		if (preg_last_error()) {
+		if (preg_last_error() || $s === null) {
 			throw new Latte\RuntimeException(preg_last_error_msg());
 		}
 
@@ -503,7 +508,7 @@ final class Filters
 	public static function reverse(string|iterable $val, bool $preserveKeys = false): string|array
 	{
 		return is_string($val)
-			? iconv('UTF-32LE', 'UTF-8', strrev(iconv('UTF-8', 'UTF-32BE', $val)))
+			? (string) iconv('UTF-32LE', 'UTF-8', strrev((string) iconv('UTF-8', 'UTF-32BE', $val)))
 			: array_reverse(iterator_to_array($val), $preserveKeys);
 	}
 

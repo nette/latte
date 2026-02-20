@@ -42,7 +42,7 @@ final class Cache
 			: null;
 
 		if (
-			!($signature && $signature !== stream_get_contents($lock))
+			!($signature && $lock && $signature !== stream_get_contents($lock))
 			&& (@include $file) !== false // @ - file may not exist
 		) {
 			return;
@@ -68,7 +68,7 @@ final class Cache
 
 			fseek($lock, 0);
 			fwrite($lock, $signature ?? hash('xxh128', serialize($this->generateRefreshSignature($engine, $name))));
-			ftruncate($lock, ftell($lock));
+			ftruncate($lock, (int) ftell($lock));
 
 			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, force: true); // @ can be restricted
@@ -88,14 +88,14 @@ final class Cache
 	{
 		$dir = dirname($file);
 		if (!is_dir($dir) && !@mkdir($dir) && !is_dir($dir)) { // @ - dir may already exist
-			throw new RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
+			throw new RuntimeException("Unable to create directory '$dir'. " . (error_get_last()['message'] ?? ''));
 		}
 
 		$handle = @fopen($file, 'c+'); // @ is escalated to exception
 		if (!$handle) {
-			throw new RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
+			throw new RuntimeException("Unable to create file '$file'. " . (error_get_last()['message'] ?? ''));
 		} elseif (!@flock($handle, $mode)) { // @ is escalated to exception
-			throw new RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
+			throw new RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . (error_get_last()['message'] ?? ''));
 		}
 
 		return $handle;
@@ -135,7 +135,7 @@ final class Cache
 			Engine::Version,
 			$engine->getLoader()->getContent($name),
 			array_map(
-				fn($extension) => filemtime((new \ReflectionObject($extension))->getFileName()),
+				fn($extension) => @filemtime((string) (new \ReflectionObject($extension))->getFileName()), // @ file may not exist
 				$engine->getExtensions(),
 			),
 		];

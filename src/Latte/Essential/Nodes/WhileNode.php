@@ -36,6 +36,7 @@ class WhileNode extends StatementNode
 
 		[$node->content, $nextTag] = yield;
 		if ($node->postTest) {
+			assert($nextTag !== null);
 			$nextTag->expectArguments();
 			$node->condition = $nextTag->parser->parseExpression();
 		}

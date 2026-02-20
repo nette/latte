@@ -18,7 +18,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
 use Latte\Helpers;
-use function assert, implode;
+use function assert, implode, is_string;
 
 
 /**
@@ -73,11 +73,13 @@ class VarNode extends StatementNode
 		foreach ($this->assignments as $assign) {
 			if ($this->default) {
 				assert($assign->var instanceof VariableNode);
+				assert(is_string($assign->var->name));
+				$varName = $assign->var->name;
 				$assign = new AssignOpNode(
 					$assign->var,
 					'??',
 					new TernaryNode(
-						new AuxiliaryNode(fn() => 'array_key_exists(' . $context->encodeString($assign->var->name) . ', get_defined_vars())'),
+						new AuxiliaryNode(fn() => 'array_key_exists(' . $context->encodeString($varName) . ', get_defined_vars())'),
 						new NullNode,
 						$assign->expr,
 					),

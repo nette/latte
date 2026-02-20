@@ -97,12 +97,12 @@ final class Linter
 
 	public function lintLatte(string $file): bool
 	{
-		set_error_handler(function (int $severity, string $message) use ($file) {
+		set_error_handler(function (int $severity, string $message, string $errFile = '', int $errLine = 0) use ($file): bool {
 			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], strict: true)) {
 				$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
 				$label = $severity === E_USER_DEPRECATED ? 'DEPRECATED' : 'WARNING';
 				$this->writeError($label, $file . $pos, $message);
-				return null;
+				return true;
 			}
 			return false;
 		});
@@ -111,6 +111,10 @@ final class Linter
 			echo $file, "\n";
 		}
 		$s = file_get_contents($file);
+		if ($s === false) {
+			$this->writeError('ERROR', $file, 'unable to read file');
+			return false;
+		}
 		if (str_starts_with($s, "\xEF\xBB\xBF")) {
 			$this->writeError('WARNING', $file, 'contains BOM');
 		}

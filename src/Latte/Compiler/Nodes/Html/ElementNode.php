@@ -89,7 +89,7 @@ class ElementNode extends AreaNode
 			? $this->dynamicTag->print($context)
 			: (new TagNode($this))->print($context, captureEnd: false);
 
-		if ($this->content) {
+		if ($innerContent = $this->content) {
 			if ($this->dynamicTag) {
 				$endTag = '$ʟ_tags[' . ($context->generateId()) . ']';
 				$res = "\$ʟ_tag = ''; $res $endTag = \$ʟ_tag;";
@@ -98,7 +98,7 @@ class ElementNode extends AreaNode
 			}
 
 			$context->beginEscape()->enterHtmlText($this);
-			$content = $this->content->print($context);
+			$content = $innerContent->print($context);
 			$context->restoreEscape();
 			$res .= $this->breakable
 				? 'try { ' . $content . ' } finally { echo ' . $endTag . '; } '

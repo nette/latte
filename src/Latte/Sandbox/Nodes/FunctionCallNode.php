@@ -7,6 +7,7 @@
 
 namespace Latte\Sandbox\Nodes;
 
+use Latte\Compiler\Nodes\Php\ArgumentNode;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
@@ -24,10 +25,14 @@ class FunctionCallNode extends Expression\FunctionCallNode
 
 	public function print(PrintContext $context): string
 	{
-		return $this->isPartialFunction()
-			? '$this->global->sandbox->closure(' . $context->memberAsString($this->name) . ')'
-			: '$this->global->sandbox->call('
-				. $context->memberAsString($this->name) . ', '
-				. $context->argumentsAsArray($this->args) . ')';
+		if ($this->isPartialFunction()) {
+			return '$this->global->sandbox->closure(' . $context->memberAsString($this->name) . ')';
+		}
+
+		/** @var array<ArgumentNode> $args */
+		$args = $this->args;
+		return '$this->global->sandbox->call('
+			. $context->memberAsString($this->name) . ', '
+			. $context->argumentsAsArray($args) . ')';
 	}
 }

@@ -279,7 +279,7 @@ final class TemplateLexer
 
 	public function pushState(string $state, mixed ...$args): void
 	{
-		array_unshift($this->states, null);
+		array_unshift($this->states, ['name' => '', 'args' => []]);
 		$this->setState($state, ...$args);
 	}
 
@@ -319,7 +319,7 @@ final class TemplateLexer
 
 	public function popSyntax(): void
 	{
-		[$this->openDelimiter, $this->closeDelimiter] = array_pop($this->delimiters);
+		[$this->openDelimiter, $this->closeDelimiter] = array_pop($this->delimiters) ?? throw new \LogicException;
 	}
 
 

@@ -37,12 +37,12 @@ class ClosureNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		$arrow = (bool) $this->expr;
+		$usesByRef = false;
 		foreach ($this->uses as $use) {
-			$arrow = $arrow && !$use->byRef;
+			$usesByRef = $usesByRef || $use->byRef;
 		}
 
-		return $arrow
+		return $this->expr && !$usesByRef
 			? 'fn' . ($this->byRef ? '&' : '')
 				. '(' . $context->implode($this->params) . ')'
 				. ($this->returnType !== null ? ': ' . $this->returnType->print($context) : '')

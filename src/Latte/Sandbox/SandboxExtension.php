@@ -73,6 +73,7 @@ final class SandboxExtension extends Latte\Extension
 
 	private function sandboxVisitor(Node $node): Node
 	{
+		assert($this->policy !== null);
 		if ($node instanceof Expression\VariableNode) {
 			if ($node->name === 'this') {
 				throw new SecurityViolationException("Forbidden variable \${$node->name}.", $node->position);
@@ -128,7 +129,9 @@ final class SandboxExtension extends Latte\Extension
 			|| $node instanceof Expression\StaticMethodCallNode
 		) {
 			$class = namespace\Nodes::class . strrchr($node::class, '\\');
-			return new $class($node);
+			$result = new $class($node);
+			assert($result instanceof Node);
+			return $result;
 
 		} else {
 			return $node;

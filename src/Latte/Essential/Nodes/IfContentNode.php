@@ -35,6 +35,7 @@ class IfContentNode extends StatementNode
 		$node = $tag->node = new static;
 		$node->id = $parser->generateId();
 		[$node->content] = yield;
+		assert($tag->htmlElement !== null);
 		$node->htmlElement = $tag->htmlElement;
 		if (!$node->htmlElement->content) {
 			throw new CompileException("Unnecessary n:ifcontent on empty element <{$node->htmlElement->name}>", $tag->position);
@@ -45,8 +46,9 @@ class IfContentNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
+		$saved = $this->htmlElement->content;
+		assert($saved !== null);
 		try {
-			$saved = $this->htmlElement->content;
 			$else = $this->else ?? new AuxiliaryNode(fn() => '');
 			$this->htmlElement->content = new AuxiliaryNode(fn() => <<<XX
 				ob_start();

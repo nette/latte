@@ -38,6 +38,7 @@ class BlockNode extends StatementNode
 		$tag->outputMode = $tag::OutputRemoveIndentation;
 		$stream = $tag->parser->stream;
 		$node = $tag->node = new static;
+		$name = null;
 
 		if (!$stream->is('|', Token::End)) {
 			$layer = $tag->parser->tryConsumeTokenBeforeUnquotedString('local')
@@ -107,6 +108,7 @@ class BlockNode extends StatementNode
 
 	private function printStatic(PrintContext $context): string
 	{
+		assert($this->block !== null);
 		$this->modifier->escape = $this->modifier->escape || $context->getEscaper()->getState() === Escaper::HtmlAttribute;
 		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
@@ -126,6 +128,7 @@ class BlockNode extends StatementNode
 
 	private function printDynamic(PrintContext $context): string
 	{
+		assert($this->block !== null);
 		$context->addBlock($this->block);
 		$this->block->content = $this->content->print($context); // must be compiled after is added
 		$escaper = $context->getEscaper();

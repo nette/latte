@@ -85,7 +85,7 @@ final class TemplateGenerator
 			$node->head,
 			fn(Node $node) => $node instanceof Nodes\TextNode ? new Nodes\NopNode : $node,
 		);
-		$code = $head->print($context);
+		$code = $head?->print($context) ?? '';
 		if ($code || $context->paramsExtraction) {
 			$code .= 'return get_defined_vars();';
 			$code = self::buildParams($code, $context->paramsExtraction, '$this->params', $context);
@@ -102,8 +102,11 @@ final class TemplateGenerator
 	{
 		$contentType = $context->getEscaper()->getContentType();
 		foreach ($context->blocks as $block) {
-			if (!$block->isDynamic()) {
-				$meta[$block->layer][$block->name->value] = $contentType === $block->escaping
+			$name = $block->name;
+			if (!$block->isDynamic()
+				&& ($name instanceof Nodes\Php\Scalar\StringNode || $name instanceof Nodes\Php\Scalar\IntegerNode)
+			) {
+				$meta[$block->layer][$name->value] = $contentType === $block->escaping
 					? $block->method
 					: [$block->method, $block->escaping];
 			}

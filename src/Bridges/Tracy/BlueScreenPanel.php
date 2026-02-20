@@ -59,7 +59,7 @@ class BlueScreenPanel
 								: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
 							. '</p>')
 					. '<pre class="code tracy-code"><div>'
-					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
+					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode ?? '', ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
 					. '</div></pre>',
 			];
 		}
@@ -79,7 +79,7 @@ class BlueScreenPanel
 				|| preg_match('#Unknown attribute (n:\w+), did you mean (n:\w+)\?#A', $e->getMessage(), $m))
 		) {
 			return [
-				'link' => Helpers::editorUri($e->sourceName, $e->position?->line, 'fix', $m[1], $m[2]),
+				'link' => (string) Helpers::editorUri($e->sourceName, $e->position?->line, 'fix', $m[1], $m[2]),
 				'label' => 'fix it',
 			];
 		}
@@ -91,7 +91,7 @@ class BlueScreenPanel
 	/** @return array{file: string, line: int, label: string, active: bool} */
 	public static function mapLatteSourceCode(string $file, int $line): ?array
 	{
-		return ($source = Latte\Helpers::mapCompiledToSource($file, $line)) && @is_file($source['name']) // @ - may trigger error
+		return ($source = Latte\Helpers::mapCompiledToSource($file, $line)) && $source['name'] !== null && @is_file($source['name']) // @ - may trigger error
 			? ['file' => $source['name'], 'line' => $source['line'] ?? 0, 'column' => $source['column'] ?? 0, 'label' => 'Latte', 'active' => true]
 			: null;
 	}

@@ -75,7 +75,7 @@ final class XmlHelpers
 		return match (true) {
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
-			default => HtmlHelpers::triggerInvalidValue(trim($namePart), $value) ?? '',
+			default => HtmlHelpers::triggerInvalidValue(trim($namePart), $value),
 		};
 	}
 

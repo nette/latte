@@ -194,7 +194,7 @@ final class HtmlHelpers
 		return match (true) {
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
-			default => self::triggerInvalidValue(trim($namePart), $value) ?? '',
+			default => self::triggerInvalidValue(trim($namePart), $value),
 		};
 	}
 
@@ -280,11 +280,12 @@ final class HtmlHelpers
 	}
 
 
-	public static function triggerInvalidValue(string $name, mixed $value): void
+	public static function triggerInvalidValue(string $name, mixed $value): string
 	{
 		$source = Latte\Helpers::guessTemplatePosition();
 		$type = get_debug_type($value);
 		trigger_error("Invalid value for attribute '$name': $type is not allowed" . ($source ? " ($source)" : '.'), E_USER_WARNING);
+		return '';
 	}
 
 
