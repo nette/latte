@@ -141,7 +141,7 @@ final class TemplateParserHtml
 				$this->parser->getLexer()->popState();
 			}
 
-			[$endText, $endVariable] = $this->endName;
+			[$endText, $endVariable] = $this->endName ?? [null, null];
 			$this->endName = null;
 			if ($endText && ($this->element->is($endText) || $this->elementData[$this->element]->textualName === $endText)) {
 				$elem->content = $content;
@@ -155,7 +155,7 @@ final class TemplateParserHtml
 			) {
 				$stream->throwUnexpectedException(
 					addendum: ", expecting </{$this->elementData[$elem]->textualName}> for element started $elem->position",
-					excerpt: $endText ? "/{$endText}>" : $stream->tryPeek(1)?->text . $stream->tryPeek(2)?->text,
+					excerpt: $endText ? "/{$endText}>" : ($stream->tryPeek(1)->text ?? '') . ($stream->tryPeek(2)->text ?? ''),
 				);
 			} else { // element collapsed to tags
 				$res->append($content);
@@ -249,7 +249,8 @@ final class TemplateParserHtml
 	/** @return array{string, ?Nodes\Php\ExpressionNode} */
 	private function parseTagName(bool $strict = true): array
 	{
-		$variable = $text = null;
+		$variable = null;
+		$text = '';
 		$parts = [];
 		$stream = $this->parser->getStream();
 		do {
@@ -258,7 +259,7 @@ final class TemplateParserHtml
 				$statement = $this->parser->parseLatteStatement($this->inTagResolve(...));
 				if (!$statement instanceof Nodes\PrintNode) {
 					if (!$parts || $strict) {
-						throw new CompileException('Only expression can be used as a HTML tag name.', $statement->position);
+						throw new CompileException('Only expression can be used as a HTML tag name.', $statement?->position);
 					}
 					$stream->seek($save);
 					break;
@@ -288,7 +289,7 @@ final class TemplateParserHtml
 	}
 
 
-	private function parseBogusEndTag(): ?Html\BogusTagNode
+	private function parseBogusEndTag(): Html\BogusTagNode
 	{
 		$stream = $this->parser->getStream();
 		$lexer = $this->parser->getLexer();
@@ -368,7 +369,7 @@ final class TemplateParserHtml
 			$name = $this->parser->parseText();
 		}
 
-		[$value, $quote] = $this->parseAttributeValue();
+		[$value, $quote] = $this->parseAttributeValue() ?? [null, null];
 		if ($name instanceof Nodes\TextNode && $value instanceof Nodes\PrintNode && $value->modifier->escape) {
 			if (($indent = end($fragment->children)) instanceof Nodes\TextNode && $indent->isWhitespace()) {
 				array_pop($fragment->children);
@@ -408,6 +409,7 @@ final class TemplateParserHtml
 			$lexer = $this->parser->getLexer();
 			$lexer->pushState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
 			$value = $this->parser->parseFragment($this->parser->inTextResolve(...))->simplify(allowsNull: false);
+			assert($value !== null);
 			$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of HTML attribute started $quoteToken->position");
 			$lexer->popState();
 			return [$value, $quoteToken->text];
@@ -427,6 +429,7 @@ final class TemplateParserHtml
 
 	private function parseNAttribute(): Nodes\TextNode
 	{
+		assert($this->element !== null);
 		$stream = $this->parser->getStream();
 		$nameToken = $stream->consume(Token::Html_Name);
 		$save = $stream->getIndex();
@@ -466,6 +469,8 @@ final class TemplateParserHtml
 		}
 		$tokens ??= [new Token(Token::End, '', $pos)];
 
+		assert($nameToken->position !== null);
+		assert($this->element !== null);
 		$this->element->nAttributes[$name] = new Tag(
 			name: preg_replace('~(inner-|tag-|)~', '', $name),
 			tokens: $tokens,

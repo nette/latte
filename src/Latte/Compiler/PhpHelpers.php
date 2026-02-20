@@ -51,7 +51,7 @@ final class PhpHelpers
 						$token = ' ';
 					} elseif ($prev === '{' || $prev === '}' || $prev === ';' || $lines) {
 						$token = str_repeat("\n", max(1, $lines)) . str_repeat("\t", $level); // indent last line
-					} elseif ($prev[0] === T_OPEN_TAG) {
+					} elseif (is_array($prev) && $prev[0] === T_OPEN_TAG) {
 						$token = '';
 					}
 
@@ -129,19 +129,20 @@ final class PhpHelpers
 		$res = '';
 		$tokens = token_get_all($source);
 		$start = null;
+		$str = '';
 
 		for ($i = 0; $i < count($tokens); $i++) {
 			$token = $tokens[$i];
 			if ($token[0] === T_ECHO) {
-				if (!$start) {
+				if ($start === null) {
 					$str = '';
 					$start = strlen($res);
 				}
 
-			} elseif ($start && $token[0] === T_CONSTANT_ENCAPSED_STRING && $token[1][0] === "'") {
+			} elseif ($start !== null && $token[0] === T_CONSTANT_ENCAPSED_STRING && $token[1][0] === "'") {
 				$str .= stripslashes(substr($token[1], 1, -1));
 
-			} elseif ($start && $token === ';') {
+			} elseif ($start !== null && $token === ';') {
 				if ($str !== '') {
 					$res = substr_replace(
 						$res,
@@ -165,7 +166,7 @@ final class PhpHelpers
 	/**
 	 * Decodes number string to int or float value.
 	 */
-	public static function decodeNumber(string $str, &$base = null): int|float|null
+	public static function decodeNumber(string $str, ?int &$base = null): int|float|null
 	{
 		$str = str_replace('_', '', $str);
 
@@ -210,11 +211,11 @@ final class PhpHelpers
 				if (isset($replacements[$ch])) {
 					return $replacements[$ch];
 				} elseif ($ch[0] === 'x' || $ch[0] === 'X') {
-					return chr(hexdec(substr($ch, 1)));
+					return chr((int) hexdec(substr($ch, 1)));
 				} elseif ($ch[0] === 'u') {
-					return self::codePointToUtf8(hexdec($matches[2]));
+					return self::codePointToUtf8((int) hexdec($matches[2]));
 				} else {
-					$num = octdec($ch);
+					$num = (int) octdec($ch);
 					if ($num > 255) {
 						throw new CompileException("Octal escape sequence \\$ch is greater than \\377");
 					}

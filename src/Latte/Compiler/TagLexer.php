@@ -209,7 +209,7 @@ final class TagLexer
 				|| isset($m[$type = 'Php_NullsafeObjectOperator'])
 				|| isset($m[$type = 'Php_UndefinedsafeObjectOperator'])
 			) {
-				$this->addToken(constant(Token::class . '::' . $type), $m[$type]);
+				$this->addToken(constant(Token::class . '::' . $type), $m[$type] ?? '');
 				if (isset($m['Php_Whitespace'])) {
 					$this->addToken(Token::Php_Whitespace, $m['Php_Whitespace']);
 				}
@@ -359,8 +359,8 @@ final class TagLexer
 					|| isset($m[$type = 'Php_NullsafeObjectOperator'])
 					|| isset($m[$type = 'Php_UndefinedsafeObjectOperator'])
 				) {
-					$this->addToken(constant(Token::class . '::' . $type), $m[$type]);
-					$this->addToken(Token::Php_Identifier, $m['Php_Identifier']);
+					$this->addToken(constant(Token::class . '::' . $type), $m[$type] ?? '');
+					$this->addToken(Token::Php_Identifier, $m['Php_Identifier'] ?? '');
 
 				} elseif (isset($m['offset'])) {
 					$this->addToken(null, '[');

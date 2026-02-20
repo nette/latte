@@ -22,12 +22,14 @@ final class NTagNode extends StatementNode
 {
 	public static function create(Tag $tag): void
 	{
+		assert($tag->htmlElement !== null);
 		if (preg_match('(style$|script$)iA', $tag->htmlElement->name)) {
 			throw new CompileException('Attribute n:tag is not allowed in <script> or <style>', $tag->position);
 		}
 
 		$tag->expectArguments();
 		$tag->htmlElement->dynamicTag ??= new TagNode($tag->htmlElement);
+		assert($tag->htmlElement->dynamicTag instanceof TagNode);
 		$tag->htmlElement->dynamicTag->name = $tag->parser->parseExpression();
 	}
 

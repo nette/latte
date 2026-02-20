@@ -116,7 +116,7 @@ final class Escaper
 				$type = $el->getAttribute('type');
 				$this->subType = $type === true || $type === null
 					? self::JavaScript
-					: HtmlHelpers::classifyScriptType($type);
+					: (is_string($type) ? HtmlHelpers::classifyScriptType($type) : '');
 			} elseif ($el->is('style')) {
 				$this->subType = self::Css;
 			}

@@ -107,7 +107,9 @@ class SwitchNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		yield $this->expression;
+		if ($this->expression) {
+			yield $this->expression;
+		}
 		foreach ($this->cases as [&$case, , &$stmt]) {
 			if ($case) {
 				yield $case;

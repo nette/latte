@@ -7,6 +7,7 @@
 
 namespace Latte\Sandbox\Nodes;
 
+use Latte\Compiler\Nodes\Php\ArgumentNode;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
@@ -24,14 +25,18 @@ class MethodCallNode extends Expression\MethodCallNode
 
 	public function print(PrintContext $context): string
 	{
-		return $this->isPartialFunction()
-			? '$this->global->sandbox->closure(['
+		if ($this->isPartialFunction()) {
+			return '$this->global->sandbox->closure(['
 				. $this->object->print($context) . ', '
-				. $context->memberAsString($this->name) . '])'
-			: '$this->global->sandbox->callMethod('
-				. $this->object->print($context) . ', '
-				. $context->memberAsString($this->name) . ', '
-				. $context->argumentsAsArray($this->args)
-				. ', ' . var_export($this->nullsafe, return: true) . ')';
+				. $context->memberAsString($this->name) . '])';
+		}
+
+		/** @var array<ArgumentNode> $args */
+		$args = $this->args;
+		return '$this->global->sandbox->callMethod('
+			. $this->object->print($context) . ', '
+			. $context->memberAsString($this->name) . ', '
+			. $context->argumentsAsArray($args)
+			. ', ' . var_export($this->nullsafe, return: true) . ')';
 	}
 }

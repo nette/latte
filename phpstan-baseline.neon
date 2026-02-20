@@ -1,0 +1,79 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Offset 2 might not exist on array\{0\: non\-falsy\-string, 1\: non\-falsy\-string\|numeric\-string, 2\?\: non\-empty\-string\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Latte/Compiler/PhpHelpers.php
+
+		-
+			message: '#^Offset 0 might not exist on array\{0\?\: string\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Latte/Compiler/TemplateLexer.php
+
+		-
+			message: '#^Method Latte\\Engine\:\:loadTemplate\(\) should return class\-string\<Latte\\Runtime\\Template\> but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Latte/Engine.php
+
+		-
+			message: '#^Method Latte\\Essential\\Tracer\:\:generateTrace\(\) should return array\<array\{function\: string, file\: string, line\: int, args\: array\<mixed\>\}\> but returns array\<int\<\-1, max\>, array\{function\?\: non\-falsy\-string, file\?\: string, line\?\: int, args\?\: array\<mixed\>\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Latte/Essential/Tracer.php
+
+		-
+			message: '#^Offset int\<min, \-2\>\|int\<0, max\> might not exist on non\-empty\-list\<string\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/Latte/Helpers.php
+
+		-
+			message: '#^Expression on left side of \?\? is always null\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: src/Latte/Runtime/HtmlHelpers.php
+
+		-
+			message: '#^Result of static method Latte\\Runtime\\HtmlHelpers\:\:triggerInvalidValue\(\) \(void\) is used\.$#'
+			identifier: staticMethod.void
+			count: 1
+			path: src/Latte/Runtime/HtmlHelpers.php
+
+		-
+			message: '#^Variable \$block on left side of \?\?\= always exists and is not nullable\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: src/Latte/Runtime/Template.php
+
+		-
+			message: '#^Expression on left side of \?\? is always null\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: src/Latte/Runtime/XmlHelpers.php
+
+		-
+			message: '#^Result of static method Latte\\Runtime\\HtmlHelpers\:\:triggerInvalidValue\(\) \(void\) is used\.$#'
+			identifier: staticMethod.void
+			count: 1
+			path: src/Latte/Runtime/XmlHelpers.php
+
+		-
+			message: '#^Call to function is_callable\(\) with arguments callable\(\)\: mixed, false and mixed will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Latte/Sandbox/RuntimeChecker.php
+
+		-
+			message: '#^Method Latte\\Sandbox\\RuntimeChecker\:\:args\(\) should return list\<mixed\> but returns array\<int\|string, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Latte/Sandbox/RuntimeChecker.php
+
+		-
+			message: '#^Class Latte\\Sandbox\\Nodes not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Latte/Sandbox/SandboxExtension.php

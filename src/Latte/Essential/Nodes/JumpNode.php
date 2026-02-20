@@ -46,7 +46,7 @@ class JumpNode extends StatementNode
 		}
 
 		$last = $parent?->prefix === Tag::PrefixNone
-			? $parent->htmlElement->parent
+			? $parent->htmlElement?->parent
 			: $parent?->htmlElement;
 		$el = $tag->htmlElement;
 		while ($el && $el !== $last) {

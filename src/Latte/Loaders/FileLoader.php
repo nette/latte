@@ -39,7 +39,12 @@ class FileLoader implements Latte\Loader
 			throw new Latte\TemplateNotFoundException("Missing template file '$file'.");
 		}
 
-		return file_get_contents($file);
+		$content = file_get_contents($file);
+		if ($content === false) {
+			throw new Latte\RuntimeException("Unable to read file '$file'.");
+		}
+
+		return $content;
 	}
 
 

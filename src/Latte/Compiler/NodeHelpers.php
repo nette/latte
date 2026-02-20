@@ -54,7 +54,7 @@ final class NodeHelpers
 	public static function clone(Node $node): Node
 	{
 		return (new NodeTraverser)
-			->traverse($node, enter: fn(Node $node) => clone $node);
+			->traverse($node, enter: fn(Node $node) => clone $node) ?? throw new \LogicException;
 	}
 
 
@@ -96,7 +96,11 @@ final class NodeHelpers
 				? constant($name)
 				: throw new \InvalidArgumentException("The constant '$name' is not defined.");
 
-		} elseif ($node instanceof Expression\ClassConstantFetchNode && $constants) {
+		} elseif (
+			$node instanceof Expression\ClassConstantFetchNode
+			&& $constants
+			&& $node->name instanceof Php\IdentifierNode
+		) {
 			$class = $node->class instanceof Php\NameNode
 				? $node->class->toCodeString()
 				: self::toValue($node->class, $constants);

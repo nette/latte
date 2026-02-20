@@ -1,12 +1,138 @@
 parameters:
-	level: 5
+	level: 8
 
 	paths:
 		- src
 
+	excludePaths:
+		analyse:
+			- src/Latte/Compiler/TagParserData.php
+
+	fileExtensions:
+		- php
+		- phtml
+
 	ignoreErrors:
-		- '#Unsafe usage of new static\(\)#'
-		- '#Match expression does not handle remaining value.*#'
+		# --- Whole project ---
+
+		-	# Factory/derive pattern — new static() is intentional
+			'#Unsafe usage of new static\(\)#'
+
+		-	# Match with exhaustive else branch as safety net
+			'#Match expression does not handle remaining value.*#'
+
+		-	# Latte callback system — callable has no fixed signature
+			'#no signature specified for (callable|Closure)#'
+
+		# --- AST Node classes: match() expressions with exhaustive typing ---
+
+		-	# PHPStan sees redundant branches in match/ternary on nullable/union properties
+			message: '#(Left side of && is always false|Result of && is always false|always evaluate to (true|false)|Ternary operator condition is always true)#'
+			paths:
+				- src/Latte/Compiler/Nodes/
+				- src/Latte/Essential/Nodes/
+
+		-	# getIterator() yields null for optional child nodes
+			message: '#Generator expects value type Latte\\Compiler\\Node, null given#'
+			paths:
+				- src/Latte/Compiler/Nodes/
+				- src/Latte/Essential/Nodes/
+
+		# --- Parsers: lookahead tokens can be null ---
+
+		-	# Parser works with nullable tokens during lookahead/backtrack
+			message: '#Latte\\Compiler\\(Position|Token)\|null#'
+			paths:
+				- src/Latte/Compiler/TagParser.php
+				- src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParser: nullable Tag when processing nested tags
+			message: '#on Latte\\Compiler\\Tag\|null#'
+			path: src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParser: nullable Closure for optional callbacks
+			message: '#Closure\|null given#'
+			path: src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParser: dynamic access to expression node properties
+			message: '#(undefined property.*ExpressionNode|Variable \$name might not be defined)#'
+			path: src/Latte/Compiler/TemplateParser.php
+
+		-	# TemplateParserHtml: dynamic HTML element objects and destructuring
+			message: '#(object\{tag:.*not writable|undefined property.*object\{|has parameter \$elem with no type|array destructuring on list)#'
+			path: src/Latte/Compiler/TemplateParserHtml.php
+
+		# --- TagParser: generated trait TagParserData ---
+
+		-	# Methods called from generated trait TagParserData (excluded from analysis)
+			message: '#^(Static method|Method) Latte\\Compiler\\TagParser::(checkFunctionName|handleBuiltinTypes|parseOffset|parseDocString)\(\) is unused\.$#'
+			path: src/Latte/Compiler/TagParser.php
+
+		-	# Internal parser state machine — types from regex results and token operations
+			message: '#^(Cannot access offset 0 on|Cannot use array destructuring on|Instanceof between.*InterpolatedStringPartNode will always evaluate to false|Offset.*might not exist on|Unary operation.*on string results in an error)#'
+			path: src/Latte/Compiler/TagParser.php
+
+		# --- PrintContext::format() — regex-based code generation ---
+
+		-	# Regex groups guarantee offset existence, PHPStan cannot see this
+			message: '#^Offset [1-5] (does not|might not) exist on array\{#'
+			path: src/Latte/Compiler/PrintContext.php
+
+		-	# OperatorNode is abstract, print() exists on concrete subclasses
+			message: '#(OperatorNode::print\(\)|parenthesize\(\) expects Latte\\Compiler\\Nodes\\Php\\OperatorNode, Latte\\Compiler\\Node given)#'
+			path: src/Latte/Compiler/PrintContext.php
+
+		# --- SecurityPolicy: reference-based caching pattern ---
+
+		-	# $res = &$cache[...] — PHPStan cannot analyze auto-vivification and reference state
+			message: '#(always evaluate to (true|false)|Result of \|\| is always true|is never read, only written|Unreachable statement|always exists and is not nullable)#'
+			path: src/Latte/Sandbox/SecurityPolicy.php
+
+		# --- Tracy bridge ---
+
+		-	# Intentional version_compare() guards for Tracy compatibility
+			message: '#side of && is always true#'
+			path: src/Bridges/Tracy/BlueScreenPanel.php
+
+		-	# Anonymous Extension class for collecting rendered templates (write-only by design)
+			message: '#Extension@anonymous.*LattePanel#'
+			path: src/Bridges/Tracy/LattePanel.php
+
+		-	# Compiled phtml template — stdClass from Tracy context
+			message: '#on stdClass\|false#'
+			path: src/Bridges/Tracy/dist/panel.phtml
+
+		# --- Other ---
+
+		-	# Linter: dynamic loading of Nette bridge extensions
+			identifier: class.notFound
+			path: src/Tools/Linter.php
+		-
+			message: '#expects Latte\\Extension, Nette\\#'
+			path: src/Tools/Linter.php
+
+		-	# Blueprint: nullable type from reflection
+			message: '#expects string, string\|null given#'
+			path: src/Latte/Essential/Blueprint.php
+
+		-	# class_alias for backward compatibility
+			identifier: class.notFound
+			path: src/Latte/Compiler/Nodes/PrintNode.php
+
+		-	# codePointToUtf8: bitwise operations lose range information for chr()
+			# decodeNumber: $str + 0 is a standard PHP idiom for string-to-number conversion
+			message: '#(chr expects int\<0, 255\>|string.*results in an error)#'
+			path: src/Latte/Compiler/PhpHelpers.php
+
+		-	# flock/ftruncate: PHPStan requires more specific int range
+			message: '#(flock expects int\<0, 7\>|ftruncate expects int\<0, max\>)#'
+			path: src/Latte/Runtime/Cache.php
+
+		-	# array_slice() returns array, not list
+			message: '#expects list<Latte\\Compiler\\Token>, array<Latte\\Compiler\\Token> given#'
+			paths:
+				- src/Latte/Compiler/TemplateParser.php
+				- src/Latte/Compiler/TemplateParserHtml.php
 
 includes:
 	- phpstan-baseline.neon

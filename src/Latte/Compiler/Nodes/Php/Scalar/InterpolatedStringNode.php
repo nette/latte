@@ -31,7 +31,7 @@ class InterpolatedStringNode extends ScalarNode
 
 
 	/** @param array<ExpressionNode|InterpolatedStringPartNode>  $parts */
-	public static function parse(array $parts, Position $position): static
+	public static function parse(array $parts, ?Position $position): static
 	{
 		foreach ($parts as $part) {
 			if ($part instanceof InterpolatedStringPartNode) {

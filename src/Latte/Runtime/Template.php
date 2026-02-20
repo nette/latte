@@ -115,10 +115,12 @@ class Template
 			throw new Latte\RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
+		$fn = reset($block->functions);
+		assert($fn !== false);
 		$this->filter(
-			fn() => reset($block->functions)($params),
+			fn() => $fn($params),
 			$mod,
-			$block->contentType,
+			$block->contentType ?? static::ContentType,
 			"block $name",
 		);
 	}
@@ -173,7 +175,7 @@ class Template
 
 		if (in_array($relation, ['extends', 'includeblock', 'import', 'embed'], strict: true)) {
 			foreach ($child->blocks[self::LayerTop] as $nm => $block) {
-				$this->addBlock($nm, $block->contentType, $block->functions);
+				$this->addBlock($nm, $block->contentType ?? static::ContentType, $block->functions);
 			}
 
 			$child->blocks[self::LayerTop] = &$this->blocks[self::LayerTop];
@@ -347,15 +349,15 @@ class Template
 
 	protected function copyBlockLayer(): void
 	{
-		foreach (end($this->blockStack) as $nm => $block) {
-			$this->addBlock($nm, $block->contentType, $block->functions);
+		foreach (end($this->blockStack) ?: [] as $nm => $block) {
+			$this->addBlock($nm, $block->contentType ?? static::ContentType, $block->functions);
 		}
 	}
 
 
 	protected function leaveBlockLayer(): void
 	{
-		$this->blocks[self::LayerTop] = array_pop($this->blockStack);
+		$this->blocks[self::LayerTop] = array_pop($this->blockStack) ?? [];
 		array_pop($this->varStack);
 	}
 }

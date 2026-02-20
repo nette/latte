@@ -37,7 +37,7 @@ final class TemplateParser
 	private array $attrParsersInfo = [];
 
 	private TemplateParserHtml $html;
-	private ?TokenStream $stream = null;
+	private TokenStream $stream;
 	private TemplateLexer $lexer;
 	private ?Policy $policy = null;
 	private string $contentType;
@@ -52,6 +52,7 @@ final class TemplateParser
 	public function __construct()
 	{
 		$this->lexer = new TemplateLexer;
+		$this->stream = new TokenStream(new \EmptyIterator);
 		$this->setContentType(ContentType::Html);
 	}
 
@@ -98,6 +99,7 @@ final class TemplateParser
 		try {
 			while (!$this->stream->peek()->isEnd()) {
 				if ($node = $resolver($res)) {
+					assert($node instanceof Nodes\AreaNode);
 					$res->append($node);
 					$after && $after($res);
 				} else {
@@ -270,10 +272,12 @@ final class TemplateParser
 		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], strict: true);
 		$openToken = $stream->consume(Token::Latte_TagOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
+		$closing = (bool) $stream->tryConsume(Token::Slash);
+		$nameToken = $stream->tryConsume(Token::Latte_Name);
 		$tag = new Tag(
 			position: $openToken->position,
-			closing: $closing = (bool) $stream->tryConsume(Token::Slash),
-			name: $stream->tryConsume(Token::Latte_Name)->text ?? ($closing ? '' : '='),
+			closing: $closing,
+			name: $nameToken ? $nameToken->text : ($closing ? '' : '='),
 			tokens: $this->consumeTag(),
 			void: (bool) $stream->tryConsume(Token::Slash),
 			inHead: $this->inHead,

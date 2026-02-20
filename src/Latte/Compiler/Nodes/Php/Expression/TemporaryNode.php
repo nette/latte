@@ -26,6 +26,7 @@ class TemporaryNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
+		return '';
 	}
 
 

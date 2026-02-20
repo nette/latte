@@ -26,7 +26,7 @@ class StringNode extends ScalarNode
 	}
 
 
-	public static function parse(string $str, Position $position): static
+	public static function parse(string $str, ?Position $position): static
 	{
 		$str = $str[0] === "'"
 			? strtr(substr($str, 1, -1), ['\\\\' => '\\', "\\'" => "'"])

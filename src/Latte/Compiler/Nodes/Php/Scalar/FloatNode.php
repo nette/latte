@@ -27,7 +27,7 @@ class FloatNode extends ScalarNode
 	}
 
 
-	public static function parse(string $str, Position $position): static
+	public static function parse(string $str, ?Position $position): static
 	{
 		return strpbrk($str, '.eE') === false
 			? new static((float) PhpHelpers::decodeNumber($str), $position)

@@ -33,7 +33,7 @@ class IterateWhileNode extends StatementNode
 	public static function create(Tag $tag): \Generator
 	{
 		$foreach = $tag->closestTag([ForeachNode::class])?->node;
-		if (!$foreach) {
+		if (!$foreach instanceof ForeachNode) {
 			throw new CompileException("Tag {{$tag->name}} must be inside {foreach} ... {/foreach}.", $tag->position);
 		}
 
@@ -47,6 +47,7 @@ class IterateWhileNode extends StatementNode
 		$node->value = $foreach->value;
 		[$node->content, $nextTag] = yield;
 		if ($node->postTest) {
+			assert($nextTag !== null);
 			$nextTag->expectArguments();
 			$node->condition = $nextTag->parser->parseExpression();
 		}

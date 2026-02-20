@@ -224,7 +224,7 @@ class Engine
 		} else {
 			$compiled = $this->compile($name);
 			if (@eval(substr($compiled, 5)) === false) { // @ is escalated to exception, substr removes <?php
-				throw (new CompileException('Error in template: ' . error_get_last()['message']))
+				throw (new CompileException('Error in template: ' . (error_get_last()['message'] ?? '')))
 					->setSource($compiled, "$name (compiled)");
 			}
 		}
@@ -350,7 +350,7 @@ class Engine
 	/** @return list<Extension> */
 	public function getExtensions(): array
 	{
-		return $this->extensions;
+		return array_values($this->extensions);
 	}
 
 

@@ -34,7 +34,7 @@ class IntegerNode extends ScalarNode
 	}
 
 
-	public static function parse(string $str, Position $position): static
+	public static function parse(string $str, ?Position $position): static
 	{
 		$num = PhpHelpers::decodeNumber($str, $base);
 		if ($num === null) {
