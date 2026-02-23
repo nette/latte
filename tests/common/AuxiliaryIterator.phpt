@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * TestAuxiliaryIterator usage.
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\AuxiliaryIterator;
 use Tester\Assert;

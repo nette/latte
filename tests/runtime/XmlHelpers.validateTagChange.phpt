@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Runtime\XmlHelpers::validateTagChange()
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\XmlHelpers;
 use Tester\Assert;

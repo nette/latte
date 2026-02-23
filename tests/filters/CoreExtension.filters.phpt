@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Essential\CoreExtension::getFilters()
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\CoreExtension;
 use Latte\Runtime\FilterInfo;

@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 // names
-
-declare(strict_types=1);
 
 use Latte\Compiler\TagLexer;
 use Tester\Assert;

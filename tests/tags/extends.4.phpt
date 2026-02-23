@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: {extends ...} test V.
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\Template;
 use Tester\Assert;
