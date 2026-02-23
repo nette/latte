@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: CachingIterator width.
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\CachingIterator;
 use Tester\Assert;

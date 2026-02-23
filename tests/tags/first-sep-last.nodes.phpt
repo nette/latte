@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: {first}, {last}, {sep}.
  */
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

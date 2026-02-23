@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Runtime\HtmlHelpers::escapeQuotes
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\HtmlHelpers;
 use Tester\Assert;

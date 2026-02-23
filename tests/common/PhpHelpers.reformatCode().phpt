@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\PhpHelpers::reformatCode()
  */
-
-declare(strict_types=1);
 
 use Latte\Compiler\PhpHelpers;
 use Tester\Assert;

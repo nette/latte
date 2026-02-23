@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: {include ... with blocks}
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\Template;
 use Tester\Assert;

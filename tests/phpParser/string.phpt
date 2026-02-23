@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 // Constant string syntaxes
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

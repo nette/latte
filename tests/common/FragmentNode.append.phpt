@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\NopNode;
