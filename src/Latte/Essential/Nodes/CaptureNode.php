@@ -35,7 +35,7 @@ class CaptureNode extends StatementNode
 		if (!$variable->isWritable()) {
 			$text = '';
 			$i = 0;
-			while ($token = $tag->parser->stream->peek(--$i)) {
+			while ($token = $tag->parser->stream->tryPeek(--$i)) {
 				$text = $token->text . $text;
 			}
 

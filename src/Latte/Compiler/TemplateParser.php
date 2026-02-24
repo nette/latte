@@ -148,7 +148,7 @@ final class TemplateParser
 
 	public function parseLatteComment(): Nodes\NopNode
 	{
-		if (str_ends_with($this->stream->peek(-1)?->text ?? "\n", "\n")) {
+		if (str_ends_with($this->stream->tryPeek(-1)->text ?? "\n", "\n")) {
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 		$openToken = $this->stream->consume(Token::Latte_CommentOpen);
@@ -254,7 +254,7 @@ final class TemplateParser
 	private function parseLatteTag(): Tag
 	{
 		$stream = $this->stream;
-		if (str_ends_with($stream->peek(-1)?->text ?? "\n", "\n")) {
+		if (str_ends_with($stream->tryPeek(-1)->text ?? "\n", "\n")) {
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 

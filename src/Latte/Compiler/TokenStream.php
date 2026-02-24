@@ -39,9 +39,18 @@ final class TokenStream
 
 
 	/**
+	 * Gets the token at $offset from the current position or throws.
+	 */
+	public function peek(int $offset = 0): Token
+	{
+		return $this->tryPeek($offset) ?? throw new CompileException('Unexpected end');
+	}
+
+
+	/**
 	 * Gets the token at $offset from the current position.
 	 */
-	public function peek(int $offset = 0): ?Token
+	public function tryPeek(int $offset = 0): ?Token
 	{
 		$pos = $this->index + $offset;
 		while ($pos >= 0 && !isset($this->tokens[$pos]) && $this->source->valid()) {
@@ -80,8 +89,8 @@ final class TokenStream
 	 */
 	public function tryConsume(int|string ...$kind): ?Token
 	{
-		$token = $this->peek();
-		if (!$token->is(...$kind)) {
+		$token = $this->tryPeek();
+		if (!$token?->is(...$kind)) {
 			return null;
 		} elseif (!$token->isEnd()) {
 			$this->index++;
@@ -117,7 +126,7 @@ final class TokenStream
 	 */
 	public function throwUnexpectedException(array $expected = [], string $addendum = '', string $excerpt = ''): void
 	{
-		$token = $this->peek()->text . $excerpt;
+		$token = ($this->tryPeek()->text ?? '') . $excerpt;
 		$expected = array_map(fn($item) => is_int($item) ? Token::Names[$item] : $item, $expected);
 		throw new CompileException(
 			'Unexpected '
@@ -128,7 +137,7 @@ final class TokenStream
 				? ', expecting ' . implode(', ', $expected)
 				: '')
 			. $addendum,
-			$this->peek()->position,
+			$this->tryPeek()?->position,
 		);
 	}
 }
