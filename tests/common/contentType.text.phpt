@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: {contentType text/plain}
  */
-
-declare(strict_types=1);
 
 use Latte\ContentType;
 use Tester\Assert;

@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: FileLoader
  */
-
-declare(strict_types=1);
 
 use Latte\Loaders\FileLoader;
 use Tester\Assert;

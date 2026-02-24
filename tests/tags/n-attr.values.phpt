@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * n:attr
  */
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

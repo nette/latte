@@ -1,9 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 /** @phpversion < 8.1 */
 // First-class callables
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

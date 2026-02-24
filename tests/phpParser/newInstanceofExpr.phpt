@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 // Arbitrary expressions in new and instanceof
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Essential\CoreExtension::getFunctions()
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\CoreExtension;
 use Tester\Assert;

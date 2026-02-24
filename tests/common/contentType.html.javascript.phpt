@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: JavaScript in HTML
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\Html;
 use Tester\Assert;

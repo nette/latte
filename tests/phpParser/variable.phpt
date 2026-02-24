@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 // Variable syntaxes
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

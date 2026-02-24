@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 // Uniform variable syntax in PHP 7 (misc)
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

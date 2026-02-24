@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Engine and auto-safe URL.
  */
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

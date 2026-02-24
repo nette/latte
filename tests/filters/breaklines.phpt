@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Essential\Filters::breaklines()
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\Filters;
 use Latte\Runtime\Html;

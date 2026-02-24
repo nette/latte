@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: filters test.
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\FilterInfo;
 use Tester\Assert;

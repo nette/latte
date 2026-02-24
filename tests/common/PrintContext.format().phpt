@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 use Latte\Compiler\Nodes\Php\ArrayItemNode;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;

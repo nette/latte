@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Unknown type of <script>
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\Html;
 use Tester\Assert;

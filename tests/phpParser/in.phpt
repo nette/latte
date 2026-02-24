@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 // In operators
-
-declare(strict_types=1);
 
 use Tester\Assert;
 

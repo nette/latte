@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 use Latte\Compiler\ExpressionBuilder;
 use Latte\Compiler\Nodes\Php\ArgumentNode;

@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: {contentType application/xml}
  */
-
-declare(strict_types=1);
 
 use Latte\ContentType;
 use Latte\Runtime\Html;

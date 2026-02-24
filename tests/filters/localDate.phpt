@@ -1,11 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Essential\Filters::localDate()
  * @phpVersion 8.1
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\Filters;
 use Tester\Assert;

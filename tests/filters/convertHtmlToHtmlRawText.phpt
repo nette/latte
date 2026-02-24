@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Runtime\Filters::convertHtmlToHtmlRawText
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\Filters;
 use Tester\Assert;
