@@ -43,7 +43,13 @@ final class Passes
 				&& $node->name instanceof Php\NameNode
 				&& isset($functions[$node->name->name])
 			) {
-				return new Nodes\CustomFunctionCallNode($node->name, $node->args, $node->position);
+				if ($node->isPartialFunction()) {
+					throw new CompileException("Custom function '{$node->name->name}' cannot be used as partial function.", $node->position);
+				}
+
+				/** @var array<Php\ArgumentNode> $args */
+				$args = $node->args;
+				return new Nodes\CustomFunctionCallNode($node->name, $args, $node->position);
 			}
 		});
 	}
