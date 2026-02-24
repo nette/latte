@@ -17,11 +17,11 @@ final class NodeTraverser
 	public const StopTraversal = 2;
 	public const RemoveNode = 3;
 
-	/** @var ?callable(Node): (Node|int|void|null) */
-	private $enter;
+	/** @var ?(\Closure(Node): (Node|int|void|null)) */
+	private ?\Closure $enter = null;
 
-	/** @var ?callable(Node): (Node|int|void|null) */
-	private $leave;
+	/** @var ?(\Closure(Node): (Node|int|void|null)) */
+	private ?\Closure $leave = null;
 
 	private bool $stop;
 
@@ -32,8 +32,8 @@ final class NodeTraverser
 	 */
 	public function traverse(Node $node, ?callable $enter = null, ?callable $leave = null): ?Node
 	{
-		$this->enter = $enter;
-		$this->leave = $leave;
+		$this->enter = $enter ? $enter(...) : null;
+		$this->leave = $leave ? $leave(...) : null;
 		$this->stop = false;
 		return $this->traverseNode($node);
 	}

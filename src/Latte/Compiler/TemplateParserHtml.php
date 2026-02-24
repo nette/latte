@@ -34,7 +34,7 @@ final class TemplateParserHtml
 
 	public function __construct(
 		private readonly TemplateParser $parser,
-		/** @var array<string, callable(Tag, TemplateParser): (Node|\Generator|void)> */
+		/** @var array<string, \Closure(Tag, TemplateParser): (Node|\Generator|void)> */
 		private readonly array $attrParsers,
 	) {
 		$this->elementData = new \WeakMap;
@@ -593,8 +593,8 @@ final class TemplateParserHtml
 	}
 
 
-	/** @return callable(Tag, TemplateParser): (Node|\Generator|void) */
-	private function getAttrParser(string $name, Position $pos): callable
+	/** @return \Closure(Tag, TemplateParser): (Node|\Generator|void) */
+	private function getAttrParser(string $name, Position $pos): \Closure
 	{
 		if (!isset($this->attrParsers[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->attrParsers), $name))
