@@ -13,7 +13,7 @@ test('end', function () {
 	$stream = new TokenStream(new ArrayIterator([$eof]));
 	Assert::false($stream->is());
 	Assert::same($eof, $stream->peek());
-	Assert::null($stream->peek(1));
+	Assert::exception(fn() => $stream->peek(1), CompileException::class, 'Unexpected end');
 	Assert::same($eof, $stream->consume());
 	Assert::same($eof, $stream->consume());
 	Assert::same(0, $stream->getIndex());
@@ -42,27 +42,57 @@ test('peek()', function () {
 	$eof = new Token(Token::End, '');
 	$stream = new TokenStream(new ArrayIterator([$token1, $token2, $eof]));
 
-	Assert::null($stream->peek(-1));
+	Assert::exception(fn() => $stream->peek(-1), CompileException::class, 'Unexpected end');
 	Assert::same(0, $stream->getIndex());
 	Assert::same($token1, $stream->peek());
 	Assert::same($token2, $stream->peek(1));
 	Assert::same($eof, $stream->peek(2));
-	Assert::null($stream->peek(3));
+	Assert::exception(fn() => $stream->peek(3), CompileException::class, 'Unexpected end');
 	Assert::same(0, $stream->getIndex());
 
 	$stream->consume();
-	Assert::null($stream->peek(-2));
+	Assert::exception(fn() => $stream->peek(-2), CompileException::class, 'Unexpected end');
 	Assert::same($token1, $stream->peek(-1));
 	Assert::same($token2, $stream->peek());
 	Assert::same($eof, $stream->peek(1));
-	Assert::null($stream->peek(2));
+	Assert::exception(fn() => $stream->peek(2), CompileException::class, 'Unexpected end');
 
 	$stream->consume();
-	Assert::null($stream->peek(-3));
+	Assert::exception(fn() => $stream->peek(-3), CompileException::class, 'Unexpected end');
 	Assert::same($token1, $stream->peek(-2));
 	Assert::same($token2, $stream->peek(-1));
 	Assert::same($eof, $stream->peek());
-	Assert::null($stream->peek(1));
+	Assert::exception(fn() => $stream->peek(1), CompileException::class, 'Unexpected end');
+});
+
+
+test('tryPeek()', function () {
+	$token1 = new Token(1, '');
+	$token2 = new Token(2, '');
+	$eof = new Token(Token::End, '');
+	$stream = new TokenStream(new ArrayIterator([$token1, $token2, $eof]));
+
+	Assert::null($stream->tryPeek(-1));
+	Assert::same(0, $stream->getIndex());
+	Assert::same($token1, $stream->tryPeek());
+	Assert::same($token2, $stream->tryPeek(1));
+	Assert::same($eof, $stream->tryPeek(2));
+	Assert::null($stream->tryPeek(3));
+	Assert::same(0, $stream->getIndex());
+
+	$stream->consume();
+	Assert::null($stream->tryPeek(-2));
+	Assert::same($token1, $stream->tryPeek(-1));
+	Assert::same($token2, $stream->tryPeek());
+	Assert::same($eof, $stream->tryPeek(1));
+	Assert::null($stream->tryPeek(2));
+
+	$stream->consume();
+	Assert::null($stream->tryPeek(-3));
+	Assert::same($token1, $stream->tryPeek(-2));
+	Assert::same($token2, $stream->tryPeek(-1));
+	Assert::same($eof, $stream->tryPeek());
+	Assert::null($stream->tryPeek(1));
 });
 
 

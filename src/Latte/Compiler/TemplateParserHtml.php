@@ -83,7 +83,7 @@ final class TemplateParserHtml
 		$stream = $this->parser->getStream();
 		$lexer = $this->parser->getLexer();
 		$lexer->pushState(TemplateLexer::StateHtmlTag);
-		$closing = $stream->peek(1)?->is(Token::Slash);
+		$closing = $stream->tryPeek(1)?->is(Token::Slash);
 		$lexer->popState();
 		if (!$closing) {
 			return $this->parseElement();
@@ -157,7 +157,7 @@ final class TemplateParserHtml
 			) {
 				$stream->throwUnexpectedException(
 					addendum: ", expecting </{$this->elementData[$elem]->textualName}> for element started $elem->position",
-					excerpt: $endText ? "/{$endText}>" : $stream->peek(1)?->text . $stream->peek(2)?->text,
+					excerpt: $endText ? "/{$endText}>" : $stream->tryPeek(1)?->text . $stream->tryPeek(2)?->text,
 				);
 			} else { // element collapsed to tags
 				$res->append($content);
