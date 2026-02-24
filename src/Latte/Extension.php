@@ -97,6 +97,7 @@ abstract class Extension
 	 */
 	public static function order(callable $subject, array|string $before = [], array|string $after = []): \stdClass
 	{
+		$subject = $subject(...);
 		return (object) get_defined_vars();
 	}
 }

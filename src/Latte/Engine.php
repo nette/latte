@@ -428,7 +428,7 @@ class Engine
 
 	public function setExceptionHandler(callable $handler): static
 	{
-		$this->providers->coreExceptionHandler = $handler;
+		$this->providers->coreExceptionHandler = $handler(...);
 		return $this;
 	}
 

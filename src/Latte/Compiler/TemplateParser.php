@@ -30,7 +30,7 @@ final class TemplateParser
 	public bool $strict = false;
 	public ?Nodes\TextNode $lastIndentation = null;
 
-	/** @var array<string, callable(Tag, self): (Node|\Generator|void)> */
+	/** @var array<string, \Closure(Tag, self): (Node|\Generator|void)> */
 	private array $tagParsers = [];
 
 	/** @var array<string, \stdClass> */
@@ -43,7 +43,7 @@ final class TemplateParser
 	private string $contentType;
 	private int $counter = 0;
 	private ?Tag $tag = null;
-	private $lastResolver;
+	private ?\Closure $lastResolver = null;
 
 	/** @var \WeakMap<Tag, ?list<string>> */
 	private \WeakMap $lookFor;
@@ -86,7 +86,11 @@ final class TemplateParser
 	}
 
 
-	public function parseFragment(callable $resolver, ?callable $after = null): FragmentNode
+	/**
+	 * @param  \Closure(FragmentNode): ?Node  $resolver
+	 * @param  ?(\Closure(FragmentNode): void)  $after
+	 */
+	public function parseFragment(\Closure $resolver, ?\Closure $after = null): FragmentNode
 	{
 		$res = new FragmentNode;
 		$save = [$this->lastResolver, $this->tag];
@@ -165,7 +169,7 @@ final class TemplateParser
 	}
 
 
-	public function parseLatteStatement(?callable $resolver = null): ?Node
+	public function parseLatteStatement(?\Closure $resolver = null): ?Node
 	{
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		if ($this->stream->peek(1)->is(Token::Slash)
@@ -314,8 +318,8 @@ final class TemplateParser
 	}
 
 
-	/** @return callable(Tag, self): (Node|\Generator|void) */
-	private function getTagParser(string $name, Position $pos): callable
+	/** @return \Closure(Tag, self): (Node|\Generator|void) */
+	private function getTagParser(string $name, Position $pos): \Closure
 	{
 		if (!isset($this->tagParsers[$name])) {
 			$hint = ($t = Helpers::getSuggestion(array_keys($this->tagParsers), $name))

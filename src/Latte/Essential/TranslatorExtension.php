@@ -23,18 +23,18 @@ use function array_unshift, is_array, is_string;
  */
 final class TranslatorExtension extends Latte\Extension
 {
-	/** @var callable|Translator|null */
-	private $translator;
+	private ?\Closure $translator;
 
 
 	public function __construct(
 		callable|Translator|null $translator,
 		private ?string $key = null,
 	) {
-		$this->translator = $translator;
-		if ($translator instanceof Translator) {
-			$this->translator = $translator->translate(...);
-		}
+		$this->translator = match (true) {
+			$translator === null => null,
+			$translator instanceof Translator => $translator->translate(...),
+			default => $translator(...),
+		};
 	}
 
 
