@@ -88,7 +88,7 @@ class Filters
 		}
 
 		$s = str_replace('--', '- - ', $s);
-		if (substr($s, -1) === '-') {
+		if (str_ends_with($s, '-')) {
 			$s .= ' ';
 		}
 

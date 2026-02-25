@@ -69,7 +69,9 @@ class VarNode extends StatementNode
 					$assign->var,
 					'??',
 					new TernaryNode(
-						new AuxiliaryNode(fn() => 'array_key_exists(' . $context->encodeString($assign->var->name) . ', get_defined_vars())'),
+						new AuxiliaryNode(
+							fn() => 'array_key_exists(' . $context->encodeString($assign->var->name) . ', get_defined_vars())',
+						),
 						new NullNode,
 						$assign->expr,
 					),

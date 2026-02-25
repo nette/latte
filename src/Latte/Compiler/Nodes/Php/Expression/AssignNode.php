@@ -36,7 +36,10 @@ class AssignNode extends ExpressionNode
 		if ($this->var instanceof ExpressionNode && !$this->var->isWritable()) {
 			throw new CompileException('Cannot write to the expression: ' . $this->var->print(new PrintContext), $this->var->position);
 		} elseif ($this->byRef && !$this->expr->isWritable()) {
-			throw new CompileException('Cannot take reference to the expression: ' . $this->expr->print(new PrintContext), $this->expr->position);
+			throw new CompileException(
+				'Cannot take reference to the expression: ' . $this->expr->print(new PrintContext),
+				$this->expr->position,
+			);
 		}
 	}
 

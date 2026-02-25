@@ -40,7 +40,7 @@ Assert::matchFile(
 );
 
 
-//typehints
+// typehints
 $template = <<<'XX'
 	{define test $var1, ?stdClass $var2, \C\B|null $var3}
 	{/define}

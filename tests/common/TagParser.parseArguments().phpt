@@ -45,7 +45,10 @@ test('strings', function () {
 
 
 test('key words', function () {
-	Assert::same('true, false, null, 1 or 1 and 2 xor 3, clone $obj, new namespace\Class', formatArgs('TRUE, false, null, 1 or 1 and 2 xor 3, clone $obj, new Class'));
+	Assert::same(
+		'true, false, null, 1 or 1 and 2 xor 3, clone $obj, new namespace\Class',
+		formatArgs('TRUE, false, null, 1 or 1 and 2 xor 3, clone $obj, new Class'),
+	);
 	Assert::same('func(10)', formatArgs('func (10)'));
 });
 
@@ -57,7 +60,10 @@ test('associative arrays', function () {
 
 
 test('short ternary operators', function () {
-	Assert::same("\$first ? 'first' : null, \$var ? 'foo' : 'bar', \$var ? 'foo' : null", formatArgs('($first ? first), $var ? foo : bar, $var ? foo'));
+	Assert::same(
+		"\$first ? 'first' : null, \$var ? 'foo' : 'bar', \$var ? 'foo' : null",
+		formatArgs('($first ? first), $var ? foo : bar, $var ? foo'),
+	);
 	Assert::same("('a' ? 'b' : null) ? 'c' ? 'd' : null : null", formatArgs('(a ? b) ? (c ? d)'));
 	Assert::same("fce() ? 'a' : null, fce() ? 'b' : null", formatArgs('fce() ? a, fce() ? b'));
 });
@@ -75,14 +81,20 @@ test('inline modifiers', function () {
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(0)))', formatArgs('(0|mod1|mod2|mod3)'));
 	Assert::same('($this->filters->mod3)(($this->filters->mod2)(($this->filters->mod1)(0)))', formatArgs('((0|mod1)|mod2|mod3)'));
 	Assert::same('($this->filters->mod)(0, 1, 2, $var[\'pocet\'])', formatArgs('(0|mod,1,2,$var["pocet"])'));
-	Assert::same('($this->filters->mod)(0, $var, 0, -0.0, \'s"\\\'tr\', \'s"\\\'tr\')', formatArgs('(0|mod, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')'));
+	Assert::same(
+		'($this->filters->mod)(0, $var, 0, -0.0, \'s"\\\'tr\', \'s"\\\'tr\')',
+		formatArgs('(0|mod, $var, 0, -0.0, "s\"\'tr", \'s"\\\'tr\')'),
+	);
 	Assert::same('($this->filters->mod)(0, [1])', formatArgs('(0|mod: array(1))'));
 	Assert::same('($this->filters->mod)($a ? $b : null)', formatArgs('($a ? $b|mod)'));
 
 	Assert::same("foo: (\$this->filters->mod)(\$val, 'param', 'param2)')", formatArgs('foo => ($val|mod:param, "param2)")'));
 	Assert::same('foo: ($this->filters->mod2)(($this->filters->mod)($val))', formatArgs('foo => ($val|mod|mod2)'));
 	Assert::same("foo: (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1))", formatArgs('foo => ($val|mod:param,(1|mod2))'));
-	Assert::same("foo: (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1, round((\$this->filters->foo)(2))))", formatArgs('foo => ($val|mod:param,(1|mod2:round((2|foo))))'));
+	Assert::same(
+		"foo: (\$this->filters->mod)(\$val, 'param', (\$this->filters->mod2)(1, round((\$this->filters->foo)(2))))",
+		formatArgs('foo => ($val|mod:param,(1|mod2:round((2|foo))))'),
+	);
 	Assert::same('foo: foo($val)', formatArgs('foo => foo($val)'));
 	Assert::same('($this->filters->escape)(0)', formatArgs('(0|escape)'));
 	Assert::same('($this->filters->checkurl)(0)', formatArgs('(0|checkurl)'));

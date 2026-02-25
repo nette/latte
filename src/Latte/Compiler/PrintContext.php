@@ -62,10 +62,10 @@ final class PrintContext
 		'||'         => [120, self::Left],
 		'??'         => [110, self::Right],
 		'?:'         => [100, self::None],
-		'='          => [90,  self::Right],
-		'and'        => [50,  self::Left],
-		'xor'        => [40,  self::Left],
-		'or'         => [30,  self::Left],
+		'='          => [90, self::Right],
+		'and'        => [50, self::Left],
+		'xor'        => [40, self::Left],
+		'or'         => [30, self::Left],
 	];
 
 	private int $counter = 0;

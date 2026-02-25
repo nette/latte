@@ -93,7 +93,7 @@ final class Linter
 			echo $file, "\n";
 		}
 		$s = file_get_contents($file);
-		if (substr($s, 0, 3) === "\xEF\xBB\xBF") {
+		if (str_starts_with($s, "\xEF\xBB\xBF")) {
 			fwrite(STDERR, "[WARNING]    $file    contains BOM\n");
 		}
 

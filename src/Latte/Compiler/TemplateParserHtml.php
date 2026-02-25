@@ -21,15 +21,15 @@ final class TemplateParserHtml
 	/** @var array<string, callable(Tag, TemplateParser): (Node|\Generator|void)> */
 	private array $attrParsers;
 	private ?Html\ElementNode $element = null;
-	private TemplateParser $parser;
 
 	/** @var array{string, ?Nodes\Php\ExpressionNode} */
 	private ?array $endName = null;
 
 
-	public function __construct(TemplateParser $parser, array $attrParsers)
-	{
-		$this->parser = $parser;
+	public function __construct(
+		private TemplateParser $parser,
+		array $attrParsers,
+	) {
 		$this->attrParsers = $attrParsers;
 	}
 
@@ -380,7 +380,11 @@ final class TemplateParserHtml
 			$lexer = $this->parser->getLexer();
 			$lexer->pushState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
 			$value = $this->parser->parseFragment([$this->parser, 'inTextResolve'])->simplify(allowsNull: false);
-			$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of HTML attribute started $quoteToken->position");
+			$stream->tryConsume(Token::Quote)
+				|| $stream->throwUnexpectedException(
+					[$quoteToken->text],
+					addendum: ", end of HTML attribute started $quoteToken->position",
+				);
 			$lexer->popState();
 			return [$value, $quoteToken->text];
 		}
@@ -419,7 +423,11 @@ final class TemplateParserHtml
 				$lexer->pushState(TemplateLexer::StateHtmlQuotedNAttrValue, $quoteToken->text);
 				$valueToken = $stream->tryConsume(Token::Text);
 				$pos = $stream->peek()->position;
-				$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of n:attribute started $quoteToken->position");
+				$stream->tryConsume(Token::Quote)
+					|| $stream->throwUnexpectedException(
+						[$quoteToken->text],
+						addendum: ", end of n:attribute started $quoteToken->position",
+					);
 				$lexer->popState();
 			} else {
 				$valueToken = $stream->consume(Token::Html_Name);
@@ -457,7 +465,8 @@ final class TemplateParserHtml
 			position: $openToken->position,
 			content: $this->parser->parseFragment([$this->parser, 'inTextResolve']),
 		);
-		$stream->tryConsume(Token::Html_CommentClose) || $stream->throwUnexpectedException([Token::Html_CommentClose], addendum: " started $openToken->position");
+		$stream->tryConsume(Token::Html_CommentClose)
+			|| $stream->throwUnexpectedException([Token::Html_CommentClose], addendum: " started $openToken->position");
 		$lexer->popState();
 		return $node;
 	}

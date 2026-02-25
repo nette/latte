@@ -24,7 +24,8 @@ final class HtmlHelpers
 	public static function isVoidElement(string $name): bool
 	{
 		static $names = [
-			'img' => 1, 'hr' => 1, 'br' => 1, 'input' => 1, 'meta' => 1, 'area' => 1, 'embed' => 1, 'keygen' => 1, 'source' => 1, 'base' => 1,
+			'img' => 1, 'hr' => 1, 'br' => 1, 'input' => 1, 'meta' => 1,
+			'area' => 1, 'embed' => 1, 'keygen' => 1, 'source' => 1, 'base' => 1,
 			'col' => 1, 'link' => 1, 'param' => 1, 'basefont' => 1, 'frame' => 1, 'isindex' => 1, 'wbr' => 1, 'command' => 1, 'track' => 1,
 		];
 		return isset($names[strtolower($name)]);
@@ -47,7 +48,10 @@ final class HtmlHelpers
 	 */
 	public static function classifyScriptType(string $type): string
 	{
-		if (preg_match('#((application|text)/(((x-)?java|ecma|j|live)script|json)|application/.+\+json|text/plain|module|importmap|)$#Ai', $type)) {
+		if (preg_match(
+			'#((application|text)/(((x-)?java|ecma|j|live)script|json)|application/.+\+json|text/plain|module|importmap|)$#Ai',
+			$type,
+		)) {
 			return ContentType::JavaScript;
 
 		} elseif (preg_match('#text/((x-)?template|html)$#Ai', $type)) {
@@ -71,7 +75,8 @@ final class HtmlHelpers
 			throw new Latte\RuntimeException("Invalid tag name '$name'");
 
 		} elseif (self::isVoidElement($name) !== self::isVoidElement($origName ?? 'div') // non-void is default
-			|| in_array(strtolower($name), ['style', 'script'], true)) {
+			|| in_array(strtolower($name), ['style', 'script'], true)
+		) {
 			throw new Latte\RuntimeException("Forbidden: Cannot change element to <$name>");
 		}
 		return $name;

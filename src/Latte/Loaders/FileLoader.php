@@ -38,7 +38,10 @@ class FileLoader implements Latte\Loader
 
 		} elseif ($this->isExpired($fileName, time())) {
 			if (@touch($file) === false) { // @ is escalated to warning
-				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
+				trigger_error(
+					"File's modification time is in the future. Cannot update it: " . error_get_last()['message'],
+					E_USER_WARNING,
+				);
 			}
 		}
 

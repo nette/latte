@@ -8,7 +8,7 @@
 namespace Latte;
 
 
-/*enum*/ final class ContentType
+/* enum */ final class ContentType
 {
 	public const
 		Text = 'text',

@@ -31,10 +31,7 @@ class IntegerNode extends ScalarNode
 
 	public static function parse(string $str, Position $position): static
 	{
-		$num = PhpHelpers::decodeNumber($str, $base);
-		if ($num === null) {
-			throw new CompileException('Invalid numeric literal', $position);
-		}
+		$num = PhpHelpers::decodeNumber($str, $base) ?? throw new CompileException('Invalid numeric literal', $position);
 		return new static($num, $base, $position);
 	}
 

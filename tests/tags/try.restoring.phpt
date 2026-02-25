@@ -63,8 +63,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 					{embed embed.latte}{/embed}
 				{/try}
 				{include test}
-		X
-	,
+		X,
 	'embed.latte' => '{rollback}',
 ]));
 

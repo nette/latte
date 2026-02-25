@@ -169,7 +169,10 @@ final class TagParser extends TagParserData
 			} else {
 				if ($symbol === self::SymbolNone) {
 					$recovery = $recovery
-						? [$this->stream->getIndex(), $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack]
+						? [
+							$this->stream->getIndex(), $state, $stateStack, $stackPos,
+							$this->semValue, $this->semStack, $this->startTokenStack,
+						]
 						: null;
 
 
@@ -196,7 +199,7 @@ final class TagParser extends TagParserData
 					= -YYUNEXPECTED: error
 					*/
 					if ($action > 0) { // shift
-						++$stackPos;
+						$stackPos++;
 						$stateStack[$stackPos] = $state = $action;
 						$this->semStack[$stackPos] = $token->text;
 						$this->startTokenStack[$stackPos] = $token;
@@ -206,6 +209,7 @@ final class TagParser extends TagParserData
 						}
 
 						$rule = $action - self::NumNonLeafStates; // shift-and-reduce
+
 					} else {
 						$rule = -$action;
 					}
@@ -233,7 +237,7 @@ final class TagParser extends TagParserData
 						$state = self::GotoDefault[$nonTerminal];
 					}
 
-					++$stackPos;
+					$stackPos++;
 					$stateStack[$stackPos] = $state;
 					$this->semStack[$stackPos] = $this->semValue;
 					if ($ruleLength === 0) {
@@ -267,10 +271,10 @@ final class TagParser extends TagParserData
 	{
 		foreach (self::SymbolToName as $symbol => $name) {
 			$idx = self::ActionBase[$state] + $symbol;
-			if (($idx >= 0 && $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol
-					|| $state < self::Yy2Tblstate
+			if ((($idx >= 0 && $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol)
+				|| ($state < self::Yy2Tblstate
 					&& ($idx = self::ActionBase[$state + self::NumNonLeafStates] + $symbol) >= 0
-					&& $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol)
+					&& $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol))
 				&& self::Action[$idx] !== self::UnexpectedTokenRule
 				&& self::Action[$idx] !== self::DefaultAction
 				&& $symbol === 0
@@ -406,8 +410,8 @@ final class TagParser extends TagParserData
 					throw new CompileException('Invalid indentation - tabs and spaces cannot be mixed', $position);
 				} elseif (strlen($prefix) < $indentLen && !isset($matches[2])) {
 					throw new CompileException(
-						'Invalid body indentation level ' .
-						'(expecting an indentation level of at least ' . $indentLen . ')',
+						'Invalid body indentation level '
+						. '(expecting an indentation level of at least ' . $indentLen . ')',
 						$position,
 					);
 				}

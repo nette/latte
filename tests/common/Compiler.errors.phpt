@@ -192,13 +192,13 @@ Assert::exception(
 
 Assert::exception(
 	fn() => $latte->compile('<p title=""</p>'),
-	'Latte\CompileException',
+	Latte\CompileException::class,
 	"Unexpected '</p>' (on line 1 at column 12)",
 );
 
 Assert::exception(
 	fn() => $latte->compile('<p title=>'),
-	'Latte\CompileException',
+	Latte\CompileException::class,
 	"Unexpected '>' (on line 1 at column 10)",
 );
 

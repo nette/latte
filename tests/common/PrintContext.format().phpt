@@ -154,7 +154,10 @@ test('%modify', function () {
 
 	Assert::same(
 		'test1(($this->filters->a)(($this->filters->b)(test())))',
-		format('test1(%modify(test()))', new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))])),
+		format(
+			'test1(%modify(test()))',
+			new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))]),
+		),
 	);
 });
 
@@ -167,7 +170,10 @@ test('%modifyContent', function () {
 
 	Assert::same(
 		'test1($this->filters->filterContent(\'a\', $ʟ_fi, $this->filters->filterContent(\'b\', $ʟ_fi, test())))',
-		format('test1(%modifyContent(test()))', new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))])),
+		format(
+			'test1(%modifyContent(test()))',
+			new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))]),
+		),
 	);
 });
 

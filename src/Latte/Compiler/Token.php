@@ -7,6 +7,7 @@
 
 namespace Latte\Compiler;
 
+
 final class Token
 {
 	public const

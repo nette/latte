@@ -35,7 +35,10 @@ class ListNode extends Node
 			if ($item !== null && !$item instanceof ListItemNode) {
 				throw new \TypeError('Item must be null or ListItemNode, ' . get_debug_type($item) . ' given.');
 			} elseif ($item?->value instanceof ExpressionNode && !$item->value->isWritable()) {
-				throw new CompileException('Cannot write to the expression: ' . $item->value->print(new PrintContext), $item->value->position);
+				throw new CompileException(
+					'Cannot write to the expression: ' . $item->value->print(new PrintContext),
+					$item->value->position,
+				);
 			}
 		}
 	}

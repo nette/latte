@@ -18,7 +18,7 @@ test('arrays', function () {
 });
 
 test('iterators', function () {
-	Assert::same(null, Filters::first(new ArrayIterator([])));
+	Assert::same(null, Filters::first(new ArrayIterator));
 	Assert::same('a', Filters::first(new ArrayIterator(['a'])));
 	Assert::same('a', Filters::first(new ArrayIterator(['a', 'b'])));
 	Assert::same('a', Filters::first(new ArrayIterator([2 => 'a', 1 => 'b'])));

@@ -31,7 +31,7 @@ Assert::exception(
 
 Assert::exception(
 	fn() => $latte->compile('<p n:forech>'),
-	'Latte\CompileException',
+	Latte\CompileException::class,
 	'Unexpected attribute n:forech, did you mean n:foreach? (on line 1 at column 4)',
 );
 

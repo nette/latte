@@ -36,9 +36,9 @@ class BlueScreenPanel
 			&& version_compare(Tracy\Debugger::VERSION, '3.0', '<')
 		) {
 			Tracy\Debugger::addSourceMapper([self::class, 'mapLatteSourceCode']);
-			$blueScreen->addFileGenerator(fn(string $file) => substr($file, -6) === '.latte'
-					? "{block content}\n\$END\$"
-					: null);
+			$blueScreen->addFileGenerator(fn(string $file) => str_ends_with($file, '.latte')
+				? "{block content}\n\$END\$"
+				: null);
 		}
 	}
 
@@ -49,14 +49,19 @@ class BlueScreenPanel
 			return [
 				'tab' => 'Template',
 				'panel' => (preg_match('#\n|\?#', $e->sourceName)
-						? ''
-						: '<p>'
-							. (@is_file($e->sourceName) // @ - may trigger error
-								? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->position?->line)
-								: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
-							. '</p>')
+					? ''
+					: '<p>'
+						. (@is_file($e->sourceName) // @ - may trigger error
+							? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->position?->line)
+							: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
+						. '</p>')
 					. '<pre class="code tracy-code"><div>'
-					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
+					. BlueScreen::highlightLine(
+						htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'),
+						$e->position->line ?? 0,
+						15,
+						$e->position->column ?? 0,
+					)
 					. '</div></pre>',
 			];
 		}

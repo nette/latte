@@ -71,7 +71,10 @@ Assert::equal(
 );
 
 Assert::equal(
-	new PropertyFetchNode(new MethodCallNode(new VariableNode('this'), new IdentifierNode('foo'), [new ArgumentNode(new IntegerNode(123))]), new IdentifierNode('bar')),
+	new PropertyFetchNode(
+		new MethodCallNode(new VariableNode('this'), new IdentifierNode('foo'), [new ArgumentNode(new IntegerNode(123))]),
+		new IdentifierNode('bar'),
+	),
 	$var->method('foo', [123])->property('bar')->build(),
 );
 
@@ -83,7 +86,10 @@ Assert::equal(
 );
 
 Assert::equal(
-	new PropertyFetchNode(new StaticMethodCallNode(new VariableNode('this'), new IdentifierNode('foo'), [new ArgumentNode(new IntegerNode(123))]), new IdentifierNode('bar')),
+	new PropertyFetchNode(
+		new StaticMethodCallNode(new VariableNode('this'), new IdentifierNode('foo'), [new ArgumentNode(new IntegerNode(123))]),
+		new IdentifierNode('bar'),
+	),
 	$var->staticMethod('foo', [123])->property('bar')->build(),
 );
 

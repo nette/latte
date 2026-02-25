@@ -40,7 +40,10 @@ Assert::exception(
 // {elseifset ... }
 Assert::contains("} elseif (\$this->hasBlock('block')) ", $latte->compile('{if 1}{elseifset #block}{/if}'));
 Assert::contains("} elseif (\$this->hasBlock('block')) ", $latte->compile('{if 1}{elseifset block}{/if}'));
-Assert::contains("} elseif (\$this->hasBlock('block') && isset(\$item->var['#test'])) ", $latte->compile('{if 1}{elseifset #block, $item->var["#test"]}{/if}'));
+Assert::contains(
+	"} elseif (\$this->hasBlock('block') && isset(\$item->var['#test'])) ",
+	$latte->compile('{if 1}{elseifset #block, $item->var["#test"]}{/if}'),
+);
 Assert::contains(
 	"} elseif (\$this->hasBlock('block1') && \$this->hasBlock('block2') && isset(\$var3) && isset(item()->abc)) ",
 	$latte->compile('{if 1}{elseifset #block1, block2, $var3, item()->abc}{/if}'),

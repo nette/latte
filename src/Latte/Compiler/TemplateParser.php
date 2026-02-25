@@ -93,6 +93,7 @@ final class TemplateParser
 			}
 
 			return $res;
+
 		} finally {
 			[$this->lastResolver, $this->tag] = $save;
 		}
@@ -150,7 +151,8 @@ final class TemplateParser
 		$openToken = $this->stream->consume(Token::Latte_CommentOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteComment);
 		$this->stream->consume(Token::Text);
-		$this->stream->tryConsume(Token::Latte_CommentClose) || $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
+		$this->stream->tryConsume(Token::Latte_CommentClose)
+			|| $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return new Nodes\NopNode;
 	}
@@ -254,7 +256,16 @@ final class TemplateParser
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 
-		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], true);
+		$inTag = in_array(
+			$this->lexer->getState(),
+			[
+				TemplateLexer::StateHtmlTag,
+				TemplateLexer::StateHtmlQuotedValue,
+				TemplateLexer::StateHtmlComment,
+				TemplateLexer::StateHtmlBogus,
+			],
+			true,
+		);
 		$openToken = $stream->consume(Token::Latte_TagOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$tag = new Tag(
@@ -267,7 +278,8 @@ final class TemplateParser
 			inTag: $inTag,
 			htmlElement: $this->html->getElement(),
 		);
-		$stream->tryConsume(Token::Latte_TagClose) || $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
+		$stream->tryConsume(Token::Latte_TagClose)
+			|| $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return $tag;
 	}
@@ -367,7 +379,10 @@ final class TemplateParser
 	public function checkBlockIsUnique(Block $block): void
 	{
 		if ($block->isDynamic() || !preg_match('#^[a-z]#iD', $name = (string) $block->name->value)) {
-			throw new CompileException(ucfirst($block->tag->name) . " name must start with letter a-z, '$name' given.", $block->tag->position);
+			throw new CompileException(
+				ucfirst($block->tag->name) . " name must start with letter a-z, '$name' given.",
+				$block->tag->position,
+			);
 		}
 
 		if ($block->layer === Template::LayerSnippet

@@ -35,8 +35,6 @@ class Template
 	/** @var mixed[]  @internal */
 	protected array $params = [];
 
-	protected FilterExecutor $filters;
-
 	/** @internal */
 	protected string|false|null $parentName = null;
 
@@ -49,8 +47,6 @@ class Template
 	/** @var mixed[][] */
 	private array $blockStack = [];
 
-	private Engine $engine;
-	private string $name;
 	private ?Template $referringTemplate = null;
 	private ?string $referenceType = null;
 
@@ -59,16 +55,13 @@ class Template
 	 * @param  mixed[]  $params
 	 */
 	public function __construct(
-		Engine $engine,
+		private Engine $engine,
 		array $params,
-		FilterExecutor $filters,
+		protected FilterExecutor $filters,
 		\stdClass $providers,
-		string $name,
+		private string $name,
 	) {
-		$this->engine = $engine;
 		$this->params = $params;
-		$this->filters = $filters;
-		$this->name = $name;
 		$this->global = $providers;
 		$this->initBlockLayer(self::LayerTop);
 		$this->initBlockLayer(self::LayerLocal);

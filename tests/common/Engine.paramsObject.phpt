@@ -39,5 +39,8 @@ $latte->setCacheDirectory(getTempDir());
 
 Assert::same(
 	'%*123*% ##123## ',
-	$latte->renderToString('{myFunc($a)|myFilter} {both(123)|both} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams),
+	$latte->renderToString(
+		'{myFunc($a)|myFilter} {both(123)|both} {if isset($protected) || isset($private)}invisible{/if}',
+		new TemplateParams,
+	),
 );

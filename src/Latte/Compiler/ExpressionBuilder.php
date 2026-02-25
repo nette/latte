@@ -74,7 +74,7 @@ final class ExpressionBuilder
 	}
 
 
-	public static function valueToNode(bool|int|float|string|array|null|ExpressionNode $value): ExpressionNode
+	public static function valueToNode(bool|int|float|string|array|ExpressionNode|null $value): ExpressionNode
 	{
 		return match (true) {
 			$value === null => new Scalar\NullNode,

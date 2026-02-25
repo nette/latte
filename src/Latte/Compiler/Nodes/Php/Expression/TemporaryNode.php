@@ -18,7 +18,7 @@ use Latte\Compiler\PrintContext;
 class TemporaryNode extends ExpressionNode
 {
 	public function __construct(
-		public ListNode|null $value,
+		public ?ListNode $value,
 	) {
 	}
 
