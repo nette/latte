@@ -477,7 +477,7 @@ final class Filters
 	/**
 	 * Pad a string to a certain length with another string.
 	 */
-	public static function padLeft(string|Stringable|null $s, int $length, string $append = ' '): string
+	public static function padLeft(string|Stringable|int|float|null $s, int $length, string $append = ' '): string
 	{
 		$s = (string) $s;
 		$length = max(0, $length - self::strLength($s));
@@ -489,7 +489,7 @@ final class Filters
 	/**
 	 * Pad a string to a certain length with another string.
 	 */
-	public static function padRight(string|Stringable|null $s, int $length, string $append = ' '): string
+	public static function padRight(string|Stringable|int|float|null $s, int $length, string $append = ' '): string
 	{
 		$s = (string) $s;
 		$length = max(0, $length - self::strLength($s));
