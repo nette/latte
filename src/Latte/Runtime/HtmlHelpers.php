@@ -43,7 +43,7 @@ final class HtmlHelpers
 		}
 
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
-		$s = strtr($s, ['{{' => '{<!-- -->{', '{' => '&#123;']);
+		$s = strtr($s, ['{{' => '&#123;&#123;', '{' => '&#123;']);
 		return $s;
 	}
 
