@@ -36,7 +36,10 @@ class Helpers
 	}
 
 
-	/** intentionally without callable typehint, because it generates bad error messages */
+	/**
+	 * Returns a reflection object for the given callable.
+	 * Intentionally without callable type hint to avoid unhelpful error messages.
+	 */
 	public static function toReflection(mixed $callable): \ReflectionFunctionAbstract
 	{
 		if (is_string($callable) && strpos($callable, '::')) {
@@ -54,6 +57,7 @@ class Helpers
 
 
 	/**
+	 * Sorts items by before/after ordering constraints defined as \stdClass objects.
 	 * @param  array<string, mixed|\stdClass>  $list
 	 * @return array<string, mixed|\stdClass>
 	 */
@@ -96,7 +100,10 @@ class Helpers
 	}
 
 
-	/** @param  mixed[]  $items */
+	/**
+	 * Removes null values from the array and re-indexes it.
+	 * @param  mixed[]  $items
+	 */
 	public static function removeNulls(array &$items): void
 	{
 		$items = array_values(array_filter($items, fn($item) => $item !== null));
@@ -126,7 +133,8 @@ class Helpers
 
 
 	/**
-	 * Tries to guess the position in the template from the backtrace
+	 * Tries to guess the template position from the backtrace. Returns a human-readable string like
+	 * "in 'path/to/template.latte' on line 42", or null if the position cannot be determined.
 	 */
 	public static function guessTemplatePosition(): ?string
 	{

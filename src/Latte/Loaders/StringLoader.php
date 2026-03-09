@@ -11,7 +11,7 @@ use Latte;
 
 
 /**
- * Template loader.
+ * Loads templates from strings or an in-memory array.
  */
 class StringLoader implements Latte\Loader
 {

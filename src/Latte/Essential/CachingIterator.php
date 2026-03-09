@@ -118,7 +118,7 @@ class CachingIterator extends \CachingIterator implements \Countable
 
 
 	/**
-	 * Decrements counter.
+	 * Decrements the counter (minimum 0) to skip the current iteration in counting.
 	 */
 	public function skipRound(): void
 	{
@@ -126,18 +126,12 @@ class CachingIterator extends \CachingIterator implements \Countable
 	}
 
 
-	/**
-	 * Returns the counter as string
-	 */
 	public function __toString(): string
 	{
 		return (string) $this->counter;
 	}
 
 
-	/**
-	 * Returns the count of elements.
-	 */
 	public function count(): int
 	{
 		$inner = $this->getInnerIterator();

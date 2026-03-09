@@ -174,7 +174,7 @@ class Engine
 
 
 	/**
-	 * Calls node visitors.
+	 * Runs all registered compiler passes over the AST.
 	 */
 	public function applyPasses(TemplateNode &$node): void
 	{
@@ -319,7 +319,7 @@ class Engine
 
 
 	/**
-	 * Call a run-time filter.
+	 * Calls a run-time filter.
 	 * @param  mixed[]  $args
 	 */
 	public function invokeFilter(string $name, array $args): mixed
@@ -371,7 +371,7 @@ class Engine
 
 
 	/**
-	 * Call a run-time function.
+	 * Calls a run-time function.
 	 * @param  mixed[]  $args
 	 */
 	public function invokeFunction(string $name, array $args): mixed
@@ -381,6 +381,7 @@ class Engine
 
 
 	/**
+	 * Returns all run-time functions.
 	 * @return array<string, callable>
 	 */
 	public function getFunctions(): array
@@ -428,6 +429,9 @@ class Engine
 	}
 
 
+	/**
+	 * Sets a handler called when an exception occurs during template rendering.
+	 */
 	public function setExceptionHandler(callable $handler): static
 	{
 		$this->providers->coreExceptionHandler = $handler(...);
@@ -551,6 +555,9 @@ class Engine
 	}
 
 
+	/**
+	 * Validates compiled PHP code using the given PHP binary. Pass null to disable.
+	 */
 	public function enablePhpLinter(?string $phpBinary): static
 	{
 		$this->phpBinary = $phpBinary;

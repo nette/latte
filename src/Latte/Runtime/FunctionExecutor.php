@@ -46,6 +46,9 @@ class FunctionExecutor
 	}
 
 
+	/**
+	 * Returns the named function wrapped to accept or skip a Template argument based on its signature.
+	 */
 	public function __get(string $name): callable
 	{
 		$callback = $this->_list[$name] ?? null;

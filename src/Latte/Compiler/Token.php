@@ -257,6 +257,9 @@ final readonly class Token
 	}
 
 
+	/**
+	 * Checks whether the token is a PHP expression token (not a structural delimiter).
+	 */
 	public function isPhpKind(): bool
 	{
 		return $this->type > 0 && $this->type < 10000;

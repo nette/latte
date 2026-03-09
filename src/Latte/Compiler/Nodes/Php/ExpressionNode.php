@@ -15,6 +15,9 @@ use Latte\Compiler\Node;
  */
 abstract class ExpressionNode extends Node
 {
+	/**
+	 * Checks whether the expression can be used as the target of an assignment.
+	 */
 	public function isWritable(): bool
 	{
 		return $this instanceof Expression\ArrayAccessNode
@@ -24,6 +27,9 @@ abstract class ExpressionNode extends Node
 	}
 
 
+	/**
+	 * Checks whether the expression represents a variable-like access (variable, property, or array element).
+	 */
 	public function isVariable(): bool
 	{
 		return $this instanceof Expression\ArrayAccessNode
@@ -33,6 +39,9 @@ abstract class ExpressionNode extends Node
 	}
 
 
+	/**
+	 * Checks whether the expression is a function or method call.
+	 */
 	public function isCall(): bool
 	{
 		return $this instanceof Expression\FunctionCallNode

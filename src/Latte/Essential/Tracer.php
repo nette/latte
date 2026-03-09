@@ -19,6 +19,9 @@ use function count, is_string;
  */
 final class Tracer
 {
+	/**
+	 * Throws a RuntimeException with a backtrace mapped back to Latte template source positions.
+	 */
 	public static function throw(): void
 	{
 		$e = new Latte\RuntimeException('Your location in Latte templates');

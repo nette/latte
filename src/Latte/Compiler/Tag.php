@@ -69,6 +69,9 @@ final class Tag
 	}
 
 
+	/**
+	 * Returns the tag notation, e.g. {tagName} or n:tagName="...".
+	 */
 	public function getNotation(bool $withArgs = false): string
 	{
 		return $this->isNAttribute()
@@ -84,6 +87,8 @@ final class Tag
 
 
 	/**
+	 * Finds the nearest ancestor tag whose node is an instance of one of the given classes,
+	 * optionally filtered by a condition. Returns null if none is found.
 	 * @param  class-string[]  $classes
 	 */
 	public function closestTag(array $classes, ?callable $condition = null): ?self
@@ -100,6 +105,9 @@ final class Tag
 	}
 
 
+	/**
+	 * Throws a CompileException if the tag has no arguments.
+	 */
 	public function expectArguments(string $what = 'arguments'): void
 	{
 		if ($this->parser->isEnd()) {
@@ -108,6 +116,9 @@ final class Tag
 	}
 
 
+	/**
+	 * Replaces the current n:attribute node in the parent HTML element with the given node.
+	 */
 	public function replaceNAttribute(AreaNode $node): void
 	{
 		assert($this->htmlElement !== null);

@@ -8,8 +8,11 @@
 namespace Latte\Runtime;
 
 
+/**
+ * Marks a value as pre-escaped HTML that should not be escaped again when rendered.
+ */
 interface HtmlStringable
 {
-	/** in HTML format */
+	/** Returns content in HTML format (no further escaping needed). */
 	function __toString(): string;
 }

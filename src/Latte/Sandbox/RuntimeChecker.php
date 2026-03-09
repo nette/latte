@@ -20,7 +20,10 @@ final class RuntimeChecker
 	}
 
 
-	/** @param  array<mixed>  $args */
+	/**
+	 * Calls a function after verifying it is allowed by the policy.
+	 * @param  array<mixed>  $args
+	 */
 	public function call(mixed $callable, array $args): mixed
 	{
 		self::checkCallable($callable);
@@ -29,7 +32,10 @@ final class RuntimeChecker
 	}
 
 
-	/** @param  array<mixed>  $args */
+	/**
+	 * Calls a method on an object after verifying it is allowed by the policy.
+	 * @param  array<mixed>  $args
+	 */
 	public function callMethod(mixed $object, mixed $method, array $args, bool $nullsafe = false): mixed
 	{
 		if ($object === null) {
@@ -50,6 +56,9 @@ final class RuntimeChecker
 	}
 
 
+	/**
+	 * Returns the callable wrapped as a Closure after verifying it is allowed by the policy.
+	 */
 	public function closure(mixed $callable): \Closure
 	{
 		self::checkCallable($callable);
@@ -57,7 +66,10 @@ final class RuntimeChecker
 	}
 
 
-	/** @return list<mixed> */
+	/**
+	 * Validates that no array argument is a disallowed callable and returns the arguments.
+	 * @return list<mixed>
+	 */
 	public function args(mixed ...$args): array
 	{
 		foreach ($args as $arg) {
@@ -74,6 +86,9 @@ final class RuntimeChecker
 	}
 
 
+	/**
+	 * Validates that property access is allowed by the policy and returns the object.
+	 */
 	public function prop(mixed $object, mixed $property): mixed
 	{
 		$class = is_object($object) ? $object::class : $object;

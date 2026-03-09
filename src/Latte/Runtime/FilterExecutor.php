@@ -54,7 +54,7 @@ class FilterExecutor
 
 
 	/**
-	 * Returns filter for classic calling.
+	 * Returns the named filter as a simple callable (without FilterInfo context argument).
 	 */
 	public function __get(string $name): callable
 	{
