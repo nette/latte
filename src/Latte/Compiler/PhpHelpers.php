@@ -188,6 +188,10 @@ final class PhpHelpers
 	}
 
 
+	/**
+	 * Decodes PHP string escape sequences (e.g. \n, \x1B, \u{1F600}).
+	 * Pass $quote to also unescape the given quote character.
+	 */
 	public static function decodeEscapeSequences(string $str, ?string $quote): string
 	{
 		if ($quote !== null) {
@@ -240,6 +244,10 @@ final class PhpHelpers
 	}
 
 
+	/**
+	 * Validates the generated PHP code using the given PHP binary as a linter.
+	 * Throws CompileException if the code contains syntax errors.
+	 */
 	public static function checkCode(string $phpBinary, string $code, string $name): void
 	{
 		$process = proc_open(

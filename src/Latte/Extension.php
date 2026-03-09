@@ -74,7 +74,7 @@ abstract class Extension
 
 
 	/**
-	 * Returns a value to distinguish multiple versions of the template.
+	 * Returns a value that invalidates the template cache when the extension configuration changes.
 	 */
 	public function getCacheKey(Engine $engine): mixed
 	{

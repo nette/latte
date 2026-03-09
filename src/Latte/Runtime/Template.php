@@ -263,6 +263,9 @@ class Template
 	}
 
 
+	/**
+	 * Returns the relation type ('extends', 'include', 'import', 'embed', 'sandbox'), or null for root.
+	 */
 	public function getReferenceType(): ?string
 	{
 		return $this->referenceType;

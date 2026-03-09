@@ -118,6 +118,9 @@ final class Cache
 	}
 
 
+	/**
+	 * Checks whether the file path looks like a Latte cache file.
+	 */
 	public static function isCacheFile(string $file): bool
 	{
 		return (bool) preg_match('/latte--\w{10}\.php$/', $file);

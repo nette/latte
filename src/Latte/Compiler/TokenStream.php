@@ -12,8 +12,7 @@ use function array_map, count, implode, is_int, is_string, trim;
 
 
 /**
- * TokenStream loads tokens from $source iterator on-demand, and places them in a buffer to provide access
- * to any previous token by index.
+ * Lazy token buffer over an iterator with random-access peek and consume operations.
  */
 final class TokenStream
 {

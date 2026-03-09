@@ -147,7 +147,7 @@ final class HtmlHelpers
 
 
 	/**
-	 * Converts HTML attribute to HTML text. The < > chars need to be escaped.
+	 * Converts an HTML attribute value back to HTML text with re-encoded special characters.
 	 */
 	public static function convertAttrToHtml(string $s): string
 	{
@@ -165,6 +165,9 @@ final class HtmlHelpers
 	}
 
 
+	/**
+	 * Returns the type category of an HTML attribute: 'bool', 'list', 'data', 'aria', 'style', or ''.
+	 */
 	public static function classifyAttributeType(string $name): string
 	{
 		$name = strtolower($name);
@@ -280,6 +283,9 @@ final class HtmlHelpers
 	}
 
 
+	/**
+	 * Triggers an E_USER_WARNING for an invalid attribute value type.
+	 */
 	public static function triggerInvalidValue(string $name, mixed $value): void
 	{
 		$source = Latte\Helpers::guessTemplatePosition();
@@ -288,6 +294,9 @@ final class HtmlHelpers
 	}
 
 
+	/**
+	 * Triggers an E_USER_WARNING about a behavior change in attribute rendering.
+	 */
 	public static function triggerMigrationWarning(string $name, mixed $value): void
 	{
 		$source = Latte\Helpers::guessTemplatePosition();
@@ -361,6 +370,9 @@ final class HtmlHelpers
 	}
 
 
+	/**
+	 * Validates that the HTML attribute name contains only allowed characters.
+	 */
 	public static function validateAttributeName(mixed $name): void
 	{
 		if (!is_string($name)) {

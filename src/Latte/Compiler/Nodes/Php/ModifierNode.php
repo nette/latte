@@ -44,6 +44,9 @@ class ModifierNode extends Node
 	}
 
 
+	/**
+	 * Removes and returns the first filter with the given name, or null if not found.
+	 */
 	public function removeFilter(string $name): ?FilterNode
 	{
 		foreach ($this->filters as $i => $filter) {

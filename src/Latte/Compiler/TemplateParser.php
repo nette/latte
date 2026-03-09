@@ -114,6 +114,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Resolves the next node in plain text context (text, indentation, Latte tag, or comment).
+	 */
 	public function inTextResolve(): ?Node
 	{
 		$token = $this->stream->peek();
@@ -128,6 +131,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Consumes a text token and returns a TextNode.
+	 */
 	public function parseText(): Nodes\TextNode
 	{
 		$token = $this->stream->consume(Token::Text, Token::Html_Name);
@@ -157,6 +163,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Consumes a Latte comment and returns a NopNode.
+	 */
 	public function parseLatteComment(): Nodes\NopNode
 	{
 		if (str_ends_with($this->stream->tryPeek(-1)->text ?? "\n", "\n")) {
@@ -290,7 +299,10 @@ final class TemplateParser
 	}
 
 
-	/** @return Token[] */
+	/**
+	 * Consumes all PHP tokens of the current tag body and returns them.
+	 * @return Token[]
+	 */
 	public function consumeTag(): array
 	{
 		$res = [];
@@ -374,6 +386,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Throws if the tag parser has not consumed all tokens.
+	 */
 	public function ensureIsConsumed(Tag $tag): void
 	{
 		if (!$tag->parser->isEnd()) {
@@ -383,6 +398,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Validates that the block name is valid and not already declared, then registers it.
+	 */
 	public function checkBlockIsUnique(Block $block): void
 	{
 		if ($block->isDynamic() || !preg_match('#^[a-z]#iD', $name = (string) $block->name->value)) {
@@ -436,6 +454,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Returns the currently parsed tag, or null if no tag is being parsed.
+	 */
 	public function peekTag(): ?Tag
 	{
 		return $this->tag;
@@ -456,6 +477,9 @@ final class TemplateParser
 	}
 
 
+	/**
+	 * Generates a unique integer ID for use in compiled output.
+	 */
 	public function generateId(): int
 	{
 		return $this->counter++;

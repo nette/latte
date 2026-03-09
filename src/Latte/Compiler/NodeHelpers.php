@@ -20,8 +20,9 @@ use function array_merge, constant, defined;
 final class NodeHelpers
 {
 	/**
+	 * Finds all nodes matching the filter and returns them in traversal order.
 	 * @param callable(Node): bool  $filter
-	 * @return Node[]
+	 * @return list<Node>
 	 */
 	public static function find(Node $node, callable $filter): array
 	{
@@ -36,7 +37,10 @@ final class NodeHelpers
 	}
 
 
-	/** @param callable(Node): bool  $filter */
+	/**
+	 * Finds the first node matching the filter, or null if none.
+	 * @param callable(Node): bool  $filter
+	 */
 	public static function findFirst(Node $node, callable $filter): ?Node
 	{
 		$found = null;
@@ -51,6 +55,9 @@ final class NodeHelpers
 	}
 
 
+	/**
+	 * Creates a deep clone of the node tree.
+	 */
 	public static function clone(Node $node): Node
 	{
 		return (new NodeTraverser)
@@ -58,6 +65,10 @@ final class NodeHelpers
 	}
 
 
+	/**
+	 * Evaluates a scalar expression node to a PHP value. Resolves constants when $constants is true.
+	 * Throws InvalidArgumentException if the expression cannot be reduced to a value.
+	 */
 	public static function toValue(ExpressionNode $node, bool $constants = false): mixed
 	{
 		if ($node instanceof Scalar\BooleanNode
@@ -115,6 +126,9 @@ final class NodeHelpers
 	}
 
 
+	/**
+	 * Extracts plain text from a node if it contains only static text, or returns null.
+	 */
 	public static function toText(?Node $node): ?string
 	{
 		if ($node instanceof Nodes\FragmentNode) {

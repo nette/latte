@@ -37,7 +37,7 @@ final class Passes
 
 
 	/**
-	 * Enable custom functions.
+	 * Replaces calls to registered functions with CustomFunctionCallNode wrappers.
 	 */
 	public function customFunctionsPass(TemplateNode $node): void
 	{
@@ -60,7 +60,7 @@ final class Passes
 
 
 	/**
-	 * $ʟ_xxx, $GLOBALS and $this are forbidden
+	 * Forbids use of internal Latte variables ($ʟ_xxx), $GLOBALS, and $this in templates.
 	 */
 	public function forbiddenVariablesPass(TemplateNode $node): void
 	{
@@ -80,7 +80,7 @@ final class Passes
 
 
 	/**
-	 * Validate PrintNode inside <script> - prevent quotes after PrintNode
+	 * Detects print statements immediately followed by quotes inside <script> and throws an error.
 	 */
 	public function scriptTagQuotesPass(TemplateNode $node): void
 	{

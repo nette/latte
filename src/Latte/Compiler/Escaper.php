@@ -96,6 +96,9 @@ final class Escaper
 	}
 
 
+	/**
+	 * Returns the current escaping state as a string (e.g. "html/attr/js").
+	 */
 	public function export(): string
 	{
 		return $this->state . ($this->subType ? '/' . $this->subType : '');
@@ -207,6 +210,9 @@ final class Escaper
 	}
 
 
+	/**
+	 * Applies mandatory escaping that cannot be suppressed (e.g. quotes in attributes).
+	 */
 	public function escapeMandatory(string $str, ?Position $position = null): string
 	{
 		return match ($this->contentType) {
@@ -229,6 +235,9 @@ final class Escaper
 	}
 
 
+	/**
+	 * Generates code that converts content between content types at runtime using FilterInfo.
+	 */
 	public function escapeContent(string $str): string
 	{
 		return 'LR\Helpers::convertTo($ʟ_fi, '
@@ -238,6 +247,9 @@ final class Escaper
 	}
 
 
+	/**
+	 * Returns a callable that converts content from $source type to $dest type, or null if unsupported.
+	 */
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
 		return match (true) {

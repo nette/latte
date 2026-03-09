@@ -27,6 +27,8 @@ final class NodeTraverser
 
 
 	/**
+	 * Traverses the AST, calling $enter before and $leave after visiting each node's children.
+	 * The callable may return a replacement Node, or one of the class constants to control traversal.
 	 * @param ?(callable(Node): (Node|int|void|null))  $enter
 	 * @param ?(callable(Node): (Node|int|void|null))  $leave
 	 */

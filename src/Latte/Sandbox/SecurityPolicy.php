@@ -12,7 +12,7 @@ use function array_flip, array_map, assert, is_a, is_bool, strtolower;
 
 
 /**
- * Default-deny security policy. Whitelist allowed tags, filters, functions, methods and properties.
+ * Default-deny security policy. Allowlist permitted tags, filters, functions, methods, and properties.
  */
 class SecurityPolicy implements Latte\Policy
 {
@@ -107,6 +107,8 @@ class SecurityPolicy implements Latte\Policy
 
 
 	/**
+	 * Adds methods of the given class (or its subclasses) to the allowlist.
+	 * Use SecurityPolicy::All to allow all methods.
 	 * @param  string[]  $methods
 	 */
 	public function allowMethods(string $class, array $methods): self
@@ -118,6 +120,8 @@ class SecurityPolicy implements Latte\Policy
 
 
 	/**
+	 * Adds properties of the given class (or its subclasses) to the allowlist.
+	 * Use SecurityPolicy::All to allow all properties.
 	 * @param  string[]  $properties
 	 */
 	public function allowProperties(string $class, array $properties): self

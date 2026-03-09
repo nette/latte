@@ -9,7 +9,7 @@ namespace Latte\Runtime;
 
 
 /**
- * HTML literal.
+ * Wraps a pre-escaped HTML string so it is not escaped again when rendered.
  */
 class Html implements HtmlStringable
 {

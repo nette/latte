@@ -30,6 +30,9 @@ final class FragmentNode extends AreaNode
 	}
 
 
+	/**
+	 * Appends a node. FragmentNode children are merged inline; NopNodes are discarded.
+	 */
 	public function append(AreaNode $node): static
 	{
 		if ($node instanceof self) {
@@ -42,6 +45,9 @@ final class FragmentNode extends AreaNode
 	}
 
 
+	/**
+	 * Returns null (or self) for an empty fragment, the single child when there is only one, or self otherwise.
+	 */
 	public function simplify(bool $allowsNull = true): ?AreaNode
 	{
 		return match (true) {
