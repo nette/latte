@@ -72,8 +72,7 @@ class Engine
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new Runtime\FunctionExecutor;
 		$this->providers = new \stdClass;
-		$this->addExtension(new Essential\CoreExtension);
-		$this->addExtension(new Sandbox\SandboxExtension);
+		$this->addDefaultExtensions();
 	}
 
 
@@ -615,5 +614,12 @@ class Engine
 		}
 
 		return $res;
+	}
+
+
+	protected function addDefaultExtensions(): void
+	{
+		$this->addExtension(new Essential\CoreExtension);
+		$this->addExtension(new Sandbox\SandboxExtension);
 	}
 }
