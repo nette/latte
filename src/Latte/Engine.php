@@ -8,8 +8,7 @@
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
-use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, get_object_vars, is_array, preg_match, serialize, substr;
-use const PHP_VERSION_ID;
+use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, preg_match, serialize, substr;
 
 
 /**
@@ -82,7 +81,7 @@ class Engine
 	 */
 	public function render(string $name, object|array $params = [], ?string $block = null): void
 	{
-		$template = $this->createTemplate($name, $this->processParams($params));
+		$template = $this->createTemplate($name, Helpers::resolveParams($this, $params));
 		$template->global->coreCaptured = false;
 		$template->render($block);
 	}
@@ -94,7 +93,7 @@ class Engine
 	 */
 	public function renderToString(string $name, object|array $params = [], ?string $block = null): string
 	{
-		$template = $this->createTemplate($name, $this->processParams($params));
+		$template = $this->createTemplate($name, Helpers::resolveParams($this, $params));
 		$template->global->coreCaptured = true;
 		return $template->capture(fn() => $template->render($block));
 	}
@@ -578,42 +577,6 @@ class Engine
 	public function setMigrationWarnings(bool $state = true): static
 	{
 		return $this->setFeature(Feature::MigrationWarnings, $state);
-	}
-
-
-	/**
-	 * @param  object|mixed[]  $params
-	 * @return array<string, mixed>
-	 */
-	private function processParams(object|array $params): array
-	{
-		if (is_array($params)) {
-			return $params;
-		}
-
-		$rc = new \ReflectionClass($params);
-		$methods = $rc->getMethods(\ReflectionMethod::IS_PUBLIC);
-		foreach ($methods as $method) {
-			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
-				$this->addFilter($method->name, $method->getClosure($params));
-			}
-
-			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
-				$this->addFunction($method->name, $method->getClosure($params));
-			}
-		}
-
-		$res = get_object_vars($params);
-		if (PHP_VERSION_ID >= 80400) {
-			foreach ($rc->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-				if ($property->isVirtual() && $property->hasHook(\PropertyHookType::Get)) {
-					$name = $property->getName();
-					$res[$name] = $params->$name;
-				}
-			}
-		}
-
-		return $res;
 	}
 
 

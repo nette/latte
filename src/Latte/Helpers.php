@@ -7,7 +7,7 @@
 
 namespace Latte;
 
-use function array_filter, array_keys, array_search, array_slice, array_unique, count, is_array, is_object, is_string, levenshtein, max, min, strlen, strpos;
+use function array_filter, array_keys, array_slice, array_unique, count, get_object_vars, is_array, is_object, is_string, levenshtein, strlen, strpos;
 use const PHP_VERSION_ID;
 
 
@@ -152,5 +152,43 @@ class Helpers
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * Resolves template parameters from an object, its public properties are extracted as variables
+	 * and annotated methods are registered as filters/functions.
+	 * @param  object|mixed[]  $params
+	 * @return array<string, mixed>
+	 */
+	public static function resolveParams(Engine $engine, object|array $params): array
+	{
+		if (is_array($params)) {
+			return $params;
+		}
+
+		$rc = new \ReflectionClass($params);
+		$methods = $rc->getMethods(\ReflectionMethod::IS_PUBLIC);
+		foreach ($methods as $method) {
+			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
+				$engine->addFilter($method->name, $method->getClosure($params));
+			}
+
+			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
+				$engine->addFunction($method->name, $method->getClosure($params));
+			}
+		}
+
+		$res = get_object_vars($params);
+		if (PHP_VERSION_ID >= 80400) {
+			foreach ($rc->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+				if ($property->isVirtual() && $property->hasHook(\PropertyHookType::Get)) {
+					$name = $property->getName();
+					$res[$name] = $params->$name;
+				}
+			}
+		}
+
+		return $res;
 	}
 }
