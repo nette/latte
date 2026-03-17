@@ -158,6 +158,7 @@ class Engine
 		$parser = new Compiler\TemplateParser;
 		$parser->getLexer()->setSyntax($this->syntax);
 		$parser->strict = $this->hasFeature(Feature::StrictParsing);
+		$parser->dedent = $this->hasFeature(Feature::Dedent);
 
 		foreach ($this->extensions as $extension) {
 			$extension->beforeCompile($this);

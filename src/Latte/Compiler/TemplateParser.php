@@ -15,7 +15,7 @@ use Latte\Helpers;
 use Latte\Policy;
 use Latte\Runtime\Template;
 use Latte\SecurityViolationException;
-use function array_keys, array_splice, count, end, in_array, preg_match, str_ends_with, str_starts_with, substr, trim, ucfirst;
+use function array_keys, array_splice, count, end, explode, implode, in_array, preg_match, str_ends_with, str_starts_with, strlen, substr, trim, ucfirst;
 
 
 /**
@@ -28,6 +28,7 @@ final class TemplateParser
 	public int $blockLayer = Template::LayerTop;
 	public bool $inHead = true;
 	public bool $strict = false;
+	public bool $dedent = false;
 	public ?Nodes\TextNode $lastIndentation = null;
 
 	/** @var array<string, \Closure(Tag, self): (Node|\Generator|void)> */
@@ -212,6 +213,9 @@ final class TemplateParser
 				while ($res->valid()) {
 					$this->lookFor[$startTag] = $res->current() ?: null;
 					$content = $this->parseFragment($resolver ?? $this->lastResolver);
+					if ($this->dedent) {
+						$this->applyDedent($content);
+					}
 
 					if (!$this->stream->is(Token::Latte_TagOpen)) {
 						$this->checkEndTag($startTag, null);
@@ -489,5 +493,64 @@ final class TemplateParser
 	public function isTagAllowed(string $name): bool
 	{
 		return !$this->policy || $this->policy->isTagAllowed($name);
+	}
+
+
+	private function applyDedent(FragmentNode $fragment): void
+	{
+		$baseIndent = null;
+		$atLineStart = true;
+
+		foreach ($fragment->children as $i => $child) {
+			if (!$child instanceof Nodes\TextNode) {
+				$atLineStart = false;
+				continue;
+			}
+
+			$lines = explode("\n", $child->content);
+			$lineCount = count($lines);
+
+			foreach ($lines as $j => &$line) {
+				$isLineStart = $j === 0 ? $atLineStart : true;
+				if (!$isLineStart || $line === '') {
+					continue;
+				}
+
+				$hasContent = trim($line) !== '';
+				$continuesWithExpr = !$hasContent
+					&& $j === $lineCount - 1
+					&& !str_ends_with($child->content, "\n")
+					&& $i + 1 < count($fragment->children);
+
+				if ($baseIndent === null) {
+					if ($hasContent) {
+						preg_match('/^([ \t]+)/', $line, $m);
+						$baseIndent = $m[1] ?? null;
+						if ($baseIndent === null) {
+							return; // first content line has no indent
+						}
+
+					} elseif ($continuesWithExpr) {
+						$baseIndent = $line;
+
+					} else {
+						continue; // blank line before detection
+					}
+
+				} elseif (!str_starts_with($line, $baseIndent)) {
+					if ($hasContent || $continuesWithExpr) {
+						throw new CompileException('Inconsistent indentation.', $child->position ? new Position($child->position->line + $j, 1) : null);
+					}
+
+					continue; // blank line — strip silently
+				}
+
+				$line = substr($line, strlen((string) $baseIndent));
+			}
+
+			unset($line);
+			$child->content = implode("\n", $lines);
+			$atLineStart = str_ends_with($child->content, "\n");
+		}
 	}
 }
