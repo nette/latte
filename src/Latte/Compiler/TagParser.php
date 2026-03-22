@@ -139,7 +139,7 @@ final class TagParser
 	{
 		$token = $this->stream->peek();
 		return $token->is(...$kind) // is followed by whitespace
-			&& $this->stream->peek(1)->position->offset > $token->position->offset + strlen($token->text)
+			&& $this->stream->peek(1)->position->offset > $token->position->offset + $token->position->length
 			? $this->stream->consume()
 			: null;
 	}
@@ -164,6 +164,7 @@ final class TagParser
 	{
 		$symbol = self::SymbolNone; // We start off with no lookahead-token
 		$this->startTokenStack = []; // Keep stack of start token
+		$this->endTokenStack = []; // Keep stack of end token
 		$token = null;
 		$state = 0; // Start off in the initial state and keep a stack of previous states
 		$stateStack = [$state];
@@ -177,7 +178,7 @@ final class TagParser
 			} else {
 				if ($symbol === self::SymbolNone) {
 					$recovery = $recovery
-						? [$this->stream->getIndex(), $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack]
+						? [$this->stream->getIndex(), $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack, $this->endTokenStack]
 						: null;
 
 
@@ -208,6 +209,7 @@ final class TagParser
 						$stateStack[$stackPos] = $state = $action;
 						$this->semStack[$stackPos] = $token->text;
 						$this->startTokenStack[$stackPos] = $token;
+						$this->endTokenStack[$stackPos] = $token;
 						$symbol = self::SymbolNone;
 						if ($action < self::NumNonLeafStates) {
 							continue;
@@ -228,6 +230,7 @@ final class TagParser
 					return $this->semValue;
 
 				} elseif ($rule !== self::UnexpectedTokenRule) { // reduce
+					$lastEndToken = $this->endTokenStack[$stackPos] ?? $token;
 					$this->reduce($rule, $stackPos);
 
 					// Goto - shift nonterminal
@@ -244,12 +247,13 @@ final class TagParser
 					++$stackPos;
 					$stateStack[$stackPos] = $state;
 					$this->semStack[$stackPos] = $this->semValue;
+					$this->endTokenStack[$stackPos] = $lastEndToken;
 					if ($ruleLength === 0) {
 						$this->startTokenStack[$stackPos] = $token;
 					}
 
 				} elseif ($recovery && $this->isExpectedEof($state)) { // recoverable error
-					[, $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack] = $recovery;
+					[, $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack, $this->endTokenStack] = $recovery;
 					$this->stream->seek($recovery[0]);
 					$token = new Token(Token::End, '');
 					goto recovery;
@@ -288,6 +292,15 @@ final class TagParser
 		}
 
 		return false;
+	}
+
+
+	private function createPosition(int $startPos, int $endPos): ?Position
+	{
+		return Position::range(
+			$this->startTokenStack[$startPos]->position,
+			$this->endTokenStack[$endPos]->position,
+		);
 	}
 
 

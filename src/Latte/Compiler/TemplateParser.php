@@ -15,7 +15,7 @@ use Latte\Helpers;
 use Latte\Policy;
 use Latte\Runtime\Template;
 use Latte\SecurityViolationException;
-use function array_keys, array_splice, count, end, explode, implode, in_array, preg_match, str_ends_with, str_starts_with, strlen, substr, trim, ucfirst;
+use function array_keys, array_splice, count, end, in_array, preg_match, str_ends_with, str_starts_with, strlen, substr, trim, ucfirst;
 
 
 /**
@@ -270,7 +270,9 @@ final class TemplateParser
 
 		$this->popTag();
 
-		$node->position = $startTag->position;
+		$node->position = isset($tag) && $tag->closing
+			? Position::range($startTag->position, $tag->position)
+			: $startTag->position;
 		return $node;
 	}
 
@@ -287,17 +289,19 @@ final class TemplateParser
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$closing = (bool) $stream->tryConsume(Token::Slash);
 		$nameToken = $stream->tryConsume(Token::Latte_Name);
+		$tokens = $this->consumeTag();
+		$void = (bool) $stream->tryConsume(Token::Slash);
+		$closeToken = $stream->tryConsume(Token::Latte_TagClose) ?? $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
 		$tag = new Tag(
-			position: $openToken->position,
+			position: Position::range($openToken->position, $closeToken->position),
 			closing: $closing,
 			name: $nameToken ? $nameToken->text : ($closing ? '' : '='),
-			tokens: $this->consumeTag(),
-			void: (bool) $stream->tryConsume(Token::Slash),
+			tokens: $tokens,
+			void: $void,
 			inHead: $this->inHead,
 			inTag: $inTag,
 			htmlElement: $this->html->getElement(),
 		);
-		$stream->tryConsume(Token::Latte_TagClose) || $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return $tag;
 	}

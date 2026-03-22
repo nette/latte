@@ -15,11 +15,26 @@ use function strlen, strrpos, substr_count;
  */
 final readonly class Position
 {
+	public static function range(?self $start, ?self $end): ?self
+	{
+		return $start && $end
+			? $start->withLength($end->offset + $end->length - $start->offset)
+			: $start;
+	}
+
+
 	public function __construct(
 		public int $line = 1,
 		public int $column = 1,
 		public int $offset = 0,
+		public ?int $length = null,
 	) {
+	}
+
+
+	public function withLength(int $length): self
+	{
+		return new self($this->line, $this->column, $this->offset, $length);
 	}
 
 

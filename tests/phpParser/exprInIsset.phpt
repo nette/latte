@@ -17,21 +17,20 @@ Assert::same(
 	exportNode($node),
 );
 
-__halt_compiler();
-Latte\Compiler\Nodes\Php\Expression\ArrayNode
+__halt_compiler();Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (1)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 1:8
+   |  |  |  |  |  position: 1:8+2
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 1:15
-   |  |  |  position: 1:1
+   |  |  |  |  |  position: 1:15+2
+   |  |  |  position: 1:1+19
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
-   position: 1:1
+   |  |  position: 1:1+19
+   position: 1:1+20
