@@ -20,42 +20,41 @@ Assert::same(
 	exportNode($node),
 );
 
-__halt_compiler();
-Latte\Compiler\Nodes\Php\Expression\ArrayNode
+__halt_compiler();Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (4)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 83
    |  |  |  kind: 8
-   |  |  |  position: 1:1
+   |  |  |  position: 1:1+5
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+5
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 83
    |  |  |  kind: 8
-   |  |  |  position: 2:1
+   |  |  |  position: 2:1+5
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+5
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 83
    |  |  |  kind: 8
-   |  |  |  position: 3:1
+   |  |  |  position: 3:1+7
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
+   |  |  position: 3:1+7
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 9.223372036854776e+18
-   |  |  |  position: 4:1
+   |  |  |  position: 4:1+24
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
-   position: 1:1
+   |  |  position: 4:1+24
+   position: 1:1+48

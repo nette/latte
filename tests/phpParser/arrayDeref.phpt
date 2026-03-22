@@ -21,8 +21,7 @@ Assert::same(
 	exportNode($node),
 );
 
-__halt_compiler();
-Latte\Compiler\Nodes\Php\Expression\ArrayNode
+__halt_compiler();Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (4)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
@@ -32,39 +31,39 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 1:2
+   |  |  |  |  |  |  |  position: 1:2+1
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 1:2
+   |  |  |  |  |  |  position: 1:2+1
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 1:5
+   |  |  |  |  |  |  |  position: 1:5+1
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 1:5
+   |  |  |  |  |  |  position: 1:5+1
    |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 1:8
+   |  |  |  |  |  |  |  position: 1:8+1
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 1:8
-   |  |  |  |  position: 1:1
+   |  |  |  |  |  |  position: 1:8+1
+   |  |  |  |  position: 1:1+9
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 2
    |  |  |  |  kind: 10
-   |  |  |  |  position: 1:11
-   |  |  |  position: 1:1
+   |  |  |  |  position: 1:11+1
+   |  |  |  position: 1:1+12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+12
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
@@ -75,49 +74,49 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 2:2
+   |  |  |  |  |  |  |  |  |  position: 2:2+1
    |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 2:2
+   |  |  |  |  |  |  |  |  position: 2:2+1
    |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 2:5
+   |  |  |  |  |  |  |  |  |  position: 2:5+1
    |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 2:5
+   |  |  |  |  |  |  |  |  position: 2:5+1
    |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 2:8
+   |  |  |  |  |  |  |  |  |  position: 2:8+1
    |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 2:8
-   |  |  |  |  |  |  position: 2:1
+   |  |  |  |  |  |  |  |  position: 2:8+1
+   |  |  |  |  |  |  position: 2:1+9
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 2:11
-   |  |  |  |  |  position: 2:1
+   |  |  |  |  |  |  position: 2:11+1
+   |  |  |  |  |  position: 2:1+12
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 0
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 2:14
-   |  |  |  |  position: 2:1
+   |  |  |  |  |  position: 2:14+1
+   |  |  |  |  position: 2:1+15
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 2:17
-   |  |  |  position: 2:1
+   |  |  |  |  position: 2:17+1
+   |  |  |  position: 2:1+18
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+18
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayNode
@@ -126,39 +125,39 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 4:7
+   |  |  |  |  |  |  |  position: 4:7+1
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:7
+   |  |  |  |  |  |  position: 4:7+1
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 4:10
+   |  |  |  |  |  |  |  position: 4:10+1
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:10
+   |  |  |  |  |  |  position: 4:10+1
    |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  position: 4:13
+   |  |  |  |  |  |  |  position: 4:13+1
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  position: 4:13
-   |  |  |  |  position: 4:1
+   |  |  |  |  |  |  position: 4:13+1
+   |  |  |  |  position: 4:1+14
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 2
    |  |  |  |  kind: 10
-   |  |  |  |  position: 4:16
-   |  |  |  position: 4:1
+   |  |  |  |  position: 4:16+1
+   |  |  |  position: 4:1+17
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
+   |  |  position: 4:1+17
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
@@ -169,47 +168,47 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 5:7
+   |  |  |  |  |  |  |  |  |  position: 5:7+1
    |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 5:7
+   |  |  |  |  |  |  |  |  position: 5:7+1
    |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 5:10
+   |  |  |  |  |  |  |  |  |  position: 5:10+1
    |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 5:10
+   |  |  |  |  |  |  |  |  position: 5:10+1
    |  |  |  |  |  |  |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  value: 3
    |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  position: 5:13
+   |  |  |  |  |  |  |  |  |  position: 5:13+1
    |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 5:13
-   |  |  |  |  |  |  position: 5:1
+   |  |  |  |  |  |  |  |  position: 5:13+1
+   |  |  |  |  |  |  position: 5:1+14
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 5:16
-   |  |  |  |  |  position: 5:1
+   |  |  |  |  |  |  position: 5:16+1
+   |  |  |  |  |  position: 5:1+17
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 0
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 5:19
-   |  |  |  |  position: 5:1
+   |  |  |  |  |  position: 5:19+1
+   |  |  |  |  position: 5:1+20
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 5:22
-   |  |  |  position: 5:1
+   |  |  |  |  position: 5:22+1
+   |  |  |  position: 5:1+23
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1
-   position: 1:1
+   |  |  position: 5:1+23
+   position: 1:1+78
