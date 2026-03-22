@@ -31,43 +31,43 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'truncate'
-   |  |  |  position: 1:2
+   |  |  |  position: 1:2+8
    |  |  args: array (2)
    |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 10
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 1:12
+   |  |  |  |  |  position: 1:12+2
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:12
+   |  |  |  |  position: 1:12+2
    |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  position: 1:17+2
    |  |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  position: 1:20
+   |  |  |  |  |  |  |  position: 1:20+5
    |  |  |  |  |  |  args: array (0)
    |  |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  |  position: 1:19
-   |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  position: 1:19+6
+   |  |  |  |  |  position: 1:17+8
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:16
+   |  |  |  |  position: 1:16+10
    |  |  nullsafe: false
-   |  |  position: 1:1
+   |  |  position: 1:1+25
    |  1 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'trim'
-   |  |  |  position: 1:27
+   |  |  |  position: 1:27+4
    |  |  args: array (0)
    |  |  nullsafe: false
-   |  |  position: 1:26
+   |  |  position: 1:26+5
    escape: false
-   position: 1:1
+   position: 1:1+30

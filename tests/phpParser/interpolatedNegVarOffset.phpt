@@ -29,63 +29,63 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 1:2
+   |  |  |  |  |  |  position: 1:2+2
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: '-0'
-   |  |  |  |  |  |  position: 1:5
-   |  |  |  |  |  position: 1:2
-   |  |  |  position: 1:1
+   |  |  |  |  |  |  position: 1:5+2
+   |  |  |  |  |  position: 1:2+6
+   |  |  |  position: 1:1+8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+8
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 2:2
+   |  |  |  |  |  |  position: 2:2+2
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: -1
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 2:5
-   |  |  |  |  |  position: 2:2
-   |  |  |  position: 2:1
+   |  |  |  |  |  |  position: 2:5+2
+   |  |  |  |  |  position: 2:2+6
+   |  |  |  position: 2:1+8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+8
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 3:2
+   |  |  |  |  |  |  position: 3:2+2
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: '-0x0'
-   |  |  |  |  |  |  position: 3:5
-   |  |  |  |  |  position: 3:2
-   |  |  |  position: 3:1
+   |  |  |  |  |  |  position: 3:5+4
+   |  |  |  |  |  position: 3:2+8
+   |  |  |  position: 3:1+10
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
+   |  |  position: 3:1+10
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 4:2
+   |  |  |  |  |  |  position: 4:2+2
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: '-00'
-   |  |  |  |  |  |  position: 4:5
-   |  |  |  |  |  position: 4:2
-   |  |  |  position: 4:1
+   |  |  |  |  |  |  position: 4:5+3
+   |  |  |  |  |  position: 4:2+7
+   |  |  |  position: 4:1+9
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
-   position: 1:1
+   |  |  position: 4:1+9
+   position: 1:1+42

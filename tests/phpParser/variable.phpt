@@ -25,33 +25,33 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  name: 'a'
-   |  |  |  position: 1:1
+   |  |  |  position: 1:1+2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+2
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  name: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'a'
-   |  |  |  |  position: 2:3
-   |  |  |  position: 2:1
+   |  |  |  |  position: 2:3+3
+   |  |  |  position: 2:1+6
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+6
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  name: Latte\Compiler\Nodes\Php\Expression\FunctionCallNode
    |  |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'foo'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 3:3
+   |  |  |  |  |  position: 3:3+3
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 3:3
-   |  |  |  position: 3:1
+   |  |  |  |  position: 3:3+5
+   |  |  |  position: 3:1+8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
-   position: 1:1
+   |  |  position: 3:1+8
+   position: 1:1+21

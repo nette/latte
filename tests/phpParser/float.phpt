@@ -39,113 +39,113 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 1:1
+   |  |  |  position: 1:1+3
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+3
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 2:1
+   |  |  |  position: 2:1+2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+2
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 3:1
+   |  |  |  position: 3:1+2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
+   |  |  position: 3:1+2
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 4:1
+   |  |  |  position: 4:1+3
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
+   |  |  position: 4:1+3
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 5:1
+   |  |  |  position: 5:1+3
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1
+   |  |  position: 5:1+3
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 6:1
+   |  |  |  position: 6:1+4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1
+   |  |  position: 6:1+4
    |  6 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 0.0
-   |  |  |  position: 7:1
+   |  |  |  position: 7:1+4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 7:1
+   |  |  position: 7:1+4
    |  7 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 302000000000.0
-   |  |  |  position: 8:1
+   |  |  |  position: 8:1+8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 8:1
+   |  |  position: 8:1+8
    |  8 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 3.002e+102
-   |  |  |  position: 9:1
+   |  |  |  position: 9:1+11
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 9:1
+   |  |  position: 9:1+11
    |  9 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: INF
-   |  |  |  position: 10:1
+   |  |  |  position: 10:1+7
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 10:1
+   |  |  position: 10:1+7
    |  10 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 1.8446744073709552e+19
-   |  |  |  position: 14:1
+   |  |  |  position: 14:1+20
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 14:1
+   |  |  position: 14:1+20
    |  11 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 1.8446744073709552e+19
-   |  |  |  position: 15:1
+   |  |  |  position: 15:1+18
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 15:1
+   |  |  position: 15:1+18
    |  12 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 1.8446744073709552e+19
-   |  |  |  position: 16:1
+   |  |  |  position: 16:1+23
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 16:1
+   |  |  position: 16:1+23
    |  13 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 1.8446744073709552e+19
-   |  |  |  position: 17:1
+   |  |  |  position: 17:1+66
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 17:1
-   position: 1:1
+   |  |  position: 17:1+66
+   position: 1:1+319

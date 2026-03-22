@@ -28,56 +28,56 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 1:1
+   |  |  |  |  position: 1:1+2
    |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 1:7
-   |  |  |  position: 1:1
+   |  |  |  |  position: 1:7+2
+   |  |  |  position: 1:1+8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+8
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  left: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 4:1
+   |  |  |  |  |  position: 4:1+2
    |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 4:7
-   |  |  |  |  position: 4:1
+   |  |  |  |  |  position: 4:7+2
+   |  |  |  |  position: 4:1+8
    |  |  |  operator: '||'
    |  |  |  right: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'c'
-   |  |  |  |  |  position: 4:13
+   |  |  |  |  |  position: 4:13+2
    |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'd'
-   |  |  |  |  |  position: 4:19
-   |  |  |  |  position: 4:13
-   |  |  |  position: 4:1
+   |  |  |  |  |  position: 4:19+2
+   |  |  |  |  position: 4:13+8
+   |  |  |  position: 4:1+20
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
+   |  |  position: 4:1+20
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'a'
-   |  |  |  |  position: 5:1
+   |  |  |  |  position: 5:1+2
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\InNode
    |  |  |  |  needle: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 5:6
+   |  |  |  |  |  position: 5:6+2
    |  |  |  |  haystack: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'c'
-   |  |  |  |  |  position: 5:12
-   |  |  |  |  position: 5:6
+   |  |  |  |  |  position: 5:12+2
+   |  |  |  |  position: 5:6+8
    |  |  |  byRef: false
-   |  |  |  position: 5:1
+   |  |  |  position: 5:1+13
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1
-   position: 1:1
+   |  |  position: 5:1+13
+   position: 1:1+64

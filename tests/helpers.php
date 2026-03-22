@@ -5,6 +5,7 @@ use Latte\Compiler\Nodes;
 use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
+use Latte\Compiler\Range;
 use Latte\Compiler\TagLexer;
 use Latte\Compiler\Token;
 use Tracy\Dumper;
@@ -54,7 +55,7 @@ function exportNode(Node $node): string
 {
 	$exporters = [
 		Position::class => function (Position $pos, Tracy\Dumper\Value $value) {
-			$value->value = $pos->line . ':' . $pos->column;
+			$value->value = $pos->line . ':' . $pos->column . ($pos instanceof Range ? '+' . $pos->length : '');
 		},
 	];
 	$dump = Dumper::toText($node, [Dumper::HASH => false, Dumper::DEPTH => 20, Dumper::OBJECT_EXPORTERS => $exporters]);

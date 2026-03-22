@@ -30,20 +30,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 1:7
+   |  |  |  |  |  |  |  position: 1:7+2
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 1:6
-   |  |  |  |  position: 1:1
+   |  |  |  |  |  |  position: 1:6+3
+   |  |  |  |  position: 1:1+9
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 1:13
+   |  |  |  |  position: 1:13+2
    |  |  |  byRef: false
-   |  |  |  position: 1:1
+   |  |  |  position: 1:1+14
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+14
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -51,22 +51,22 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 2:14
+   |  |  |  |  |  |  |  position: 2:14+2
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'k'
-   |  |  |  |  |  |  |  position: 2:6
+   |  |  |  |  |  |  |  position: 2:6+3
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 2:6
-   |  |  |  |  position: 2:1
+   |  |  |  |  |  |  position: 2:6+10
+   |  |  |  |  position: 2:1+16
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 2:20
+   |  |  |  |  position: 2:20+2
    |  |  |  byRef: false
-   |  |  |  position: 2:1
+   |  |  |  position: 2:1+21
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+21
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -74,20 +74,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 3:3
+   |  |  |  |  |  |  |  position: 3:3+2
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 3:2
-   |  |  |  |  position: 3:1
+   |  |  |  |  |  |  position: 3:2+3
+   |  |  |  |  position: 3:1+5
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 3:9
+   |  |  |  |  position: 3:9+2
    |  |  |  byRef: false
-   |  |  |  position: 3:1
+   |  |  |  position: 3:1+10
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
+   |  |  position: 3:1+10
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\AssignNode
    |  |  |  var: Latte\Compiler\Nodes\Php\ListNode
@@ -95,20 +95,20 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'v'
-   |  |  |  |  |  |  |  position: 4:10
+   |  |  |  |  |  |  |  position: 4:10+2
    |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  value: 'k'
-   |  |  |  |  |  |  |  position: 4:2
+   |  |  |  |  |  |  |  position: 4:2+3
    |  |  |  |  |  |  byRef: true
-   |  |  |  |  |  |  position: 4:2
-   |  |  |  |  position: 4:1
+   |  |  |  |  |  |  position: 4:2+10
+   |  |  |  |  position: 4:1+12
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 4:16
+   |  |  |  |  position: 4:16+2
    |  |  |  byRef: false
-   |  |  |  position: 4:1
+   |  |  |  position: 4:1+17
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
-   position: 1:1
+   |  |  position: 4:1+17
+   position: 1:1+69

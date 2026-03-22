@@ -29,54 +29,54 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 1:6
+   |  |  |  |  |  position: 1:6+1
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 1:2
+   |  |  |  |  position: 1:2+5
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 1:10
+   |  |  |  |  position: 1:10+1
    |  |  |  nullsafe: false
-   |  |  |  position: 1:1
+   |  |  |  position: 1:1+10
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+10
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\MethodCallNode
    |  |  |  object: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 2:6
+   |  |  |  |  |  position: 2:6+1
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 2:2
+   |  |  |  |  position: 2:2+5
    |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 2:10
+   |  |  |  |  position: 2:10+1
    |  |  |  args: array (0)
    |  |  |  nullsafe: false
-   |  |  |  position: 2:1
+   |  |  |  position: 2:1+12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+12
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 3:6
+   |  |  |  |  |  position: 3:6+1
    |  |  |  |  args: array (0)
-   |  |  |  |  position: 3:2
+   |  |  |  |  position: 3:2+5
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'b'
-   |  |  |  |  position: 3:9
-   |  |  |  position: 3:1
+   |  |  |  |  position: 3:9+3
+   |  |  |  position: 3:1+12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
+   |  |  position: 3:1+12
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
@@ -84,19 +84,19 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  |  name: 'A'
    |  |  |  |  |  |  kind: 1
-   |  |  |  |  |  |  position: 4:6
+   |  |  |  |  |  |  position: 4:6+1
    |  |  |  |  |  args: array (0)
-   |  |  |  |  |  position: 4:2
+   |  |  |  |  |  position: 4:2+5
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'b'
-   |  |  |  |  |  position: 4:9
-   |  |  |  |  position: 4:1
+   |  |  |  |  |  position: 4:9+3
+   |  |  |  |  position: 4:1+12
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'c'
-   |  |  |  |  position: 4:14
-   |  |  |  position: 4:1
+   |  |  |  |  position: 4:14+3
+   |  |  |  position: 4:1+17
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1
-   position: 1:1
+   |  |  position: 4:1+17
+   position: 1:1+58
