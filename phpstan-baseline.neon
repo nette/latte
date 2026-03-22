@@ -7,7 +7,7 @@ parameters:
 			path: src/Latte/Compiler/PhpHelpers.php
 
 		-
-			message: '#^Offset 0 might not exist on array\{0\?\: string\}\.$#'
+			message: '#^Offset 0 might not exist on array\{\}\\|array\{string\}\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
 			path: src/Latte/Compiler/TemplateLexer.php
@@ -19,7 +19,7 @@ parameters:
 			path: src/Latte/Engine.php
 
 		-
-			message: '#^Method Latte\\Essential\\Tracer\:\:generateTrace\(\) should return array\<array\{function\: string, file\: string, line\: int, args\: array\<mixed\>\}\> but returns array\<int\<\-1, max\>, array\{function\?\: non\-falsy\-string, file\?\: string, line\?\: int, args\?\: array\<mixed\>\}\>\.$#'
+			message: '#^Method Latte\\Essential\\Tracer\:\:generateTrace\(\) should return array\<array\{function\: string, file\: string, line\: int, args\: array\<mixed\>\}\> but returns array\<int\<\-1, max\>, array\<.+\>\>\.$#'
 			identifier: return.type
 			count: 1
 			path: src/Latte/Essential/Tracer.php

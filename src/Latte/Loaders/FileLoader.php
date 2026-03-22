@@ -72,7 +72,7 @@ class FileLoader implements Latte\Loader
 
 	protected static function normalizePath(string $path): string
 	{
-		preg_match('#^([a-z]:|phar://.+?/)?(.*)#i', $path, $m);
+		preg_match('#^([a-z]:|phar://.+?/)?(.*)#i', $path, $m) ?: throw new \LogicException;
 		$res = [];
 		foreach (explode('/', strtr($m[2], '\\', '/')) as $part) {
 			if ($part === '..' && $res && end($res) !== '..' && end($res) !== '') {
