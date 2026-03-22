@@ -236,11 +236,15 @@ final readonly class Token
 	];
 
 
+	public readonly ?Position $position;
+
+
 	public function __construct(
 		public int $type,
 		public string $text,
-		public ?Position $position = null,
+		?Position $position = null,
 	) {
+		$this->position = $position?->withLength(strlen($text));
 	}
 
 

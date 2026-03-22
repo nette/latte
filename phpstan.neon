@@ -45,6 +45,7 @@ parameters:
 			paths:
 				- src/Latte/Compiler/TagParser.php
 				- src/Latte/Compiler/TemplateParser.php
+				- src/Latte/Compiler/TemplateParserHtml.php
 
 		-	# TemplateParser: nullable Tag when processing nested tags
 			message: '#on Latte\\Compiler\\Tag\|null#'
@@ -65,7 +66,7 @@ parameters:
 		# --- TagParser: generated trait TagParserData ---
 
 		-	# Methods called from generated trait TagParserData (excluded from analysis)
-			message: '#^(Static method|Method) Latte\\Compiler\\TagParser::(checkFunctionName|handleBuiltinTypes|parseOffset|parseDocString)\(\) is unused\.$#'
+			message: '#^(Static method|Method) Latte\\Compiler\\TagParser::(checkFunctionName|handleBuiltinTypes|parseOffset|parseDocString|createPosition)\(\) is unused\.$#'
 			path: src/Latte/Compiler/TagParser.php
 
 		-	# Internal parser state machine — types from regex results and token operations
