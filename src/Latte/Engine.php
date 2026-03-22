@@ -16,8 +16,8 @@ use function array_map, array_merge, class_exists, extension_loaded, get_debug_t
  */
 class Engine
 {
-	public const Version = '3.1.3';
-	public const VersionId = 30103;
+	public const Version = '3.1.4';
+	public const VersionId = 30104;
 
 	/** @deprecated use Engine::Version */
 	public const
