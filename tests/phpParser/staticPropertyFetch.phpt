@@ -22,54 +22,53 @@ Assert::same(
 	exportNode($node),
 );
 
-__halt_compiler();
-Latte\Compiler\Nodes\Php\Expression\ArrayNode
+__halt_compiler();Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (3)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 2:1
+   |  |  |  |  position: 2:1+1
    |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
    |  |  |  |  name: 'b'
-   |  |  |  |  position: 2:4
-   |  |  |  position: 2:1
+   |  |  |  |  position: 2:4+2
+   |  |  |  position: 2:1+5
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+5
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'A'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 3:1
+   |  |  |  |  position: 3:1+1
    |  |  |  name: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'b'
-   |  |  |  |  position: 3:6
-   |  |  |  position: 3:1
+   |  |  |  |  position: 3:6+3
+   |  |  |  position: 3:1+9
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1
+   |  |  position: 3:1+9
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\StaticPropertyFetchNode
    |  |  |  |  class: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  |  name: 'A'
    |  |  |  |  |  kind: 1
-   |  |  |  |  |  position: 6:1
+   |  |  |  |  |  position: 6:1+1
    |  |  |  |  name: Latte\Compiler\Nodes\Php\VarLikeIdentifierNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 6:4
-   |  |  |  |  position: 6:1
+   |  |  |  |  |  position: 6:4+2
+   |  |  |  |  position: 6:1+5
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'c'
-   |  |  |  |  position: 6:7
-   |  |  |  position: 6:1
+   |  |  |  |  position: 6:7+3
+   |  |  |  position: 6:1+10
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1
-   position: 2:1
+   |  |  position: 6:1+10
+   position: 2:1+49

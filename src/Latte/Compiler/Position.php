@@ -12,8 +12,9 @@ use function strlen, strrpos, substr_count;
 
 /**
  * Source position (line, column, byte offset) within a template.
+ * @phpstan-sealed Range
  */
-final readonly class Position
+readonly class Position
 {
 	public function __construct(
 		public int $line = 1,
