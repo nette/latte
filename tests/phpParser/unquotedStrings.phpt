@@ -22,42 +22,41 @@ Assert::same(
 	exportNode($node),
 );
 
-__halt_compiler();
-Latte\Compiler\Nodes\Php\Expression\ArrayNode
+__halt_compiler();Latte\Compiler\Nodes\Php\Expression\ArrayNode
    items: array (4)
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'a'
-   |  |  |  position: 1:1
+   |  |  |  position: 1:1+1
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1
+   |  |  position: 1:1+1
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'MD5'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 2:1
-   |  |  |  position: 2:1
+   |  |  |  |  position: 2:1+3
+   |  |  |  position: 2:1+3
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1
+   |  |  position: 2:1+3
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'a-b-c'
-   |  |  |  position: 5:1
+   |  |  |  position: 5:1+5
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1
+   |  |  position: 5:1+5
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'a--b--c'
-   |  |  |  position: 6:1
+   |  |  |  position: 6:1+7
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1
-   position: 1:1
+   |  |  position: 6:1+7
+   position: 1:1+37
