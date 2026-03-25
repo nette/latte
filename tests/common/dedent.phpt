@@ -93,6 +93,40 @@ test('capture tag', function () {
 });
 
 
+test('inline block content not dedented (issue #412)', function () {
+	$result = dedent('<div class="page-content{block class} content-area{/block}">stuff</div>');
+	Assert::same('<div class="page-content content-area">stuff</div>', $result);
+});
+
+
+test('expressions with OutputKeepIndentation and varying indent (issue #413)', function () {
+	$template = <<<'LATTE'
+		{define test}
+			{var $a = 1}
+			{var $b = 2}
+			{=$a}
+				{=$b}
+			{=$a}
+		{/define}
+		{include test}
+		LATTE;
+	$result = dedent($template);
+	Assert::same("1\n\t2\n1\n", $result);
+});
+
+
+test('spaces after tab indent are content, not indentation', function () {
+	$result = dedent("{foreach \$items as \$item}\n\t{if true}\n\t\tA\n\t{else}\n\t\tB\n\t{/if}\n\t   C\n{/foreach}", ['items' => [1]]);
+	Assert::same("A\n   C\n", $result);
+});
+
+
+test('spaces after tab indent preserved in nested blocks', function () {
+	$result = dedent("{if true}\n\t   hello\n{/if}");
+	Assert::same("   hello\n", $result);
+});
+
+
 test('inconsistent indentation throws exception', function () {
 	Assert::exception(
 		fn() => dedent("{if true}\n\tHello\nWorld\n{/if}"),

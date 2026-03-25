@@ -214,7 +214,7 @@ final class TemplateParser
 					$this->lookFor[$startTag] = $res->current() ?: null;
 					$content = $this->parseFragment($resolver ?? $this->lastResolver);
 					if ($this->dedent) {
-						$this->applyDedent($content);
+						$this->applyDedent($content, $startTag);
 					}
 
 					if (!$this->stream->is(Token::Latte_TagOpen)) {
@@ -496,19 +496,29 @@ final class TemplateParser
 	}
 
 
-	private function applyDedent(FragmentNode $fragment): void
+	private function applyDedent(FragmentNode $fragment, Tag $startTag): void
 	{
 		$baseIndent = null;
 		$atLineStart = true;
+		$inlineChecked = false;
 
 		foreach ($fragment->children as $i => $child) {
+			if ($child instanceof Nodes\TextNode && $child->content === '') {
+				continue;
+
+			} elseif (!$inlineChecked) {
+				$inlineChecked = true;
+				if ($child->position?->line === $startTag->position->line) {
+					return;
+				}
+			}
 			if (!$child instanceof Nodes\TextNode) {
-				$atLineStart = false;
 				continue;
 			}
 
 			$lines = explode("\n", $child->content);
 			$lineCount = count($lines);
+			$lastContinues = !str_ends_with($child->content, "\n") && $i + 1 < count($fragment->children);
 
 			foreach ($lines as $j => &$line) {
 				$isLineStart = $j === 0 ? $atLineStart : true;
@@ -517,14 +527,11 @@ final class TemplateParser
 				}
 
 				$hasContent = trim($line) !== '';
-				$continuesWithExpr = !$hasContent
-					&& $j === $lineCount - 1
-					&& !str_ends_with($child->content, "\n")
-					&& $i + 1 < count($fragment->children);
+				$continuesWithExpr = !$hasContent && $j === $lineCount - 1 && $lastContinues;
 
 				if ($baseIndent === null) {
 					if ($hasContent) {
-						preg_match('/^([ \t]+)/', $line, $m);
+						preg_match('/^(\t+| +)/', $line, $m);
 						$baseIndent = $m[1] ?? null;
 						if ($baseIndent === null) {
 							return; // first content line has no indent
@@ -542,7 +549,7 @@ final class TemplateParser
 						throw new CompileException('Inconsistent indentation.', $child->position ? new Position($child->position->line + $j, 1) : null);
 					}
 
-					continue; // blank line — strip silently
+					continue; // blank line, strip silently
 				}
 
 				$line = substr($line, strlen((string) $baseIndent));
