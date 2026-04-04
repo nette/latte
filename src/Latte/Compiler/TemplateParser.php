@@ -513,6 +513,11 @@ final class TemplateParser
 		$baseIndent = null;
 		$atLineStart = true;
 		$inlineChecked = false;
+		$root = $startTag;
+		while ($root->parent !== null) {
+			$root = $root->parent;
+		}
+		$tagIndentLen = $root->position->column - 1;
 
 		foreach ($fragment->children as $i => $child) {
 			if ($child instanceof Nodes\TextNode && $child->content === '') {
@@ -545,12 +550,15 @@ final class TemplateParser
 					if ($hasContent) {
 						preg_match('/^([ \t]+)/', $line, $m);
 						$baseIndent = $m[1] ?? null;
-						if ($baseIndent === null) {
-							return; // first content line has no indent
+						if ($baseIndent === null || strlen($baseIndent) <= $tagIndentLen) {
+							return; // first content line has no indent beyond tag level
 						}
 
 					} elseif ($continuesWithExpr) {
 						$baseIndent = $line;
+						if (strlen($baseIndent) <= $tagIndentLen) {
+							return;
+						}
 
 					} else {
 						continue; // blank line before detection
@@ -564,12 +572,51 @@ final class TemplateParser
 					continue; // blank line, strip silently
 				}
 
-				$line = substr($line, strlen((string) $baseIndent));
+				$line = substr($line, 0, $tagIndentLen) . substr($line, strlen((string) $baseIndent));
 			}
 
 			unset($line);
 			$child->content = implode("\n", $lines);
 			$atLineStart = str_ends_with($child->content, "\n");
+		}
+
+		// Also dedent indentation inside HTML elements
+		$indentNodes = [];
+		$this->collectHtmlIndentNodes($fragment, $indentNodes);
+		if ($indentNodes) {
+			if ($baseIndent === null) {
+				// detect minimum from HTML elements
+				$baseIndent = $indentNodes[0]->content;
+				foreach ($indentNodes as $node) {
+					if (strlen($node->content) < strlen($baseIndent)) {
+						$baseIndent = $node->content;
+					}
+				}
+				if (strlen($baseIndent) <= $tagIndentLen) {
+					return;
+				}
+			}
+			foreach ($indentNodes as $node) {
+				if (str_starts_with($node->content, $baseIndent)) {
+					$node->content = substr($node->content, 0, $tagIndentLen) . substr($node->content, strlen($baseIndent));
+				}
+			}
+		}
+	}
+
+
+	private function collectHtmlIndentNodes(FragmentNode $fragment, array &$nodes, bool $inElement = false): void
+	{
+		foreach ($fragment->children as $child) {
+			if ($inElement && $child instanceof Nodes\TextNode
+				&& $child->content !== ''
+				&& trim($child->content) === ''
+				&& !str_contains($child->content, "\n")
+			) {
+				$nodes[] = $child;
+			} elseif ($child instanceof Nodes\Html\ElementNode && $child->content instanceof FragmentNode) {
+				$this->collectHtmlIndentNodes($child->content, $nodes, true);
+			}
 		}
 	}
 }

@@ -115,6 +115,24 @@ test('expressions with OutputKeepIndentation and varying indent (issue #413)', f
 });
 
 
+test('foreach inside HTML - dedents only excess indentation', function () {
+	$result = dedent("<ul>\n\t{foreach \$items as \$item}\n\t\t<li>{\$item}</li>\n\t{/foreach}\n</ul>", ['items' => ['a', 'b']]);
+	Assert::same("<ul>\n\t<li>a</li>\n\t<li>b</li>\n</ul>", $result);
+});
+
+
+test('nested foreach/if inside HTML', function () {
+	$result = dedent("<ul>\n\t{foreach [0, 1, 2] as \$item}\n\t\t{if \$item}\n\t\t\t<li>{\$item}</li>\n\t\t{/if}\n\t{/foreach}\n</ul>");
+	Assert::same("<ul>\n\t<li>1</li>\n\t<li>2</li>\n</ul>", $result);
+});
+
+
+test('HTML elements inside paired tags', function () {
+	$result = dedent("{foreach [0, 1, 2] as \$item}\n\t{if \$item}\n\t\t<ul>\n\t\t\t<li>{\$item}</li>\n\t\t</ul>\n\t{/if}\n{/foreach}");
+	Assert::same("<ul>\n\t<li>1</li>\n</ul>\n<ul>\n\t<li>2</li>\n</ul>\n", $result);
+});
+
+
 test('inconsistent indentation throws exception', function () {
 	Assert::exception(
 		fn() => dedent("{if true}\n\tHello\nWorld\n{/if}"),
