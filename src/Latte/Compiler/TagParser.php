@@ -111,6 +111,7 @@ final class TagParser
 			Token::Php_Identifier, Token::Php_Constant, Token::Php_Ellipsis, Token::Php_Array, Token::Php_Integer,
 			Token::Php_NameFullyQualified, Token::Php_NameQualified, Token::Php_Null, Token::Php_False, Token::Php_FilterPipe,
 			'(', ')', '<', '>', '[', ']', '|', '&', '{', '}', ':', ',', '=', '?',
+			Token::Php_Sr, // >> in nested generics like array<int, array<string, mixed>>
 		];
 		$res = null;
 		while ($token = $this->stream->tryConsume(...$kind)) {
