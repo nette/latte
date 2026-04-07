@@ -36,8 +36,9 @@ final class PrintContext
 		string $contentType = ContentType::Html,
 		/** @var array<string, bool> */
 		private array $features = [],
+		?Escaper $escaper = null,
 	) {
-		$this->escaperStack[] = new Escaper($contentType);
+		$this->escaperStack[] = $escaper ?? new Escaper($contentType);
 	}
 
 
