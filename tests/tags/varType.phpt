@@ -42,3 +42,5 @@ Assert::noError(fn() => $latte->compile('{varType ?\Nm\Class $var}'));
 Assert::noError(fn() => $latte->compile('{varType int|null $var}'));
 
 Assert::noError(fn() => $latte->compile('{varType array{0: int, 1: int} $var}'));
+
+Assert::noError(fn() => $latte->compile('{varType array<Foo<int>> $var}'));
