@@ -18,7 +18,7 @@ use function in_array, is_string, str_starts_with, strtolower;
 /**
  * Context-aware escaping.
  */
-final class Escaper
+class Escaper
 {
 	public const
 		Text = 'text',
