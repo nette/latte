@@ -127,6 +127,15 @@ test('spaces after tab indent preserved in nested blocks', function () {
 });
 
 
+test('paired tag inside HTML preserves structural indent', function () {
+	$result = dedent(
+		"<ul>\n    {foreach \$items as \$item}\n        <li>{\$item}</li>\n    {/foreach}\n</ul>",
+		['items' => [1, 2, 3]],
+	);
+	Assert::same("<ul>\n    <li>1</li>\n    <li>2</li>\n    <li>3</li>\n</ul>", $result);
+});
+
+
 test('inconsistent indentation throws exception', function () {
 	Assert::exception(
 		fn() => dedent("{if true}\n\tHello\nWorld\n{/if}"),

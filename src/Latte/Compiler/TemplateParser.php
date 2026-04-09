@@ -501,6 +501,9 @@ final class TemplateParser
 		$baseIndent = null;
 		$atLineStart = true;
 		$inlineChecked = false;
+		// When the tag is inside an HTML element, preserve indent up to the tag's column
+		// (structural indent). When top-level, strip to column 1.
+		$tagIndentLen = $startTag->htmlElement !== null ? $startTag->position->column - 1 : 0;
 
 		foreach ($fragment->children as $i => $child) {
 			if ($child instanceof Nodes\TextNode && $child->content === '') {
@@ -533,12 +536,22 @@ final class TemplateParser
 					if ($hasContent) {
 						preg_match('/^(\t+| +)/', $line, $m);
 						$baseIndent = $m[1] ?? null;
-						if ($baseIndent === null) {
-							return; // first content line has no indent
+						if ($baseIndent === null || strlen($baseIndent) <= $tagIndentLen) {
+							return; // first content line has no indent beyond tag level
 						}
 
 					} elseif ($continuesWithExpr) {
+						// Top-level tag whose first child is an HTML element: leave structural
+						// HTML indentation untouched.
+						if ($startTag->htmlElement === null
+							&& ($fragment->children[$i + 1] ?? null) instanceof Nodes\Html\ElementNode
+						) {
+							return;
+						}
 						$baseIndent = $line;
+						if (strlen($baseIndent) <= $tagIndentLen) {
+							return;
+						}
 
 					} else {
 						continue; // blank line before detection
@@ -552,7 +565,7 @@ final class TemplateParser
 					continue; // blank line, strip silently
 				}
 
-				$line = substr($line, strlen((string) $baseIndent));
+				$line = substr($line, 0, $tagIndentLen) . substr($line, strlen((string) $baseIndent));
 			}
 
 			unset($line);
