@@ -251,7 +251,7 @@ final class PhpHelpers
 	public static function checkCode(string $phpBinary, string $code, string $name): void
 	{
 		$process = proc_open(
-			$phpBinary . ' -l -n',
+			[$phpBinary, '-l', '-n'],
 			[['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']],
 			$pipes,
 			null,
