@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		foreach ([0, 1] as $i) /* pos %d%:%d% */ {
 			echo '<div>';

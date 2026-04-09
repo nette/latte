@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		if (true) /* pos 2:1 */ {
 			echo '	a

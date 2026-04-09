@@ -62,7 +62,7 @@ final class PhpHelpers
 					$res .= $token;
 
 				} elseif ($name === T_OPEN_TAG) {
-					$res .= "<?php\n";
+					$res .= $next[0] === T_DECLARE ? '<?php ' : "<?php\n";
 
 				} elseif ($name === T_CLOSE_TAG) {
 					throw new \LogicException('Unexpected token');
