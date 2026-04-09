@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
 		echo '

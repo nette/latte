@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		foreach ([1, 1, 2, 3, 3, 3] as $i) /* pos 2:1 */ {
 			echo ' ';

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		while ($i++ < 10) /* pos 2:1 */ {
 			echo '	';

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['a'], $ʟ_it ?? null) as $item) /* pos 2:1 */ {
 			echo '	item
