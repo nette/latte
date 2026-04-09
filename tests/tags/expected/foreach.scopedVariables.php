@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		try {
 			$ʟ_fe_0 = get_defined_vars();

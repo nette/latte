@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		$ʟ_try[0] = [$ʟ_it ?? null];
 		ob_start(fn() => '');

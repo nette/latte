@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		foreach (['a', 'b'] as $item) /* pos 2:1 */ {
 			echo '	item

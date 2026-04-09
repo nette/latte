@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 final class Template%a% extends Latte\Runtime\Template
 {

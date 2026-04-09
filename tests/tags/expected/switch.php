@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 %A%
 		$ʟ_switch = (0) /* pos 2:1 */;
 		if (in_array($ʟ_switch, [''], true)) /* pos 3:1 */ {
