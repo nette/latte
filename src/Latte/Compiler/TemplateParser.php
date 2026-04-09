@@ -215,7 +215,11 @@ final class TemplateParser
 					$this->lookFor[$startTag] = $res->current() ?: null;
 					$content = $this->parseFragment($resolver ?? $this->lastResolver);
 					if ($this->dedent) {
+<<<<<<< fix/php-binary-space-in-path
 						$this->applyDedent($content, $startTag);
+=======
+						Dedent::apply($content, $startTag);
+>>>>>>> master
 					}
 
 					if (!$this->stream->is(Token::Latte_TagOpen)) {
@@ -506,6 +510,7 @@ final class TemplateParser
 	{
 		return !$this->policy || $this->policy->isTagAllowed($name);
 	}
+<<<<<<< fix/php-binary-space-in-path
 
 
 	private function applyDedent(FragmentNode $fragment, Tag $startTag): void
@@ -585,4 +590,6 @@ final class TemplateParser
 			$atLineStart = str_ends_with($child->content, "\n");
 		}
 	}
+=======
+>>>>>>> master
 }

@@ -34,22 +34,44 @@ test('basic dedent with tab', function () {
 
 
 test('multiple lines', function () {
-	Assert::same("Hello\nWorld\n", dedent("{if true}\n\tHello\n\tWorld\n{/if}"));
+	Assert::same("Hello\nWorld\n", dedent(<<<'XX'
+		{if true}
+			Hello
+			World
+		{/if}
+		XX));
 });
 
 
 test('deeper indentation preserved', function () {
-	Assert::same("Hello\n\tIndented\n", dedent("{if true}\n\tHello\n\t\tIndented\n{/if}"));
+	Assert::same("Hello\n\tIndented\n", dedent(<<<'XX'
+		{if true}
+			Hello
+				Indented
+		{/if}
+		XX));
 });
 
 
 test('nested tags', function () {
-	Assert::same("Hello\n", dedent("{if true}\n\t{if true}\n\t\tHello\n\t{/if}\n{/if}"));
+	Assert::same("Hello\n", dedent(<<<'XX'
+		{if true}
+			{if true}
+				Hello
+			{/if}
+		{/if}
+		XX));
 });
 
 
 test('nested tags with expression', function () {
-	$result = dedent("{if true}\n\t{if true}\n\t\t{=\$x}\n\t{/if}\n{/if}", ['x' => 'val']);
+	$result = dedent(<<<'XX'
+		{if true}
+			{if true}
+				{='val'}
+			{/if}
+		{/if}
+		XX);
 	Assert::same("val\n", $result);
 });
 
@@ -61,7 +83,11 @@ test('if/else branches dedented independently', function () {
 
 
 test('foreach', function () {
-	$result = dedent("{foreach \$items as \$item}\n\t{\$item}\n{/foreach}", ['items' => ['a', 'b']]);
+	$result = dedent(<<<'XX'
+		{foreach ['a', 'b'] as $item}
+			{$item}
+		{/foreach}
+		XX);
 	Assert::same("a\nb\n", $result);
 });
 
@@ -72,13 +98,21 @@ test('no indentation - no change', function () {
 
 
 test('expression on indented line', function () {
-	$result = dedent("{if true}\n\t{=\$x}\n{/if}", ['x' => 'val']);
+	$result = dedent(<<<'XX'
+		{if true}
+			{=$x}
+		{/if}
+		XX, ['x' => 'val']);
 	Assert::same("val\n", $result);
 });
 
 
 test('mixed text and expression on same line', function () {
-	$result = dedent("{if true}\n\tHello {=\$x} World\n{/if}", ['x' => 'dear']);
+	$result = dedent(<<<'XX'
+		{if true}
+			Hello {='dear'} World
+		{/if}
+		XX);
 	Assert::same("Hello dear World\n", $result);
 });
 
@@ -100,39 +134,93 @@ test('inline block content not dedented (issue #412)', function () {
 
 
 test('expressions with OutputKeepIndentation and varying indent (issue #413)', function () {
-	$template = <<<'LATTE'
-		{define test}
-			{var $a = 1}
-			{var $b = 2}
-			{=$a}
-				{=$b}
-			{=$a}
-		{/define}
-		{include test}
-		LATTE;
-	$result = dedent($template);
+	$result = dedent(
+		<<<'XX'
+			{define test}
+				{var $a = 1}
+				{var $b = 2}
+				{=$a}
+					{=$b}
+				{=$a}
+			{/define}
+			{include test}
+			XX,
+	);
 	Assert::same("1\n\t2\n1\n", $result);
 });
 
 
 test('spaces after tab indent are content, not indentation', function () {
-	$result = dedent("{foreach \$items as \$item}\n\t{if true}\n\t\tA\n\t{else}\n\t\tB\n\t{/if}\n\t   C\n{/foreach}", ['items' => [1]]);
+	$result = dedent(<<<'XX'
+		{foreach [1] as $item}
+			{if true}
+				A
+			{else}
+				B
+			{/if}
+			   C
+		{/foreach}
+		XX);
 	Assert::same("A\n   C\n", $result);
 });
 
 
 test('spaces after tab indent preserved in nested blocks', function () {
-	$result = dedent("{if true}\n\t   hello\n{/if}");
+	$result = dedent(<<<'XX'
+		{if true}
+			   hello
+		{/if}
+		XX);
 	Assert::same("   hello\n", $result);
 });
 
 
-test('paired tag inside HTML preserves structural indent', function () {
-	$result = dedent(
-		"<ul>\n    {foreach \$items as \$item}\n        <li>{\$item}</li>\n    {/foreach}\n</ul>",
-		['items' => [1, 2, 3]],
-	);
-	Assert::same("<ul>\n    <li>1</li>\n    <li>2</li>\n    <li>3</li>\n</ul>", $result);
+test('indented tag preserves structural indent', function () {
+	$result = dedent(<<<'XX'
+		    {foreach [1] as $item}
+		        line A
+		        line B
+		    {/foreach}
+		XX);
+	Assert::same("    line A\n    line B\n    ", $result);
+});
+
+
+test('nested indented tags each strip one level', function () {
+	$result = dedent(<<<'XX'
+		    {foreach [1] as $item}
+		        {if true}
+		            foo
+		        {/if}
+		    {/foreach}
+		XX);
+	Assert::same("    foo\n    ", $result);
+});
+
+
+test('three levels of nesting', function () {
+	$result = dedent(<<<'XX'
+		{foreach [1] as $a}
+			{foreach [1] as $b}
+				{if true}
+					foo
+				{/if}
+			{/foreach}
+		{/foreach}
+		XX);
+	Assert::same("foo\n", $result);
+});
+
+
+test('blank lines inside content', function () {
+	$result = dedent(<<<'XX'
+		{if true}
+			Hello
+
+			World
+		{/if}
+		XX);
+	Assert::same("Hello\n\nWorld\n", $result);
 });
 
 
