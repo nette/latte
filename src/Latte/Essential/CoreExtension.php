@@ -150,6 +150,7 @@ final class CoreExtension extends Latte\Extension
 			'implode' => $this->filters->implode(...),
 			'indent' => $this->filters->indent(...),
 			'join' => $this->filters->implode(...),
+			'json' => Latte\Runtime\Helpers::encodeJson(...),
 			'last' => $this->filters->last(...),
 			'length' => $this->filters->length(...),
 			'limit' => fn(string|iterable $value, int $length) => Filters::slice($value, 0, $length, preserveKeys: true),

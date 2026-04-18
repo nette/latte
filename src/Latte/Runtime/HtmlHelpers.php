@@ -243,14 +243,23 @@ final class HtmlHelpers
 		if ($migrationWarnings && (is_bool($value) || $value === null)) {
 			self::triggerMigrationWarning(trim($namePart), $value);
 		}
-		$escape = fn($value) => str_contains($value, '"')
-			? "'" . str_replace(['&', "'"], ['&amp;', '&apos;'], $value) . "'"
-			: '"' . str_replace(['&', '"'], ['&amp;', '&quot;'], $value) . '"';
 		return match (true) {
 			is_bool($value) => $namePart . '="' . ($value ? 'true' : 'false') . '"',
-			is_array($value) || $value instanceof \stdClass => $namePart . '=' . $escape(json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR)),
+			is_array($value) || $value instanceof \stdClass => self::formatJsonAttribute($namePart, $value),
 			default => self::formatAttribute($namePart, $value),
 		};
+	}
+
+
+	/**
+	 * Formats HTML attribute with JSON-encoded value.
+	 */
+	public static function formatJsonAttribute(string $namePart, mixed $value): string
+	{
+		$json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR);
+		return $namePart . '=' . (str_contains($json, '"')
+			? "'" . str_replace(['&', "'"], ['&amp;', '&apos;'], $json) . "'"
+			: '"' . str_replace(['&', '"'], ['&amp;', '&quot;'], $json) . '"');
 	}
 
 

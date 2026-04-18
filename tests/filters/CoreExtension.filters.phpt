@@ -27,6 +27,7 @@ Assert::true(str_starts_with(($filters['datastream'])('abc'), 'data:'));
 Assert::same(['a', 'b'], ($filters['explode'])('a,b', ','));
 Assert::same('a,b', ($filters['implode'])(['a', 'b'], ','));
 Assert::same('a,b', ($filters['join'])(['a', 'b'], ','));
+Assert::same('{"a":1}', ($filters['json'])(['a' => 1]));
 Assert::same('abc', ($filters['trim'])(new FilterInfo('html'), ' abc '));
 Assert::same('abc', ($filters['strip'])(new FilterInfo('html'), '  abc  '));
 Assert::same('abc', ($filters['stripHtml'])(new FilterInfo('html'), '<b>abc</b>'));
