@@ -88,9 +88,12 @@ class SwitchNode extends StatementNode
 			}
 
 			$first = false;
+			$single = count($case->items) === 1 && !$case->items[0]->unpack;
 			$res .= $context->format(
-				'if (in_array($ʟ_switch, %node, true)) %line { %node } ',
-				$case,
+				$single
+					? 'if ($ʟ_switch === (%node)) %line { %node } '
+					: 'if (in_array($ʟ_switch, %node, true)) %line { %node } ',
+				$single ? $case->items[0]->value : $case,
 				$this->tagRanges[$i + 1] ?? null,
 				$content,
 			);
