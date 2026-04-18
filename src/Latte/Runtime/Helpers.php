@@ -50,7 +50,16 @@ class Helpers
 			$s = $s->__toString();
 		}
 
-		$json = json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR);
+		return self::encodeJson($s);
+	}
+
+
+	/**
+	 * Encodes value as JSON, safe for embedding into HTML/XML (escapes ]]>, <!, </).
+	 */
+	public static function encodeJson(mixed $value): string
+	{
+		$json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR);
 		return str_replace([']]>', '<!', '</'], [']]\u003E', '\u003C!', '<\/'], $json);
 	}
 
