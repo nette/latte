@@ -35,7 +35,11 @@ class ExpressionAttributeNode extends AreaNode
 	public function print(PrintContext $context): string
 	{
 		if ($context->getEscaper()->getContentType() === ContentType::Html) {
-			$type = $this->modifier->removeFilter('toggle') ? 'bool' : LR\HtmlHelpers::classifyAttributeType($this->name);
+			$type = match (true) {
+				$this->modifier->removeFilter('toggle') !== null => 'bool',
+				$this->modifier->removeFilter('json', 'last') !== null => 'json',
+				default => LR\HtmlHelpers::classifyAttributeType($this->name),
+			};
 			$method = 'LR\HtmlHelpers::format' . ucfirst($type) . 'Attribute';
 		} else {
 			$method = 'LR\XmlHelpers::formatAttribute';

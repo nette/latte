@@ -45,16 +45,22 @@ class ModifierNode extends Node
 
 
 	/**
-	 * Removes and returns the first filter with the given name, or null if not found.
+	 * Removes and returns a matching filter, or null if no matching filter is found at the requested position.
+	 * Position: '' (default) = anywhere, 'first' = only at index 0, 'last' = only at the last index.
 	 */
-	public function removeFilter(string $name): ?FilterNode
+	public function removeFilter(string $name, string $position = ''): ?FilterNode
 	{
-		foreach ($this->filters as $i => $filter) {
-			if ($filter->name->name === $name) {
+		$indexes = match ($position) {
+			'' => array_keys($this->filters),
+			'first' => $this->filters ? [array_key_first($this->filters)] : [],
+			'last' => $this->filters ? [array_key_last($this->filters)] : [],
+			default => throw new \InvalidArgumentException("Invalid position '$position', expected '', 'first' or 'last'."),
+		};
+		foreach ($indexes as $i) {
+			if ($this->filters[$i]->name->name === $name) {
 				return array_splice($this->filters, $i, 1)[0];
 			}
 		}
-
 		return null;
 	}
 
