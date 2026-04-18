@@ -40,6 +40,7 @@ $template = <<<'EOD'
 
 	{switch 0}
 	{case ''}string
+	{case ...['a']}a
 	{default}def
 	{case 0.0}flot
 	{/switch}
