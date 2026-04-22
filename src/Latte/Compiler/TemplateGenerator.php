@@ -54,7 +54,8 @@ final class TemplateGenerator
 			$this->addConstant('ContentType', $node->contentType);
 		}
 
-		if ($templateName !== null && !preg_match('#\n|\?#', $templateName)) {
+		$templateName = $templateName === null || preg_match('#\n|\?#', $templateName) ? null : $templateName;
+		if ($templateName !== null) {
 			$this->addConstant('Source', $templateName);
 		}
 
