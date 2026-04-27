@@ -15,7 +15,10 @@ Latte linter
 ------------
 ';
 
-if ($argc < 2) {
+/** @var list<string> $argv */
+$argv = $_SERVER['argv'] ?? [];
+
+if (count($argv) < 2) {
 	echo "Usage: latte-lint <path>\n";
 	exit(1);
 }

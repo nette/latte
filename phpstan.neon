@@ -3,6 +3,7 @@ parameters:
 
 	paths:
 		- src
+		- bin/latte-lint
 
 	excludePaths:
 		analyse:
