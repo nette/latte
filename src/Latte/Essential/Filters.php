@@ -64,7 +64,7 @@ final class Filters
 	public static function spacelessHtml(string $s, bool &$strip = true): string
 	{
 		return preg_replace_callback(
-			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#si',
+			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#i',
 			function ($m) use (&$strip) {
 				if (empty($m[2])) {
 					return $strip ? ' ' : $m[0];
@@ -480,7 +480,7 @@ final class Filters
 	public static function trim(FilterInfo $info, string $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
 	{
 		$charlist = preg_quote($charlist, '#');
-		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '', (string) $s);
+		$s = preg_replace('#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '', $s);
 		if (preg_last_error() || $s === null) {
 			throw new Latte\RuntimeException(preg_last_error_msg());
 		}
@@ -634,6 +634,8 @@ final class Filters
 	{
 		$fn = $by instanceof \Closure ? $by : fn($a) => is_array($a) ? $a[$by] : $a->$by;
 		$keys = $groups = [];
+		$index = 0;
+		$prevKey = null;
 
 		foreach ($data as $k => $v) {
 			$groupKey = $fn($v, $k);
@@ -836,7 +838,7 @@ final class Filters
 		}
 
 		return $values
-			? $values[array_rand($values, 1)]
+			? $values[array_rand($values)]
 			: null;
 	}
 

@@ -28,7 +28,7 @@ final class TranslatorExtension extends Latte\Extension
 
 	public function __construct(
 		callable|Translator|null $translator,
-		private ?string $key = null,
+		private readonly ?string $key = null,
 	) {
 		$this->translator = match (true) {
 			$translator === null => null,

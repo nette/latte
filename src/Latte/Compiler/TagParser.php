@@ -14,7 +14,7 @@ use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\NameNode;
 use Latte\Compiler\Nodes\Php\Scalar;
-use function count, is_int, ord, preg_match, preg_replace, preg_replace_callback, str_contains, strlen, strtolower, substr;
+use function count, ord, preg_match, preg_replace, preg_replace_callback, str_contains, strlen, strtolower, substr;
 
 
 /**
@@ -340,8 +340,8 @@ final class TagParser
 			return new Scalar\StringNode($str, $position);
 		}
 
-		$num = +$str;
-		if (!is_int($num)) {
+		$num = (int) $str;
+		if ((string) $num !== $str) { // value overflows the integer range
 			return new Scalar\StringNode($str, $position);
 		}
 

@@ -598,7 +598,7 @@ trait TagParserData
 			259 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->createRange($pos - 3, $pos)),
 			260 => function () use ($pos) {
 				$var = $this->semStack[$pos]->name;
-				$this->semValue = \is_string($var) ? new Node\VarLikeIdentifierNode($var, $this->createRange($pos, $pos)) : $var;
+				$this->semValue = is_string($var) ? new Node\VarLikeIdentifierNode($var, $this->createRange($pos, $pos)) : $var;
 			},
 			261, 267, 268 => fn() => $this->semValue = new Expression\StaticPropertyFetchNode($this->semStack[$pos - 2], $this->semStack[$pos], $this->createRange($pos - 2, $pos)),
 			275 => fn() => $this->semValue = $this->convertArrayToList(new Expression\ArrayNode($this->semStack[$pos - 1], $this->createRange($pos - 3, $pos))),

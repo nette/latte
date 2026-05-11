@@ -143,13 +143,7 @@ parameters:
 				- src/Latte/Compiler/TemplateParserHtml.php
 
 		-
-			message: '#^Offset 2 might not exist on array\{0\: non\-falsy\-string, 1\: non\-falsy\-string\|numeric\-string, 2\?\: non\-empty\-string\}\.$#'
-			identifier: offsetAccess.notFound
-			count: 1
-			path: src/Latte/Compiler/PhpHelpers.php
-
-		-
-			message: '#^Offset 0 might not exist on array\{\}\\|array\{string\}\.$#'
+			message: '#^Offset 0 might not exist on array\{\}\|array\{string\}\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
 			path: src/Latte/Compiler/TemplateLexer.php
@@ -205,12 +199,6 @@ parameters:
 		-
 			message: '#^Call to function is_callable\(\) with arguments callable\(\)\: mixed, false and mixed will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Latte/Sandbox/RuntimeChecker.php
-
-		-
-			message: '#^Method Latte\\Sandbox\\RuntimeChecker\:\:args\(\) should return list\<mixed\> but returns array\<int\|string, mixed\>\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Latte/Sandbox/RuntimeChecker.php
 

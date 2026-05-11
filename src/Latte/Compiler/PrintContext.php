@@ -35,7 +35,7 @@ final class PrintContext
 	public function __construct(
 		string $contentType = ContentType::Html,
 		/** @var array<string, bool> */
-		private array $features = [],
+		private readonly array $features = [],
 		?Escaper $escaper = null,
 	) {
 		$this->escaperStack[] = $escaper ?? new Escaper($contentType);
@@ -63,12 +63,15 @@ final class PrintContext
 			function ($m) use ($args) {
 				[, $pos, $fn, $var] = $m;
 				$var = substr($var, 1, -1);
-				/** @var Nodes\ModifierNode[] $args */
-				return match ($fn) {
-					'modify' => $args[$pos]->printSimple($this, $var),
-					'modifyContent' => $args[$pos]->printContentAware($this, $var),
-					'escape' => $this->getEscaper()->escape($var),
-				};
+				if ($fn === 'escape') {
+					return $this->getEscaper()->escape($var);
+				}
+
+				$arg = $args[$pos];
+				assert($arg instanceof Nodes\ModifierNode);
+				return $fn === 'modify'
+					? $arg->printSimple($this, $var)
+					: $arg->printContentAware($this, $var);
 			},
 			$mask,
 		);

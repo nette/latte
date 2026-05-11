@@ -51,7 +51,7 @@ class BlueScreenPanel
 		if ($e instanceof Latte\CompileException && $e->sourceName) {
 			return [
 				'tab' => 'Template',
-				'panel' => (preg_match('#\n|\?#', $e->sourceName)
+				'panel' => (preg_match('#[\n?]#', $e->sourceName)
 						? ''
 						: '<p>'
 							. (@is_file($e->sourceName) // @ - may trigger error
@@ -75,7 +75,7 @@ class BlueScreenPanel
 			$e instanceof Latte\CompileException
 			&& $e->sourceName
 			&& @is_file($e->sourceName) // @ - may trigger error
-			&& (preg_match('#Unknown tag (\{\w+)\}, did you mean (\{\w+)\}\?#A', $e->getMessage(), $m)
+			&& (preg_match('#Unknown tag (\{\w+)}, did you mean (\{\w+)}\?#A', $e->getMessage(), $m)
 				|| preg_match('#Unknown attribute (n:\w+), did you mean (n:\w+)\?#A', $e->getMessage(), $m))
 		) {
 			return [

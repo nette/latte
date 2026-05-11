@@ -283,7 +283,7 @@ final class CoreExtension extends Latte\Extension
 	{
 		try {
 			$name = $this->engine->getLoader()->getReferredName($name, $referringName);
-			$this->engine->createTemplate($name, [], clearCache: false);
+			$this->engine->createTemplate($name, clearCache: false);
 			return true;
 		} catch (Latte\TemplateNotFoundException) {
 			return false;

@@ -199,7 +199,7 @@ final class PhpHelpers
 		}
 
 		return preg_replace_callback(
-			'~\\\([\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u\{([0-9a-fA-F]+)\})~',
+			'~\\\([\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u\{[0-9a-fA-F]+\})~',
 			function ($matches) {
 				$ch = $matches[1];
 				$replacements = [
@@ -217,7 +217,7 @@ final class PhpHelpers
 				} elseif ($ch[0] === 'x' || $ch[0] === 'X') {
 					return chr((int) hexdec(substr($ch, 1)));
 				} elseif ($ch[0] === 'u') {
-					return self::codePointToUtf8((int) hexdec($matches[2]));
+					return self::codePointToUtf8((int) hexdec(substr($ch, 2, -1)));
 				} else {
 					$num = (int) octdec($ch);
 					if ($num > 255) {

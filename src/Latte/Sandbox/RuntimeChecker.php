@@ -68,7 +68,7 @@ final class RuntimeChecker
 
 	/**
 	 * Validates that no array argument is a disallowed callable and returns the arguments.
-	 * @return list<mixed>
+	 * @return mixed[]
 	 */
 	public function args(mixed ...$args): array
 	{
@@ -115,9 +115,7 @@ final class RuntimeChecker
 			$allowed = $this->policy->isMethodAllowed(is_object($callable[0]) ? $callable[0]::class : $callable[0], $callable[1]);
 
 		} elseif (is_object($callable)) {
-			$allowed = $callable instanceof \Closure
-				? true
-				: $this->policy->isMethodAllowed($callable::class, '__invoke');
+			$allowed = $callable instanceof \Closure || $this->policy->isMethodAllowed($callable::class, '__invoke');
 
 		} else {
 			$allowed = false;

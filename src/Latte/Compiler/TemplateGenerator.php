@@ -44,7 +44,7 @@ final class TemplateGenerator
 	 */
 	public function generateCode(string $className, ?string $templateName, bool $strictMode): string
 	{
-		$templateName = $templateName === null || preg_match('#\n|\?#', $templateName) ? null : $templateName;
+		$templateName = $templateName === null || preg_match('#[\n?]#', $templateName) ? null : $templateName;
 		$members = [];
 		foreach ($this->constants as $name => $value) {
 			$members[] = "\tpublic const $name = " . PhpHelpers::dump($value, multiline: true) . ';';

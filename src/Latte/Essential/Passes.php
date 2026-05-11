@@ -31,7 +31,7 @@ use function is_string;
 final class Passes
 {
 	public function __construct(
-		private Engine $engine,
+		private readonly Engine $engine,
 	) {
 	}
 

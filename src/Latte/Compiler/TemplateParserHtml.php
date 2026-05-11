@@ -202,7 +202,7 @@ final class TemplateParserHtml
 		if (($this->parser->strict || $variable)
 			&& !$stream->is(Token::Whitespace, Token::Slash, Token::Html_TagClose)
 		) {
-			throw $stream->throwUnexpectedException();
+			$stream->throwUnexpectedException();
 		}
 
 		$this->parser->lastIndentation = null;
@@ -277,7 +277,7 @@ final class TemplateParserHtml
 				$text .= $token->text;
 
 			} elseif (!$parts) {
-				throw $stream->throwUnexpectedException([Token::Html_Name, Token::Latte_TagOpen]);
+				$stream->throwUnexpectedException([Token::Html_Name, Token::Latte_TagOpen]);
 			} else {
 				break;
 			}
