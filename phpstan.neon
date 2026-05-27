@@ -16,14 +16,20 @@ parameters:
 	ignoreErrors:
 		# --- Whole project ---
 
-		-	# Factory/derive pattern — new static() is intentional
-			'#Unsafe usage of new static\(\)#'
+		-	# Factory/derive pattern — new static() is intentional in Node hierarchy
+			message: '#Unsafe usage of new static\(\)#'
+			paths:
+				- src/Latte/Compiler/Nodes/
+				- src/Latte/Essential/Nodes/
+				- src/Latte/Sandbox/Nodes/
 
 		-	# Match with exhaustive else branch as safety net
-			'#Match expression does not handle remaining value.*#'
+			message: '#Match expression does not handle remaining value.*#'
+			path: src/Latte
 
 		-	# Latte callback system — callable has no fixed signature
-			'#no signature specified for (callable|Closure)#'
+			message: '#no signature specified for (callable|Closure)#'
+			path: src/Latte
 
 		# --- AST Node classes: match() expressions with exhaustive typing ---
 
