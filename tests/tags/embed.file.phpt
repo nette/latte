@@ -912,48 +912,134 @@ testTemplate(
 );
 
 
-testTemplate('default block: caller content overrides the fallback', [
-	'main' => '{embed "embed.latte"}custom body{/embed}',
-	'embed.latte' => 'start [{block default}fallback body{/block}] end',
-], 'start [custom body] end');
-
-
-testTemplate('default block: empty caller keeps the fallback', [
-	'main' => '{embed "embed.latte"}{/embed}',
-	'embed.latte' => 'start [{block default}fallback body{/block}] end',
-], 'start [fallback body] end');
-
-
-testTemplate('default block: self-closing caller keeps the fallback', [
-	'main' => '{embed "embed.latte"/}',
-	'embed.latte' => 'start [{block default}fallback body{/block}] end',
-], 'start [fallback body] end');
-
-
-testTemplate('default block: whitespace-only caller keeps the fallback', [
-	'main' => '{embed "embed.latte"}   {/embed}',
-	'embed.latte' => 'start [{block default}fallback body{/block}] end',
-], 'start [fallback body] end');
-
-
-testTemplate('default block: default content sees caller variables', [
-	'main' => <<<'XX'
-		{var $greeting = 'Hello'}{embed "embed.latte"}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
+testTemplate(
+	'default block: caller content overrides the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom body{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			[{block default}fallback body{/block}]
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		[custom body]
+		end
 		XX,
-	'embed.latte' => 'start [{block default}fallback body{/block}] end',
-], 'start [Hello world!] end');
+);
 
 
-testTemplate('default block: works together with named blocks', [
-	'main' => '{embed "embed.latte"}custom body{block title}custom title{/block}{/embed}',
-	'embed.latte' => 'title={block title}fallback title{/block} body=[{block default}fallback body{/block}]',
-], 'title=custom title body=[custom body]');
+testTemplate(
+	'default block: empty caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			[{block default}fallback body{/block}]
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		[fallback body]
+		end
+		XX,
+);
 
 
-testTemplate('default block: caller content ignored without a placeholder', [
-	'main' => '{embed "embed.latte"}custom body{/embed}',
-	'embed.latte' => 'no placeholder here',
-], 'no placeholder here');
+testTemplate(
+	'default block: self-closing caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"/}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			[{block default}fallback body{/block}]
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		[fallback body]
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: whitespace-only caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}   {/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			[{block default}fallback body{/block}]
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		[fallback body]
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: default content sees caller variables',
+	[
+		'main' => <<<'XX'
+			{var $greeting = 'Hello'}{embed "embed.latte"}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			[{block default}fallback body{/block}]
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		[Hello world!]
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: works together with named blocks',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom body{block title}custom title{/block}{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			title={block title}fallback title{/block}
+			body=[{block default}fallback body{/block}]
+			XX,
+	],
+	<<<'XX'
+		title=custom title
+		body=[custom body]
+		XX,
+);
+
+
+testTemplate(
+	'default block: caller content ignored without a placeholder',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom body{/embed}
+			XX,
+		'embed.latte' => 'no placeholder here',
+	],
+	'no placeholder here',
+);
 
 
 Assert::exception(function () {
