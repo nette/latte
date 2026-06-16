@@ -70,6 +70,13 @@ class EmbedNode extends StatementNode
 		}
 
 		if ($default) {
+			if (isset($parser->blocks[$node->layer]['default'])) {
+				throw new CompileException(
+					'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default slot.',
+					$default[0]->position ?? $tag->position,
+				);
+			}
+
 			$blockTag = new Tag('block', [new Token(Token::End, '', $tag->position)], $tag->position, prefix: $tag->prefix);
 			$block = new Block(new StringNode('default'), $node->layer, $blockTag);
 			$parser->checkBlockIsUnique($block);
