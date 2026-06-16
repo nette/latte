@@ -425,13 +425,13 @@ testTemplate(
 
 
 testTemplate(
-	'default block: override, fallback, and named blocks',
+	'default block: works together with named blocks',
 	[
 		'main' => <<<'XX'
 
 					{embed embed}DEFAULT-OVER{block title}TITLE-OVER{/block}{/embed}
 
-					{define embed}title={block title}TITLE-FB{/block} body=[{block default}DEFAULT-FB{/block}]{/define}
+					{define embed}title={block title}fallback{/block} body=[{block default}fallback{/block}]{/define}
 
 			XX,
 	],
@@ -444,52 +444,52 @@ testTemplate(
 
 
 testTemplate(
-	'default block: fallback used when caller is self-closing',
+	'default block: self-closing caller keeps the fallback',
 	[
 		'main' => <<<'XX'
 
 					{embed embed/}
 
-					{define embed}body=[{block default}DEFAULT{/block}]{/define}
+					{define embed}body=[{block default}fallback{/block}]{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[DEFAULT]
+			body=[fallback]
 
 		XX,
 );
 
 
 testTemplate(
-	'default block: fallback used when caller is empty',
+	'default block: empty caller keeps the fallback',
 	[
 		'main' => <<<'XX'
 
 					{embed embed}{/embed}
 
-					{define embed}body=[{block default}DEFAULT{/block}]{/define}
+					{define embed}body=[{block default}fallback{/block}]{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[DEFAULT]
+			body=[fallback]
 
 		XX,
 );
 
 
 testTemplate(
-	'default block: arbitrary sub-nodes and caller variables',
+	'default block: default content sees caller variables',
 	[
 		'main' => <<<'XX'
 
 					{var $outer = 'OUT'}
 					{embed embed}{var $local = 'LOC'}{$outer}-{$local}{if true}!{/if}{/embed}
 
-					{define embed}body=[{block default}DEFAULT-FB{/block}]{/define}
+					{define embed}body=[{block default}fallback{/block}]{/define}
 
 			XX,
 	],

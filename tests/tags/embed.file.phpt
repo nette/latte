@@ -914,44 +914,46 @@ testTemplate(
 
 testTemplate('default block: caller content overrides the fallback', [
 	'main' => '{embed "embed.latte"}OVERRIDE{/embed}',
-	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+	'embed.latte' => 'start [{block default}fallback{/block}] end',
 ], 'start [OVERRIDE] end');
 
 
-testTemplate('default block: fallback used when caller is self-closing', [
-	'main' => '{embed "embed.latte"/}',
-	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
-], 'start [FALLBACK] end');
-
-
-testTemplate('default block: fallback used when caller is empty', [
+testTemplate('default block: empty caller keeps the fallback', [
 	'main' => '{embed "embed.latte"}{/embed}',
-	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
-], 'start [FALLBACK] end');
+	'embed.latte' => 'start [{block default}fallback{/block}] end',
+], 'start [fallback] end');
 
 
-testTemplate('default block: whitespace-only content keeps the fallback', [
+testTemplate('default block: self-closing caller keeps the fallback', [
+	'main' => '{embed "embed.latte"/}',
+	'embed.latte' => 'start [{block default}fallback{/block}] end',
+], 'start [fallback] end');
+
+
+testTemplate('default block: whitespace-only caller keeps the fallback', [
 	'main' => '{embed "embed.latte"}   {/embed}',
-	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
-], 'start [FALLBACK] end');
+	'embed.latte' => 'start [{block default}fallback{/block}] end',
+], 'start [fallback] end');
 
 
-testTemplate('default block: arbitrary sub-nodes and caller variables', [
-	'main' => "{var \$outer = 'OUT'}{embed \"embed.latte\"}{var \$local = 'LOC'}{\$outer}-{\$local}{if true}!{/if}{/embed}",
-	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+testTemplate('default block: default content sees caller variables', [
+	'main' => <<<'XX'
+		{var $outer = 'OUT'}{embed "embed.latte"}{var $local = 'LOC'}{$outer}-{$local}{if true}!{/if}{/embed}
+		XX,
+	'embed.latte' => 'start [{block default}fallback{/block}] end',
 ], 'start [OUT-LOC!] end');
 
 
-testTemplate('default block: coexists with named blocks', [
+testTemplate('default block: works together with named blocks', [
 	'main' => '{embed "embed.latte"}DEFAULT-OVER{block title}TITLE-OVER{/block}{/embed}',
-	'embed.latte' => 'title={block title}TITLE-FB{/block} body=[{block default}DEFAULT-FB{/block}]',
+	'embed.latte' => 'title={block title}fallback{/block} body=[{block default}fallback{/block}]',
 ], 'title=TITLE-OVER body=[DEFAULT-OVER]');
 
 
 testTemplate('default block: caller content ignored without a placeholder', [
 	'main' => '{embed "embed.latte"}{var $x = 1}{$x} ignored{/embed}',
-	'embed.latte' => 'no block here',
-], 'no block here');
+	'embed.latte' => 'no placeholder here',
+], 'no placeholder here');
 
 
 Assert::exception(function () {
