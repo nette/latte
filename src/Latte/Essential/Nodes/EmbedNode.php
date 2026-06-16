@@ -8,16 +8,19 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
+use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
-use function count, preg_match;
+use Latte\Compiler\Token;
+use function count, preg_match, trim;
 
 
 /**
@@ -54,10 +57,29 @@ class EmbedNode extends StatementNode
 		$parser->blocks[$parser->blockLayer] = [];
 		[$node->blocks] = yield;
 
+		// Content not wrapped in a {block} becomes the implicit {block default} slot.
+		$kept = $default = [];
 		foreach ($node->blocks->children as $child) {
-			if (!$child instanceof ImportNode && !$child instanceof BlockNode && !$child instanceof TextNode) {
-				throw new CompileException('Unexpected content inside {embed} tags.', $child->position);
+			if ($child instanceof ImportNode || $child instanceof BlockNode) {
+				$kept[] = $child;
+			} elseif ($child instanceof TextNode && trim($child->content) === '') {
+				$kept[] = $child;
+			} else {
+				$default[] = $child;
 			}
+		}
+
+		if ($default) {
+			$blockTag = new Tag('block', [new Token(Token::End, '', $tag->position)], $tag->position, prefix: $tag->prefix);
+			$block = new Block(new StringNode('default'), $node->layer, $blockTag);
+			$parser->checkBlockIsUnique($block);
+			$blockNode = new BlockNode;
+			$blockNode->block = $block;
+			$blockNode->modifier = new ModifierNode([], position: $tag->position);
+			$blockNode->content = new FragmentNode($default);
+			$blockNode->position = $tag->position;
+			$kept[] = $blockNode;
+			$node->blocks->children = $kept;
 		}
 
 		$parser->blockLayer = $prevIndex;
