@@ -912,6 +912,56 @@ testTemplate(
 );
 
 
+testTemplate('default block: caller content overrides the fallback', [
+	'main' => '{embed "embed.latte"}OVERRIDE{/embed}',
+	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+], 'start [OVERRIDE] end');
+
+
+testTemplate('default block: fallback used when caller is self-closing', [
+	'main' => '{embed "embed.latte"/}',
+	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+], 'start [FALLBACK] end');
+
+
+testTemplate('default block: fallback used when caller is empty', [
+	'main' => '{embed "embed.latte"}{/embed}',
+	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+], 'start [FALLBACK] end');
+
+
+testTemplate('default block: whitespace-only content keeps the fallback', [
+	'main' => '{embed "embed.latte"}   {/embed}',
+	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+], 'start [FALLBACK] end');
+
+
+testTemplate('default block: arbitrary sub-nodes and caller variables', [
+	'main' => "{var \$outer = 'OUT'}{embed \"embed.latte\"}{var \$local = 'LOC'}{\$outer}-{\$local}{if true}!{/if}{/embed}",
+	'embed.latte' => 'start [{block default}FALLBACK{/block}] end',
+], 'start [OUT-LOC!] end');
+
+
+testTemplate('default block: coexists with named blocks', [
+	'main' => '{embed "embed.latte"}DEFAULT-OVER{block title}TITLE-OVER{/block}{/embed}',
+	'embed.latte' => 'title={block title}TITLE-FB{/block} body=[{block default}DEFAULT-FB{/block}]',
+], 'title=TITLE-OVER body=[DEFAULT-OVER]');
+
+
+testTemplate('default block: caller content ignored without a placeholder', [
+	'main' => '{embed "embed.latte"}{var $x = 1}{$x} ignored{/embed}',
+	'embed.latte' => 'no block here',
+], 'no block here');
+
+
+Assert::exception(function () {
+	testTemplate('default block: loose content mixed with explicit block', [
+		'main' => '{embed "embed.latte"}loose{block default}explicit{/block}{/embed}',
+		'embed.latte' => '[{block default}x{/block}]',
+	]);
+}, Latte\CompileException::class, 'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default block (on line 1 at column 22)');
+
+
 $latte = createLatte();
 Assert::exception(
 	fn() => $latte->renderToString('{embed (null)/}'),
