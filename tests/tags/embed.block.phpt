@@ -424,6 +424,83 @@ testTemplate(
 );
 
 
+testTemplate(
+	'default block: override, fallback, and named blocks',
+	[
+		'main' => <<<'XX'
+
+					{embed embed}DEFAULT-OVER{block title}TITLE-OVER{/block}{/embed}
+
+					{define embed}title={block title}TITLE-FB{/block} body=[{block default}DEFAULT-FB{/block}]{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			title=TITLE-OVER body=[DEFAULT-OVER]
+
+		XX,
+);
+
+
+testTemplate(
+	'default block: fallback used when caller is self-closing',
+	[
+		'main' => <<<'XX'
+
+					{embed embed/}
+
+					{define embed}body=[{block default}DEFAULT{/block}]{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			body=[DEFAULT]
+
+		XX,
+);
+
+
+testTemplate(
+	'default block: fallback used when caller is empty',
+	[
+		'main' => <<<'XX'
+
+					{embed embed}{/embed}
+
+					{define embed}body=[{block default}DEFAULT{/block}]{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			body=[DEFAULT]
+
+		XX,
+);
+
+
+testTemplate(
+	'default block: arbitrary sub-nodes and caller variables',
+	[
+		'main' => <<<'XX'
+
+					{var $outer = 'OUT'}
+					{embed embed}{var $local = 'LOC'}{$outer}-{$local}{if true}!{/if}{/embed}
+
+					{define embed}body=[{block default}DEFAULT-FB{/block}]{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			body=[OUT-LOC!]
+
+		XX,
+);
+
+
 $latte = createLatte();
 Assert::exception(
 	fn() => $latte->renderToString('{embed block (null)/}'),
