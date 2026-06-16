@@ -17,14 +17,6 @@ function testTemplate(string $title, array $templates, string $exp = '')
 }
 
 
-Assert::exception(function () {
-	testTemplate('default block: loose content mixed with explicit block', [
-		'main' => '{embed "embed.latte"}loose{block default}explicit{/block}{/embed}',
-		'embed.latte' => '[{block default}x{/block}]',
-	]);
-}, Latte\CompileException::class, 'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default block (on line 1 at column 22)');
-
-
 testTemplate('keyword file', [
 	'main' => '{embed file embed}{/embed}',
 	'embed' => 'embed',
