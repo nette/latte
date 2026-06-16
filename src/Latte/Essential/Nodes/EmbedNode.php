@@ -20,7 +20,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Compiler\Token;
-use function count, preg_match, trim;
+use function array_pop, array_shift, count, end, preg_match, trim;
 
 
 /**
@@ -62,11 +62,17 @@ class EmbedNode extends StatementNode
 		foreach ($node->blocks->children as $child) {
 			if ($child instanceof ImportNode || $child instanceof BlockNode) {
 				$kept[] = $child;
-			} elseif ($child instanceof TextNode && trim($child->content) === '') {
-				$kept[] = $child;
 			} else {
 				$default[] = $child;
 			}
+		}
+
+		// ignore whitespace-only text surrounding the blocks, but keep it in between
+		while ($default && $default[0] instanceof TextNode && trim($default[0]->content) === '') {
+			array_shift($default);
+		}
+		while ($default && ($last = end($default)) instanceof TextNode && trim($last->content) === '') {
+			array_pop($default);
 		}
 
 		if ($default) {
