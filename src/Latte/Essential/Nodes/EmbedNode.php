@@ -57,7 +57,7 @@ class EmbedNode extends StatementNode
 		$parser->blocks[$parser->blockLayer] = [];
 		[$node->blocks] = yield;
 
-		// Content not wrapped in a {block} becomes the implicit {block default} slot.
+		// Content not wrapped in a {block} becomes the implicit {block default} block.
 		$kept = $default = [];
 		foreach ($node->blocks->children as $child) {
 			if ($child instanceof ImportNode || $child instanceof BlockNode) {
@@ -72,7 +72,7 @@ class EmbedNode extends StatementNode
 		if ($default) {
 			if (isset($parser->blocks[$node->layer]['default'])) {
 				throw new CompileException(
-					'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default slot.',
+					'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default block.',
 					$default[0]->position ?? $tag->position,
 				);
 			}
