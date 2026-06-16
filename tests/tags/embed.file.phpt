@@ -913,52 +913,52 @@ testTemplate(
 
 
 testTemplate('default block: caller content overrides the fallback', [
-	'main' => '{embed "embed.latte"}OVERRIDE{/embed}',
-	'embed.latte' => 'start [{block default}fallback{/block}] end',
-], 'start [OVERRIDE] end');
+	'main' => '{embed "embed.latte"}custom body{/embed}',
+	'embed.latte' => 'start [{block default}fallback body{/block}] end',
+], 'start [custom body] end');
 
 
 testTemplate('default block: empty caller keeps the fallback', [
 	'main' => '{embed "embed.latte"}{/embed}',
-	'embed.latte' => 'start [{block default}fallback{/block}] end',
-], 'start [fallback] end');
+	'embed.latte' => 'start [{block default}fallback body{/block}] end',
+], 'start [fallback body] end');
 
 
 testTemplate('default block: self-closing caller keeps the fallback', [
 	'main' => '{embed "embed.latte"/}',
-	'embed.latte' => 'start [{block default}fallback{/block}] end',
-], 'start [fallback] end');
+	'embed.latte' => 'start [{block default}fallback body{/block}] end',
+], 'start [fallback body] end');
 
 
 testTemplate('default block: whitespace-only caller keeps the fallback', [
 	'main' => '{embed "embed.latte"}   {/embed}',
-	'embed.latte' => 'start [{block default}fallback{/block}] end',
-], 'start [fallback] end');
+	'embed.latte' => 'start [{block default}fallback body{/block}] end',
+], 'start [fallback body] end');
 
 
 testTemplate('default block: default content sees caller variables', [
 	'main' => <<<'XX'
-		{var $outer = 'OUT'}{embed "embed.latte"}{var $local = 'LOC'}{$outer}-{$local}{if true}!{/if}{/embed}
+		{var $greeting = 'Hello'}{embed "embed.latte"}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
 		XX,
-	'embed.latte' => 'start [{block default}fallback{/block}] end',
-], 'start [OUT-LOC!] end');
+	'embed.latte' => 'start [{block default}fallback body{/block}] end',
+], 'start [Hello world!] end');
 
 
 testTemplate('default block: works together with named blocks', [
-	'main' => '{embed "embed.latte"}DEFAULT-OVER{block title}TITLE-OVER{/block}{/embed}',
-	'embed.latte' => 'title={block title}fallback{/block} body=[{block default}fallback{/block}]',
-], 'title=TITLE-OVER body=[DEFAULT-OVER]');
+	'main' => '{embed "embed.latte"}custom body{block title}custom title{/block}{/embed}',
+	'embed.latte' => 'title={block title}fallback title{/block} body=[{block default}fallback body{/block}]',
+], 'title=custom title body=[custom body]');
 
 
 testTemplate('default block: caller content ignored without a placeholder', [
-	'main' => '{embed "embed.latte"}{var $x = 1}{$x} ignored{/embed}',
+	'main' => '{embed "embed.latte"}custom body{/embed}',
 	'embed.latte' => 'no placeholder here',
 ], 'no placeholder here');
 
 
 Assert::exception(function () {
 	testTemplate('default block: loose content mixed with explicit block', [
-		'main' => '{embed "embed.latte"}loose{block default}explicit{/block}{/embed}',
+		'main' => '{embed "embed.latte"}custom body{block default}explicit body{/block}{/embed}',
 		'embed.latte' => '[{block default}x{/block}]',
 	]);
 }, Latte\CompileException::class, 'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default block (on line 1 at column 22)');

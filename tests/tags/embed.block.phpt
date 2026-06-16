@@ -429,15 +429,15 @@ testTemplate(
 	[
 		'main' => <<<'XX'
 
-					{embed embed}DEFAULT-OVER{block title}TITLE-OVER{/block}{/embed}
+					{embed embed}custom body{block title}custom title{/block}{/embed}
 
-					{define embed}title={block title}fallback{/block} body=[{block default}fallback{/block}]{/define}
+					{define embed}title={block title}fallback title{/block} body=[{block default}fallback body{/block}]{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			title=TITLE-OVER body=[DEFAULT-OVER]
+			title=custom title body=[custom body]
 
 		XX,
 );
@@ -450,13 +450,13 @@ testTemplate(
 
 					{embed embed/}
 
-					{define embed}body=[{block default}fallback{/block}]{/define}
+					{define embed}body=[{block default}fallback body{/block}]{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[fallback]
+			body=[fallback body]
 
 		XX,
 );
@@ -469,13 +469,13 @@ testTemplate(
 
 					{embed embed}{/embed}
 
-					{define embed}body=[{block default}fallback{/block}]{/define}
+					{define embed}body=[{block default}fallback body{/block}]{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[fallback]
+			body=[fallback body]
 
 		XX,
 );
@@ -486,16 +486,16 @@ testTemplate(
 	[
 		'main' => <<<'XX'
 
-					{var $outer = 'OUT'}
-					{embed embed}{var $local = 'LOC'}{$outer}-{$local}{if true}!{/if}{/embed}
+					{var $greeting = 'Hello'}
+					{embed embed}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
 
-					{define embed}body=[{block default}fallback{/block}]{/define}
+					{define embed}body=[{block default}fallback body{/block}]{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[OUT-LOC!]
+			body=[Hello world!]
 
 		XX,
 );
