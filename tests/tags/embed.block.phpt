@@ -431,13 +431,13 @@ testTemplate(
 
 					{embed embed}custom body{block title}custom title{/block}{/embed}
 
-					{define embed}title={block title}fallback title{/block} body=[{block default}fallback body{/block}]{/define}
+					{define embed}title={block title}fallback title{/block} body={block default}fallback body{/block}{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			title=custom title body=[custom body]
+			title=custom title body=custom body
 
 		XX,
 );
@@ -450,13 +450,13 @@ testTemplate(
 
 					{embed embed/}
 
-					{define embed}body=[{block default}fallback body{/block}]{/define}
+					{define embed}body={block default}fallback body{/block}{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[fallback body]
+			body=fallback body
 
 		XX,
 );
@@ -469,13 +469,13 @@ testTemplate(
 
 					{embed embed}{/embed}
 
-					{define embed}body=[{block default}fallback body{/block}]{/define}
+					{define embed}body={block default}fallback body{/block}{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[fallback body]
+			body=fallback body
 
 		XX,
 );
@@ -489,13 +489,13 @@ testTemplate(
 					{var $greeting = 'Hello'}
 					{embed embed}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
 
-					{define embed}body=[{block default}fallback body{/block}]{/define}
+					{define embed}body={block default}fallback body{/block}{/define}
 
 			XX,
 	],
 	<<<'XX'
 
-			body=[Hello world!]
+			body=Hello world!
 
 		XX,
 );

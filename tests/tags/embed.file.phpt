@@ -920,13 +920,13 @@ testTemplate(
 			XX,
 		'embed.latte' => <<<'XX'
 			start
-			[{block default}fallback body{/block}]
+			{block default}fallback body{/block}
 			end
 			XX,
 	],
 	<<<'XX'
 		start
-		[custom body]
+		custom body
 		end
 		XX,
 );
@@ -940,13 +940,13 @@ testTemplate(
 			XX,
 		'embed.latte' => <<<'XX'
 			start
-			[{block default}fallback body{/block}]
+			{block default}fallback body{/block}
 			end
 			XX,
 	],
 	<<<'XX'
 		start
-		[fallback body]
+		fallback body
 		end
 		XX,
 );
@@ -960,13 +960,13 @@ testTemplate(
 			XX,
 		'embed.latte' => <<<'XX'
 			start
-			[{block default}fallback body{/block}]
+			{block default}fallback body{/block}
 			end
 			XX,
 	],
 	<<<'XX'
 		start
-		[fallback body]
+		fallback body
 		end
 		XX,
 );
@@ -980,13 +980,13 @@ testTemplate(
 			XX,
 		'embed.latte' => <<<'XX'
 			start
-			[{block default}fallback body{/block}]
+			{block default}fallback body{/block}
 			end
 			XX,
 	],
 	<<<'XX'
 		start
-		[fallback body]
+		fallback body
 		end
 		XX,
 );
@@ -1000,13 +1000,13 @@ testTemplate(
 			XX,
 		'embed.latte' => <<<'XX'
 			start
-			[{block default}fallback body{/block}]
+			{block default}fallback body{/block}
 			end
 			XX,
 	],
 	<<<'XX'
 		start
-		[Hello world!]
+		Hello world!
 		end
 		XX,
 );
@@ -1020,12 +1020,12 @@ testTemplate(
 			XX,
 		'embed.latte' => <<<'XX'
 			title={block title}fallback title{/block}
-			body=[{block default}fallback body{/block}]
+			body={block default}fallback body{/block}
 			XX,
 	],
 	<<<'XX'
 		title=custom title
-		body=[custom body]
+		body=custom body
 		XX,
 );
 
