@@ -8,16 +8,19 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
+use Latte\Compiler\Block;
 use Latte\Compiler\Nodes\FragmentNode;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
-use function count, preg_match;
+use Latte\Compiler\Token;
+use function array_pop, array_shift, count, end, preg_match;
 
 
 /**
@@ -50,17 +53,61 @@ class EmbedNode extends StatementNode
 		$node->args = $tag->parser->parseArguments();
 
 		$prevIndex = $parser->blockLayer;
-		$parser->blockLayer = $node->layer = count($parser->blocks);
+		$layer = $parser->blockLayer = $node->layer = count($parser->blocks);
 		$parser->blocks[$parser->blockLayer] = [];
-		[$node->blocks] = yield;
 
+		// push the implicit {block default} onto the tag stack so {include parent/this} in loose content resolve to it
+		$defaultBlock = $node->createDefaultBlock($layer, $tag);
+		$parser->pushTag($defaultBlock->block->tag);
+		[$node->blocks] = yield;
+		$parser->popTag();
+
+		// Content not wrapped in a {block} becomes the implicit {block default} block.
+		$kept = $loose = [];
 		foreach ($node->blocks->children as $child) {
-			if (!$child instanceof ImportNode && !$child instanceof BlockNode && !$child instanceof TextNode) {
-				throw new CompileException('Unexpected content inside {embed} tags.', $child->position);
+			$child instanceof ImportNode || $child instanceof BlockNode
+				? $kept[] = $child
+				: $loose[] = $child;
+		}
+
+		// ignore whitespace-only text surrounding the blocks, but keep it in between
+		while ($loose && $loose[0] instanceof TextNode && $loose[0]->isWhitespace()) {
+			array_shift($loose);
+		}
+		while ($loose && ($last = end($loose)) instanceof TextNode && $last->isWhitespace()) {
+			array_pop($loose);
+		}
+
+		if ($loose) {
+			if (isset($parser->blocks[$layer]['default'])) {
+				throw new CompileException(
+					'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default block.',
+					$loose[0]->position ?? $tag->position,
+				);
 			}
+
+			$parser->blocks[$layer]['default'] = $defaultBlock->block;
+			$defaultBlock->content = new FragmentNode($loose);
+			$kept[] = $defaultBlock;
+			$node->blocks->children = $kept;
 		}
 
 		$parser->blockLayer = $prevIndex;
+		return $node;
+	}
+
+
+	/**
+	 * Creates the implicit {block default} that wraps loose content.
+	 */
+	private function createDefaultBlock(int|string $layer, Tag $tag): BlockNode
+	{
+		// tag name 'block' is load-bearing: TemplateGenerator uses it to give the block access to the caller's variables
+		$blockTag = new Tag('block', [new Token(Token::End, '', $tag->position)], $tag->position, prefix: $tag->prefix);
+		$node = $blockTag->node = new BlockNode;
+		$node->block = new Block(new StringNode('default'), $layer, $blockTag);
+		$node->modifier = new ModifierNode([], position: $tag->position);
+		$node->position = $tag->position;
 		return $node;
 	}
 
