@@ -17,13 +17,6 @@ function testTemplate(string $title, array $templates, string $exp = '')
 }
 
 
-Assert::exception(function () {
-	testTemplate('unexpected content', [
-		'main' => '{embed "embed.latte"} {$a} {/embed}',
-	]);
-}, Latte\CompileException::class, 'Unexpected content inside {embed} tags (on line 1 at column 23)');
-
-
 testTemplate('keyword file', [
 	'main' => '{embed file embed}{/embed}',
 	'embed' => 'embed',
@@ -917,6 +910,169 @@ testTemplate(
 
 		XX,
 );
+
+
+testTemplate(
+	'default block: caller content overrides the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom body{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			{block default}fallback body{/block}
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		custom body
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: empty caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			{block default}fallback body{/block}
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		fallback body
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: self-closing caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"/}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			{block default}fallback body{/block}
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		fallback body
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: whitespace-only caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}   {/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			{block default}fallback body{/block}
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		fallback body
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: default content sees caller variables',
+	[
+		'main' => <<<'XX'
+			{var $greeting = 'Hello'}{embed "embed.latte"}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			start
+			{block default}fallback body{/block}
+			end
+			XX,
+	],
+	<<<'XX'
+		start
+		Hello world!
+		end
+		XX,
+);
+
+
+testTemplate(
+	'default block: works together with named blocks',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom body{block title}custom title{/block}{/embed}
+			XX,
+		'embed.latte' => <<<'XX'
+			title={block title}fallback title{/block}
+			body={block default}fallback body{/block}
+			XX,
+	],
+	<<<'XX'
+		title=custom title
+		body=custom body
+		XX,
+);
+
+
+testTemplate(
+	'default block: caller content ignored without a placeholder',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom body{/embed}
+			XX,
+		'embed.latte' => 'no placeholder here',
+	],
+	'no placeholder here',
+);
+
+
+testTemplate(
+	'default block: {include parent} renders the fallback',
+	[
+		'main' => <<<'XX'
+			{embed "embed.latte"}custom {include parent}{/embed}
+			XX,
+		'embed.latte' => '{block default}fallback{/block}',
+	],
+	'custom fallback',
+);
+
+
+testTemplate(
+	'default block: {include parent} resolves to default, not an enclosing block',
+	[
+		'main' => <<<'XX'
+			{layout "layout.latte"}{block content}{embed "embed.latte"}custom {include parent}{/embed}{/block}
+			XX,
+		'layout.latte' => '{block content}layout content{/block}',
+		'embed.latte' => '{block default}fallback{/block}',
+	],
+	'custom fallback',
+);
+
+
+Assert::exception(function () {
+	testTemplate('default block: loose content mixed with explicit block', [
+		'main' => '{embed "embed.latte"}custom body{block default}explicit body{/block}{/embed}',
+		'embed.latte' => '[{block default}x{/block}]',
+	]);
+}, Latte\CompileException::class, 'Cannot combine loose content with an explicit {block default} inside {embed}; both define the default block (on line 1 at column 22)');
 
 
 $latte = createLatte();

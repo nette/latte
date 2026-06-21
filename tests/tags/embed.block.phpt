@@ -424,6 +424,83 @@ testTemplate(
 );
 
 
+testTemplate(
+	'default block: works together with named blocks',
+	[
+		'main' => <<<'XX'
+
+					{embed embed}custom body{block title}custom title{/block}{/embed}
+
+					{define embed}title={block title}fallback title{/block} body={block default}fallback body{/block}{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			title=custom title body=custom body
+
+		XX,
+);
+
+
+testTemplate(
+	'default block: self-closing caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+
+					{embed embed/}
+
+					{define embed}body={block default}fallback body{/block}{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			body=fallback body
+
+		XX,
+);
+
+
+testTemplate(
+	'default block: empty caller keeps the fallback',
+	[
+		'main' => <<<'XX'
+
+					{embed embed}{/embed}
+
+					{define embed}body={block default}fallback body{/block}{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			body=fallback body
+
+		XX,
+);
+
+
+testTemplate(
+	'default block: default content sees caller variables',
+	[
+		'main' => <<<'XX'
+
+					{var $greeting = 'Hello'}
+					{embed embed}{var $name = 'world'}{$greeting} {$name}{if true}!{/if}{/embed}
+
+					{define embed}body={block default}fallback body{/block}{/define}
+
+			XX,
+	],
+	<<<'XX'
+
+			body=Hello world!
+
+		XX,
+);
+
+
 $latte = createLatte();
 Assert::exception(
 	fn() => $latte->renderToString('{embed block (null)/}'),
