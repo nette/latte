@@ -160,6 +160,23 @@ final class TagParser
 	}
 
 
+	/**
+	 * Consumes the comma separating the tag name from its arguments.
+	 * When $strict is false, a missing comma only triggers E_USER_DEPRECATED,
+	 * which allows tags to phase in the required comma without breaking BC.
+	 */
+	public function consumeCommaBeforeArguments(bool $strict = true): void
+	{
+		if ($this->isEnd() || $this->stream->is(Token::Php_FilterPipe)) {
+			return;
+		} elseif ($strict) {
+			$this->stream->consume(',');
+		} elseif (!$this->stream->tryConsume(',')) {
+			trigger_error("Missing comma before tag arguments {$this->stream->peek()->position}.", E_USER_DEPRECATED);
+		}
+	}
+
+
 	/** @throws Latte\CompileException */
 	private function parse(string $schema, bool $recovery = false): mixed
 	{
