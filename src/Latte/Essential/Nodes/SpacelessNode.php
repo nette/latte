@@ -7,11 +7,14 @@
 
 namespace Latte\Essential\Nodes;
 
+use Latte;
+use Latte\Compiler\Escaper;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\ContentType;
+use function in_array;
 
 
 /**
@@ -34,20 +37,24 @@ class SpacelessNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
+		$escaper = $context->getEscaper();
+		$allowed = [Escaper::HtmlText, Escaper::Text, Escaper::JavaScript, Escaper::Css, Escaper::ICal, ContentType::Xml];
+		if (!in_array($escaper->getState(), $allowed, strict: true)) {
+			throw new Latte\CompileException('{spaceless} cannot be used in this context.', $this->position);
+		}
+
 		return $context->format(
 			<<<'XX'
-				ob_start('Latte\Essential\Filters::%raw', 4096) %line;
+				Latte\Essential\WhitespaceMinifier::start(%dump) %line;
 				try {
 					%node
 				} finally {
-					ob_end_flush();
+					Latte\Essential\WhitespaceMinifier::end();
 				}
 
 
 				XX,
-			$context->getEscaper()->getContentType() === ContentType::Html
-				? 'spacelessHtmlHandler'
-				: 'spacelessText',
+			$escaper->getContentType(),
 			$this->position,
 			$this->content,
 		);

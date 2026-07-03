@@ -170,9 +170,9 @@ final class CoreExtension extends Latte\Extension
 			'round' => $this->filters->round(...),
 			'slice' => $this->filters->slice(...),
 			'sort' => $this->filters->sort(...),
-			'spaceless' => $this->filters->strip(...),
+			'spaceless' => $this->filters->spaceless(...),
 			'split' => $this->filters->explode(...),
-			'strip' => $this->filters->strip(...), // obsolete
+			'strip' => $this->filters->spaceless(...), // obsolete
 			'stripHtml' => $this->filters->stripHtml(...),
 			'striphtml' => $this->filters->stripHtml(...),
 			'stripTags' => $this->filters->stripTags(...),

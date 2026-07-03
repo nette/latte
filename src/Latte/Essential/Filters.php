@@ -12,8 +12,8 @@ use Latte\ContentType;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
 use Stringable;
-use function abs, array_combine, array_fill_keys, array_key_last, array_map, array_rand, array_reverse, array_search, array_slice, base64_encode, ceil, count, end, explode, extension_loaded, finfo_buffer, finfo_open, floor, func_num_args, htmlspecialchars, http_build_query, iconv, iconv_strlen, iconv_substr, implode, is_array, is_int, is_numeric, is_string, iterator_count, iterator_to_array, key, ltrim, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, min, nl2br, number_format, preg_last_error, preg_last_error_msg, preg_match, preg_quote, preg_replace, preg_replace_callback, preg_split, reset, round, rtrim, str_repeat, str_replace, strip_tags, strlen, strrev, strtr, substr, trim, uasort, uksort, urlencode, utf8_decode;
-use const ENT_NOQUOTES, ENT_SUBSTITUTE, FILEINFO_MIME_TYPE, MB_CASE_TITLE, PHP_OUTPUT_HANDLER_FINAL, PHP_OUTPUT_HANDLER_START, PREG_SPLIT_NO_EMPTY;
+use function abs, array_combine, array_fill_keys, array_key_last, array_map, array_rand, array_reverse, array_search, array_slice, base64_encode, ceil, count, end, explode, extension_loaded, finfo_buffer, finfo_open, floor, func_num_args, htmlspecialchars, http_build_query, iconv, iconv_strlen, iconv_substr, implode, is_array, is_int, is_numeric, is_string, iterator_count, iterator_to_array, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, min, nl2br, number_format, preg_last_error, preg_last_error_msg, preg_match, preg_quote, preg_replace, preg_replace_callback, preg_split, reset, round, str_repeat, str_replace, strip_tags, strlen, strrev, strtr, uasort, uksort, urlencode, utf8_decode;
+use const ENT_NOQUOTES, ENT_SUBSTITUTE, FILEINFO_MIME_TYPE, MB_CASE_TITLE, PREG_SPLIT_NO_EMPTY;
 
 
 /**
@@ -48,67 +48,11 @@ final class Filters
 
 
 	/**
-	 * Replaces all repeated white spaces with a single space.
+	 * Minifies whitespace: collapses runs to a single space, removes it around whitespace-insensitive tags entirely.
 	 */
-	public static function strip(FilterInfo $info, string $s): string
+	public static function spaceless(FilterInfo $info, string $s): string
 	{
-		return $info->contentType === ContentType::Html
-			? trim(self::spacelessHtml($s))
-			: trim(self::spacelessText($s));
-	}
-
-
-	/**
-	 * Replaces all repeated white spaces with a single space.
-	 */
-	public static function spacelessHtml(string $s, bool &$strip = true): string
-	{
-		return preg_replace_callback(
-			'#[ \t\r\n]+|<(/)?(textarea|pre|script)(?=\W)#i',
-			function ($m) use (&$strip) {
-				if (empty($m[2])) {
-					return $strip ? ' ' : $m[0];
-				} else {
-					$strip = !empty($m[1]);
-					return $m[0];
-				}
-			},
-			$s,
-		);
-	}
-
-
-	/**
-	 * Output buffering handler for spacelessHtml.
-	 */
-	public static function spacelessHtmlHandler(string $s, ?int $phase = null): string
-	{
-		static $strip;
-		$left = $right = '';
-
-		if ($phase & PHP_OUTPUT_HANDLER_START) {
-			$strip = true;
-			$tmp = ltrim($s);
-			$left = substr($s, 0, strlen($s) - strlen($tmp));
-			$s = $tmp;
-		}
-
-		if ($phase & PHP_OUTPUT_HANDLER_FINAL) {
-			$tmp = rtrim($s);
-			$right = substr($s, strlen($tmp));
-			$s = $tmp;
-		}
-
-		return $left . self::spacelessHtml($s, $strip) . $right;
-	}
-
-
-	/**
-	 * Replaces all repeated white spaces with a single space.
-	 */
-	public static function spacelessText(string $s): string
-	{
-		return preg_replace('#[ \t\r\n]+#', ' ', $s);
+		return (new WhitespaceMinifier($info->contentType ?? ContentType::Text))->minify($s);
 	}
 
 
