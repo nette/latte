@@ -35,8 +35,9 @@ class ExpressionAttributeNode extends AreaNode
 
 	public function print(PrintContext $context): string
 	{
+		$modifier = clone $this->modifier;
 		if ($context->getEscaper()->getContentType() === ContentType::Html) {
-			$type = $this->modifier->removeFilter('toggle') ? 'bool' : LR\HtmlHelpers::classifyAttributeType($this->name);
+			$type = $modifier->removeFilter('toggle') ? 'bool' : LR\HtmlHelpers::classifyAttributeType($this->name);
 			$method = 'LR\HtmlHelpers::format' . ucfirst($type) . 'Attribute';
 		} else {
 			$method = 'LR\XmlHelpers::formatAttribute';
@@ -45,9 +46,9 @@ class ExpressionAttributeNode extends AreaNode
 			'echo %raw(%dump, %modify(%node), %dump?) %line;',
 			$method,
 			$this->indentation . $this->name,
-			$this->modifier,
+			$modifier,
 			$this->value,
-			(!$this->modifier->removeFilter('accept') && $context->hasFeature(Feature::MigrationWarnings)) ?: null,
+			(!$modifier->removeFilter('accept') && $context->hasFeature(Feature::MigrationWarnings)) ?: null,
 			$this->value->position,
 		);
 	}
