@@ -640,6 +640,23 @@ final class Filters
 
 
 	/**
+	 * Transforms elements using the given $transformer. Maintains original keys.
+	 * @template K
+	 * @template V
+	 * @template R
+	 * @param  iterable<K, V>  $iterable
+	 * @param  callable(V, K, iterable<K, V>): R  $transformer
+	 * @return iterable<K, R>
+	 */
+	public static function map(iterable $iterable, callable $transformer): iterable
+	{
+		foreach ($iterable as $k => $v) {
+			yield $k => $transformer($v, $k, $iterable);
+		}
+	}
+
+
+	/**
 	 * Returns value clamped to the inclusive range of min and max.
 	 */
 	public static function clamp(int|float $value, int|float $min, int|float $max): int|float
