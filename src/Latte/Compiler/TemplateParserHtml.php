@@ -482,7 +482,7 @@ final class TemplateParserHtml
 		$tokens ??= [new Token(Token::End, '', $pos)];
 
 		$elem->nAttributes[$name] = new Tag(
-			name: preg_replace('~(inner-|tag-|)~', '', $name),
+			name: preg_replace('~^(inner-|tag-)~', '', $name),
 			tokens: $tokens,
 			position: $nameToken->position,
 			end: $endToken->end,
