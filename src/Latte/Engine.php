@@ -60,7 +60,7 @@ class Engine
 	private ?Policy $policy = null;
 	private bool $sandboxed = false;
 	private ?string $phpBinary = null;
-	private ?string $configurationHash;
+	private ?string $configurationHash = null;
 	private ?string $locale = null;
 	private ?string $syntax = null;
 
@@ -259,7 +259,7 @@ class Engine
 	 */
 	public function generateTemplateHash(string $name): string
 	{
-		$hash = $this->configurationHash ?? hash('xxh128', serialize($this->generateConfigurationSignature()));
+		$hash = $this->configurationHash ??= hash('xxh128', serialize($this->generateConfigurationSignature()));
 		$hash .= $this->getLoader()->getUniqueId($name);
 		return substr(hash('xxh128', $hash), 0, 10);
 	}
@@ -294,6 +294,7 @@ class Engine
 		}
 
 		$this->filters->add($name, $callback);
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -344,6 +345,8 @@ class Engine
 		foreach ($extension->getProviders() as $name => $value) {
 			$this->providers->$name = $value;
 		}
+
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -365,6 +368,7 @@ class Engine
 		}
 
 		$this->functions->add($name, $callback);
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -416,6 +420,7 @@ class Engine
 	public function setPolicy(?Policy $policy): static
 	{
 		$this->policy = $policy;
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -441,6 +446,7 @@ class Engine
 	public function setSandboxMode(bool $state = true): static
 	{
 		$this->sandboxed = $state;
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -448,6 +454,7 @@ class Engine
 	public function setContentType(string $type): static
 	{
 		$this->contentType = $type;
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -485,6 +492,7 @@ class Engine
 	public function setFeature(Feature $feature, bool $state = true): static
 	{
 		$this->features[$feature->name] = $state;
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -531,6 +539,7 @@ class Engine
 			throw new RuntimeException("Setting a locale requires the 'intl' extension to be installed.");
 		}
 		$this->locale = $locale;
+		$this->configurationHash = null;
 		return $this;
 	}
 
@@ -570,6 +579,7 @@ class Engine
 	public function setSyntax(string $syntax): static
 	{
 		$this->syntax = $syntax;
+		$this->configurationHash = null;
 		return $this;
 	}
 
