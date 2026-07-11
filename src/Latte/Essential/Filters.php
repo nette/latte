@@ -117,7 +117,7 @@ final class Filters
 		}
 
 		$parts = preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY);
-		if ($parts === false) {
+		if (preg_last_error()) { // e.g. malformed UTF-8
 			throw new Latte\RuntimeException(preg_last_error_msg());
 		}
 

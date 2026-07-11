@@ -601,11 +601,16 @@ final class TemplateParserHtml
 	{
 		while ([$gen, $tag] = array_pop($toClose)) {
 			$gen->send([$node, null]);
+			$gen->valid() && throw new \LogicException("Incorrect behavior of {$tag->getNotation()} parser, more yield calls than expected (on line {$tag->position->line})");
 			$node = $gen->getReturn();
+			if (!$node instanceof AreaNode) {
+				throw new CompileException("Unexpected value returned by {$tag->getNotation()} parser.", $tag->position);
+			}
+
 			$node->position = $tag->position;
 			$node->end ??= $tag->end;
-			$this->parser->popTag();
 			$this->parser->ensureIsConsumed($tag);
+			$this->parser->popTag();
 		}
 
 		return $node;
