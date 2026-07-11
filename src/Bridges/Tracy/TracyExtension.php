@@ -32,4 +32,10 @@ class TracyExtension extends Extension
 	{
 		$this->panel->addTemplate($template);
 	}
+
+
+	public function afterRender(Template $template): void
+	{
+		$this->panel->templateRendered($template);
+	}
 }

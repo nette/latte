@@ -50,41 +50,64 @@ echo '
 	#tracy-debug .LattePanel-sandbox {
 		background: black;
 	}
+
+	#tracy-debug .LattePanel-time {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+
+	#tracy-debug .LattePanel-time small {
+		opacity: .6;
+	}
 </style>
 
 <h1>Rendered Templates</h1>
 
 <div class="tracy-inner LattePanel">
 	<table>
+		<tr>
+			<th>Template</th>
+			<th></th>
+			<th class="LattePanel-time" title="Total time including included templates / time spent in the template itself">time / self</th>
+		</tr>
 ';
-foreach ($list as $item) /* pos 64:3 */ {
+foreach ($list as $item) /* pos 78:3 */ {
 	echo '		<tr>
 			<td>
 ';
-	if ($item->template->getReferenceType()) /* pos 67:6 */ {
+	if ($item->template->getReferenceType()) /* pos 81:6 */ {
 		echo '				<span style="margin-left: ';
-		echo Tracy\Helpers::escapeHtml($item->depth * 4) /* pos 68:33 */;
+		echo Tracy\Helpers::escapeHtml($item->depth * 4) /* pos 82:33 */;
 		echo 'ex"></span>└ 
 				<span class="LattePanel-type" style="background: ';
-		echo Tracy\Helpers::escapeHtml($colors[$item->template->getReferenceType()]) /* pos 69:56 */;
+		echo Tracy\Helpers::escapeHtml($colors[$item->template->getReferenceType()]) /* pos 83:56 */;
 		echo '">';
-		echo Tracy\Helpers::escapeHtml($item->template->getReferenceType()) /* pos 69:104 */;
+		echo Tracy\Helpers::escapeHtml($item->template->getReferenceType()) /* pos 83:104 */;
 		echo '</span>
 ';
 	}
 	echo '
 				';
-	echo Tracy\Helpers::editorLink($item->template->getName()) /* pos 72:6 */;
+	echo Tracy\Helpers::editorLink($item->template->getName()) /* pos 86:6 */;
 	echo '
 
 				<a';
-	echo ($ʟ_tmp = (Tracy\Helpers::editorUri($item->phpFile))) === null ? '' : ' href="' . Tracy\Helpers::escapeHtml($ʟ_tmp) . '"' /* pos 74:16 */;
+	echo ($ʟ_tmp = (Tracy\Helpers::editorUri($item->phpFile))) === null ? '' : ' href="' . Tracy\Helpers::escapeHtml($ʟ_tmp) . '"' /* pos 88:16 */;
 	echo ' class="LattePanel-php">php</a>
 			</td>
 
 			<td>';
-	echo Tracy\Helpers::escapeHtml($item->count > 1 ? $item->count . '×' : null) /* pos 77:9 */;
+	echo Tracy\Helpers::escapeHtml($item->count > 1 ? $item->count . '×' : null) /* pos 91:9 */;
 	echo '</td>
+
+			<td class="LattePanel-time">
+				';
+	echo Tracy\Helpers::escapeHtml(number_format($item->time * 1000, 1)) /* pos 94:6 */;
+	echo ' ms
+				<small>/ ';
+	echo Tracy\Helpers::escapeHtml(number_format($item->selfTime * 1000, 1)) /* pos 95:15 */;
+	echo ' ms</small>
+			</td>
 		</tr>
 ';
 
@@ -93,19 +116,19 @@ foreach ($list as $item) /* pos 64:3 */ {
 echo '	</table>
 
 ';
-if ($dumpParameters) /* pos 82:2 */ {
+if ($dumpParameters) /* pos 101:2 */ {
 	echo '	<h2>Parameters</h2>
 
 	<div class="tracy-inner">
 		<table class="tracy-sortable">
 ';
-	foreach (reset($list)->template->getParameters() as $k => $v) /* pos 87:5 */ {
+	foreach (reset($list)->template->getParameters() as $k => $v) /* pos 106:5 */ {
 		echo '			<tr>
 				<th>';
-		echo Tracy\Helpers::escapeHtml($k) /* pos 89:11 */;
+		echo Tracy\Helpers::escapeHtml($k) /* pos 108:11 */;
 		echo '</th>
 				<td>';
-		echo Tracy\Dumper::toHtml($v, [Tracy\Dumper::LIVE => true]) /* pos 90:11 */;
+		echo Tracy\Dumper::toHtml($v, [Tracy\Dumper::LIVE => true]) /* pos 109:11 */;
 		echo '</td>
 			</tr>
 ';

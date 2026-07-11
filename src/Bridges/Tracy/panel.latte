@@ -55,12 +55,26 @@
 	#tracy-debug .LattePanel-sandbox {
 		background: black;
 	}
+
+	#tracy-debug .LattePanel-time {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+
+	#tracy-debug .LattePanel-time small {
+		opacity: .6;
+	}
 </style>
 
 <h1>Rendered Templates</h1>
 
 <div class="tracy-inner LattePanel">
 	<table>
+		<tr>
+			<th>Template</th>
+			<th></th>
+			<th class="LattePanel-time" title="Total time including included templates / time spent in the template itself">time / self</th>
+		</tr>
 		{foreach $list as $item}
 			<tr>
 				<td>
@@ -75,6 +89,11 @@
 				</td>
 
 				<td>{$item->count > 1 ? $item->count . '×'}</td>
+
+				<td class="LattePanel-time">
+					{number_format($item->time * 1000, 1)} ms
+					<small>/ {number_format($item->selfTime * 1000, 1)} ms</small>
+				</td>
 			</tr>
 		{/foreach}
 	</table>
