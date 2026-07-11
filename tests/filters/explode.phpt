@@ -18,3 +18,9 @@ Assert::same([''], Filters::explode('', ','));
 Assert::same(['a'], Filters::explode('a', ','));
 Assert::same(['a', ''], Filters::explode('a,', ','));
 Assert::same(['a', '', 'b'], Filters::explode('a,,b', ','));
+
+Assert::exception(
+	fn() => Filters::explode("a\xC3\x28b"), // invalid UTF-8
+	Latte\RuntimeException::class,
+	'%a?%UTF-8%a?%',
+);

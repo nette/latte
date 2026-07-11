@@ -110,9 +110,16 @@ final class Filters
 	 */
 	public static function explode(string $value, string $separator = ''): array
 	{
-		return $separator === ''
-			? preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY)
-			: explode($separator, $value);
+		if ($separator !== '') {
+			return explode($separator, $value);
+		}
+
+		$parts = preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY);
+		if ($parts === false) {
+			throw new Latte\RuntimeException(preg_last_error_msg());
+		}
+
+		return $parts;
 	}
 
 
@@ -778,7 +785,7 @@ final class Filters
 	public static function random(string|array $values): mixed
 	{
 		if (is_string($values)) {
-			$values = preg_split('//u', $values, -1, PREG_SPLIT_NO_EMPTY);
+			$values = self::explode($values);
 		}
 
 		return $values
