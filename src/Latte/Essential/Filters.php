@@ -12,7 +12,7 @@ use Latte\ContentType;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
 use Stringable;
-use function abs, array_combine, array_fill_keys, array_key_last, array_map, array_rand, array_reverse, array_search, array_slice, base64_encode, ceil, count, end, explode, extension_loaded, finfo_buffer, finfo_open, floor, func_num_args, htmlspecialchars, http_build_query, iconv, iconv_strlen, iconv_substr, implode, is_array, is_int, is_numeric, is_string, iterator_count, iterator_to_array, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, min, nl2br, number_format, preg_last_error, preg_last_error_msg, preg_match, preg_quote, preg_replace, preg_replace_callback, preg_split, reset, round, str_repeat, str_replace, strip_tags, strlen, strrev, strtr, uasort, uksort, urlencode, utf8_decode;
+use function abs, addcslashes, array_combine, array_fill_keys, array_key_last, array_map, array_rand, array_reverse, array_search, array_slice, base64_encode, ceil, count, end, explode, extension_loaded, finfo_buffer, finfo_open, floor, func_num_args, htmlspecialchars, http_build_query, iconv, iconv_strlen, iconv_substr, implode, is_array, is_int, is_numeric, is_string, iterator_count, iterator_to_array, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, min, nl2br, number_format, preg_last_error, preg_last_error_msg, preg_match, preg_quote, preg_replace, preg_replace_callback, preg_split, reset, round, str_repeat, str_replace, strip_tags, strlen, strrev, strtr, uasort, uksort, urlencode, utf8_decode;
 use const ENT_NOQUOTES, ENT_SUBSTITUTE, FILEINFO_MIME_TYPE, MB_CASE_TITLE, PREG_SPLIT_NO_EMPTY;
 
 
@@ -61,6 +61,7 @@ final class Filters
 	 */
 	public static function indent(FilterInfo $info, string $s, int $level = 1, string $chars = "\t"): string
 	{
+		$indent = str_repeat(addcslashes($chars, '$\\'), max(0, $level));
 		if ($level < 1) {
 			// do nothing
 		} elseif ($info->contentType === ContentType::Html) {
@@ -69,10 +70,10 @@ final class Filters
 				throw new Latte\RuntimeException(preg_last_error_msg());
 			}
 
-			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
+			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . $indent, $s);
 			$s = strtr($s, "\x1F\x1E\x1D\x1A", " \t\r\n");
 		} else {
-			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . str_repeat($chars, $level), $s);
+			$s = preg_replace('#(?:^|[\r\n]+)(?=[^\r\n])#', '$0' . $indent, $s);
 		}
 
 		return $s;

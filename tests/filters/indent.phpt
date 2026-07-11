@@ -38,3 +38,10 @@ test('HTML indentation', function () {
 	Assert::same("\r\n\t\tword\r\n", Filters::indent($info, "\r\nword\r\n", 2));
 	Assert::same("\r\n      word\r\n", Filters::indent($info, "\r\nword\r\n", 2, '   '));
 });
+
+
+test('indentation characters are not interpreted as regexp backreferences', function () {
+	$info = new FilterInfo(ContentType::Text);
+	Assert::same('$0word', Filters::indent($info, 'word', 1, '$0'));
+	Assert::same('\1word', Filters::indent($info, 'word', 1, '\1'));
+});
