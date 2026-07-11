@@ -132,6 +132,16 @@ class SecurityPolicy implements Latte\Policy
 	}
 
 
+	/**
+	 * Returns a value representing the policy rules. When it changes, cached templates compiled
+	 * under this policy are invalidated, because part of the sandbox enforcement happens at compile time.
+	 */
+	public function getCacheSignature(): mixed
+	{
+		return [$this->tags, $this->filters, $this->functions, $this->methods, $this->properties];
+	}
+
+
 	public function isTagAllowed(string $tag): bool
 	{
 		return isset($this->tags[strtolower($tag)]) || isset($this->tags['*']);
