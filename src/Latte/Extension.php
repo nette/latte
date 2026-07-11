@@ -91,6 +91,15 @@ abstract class Extension
 
 
 	/**
+	 * Cleans up after template is rendered. Called even when rendering ends early via {exitIf}
+	 * or is interrupted by an exception.
+	 */
+	public function afterRender(Runtime\Template $template): void
+	{
+	}
+
+
+	/**
 	 * Wraps callable with ordering metadata for tags and passes.
 	 * @param  array<string>|string  $before
 	 * @param  array<string>|string  $after

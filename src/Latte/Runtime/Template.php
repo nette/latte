@@ -68,30 +68,37 @@ class Template
 	 */
 	public function render(?string $block = null): void
 	{
-		foreach ($this->engine->getExtensions() as $extension) {
-			$extension->beforeRender($this);
-		}
-
-		$params = $this->prepare();
-
-		if ($this->parentName === null && !$this->referringTemplate && isset($this->global->coreParentFinder)) {
-			$this->parentName = ($this->global->coreParentFinder)($this);
-		}
-
-		if ($this->referenceType === 'import') {
-			if ($this->parentName) {
-				throw new Latte\RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
+		$extensions = $this->engine->getExtensions();
+		try {
+			foreach ($extensions as $extension) {
+				$extension->beforeRender($this);
 			}
 
-		} elseif ($this->parentName) { // extends
-			$this->params = $params;
-			$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
+			$params = $this->prepare();
 
-		} elseif ($block !== null) { // single block rendering
-			$this->renderBlock($block, $this->params);
+			if ($this->parentName === null && !$this->referringTemplate && isset($this->global->coreParentFinder)) {
+				$this->parentName = ($this->global->coreParentFinder)($this);
+			}
 
-		} else {
-			$this->main($params);
+			if ($this->referenceType === 'import') {
+				if ($this->parentName) {
+					throw new Latte\RuntimeException('Imported template cannot use {extends} or {layout}, use {import}');
+				}
+
+			} elseif ($this->parentName) { // extends
+				$this->params = $params;
+				$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
+
+			} elseif ($block !== null) { // single block rendering
+				$this->renderBlock($block, $this->params);
+
+			} else {
+				$this->main($params);
+			}
+		} finally {
+			foreach ($extensions as $extension) {
+				$extension->afterRender($this);
+			}
 		}
 	}
 
