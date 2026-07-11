@@ -263,7 +263,7 @@ class Engine
 	{
 		$hash = $this->configurationHash ??= hash('xxh128', serialize($this->generateConfigurationSignature()));
 		$hash .= $this->getLoader()->getUniqueId($name);
-		return substr(hash('xxh128', $hash), 0, 10);
+		return substr(hash('xxh128', $hash), 0, 16); // 64 bits, a collision would silently render a different template
 	}
 
 

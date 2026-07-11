@@ -123,7 +123,7 @@ final class Cache
 	 */
 	public static function isCacheFile(string $file): bool
 	{
-		return (bool) preg_match('/latte--\w{10}\.php$/', $file);
+		return (bool) preg_match('/latte--\w+\.php$/', $file);
 	}
 
 
