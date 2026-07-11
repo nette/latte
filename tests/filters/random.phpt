@@ -18,3 +18,7 @@ Assert::true($item === 'a' || $item === 'b');
 
 $item = Filters::random('žý');
 Assert::true($item === 'ž' || $item === 'ý');
+
+// iterables
+Assert::same(7, Filters::random(new ArrayIterator([7])));
+Assert::null(Filters::random(new ArrayIterator([])));

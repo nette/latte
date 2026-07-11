@@ -14,3 +14,10 @@ test('', function () {
 	Assert::same('', Filters::implode([], ''));
 	Assert::same('a,b', Filters::implode(['a', 'b'], ','));
 });
+
+// iterables
+Assert::same('1,2,3', Filters::implode(new ArrayIterator([1, 2, 3]), ','));
+Assert::same('a b', Filters::implode((function () {
+	yield 0 => 'a';
+	yield 0 => 'b';
+})(), ' '));

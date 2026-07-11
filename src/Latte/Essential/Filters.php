@@ -81,21 +81,22 @@ final class Filters
 
 
 	/**
-	 * Join array of text or HTML elements with a string.
-	 * @param  string[]  $arr
+	 * Join iterable of text or HTML elements with a string.
+	 * @param  iterable<string>  $arr
 	 */
-	public static function implode(array $arr, string $glue = ''): string
+	public static function implode(iterable $arr, string $glue = ''): string
 	{
-		return implode($glue, $arr);
+		return implode($glue, iterator_to_array($arr, preserve_keys: false));
 	}
 
 
 	/**
-	 * Join array elements with a comma and space.
-	 * @param  string[]  $arr
+	 * Join iterable elements with a comma and space.
+	 * @param  iterable<string>  $arr
 	 */
-	public static function commas(array $arr, ?string $lastGlue = null): string
+	public static function commas(iterable $arr, ?string $lastGlue = null): string
 	{
+		$arr = iterator_to_array($arr, preserve_keys: false);
 		if ($lastGlue === null || count($arr) < 2) {
 			return implode(', ', $arr);
 		}
@@ -732,15 +733,18 @@ final class Filters
 
 
 	/**
-	 * Returns the last element in an array or character in a string, or null if none.
-	 * @param  string|array<mixed>  $value
+	 * Returns the last element in an iterable or character in a string, or null if none.
+	 * @param  string|iterable<mixed>  $value
 	 * @return ($value is string ? string : mixed)
 	 */
-	public static function last(string|array $value): mixed
+	public static function last(string|iterable $value): mixed
 	{
-		return is_array($value)
-			? ($value ? $value[array_key_last($value)] : null)
-			: self::substring($value, -1);
+		if (is_string($value)) {
+			return self::substring($value, -1);
+		}
+
+		$value = iterator_to_array($value, preserve_keys: false);
+		return $value ? $value[array_key_last($value)] : null;
 	}
 
 
@@ -812,14 +816,14 @@ final class Filters
 
 	/**
 	 * Picks random element/char.
-	 * @param  string|array<mixed>  $values
+	 * @param  string|iterable<mixed>  $values
 	 * @return ($values is string ? string : mixed)
 	 */
-	public static function random(string|array $values): mixed
+	public static function random(string|iterable $values): mixed
 	{
-		if (is_string($values)) {
-			$values = self::explode($values);
-		}
+		$values = is_string($values)
+			? self::explode($values)
+			: iterator_to_array($values, preserve_keys: false);
 
 		return $values
 			? $values[array_rand($values)]

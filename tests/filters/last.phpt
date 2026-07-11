@@ -23,3 +23,11 @@ test('strings', function () {
 	Assert::same('b', Filters::last('ab'));
 	Assert::same('ý', Filters::last('žý'));
 });
+
+// iterables
+Assert::same(3, Filters::last(new ArrayIterator([1, 2, 3])));
+Assert::null(Filters::last(new ArrayIterator([])));
+Assert::same('b', Filters::last((function () {
+	yield 0 => 'a';
+	yield 0 => 'b';
+})()));

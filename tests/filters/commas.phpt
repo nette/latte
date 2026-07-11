@@ -49,3 +49,7 @@ test('custom last separator with single element', function () {
 test('custom last separator with empty array', function () {
 	Assert::same('', Filters::commas([], ' and '));
 });
+
+// iterables
+Assert::same('1, 2, 3', Filters::commas(new ArrayIterator([1, 2, 3])));
+Assert::same('1, 2 and 3', Filters::commas(new ArrayIterator([1, 2, 3]), ' and '));
