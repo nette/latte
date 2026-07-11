@@ -76,6 +76,13 @@ Assert::contains(
 );
 
 
+// xlink:href in inline SVG
+Assert::match(
+	'<svg><a xlink:href="">x</a></svg>',
+	$latte->renderToString('<svg><a xlink:href={$url1}>x</a></svg>', $params),
+);
+
+
 // accepts HtmlStringable
 Assert::match(
 	'<img src="https://nette.org?a=1&amp;b=&lt;a&gt;">',

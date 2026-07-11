@@ -338,7 +338,7 @@ final class HtmlHelpers
 	public static function isUrlAttribute(string $tag, string $attr): bool
 	{
 		$attr = strtolower($attr);
-		return in_array($attr, ['href', 'src', 'action', 'formaction'], strict: true)
+		return in_array($attr, ['href', 'src', 'action', 'formaction', 'xlink:href'], strict: true)
 			|| ($attr === 'data' && strtolower($tag) === 'object');
 	}
 
