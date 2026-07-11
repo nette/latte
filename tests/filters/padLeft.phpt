@@ -18,3 +18,9 @@ Assert::same('ŽLU', Filters::padLeft("\u{17D}LU", -1, "\u{164}OU"));
 Assert::same('ŤŤŤŤŤŤŤŽLU', Filters::padLeft("\u{17D}LU", 10, "\u{164}"));
 Assert::same('ŽLU', Filters::padLeft("\u{17D}LU", 3, "\u{164}"));
 Assert::same('       ŽLU', Filters::padLeft("\u{17D}LU", 10));
+
+Assert::exception(
+	fn() => Filters::padLeft('x', 5, ''),
+	InvalidArgumentException::class,
+	'Filter |padLeft: pad string cannot be empty.',
+);

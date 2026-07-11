@@ -446,6 +446,10 @@ final class Filters
 	 */
 	public static function padLeft(string|Stringable|int|float|null $s, int $length, string $append = ' '): string
 	{
+		if ($append === '') {
+			throw new \InvalidArgumentException('Filter |padLeft: pad string cannot be empty.');
+		}
+
 		$s = (string) $s;
 		$length = max(0, $length - self::strLength($s));
 		$l = self::strLength($append);
@@ -458,6 +462,10 @@ final class Filters
 	 */
 	public static function padRight(string|Stringable|int|float|null $s, int $length, string $append = ' '): string
 	{
+		if ($append === '') {
+			throw new \InvalidArgumentException('Filter |padRight: pad string cannot be empty.');
+		}
+
 		$s = (string) $s;
 		$length = max(0, $length - self::strLength($s));
 		$l = self::strLength($append);
@@ -658,6 +666,10 @@ final class Filters
 	 */
 	public static function divisibleBy(int $value, int $by): bool
 	{
+		if ($by === 0) {
+			throw new \InvalidArgumentException('Cannot check divisibility by zero.');
+		}
+
 		return $value % $by === 0;
 	}
 

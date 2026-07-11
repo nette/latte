@@ -17,6 +17,6 @@ Assert::false(Filters::divisibleBy(10, 20));
 
 Assert::exception(
 	fn() => Filters::divisibleBy(10, 0),
-	DivisionByZeroError::class,
-	'Modulo by zero',
+	InvalidArgumentException::class,
+	'Cannot check divisibility by zero.',
 );
