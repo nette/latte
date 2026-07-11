@@ -73,11 +73,9 @@ class SwitchNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$res = $context->format(
-			'$ʟ_switch = (%node) %line;',
-			$this->expression,
-			$this->position,
-		);
+		$res = $this->expression
+			? $context->format('$ʟ_switch = (%node) %line;', $this->expression, $this->position)
+			: $context->format('$ʟ_switch = true %line;', $this->position);
 		$first = true;
 		$default = null;
 		foreach ($this->cases as $i => [$case, $content]) {
