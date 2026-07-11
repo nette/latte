@@ -220,6 +220,7 @@ final class CoreExtension extends Latte\Extension
 				}
 			},
 			'customFunctions' => $passes->customFunctionsPass(...),
+			'firstLastSep' => Nodes\FirstLastSepNode::outsideForeachPass(...),
 			'moveTemplatePrintToHead' => Nodes\TemplatePrintNode::moveToHeadPass(...),
 			'nElse' => Nodes\NElseNode::processPass(...),
 			'scriptTagQuotes' => $passes->scriptTagQuotesPass(...),
