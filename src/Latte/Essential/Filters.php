@@ -144,6 +144,9 @@ final class Filters
 		if ($time == null) { // intentionally ==
 			return null;
 		} elseif ($time instanceof \DateInterval) {
+			if (func_num_args() < 2) {
+				throw new Latte\RuntimeException("Filter |date: DateInterval requires an explicit format with %-placeholders like |date:'%d days'.");
+			}
 			return $time->format($format);
 		} elseif (is_numeric($time)) {
 			$time = (new \DateTime)->setTimestamp((int) $time);

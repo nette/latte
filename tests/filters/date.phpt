@@ -38,3 +38,12 @@ test('date/time formatting', function () {
 test('interval', function () {
 	Assert::same('30:10:10', Filters::date(new DateInterval('PT30H10M10S'), '%H:%I:%S'));
 });
+
+
+test('interval requires explicit format', function () {
+	Assert::exception(
+		fn() => Filters::date(new DateInterval('PT30H10M10S')),
+		Latte\RuntimeException::class,
+		"Filter |date: DateInterval requires an explicit format with %-placeholders like |date:'%d days'.",
+	);
+});
