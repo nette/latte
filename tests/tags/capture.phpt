@@ -43,6 +43,26 @@ Assert::match( // bug #215
 	$latte->renderToString('{capture $var|strip} <html> {/capture}'),
 );
 
+Assert::match( // filter must not strip the HTML-ness of captured content
+	'<b>a</b>',
+	$latte->renderToString('{capture $var|trim} <b>a</b> {/capture}{$var}'),
+);
+
+Assert::match(
+	Latte\Runtime\Html::class,
+	$latte->renderToString('{capture $var|trim}<html>{/capture}{=get_class($var)}'),
+);
+
+Assert::match( // filter changing content type to text keeps a plain string
+	'string a&amp;b',
+	$latte->renderToString('{capture $var|stripHtml}<b>a&amp;b</b>{/capture}{=gettype($var)} {$var}'),
+);
+
+Assert::match( // empty filtered capture stays a falsy string like the unfiltered one
+	'string FALSY',
+	$latte->renderToString('{capture $var|trim}  {/capture}{=gettype($var)} {if $var}TRUTHY{else}FALSY{/if}'),
+);
+
 Assert::match(
 	'<!--  --> &lt;foo&gt;',
 	$latte->renderToString('<!-- {capture $x}<foo>{/capture} --> {$x}'),

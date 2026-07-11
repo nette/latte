@@ -15,6 +15,7 @@ use Latte\Compiler\Nodes\Php\ModifierNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
+use Latte\ContentType;
 
 
 /**
@@ -53,7 +54,8 @@ class CaptureNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		$escaper = $context->getEscaper();
-		return $context->format(
+		$inHtmlText = $escaper->getState() === Escaper::HtmlText;
+		$res = $context->format(
 			<<<'XX'
 				ob_start(fn() => '') %line;
 				try {
@@ -63,17 +65,33 @@ class CaptureNode extends StatementNode
 				}
 				$ʟ_fi = new LR\FilterInfo(%dump); %node = %modifyContent($ʟ_tmp);
 
-
 				XX,
 			$this->position,
 			$this->content,
-			$escaper->getState() === Escaper::HtmlText
+			$inHtmlText
 				? 'ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()'
 				: 'ob_get_clean()',
 			$escaper->export(),
 			$this->variable,
 			$this->modifier,
 		);
+
+		if ($inHtmlText && $this->modifier->filters) {
+			// filters returned a plain string, wrap it back unless they changed the content type,
+			// empty string stays plain like in the unfiltered branch
+			$res .= $context->format(
+				<<<'XX'
+					if ($ʟ_fi->contentType === %dump && %node !== '') %node = new LR\Html(%node);
+
+					XX,
+				ContentType::Html,
+				$this->variable,
+				$this->variable,
+				$this->variable,
+			);
+		}
+
+		return $res . "\n";
 	}
 
 
