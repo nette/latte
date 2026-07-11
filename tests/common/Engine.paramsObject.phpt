@@ -41,3 +41,13 @@ Assert::same(
 	'%*123*% ##123## ',
 	$latte->renderToString('{myFunc($a)|myFilter} {both(123)|both} {if isset($protected) || isset($private)}invisible{/if}', new TemplateParams),
 );
+
+
+// each instance is bound separately, the memoized class scan must not leak the first instance
+$first = new TemplateParams;
+$first->a = 1;
+$second = new TemplateParams;
+$second->a = 2;
+
+Assert::same('*1*', $latte->renderToString('{myFunc($a)}', $first));
+Assert::same('*2*', $latte->renderToString('{myFunc($a)}', $second));

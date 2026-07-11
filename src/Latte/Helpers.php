@@ -207,28 +207,57 @@ class Helpers
 			return $params;
 		}
 
-		$rc = new \ReflectionClass($params);
-		$methods = $rc->getMethods(\ReflectionMethod::IS_PUBLIC);
-		foreach ($methods as $method) {
-			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
-				$engine->addFilter($method->name, $method->getClosure($params));
-			}
+		['filters' => $filters, 'functions' => $functions, 'hooked' => $hooked] = self::inspectParamsClass($params::class);
+		foreach ($filters as $name) {
+			$engine->addFilter($name, $params->$name(...));
+		}
 
-			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
-				$engine->addFunction($method->name, $method->getClosure($params));
-			}
+		foreach ($functions as $name) {
+			$engine->addFunction($name, $params->$name(...));
 		}
 
 		$res = get_object_vars($params);
+		foreach ($hooked as $name) {
+			$res[$name] = $params->$name;
+		}
+
+		return $res;
+	}
+
+
+	/**
+	 * Returns names of methods annotated as filters/functions and of virtual properties with a get hook.
+	 * The reflection scan is memoized, because it is the same for every instance of the class.
+	 * @param  class-string  $class
+	 * @return array{filters: list<string>, functions: list<string>, hooked: list<string>}
+	 */
+	private static function inspectParamsClass(string $class): array
+	{
+		static $cache = [];
+		if (isset($cache[$class])) {
+			return $cache[$class];
+		}
+
+		$rc = new \ReflectionClass($class);
+		$res = ['filters' => [], 'functions' => [], 'hooked' => []];
+		foreach ($rc->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+			if ($method->getAttributes(Attributes\TemplateFilter::class)) {
+				$res['filters'][] = $method->name;
+			}
+
+			if ($method->getAttributes(Attributes\TemplateFunction::class)) {
+				$res['functions'][] = $method->name;
+			}
+		}
+
 		if (PHP_VERSION_ID >= 80400) {
 			foreach ($rc->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
 				if ($property->isVirtual() && $property->hasHook(\PropertyHookType::Get)) {
-					$name = $property->getName();
-					$res[$name] = $params->$name;
+					$res['hooked'][] = $property->getName();
 				}
 			}
 		}
 
-		return $res;
+		return $cache[$class] = $res;
 	}
 }
