@@ -136,3 +136,10 @@ Assert::match(<<<'EOD'
 			<link>
 		EOD,
 ));
+
+
+// empty comment
+Assert::match('ab', $latte->renderToString('a{**}b'));
+Assert::match('ab', $latte->renderToString('a{* *}b'));
+Assert::match('ab', $latte->renderToString('a{***}b'));
+Assert::match('<div  class="x">ok</div>', $latte->renderToString('<div {**} class="x">ok</div>'));

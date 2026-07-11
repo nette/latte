@@ -180,7 +180,7 @@ final class TemplateParser
 		}
 		$openToken = $this->stream->consume(Token::Latte_CommentOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteComment);
-		$this->stream->consume(Token::Text);
+		$this->stream->tryConsume(Token::Text);
 		$this->stream->tryConsume(Token::Latte_CommentClose) || $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return new Nodes\NopNode;

@@ -524,7 +524,7 @@ final class TemplateParserHtml
 			}
 			if ($stream->tryConsume(Token::Latte_CommentOpen)) {
 				$lexer->pushState(TemplateLexer::StateLatteComment);
-				$stream->consume(Token::Text);
+				$stream->tryConsume(Token::Text);
 				$stream->consume(Token::Latte_CommentClose);
 				$lexer->popState();
 				$stream->tryConsume(Token::Newline);
