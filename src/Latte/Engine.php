@@ -225,8 +225,10 @@ class Engine
 			$this->cache->loadOrCreate($this, $name);
 		} else {
 			$compiled = $this->compile($name);
-			if (@eval(substr($compiled, 5)) === false) { // @ is escalated to exception, substr removes <?php
-				throw (new CompileException('Error in template: ' . (error_get_last()['message'] ?? '')))
+			try {
+				eval(substr($compiled, 5)); // substr removes <?php
+			} catch (\ParseError $e) {
+				throw (new CompileException('Error in template: ' . $e->getMessage(), previous: $e))
 					->setSource($compiled, "$name (compiled)");
 			}
 		}
