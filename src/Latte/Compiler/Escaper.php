@@ -117,9 +117,9 @@ class Escaper
 			$this->state = self::HtmlRawText;
 			if ($el->is('script')) {
 				$type = $el->getAttribute('type');
-				$this->subType = $type === true || $type === null
-					? self::JavaScript
-					: (is_string($type) ? HtmlHelpers::classifyScriptType($type) : '');
+				$this->subType = is_string($type)
+					? HtmlHelpers::classifyScriptType($type)
+					: self::JavaScript; // missing or dynamic type attribute
 			} elseif ($el->is('style')) {
 				$this->subType = self::Css;
 			}
@@ -190,6 +190,7 @@ class Escaper
 					self::HtmlText => 'LR\HtmlHelpers::escapeRawHtml(' . $str . ')',
 					self::JavaScript => 'LR\Helpers::escapeJs(' . $str . ')',
 					self::Css => 'LR\Helpers::escapeCss(' . $str . ')',
+					default => throw new \LogicException("Unknown raw text subtype '$this->subType'."),
 				},
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
