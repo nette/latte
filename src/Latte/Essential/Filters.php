@@ -468,7 +468,7 @@ final class Filters
 	{
 		return is_string($val)
 			? (string) iconv('UTF-32LE', 'UTF-8', strrev((string) iconv('UTF-8', 'UTF-32BE', $val)))
-			: array_reverse(iterator_to_array($val), $preserveKeys);
+			: array_reverse(iterator_to_array($val, preserve_keys: $preserveKeys), $preserveKeys);
 	}
 
 
@@ -479,7 +479,7 @@ final class Filters
 	 */
 	public static function column(iterable $data, string|int|null $columnKey, string|int|null $indexKey = null): array
 	{
-		return array_column(iterator_to_array($data), $columnKey, $indexKey);
+		return array_column(iterator_to_array($data, preserve_keys: false), $columnKey, $indexKey);
 	}
 
 

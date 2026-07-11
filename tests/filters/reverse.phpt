@@ -26,3 +26,15 @@ class TraversableClass implements IteratorAggregate
 
 Assert::same(['three', 'two', 'one'], Filters::reverse(new TraversableClass));
 Assert::same([2 => 'three', 1 => 'two', 0 => 'one'], Filters::reverse(new TraversableClass, true));
+
+
+// generator with duplicate keys must not lose elements
+function dupKeys(): Generator
+{
+	yield 0 => 'a';
+	yield 0 => 'b';
+	yield 0 => 'c';
+}
+
+
+Assert::same(['c', 'b', 'a'], Filters::reverse(dupKeys()));

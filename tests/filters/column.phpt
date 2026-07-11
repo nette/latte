@@ -48,6 +48,17 @@ test('works with iterable', function () {
 });
 
 
+test('generator with duplicate keys must not lose elements', function () {
+	$generator = (function () {
+		yield 0 => ['id' => 1];
+		yield 0 => ['id' => 2];
+		yield 0 => ['id' => 3];
+	})();
+
+	Assert::same([1, 2, 3], Filters::column($generator, 'id'));
+});
+
+
 test('works with numeric keys', function () {
 	$data = [
 		[10, 'John', 30],
