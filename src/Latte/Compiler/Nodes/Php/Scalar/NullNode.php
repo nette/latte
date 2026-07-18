@@ -19,6 +19,7 @@ class NullNode extends ScalarNode
 {
 	public function __construct(
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

@@ -24,6 +24,7 @@ class TernaryNode extends ExpressionNode implements OperatorNode
 		public ?ExpressionNode $if,
 		public ?ExpressionNode $else,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

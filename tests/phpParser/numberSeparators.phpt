@@ -27,45 +27,56 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\FloatNode
    |  |  |  value: 6.674083e-11
-   |  |  |  position: 1:1+13
+   |  |  |  position: 1:1
+   |  |  |  end: 1:14
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+13
+   |  |  position: 1:1
+   |  |  end: 1:14
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 299792458
    |  |  |  kind: 10
-   |  |  |  position: 2:1+11
+   |  |  |  position: 2:1
+   |  |  |  end: 2:12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+11
+   |  |  position: 2:1
+   |  |  end: 2:12
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 3405705229
    |  |  |  kind: 16
-   |  |  |  position: 3:1+11
+   |  |  |  position: 3:1
+   |  |  |  end: 3:12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1+11
+   |  |  position: 3:1
+   |  |  end: 3:12
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 95
    |  |  |  kind: 2
-   |  |  |  position: 4:1+11
+   |  |  |  position: 4:1
+   |  |  |  end: 4:12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1+11
+   |  |  position: 4:1
+   |  |  end: 4:12
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  value: 48673
    |  |  |  kind: 8
-   |  |  |  position: 5:1+8
+   |  |  |  position: 5:1
+   |  |  |  end: 5:9
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1+8
-   position: 1:1+63
+   |  |  position: 5:1
+   |  |  end: 5:9
+   position: 1:1
+   end: 5:10

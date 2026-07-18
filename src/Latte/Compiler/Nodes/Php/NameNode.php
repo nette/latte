@@ -27,6 +27,7 @@ class NameNode extends Node
 		public string $name,
 		public int $kind = self::KindNormal,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if ($name === '') {
 			throw new \InvalidArgumentException('Name cannot be empty');

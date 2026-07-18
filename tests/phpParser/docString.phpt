@@ -43,76 +43,98 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: ''
-   |  |  |  position: 2:1+12
+   |  |  |  position: 2:1
+   |  |  |  end: 3:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+12
+   |  |  position: 2:1
+   |  |  end: 3:4
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: ''
-   |  |  |  position: 4:1+10
+   |  |  |  position: 4:1
+   |  |  |  end: 5:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 4:1+10
+   |  |  position: 4:1
+   |  |  end: 5:4
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'Test '" $a \n'
-   |  |  |  position: 8:1+26
+   |  |  |  position: 8:1
+   |  |  |  end: 10:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 8:1+26
+   |  |  position: 8:1
+   |  |  end: 10:4
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'Test '" $a \n'
-   |  |  |  position: 11:1+25
+   |  |  |  position: 11:1
+   |  |  |  end: 13:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 11:1+25
+   |  |  position: 11:1
+   |  |  end: 13:4
    |  4 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: 'Test '
-   |  |  |  |  |  position: 17:1+5
+   |  |  |  |  |  position: 17:1
+   |  |  |  |  |  end: 17:6
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 17:6+2
-   |  |  |  position: 16:1+18
+   |  |  |  |  |  position: 17:6
+   |  |  |  |  |  end: 17:8
+   |  |  |  position: 16:1
+   |  |  |  end: 18:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 16:1+18
+   |  |  position: 16:1
+   |  |  end: 18:4
    |  5 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode
    |  |  |  parts: array (5)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: 'Test '
-   |  |  |  |  |  position: 20:1+5
+   |  |  |  |  |  position: 20:1
+   |  |  |  |  |  end: 20:6
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 20:6+2
+   |  |  |  |  |  position: 20:6
+   |  |  |  |  |  end: 20:8
    |  |  |  |  2 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' and '
-   |  |  |  |  |  position: 20:8+5
+   |  |  |  |  |  position: 20:8
+   |  |  |  |  |  end: 20:13
    |  |  |  |  3 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  position: 20:13+2
+   |  |  |  |  |  |  position: 20:13
+   |  |  |  |  |  |  end: 20:15
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'c'
-   |  |  |  |  |  |  position: 20:17+1
+   |  |  |  |  |  |  position: 20:17
+   |  |  |  |  |  |  end: 20:18
    |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  position: 20:13+5
+   |  |  |  |  |  position: 20:13
+   |  |  |  |  |  end: 20:18
    |  |  |  |  4 => Latte\Compiler\Nodes\Php\InterpolatedStringPartNode
    |  |  |  |  |  value: ' test'
-   |  |  |  |  |  position: 20:18+6
-   |  |  |  position: 19:1+33
+   |  |  |  |  |  position: 20:18
+   |  |  |  |  |  end: 21:1
+   |  |  |  position: 19:1
+   |  |  |  end: 21:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 19:1+33
-   position: 2:1+192
+   |  |  position: 19:1
+   |  |  end: 21:4
+   position: 2:1
+   end: 21:5

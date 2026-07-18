@@ -25,13 +25,18 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  vars: array (2)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'a'
-   |  |  |  |  |  position: 1:8+2
+   |  |  |  |  |  position: 1:8
+   |  |  |  |  |  end: 1:10
    |  |  |  |  1 => Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'b'
-   |  |  |  |  |  position: 1:15+2
-   |  |  |  position: 1:1+19
+   |  |  |  |  |  position: 1:15
+   |  |  |  |  |  end: 1:17
+   |  |  |  position: 1:1
+   |  |  |  end: 1:20
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+19
-   position: 1:1+20
+   |  |  position: 1:1
+   |  |  end: 1:20
+   position: 1:1
+   end: 1:21

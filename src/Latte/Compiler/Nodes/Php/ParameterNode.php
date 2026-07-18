@@ -25,6 +25,7 @@ class ParameterNode extends Node
 		public bool $byRef = false,
 		public bool $variadic = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if ($variadic && $default !== null) {
 			throw new CompileException('Variadic parameter cannot have a default value', $position);

@@ -21,6 +21,7 @@ class IntersectionTypeNode extends ComplexTypeNode
 		/** @var array<IdentifierNode|NameNode> */
 		public array $types,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (IdentifierNode|NameNode ...$args) {})(...$types);
 	}

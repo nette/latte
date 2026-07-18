@@ -20,6 +20,7 @@ class BooleanNode extends ScalarNode
 	public function __construct(
 		public bool $value,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

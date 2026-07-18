@@ -91,7 +91,9 @@ final class PrintContext
 					},
 					'raw' => (string) $arg,
 					'args' => $this->implode($arg instanceof Expression\ArrayNode ? $arg->toArguments() : $arg),
-					'line' => $arg?->line ? "/* pos $arg->line" . ($arg->column ? ":$arg->column" : '') . ' */' : '',
+					'line' => ($pos = $arg instanceof Range ? $arg->start : $arg)?->line
+						? "/* pos $pos->line" . ($pos->column ? ":$pos->column" : '') . ' */'
+						: '',
 				};
 
 				if ($cond && ($code === '[]' || $code === '' || $code === 'null')) {

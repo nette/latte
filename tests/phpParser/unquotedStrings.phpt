@@ -28,36 +28,46 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'a'
-   |  |  |  position: 1:1+1
+   |  |  |  position: 1:1
+   |  |  |  end: 1:2
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+1
+   |  |  position: 1:1
+   |  |  end: 1:2
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ConstantFetchNode
    |  |  |  name: Latte\Compiler\Nodes\Php\NameNode
    |  |  |  |  name: 'MD5'
    |  |  |  |  kind: 1
-   |  |  |  |  position: 2:1+3
-   |  |  |  position: 2:1+3
+   |  |  |  |  position: 2:1
+   |  |  |  |  end: 2:4
+   |  |  |  position: 2:1
+   |  |  |  end: 2:4
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+3
+   |  |  position: 2:1
+   |  |  end: 2:4
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'a-b-c'
-   |  |  |  position: 5:1+5
+   |  |  |  position: 5:1
+   |  |  |  end: 5:6
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 5:1+5
+   |  |  position: 5:1
+   |  |  end: 5:6
    |  3 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'a--b--c'
-   |  |  |  position: 6:1+7
+   |  |  |  position: 6:1
+   |  |  |  end: 6:8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 6:1+7
-   position: 1:1+37
+   |  |  position: 6:1
+   |  |  end: 6:8
+   position: 1:1
+   end: 6:9

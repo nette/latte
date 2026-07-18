@@ -25,25 +25,32 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: '\x00'
-   |  |  |  position: 1:1+7
+   |  |  |  position: 1:1
+   |  |  |  end: 1:8
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+7
+   |  |  position: 1:1
+   |  |  end: 1:8
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: 'Ĕ'
-   |  |  |  position: 2:1+9
+   |  |  |  position: 2:1
+   |  |  |  end: 2:10
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+9
+   |  |  position: 2:1
+   |  |  end: 2:10
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  value: '😂'
-   |  |  |  position: 3:1+11
+   |  |  |  position: 3:1
+   |  |  |  end: 3:12
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1+11
-   position: 1:1+32
+   |  |  position: 3:1
+   |  |  end: 3:12
+   position: 1:1
+   end: 3:13

@@ -22,6 +22,7 @@ class ListNode extends Node
 		/** @var array<ListItemNode|null> */
 		public array $items = [],
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		$this->validate();
 	}

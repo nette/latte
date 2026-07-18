@@ -20,6 +20,7 @@ class CommentNode extends AreaNode
 	public function __construct(
 		public AreaNode $content,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

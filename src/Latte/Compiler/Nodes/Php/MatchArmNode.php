@@ -23,6 +23,7 @@ class MatchArmNode extends Node
 		public ?array $conds,
 		public ExpressionNode $body,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

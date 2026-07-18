@@ -22,6 +22,7 @@ class FilterCallNode extends ExpressionNode
 		public ExpressionNode $expr,
 		public Php\FilterNode $filter,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

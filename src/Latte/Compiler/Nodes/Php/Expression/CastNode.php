@@ -25,6 +25,7 @@ class CastNode extends ExpressionNode implements OperatorNode
 		public string $type,
 		public ExpressionNode $expr,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if (!isset(self::Types[strtolower($this->type)])) {
 			throw new \InvalidArgumentException("Unexpected type '$this->type'");

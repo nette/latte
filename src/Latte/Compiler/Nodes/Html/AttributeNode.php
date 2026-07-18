@@ -24,6 +24,7 @@ class AttributeNode extends AreaNode
 		public ?AreaNode $value = null,
 		public ?string $quote = null,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

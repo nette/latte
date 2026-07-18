@@ -33,36 +33,47 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  |  position: 1:9+1
+   |  |  |  |  |  |  |  |  |  |  position: 1:9
+   |  |  |  |  |  |  |  |  |  |  end: 1:10
    |  |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  |  position: 1:9+1
+   |  |  |  |  |  |  |  |  |  position: 1:9
+   |  |  |  |  |  |  |  |  |  end: 1:10
    |  |  |  |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  |  |  |  |  value: 1
    |  |  |  |  |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  |  |  |  |  position: 1:12+1
+   |  |  |  |  |  |  |  |  |  |  position: 1:12
+   |  |  |  |  |  |  |  |  |  |  end: 1:13
    |  |  |  |  |  |  |  |  |  key: null
    |  |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  |  position: 1:12+1
-   |  |  |  |  |  |  |  position: 1:8+6
+   |  |  |  |  |  |  |  |  |  position: 1:12
+   |  |  |  |  |  |  |  |  |  end: 1:13
+   |  |  |  |  |  |  |  position: 1:8
+   |  |  |  |  |  |  |  end: 1:14
    |  |  |  |  |  |  operator: '+'
    |  |  |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  items: array (0)
-   |  |  |  |  |  |  |  position: 1:17+2
-   |  |  |  |  |  |  position: 1:8+11
+   |  |  |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  |  end: 1:19
+   |  |  |  |  |  |  position: 1:8
+   |  |  |  |  |  |  end: 1:19
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 0
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:21+1
-   |  |  |  |  |  position: 1:7+16
-   |  |  |  position: 1:1+23
+   |  |  |  |  |  |  position: 1:21
+   |  |  |  |  |  |  end: 1:22
+   |  |  |  |  |  position: 1:7
+   |  |  |  |  |  end: 1:23
+   |  |  |  position: 1:1
+   |  |  |  end: 1:24
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+23
+   |  |  position: 1:1
+   |  |  end: 1:24
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
@@ -72,39 +83,53 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  value: 'b'
-   |  |  |  |  |  |  |  |  |  position: 2:15+3
+   |  |  |  |  |  |  |  |  |  position: 2:15
+   |  |  |  |  |  |  |  |  |  end: 2:18
    |  |  |  |  |  |  |  |  key: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  |  |  |  value: 'a'
-   |  |  |  |  |  |  |  |  |  position: 2:8+3
+   |  |  |  |  |  |  |  |  |  position: 2:8
+   |  |  |  |  |  |  |  |  |  end: 2:11
    |  |  |  |  |  |  |  |  byRef: false
    |  |  |  |  |  |  |  |  unpack: false
-   |  |  |  |  |  |  |  |  position: 2:8+10
-   |  |  |  |  |  |  position: 2:7+12
+   |  |  |  |  |  |  |  |  position: 2:8
+   |  |  |  |  |  |  |  |  end: 2:18
+   |  |  |  |  |  |  position: 2:7
+   |  |  |  |  |  |  end: 2:19
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 2:21+1
+   |  |  |  |  |  |  position: 2:21
+   |  |  |  |  |  |  end: 2:22
    |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  position: 2:7+15
-   |  |  |  position: 2:1+22
+   |  |  |  |  |  position: 2:7
+   |  |  |  |  |  end: 2:22
+   |  |  |  position: 2:1
+   |  |  |  end: 2:23
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+22
+   |  |  position: 2:1
+   |  |  end: 2:23
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\IssetNode
    |  |  |  vars: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode
    |  |  |  |  |  object: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'str'
-   |  |  |  |  |  |  position: 3:7+5
+   |  |  |  |  |  |  position: 3:7
+   |  |  |  |  |  |  end: 3:12
    |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  position: 3:14+1
+   |  |  |  |  |  |  position: 3:14
+   |  |  |  |  |  |  end: 3:15
    |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  position: 3:7+8
-   |  |  |  position: 3:1+15
+   |  |  |  |  |  position: 3:7
+   |  |  |  |  |  end: 3:15
+   |  |  |  position: 3:1
+   |  |  |  end: 3:16
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1+15
-   position: 1:1+65
+   |  |  position: 3:1
+   |  |  end: 3:16
+   position: 1:1
+   end: 3:17

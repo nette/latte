@@ -36,6 +36,7 @@ class ElementNode extends AreaNode
 	public function __construct(
 		public readonly string $name,
 		public ?Position $position = null,
+		public ?Position $end = null,
 		public readonly ?self $parent = null,
 		public string $contentType = ContentType::Html,
 	) {

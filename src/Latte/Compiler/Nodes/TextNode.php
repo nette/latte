@@ -20,6 +20,7 @@ class TextNode extends AreaNode
 	public function __construct(
 		public string $content,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

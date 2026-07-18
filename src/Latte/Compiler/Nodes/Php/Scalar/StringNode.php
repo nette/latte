@@ -22,16 +22,17 @@ class StringNode extends ScalarNode
 	public function __construct(
 		public string $value,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 
 
-	public static function parse(string $str, ?Position $position): static
+	public static function parse(string $str, ?Position $start, ?Position $end = null): static
 	{
 		$str = $str[0] === "'"
 			? strtr(substr($str, 1, -1), ['\\\\' => '\\', "\\'" => "'"])
 			: PhpHelpers::decodeEscapeSequences(substr($str, 1, -1), '"');
-		return new static($str, $position);
+		return new static($str, $start, $end);
 	}
 
 

@@ -71,6 +71,11 @@ class IfNode extends StatementNode
 			$node->condition = $nextTag->parser->parseExpression();
 		}
 
+		// a nested {elseif} node bypasses the parser's extent stamping
+		$node->end = $node->else instanceof self
+			? $node->else->end
+			: ($nextTag->end ?? $tag->end);
+
 		return $node;
 	}
 

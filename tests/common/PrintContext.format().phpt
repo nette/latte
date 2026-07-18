@@ -149,6 +149,12 @@ test('%line', function () {
 		'test() /* pos 1:1 */;',
 		format('test() %line;', new Position(1, 1)),
 	);
+
+	// a Range is accepted too and reports its start (BC: nodes pass tag ranges here)
+	Assert::same(
+		'test() /* pos 3:5 */;',
+		format('test() %line;', new Latte\Compiler\Range(new Position(3, 5, 20), new Position(3, 8, 23))),
+	);
 });
 
 

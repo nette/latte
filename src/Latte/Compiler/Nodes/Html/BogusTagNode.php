@@ -22,6 +22,7 @@ class BogusTagNode extends AreaNode
 		public AreaNode $content,
 		public string $endDelimiter,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

@@ -20,6 +20,7 @@ class VariableNode extends ExpressionNode
 	public function __construct(
 		public string|ExpressionNode $name,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

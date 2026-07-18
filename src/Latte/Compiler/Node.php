@@ -14,6 +14,7 @@ namespace Latte\Compiler;
 abstract class Node implements \IteratorAggregate
 {
 	public ?Position $position = null;
+	public ?Position $end = null;
 
 
 	abstract public function print(PrintContext $context): string;

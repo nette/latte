@@ -40,8 +40,25 @@ final class FragmentNode extends AreaNode
 		} elseif (!$node instanceof NopNode) {
 			$this->children[] = $node;
 		}
-		$this->position ??= $node->position;
 		return $this;
+	}
+
+
+	/**
+	 * Recomputes the extent to span the children (lowest start, highest end). Called by the
+	 * parser once the tree is built; a fragment has no extent of its own until then.
+	 */
+	public function updateExtent(): void
+	{
+		$this->position = $this->end = null;
+		foreach ($this->children as $child) {
+			if ($child->position && (!$this->position || $child->position->offset < $this->position->offset)) {
+				$this->position = $child->position;
+			}
+			if ($child->end && (!$this->end || $child->end->offset > $this->end->offset)) {
+				$this->end = $child->end;
+			}
+		}
 	}
 
 

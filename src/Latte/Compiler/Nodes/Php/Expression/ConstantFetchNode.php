@@ -21,6 +21,7 @@ class ConstantFetchNode extends ExpressionNode
 	public function __construct(
 		public NameNode $name,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

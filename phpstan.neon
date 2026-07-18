@@ -73,7 +73,7 @@ parameters:
 		# --- TagParser: generated trait TagParserData ---
 
 		-	# Methods called from generated trait TagParserData (excluded from analysis)
-			message: '#^(Static method|Method) Latte\\Compiler\\TagParser::(checkFunctionName|handleBuiltinTypes|parseOffset|parseDocString|createRange)\(\) is unused\.$#'
+			message: '#^(Static method|Method) Latte\\Compiler\\TagParser::(checkFunctionName|handleBuiltinTypes|parseOffset|parseDocString|startPos|endPos)\(\) is unused\.$#'
 			path: src/Latte/Compiler/TagParser.php
 
 		-	# Internal parser state machine — types from regex results and token operations

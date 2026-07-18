@@ -27,6 +27,7 @@ class StaticMethodCallNode extends ExpressionNode
 		/** @var array<Php\ArgumentNode|Php\VariadicPlaceholderNode> */
 		public array $args = [],
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {})(...$args);
 	}

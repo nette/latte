@@ -262,8 +262,9 @@ final class TemplateLexer
 		$tokens = [];
 		foreach ($matches as $k => $v) {
 			if ($v !== null && !is_int($k)) {
-				$tokens[] = new Token(constant(Token::class . '::' . $k), $v, $this->position);
-				$this->position = $this->position->advance($v);
+				$end = $this->position->advance($v);
+				$tokens[] = new Token(constant(Token::class . '::' . $k), $v, $this->position, $end);
+				$this->position = $end;
 			}
 		}
 

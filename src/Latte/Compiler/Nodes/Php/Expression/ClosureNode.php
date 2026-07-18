@@ -29,6 +29,7 @@ class ClosureNode extends ExpressionNode
 		public Php\IdentifierNode|Php\NameNode|Php\ComplexTypeNode|null $returnType = null,
 		public ?ExpressionNode $expr = null,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (Php\ParameterNode ...$args) {})(...$params);
 		(function (ClosureUseNode ...$args) {})(...$uses);

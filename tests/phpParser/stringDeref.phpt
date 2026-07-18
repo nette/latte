@@ -25,40 +25,53 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  value: 'abc'
-   |  |  |  |  position: 1:1+5
+   |  |  |  |  position: 1:1
+   |  |  |  |  end: 1:6
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 2
    |  |  |  |  kind: 10
-   |  |  |  |  position: 1:7+1
-   |  |  |  position: 1:1+8
+   |  |  |  |  position: 1:7
+   |  |  |  |  end: 1:8
+   |  |  |  position: 1:1
+   |  |  |  end: 1:9
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+8
+   |  |  position: 1:1
+   |  |  end: 1:9
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\ArrayAccessNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  |  value: 'abc'
-   |  |  |  |  |  |  position: 2:1+5
+   |  |  |  |  |  |  position: 2:1
+   |  |  |  |  |  |  end: 2:6
    |  |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 2
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 2:7+1
-   |  |  |  |  |  position: 2:1+8
+   |  |  |  |  |  |  position: 2:7
+   |  |  |  |  |  |  end: 2:8
+   |  |  |  |  |  position: 2:1
+   |  |  |  |  |  end: 2:9
    |  |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 0
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 2:10+1
-   |  |  |  |  position: 2:1+11
+   |  |  |  |  |  position: 2:10
+   |  |  |  |  |  end: 2:11
+   |  |  |  |  position: 2:1
+   |  |  |  |  end: 2:12
    |  |  |  index: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  value: 0
    |  |  |  |  kind: 10
-   |  |  |  |  position: 2:13+1
-   |  |  |  position: 2:1+14
+   |  |  |  |  position: 2:13
+   |  |  |  |  end: 2:14
+   |  |  |  position: 2:1
+   |  |  |  end: 2:15
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+14
-   position: 1:1+25
+   |  |  position: 2:1
+   |  |  end: 2:15
+   position: 1:1
+   end: 2:16

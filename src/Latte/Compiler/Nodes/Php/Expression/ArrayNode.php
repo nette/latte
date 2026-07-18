@@ -24,6 +24,7 @@ class ArrayNode extends ExpressionNode
 		/** @var array<ArrayItemNode> */
 		public array $items = [],
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (ArrayItemNode ...$args) {})(...$items);
 	}

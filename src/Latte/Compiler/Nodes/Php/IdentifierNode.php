@@ -20,6 +20,7 @@ class IdentifierNode extends Node
 	public function __construct(
 		public string $name,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

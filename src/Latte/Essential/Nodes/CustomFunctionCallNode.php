@@ -24,6 +24,7 @@ class CustomFunctionCallNode extends ExpressionNode
 		/** @var array<Php\ArgumentNode> */
 		public array $args = [],
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (Php\ArgumentNode ...$args) {})(...$args);
 	}

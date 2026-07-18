@@ -23,6 +23,7 @@ class ClassConstantFetchNode extends ExpressionNode
 		public NameNode|ExpressionNode $class,
 		public IdentifierNode|ExpressionNode $name,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

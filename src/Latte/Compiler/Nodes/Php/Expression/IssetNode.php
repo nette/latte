@@ -23,6 +23,7 @@ class IssetNode extends ExpressionNode
 		/** @var ExpressionNode[] */
 		public array $vars,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		$this->validate();
 	}

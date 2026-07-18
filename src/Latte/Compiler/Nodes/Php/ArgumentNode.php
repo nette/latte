@@ -23,6 +23,7 @@ class ArgumentNode extends Node
 		public bool $unpack = false,
 		public ?IdentifierNode $name = null,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

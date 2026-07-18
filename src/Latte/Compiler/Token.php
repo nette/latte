@@ -235,15 +235,16 @@ final readonly class Token
 		self::Php_False => "'false'",
 	];
 
-	public ?Range $position;
+	public ?Position $end;
 
 
 	public function __construct(
 		public int $type,
 		public string $text,
-		?Position $position = null,
+		public ?Position $position = null,
+		?Position $end = null,
 	) {
-		$this->position = $position ? new Range($position->line, $position->column, $position->offset, strlen($text)) : null;
+		$this->end = $position ? $end ?? $position->advance($text) : null;
 	}
 
 

@@ -19,6 +19,7 @@ class NullableTypeNode extends ComplexTypeNode
 	public function __construct(
 		public IdentifierNode|NameNode $type,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

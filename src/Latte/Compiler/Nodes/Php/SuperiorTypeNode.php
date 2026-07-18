@@ -19,6 +19,7 @@ class SuperiorTypeNode extends ComplexTypeNode
 	public function __construct(
 		public string $type,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

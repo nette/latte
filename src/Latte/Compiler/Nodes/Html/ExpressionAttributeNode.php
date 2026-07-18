@@ -28,6 +28,7 @@ class ExpressionAttributeNode extends AreaNode
 		public ModifierNode $modifier,
 		public ?string $indentation = null,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

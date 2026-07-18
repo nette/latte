@@ -23,6 +23,7 @@ class ArrayItemNode extends Node
 		public bool $byRef = false,
 		public bool $unpack = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

@@ -28,6 +28,7 @@ class BinaryOpNode extends ExpressionNode implements OperatorNode
 		public string $operator,
 		public ExpressionNode $right,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if (!in_array(strtolower($this->operator), self::Ops, strict: true)) {
 			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");

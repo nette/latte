@@ -23,15 +23,16 @@ class FloatNode extends ScalarNode
 	public function __construct(
 		public float $value,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 
 
-	public static function parse(string $str, ?Position $position): static
+	public static function parse(string $str, ?Position $start, ?Position $end = null): static
 	{
 		return strpbrk($str, '.eE') === false
-			? new static((float) PhpHelpers::decodeNumber($str), $position)
-			: new static((float) str_replace('_', '', $str), $position);
+			? new static((float) PhpHelpers::decodeNumber($str), $start, $end)
+			: new static((float) str_replace('_', '', $str), $start, $end);
 	}
 
 

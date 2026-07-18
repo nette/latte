@@ -26,6 +26,7 @@ class PostOpNode extends ExpressionNode implements OperatorNode
 		public ExpressionNode $var,
 		public string $operator,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if (!isset(self::Ops[$this->operator])) {
 			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");

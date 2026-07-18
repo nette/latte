@@ -25,6 +25,7 @@ class FilterNode extends Node
 		public array $args = [],
 		public bool $nullsafe = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if ($name->name === 'escape') {
 			throw new CompileException("Filter 'escape' is not allowed.", $position);

@@ -9,23 +9,29 @@ namespace Latte\Compiler;
 
 
 /**
- * Source range (starting position plus byte length) within a template.
+ * Source range (start and exclusive end position) within a template.
+ * @property-read int $length  length of the range in bytes
  */
-final readonly class Range extends Position
+final readonly class Range
 {
-	public static function span(?self $start, ?self $end): ?self
-	{
-		return $start && $end
-			? new self($start->line, $start->column, $start->offset, $end->offset + $end->length - $start->offset)
-			: $start;
+	public function __construct(
+		public Position $start,
+		public Position $end,
+	) {
 	}
 
 
-	public function __construct(
-		public int $line,
-		public int $column,
-		public int $offset,
-		public int $length,
-	) {
+	public function __get(string $name): int
+	{
+		return match (true) {
+			$name === 'length' => $this->end->offset - $this->start->offset,
+			default => throw new \LogicException("Attempt to read undeclared property $name."),
+		};
+	}
+
+
+	public function __isset(string $name): bool
+	{
+		return $name === 'length';
 	}
 }

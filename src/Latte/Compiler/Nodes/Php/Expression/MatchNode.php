@@ -24,6 +24,7 @@ class MatchNode extends Php\ExpressionNode
 		/** @var MatchArmNode[] */
 		public array $arms = [],
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (MatchArmNode ...$args) {})(...$arms);
 	}

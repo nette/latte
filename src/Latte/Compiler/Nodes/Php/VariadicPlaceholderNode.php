@@ -19,6 +19,7 @@ class VariadicPlaceholderNode extends Node
 {
 	public function __construct(
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

@@ -140,7 +140,7 @@ final class TagParser
 	{
 		$token = $this->stream->peek();
 		return $token->is(...$kind) // is followed by whitespace
-			&& $this->stream->peek(1)->position->offset > $token->position->offset + $token->position->length
+			&& $this->stream->peek(1)->position->offset > $token->end->offset
 			? $this->stream->consume()
 			: null;
 	}
@@ -296,12 +296,16 @@ final class TagParser
 	}
 
 
-	private function createRange(int $startPos, int $endPos): ?Position
+	private function startPos(int $pos): ?Position
 	{
-		return Range::span(
-			$this->startTokenStack[$startPos]->position,
-			$this->endTokenStack[$endPos]->position,
-		);
+		return $this->startTokenStack[$pos]->position;
+	}
+
+
+	private function endPos(int $pos): ?Position
+	{
+		// the end token may be a synthetic one without a position; fall back to the start token
+		return $this->endTokenStack[$pos]->end ?? $this->startTokenStack[$pos]->end;
 	}
 
 
@@ -356,16 +360,17 @@ final class TagParser
 		string $endToken,
 		Position $startPos,
 		Position $endPos,
+		Position $errorPos,
 	): Scalar\StringNode|Scalar\InterpolatedStringNode
 	{
 		$hereDoc = !str_contains($startToken, "'");
 		preg_match('/\A[ \t]*/', $endToken, $matches);
 		$indentation = $matches[0];
 		if (str_contains($indentation, ' ') && str_contains($indentation, "\t")) {
-			throw new CompileException('Invalid indentation - tabs and spaces cannot be mixed', $endPos);
+			throw new CompileException('Invalid indentation - tabs and spaces cannot be mixed', $errorPos);
 
 		} elseif (!$parts) {
-			return new Scalar\StringNode('', $startPos);
+			return new Scalar\StringNode('', $startPos, $endPos);
 
 		} elseif (!$parts[0] instanceof Node\InterpolatedStringPartNode) {
 			// If there is no leading encapsed string part, pretend there is an empty one
@@ -390,7 +395,7 @@ final class TagParser
 					$part->value = PhpHelpers::decodeEscapeSequences($part->value, null);
 				}
 				if ($i === 0 && $isLast) {
-					return new Scalar\StringNode($part->value, $startPos);
+					return new Scalar\StringNode($part->value, $startPos, $endPos);
 				}
 				if ($part->value === '') {
 					continue;
@@ -399,7 +404,7 @@ final class TagParser
 			$newParts[] = $part;
 		}
 
-		return new Scalar\InterpolatedStringNode($newParts, $startPos);
+		return new Scalar\InterpolatedStringNode($newParts, $startPos, $endPos);
 	}
 
 

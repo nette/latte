@@ -27,6 +27,7 @@ class ModifierNode extends Node
 		public array $filters,
 		public bool $escape = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (FilterNode ...$args) {})(...$filters);
 	}

@@ -23,6 +23,7 @@ class PropertyFetchNode extends ExpressionNode
 		public IdentifierNode|ExpressionNode $name,
 		public bool $nullsafe = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

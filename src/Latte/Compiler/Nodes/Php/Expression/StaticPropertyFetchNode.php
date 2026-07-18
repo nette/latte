@@ -23,6 +23,7 @@ class StaticPropertyFetchNode extends ExpressionNode
 		public NameNode|ExpressionNode $class,
 		public VarLikeIdentifierNode|ExpressionNode $name,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

@@ -51,19 +51,25 @@ test('constructor/append flattens nested FragmentNode', function () {
 		   |  0 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'root'
 		   |  |  position: null
+		   |  |  end: null
 		   |  1 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'level1'
 		   |  |  position: null
+		   |  |  end: null
 		   |  2 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'level2'
 		   |  |  position: null
+		   |  |  end: null
 		   |  3 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'level3'
 		   |  |  position: null
+		   |  |  end: null
 		   |  4 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'end'
 		   |  |  position: null
+		   |  |  end: null
 		   position: null
+		   end: null
 		XX, $result);
 });
 
@@ -89,14 +95,19 @@ test('constructor/append ignores NopNode', function () {
 		   |  0 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'start'
 		   |  |  position: null
+		   |  |  end: null
 		   |  1 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'inner'
 		   |  |  position: null
+		   |  |  end: null
 		   |  2 => OtherNode
 		   |  |  position: null
+		   |  |  end: null
 		   |  3 => Latte\Compiler\Nodes\TextNode
 		   |  |  content: 'end'
 		   |  |  position: null
+		   |  |  end: null
 		   position: null
+		   end: null
 		XX, $result);
 });

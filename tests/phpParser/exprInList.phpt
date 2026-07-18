@@ -27,25 +27,34 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  |  |  0 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'a'
-   |  |  |  |  |  |  |  position: 1:7+2
+   |  |  |  |  |  |  |  position: 1:7
+   |  |  |  |  |  |  |  end: 1:9
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 1:6+4
+   |  |  |  |  |  |  position: 1:6
+   |  |  |  |  |  |  end: null
    |  |  |  |  |  1 => Latte\Compiler\Nodes\Php\ListItemNode
    |  |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  |  name: 'b'
-   |  |  |  |  |  |  |  position: 1:15+2
+   |  |  |  |  |  |  |  position: 1:15
+   |  |  |  |  |  |  |  end: 1:17
    |  |  |  |  |  |  key: null
    |  |  |  |  |  |  byRef: false
-   |  |  |  |  |  |  position: 1:12+8
-   |  |  |  |  position: 1:1+20
+   |  |  |  |  |  |  position: 1:12
+   |  |  |  |  |  |  end: null
+   |  |  |  |  position: 1:1
+   |  |  |  |  end: null
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'x'
-   |  |  |  |  position: 1:24+2
+   |  |  |  |  position: 1:24
+   |  |  |  |  end: 1:26
    |  |  |  byRef: false
-   |  |  |  position: 1:1+25
+   |  |  |  position: 1:1
+   |  |  |  end: 1:26
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+25
-   position: 1:1+26
+   |  |  position: 1:1
+   |  |  end: 1:26
+   position: 1:1
+   end: 1:27

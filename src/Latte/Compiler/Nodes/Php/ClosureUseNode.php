@@ -22,6 +22,7 @@ class ClosureUseNode extends Node
 		public VariableNode $var,
 		public bool $byRef = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

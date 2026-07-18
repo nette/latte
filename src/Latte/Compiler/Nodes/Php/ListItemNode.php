@@ -22,6 +22,7 @@ class ListItemNode extends Node
 		public ExpressionNode|IdentifierNode|null $key = null,
 		public bool $byRef = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

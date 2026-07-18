@@ -21,6 +21,7 @@ class InNode extends ExpressionNode
 		public ExpressionNode $needle,
 		public ExpressionNode $haystack,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

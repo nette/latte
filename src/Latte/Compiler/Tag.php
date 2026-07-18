@@ -36,7 +36,8 @@ final class Tag
 	public function __construct(
 		public readonly string $name,
 		array $tokens,
-		public readonly Range $position,
+		public readonly Position $position,
+		public readonly Position $end,
 		public readonly bool $void = false,
 		public readonly bool $closing = false,
 		public readonly bool $inHead = false,

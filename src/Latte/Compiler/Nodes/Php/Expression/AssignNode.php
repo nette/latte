@@ -28,6 +28,7 @@ class AssignNode extends ExpressionNode implements OperatorNode
 		public ExpressionNode $expr,
 		public bool $byRef = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		$this->validate();
 	}

@@ -28,6 +28,7 @@ class AssignOpNode extends ExpressionNode implements OperatorNode
 		public string $operator,
 		public ExpressionNode $expr,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		if (!in_array($this->operator, self::Ops, strict: true)) {
 			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");

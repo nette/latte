@@ -27,60 +27,79 @@ Latte\Compiler\Nodes\Php\Expression\ArrayNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  left: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'Foo'
-   |  |  |  |  |  position: 1:6+5
+   |  |  |  |  |  position: 1:6
+   |  |  |  |  |  end: 1:11
    |  |  |  |  operator: '.'
    |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'bar'
-   |  |  |  |  |  position: 1:14+4
-   |  |  |  |  position: 1:6+12
+   |  |  |  |  |  position: 1:14
+   |  |  |  |  |  end: 1:18
+   |  |  |  |  position: 1:6
+   |  |  |  |  end: 1:18
    |  |  |  args: array (0)
-   |  |  |  position: 1:1+18
+   |  |  |  position: 1:1
+   |  |  |  end: 1:19
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 1:1+18
+   |  |  position: 1:1
+   |  |  end: 1:19
    |  1 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\NewNode
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  left: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'Foo'
-   |  |  |  |  |  position: 2:6+5
+   |  |  |  |  |  position: 2:6
+   |  |  |  |  |  end: 2:11
    |  |  |  |  operator: '.'
    |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'bar'
-   |  |  |  |  |  position: 2:14+4
-   |  |  |  |  position: 2:6+12
+   |  |  |  |  |  position: 2:14
+   |  |  |  |  |  end: 2:18
+   |  |  |  |  position: 2:6
+   |  |  |  |  end: 2:18
    |  |  |  args: array (1)
    |  |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  |  name: 'arg'
-   |  |  |  |  |  |  position: 2:20+4
+   |  |  |  |  |  |  position: 2:20
+   |  |  |  |  |  |  end: 2:24
    |  |  |  |  |  byRef: false
    |  |  |  |  |  unpack: false
    |  |  |  |  |  name: null
-   |  |  |  |  |  position: 2:20+4
-   |  |  |  position: 2:1+24
+   |  |  |  |  |  position: 2:20
+   |  |  |  |  |  end: 2:24
+   |  |  |  position: 2:1
+   |  |  |  end: 2:25
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 2:1+24
+   |  |  position: 2:1
+   |  |  end: 2:25
    |  2 => Latte\Compiler\Nodes\Php\ArrayItemNode
    |  |  value: Latte\Compiler\Nodes\Php\Expression\InstanceofNode
    |  |  |  expr: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  name: 'obj'
-   |  |  |  |  position: 3:1+4
+   |  |  |  |  position: 3:1
+   |  |  |  |  end: 3:5
    |  |  |  class: Latte\Compiler\Nodes\Php\Expression\BinaryOpNode
    |  |  |  |  left: Latte\Compiler\Nodes\Php\Scalar\StringNode
    |  |  |  |  |  value: 'Foo'
-   |  |  |  |  |  position: 3:18+5
+   |  |  |  |  |  position: 3:18
+   |  |  |  |  |  end: 3:23
    |  |  |  |  operator: '.'
    |  |  |  |  right: Latte\Compiler\Nodes\Php\Expression\VariableNode
    |  |  |  |  |  name: 'bar'
-   |  |  |  |  |  position: 3:26+4
-   |  |  |  |  position: 3:18+12
-   |  |  |  position: 3:1+30
+   |  |  |  |  |  position: 3:26
+   |  |  |  |  |  end: 3:30
+   |  |  |  |  position: 3:18
+   |  |  |  |  end: 3:30
+   |  |  |  position: 3:1
+   |  |  |  end: 3:31
    |  |  key: null
    |  |  byRef: false
    |  |  unpack: false
-   |  |  position: 3:1+30
-   position: 1:1+77
+   |  |  position: 3:1
+   |  |  end: 3:31
+   position: 1:1
+   end: 3:32

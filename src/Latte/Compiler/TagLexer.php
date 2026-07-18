@@ -392,8 +392,9 @@ final class TagLexer
 
 	private function addToken(?int $type, string $text): void
 	{
-		$this->tokens[] = new Token($type ?? ord($text), $text, $this->position);
-		$this->position = $this->position->advance($text);
+		$end = $this->position->advance($text);
+		$this->tokens[] = new Token($type ?? ord($text), $text, $this->position, $end);
+		$this->position = $end;
 		$this->offset += strlen($text);
 	}
 }

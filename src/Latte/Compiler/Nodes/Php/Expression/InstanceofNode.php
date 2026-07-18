@@ -23,6 +23,7 @@ class InstanceofNode extends ExpressionNode implements OperatorNode
 		public ExpressionNode $expr,
 		public NameNode|ExpressionNode $class,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

@@ -20,6 +20,7 @@ class InterpolatedStringPartNode extends Node
 	public function __construct(
 		public string $value,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

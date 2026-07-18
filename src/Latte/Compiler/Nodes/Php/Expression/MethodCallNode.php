@@ -28,6 +28,7 @@ class MethodCallNode extends ExpressionNode
 		public array $args = [],
 		public bool $nullsafe = false,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 		(function (Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) {})(...$args);
 	}

@@ -21,6 +21,7 @@ class ArrayAccessNode extends ExpressionNode
 		public ExpressionNode $expr,
 		public ?ExpressionNode $index = null,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

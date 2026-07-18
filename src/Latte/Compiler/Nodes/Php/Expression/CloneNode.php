@@ -21,6 +21,7 @@ class CloneNode extends ExpressionNode implements OperatorNode
 	public function __construct(
 		public ExpressionNode $expr,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 

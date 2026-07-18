@@ -31,43 +31,55 @@ Latte\Compiler\Nodes\Php\ModifierNode
    |  0 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'truncate'
-   |  |  |  position: 1:2+8
+   |  |  |  position: 1:2
+   |  |  |  end: 1:10
    |  |  args: array (2)
    |  |  |  0 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  value: 10
    |  |  |  |  |  kind: 10
-   |  |  |  |  |  position: 1:12+2
+   |  |  |  |  |  position: 1:12
+   |  |  |  |  |  end: 1:14
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:12+2
+   |  |  |  |  position: 1:12
+   |  |  |  |  end: 1:14
    |  |  |  1 => Latte\Compiler\Nodes\Php\ArgumentNode
    |  |  |  |  value: Latte\Compiler\Nodes\Php\Expression\FilterCallNode
    |  |  |  |  |  expr: Latte\Compiler\Nodes\Php\Scalar\IntegerNode
    |  |  |  |  |  |  value: 20
    |  |  |  |  |  |  kind: 10
-   |  |  |  |  |  |  position: 1:17+2
+   |  |  |  |  |  |  position: 1:17
+   |  |  |  |  |  |  end: 1:19
    |  |  |  |  |  filter: Latte\Compiler\Nodes\Php\FilterNode
    |  |  |  |  |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  |  |  |  |  name: 'round'
-   |  |  |  |  |  |  |  position: 1:20+5
+   |  |  |  |  |  |  |  position: 1:20
+   |  |  |  |  |  |  |  end: 1:25
    |  |  |  |  |  |  args: array (0)
    |  |  |  |  |  |  nullsafe: false
-   |  |  |  |  |  |  position: 1:19+6
-   |  |  |  |  |  position: 1:17+8
+   |  |  |  |  |  |  position: 1:19
+   |  |  |  |  |  |  end: 1:25
+   |  |  |  |  |  position: 1:17
+   |  |  |  |  |  end: 1:25
    |  |  |  |  byRef: false
    |  |  |  |  unpack: false
    |  |  |  |  name: null
-   |  |  |  |  position: 1:16+10
+   |  |  |  |  position: 1:16
+   |  |  |  |  end: 1:26
    |  |  nullsafe: false
-   |  |  position: 1:1+25
+   |  |  position: 1:1
+   |  |  end: 1:26
    |  1 => Latte\Compiler\Nodes\Php\FilterNode
    |  |  name: Latte\Compiler\Nodes\Php\IdentifierNode
    |  |  |  name: 'trim'
-   |  |  |  position: 1:27+4
+   |  |  |  position: 1:27
+   |  |  |  end: 1:31
    |  |  args: array (0)
    |  |  nullsafe: false
-   |  |  position: 1:26+5
+   |  |  position: 1:26
+   |  |  end: 1:31
    escape: false
-   position: 1:1+30
+   position: 1:1
+   end: 1:31

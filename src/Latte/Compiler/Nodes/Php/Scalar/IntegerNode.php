@@ -30,17 +30,18 @@ class IntegerNode extends ScalarNode
 		public int $value,
 		public int $kind = self::KindDecimal,
 		public ?Position $position = null,
+		public ?Position $end = null,
 	) {
 	}
 
 
-	public static function parse(string $str, ?Position $position): static
+	public static function parse(string $str, ?Position $start, ?Position $end = null): static
 	{
 		$num = PhpHelpers::decodeNumber($str, $base);
 		if ($num === null) {
-			throw new CompileException('Invalid numeric literal', $position);
+			throw new CompileException('Invalid numeric literal', $start);
 		}
-		return new static($num, $base, $position);
+		return new static($num, $base, $start, $end);
 	}
 
 
