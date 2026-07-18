@@ -119,6 +119,14 @@ parameters:
 			message: '#expects Latte\\Extension, Nette\\#'
 			path: src/Tools/Linter.php
 
+		-	# NodeTraverser: getIterator() yields references to typed properties,
+			# so `$subnode = $res` can throw TypeError. PHPStan doesn't model
+			# assignment through a reference bound to a typed property.
+			message: '#^Dead catch \- TypeError is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: src/Latte/Compiler/NodeTraverser.php
+
 		-	# Blueprint: nullable type from reflection
 			message: '#expects string, string\|null given#'
 			path: src/Latte/Essential/Blueprint.php
