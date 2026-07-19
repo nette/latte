@@ -53,3 +53,11 @@ Assert::exception(
 	InvalidArgumentException::class,
 	'Block name must be a string, null given.',
 );
+
+
+// {include parent} inside a dynamically named block resolves the name at runtime
+Assert::exception(
+	fn() => createLatte()->renderToString('{var $n = x}{block $n}A {include parent}{/block}'),
+	Latte\RuntimeException::class,
+	"Cannot include undefined parent block 'x'.",
+);

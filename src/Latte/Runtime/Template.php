@@ -38,6 +38,9 @@ class Template
 
 	/** @var mixed[][] */
 	private array $blockStack = [];
+
+	/** @var string[]  names of blocks being currently rendered */
+	private array $renderingBlocks = [];
 	private ?Template $referringTemplate = null;
 	private ?string $referenceType = null;
 
@@ -97,12 +100,13 @@ class Template
 	 * @internal
 	 */
 	public function renderBlock(
-		string $name,
+		?string $name,
 		array $params,
 		string|\Closure|null $mod = null,
 		int|string|null $layer = null,
 	): void
 	{
+		$name ??= end($this->renderingBlocks) ?: throw new Latte\RuntimeException('Cannot include this block outside of any block.');
 		$block = $layer
 			? ($this->blocks[$layer][$name] ?? null)
 			: ($this->blocks[self::LayerLocal][$name] ?? $this->blocks[self::LayerTop][$name] ?? null);
@@ -117,12 +121,17 @@ class Template
 
 		$fn = reset($block->functions);
 		assert($fn !== false);
-		$this->filter(
-			fn() => $fn($params),
-			$mod,
-			$block->contentType ?? static::ContentType,
-			"block $name",
-		);
+		$this->renderingBlocks[] = $name;
+		try {
+			$this->filter(
+				fn() => $fn($params),
+				$mod,
+				$block->contentType ?? static::ContentType,
+				"block $name",
+			);
+		} finally {
+			array_pop($this->renderingBlocks);
+		}
 	}
 
 
@@ -131,8 +140,9 @@ class Template
 	 * @param  mixed[]  $params
 	 * @internal
 	 */
-	public function renderParentBlock(string $name, array $params): void
+	public function renderParentBlock(?string $name, array $params): void
 	{
+		$name ??= end($this->renderingBlocks) ?: throw new Latte\RuntimeException('Cannot include parent block outside of any block.');
 		$block = $this->blocks[self::LayerLocal][$name] ?? $this->blocks[self::LayerTop][$name] ?? null;
 		if (!$block || ($function = next($block->functions)) === false) {
 			throw new Latte\RuntimeException("Cannot include undefined parent block '$name'.");
@@ -182,6 +192,8 @@ class Template
 
 			$this->blocks[self::LayerSnippet] += $child->blocks[self::LayerSnippet];
 			$child->blocks[self::LayerSnippet] = &$this->blocks[self::LayerSnippet];
+
+			$child->renderingBlocks = &$this->renderingBlocks;
 		}
 
 		return $child;
