@@ -155,7 +155,7 @@ final class TemplateParser
 	{
 		$token = $this->stream->consume(Token::Newline);
 		if ($this->lastIndentation) { // drop indentation & newline
-			$this->lastIndentation->content = '';
+			$this->lastIndentation->clear();
 			$this->lastIndentation = null;
 			return new Nodes\NopNode;
 		} else {

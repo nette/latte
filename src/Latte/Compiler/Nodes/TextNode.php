@@ -42,4 +42,15 @@ class TextNode extends AreaNode
 	{
 		false && yield;
 	}
+
+
+	/**
+	 * Used by the parser to drop indentation that is already in the tree.
+	 * @internal
+	 */
+	public function clear(): void
+	{
+		$this->content = '';
+		$this->end = $this->position;
+	}
 }
