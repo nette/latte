@@ -58,7 +58,9 @@ class ContentTypeNode extends StatementNode
 	public function print(PrintContext $context): string
 	{
 		if ($this->inScript) {
-			$context->getEscaper()->enterHtmlRaw($this->contentType);
+			// replaces the context installed by the enclosing <script>, must not deepen the stack
+			$context->restoreEscape();
+			$context->beginEscape()->enterHtmlRaw($this->contentType);
 			return '';
 		}
 

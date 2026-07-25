@@ -33,6 +33,27 @@ Assert::match(
 	$latte->renderToString('<script type="text/html">{="</script>"|noescape}</script>'),
 );
 
+// {contentType html} switches escaping in <script> without type attribute
+Assert::match(
+	'<script> &lt;/script&gt; </script>',
+	$latte->renderToString('<script>{contentType html} {="</script>"} </script>'),
+);
+
+// escaping of Html object in <script> switched to html
+Assert::match(
+	'<script> <div title=\'</x-script>\'></div> </script>',
+	$latte->renderToString(
+		'<script>{contentType html} {$foo} </script>',
+		['foo' => new Html("<div title='</script>'></div>")],
+	),
+);
+
+// escaping context is restored after the element
+Assert::match(
+	'<script>x</script> &lt;b&gt;',
+	$latte->renderToString('<script>{contentType html}x</script> {="<b>"}'),
+);
+
 // include
 Assert::match(
 	' <script type="text/html"><x-script></x-script></script>',
