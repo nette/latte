@@ -30,6 +30,9 @@ class Template
 	/** @internal */
 	protected string|false|null $parentName = null;
 
+	/** @var mixed[]  variables passed explicitly to the parent template @internal */
+	protected array $parentArgs = [];
+
 	/** @var mixed[][] */
 	protected array $varStack = [];
 
@@ -82,7 +85,7 @@ class Template
 
 		} elseif ($this->parentName) { // extends
 			$this->params = $params;
-			$this->createTemplate($this->parentName, $params, 'extends')->render($block);
+			$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
 
 		} elseif ($block !== null) { // single block rendering
 			$this->renderBlock($block, $this->params);

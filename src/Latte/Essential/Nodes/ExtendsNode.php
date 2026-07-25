@@ -8,6 +8,7 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
+use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\Scalar\BooleanNode;
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
@@ -17,12 +18,13 @@ use Latte\Compiler\Tag;
 
 
 /**
- * {extends 'parent.latte'}
- * {layout 'layout.latte'}
+ * {extends 'parent.latte' [, args]}
+ * {layout 'layout.latte' [, args]}
  */
 class ExtendsNode extends StatementNode
 {
 	public ExpressionNode $extends;
+	public ArrayNode $args;
 
 
 	public static function create(Tag $tag): static
@@ -38,18 +40,25 @@ class ExtendsNode extends StatementNode
 		} else {
 			$node->extends = $tag->parser->parseUnquotedStringOrExpression();
 		}
+		$tag->parser->consumeCommaBeforeArguments();
+		$node->args = $tag->parser->parseArguments();
+		if ($node->args->items && $node->extends instanceof BooleanNode) {
+			throw new CompileException("{{$tag->name} none} cannot have arguments.", $tag->position);
+		}
 		return $node;
 	}
 
 
 	public function print(PrintContext $context): string
 	{
-		return $context->format('$this->parentName = %node;', $this->extends);
+		return $context->format('$this->parentName = %node;', $this->extends)
+			. ($this->args->items ? $context->format('$this->parentArgs = %node;', $this->args) : '');
 	}
 
 
 	public function &getIterator(): \Generator
 	{
 		yield $this->extends;
+		yield $this->args;
 	}
 }
