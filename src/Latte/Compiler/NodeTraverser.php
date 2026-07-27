@@ -7,6 +7,8 @@
 
 namespace Latte\Compiler;
 
+use function sprintf;
+
 
 /**
  * Traverses and transforms AST nodes using visitor pattern.
