@@ -22,10 +22,19 @@ final class HtmlHelpers
 {
 	private const BooleanAttributes = [
 		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
-		'contenteditable' => 1, 'default' => 1, 'defer' => 1, 'disabled' => 1, 'draggable' => 1, 'formnovalidate' => 1,
-		'hidden' => 1, 'inert' => 1, 'ismap' => 1, 'itemscope' => 1, 'loop' => 1, 'multiple' => 1, 'muted' => 1,
-		'nomodule' => 1, 'novalidate' => 1, 'open' => 1, 'playsinline' => 1, 'readonly' => 1, 'required' => 1,
-		'reversed' => 1, 'selected' => 1, 'spellcheck' => 1,
+		'default' => 1, 'defer' => 1, 'disabled' => 1, 'formnovalidate' => 1, 'inert' => 1, 'ismap' => 1,
+		'itemscope' => 1, 'loop' => 1, 'multiple' => 1, 'muted' => 1, 'nomodule' => 1, 'novalidate' => 1,
+		'open' => 1, 'playsinline' => 1, 'readonly' => 1, 'required' => 1, 'reversed' => 1, 'selected' => 1,
+	];
+
+	/** enumerated attributes whose keywords are 'true' and 'false' */
+	private const TristateAttributes = [
+		'contenteditable' => 1, 'draggable' => 1, 'spellcheck' => 1, 'writingsuggestions' => 1,
+	];
+
+	/** boolean-like attributes accepting an optional keyword, e.g. hidden="until-found" */
+	private const ValuedBooleanAttributes = [
+		'hidden' => 1, 'popover' => 1,
 	];
 
 	private const SpaceSeparatedAttributes = [
@@ -166,13 +175,15 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'list', 'data', 'aria', 'style', or ''.
+	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', or ''.
 	 */
 	public static function classifyAttributeType(string $name): string
 	{
 		$name = strtolower($name);
 		return match (true) {
 			isset(self::BooleanAttributes[$name]) => 'bool',
+			isset(self::TristateAttributes[$name]) => 'tristate',
+			isset(self::ValuedBooleanAttributes[$name]) => 'valuedBool',
 			isset(self::SpaceSeparatedAttributes[$name]) => 'list',
 			str_starts_with($name, 'data-') => 'data',
 			str_starts_with($name, 'aria-') => 'aria',
@@ -208,6 +219,34 @@ final class HtmlHelpers
 	public static function formatBoolAttribute(string $namePart, mixed $value): string
 	{
 		return $value ? $namePart : '';
+	}
+
+
+	/**
+	 * Formats HTML attribute whose keywords are 'true' and 'false'.
+	 */
+	public static function formatTristateAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
+	{
+		if ($migrationWarnings && is_bool($value)) {
+			self::triggerMigrationWarning(trim($namePart), $value);
+		}
+		return match (true) {
+			is_bool($value) => $namePart . '="' . ($value ? 'true' : 'false') . '"',
+			default => self::formatAttribute($namePart, $value),
+		};
+	}
+
+
+	/**
+	 * Formats boolean HTML attribute accepting an optional keyword.
+	 */
+	public static function formatValuedBoolAttribute(string $namePart, mixed $value): string
+	{
+		return match (true) {
+			!$value => '', // falsy values are not keywords; hidden="0" would map back to the hidden state
+			$value === true => $namePart,
+			default => self::formatAttribute($namePart, $value),
+		};
 	}
 
 
@@ -268,14 +307,9 @@ final class HtmlHelpers
 	 */
 	public static function formatAriaAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
-		if ($migrationWarnings && is_bool($value)) {
-			self::triggerMigrationWarning(trim($namePart), $value);
-		}
-		return match (true) {
-			is_bool($value) => $namePart . '="' . ($value ? 'true' : 'false') . '"',
-			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => $v === true ? $k : $v, ' '),
-			default => self::formatAttribute($namePart, $value),
-		};
+		return is_array($value)
+			? self::formatArrayAttribute($namePart, $value, fn($v, $k) => $v === true ? $k : $v, ' ')
+			: self::formatTristateAttribute($namePart, $value, $migrationWarnings);
 	}
 
 

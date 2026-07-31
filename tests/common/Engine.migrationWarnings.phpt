@@ -33,6 +33,12 @@ Assert::error(
 	'Behavior change for attribute \'aria-foo\' with value true: previously it rendered as aria-foo="1", now it renders as aria-foo="true" (on line 1 at column 8)',
 );
 
+Assert::error(
+	fn() => $latte->renderToString('<div contenteditable="{=false}">'),
+	E_USER_WARNING,
+	'Behavior change for attribute \'contenteditable\' with value false: previously it rendered as contenteditable="", now it renders as contenteditable="false" (on line 1 at column 25)',
+);
+
 // |accept
 Assert::same(
 	'<input>',
@@ -49,4 +55,10 @@ Assert::error(
 Assert::same(
 	'<input true>',
 	$latte->renderToString('<input true="{=true|toggle}" false="{=false|toggle}">'),
+);
+
+// toggle overrides the category derived from the attribute name
+Assert::same(
+	'<div draggable>',
+	$latte->renderToString('<div contenteditable="{=false|toggle}" draggable="{=true|toggle}" hidden="{=false|toggle}">'),
 );

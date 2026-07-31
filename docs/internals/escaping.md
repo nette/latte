@@ -54,13 +54,21 @@ element's `restoreEscape()` and leak the context past the element.
 A whole HTML attribute generated from an expression (`Html\ExpressionAttributeNode`)
 is not escaped via `Escaper` at all. The node picks a
 `Runtime\HtmlHelpers::format*Attribute` method at compile time — the attribute *type*
-(`bool`/`list`/`data`/`aria`/`style`) comes from the attribute name via
+(`bool`/`tristate`/`valuedBool`/`list`/`data`/`aria`/`style`) comes from the attribute name via
 `classifyAttributeType`, or is forced by an attribute modifier: `|toggle` anywhere in
 the chain, `|json` only as the **last** modifier (`json` never comes from the
 attribute name). Any non-HTML content type falls back to
 `XmlHelpers::formatAttribute`. These formatters do their own escaping (`escapeAttr`,
 JSON smart-quoting), so they are a **third place** the escaping contract lives —
 audit them alongside the two layers above.
+
+The categories are not interchangeable, because HTML resolves an *invalid* value
+differently per attribute. `tristate` renders a bool as the `true`/`false` keyword,
+but `valuedBool` must not: `hidden="false"` maps to the hidden state, so `false` there
+has to drop the attribute instead. For the same reason `formatValuedBoolAttribute`
+tests falsiness **before** treating the value as a keyword — narrowing that to
+`is_string($value)` looks tidier but renders `hidden="0"` for a `'0'` coming from a
+database, and the element silently disappears.
 
 ## `ContentType` and contextual filters
 

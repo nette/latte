@@ -65,6 +65,49 @@ test('boolean attributes', function () {
 });
 
 
+test('tristate attributes', function () {
+	Assert::same('contenteditable="true"', NAttrNode::formatHtmlAttribute('contenteditable', true));
+	Assert::same('contenteditable="false"', NAttrNode::formatHtmlAttribute('contenteditable', false));
+	Assert::same('', NAttrNode::formatHtmlAttribute('contenteditable', null));
+
+	// special values
+	Assert::same('contenteditable="false"', NAttrNode::formatHtmlAttribute('contenteditable', 'false'));
+	Assert::same('contenteditable="plaintext-only"', NAttrNode::formatHtmlAttribute('contenteditable', 'plaintext-only'));
+	Assert::same('contenteditable=""', NAttrNode::formatHtmlAttribute('contenteditable', ''));
+	Assert::same('spellcheck="1"', NAttrNode::formatHtmlAttribute('spellcheck', 1));
+
+	// invalid
+	Assert::error(
+		fn() => Assert::same('', NAttrNode::formatHtmlAttribute('draggable', [])),
+		E_USER_WARNING,
+		"Invalid value for attribute 'draggable': array is not allowed.",
+	);
+});
+
+
+test('valued boolean attributes', function () {
+	Assert::same('hidden', NAttrNode::formatHtmlAttribute('hidden', true));
+	Assert::same('', NAttrNode::formatHtmlAttribute('hidden', false));
+	Assert::same('', NAttrNode::formatHtmlAttribute('hidden', null));
+
+	// special values
+	Assert::same('hidden="until-found"', NAttrNode::formatHtmlAttribute('hidden', 'until-found'));
+	Assert::same('popover="manual"', NAttrNode::formatHtmlAttribute('popover', 'manual'));
+	Assert::same('', NAttrNode::formatHtmlAttribute('hidden', ''));
+	Assert::same('', NAttrNode::formatHtmlAttribute('hidden', '0'));
+	Assert::same('', NAttrNode::formatHtmlAttribute('hidden', 0));
+	Assert::same('hidden="1"', NAttrNode::formatHtmlAttribute('hidden', 1));
+	Assert::same('', NAttrNode::formatHtmlAttribute('hidden', []));
+
+	// invalid
+	Assert::error(
+		fn() => Assert::same('', NAttrNode::formatHtmlAttribute('hidden', [1])),
+		E_USER_WARNING,
+		"Invalid value for attribute 'hidden': array is not allowed.",
+	);
+});
+
+
 test('style attribute', function () {
 	Assert::same('style=""', NAttrNode::formatHtmlAttribute('style', ''));
 	Assert::same('style="color:red;"', NAttrNode::formatHtmlAttribute('style', 'color:red;'));

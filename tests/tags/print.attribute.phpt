@@ -106,6 +106,70 @@ test('boolean attributes', function () {
 });
 
 
+test('tristate attributes', function () {
+	$latte = createLatte();
+	Assert::match(
+		<<<'XX'
+			<span contenteditable="0"></span>
+			<span contenteditable="123"></span>
+			<span contenteditable=""></span>
+			<span contenteditable="false"></span>
+			<span contenteditable="plaintext-only"></span>
+			<span contenteditable="true"></span>
+			<span contenteditable="false"></span>
+			<span></span>
+			<span></span>
+			<span draggable="true"></span>
+			XX,
+		@$latte->renderToString(<<<'XX'
+			<span contenteditable={=0}></span>
+			<span contenteditable={=123}></span>
+			<span contenteditable={=''}></span>
+			<span contenteditable={='false'}></span>
+			<span contenteditable={='plaintext-only'}></span>
+			<span contenteditable={=true}></span>
+			<span contenteditable={=false}></span>
+			<span contenteditable={=null}></span>
+			<span contenteditable={=[]}></span>
+			<span draggable={=true}></span>
+			XX),
+	);
+});
+
+
+test('valued boolean attributes', function () {
+	$latte = createLatte();
+	Assert::match(
+		<<<'XX'
+			<span></span>
+			<span hidden="123"></span>
+			<span></span>
+			<span></span>
+			<span hidden="until-found"></span>
+			<span hidden></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span popover="manual"></span>
+			XX,
+		@$latte->renderToString(<<<'XX'
+			<span hidden={=0}></span>
+			<span hidden={=123}></span>
+			<span hidden={=''}></span>
+			<span hidden={='0'}></span>
+			<span hidden={='until-found'}></span>
+			<span hidden={=true}></span>
+			<span hidden={=false}></span>
+			<span hidden={=null}></span>
+			<span hidden={=[]}></span>
+			<span hidden={=[1]}></span>
+			<span popover={='manual'}></span>
+			XX),
+	);
+});
+
+
 test('style attribute', function () {
 	$latte = createLatte();
 	Assert::match(
