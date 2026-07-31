@@ -67,7 +67,7 @@ final class NAttrNode extends StatementNode
 	{
 		LR\HtmlHelpers::validateAttributeName($name);
 		$type = LR\HtmlHelpers::classifyAttributeType($name);
-		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria')) {
+		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria' && $type !== 'tristate')) {
 			return '';
 		} elseif ($value === true && $type === '') {
 			return $name;
