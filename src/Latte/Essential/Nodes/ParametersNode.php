@@ -7,7 +7,7 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\{CompileException, Helpers};
+use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\Expression\{AssignNode, VariableNode};
 use Latte\Compiler\Nodes\Php\ParameterNode;
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
@@ -75,9 +75,8 @@ class ParametersNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->parameters as &$param) {
+		foreach (self::walk($this->parameters, fn(ParameterNode ...$parameters) => null) as &$param) {
 			yield $param;
 		}
-		Helpers::removeNulls($this->parameters);
 	}
 }

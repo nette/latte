@@ -11,7 +11,6 @@ use Latte\Compiler\{Block, PrintContext, Tag, TemplateParser, Token};
 use Latte\Compiler\Nodes\{AreaNode, StatementNode};
 use Latte\Compiler\Nodes\Php\Expression\{AssignNode, VariableNode};
 use Latte\Compiler\Nodes\Php\{ParameterNode, Scalar};
-use Latte\Helpers;
 use Latte\Runtime\Template;
 use function is_string;
 
@@ -119,10 +118,9 @@ class DefineNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->block->name;
-		foreach ($this->block->parameters as &$param) {
+		foreach (self::walk($this->block->parameters, fn(ParameterNode ...$parameters) => null) as &$param) {
 			yield $param;
 		}
-		Helpers::removeNulls($this->block->parameters);
 
 		yield $this->content;
 	}

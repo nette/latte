@@ -10,7 +10,6 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\{ExpressionNode, IdentifierNode, NameNode};
 use Latte\Compiler\{Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -54,9 +53,8 @@ class StaticMethodCallNode extends ExpressionNode
 	{
 		yield $this->class;
 		yield $this->name;
-		foreach ($this->args as &$item) {
+		foreach (self::walk($this->args, fn(Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->args);
 	}
 }

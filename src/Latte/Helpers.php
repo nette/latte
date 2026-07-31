@@ -144,6 +144,7 @@ class Helpers
 	 * Removes null values from the array and re-indexes it.
 	 * @param  mixed[]  $items
 	 */
+	#[\Deprecated('use Node::walk(), which prunes even when the traversal is cut short', since: '3.1.9')]
 	public static function removeNulls(array &$items): void
 	{
 		$items = array_values(array_filter($items, fn($item) => $item !== null));

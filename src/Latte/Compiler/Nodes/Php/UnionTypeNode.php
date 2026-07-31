@@ -8,7 +8,6 @@
 namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\{Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -34,9 +33,8 @@ class UnionTypeNode extends ComplexTypeNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->types as &$item) {
+		foreach (self::walk($this->types, fn(IdentifierNode|NameNode ...$types) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->types);
 	}
 }

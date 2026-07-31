@@ -7,7 +7,7 @@
 
 namespace Latte\Compiler\Nodes\Php\Expression;
 
-use Latte\{CompileException, Helpers};
+use Latte\CompileException;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\{ExpressionNode, IdentifierNode};
 use Latte\Compiler\{Position, PrintContext};
@@ -53,9 +53,8 @@ class MethodCallNode extends ExpressionNode
 	{
 		yield $this->object;
 		yield $this->name;
-		foreach ($this->args as &$item) {
+		foreach (self::walk($this->args, fn(Php\ArgumentNode|Php\VariadicPlaceholderNode ...$args) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->args);
 	}
 }

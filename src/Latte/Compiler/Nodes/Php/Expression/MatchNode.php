@@ -10,7 +10,6 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\MatchArmNode;
 use Latte\Compiler\{Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -44,9 +43,8 @@ class MatchNode extends Php\ExpressionNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->cond;
-		foreach ($this->arms as &$item) {
+		foreach (self::walk($this->arms, fn(MatchArmNode ...$arms) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->arms);
 	}
 }

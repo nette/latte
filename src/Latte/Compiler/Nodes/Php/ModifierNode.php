@@ -8,7 +8,6 @@
 namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\{Node, Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -89,9 +88,8 @@ class ModifierNode extends Node
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->filters as &$filter) {
+		foreach (self::walk($this->filters, fn(FilterNode ...$filters) => null) as &$filter) {
 			yield $filter;
 		}
-		Helpers::removeNulls($this->filters);
 	}
 }

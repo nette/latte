@@ -9,7 +9,6 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\Compiler\Nodes\Php\{ArgumentNode, ArrayItemNode, ExpressionNode};
 use Latte\Compiler\{Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -42,9 +41,8 @@ class ArrayNode extends ExpressionNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->items as &$item) {
+		foreach (self::walk($this->items, fn(ArrayItemNode ...$items) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->items);
 	}
 }
