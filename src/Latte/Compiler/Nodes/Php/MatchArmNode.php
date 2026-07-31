@@ -8,7 +8,6 @@
 namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\{Node, Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -36,11 +35,8 @@ class MatchArmNode extends Node
 
 	public function &getIterator(): \Generator
 	{
-		if ($this->conds) {
-			foreach ($this->conds as &$item) {
-				yield $item;
-			}
-			Helpers::removeNulls($this->conds);
+		foreach (self::walk($this->conds, fn(ExpressionNode ...$conds) => null) as &$item) {
+			yield $item;
 		}
 		yield $this->body;
 	}

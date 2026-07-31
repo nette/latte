@@ -8,7 +8,6 @@
 namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\PrintContext;
-use Latte\Helpers;
 use function count;
 
 
@@ -88,9 +87,8 @@ final class FragmentNode extends AreaNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->children as &$item) {
+		foreach (self::walk($this->children, fn(AreaNode ...$children) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->children);
 	}
 }

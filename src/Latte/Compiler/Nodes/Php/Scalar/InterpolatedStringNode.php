@@ -9,7 +9,6 @@ namespace Latte\Compiler\Nodes\Php\Scalar;
 
 use Latte\Compiler\Nodes\Php\{ExpressionNode, InterpolatedStringPartNode, ScalarNode};
 use Latte\Compiler\{PhpHelpers, Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -66,9 +65,8 @@ class InterpolatedStringNode extends ScalarNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->parts as &$item) {
+		foreach (self::walk($this->parts, fn(ExpressionNode|InterpolatedStringPartNode ...$parts) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->parts);
 	}
 }

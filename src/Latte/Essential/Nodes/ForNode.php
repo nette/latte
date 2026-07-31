@@ -10,7 +10,6 @@ namespace Latte\Essential\Nodes;
 use Latte\Compiler\Nodes\{AreaNode, StatementNode};
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\{PrintContext, Tag};
-use Latte\Helpers;
 
 
 /**
@@ -71,19 +70,17 @@ class ForNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->init as &$item) {
+		foreach (self::walk($this->init, fn(ExpressionNode ...$init) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->init);
 
 		if ($this->condition) {
 			yield $this->condition;
 		}
 
-		foreach ($this->next as &$item) {
+		foreach (self::walk($this->next, fn(ExpressionNode ...$next) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->next);
 
 		yield $this->content;
 	}

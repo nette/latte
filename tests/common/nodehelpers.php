@@ -34,10 +34,9 @@ class ArrayNode extends Node
 
 	public function &getIterator(): Generator
 	{
-		foreach ($this->items as &$item) {
+		foreach (self::walk($this->items) as &$item) {
 			yield $item;
 		}
-		Latte\Helpers::removeNulls($this->items);
 	}
 }
 

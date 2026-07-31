@@ -10,7 +10,6 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\{ClosureUseNode, ExpressionNode};
 use Latte\Compiler\{Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -57,15 +56,13 @@ class ClosureNode extends ExpressionNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->params as &$item) {
+		foreach (self::walk($this->params, fn(Php\ParameterNode ...$params) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->params);
 
-		foreach ($this->uses as &$item) {
+		foreach (self::walk($this->uses, fn(ClosureUseNode ...$uses) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->uses);
 
 		if ($this->returnType) {
 			yield $this->returnType;

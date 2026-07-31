@@ -10,7 +10,6 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php;
 use Latte\Compiler\Nodes\Php\{ExpressionNode, NameNode, OperatorNode};
 use Latte\Compiler\{Position, PrintContext};
-use Latte\Helpers;
 
 
 /**
@@ -45,9 +44,8 @@ class NewNode extends ExpressionNode implements OperatorNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->class;
-		foreach ($this->args as &$item) {
+		foreach (self::walk($this->args, fn(Php\ArgumentNode ...$args) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->args);
 	}
 }

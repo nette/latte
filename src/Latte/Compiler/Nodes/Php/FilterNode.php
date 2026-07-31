@@ -7,7 +7,7 @@
 
 namespace Latte\Compiler\Nodes\Php;
 
-use Latte\{CompileException, Helpers};
+use Latte\CompileException;
 use Latte\Compiler\{Node, Position, PrintContext};
 
 
@@ -77,9 +77,8 @@ class FilterNode extends Node
 	public function &getIterator(): \Generator
 	{
 		yield $this->name;
-		foreach ($this->args as &$item) {
+		foreach (self::walk($this->args, fn(ArgumentNode ...$args) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->args);
 	}
 }

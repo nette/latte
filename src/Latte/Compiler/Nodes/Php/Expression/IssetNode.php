@@ -7,7 +7,7 @@
 
 namespace Latte\Compiler\Nodes\Php\Expression;
 
-use Latte\{CompileException, Helpers};
+use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\{Position, PrintContext};
 
@@ -48,9 +48,8 @@ class IssetNode extends ExpressionNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->vars as &$item) {
+		foreach (self::walk($this->vars, fn(ExpressionNode ...$vars) => null) as &$item) {
 			yield $item;
 		}
-		Helpers::removeNulls($this->vars);
 	}
 }

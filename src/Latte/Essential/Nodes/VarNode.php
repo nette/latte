@@ -11,7 +11,6 @@ use Latte\Compiler\Nodes\Php\Expression\{AssignNode, AssignOpNode, AuxiliaryNode
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\{PrintContext, Tag, Token};
-use Latte\Helpers;
 use function is_string;
 
 
@@ -92,9 +91,8 @@ class VarNode extends StatementNode
 
 	public function &getIterator(): \Generator
 	{
-		foreach ($this->assignments as &$assign) {
+		foreach (self::walk($this->assignments, fn(AssignNode ...$assignments) => null) as &$assign) {
 			yield $assign;
 		}
-		Helpers::removeNulls($this->assignments);
 	}
 }
