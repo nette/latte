@@ -16,3 +16,16 @@ Assert::same([$leafNode1, $leafNode2], $res);
 
 $res = NodeHelpers::findFirst($arrayNode, fn(Node $node) => $node instanceof LeafNode);
 Assert::same($leafNode1, $res);
+
+// a node class works as the filter
+$res = NodeHelpers::find($arrayNode, LeafNode::class);
+Assert::same([$leafNode1, $leafNode2], $res);
+
+$res = NodeHelpers::findFirst($arrayNode, LeafNode::class);
+Assert::same($leafNode1, $res);
+
+Assert::exception(
+	fn() => NodeHelpers::find($arrayNode, stdClass::class),
+	LogicException::class,
+	'Filter must be a Latte\Compiler\Node subclass, stdClass given.',
+);
