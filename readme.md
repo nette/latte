@@ -35,7 +35,7 @@ Getting started
 Editor Integration
 ==================
 
-- PhpStorm ([Latte](https://plugins.jetbrains.com/plugin/24218-latte-support) or [Latte Pro](https://plugins.jetbrains.com/plugin/19661-latte-pro))
+- PhpStorm ([Latte](https://plugins.jetbrains.com/plugin/24218-latte-support), [Latte Pro](https://plugins.jetbrains.com/plugin/19661-latte-pro) or [Latte+](https://plugins.jetbrains.com/plugin/34056-latte-))
 - Visual Studio Code ([Nette Latte + Neon](https://marketplace.visualstudio.com/items?itemName=Kasik96.latte) or [Nette for VS Code](https://marketplace.visualstudio.com/items?itemName=franken-ui.nette-for-vscode))
 
  <!---->
