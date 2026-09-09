@@ -292,25 +292,17 @@ final class TagParser
 
 
 	/**
-	 * Can EOF be the next token?
+	 * Can EOF be the next token? Its symbol number is 0.
 	 */
 	private function isExpectedEof(int $state): bool
 	{
-		foreach (self::SymbolToName as $symbol => $name) {
-			$idx = self::ActionBase[$state] + $symbol;
-			if ((($idx >= 0 && $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol)
-				|| ($state < self::Yy2Tblstate
-					&& ($idx = self::ActionBase[$state + self::NumNonLeafStates] + $symbol) >= 0
-					&& $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol))
-				&& self::Action[$idx] !== self::UnexpectedTokenRule
-				&& self::Action[$idx] !== self::DefaultAction
-				&& $symbol === 0
-			) {
-				return true;
-			}
-		}
-
-		return false;
+		$idx = self::ActionBase[$state];
+		return (($idx >= 0 && $idx < count(self::Action) && self::ActionCheck[$idx] === 0)
+			|| ($state < self::Yy2Tblstate
+				&& ($idx = self::ActionBase[$state + self::NumNonLeafStates]) >= 0
+				&& $idx < count(self::Action) && self::ActionCheck[$idx] === 0))
+			&& self::Action[$idx] !== self::UnexpectedTokenRule
+			&& self::Action[$idx] !== self::DefaultAction;
 	}
 
 
