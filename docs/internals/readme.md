@@ -8,6 +8,9 @@ their own non-local invariants, split by seam:
   feature flags, and the compiled-template cache.
 - **[escaping.md](escaping.md)** — context-sensitive escaping, the two-place
   invariant, the `PrintContext` escaper stack, and the dynamic-attribute formatters.
+- **[unquoted-strings.md](unquoted-strings.md)** — how `{include foo.latte}` and
+  `{link Foo:bar}` parse, the name-vs-expression decision, and why its failure is
+  silent.
 - **[blocks.md](blocks.md)** — template inheritance, the block layers, and the exact
   runtime availability model.
 - **[sandbox-and-passes.md](sandbox-and-passes.md)** — the sandbox pass, its known
