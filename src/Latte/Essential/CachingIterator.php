@@ -198,6 +198,16 @@ class CachingIterator extends \CachingIterator implements \Countable
 	}
 
 
+	/**
+	 * Stops \CachingIterator from forwarding unknown methods to the inner iterator, past the sandbox policy.
+	 * @param  mixed[]  $args
+	 */
+	public function __call(string $name, array $args): never
+	{
+		throw new \Error('Call to undefined method ' . static::class . "::$name()");
+	}
+
+
 	/********************* property accessor ****************d*g**/
 
 
