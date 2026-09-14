@@ -773,6 +773,17 @@ final class Filters
 		return (function () use ($value, $start, $length, $preserveKeys) {
 			$i = 0;
 			$count = 0;
+			if ($start < 0 || $length < 0) { // counting from the end requires reading the whole iterator
+				$pairs = [];
+				foreach ($value as $key => $val) {
+					$pairs[] = [$key, $val];
+				}
+				foreach (array_slice($pairs, $start, $length) as [$key, $val]) {
+					yield ($preserveKeys ? $key : $count++) => $val;
+				}
+				return;
+			}
+
 			foreach ($value as $key => $val) {
 				if ($i++ < $start) {
 					continue;
@@ -780,11 +791,7 @@ final class Filters
 				if ($length !== null && $count >= $length) {
 					break;
 				}
-				if ($preserveKeys) {
-					yield $key => $val;
-				} else {
-					yield $val;
-				}
+				yield ($preserveKeys ? $key : $count) => $val;
 				$count++;
 			}
 		})();

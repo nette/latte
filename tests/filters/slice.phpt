@@ -58,6 +58,10 @@ test('iterators', function () {
 	Assert::same([3, 4, 5], iterator_to_array(Filters::slice($gen(), 2)));
 	Assert::same([3, 4], iterator_to_array(Filters::slice($gen(), 2, 2)));
 	Assert::same([], iterator_to_array(Filters::slice($gen(), 5, 1)));
+	Assert::same([4, 5], iterator_to_array(Filters::slice($gen(), -2)));
+	Assert::same([3, 4], iterator_to_array(Filters::slice($gen(), -3, 2)));
+	Assert::same([2, 3], iterator_to_array(Filters::slice($gen(), 1, -2)));
+	Assert::same([], iterator_to_array(Filters::slice($gen(), -1, -1)));
 });
 
 
@@ -73,6 +77,7 @@ test('iterators & preserveKeys', function () {
 	Assert::same(['a' => 1, 'b' => 2, 'c' => 3], iterator_to_array(Filters::slice($gen(), 0, 3, preserveKeys: true)));
 	Assert::same(['c' => 3, 'd' => 4], iterator_to_array(Filters::slice($gen(), 2, 2, preserveKeys: true)));
 	Assert::same(['b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], iterator_to_array(Filters::slice($gen(), 1, preserveKeys: true)));
+	Assert::same(['c' => 3, 'd' => 4], iterator_to_array(Filters::slice($gen(), -3, -1, preserveKeys: true)));
 });
 
 
