@@ -11,7 +11,7 @@ use Latte;
 use Latte\ContentType;
 use Latte\Runtime\{FilterInfo, Html};
 use Stringable;
-use function count, extension_loaded, func_num_args, is_array, is_int, is_string, strlen;
+use function array_key_exists, count, extension_loaded, func_num_args, is_array, is_int, is_string, strlen;
 use const ENT_NOQUOTES, ENT_SUBSTITUTE;
 
 
@@ -516,7 +516,11 @@ final class Filters
 	{
 		$batch = [];
 		foreach ($list as $key => $value) {
-			$batch[$key] = $value;
+			if (array_key_exists($key, $batch)) { // an iterator may repeat keys
+				$batch[] = $value;
+			} else {
+				$batch[$key] = $value;
+			}
 			if (count($batch) >= $length) {
 				yield $batch;
 				$batch = [];

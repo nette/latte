@@ -130,3 +130,12 @@ Assert::same(
 	[['a' => 'a', 'b' => 'b'], ['c' => 'c', 0 => 'fill']],
 	iterator_to_array(Filters::batch(['a' => 'a', 'b' => 'b', 'c' => 'c'], 2, 'fill')),
 );
+
+Assert::same( // an iterator repeating a key loses no item
+	[['A', 'B'], ['C']],
+	iterator_to_array(Filters::batch((function () {
+		yield 0 => 'A';
+		yield 0 => 'B';
+		yield 0 => 'C';
+	})(), 2)),
+);
