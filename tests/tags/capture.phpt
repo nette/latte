@@ -63,6 +63,11 @@ Assert::match( // empty filtered capture stays a falsy string like the unfiltere
 	$latte->renderToString('{capture $var|trim}  {/capture}{=gettype($var)} {if $var}TRUTHY{else}FALSY{/if}'),
 );
 
+Assert::match( // the target is evaluated once
+	'1 x',
+	$latte->renderToString('{var $a = [], $i = 0}{capture $a[$i++]|trim}  x  {/capture}{$i} {$a[0]}'),
+);
+
 Assert::match(
 	'<!--  --> &lt;foo&gt;',
 	$latte->renderToString('<!-- {capture $x}<foo>{/capture} --> {$x}'),

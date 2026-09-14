@@ -50,7 +50,18 @@ class CaptureNode extends StatementNode
 	{
 		$escaper = $context->getEscaper();
 		$inHtmlText = $escaper->getState() === Escaper::HtmlText;
-		$res = $context->format(
+		$value = $this->modifier->printContentAware($context, '$ʟ_tmp');
+		if ($inHtmlText && $this->modifier->filters) {
+			// filters returned a plain string, wrap it back unless they changed the content type,
+			// empty string stays plain like in the unfiltered branch
+			$value = $context->format(
+				'($ʟ_tmp = %raw) !== \'\' && $ʟ_fi->contentType === %dump ? new LR\Html($ʟ_tmp) : $ʟ_tmp',
+				$value,
+				ContentType::Html,
+			);
+		}
+
+		return $context->format(
 			<<<'XX'
 				ob_start(fn() => '') %line;
 				try {
@@ -58,7 +69,8 @@ class CaptureNode extends StatementNode
 				} finally {
 					$ʟ_tmp = %raw;
 				}
-				$ʟ_fi = new LR\FilterInfo(%dump); %node = %modifyContent($ʟ_tmp);
+				$ʟ_fi = new LR\FilterInfo(%dump); %node = %raw;
+
 
 				XX,
 			$this->position,
@@ -68,25 +80,8 @@ class CaptureNode extends StatementNode
 				: 'ob_get_clean()',
 			$escaper->export(),
 			$this->variable,
-			$this->modifier,
+			$value,
 		);
-
-		if ($inHtmlText && $this->modifier->filters) {
-			// filters returned a plain string, wrap it back unless they changed the content type,
-			// empty string stays plain like in the unfiltered branch
-			$res .= $context->format(
-				<<<'XX'
-					if ($ʟ_fi->contentType === %dump && %node !== '') %node = new LR\Html(%node);
-
-					XX,
-				ContentType::Html,
-				$this->variable,
-				$this->variable,
-				$this->variable,
-			);
-		}
-
-		return $res . "\n";
 	}
 
 
