@@ -96,16 +96,6 @@ final class Linter
 
 	public function lintLatte(string $file): bool
 	{
-		set_error_handler(function (int $severity, string $message, string $errFile = '', int $errLine = 0) use ($file): bool {
-			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
-				$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
-				$label = $severity === E_USER_DEPRECATED ? 'DEPRECATED' : 'WARNING';
-				$this->writeError($label, $file . $pos, $message);
-				return true;
-			}
-			return false;
-		});
-
 		if ($this->debug) {
 			echo $file, "\n";
 		}
@@ -117,6 +107,16 @@ final class Linter
 		if (str_starts_with($s, "\xEF\xBB\xBF")) {
 			$this->writeError('WARNING', $file, 'contains BOM');
 		}
+
+		set_error_handler(function (int $severity, string $message, string $errFile = '', int $errLine = 0) use ($file): bool {
+			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
+				$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
+				$label = $severity === E_USER_DEPRECATED ? 'DEPRECATED' : 'WARNING';
+				$this->writeError($label, $file . $pos, $message);
+				return true;
+			}
+			return false;
+		});
 
 		try {
 			$this->getEngine()
