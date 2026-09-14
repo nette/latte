@@ -12,9 +12,27 @@ other pass), that traverses the AST in the **`leave`** phase and:
   *allowed* functions and filters get their arguments rewritten through a runtime
   `args()` guard (wrapped in an `AuxiliaryNode`);
 - **replaces** property/method fetches and calls with `Sandbox\Nodes\*` wrappers that
-  emit a **runtime** `RuntimeChecker` call (`callMethod`/`prop`/`call`; first-class
+  emit a **runtime** `RuntimeChecker` call (`method`/`prop`/`call`; first-class
   callable syntax emits `closure()`) — so method/property access is enforced at
-  render time, not compile time.
+  render time, not compile time;
+- refuses `(array)` of an object at runtime and checks every public property of a
+  non-Traversable object iterated by `{foreach}` (`castToArray`/`iterable`; a foreach
+  by reference uses `iterableByRef`, which keeps the reference).
+
+`method()` and `prop()` only check and return the receiver; the access itself stays a
+native `->` or `?->`, so null handling and errors are PHP's own. Two traps follow, both
+handled in `Nodes\MemberAccess`. A dynamic name is evaluated once into a temporary:
+PHP reads the name of a write only after the right-hand side, so a second evaluation
+would check one name and write another. And PHP ends nullsafe short-circuiting at the
+argument of the check, so every link after a `?->` is printed as `?->` too.
+
+`Essential\CachingIterator` defines `__call` for the same reason the policy exists:
+SPL would otherwise forward an unknown method called on `$iterator` to the inner
+iterator, past a policy that allows all methods of `CachingIterator`.
+
+Tags, filters and functions are checked at compile time, so the template cache must
+tell policies apart: `SandboxExtension::getCacheKey()` uses the duck-typed
+`getCacheSignature()` and triggers a deprecation for a policy without it.
 
 Tags are gated separately (`isTagAllowed` in the parser), and the runtime checker is
 exposed as the `sandbox` provider at `beforeRender`.
