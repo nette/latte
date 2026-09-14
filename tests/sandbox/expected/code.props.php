@@ -23,7 +23,7 @@
 		echo "\n";
 		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop['x']['y'], 'prop')->prop) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->callMethod($this->global->sandbox->prop($obj, 'prop')->prop['x'], 'method', [], false)) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::escapeText($this->global->sandbox->method($this->global->sandbox->prop($obj, 'prop')->prop['x'], 'method')->method()) /* pos %d%:%d% */;
 		echo "\n";
 		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop($obj, 'prop')->{'prop'}) /* pos %d%:%d% */;
 		echo "\n";

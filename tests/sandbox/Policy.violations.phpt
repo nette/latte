@@ -121,6 +121,12 @@ Assert::exception(
 
 Assert::exception(
 	fn() => $latte->renderToString('{=$obj->method()}', ['obj' => 1]),
+	Error::class,
+	'Call to a member function method() on int',
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('{=$obj->$method()}', ['obj' => new Test, 'method' => 1]),
 	Latte\SecurityViolationException::class,
 	'Invalid callable.',
 );

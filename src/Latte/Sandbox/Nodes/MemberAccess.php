@@ -8,7 +8,7 @@
 namespace Latte\Sandbox\Nodes;
 
 use Latte\Compiler\{Node, PrintContext};
-use Latte\Compiler\Nodes\Php\{IdentifierNode, NameNode};
+use Latte\Compiler\Nodes\Php\{Expression, IdentifierNode, NameNode};
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 
 
@@ -32,5 +32,31 @@ trait MemberAccess
 
 		$var = '$ʟ_name' . $context->generateId();
 		return [$context->format("$var = %node", $name), '{' . $var . '}'];
+	}
+
+
+	/**
+	 * Short-circuiting of a nullsafe chain ends at the check call, so the links after it must be nullsafe too.
+	 */
+	private function printOperator(): string
+	{
+		$node = $this;
+		while ($node) {
+			if (
+				($node instanceof Expression\PropertyFetchNode || $node instanceof Expression\MethodCallNode)
+				&& $node->nullsafe
+			) {
+				return '?->';
+			}
+
+			$node = match (true) {
+				$node instanceof Expression\PropertyFetchNode, $node instanceof Expression\MethodCallNode => $node->object,
+				$node instanceof Expression\ArrayAccessNode => $node->expr,
+				$node instanceof Expression\StaticPropertyFetchNode, $node instanceof Expression\StaticMethodCallNode => $node->class,
+				default => null,
+			};
+		}
+
+		return '->';
 	}
 }

@@ -30,7 +30,7 @@ class PropertyFetchNode extends Expression\PropertyFetchNode
 		return '$this->global->sandbox->prop('
 			. $this->object->print($context) . ', '
 			. $name . ')'
-			. ($this->nullsafe ? '?->' : '->')
+			. $this->printOperator()
 			. $member;
 	}
 }

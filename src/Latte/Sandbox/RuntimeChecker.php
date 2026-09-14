@@ -33,26 +33,21 @@ final readonly class RuntimeChecker
 
 
 	/**
-	 * Calls a method on an object after verifying it is allowed by the policy.
-	 * @param  array<mixed>  $args
+	 * Validates that calling the method is allowed by the policy and returns the object.
 	 */
-	public function callMethod(mixed $object, mixed $method, array $args, bool $nullsafe = false): mixed
+	public function method(mixed $object, mixed $method): mixed
 	{
-		if ($object === null) {
-			if ($nullsafe) {
-				throw new \Error("Call to a member function $method() on null");
-			}
-			return null;
+		if (!is_object($object)) {
+			return $object;
 
-		} elseif (!is_object($object) || !is_string($method)) {
+		} elseif (!is_string($method)) {
 			throw new Latte\SecurityViolationException('Invalid callable.');
 
 		} elseif (!$this->policy->isMethodAllowed($class = $object::class, $method)) {
 			throw new Latte\SecurityViolationException("Calling $class::$method() is not allowed.");
 		}
 
-		self::args(...$args);
-		return $object->$method(...$args);
+		return $object;
 	}
 
 

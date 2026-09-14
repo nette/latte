@@ -7,7 +7,7 @@
 
 namespace Latte\Sandbox\Nodes;
 
-use Latte\Compiler\Nodes\Php\{ArgumentNode, Expression};
+use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\PrintContext;
 
 
@@ -16,6 +16,8 @@ use Latte\Compiler\PrintContext;
  */
 class MethodCallNode extends Expression\MethodCallNode
 {
+	use MemberAccess;
+
 	public function __construct(Expression\MethodCallNode $from)
 	{
 		parent::__construct($from->object, $from->name, $from->args, $from->nullsafe, $from->position);
@@ -30,12 +32,12 @@ class MethodCallNode extends Expression\MethodCallNode
 				. $context->memberAsString($this->name) . '])';
 		}
 
-		/** @var array<ArgumentNode> $args */
-		$args = $this->args;
-		return '$this->global->sandbox->callMethod('
+		[$name, $member] = $this->printName($context, $this->name);
+		return '$this->global->sandbox->method('
 			. $this->object->print($context) . ', '
-			. $context->memberAsString($this->name) . ', '
-			. $context->argumentsAsArray($args)
-			. ', ' . var_export($this->nullsafe, return: true) . ')';
+			. $name . ')'
+			. $this->printOperator()
+			. $member
+			. '(' . ($this->args ? '...$this->global->sandbox->args(' . $context->implode($this->args) . ')' : '') . ')';
 	}
 }
