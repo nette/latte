@@ -95,6 +95,45 @@ final readonly class RuntimeChecker
 	}
 
 
+	/**
+	 * Casts the value to array, which is not allowed for an object, as it would reveal its non-public state.
+	 * @return mixed[]
+	 */
+	public function castToArray(mixed $value): array
+	{
+		if (is_object($value)) {
+			throw new Latte\SecurityViolationException('Casting a ' . $value::class . ' object to array is not allowed.');
+		}
+
+		return (array) $value;
+	}
+
+
+	/**
+	 * Validates that iterating the value is allowed by the policy and returns it. Iterating a plain object reads its properties.
+	 */
+	public function iterable(mixed $value): mixed
+	{
+		if (is_object($value) && !$value instanceof \Traversable) {
+			foreach (array_keys(get_object_vars($value)) as $property) {
+				$this->prop($value, $property);
+			}
+		}
+
+		return $value;
+	}
+
+
+	/**
+	 * Same as iterable() for foreach by reference.
+	 */
+	public function &iterableByRef(mixed &$value): mixed
+	{
+		$this->iterable($value);
+		return $value;
+	}
+
+
 	private function checkCallable(mixed $callable): void
 	{
 		if (!is_callable($callable)) {

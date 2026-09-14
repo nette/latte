@@ -123,6 +123,20 @@ final class SandboxExtension extends Latte\Extension
 
 			return $node;
 
+		} elseif ($node instanceof Expression\CastNode && strtolower($node->type) === 'array') {
+			return new Expression\AuxiliaryNode(
+				fn(PrintContext $context, Node $expr) => '$this->global->sandbox->castToArray(' . $expr->print($context) . ')',
+				[$node->expr],
+			);
+
+		} elseif ($node instanceof Latte\Essential\Nodes\ForeachNode) {
+			$method = $node->byRef && $node->expression->isWritable() ? 'iterableByRef' : 'iterable';
+			$node->expression = new Expression\AuxiliaryNode(
+				fn(PrintContext $context, Node $expr) => '$this->global->sandbox->' . $method . '(' . $expr->print($context) . ')',
+				[$node->expression],
+			);
+			return $node;
+
 		} elseif ($node instanceof Expression\PropertyFetchNode
 			|| $node instanceof Expression\StaticPropertyFetchNode
 			|| $node instanceof Expression\FunctionCallNode
