@@ -127,7 +127,7 @@ class SecurityPolicy implements Latte\Policy
 	public function allowProperties(string $class, array $properties): self
 	{
 		$this->propertyCache = [];
-		$this->properties[$class] = array_flip(array_map(strtolower(...), $properties));
+		$this->properties[$class] = array_flip($properties);
 		return $this;
 	}
 
@@ -181,7 +181,6 @@ class SecurityPolicy implements Latte\Policy
 
 	public function isPropertyAllowed(string $class, string $property): bool
 	{
-		$property = strtolower($property);
 		$res = &$this->propertyCache[$class][$property];
 		assert(is_bool($res) || $res === null);
 		if (isset($res)) {

@@ -114,9 +114,15 @@ Assert::exception(
 	"Access to 'prop' property on a stdClass object is not allowed.",
 );
 
-$policy->allowProperties('sTdClass', ['pRop']);
+$policy->allowProperties('sTdClass', ['prop']);
 
 Assert::noError(fn() => $latte->renderToString('{=$obj->prop}', ['obj' => (object) ['prop' => 123]]));
+
+Assert::exception( // property names are case-sensitive
+	fn() => $latte->renderToString('{=$obj->pRop}', ['obj' => (object) ['pRop' => 123]]),
+	Latte\SecurityViolationException::class,
+	"Access to 'pRop' property on a stdClass object is not allowed.",
+);
 
 Assert::exception(
 	fn() => $latte->renderToString('{=$obj->prop2}', ['obj' => (object) []]),
