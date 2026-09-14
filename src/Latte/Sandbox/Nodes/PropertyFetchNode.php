@@ -16,6 +16,8 @@ use Latte\Compiler\PrintContext;
  */
 class PropertyFetchNode extends Expression\PropertyFetchNode
 {
+	use MemberAccess;
+
 	public function __construct(Expression\PropertyFetchNode $from)
 	{
 		parent::__construct($from->object, $from->name, $from->nullsafe, $from->position);
@@ -24,10 +26,11 @@ class PropertyFetchNode extends Expression\PropertyFetchNode
 
 	public function print(PrintContext $context): string
 	{
+		[$name, $member] = $this->printName($context, $this->name);
 		return '$this->global->sandbox->prop('
 			. $this->object->print($context) . ', '
-			. $context->memberAsString($this->name) . ')'
+			. $name . ')'
 			. ($this->nullsafe ? '?->' : '->')
-			. $context->objectProperty($this->name);
+			. $member;
 	}
 }

@@ -16,6 +16,8 @@ use Latte\Compiler\PrintContext;
  */
 class StaticPropertyFetchNode extends Expression\StaticPropertyFetchNode
 {
+	use MemberAccess;
+
 	public function __construct(Expression\StaticPropertyFetchNode $from)
 	{
 		parent::__construct($from->class, $from->name, $from->position);
@@ -24,10 +26,11 @@ class StaticPropertyFetchNode extends Expression\StaticPropertyFetchNode
 
 	public function print(PrintContext $context): string
 	{
+		[$name, $member] = $this->printName($context, $this->name);
 		return '$this->global->sandbox->prop('
 			. $context->memberAsString($this->class) . ', '
-			. $context->memberAsString($this->name) . ')'
+			. $name . ')'
 			. '::$'
-			. $context->objectProperty($this->name);
+			. $member;
 	}
 }
