@@ -51,3 +51,29 @@ Assert::match(
 	'  parent    parent',
 	$latte->renderToString('main3'),
 );
+
+
+$latte->setLoader(new Latte\Loaders\StringLoader([
+	'grandparent' => '{block foo}G{/block}',
+	'parent' => '{extends "grandparent"}{block foo}{if $n}{include foo, n: $n - 1}{/if}P{$n}{include parent}{/block}',
+	'main' => '{extends "parent"}{block foo}C{include parent}{/block}',
+	'failing' => '{block foo}{do $fail()}F{/block}',
+	'retry' => '{extends "failing"}{block foo}{try}{include parent}{/try}{include parent}{/block}',
+]));
+
+// recursion through the same block
+Assert::same(
+	'CCP0GP1G',
+	$latte->renderToString('main', ['n' => 1]),
+);
+
+// parent block is available again after it has thrown
+$calls = 0;
+Assert::same(
+	'F',
+	$latte->renderToString('retry', ['fail' => function () use (&$calls) {
+		if (!$calls++) {
+			throw new RuntimeException;
+		}
+	}]),
+);

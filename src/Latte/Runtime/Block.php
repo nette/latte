@@ -13,6 +13,9 @@ final class Block
 {
 	public ?string $contentType = null;
 
-	/** @var \Closure[] */
+	/** @var list<\Closure> */
 	public array $functions = [];
+
+	/** index in $functions of the override being rendered */
+	public int $level = 0;
 }

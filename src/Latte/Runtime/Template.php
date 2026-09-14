@@ -129,17 +129,18 @@ class Template
 			throw new Latte\RuntimeException("Cannot include undefined block '$name'$hint");
 		}
 
-		$fn = reset($block->functions);
-		assert($fn !== false);
 		$this->renderingBlocks[] = $name;
+		$level = $block->level;
+		$block->level = 0;
 		try {
 			$this->filter(
-				fn() => $fn($params),
+				fn() => $block->functions[0]($params),
 				$mod,
 				$block->contentType ?? static::ContentType,
 				"block $name",
 			);
 		} finally {
+			$block->level = $level;
 			array_pop($this->renderingBlocks);
 		}
 	}
@@ -154,11 +155,16 @@ class Template
 	{
 		$name ??= end($this->renderingBlocks) ?: throw new Latte\RuntimeException('Cannot include parent block outside of any block.');
 		$block = $this->blocks[self::LayerLocal][$name] ?? $this->blocks[self::LayerTop][$name] ?? null;
-		if (!$block || ($function = next($block->functions)) === false) {
+		if (!$block || !isset($block->functions[$block->level + 1])) {
 			throw new Latte\RuntimeException("Cannot include undefined parent block '$name'.");
 		}
-		$function($params);
-		prev($block->functions);
+
+		$block->level++;
+		try {
+			$block->functions[$block->level]($params);
+		} finally {
+			$block->level--;
+		}
 	}
 
 
@@ -312,7 +318,7 @@ class Template
 
 	/**
 	 * Creates block if doesn't exist and checks if content type is the same.
-	 * @param  \Closure[]  $functions
+	 * @param  list<\Closure>  $functions
 	 * @internal
 	 */
 	protected function addBlock(
