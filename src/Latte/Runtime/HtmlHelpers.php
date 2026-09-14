@@ -380,22 +380,23 @@ final class HtmlHelpers
 
 
 	/**
-	 * Classifies script content type based on the MIME type.
+	 * Classifies script content type based on the MIME type. Whatever is not plainly a data block
+	 * counts as JavaScript, because escaping a data block as JS is harmless, while the opposite is not.
 	 */
 	public static function classifyScriptType(string $type): string
 	{
 		$type = trim($type, " \t\n\f\r"); // browsers strip ASCII whitespace before matching
-		if (preg_match(
-			'#((application|text)/(((x-)?java|ecma|j|live)script|json)|application/.+\+json|text/plain|module|importmap|)$#Ai',
-			$type,
-		)) {
-			return ContentType::JavaScript;
-
-		} elseif (preg_match('#text/((x-)?template|html)$#Ai', $type)) {
+		if (preg_match('#text/((x-)?template|html)$#Ai', $type)) {
 			return ContentType::Html;
+
+		} elseif (
+			preg_match('#[a-z0-9.+-]+/[a-z0-9.+-]+$#Ai', $type)
+			&& !preg_match('#.*(script|json)|text/plain$#Ai', $type)
+		) {
+			return ContentType::Text;
 		}
 
-		return ContentType::Text;
+		return ContentType::JavaScript;
 	}
 
 

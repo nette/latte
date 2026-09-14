@@ -14,36 +14,36 @@ $latte = createLatte();
 
 // escaping of string
 Assert::match(
-	'<script type="foo"> <div title=\'\' <\/script>\'>  <\/script> </div> </script>',
-	$latte->renderToString('<script type="foo"> <div title=\'{="\' </script>"}\'>  {="</script>"} </div> </script>'),
+	'<script type="text/foo"> <div title=\'\' <\/script>\'>  <\/script> </div> </script>',
+	$latte->renderToString('<script type="text/foo"> <div title=\'{="\' </script>"}\'>  {="</script>"} </div> </script>'),
 );
 
 // escaping of Html object
 Assert::match(
-	'<script type="foo"> <div title=\'<\/script>\'></div> </script>',
+	'<script type="text/foo"> <div title=\'<\/script>\'></div> </script>',
 	$latte->renderToString(
-		'<script type="foo"> {$foo} </script>',
+		'<script type="text/foo"> {$foo} </script>',
 		['foo' => new Html("<div title='</script>'></div>")],
 	),
 );
 
 // include
 Assert::exception(
-	fn() => $latte->renderToString('{define a}<script></script>{/define} <script type="foo">{include a}</script>'),
+	fn() => $latte->renderToString('{define a}<script></script>{/define} <script type="text/foo">{include a}</script>'),
 	Latte\RuntimeException::class,
 	'Including block a with content type HTML into incompatible type HTML/RAW/TEXT.',
 );
 
 // no escape
 Assert::match(
-	'<script type="foo"><\/script></script>',
-	$latte->renderToString('<script type="foo">{="</script>"|noescape}</script>'),
+	'<script type="text/foo"><\/script></script>',
+	$latte->renderToString('<script type="text/foo">{="</script>"|noescape}</script>'),
 );
 
 // content of <script> is RAWTEXT
 Assert::match(
 	<<<'XX'
-			<script type="foo">
+			<script type="text/foo">
 			<div n:foreach="[a, b] as $i">def</div>
 			</script>
 			<div>a</div>
@@ -54,7 +54,7 @@ Assert::match(
 		<<<'XX'
 
 				{var $i = def}
-				<script type="foo">
+				<script type="text/foo">
 				<div n:foreach="[a, b] as $i">{$i}</div>
 				</script>
 				<div n:foreach="[a, b] as $i">{$i}</div>
@@ -66,7 +66,7 @@ Assert::match(
 // content of <script> changed to html
 Assert::match(
 	<<<'XX'
-			<script type="foo">
+			<script type="text/foo">
 			<div>a</div>
 			<div>b</div>
 			</script>
@@ -78,7 +78,7 @@ Assert::match(
 		<<<'XX'
 
 				{var $i = def}
-				<script type="foo">
+				<script type="text/foo">
 				{contentType html}
 				<div n:foreach="[a, b] as $i">{$i}</div>
 				</script>
