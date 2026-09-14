@@ -9,7 +9,8 @@ namespace Latte;
 
 
 /**
- * Security policy for sandbox mode.
+ * Security policy for sandbox mode. Tags, filters and functions are checked at compile time, so an implementation
+ * should also have method getCacheSignature(): mixed returning a value that identifies its rules.
  */
 interface Policy
 {

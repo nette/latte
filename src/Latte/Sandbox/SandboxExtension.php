@@ -58,11 +58,18 @@ final class SandboxExtension extends Latte\Extension
 	public function getCacheKey(Engine $engine): mixed
 	{
 		$policy = $engine->getPolicy(effective: true);
-		return match (true) {
-			!$policy => false,
-			method_exists($policy, 'getCacheSignature') => [$policy::class, $policy->getCacheSignature()],
-			default => $policy::class,
-		};
+		if (!$policy) {
+			return false;
+		} elseif (method_exists($policy, 'getCacheSignature')) {
+			return [$policy::class, $policy->getCacheSignature()];
+		}
+
+		trigger_error(
+			$policy::class
+			. ' should implement getCacheSignature(), otherwise its instances with different rules share compiled templates.',
+			E_USER_DEPRECATED,
+		);
+		return $policy::class;
 	}
 
 

@@ -38,4 +38,10 @@ class PolicyLogger implements Latte\Policy
 		$this->log['properties'][] = [$class, $property];
 		return true;
 	}
+
+
+	public function getCacheSignature(): mixed
+	{
+		return null;
+	}
 }
