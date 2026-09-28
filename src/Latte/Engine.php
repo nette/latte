@@ -8,7 +8,7 @@
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
-use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, preg_match, serialize, substr;
+use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, in_array, preg_match, serialize, str_ends_with, str_starts_with, strtolower, substr;
 
 
 /**
@@ -196,7 +196,7 @@ class Engine
 	public function generate(TemplateNode $node, string $name): string
 	{
 		$generator = new Compiler\TemplateGenerator;
-		$generator->buildClass($node, $this->features);
+		$generator->buildClass($node, $this->features, $this->getAttributeContexts());
 		return $generator->generateCode($this->getTemplateClass($name), $name, $this->hasFeature(Feature::StrictTypes));
 	}
 
@@ -278,11 +278,40 @@ class Engine
 			$this->contentType,
 			$this->features,
 			$this->syntax,
+			$this->getAttributeContexts(),
 			array_map(
 				fn($extension) => [get_debug_type($extension), $extension->getCacheKey($this)],
 				$this->extensions,
 			),
 		];
+	}
+
+
+	/**
+	 * Returns escaping contexts of custom HTML attributes registered by extensions.
+	 * @return array<string, string>
+	 */
+	private function getAttributeContexts(): array
+	{
+		$res = [];
+		foreach ($this->extensions as $extension) {
+			foreach ($extension->getAttributeContexts() as $name => $context) {
+				$name = strtolower((string) $name);
+				$prefix = str_ends_with($name, '*') ? substr($name, 0, -1) : null;
+				if (!in_array($context, [ContentType::JavaScript, ContentType::Css, ContentType::Html], strict: true)) {
+					throw new \LogicException("Invalid context for attribute '$name', expected ContentType::JavaScript, Css or Html.");
+				} elseif (!preg_match('~' . Compiler\TemplateLexer::ReAttrName . '+$~DAu', $name)) {
+					throw new \LogicException("Invalid attribute name '$name'.");
+				} elseif ($prefix === null
+					? str_starts_with($name, 'on') || $name === 'style' || $name === 'srcdoc'
+					: str_starts_with($prefix, 'on') || str_starts_with('on', $prefix) || str_starts_with('style', $prefix) || str_starts_with('srcdoc', $prefix)
+				) {
+					throw new \LogicException("Attribute '$name' would override the built-in context of on*, style or srcdoc.");
+				}
+				$res[$name] = $context;
+			}
+		}
+		return $res;
 	}
 
 
