@@ -190,7 +190,7 @@ class Engine
 	public function generate(TemplateNode $node, string $name): string
 	{
 		$generator = new Compiler\TemplateGenerator;
-		$generator->buildClass($node, $this->features);
+		$generator->buildClass($node, $this->features, $this->getAttributeContentTypes());
 		return $generator->generateCode($this->getTemplateClass($name), $name, $this->hasFeature(Feature::StrictTypes));
 	}
 
@@ -272,11 +272,40 @@ class Engine
 			$this->contentType,
 			$this->features,
 			$this->syntax,
+			$this->getAttributeContentTypes(),
 			array_map(
 				fn($extension) => [get_debug_type($extension), $extension->getCacheKey($this)],
 				$this->extensions,
 			),
 		];
+	}
+
+
+	/**
+	 * Returns content types of HTML attributes: the built-in ones and those registered by extensions.
+	 * @return array<string, string>
+	 */
+	private function getAttributeContentTypes(): array
+	{
+		$res = Runtime\HtmlHelpers::AttributeContentTypes;
+		$builtins = array_keys($res);
+		foreach ($this->extensions as $extension) {
+			foreach ($extension->getAttributeContentTypes() as $name => $contentType) {
+				$name = strtolower((string) $name);
+				$prefix = str_ends_with($name, '*') ? substr($name, 0, -1) : null;
+				if (!in_array($contentType, [ContentType::JavaScript, ContentType::Css, ContentType::Html], true)) {
+					throw new \LogicException("Invalid content type of attribute '$name', expected ContentType::JavaScript, Css or Html.");
+				} elseif (!preg_match('~' . Compiler\TemplateLexer::ReAttrName . '+$~DAu', $name)) {
+					throw new \LogicException("Invalid attribute name '$name'.");
+				} elseif (Runtime\HtmlHelpers::matchAttributeContentType($prefix ?? $name) !== null // a built-in applies to it
+					|| ($prefix !== null && array_filter($builtins, fn($key) => str_starts_with($key, $prefix))) // it applies to a built-in
+				) {
+					throw new \LogicException("Attribute '$name' would override the built-in content type of on*, style or srcdoc.");
+				}
+				$res[$name] = $contentType;
+			}
+		}
+		return $res;
 	}
 
 

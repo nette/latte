@@ -72,6 +72,16 @@ abstract class Extension
 
 
 	/**
+	 * Returns content types of HTML attributes, e.g. ['x-on:*' => ContentType::JavaScript, 'x-tooltip' => ContentType::Html].
+	 * @return array<string, string>  name or prefix with trailing * => ContentType::JavaScript, Css or Html
+	 */
+	public function getAttributeContentTypes(): array
+	{
+		return [];
+	}
+
+
+	/**
 	 * Returns a value that invalidates the template cache when the extension configuration changes.
 	 */
 	public function getCacheKey(Engine $engine): mixed
