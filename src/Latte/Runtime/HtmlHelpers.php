@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Nette;
-use function in_array, is_array, is_bool, is_float, is_int, is_string;
+use function in_array, is_array, is_bool, is_float, is_int, is_string, strlen;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -20,6 +20,13 @@ use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8
  */
 final class HtmlHelpers
 {
+	/** built-in content types of attributes: lowercase name or prefix with trailing * => ContentType::JavaScript, Css or Html */
+	public const AttributeContentTypes = [
+		'on*' => ContentType::JavaScript,
+		'style' => ContentType::Css,
+		'srcdoc' => ContentType::Html,
+	];
+
 	private const BooleanAttributes = [
 		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
 		'default' => 1, 'defer' => 1, 'disabled' => 1, 'formnovalidate' => 1, 'inert' => 1, 'ismap' => 1,
@@ -251,20 +258,47 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * Returns the content type of an HTML attribute (exact name first, then the longest prefix), or null if there is none.
+	 * @param  array<string, string>  $contentTypes  lowercase name or prefix with trailing * => content type, see AttributeContentTypes
 	 */
-	public static function classifyAttributeType(string $name): string
+	public static function matchAttributeContentType(string $name, array $contentTypes = self::AttributeContentTypes): ?string
 	{
 		$name = strtolower($name);
+		if (isset($contentTypes[$name])) {
+			return $contentTypes[$name];
+		}
+
+		$res = null;
+		$len = 0;
+		foreach ($contentTypes as $key => $contentType) {
+			if (str_ends_with($key, '*') && strlen($key) > $len && str_starts_with($name, substr($key, 0, -1))) {
+				$res = $contentType;
+				$len = strlen($key);
+			}
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * @param  array<string, string>  $contentTypes  see matchAttributeContentType()
+	 */
+	public static function classifyAttributeType(string $name, array $contentTypes = self::AttributeContentTypes): string
+	{
+		$name = strtolower($name);
+		$contentType = self::matchAttributeContentType($name, $contentTypes);
 		return match (true) {
+			$contentType === ContentType::JavaScript => '',
+			$contentType === ContentType::Css => 'style',
+			$contentType === ContentType::Html => 'srcdoc',
+			$contentType !== null => throw new \LogicException("Unknown content type '$contentType' of attribute '$name'."),
 			isset(self::BooleanAttributes[$name]) => 'bool',
 			isset(self::TristateAttributes[$name]) => 'tristate',
 			isset(self::ValuedBooleanAttributes[$name]) => 'valuedBool',
 			isset(self::SpaceSeparatedAttributes[$name]) => 'list',
 			str_starts_with($name, 'data-') => 'data',
 			str_starts_with($name, 'aria-') => 'aria',
-			$name === 'style' => 'style',
-			$name === 'srcdoc' => 'srcdoc',
 			default => '',
 		};
 	}

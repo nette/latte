@@ -8,6 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\{ContentType, Engine};
+use Latte\Runtime\HtmlHelpers;
 use function is_int;
 
 
@@ -29,10 +30,15 @@ final class TemplateGenerator
 	/**
 	 * Builds template class.
 	 * @param array<string, bool>  $features
+	 * @param array<string, string>  $attributeContentTypes
 	 */
-	public function buildClass(Nodes\TemplateNode $node, array $features = []): void
+	public function buildClass(
+		Nodes\TemplateNode $node,
+		array $features = [],
+		array $attributeContentTypes = HtmlHelpers::AttributeContentTypes,
+	): void
 	{
-		$context = new PrintContext($node->contentType, $features);
+		$context = new PrintContext($node->contentType, $features, new Escaper($node->contentType, $attributeContentTypes));
 		$this->generateBase($node, $context);
 		$this->generateBlocks($context);
 	}
