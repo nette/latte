@@ -47,6 +47,12 @@ and is encoded only once, so trusted HTML keeps its tags. All three places route
 `srcdoc` through it: the `html/attr/html` state in `escape()` and in the
 `Convertors`, and `formatSrcdocAttribute` for dynamic attributes and `n:attr`.
 
+With `Feature::MigrationWarnings`, `formatSrcdocAttribute` warns about a plain value
+whose document differs from its text (it contains `<` or a character reference),
+i.e. one that used to render as markup. Only the formatter paths warn: a mixed value
+like `srcdoc="<p>{$x}</p>"` is escaped by code `Escaper::escape()` emits, and
+`Escaper` has no access to feature flags.
+
 ## How nodes obtain the context: the `PrintContext` escaper stack
 
 At print time the current escaping context lives in a **stack of `Escaper`s inside
