@@ -30,10 +30,11 @@ final class TemplateGenerator
 	/**
 	 * Builds template class.
 	 * @param array<string, bool>  $features
+	 * @param array<string, string>  $attributeContexts
 	 */
-	public function buildClass(Nodes\TemplateNode $node, array $features = []): void
+	public function buildClass(Nodes\TemplateNode $node, array $features = [], array $attributeContexts = []): void
 	{
-		$context = new PrintContext($node->contentType, $features);
+		$context = new PrintContext($node->contentType, $features, new Escaper($node->contentType, $attributeContexts));
 		$this->generateBase($node, $context);
 		$this->generateBlocks($context);
 	}

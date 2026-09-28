@@ -81,6 +81,8 @@ class Escaper
 
 	public function __construct(
 		private string $contentType,
+		/** @var array<string, string> custom attribute contexts, see HtmlHelpers::matchAttributeContext() */
+		private readonly array $attributeContexts = [],
 	) {
 		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], strict: true)
 			? self::HtmlText
@@ -91,6 +93,13 @@ class Escaper
 	public function getContentType(): string
 	{
 		return $this->contentType;
+	}
+
+
+	/** @return array<string, string> */
+	public function getAttributeContexts(): array
+	{
+		return $this->attributeContexts;
 	}
 
 
@@ -161,6 +170,8 @@ class Escaper
 				$this->subType = self::Css;
 			} elseif ($name === 'srcdoc') {
 				$this->subType = self::HtmlText;
+			} elseif ($this->attributeContexts) {
+				$this->subType = HtmlHelpers::matchAttributeContext($name, $this->attributeContexts) ?? '';
 			}
 		}
 	}

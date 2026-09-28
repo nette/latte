@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Nette;
-use function get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_array, is_bool, is_float, is_int, is_string, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtr, trim;
+use function get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_array, is_bool, is_float, is_int, is_string, ord, preg_match, preg_replace, preg_replace_callback, str_ends_with, str_replace, str_starts_with, strip_tags, strlen, strtolower, strtr, substr, trim;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -184,12 +184,41 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * Returns the escaping context of a custom HTML attribute, or null if it is not registered.
+	 * @param  array<string, string>  $contexts  lowercase name or prefix with trailing * => context
 	 */
-	public static function classifyAttributeType(string $name): string
+	public static function matchAttributeContext(string $name, array $contexts): ?string
 	{
 		$name = strtolower($name);
+		if (isset($contexts[$name])) {
+			return $contexts[$name];
+		}
+
+		$res = null;
+		$len = 0;
+		foreach ($contexts as $key => $context) {
+			if (str_ends_with($key, '*') && strlen($key) > $len && str_starts_with($name, substr($key, 0, -1))) {
+				$res = $context;
+				$len = strlen($key);
+			}
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * @param  array<string, string>  $contexts  custom attribute contexts, see matchAttributeContext()
+	 */
+	public static function classifyAttributeType(string $name, array $contexts = []): string
+	{
+		$name = strtolower($name);
+		$context = self::matchAttributeContext($name, $contexts);
 		return match (true) {
+			$context === ContentType::JavaScript => '', // like on* attributes
+			$context === ContentType::Css => 'style',
+			$context === ContentType::Html => 'srcdoc',
+			$context !== null => throw new \LogicException("Unknown context '$context' for attribute '$name'."),
 			isset(self::BooleanAttributes[$name]) => 'bool',
 			isset(self::TristateAttributes[$name]) => 'tristate',
 			isset(self::ValuedBooleanAttributes[$name]) => 'valuedBool',
