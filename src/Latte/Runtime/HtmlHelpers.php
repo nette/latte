@@ -290,10 +290,18 @@ final class HtmlHelpers
 	 */
 	public static function formatSrcdocAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
-		return match (true) {
-			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeHtmlAttr($value) . '"',
-			default => self::formatAttribute($namePart, $value, $migrationWarnings),
-		};
+		if (!is_string($value) && !is_int($value) && !is_float($value) && !$value instanceof \Stringable) {
+			return self::formatAttribute($namePart, $value, $migrationWarnings);
+		}
+
+		if ($migrationWarnings
+			&& !$value instanceof HtmlStringable
+			&& !$value instanceof Nette\HtmlStringable
+			&& (str_contains($s = (string) $value, '<') || html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8') !== $s) // the document differs from the text
+		) {
+			self::triggerMigrationWarning(trim($namePart), 'string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\Html)');
+		}
+		return $namePart . '="' . self::escapeHtmlAttr($value) . '"';
 	}
 
 

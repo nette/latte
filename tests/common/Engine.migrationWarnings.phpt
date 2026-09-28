@@ -39,6 +39,12 @@ Assert::error(
 	'Behavior change for attribute \'contenteditable\' with value false: previously it rendered as contenteditable="", now it renders as contenteditable="false" (on line 1 at column 25)',
 );
 
+Assert::error(
+	fn() => $latte->renderToString('<iframe srcdoc="{=\'<b>x</b>\'}">'),
+	E_USER_WARNING,
+	'Behavior change for attribute \'srcdoc\' with string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\Html) (on line 1 at column 19)',
+);
+
 // |accept
 Assert::same(
 	'<input>',
