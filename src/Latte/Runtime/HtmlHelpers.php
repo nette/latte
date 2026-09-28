@@ -73,6 +73,15 @@ final class HtmlHelpers
 
 
 	/**
+	 * Escapes HTML for use inside attribute holding an HTML document (srcdoc).
+	 */
+	public static function escapeHtmlAttr(mixed $s): string
+	{
+		return self::escapeAttr(self::escapeText($s));
+	}
+
+
+	/**
 	 * Escapes string for use inside HTML tag.
 	 */
 	public static function escapeTag(mixed $s): string
@@ -175,7 +184,7 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', or ''.
+	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
 	 */
 	public static function classifyAttributeType(string $name): string
 	{
@@ -188,6 +197,7 @@ final class HtmlHelpers
 			str_starts_with($name, 'data-') => 'data',
 			str_starts_with($name, 'aria-') => 'aria',
 			$name === 'style' => 'style',
+			$name === 'srcdoc' => 'srcdoc',
 			default => '',
 		};
 	}
@@ -271,6 +281,26 @@ final class HtmlHelpers
 			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => is_string($k) ? $k . ': ' . $v : $v, '; '),
 			default => self::formatAttribute($namePart, $value),
 		};
+	}
+
+
+	/**
+	 * Formats HTML attribute 'srcdoc', whose value is an HTML document.
+	 */
+	public static function formatSrcdocAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
+	{
+		if (!is_string($value) && !is_int($value) && !is_float($value) && !$value instanceof \Stringable) {
+			return self::formatAttribute($namePart, $value, $migrationWarnings);
+		}
+
+		if ($migrationWarnings
+			&& !$value instanceof HtmlStringable
+			&& !$value instanceof Nette\HtmlStringable
+			&& (str_contains($s = (string) $value, '<') || html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8') !== $s) // the document differs from the text
+		) {
+			self::triggerMigrationWarning(trim($namePart), 'string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\Html)');
+		}
+		return $namePart . '="' . self::escapeHtmlAttr($value) . '"';
 	}
 
 
