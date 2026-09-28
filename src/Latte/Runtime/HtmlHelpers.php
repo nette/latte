@@ -41,6 +41,11 @@ final class HtmlHelpers
 		'accesskey' => 1, 'class' => 1, 'headers' => 1, 'itemprop' => 1, 'ping' => 1, 'rel' => 1, 'role' => 1, 'sandbox' => 1,
 	];
 
+	/** named character references that browsers decode even without a semicolon */
+	private const LegacyEntities = '(?:[aeiou](?:acute|circ|grave|uml)|[ano]tilde|y(?:acute|uml)|aring|aelig|ccedil|eth|oslash|thorn|szlig'
+		. '|amp|lt|gt|quot|nbsp|iexcl|cent|pound|curren|yen|brvbar|sect|uml|copy|ord[fm]|[lr]aquo|not|shy|reg|macr|deg|plusmn'
+		. '|sup[123]|acute|micro|para|middot|cedil|frac(?:1[24]|34)|iquest|times|divide)';
+
 
 	/**
 	 * Escapes string for use inside HTML text.
@@ -311,11 +316,22 @@ final class HtmlHelpers
 	 */
 	public static function formatSrcdocAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
 	{
-		return match (true) {
-			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable
-				=> $namePart . '="' . self::escapeHtmlAttr($value) . '"',
-			default => self::formatAttribute($namePart, $value, $migrationWarnings),
-		};
+		if (!is_string($value) && !is_int($value) && !is_float($value) && !$value instanceof \Stringable) {
+			return self::formatAttribute($namePart, $value, $migrationWarnings);
+		}
+
+		if ($migrationWarnings
+			&& !$value instanceof HtmlStringable
+			&& !$value instanceof Nette\HtmlStringable
+			&& (preg_match('~<[a-z/!?]|&(?:#(?:\d|x[\da-f])|' . self::LegacyEntities . ')~i', $s = (string) $value)
+				|| html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8') !== $s) // the document differs from the text
+		) {
+			self::triggerMigrationWarning(
+				trim($namePart),
+				'string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\Html)',
+			);
+		}
+		return $namePart . '="' . self::escapeHtmlAttr($value) . '"';
 	}
 
 
