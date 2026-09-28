@@ -12,9 +12,9 @@ layers that must stay in sync**.
   `(contentType, state, subType)`, emits a string that **calls** a runtime escaping
   function (e.g. `LR\HtmlHelpers::escapeText(...)`, `LR\Helpers::escapeCss(...)`;
   plain-text output goes through the `escape` filter instead). The subType is not
-  purely state-derived: `enterHtmlAttribute` infers `js` for `on*` and `css` for
-  `style` attributes, and `enterHtmlText` classifies a `<script>` by its `type`
-  attribute. `export()` serializes the state as a composite string
+  purely state-derived: `enterHtmlAttribute` infers `js` for `on*`, `css` for
+  `style` and `html` for `srcdoc` attributes, and `enterHtmlText` classifies a
+  `<script>` by its `type` attribute. `export()` serializes the state as a composite string
   (`'html/attr/js'`) — the key format used for block escaping and the convertor
   table below.
 - **Runtime** — the actual escaping functions live in `Runtime\Helpers` (JS / CSS /
@@ -36,6 +36,17 @@ type or a changed escaping rule must be reflected in *both* `Compiler\Escaper` a
 `Runtime\*` helpers, or generated templates will call an escaper that behaves
 differently than the compiler assumed.
 
+## `srcdoc` is escaped twice
+
+The value of `srcdoc` is an HTML document: the browser attribute-decodes it and then
+parses the result as HTML. Escaping it only as an attribute is therefore an XSS —
+`&lt;script&gt;` decodes to a live `<script>`, and an iframe without `sandbox` shares
+the parent's origin. `HtmlHelpers::escapeHtmlAttr` escapes a value as HTML text first
+and as an attribute second; an `Html` object passes through `escapeText` as markup
+and is encoded only once, so trusted HTML keeps its tags. All three places route
+`srcdoc` through it: the `html/attr/html` state in `escape()` and in the
+`Convertors`, and `formatSrcdocAttribute` for dynamic attributes and `n:attr`.
+
 ## How nodes obtain the context: the `PrintContext` escaper stack
 
 At print time the current escaping context lives in a **stack of `Escaper`s inside
@@ -54,7 +65,7 @@ element's `restoreEscape()` and leak the context past the element.
 A whole HTML attribute generated from an expression (`Html\ExpressionAttributeNode`)
 is not escaped via `Escaper` at all. The node picks a
 `Runtime\HtmlHelpers::format*Attribute` method at compile time — the attribute *type*
-(`bool`/`tristate`/`valuedBool`/`list`/`data`/`aria`/`style`) comes from the attribute name via
+(`bool`/`tristate`/`valuedBool`/`list`/`data`/`aria`/`style`/`srcdoc`) comes from the attribute name via
 `classifyAttributeType`, or is forced by an attribute modifier: `|toggle` anywhere in
 the chain, `|json` only as the **last** modifier (`json` never comes from the
 attribute name). Any non-HTML content type falls back to
