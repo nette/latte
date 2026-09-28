@@ -73,6 +73,18 @@ final class HtmlHelpers
 
 
 	/**
+	 * Escapes HTML for use inside attribute holding an HTML document (srcdoc).
+	 */
+	public static function escapeHtmlAttr(mixed $s): string
+	{
+		$document = $s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable
+			? $s->__toString()
+			: self::escapeAttr($s); // the value can land in the text as well as in an attribute of the document
+		return self::escapeAttr($document);
+	}
+
+
+	/**
 	 * Escapes string for use inside HTML tag.
 	 */
 	public static function escapeTag(mixed $s): string
@@ -175,7 +187,7 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', or ''.
+	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
 	 */
 	public static function classifyAttributeType(string $name): string
 	{
@@ -188,6 +200,7 @@ final class HtmlHelpers
 			str_starts_with($name, 'data-') => 'data',
 			str_starts_with($name, 'aria-') => 'aria',
 			$name === 'style' => 'style',
+			$name === 'srcdoc' => 'srcdoc',
 			default => '',
 		};
 	}
@@ -271,6 +284,19 @@ final class HtmlHelpers
 		return match (true) {
 			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => is_string($k) ? $k . ': ' . $v : $v, '; '),
 			default => self::formatAttribute($namePart, $value),
+		};
+	}
+
+
+	/**
+	 * Formats HTML attribute 'srcdoc', whose value is an HTML document.
+	 */
+	public static function formatSrcdocAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
+	{
+		return match (true) {
+			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable
+				=> $namePart . '="' . self::escapeHtmlAttr($value) . '"',
+			default => self::formatAttribute($namePart, $value, $migrationWarnings),
 		};
 	}
 
