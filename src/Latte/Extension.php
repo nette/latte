@@ -72,6 +72,17 @@ abstract class Extension
 
 
 	/**
+	 * Returns escaping contexts of custom HTML attributes, e.g. ['x-on:*' => ContentType::JavaScript].
+	 * A trailing * matches any attribute with the given prefix. Contexts are ContentType::JavaScript, Css or Html.
+	 * @return array<string, string>
+	 */
+	public function getAttributeContexts(): array
+	{
+		return [];
+	}
+
+
+	/**
 	 * Returns a value that invalidates the template cache when the extension configuration changes.
 	 */
 	public function getCacheKey(Engine $engine): mixed

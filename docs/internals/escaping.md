@@ -13,7 +13,8 @@ layers that must stay in sync**.
   function (e.g. `LR\HtmlHelpers::escapeText(...)`, `LR\Helpers::escapeCss(...)`;
   plain-text output goes through the `escape` filter instead). The subType is not
   purely state-derived: `enterHtmlAttribute` infers `js` for `on*`, `css` for
-  `style` and `html` for `srcdoc` attributes, and `enterHtmlText` classifies a
+  `style` and `html` for `srcdoc` attributes (and custom attributes, see below),
+  and `enterHtmlText` classifies a
   `<script>` by its `type` attribute and gives the content of `<textarea>` and `<title>`
   (also nested elements in them, but not `<title>` in SVG) the subType `rcdata`. `export()` serializes the state as a composite string
   (`'html/attr/js'`) — the key format used for block escaping and the convertor
@@ -69,6 +70,33 @@ corrupt the value, so `escapeRcData` leaves braces alone. A block defined there 
 `html/rcdata` too: filters see that type, and `convertRcDataToHtml` separates the braces
 when such a block is included into ordinary text. A block from ordinary text included
 there keeps its separators, since its output was escaped elsewhere.
+
+## Custom attribute contexts
+
+`Extension::getAttributeContexts()` maps attribute names, or prefixes ending with `*`,
+to `js`, `css` or `html` (e.g. `x-on:*`, Tippy's `data-tippy-content`). A registered
+attribute behaves exactly like its built-in counterpart `on*` / `style` / `srcdoc`.
+Only HTML templates use the map; the XML escaper never reads it. No new states or
+convertors exist: the value becomes the attribute subType, so `export()` yields the
+existing `html/attr/js|css|html`. The same double escaping as `srcdoc` applies to
+`html` attributes.
+
+- `Engine::getAttributeContexts()` merges the maps (last registration wins),
+  lowercases the keys and validates them. Built-ins can't be overridden: `on*`,
+  `style`, `srcdoc`, and prefixes such as `o*`/`s*`/`*` are rejected, so the name
+  checks in `enterHtmlAttribute` always run first. The map is part of the
+  configuration signature, so extensions need not put it in `getCacheKey()`.
+- `TemplateGenerator` seeds the `PrintContext` with an `Escaper` that carries the map.
+  Clones inherit it.
+- `HtmlHelpers::matchAttributeContext` (exact name, then longest prefix) is the single
+  matcher. It is used in three places:
+  - `enterHtmlAttribute`, at compile time;
+  - `classifyAttributeType($name, $contexts)`, called by `ExpressionAttributeNode`;
+  - `NAttrNode::attrs()`, at runtime. The compiled call passes the map as
+    `contexts: [...]`, but only when the map is non-empty.
+
+  A custom match wins over the bool/list/`data-`/`aria-` classification, so
+  `data-tippy-content={$x}` is formatted as `srcdoc`, not JSON-encoded as `data`.
 
 ## How nodes obtain the context: the `PrintContext` escaper stack
 
