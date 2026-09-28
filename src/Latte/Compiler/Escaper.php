@@ -40,6 +40,7 @@ class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			'xml' => 'XmlHelpers::escapeText',
 			'xml/attr' => 'XmlHelpers::escapeAttr',
@@ -48,6 +49,7 @@ class Escaper
 			self::HtmlText => 'HtmlHelpers::escapeText',
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
 			self::HtmlRawText . '/' . self::JavaScript => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
@@ -55,6 +57,7 @@ class Escaper
 			self::HtmlText => 'HtmlHelpers::escapeText',
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
+			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
 			self::HtmlRawText . '/' . self::Css => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
@@ -63,6 +66,7 @@ class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::convertHtmlToAttr',
+			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeAttr',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			self::HtmlRawText . '/' . self::HtmlText => 'HtmlHelpers::convertHtmlToRawText',
 		],
@@ -155,6 +159,8 @@ class Escaper
 				$this->subType = self::JavaScript;
 			} elseif ($name === 'style') {
 				$this->subType = self::Css;
+			} elseif ($name === 'srcdoc') {
+				$this->subType = self::HtmlText;
 			}
 		}
 	}
@@ -182,6 +188,7 @@ class Escaper
 					'' => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
 					self::JavaScript => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs(' . $str . '))',
 					self::Css => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss(' . $str . '))',
+					self::HtmlText => 'LR\HtmlHelpers::escapeHtmlAttr(' . $str . ')',
 				},
 				self::HtmlComment => 'LR\HtmlHelpers::escapeComment(' . $str . ')',
 				self::HtmlBogusTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
