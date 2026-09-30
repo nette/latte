@@ -44,6 +44,9 @@ test('with locale', function () {
 	Assert::same("-1\u{00A0}234", $filters->number(-1234));
 	Assert::same("-1\u{00A0}234,57", $filters->number(-1234.5678, 2));
 	Assert::same('NaN', $filters->number(NAN, 2));
+	Assert::same('9,11', $filters->number(9.105, 2));
+	Assert::same('-9,11', $filters->number(-9.105, 2));
+	Assert::same('0,29', $filters->number(0.285, 2));
 });
 
 
@@ -54,6 +57,7 @@ test('pattern', function () {
 	Assert::same("00\u{00A0}123,4560", $filters->number(123.456, '00,000.0000'));
 	Assert::same('3,14__', $filters->number(3.14, '##0.00*_'));
 	Assert::same('Kč 3,14', $filters->number(3.14, '¤ #,##0.00'));
+	Assert::same('9,11', $filters->number(9.105, '#,##0.00'));
 });
 
 
