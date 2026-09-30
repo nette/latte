@@ -219,6 +219,7 @@ final class Filters
 		}
 
 		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+		$formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
 		if (is_string($patternOrDecimals)) {
 			$formatter->setPattern($patternOrDecimals);
 		} else {
@@ -247,6 +248,7 @@ final class Filters
 			$bytes = (string) round($bytes, $precision);
 		} else {
 			$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+			$formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
 			$formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
 			$bytes = $formatter->format($bytes);
 		}
