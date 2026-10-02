@@ -71,8 +71,15 @@ Assert::match(
 
 
 Assert::contains(
-	'LR\HtmlHelpers::formatAttribute(\' href\', ($this->filters->checkUrl)(($this->filters->upper)($url1)))',
+	'LR\HtmlHelpers::formatAttribute(\' href\', (($ʟ_tmp = ($this->filters->upper)($url1)) === null ? null : ($this->filters->checkUrl)($ʟ_tmp)))',
 	$latte->compile('<a href="{$url1|upper}"></a>'),
+);
+
+
+// null drops the attribute like in other attributes
+Assert::match(
+	'<a></a> <img>',
+	$latte->renderToString('<a href={$url}></a> <img src="{$url}">', ['url' => null]),
 );
 
 

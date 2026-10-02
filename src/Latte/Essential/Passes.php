@@ -125,7 +125,7 @@ final readonly class Passes
 				&& !$node->modifier->removeFilter('nocheck') && !$node->modifier->removeFilter('noCheck')
 				&& !$node->modifier->hasFilter('datastream') && !$node->modifier->hasFilter('dataStream')
 			) {
-				$node->modifier->filters[] = new Php\FilterNode(new Php\IdentifierNode('checkUrl'));
+				$node->modifier->filters[] = new Php\FilterNode(new Php\IdentifierNode('checkUrl'), nullsafe: true); // null drops the attribute
 			}
 		});
 	}
