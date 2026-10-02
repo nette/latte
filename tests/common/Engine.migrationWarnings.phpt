@@ -16,6 +16,12 @@ Assert::error(
 );
 
 Assert::error(
+	fn() => $latte->renderToString('<a href="{=null}">'),
+	E_USER_WARNING,
+	'Behavior change for attribute \'href\' with value null: previously it rendered as href="", now the attribute is omitted (on line 1 at column 12)',
+);
+
+Assert::error(
 	fn() => $latte->renderToString('<input onclick="{=foo}">'),
 	E_USER_WARNING,
 	'Behavior change for attribute \'onclick\' with string value: previously it was JSON-encoded, now it is rendered as a string (on line 1 at column 19)',
