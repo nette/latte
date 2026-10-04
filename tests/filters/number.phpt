@@ -22,7 +22,7 @@ test('no locale', function () {
 	Assert::same('1.234,56', $filters->number(1234.56, 2, ',', '.'));
 	Assert::same('-1,234', $filters->number(-1234));
 	Assert::same('-1,234.57', $filters->number(-1234.5678, 2));
-	Assert::same('nan', $filters->number(NAN, 2));
+	Assert::same('NaN', $filters->number(NAN, 2));
 
 	Assert::exception(
 		fn() => $filters->number(123.456, '00,000.0000'),
@@ -43,6 +43,9 @@ test('with locale', function () {
 	Assert::same('123,457', $filters->number(123.4567, 3));
 	Assert::same('-1 234', $filters->number(-1234));
 	Assert::same('-1 234,57', $filters->number(-1234.5678, 2));
+	Assert::same('1,01', $filters->number(1.005, 2));
+	Assert::same('9,11', $filters->number(9.105, 2));
+	Assert::same('-9,11', $filters->number(-9.105, 2));
 	Assert::same('NaN', $filters->number(NAN, 2));
 });
 

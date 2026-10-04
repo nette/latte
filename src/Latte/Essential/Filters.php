@@ -237,28 +237,32 @@ final class Filters
 	 * Formats a number with grouped thousands and optionally decimal digits according to locale.
 	 */
 	public function number(
-		float $number,
-		string|int $patternOrDecimals = 0,
-		string $decimalSeparator = '.',
-		string $thousandsSeparator = ',',
+	    float $number,
+	    string|int $patternOrDecimals = 0,
+	    string $decimalSeparator = '.',
+	    string $thousandsSeparator = ',',
 	): string
 	{
-		if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
-			throw new Latte\RuntimeException('Filter |number: the number of decimal must not be negative');
-		} elseif ($this->locale === null || func_num_args() > 2) {
-			if (is_string($patternOrDecimals)) {
-				throw new Latte\RuntimeException('Filter |number: using a pattern requires setting a locale via Engine::setLocale().');
-			}
-			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
-		}
-
-		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+	    if (is_nan($number)) {
+		return 'NaN';
+	    }
+	    if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
+		throw new Latte\RuntimeException('Filter |number: the number of decimal must not be negative');
+	    } elseif ($this->locale === null || func_num_args() > 2) {
 		if (is_string($patternOrDecimals)) {
-			$formatter->setPattern($patternOrDecimals);
-		} else {
-			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
+		    throw new Latte\RuntimeException('Filter |number: using a pattern requires setting a locale via Engine::setLocale().');
 		}
-		return $formatter->format($number);
+		return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
+	    }
+
+	    $formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
+	    if (is_string($patternOrDecimals)) {
+		$formatter->setPattern($patternOrDecimals);
+	    } else {
+		$number = (float) number_format($number, $patternOrDecimals, '.', '');
+		$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
+	    }
+	    return $formatter->format($number);
 	}
 
 
