@@ -22,7 +22,7 @@ test('no locale', function () {
 	Assert::same('1.234,56', $filters->number(1234.56, 2, ',', '.'));
 	Assert::same('-1,234', $filters->number(-1234));
 	Assert::same('-1,234.57', $filters->number(-1234.5678, 2));
-	Assert::same('nan', $filters->number(NAN, 2));
+	Assert::same('NaN', $filters->number(NAN, 2));
 
 	Assert::exception(
 		fn() => $filters->number(123.456, '00,000.0000'),

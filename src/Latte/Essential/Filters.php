@@ -243,6 +243,9 @@ final class Filters
 	    string $thousandsSeparator = ',',
 	): string
 	{
+	    if (is_nan($number)) {
+		return 'NaN';
+	    }
 	    if (is_int($patternOrDecimals) && $patternOrDecimals < 0) {
 		throw new Latte\RuntimeException('Filter |number: the number of decimal must not be negative');
 	    } elseif ($this->locale === null || func_num_args() > 2) {
@@ -256,9 +259,6 @@ final class Filters
 	    if (is_string($patternOrDecimals)) {
 		$formatter->setPattern($patternOrDecimals);
 	    } else {
-		if (is_nan($number)) {
-		    return 'NaN';
-		}
 		$number = (float) number_format($number, $patternOrDecimals, '.', '');
 		$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
 	    }
