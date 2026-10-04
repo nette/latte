@@ -43,6 +43,9 @@ test('with locale', function () {
 	Assert::same('123,457', $filters->number(123.4567, 3));
 	Assert::same('-1 234', $filters->number(-1234));
 	Assert::same('-1 234,57', $filters->number(-1234.5678, 2));
+	Assert::same('1,01', $filters->number(1.005, 2));
+	Assert::same('9,11', $filters->number(9.105, 2));
+	Assert::same('-9,11', $filters->number(-9.105, 2));
 	Assert::same('NaN', $filters->number(NAN, 2));
 });
 
