@@ -21,6 +21,18 @@ Assert::exception(
 );
 
 Assert::exception(
+	fn() => parseCode('$x?->y->z = 1'),
+	Latte\CompileException::class,
+	'Cannot write to the expression: $x?->y->z (on line 1 at column 1)',
+);
+
+Assert::exception(
+	fn() => parseCode('$x?->y()[0] = 1'),
+	Latte\CompileException::class,
+	'Cannot write to the expression: $x?->y()[0] (on line 1 at column 1)',
+);
+
+Assert::exception(
 	fn() => parseCode('$x = & $x?->y'),
 	Latte\CompileException::class,
 	'Cannot take reference to the expression: $x?->y (on line 1 at column 8)',

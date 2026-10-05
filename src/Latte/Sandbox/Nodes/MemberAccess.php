@@ -8,7 +8,7 @@
 namespace Latte\Sandbox\Nodes;
 
 use Latte\Compiler\{Node, PrintContext};
-use Latte\Compiler\Nodes\Php\{Expression, IdentifierNode, NameNode};
+use Latte\Compiler\Nodes\Php\{IdentifierNode, NameNode};
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 
 
@@ -40,23 +40,6 @@ trait MemberAccess
 	 */
 	private function printOperator(): string
 	{
-		$node = $this;
-		while ($node) {
-			if (
-				($node instanceof Expression\PropertyFetchNode || $node instanceof Expression\MethodCallNode)
-				&& $node->nullsafe
-			) {
-				return '?->';
-			}
-
-			$node = match (true) {
-				$node instanceof Expression\PropertyFetchNode, $node instanceof Expression\MethodCallNode => $node->object,
-				$node instanceof Expression\ArrayAccessNode => $node->expr,
-				$node instanceof Expression\StaticPropertyFetchNode, $node instanceof Expression\StaticMethodCallNode => $node->class,
-				default => null,
-			};
-		}
-
-		return '->';
+		return $this->hasNullsafe() ? '?->' : '->';
 	}
 }
