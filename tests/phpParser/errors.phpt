@@ -5,6 +5,16 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
+// unqualified constant
+Assert::error(
+	fn() => parseCode('FOO'),
+	E_USER_DEPRECATED,
+	"Using unqualified constant 'FOO' is deprecated. Use '\\FOO' with a leading backslash on line 1 at column 1",
+);
+
+Assert::noError(fn() => parseCode('__LINE__ + \FOO + Foo\BAR'));
+
+
 // TagParser::parseArguments() must not contain list(...)
 Assert::exception(
 	fn() => parseCode('list($x)'),

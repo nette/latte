@@ -334,6 +334,18 @@ final class TagParser
 	}
 
 
+	private function warnUnqualifiedConstant(NameNode $name): NameNode
+	{
+		if (!str_starts_with($name->name, '__')) {
+			trigger_error(
+				"Using unqualified constant '$name->name' is deprecated. Use '\\$name->name' with a leading backslash $name->position",
+				E_USER_DEPRECATED,
+			);
+		}
+		return $name;
+	}
+
+
 	private static function handleBuiltinTypes(NameNode $name): NameNode|Node\IdentifierNode
 	{
 		$builtinTypes = [

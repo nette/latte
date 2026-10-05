@@ -1450,7 +1450,12 @@ trait TagParserData
 				);
 				break;
 			case 203:
-				$this->semValue = new Node\NameNode($this->semStack[$pos], -1, $this->startPos($pos), $this->endPos($pos));
+				$this->semValue = $this->warnUnqualifiedConstant(new Node\NameNode(
+					$this->semStack[$pos],
+					Node\NameNode::KindNormal,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				));
 				break;
 			case 205:
 				$this->semValue = new Node\NameNode(
