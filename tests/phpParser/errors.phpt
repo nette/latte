@@ -13,6 +13,7 @@ Assert::error(
 );
 
 Assert::noError(fn() => parseCode('__LINE__ + \FOO + Foo\BAR'));
+Assert::noError(fn() => parseCode('FOO::BAR + FOO::bar() + new FOO + fn(INT $a): SELF => 1'));
 
 
 // TagParser::parseArguments() must not contain list(...)

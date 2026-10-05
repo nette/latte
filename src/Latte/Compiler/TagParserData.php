@@ -1441,6 +1441,7 @@ trait TagParserData
 				);
 				break;
 			case 201:
+			case 203:
 			case 204:
 				$this->semValue = new Node\NameNode(
 					$this->semStack[$pos],
@@ -1448,14 +1449,6 @@ trait TagParserData
 					$this->startPos($pos),
 					$this->endPos($pos),
 				);
-				break;
-			case 203:
-				$this->semValue = $this->warnUnqualifiedConstant(new Node\NameNode(
-					$this->semStack[$pos],
-					Node\NameNode::KindNormal,
-					$this->startPos($pos),
-					$this->endPos($pos),
-				));
 				break;
 			case 205:
 				$this->semValue = new Node\NameNode(
@@ -1466,7 +1459,11 @@ trait TagParserData
 				);
 				break;
 			case 213:
-				$this->semValue = new Expression\ConstantFetchNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				$this->semValue = new Expression\ConstantFetchNode(
+					$this->warnUnqualifiedConstant($this->semStack[$pos]),
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
 				break;
 			case 214:
 				$this->semValue = new Expression\ClassConstantFetchNode(
