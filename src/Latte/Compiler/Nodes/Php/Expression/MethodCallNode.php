@@ -31,7 +31,7 @@ class MethodCallNode extends ExpressionNode
 	}
 
 
-	public function isPartialFunction(): bool
+	public function isPartialApplication(): bool
 	{
 		return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
 	}
@@ -39,7 +39,7 @@ class MethodCallNode extends ExpressionNode
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->nullsafe && $this->isPartialFunction()) {
+		if ($this->nullsafe && $this->isPartialApplication()) {
 			throw new CompileException('Cannot combine nullsafe operator with Closure creation', $this->position);
 		}
 		return $context->dereferenceExpr($this->object)

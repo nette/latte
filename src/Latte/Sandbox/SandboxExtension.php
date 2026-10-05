@@ -100,7 +100,7 @@ final class SandboxExtension extends Latte\Extension
 		} elseif (
 			$node instanceof Expression\FunctionCallNode
 			&& $node->name instanceof Php\NameNode
-			&& !$node->isPartialFunction()
+			&& !$node->isPartialApplication()
 		) {
 			if (!$this->policy->isFunctionAllowed((string) $node->name)) {
 				throw new SecurityViolationException("Function $node->name() is not allowed.", $node->position);

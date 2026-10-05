@@ -26,7 +26,7 @@ class MethodCallNode extends Expression\MethodCallNode
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->isPartialFunction()) {
+		if ($this->isPartialApplication()) {
 			return '$this->global->sandbox->closure(['
 				. $this->object->print($context) . ', '
 				. $context->memberAsString($this->name) . '])';

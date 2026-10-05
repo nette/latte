@@ -24,7 +24,7 @@ class FunctionCallNode extends Expression\FunctionCallNode
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->isPartialFunction()) {
+		if ($this->isPartialApplication()) {
 			return '$this->global->sandbox->closure(' . $context->memberAsString($this->name) . ')';
 		}
 

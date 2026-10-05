@@ -30,7 +30,7 @@ class StaticMethodCallNode extends ExpressionNode
 	}
 
 
-	public function isPartialFunction(): bool
+	public function isPartialApplication(): bool
 	{
 		return ($this->args[0] ?? null) instanceof Php\VariadicPlaceholderNode;
 	}

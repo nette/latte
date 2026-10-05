@@ -39,7 +39,7 @@ final readonly class Passes
 				&& $node->name instanceof Php\NameNode
 				&& isset($functions[$node->name->name])
 			) {
-				if ($node->isPartialFunction()) {
+				if ($node->isPartialApplication()) {
 					throw new CompileException(
 						"Custom function '{$node->name->name}' cannot be used as partial function.",
 						$node->position,
