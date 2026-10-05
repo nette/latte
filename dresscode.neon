@@ -28,7 +28,7 @@ overrides:
 			- deprecations
 
 	- # token names, a deprecated alias and the constant under test are part of the API or the test data
-		paths: [src/Latte/Compiler/Token.php, src/Latte/Sandbox/SecurityPolicy.php, 'tests/common/NodeHelpers.toValue().phpt']
+		paths: [src/Latte/Compiler/Token.php, src/Latte/Sandbox/SecurityPolicy.php, 'tests/common/ExpressionNode.toValue().phpt']
 		naming: {constant: keep}
 
 	- # the underscore keeps the properties apart from the dynamic ones named after filters and functions

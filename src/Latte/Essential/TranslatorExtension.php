@@ -8,9 +8,9 @@
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Compiler\{NodeHelpers, Tag};
 use Latte\Compiler\Nodes\{Php, PrintNode};
 use Latte\Compiler\Nodes\Php\ExpressionNode;
+use Latte\Compiler\Tag;
 use Latte\Engine;
 use Nette\Localization\Translator;
 use function is_array, is_string;
@@ -95,10 +95,6 @@ final class TranslatorExtension extends Latte\Extension
 
 	public static function toValue(ExpressionNode $args): mixed
 	{
-		try {
-			return NodeHelpers::toValue($args, constants: true);
-		} catch (\InvalidArgumentException) {
-			return null;
-		}
+		return $args->hasValue(constants: true) ? $args->toValue(constants: true) : null;
 	}
 }

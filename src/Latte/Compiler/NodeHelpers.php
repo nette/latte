@@ -7,8 +7,7 @@
 
 namespace Latte\Compiler;
 
-use Latte\Compiler\Nodes\Php;
-use Latte\Compiler\Nodes\Php\{Expression, ExpressionNode, Scalar};
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use function is_string, sprintf;
 
 
@@ -88,64 +87,10 @@ final class NodeHelpers
 	}
 
 
-	/**
-	 * Evaluates a scalar expression node to a PHP value. Resolves constants when $constants is true.
-	 * Throws InvalidArgumentException if the expression cannot be reduced to a value.
-	 */
+	/** @deprecated use ExpressionNode::toValue() */
 	public static function toValue(ExpressionNode $node, bool $constants = false): mixed
 	{
-		if ($node instanceof Scalar\BooleanNode
-			|| $node instanceof Scalar\FloatNode
-			|| $node instanceof Scalar\IntegerNode
-			|| $node instanceof Scalar\StringNode
-		) {
-			return $node->value;
-
-		} elseif ($node instanceof Scalar\NullNode) {
-			return null;
-
-		} elseif ($node instanceof Expression\ArrayNode) {
-			$res = [];
-			foreach ($node->items as $item) {
-				$value = self::toValue($item->value, $constants);
-				if ($item->key) {
-					$key = $item->key instanceof Php\IdentifierNode
-						? $item->key->name
-						: self::toValue($item->key, $constants);
-					$res[$key] = $value;
-
-				} elseif ($item->unpack) {
-					$res = [...$res, ...$value];
-
-				} else {
-					$res[] = $value;
-				}
-			}
-
-			return $res;
-
-		} elseif ($node instanceof Expression\ConstantFetchNode && $constants) {
-			$name = $node->name->toCodeString();
-			return defined($name)
-				? constant($name)
-				: throw new \InvalidArgumentException("The constant '$name' is not defined.");
-
-		} elseif (
-			$node instanceof Expression\ClassConstantFetchNode
-			&& $constants
-			&& $node->name instanceof Php\IdentifierNode
-		) {
-			$class = $node->class instanceof Php\NameNode
-				? $node->class->toCodeString()
-				: self::toValue($node->class, $constants);
-			$name = $class . '::' . $node->name->name;
-			return defined($name)
-				? constant($name)
-				: throw new \InvalidArgumentException("The constant '$name' is not defined.");
-
-		} else {
-			throw new \InvalidArgumentException('The expression cannot be converted to PHP value.');
-		}
+		return $node->toValue($constants);
 	}
 
 

@@ -8,6 +8,7 @@
 namespace Latte\Compiler\Nodes\Php;
 
 use Latte\Compiler\Node;
+use function is_array;
 
 
 /**
@@ -45,6 +46,90 @@ abstract class ExpressionNode extends Node
 		return $this instanceof Expression\FunctionCallNode
 			|| $this instanceof Expression\MethodCallNode
 			|| $this instanceof Expression\StaticMethodCallNode;
+	}
+
+
+	/**
+	 * Returns the value the expression is written as: a scalar, null, or an array of them; resolves
+	 * constants when $constants is true.
+	 * @throws \InvalidArgumentException  where the expression is written as no value, as hasValue() tells beforehand
+	 */
+	public function toValue(bool $constants = false): mixed
+	{
+		$value = $this->readValue($constants)
+			?? throw new \InvalidArgumentException('The expression cannot be converted to PHP value.');
+		return $value[0];
+	}
+
+
+	/**
+	 * Checks whether the expression is written as a value, which is what toValue() returns.
+	 */
+	public function hasValue(bool $constants = false): bool
+	{
+		return $this->readValue($constants) !== null;
+	}
+
+
+	/** @return ?array{mixed}  the value in a list, so that null tells no value apart from the value null */
+	private function readValue(bool $constants): ?array
+	{
+		if ($this instanceof Scalar\BooleanNode
+			|| $this instanceof Scalar\FloatNode
+			|| $this instanceof Scalar\IntegerNode
+			|| $this instanceof Scalar\StringNode
+		) {
+			return [$this->value];
+
+		} elseif ($this instanceof Scalar\NullNode) {
+			return [null];
+
+		} elseif ($this instanceof Expression\ArrayNode) {
+			$res = [];
+			foreach ($this->items as $item) {
+				$value = $item->value->readValue($constants);
+				if ($value === null) {
+					return null;
+
+				} elseif ($item->key) {
+					$key = $item->key instanceof IdentifierNode
+						? [$item->key->name]
+						: $item->key->readValue($constants);
+					if ($key === null) {
+						return null;
+					}
+					$res[$key[0]] = $value[0];
+
+				} elseif ($item->unpack) {
+					if (!is_array($value[0])) {
+						return null;
+					}
+					$res = [...$res, ...$value[0]];
+
+				} else {
+					$res[] = $value[0];
+				}
+			}
+
+			return [$res];
+
+		} elseif ($this instanceof Expression\ConstantFetchNode && $constants) {
+			$name = $this->name->toCodeString();
+			return defined($name) ? [constant($name)] : null;
+
+		} elseif (
+			$this instanceof Expression\ClassConstantFetchNode
+			&& $constants
+			&& $this->name instanceof IdentifierNode
+		) {
+			$class = $this->class instanceof NameNode
+				? [$this->class->toCodeString()]
+				: $this->class->readValue($constants);
+			$name = $class === null ? null : $class[0] . '::' . $this->name->name;
+			return $name !== null && defined($name) ? [constant($name)] : null;
+		}
+
+		return null;
 	}
 
 
