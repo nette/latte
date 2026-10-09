@@ -100,6 +100,18 @@ class Engine
 
 
 	/**
+	 * Renders HTML template to Html object.
+	 * @param  object|mixed[]  $params
+	 */
+	public function renderToHtml(string $name, object|array $params = [], ?string $block = null): Runtime\Html
+	{
+		$template = $this->createTemplate($name, Helpers::resolveParams($this, $params));
+		$template->global->coreCaptured = true;
+		return new Runtime\Html($template->capture(fn() => $template->render($block, ContentType::Html)));
+	}
+
+
+	/**
 	 * Creates template object.
 	 * @param  mixed[]  $params
 	 */
