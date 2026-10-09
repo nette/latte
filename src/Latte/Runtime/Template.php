@@ -66,7 +66,7 @@ class Template
 	 * Renders template.
 	 * @internal
 	 */
-	public function render(?string $block = null): void
+	public function render(?string $block = null, ?string $contentType = null): void
 	{
 		$extensions = $this->engine->getExtensions();
 		try {
@@ -87,12 +87,16 @@ class Template
 
 			} elseif ($this->parentName) { // extends
 				$this->params = $params;
-				$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
+				$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block, $contentType);
 
 			} elseif ($block !== null) { // single block rendering
+				if ($blk = $this->blocks[self::LayerLocal][$block] ?? $this->blocks[self::LayerTop][$block] ?? null) {
+					$this->checkContentType($contentType, $blk->contentType ?? static::ContentType, "block $block");
+				}
 				$this->renderBlock($block, $this->params);
 
 			} else {
+				$this->checkContentType($contentType, static::ContentType, "'$this->name'");
 				$this->main($params);
 			}
 		} finally {
@@ -235,6 +239,18 @@ class Template
 				"Including $name with content type %s into incompatible type %s.",
 				strtoupper($contentType),
 				strtoupper($targetType),
+			));
+		}
+	}
+
+
+	private function checkContentType(?string $expected, string $actual, string $name): void
+	{
+		if ($expected !== null && $expected !== $actual) {
+			throw new Latte\RuntimeException(sprintf(
+				"Rendering $name with content type %s, but %s was expected.",
+				strtoupper($actual),
+				strtoupper($expected),
 			));
 		}
 	}
