@@ -17,7 +17,7 @@ $test = <<<'XX'
 	"$a??->b",
 	XX;
 
-$node = @parseCode($test); // deprecated
+$node = @parseCode($test); // @ ??-> is deprecated
 $code = printNode($node);
 
 Assert::same(

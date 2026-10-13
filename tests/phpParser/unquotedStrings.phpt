@@ -15,7 +15,7 @@ $test = <<<'XX'
 	a--b--c,
 	XX;
 
-$node = @parseCode($test); // deprecated constants
+$node = @parseCode($test); // @ unqualified constants are deprecated
 
 Assert::same(
 	loadContent(__FILE__, __COMPILER_HALT_OFFSET__),

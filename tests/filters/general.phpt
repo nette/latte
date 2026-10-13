@@ -40,7 +40,7 @@ $latte->addFilter('h1', [new MyFilter, 'invoke']);
 $latte->addFilter('h2', 'strtoupper');
 $latte->addFilter('translate', fn(FilterInfo $info, $s) => strrev($s));
 $latte->addFilter('types', 'types');
-@$latte->addFilterLoader(function ($name) use ($latte) { // deprecated
+@$latte->addFilterLoader(function ($name) use ($latte) { // @ addFilterLoader() is deprecated
 	if ($name === 'dynamic') {
 		return fn($val) => "[dynamic $val]";
 	}

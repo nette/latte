@@ -35,6 +35,7 @@ test('text attributes', function () {
 
 			<span title="123 -- one&amp;two&apos;&quot; -- 1 --  --  -- one&amp; -- one&amp;&lt;br&gt; &quot;&apos;"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span title={=0}></span>
 			<span title={=123}></span>
@@ -91,7 +92,7 @@ test('boolean attributes', function () {
 			<span></span>
 			<span checked></span>
 			XX,
-		@$latte->renderToString(<<<'XX'
+		$latte->renderToString(<<<'XX'
 			<span checked={=0}></span>
 			<span checked={=123}></span>
 			<span checked={=''}></span>
@@ -121,6 +122,7 @@ test('style attribute', function () {
 			<span style="a: b"></span>
 			<span style="a; b"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span style={=0}></span>
 			<span style={=123}></span>
@@ -152,6 +154,7 @@ test('space-separated attribute', function () {
 			<span class="b"></span>
 			<span class="a b"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span class={=0}></span>
 			<span class={=123}></span>
@@ -182,6 +185,7 @@ test('on* attribute', function () {
 
 			<span onclick="123 -- &quot;one&amp;two&apos;\&quot;&quot; -- true -- false -- null -- &quot;one&amp;amp;&lt;br&gt;&quot; -- &#123;}"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span onclick={=0}></span>
 			<span onclick={=123}></span>
@@ -211,7 +215,7 @@ test('data attribute', function () {
 			<span data-foo='{"a":"b"}'></span>
 			<span data-foo='["a","b"]'></span>
 			XX,
-		@$latte->renderToString(<<<'XX'
+		$latte->renderToString(<<<'XX'
 			<span data-foo={=0}></span>
 			<span data-foo={=123}></span>
 			<span data-foo={=''}></span>
@@ -242,7 +246,7 @@ test('ARIA attribute', function () {
 			<span aria-foo="b"></span>
 			<span aria-foo="a b"></span>
 			XX,
-		@$latte->renderToString(<<<'XX'
+		$latte->renderToString(<<<'XX'
 			<span aria-foo={=0}></span>
 			<span aria-foo={=123}></span>
 			<span aria-foo={=''}></span>
@@ -294,6 +298,7 @@ test('XML', function () {
 			<bar></bar>
 			<bar></bar>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			{contentType xml}
 			<bar foo={=0}></bar>

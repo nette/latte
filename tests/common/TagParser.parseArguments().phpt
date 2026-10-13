@@ -106,7 +106,7 @@ test('optionalChainingPass', function () {
 	);
 	Assert::same(
 		'(((($var ?? null)?->prop ?? null)?->elem[1] ?? null)?->call(2) ?? null)?->item',
-		@formatArgs('$var??->prop??->elem[1]??->call(2)??->item'), // deprecated ??->
+		@formatArgs('$var??->prop??->elem[1]??->call(2)??->item'), // @ ??-> is deprecated
 	);
 });
 

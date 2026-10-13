@@ -56,7 +56,7 @@ Assert::match(
 
 		<input>
 		XX,
-	@$latte->renderToString($template),
+	@$latte->renderToString($template), // @ invalid values trigger a warning
 );
 $latte->setContentType(Latte\ContentType::Html);
 

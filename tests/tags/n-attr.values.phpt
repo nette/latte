@@ -36,6 +36,7 @@ test('text attributes', function () {
 			<span title="one&amp; &apos;"></span>
 			<span title="one&amp;&lt;br&gt; &quot;&apos;"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="title => 0"></span>
 			<span n:attr="title => 123"></span>
@@ -100,6 +101,7 @@ test('style attribute', function () {
 			<span style="hello: one&amp;two"></span>
 			<span style="hello: 1"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="style => 0"></span>
 			<span n:attr="style => 123"></span>
@@ -133,6 +135,7 @@ test('space-separated attribute', function () {
 			<span class="one&amp;two"></span>
 			<span class="hello"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span n:attr="class => 0"></span>
 			<span n:attr="class => 123"></span>
@@ -242,6 +245,7 @@ test('XML', function () {
 			<bar></bar>
 			<bar></bar>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			{contentType xml}
 			<bar n:attr="foo => 0"></bar>

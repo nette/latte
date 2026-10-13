@@ -14,7 +14,7 @@ $test = <<<'XX'
 	"$a??->b",
 	XX;
 
-$node = @parseCode($test); // deprecated
+$node = @parseCode($test); // @ ??-> is deprecated
 
 Assert::same(
 	loadContent(__FILE__, __COMPILER_HALT_OFFSET__),

@@ -20,12 +20,12 @@ function getTempDir(): string
 		$GLOBALS['\lock'] = $lock = fopen(__DIR__ . '/lock', 'w');
 		if (rand(0, 100)) {
 			flock($lock, LOCK_SH);
-			@mkdir(dirname($dir));
+			@mkdir(dirname($dir)); // @ directory may already exist
 		} elseif (flock($lock, LOCK_EX)) {
 			Tester\Helpers::purge(dirname($dir));
 		}
 
-		@mkdir($dir);
+		@mkdir($dir); // @ directory may already exist
 	}
 
 	return $dir;
@@ -84,7 +84,7 @@ function exportTokens(array $tokens): string
 {
 	static $table;
 	if (!$table) {
-		$table = @array_flip((new ReflectionClass(Token::class))->getConstants());
+		$table = @array_flip((new ReflectionClass(Token::class))->getConstants()); // @ the array constant Names triggers a warning
 	}
 	$res = '';
 	foreach ($tokens as $token) {

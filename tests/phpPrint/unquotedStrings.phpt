@@ -26,7 +26,7 @@ $test = <<<'XX'
 	foo(aa, bb, cc)
 	XX;
 
-$node = @parseCode($test); // deprecated constants
+$node = @parseCode($test); // @ unqualified constants are deprecated
 $code = printNode($node);
 
 Assert::same(
