@@ -21,7 +21,7 @@ use function is_array, is_string;
  */
 final class TranslatorExtension extends Latte\Extension
 {
-	private ?\Closure $translator;
+	private readonly ?\Closure $translator;
 
 
 	public function __construct(

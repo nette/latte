@@ -29,7 +29,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 $latte->addExtension(new class ($panel) extends Extension {
 	public function __construct(
-		private LattePanel $panel,
+		private readonly LattePanel $panel,
 	) {
 	}
 

@@ -60,7 +60,7 @@ final class WhitespaceMinifier
 
 
 	public function __construct(
-		private string $contentType = ContentType::Html,
+		private readonly string $contentType = ContentType::Html,
 	) {
 	}
 

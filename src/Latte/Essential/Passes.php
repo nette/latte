@@ -20,10 +20,10 @@ use function is_string;
 /**
  * Built-in compiler passes.
  */
-final class Passes
+final readonly class Passes
 {
 	public function __construct(
-		private readonly Engine $engine,
+		private Engine $engine,
 	) {
 	}
 

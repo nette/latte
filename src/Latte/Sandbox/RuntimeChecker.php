@@ -12,7 +12,7 @@ use function count, is_array, is_object, is_string;
 
 
 /** @internal */
-final class RuntimeChecker
+final readonly class RuntimeChecker
 {
 	public function __construct(
 		public Latte\Policy $policy,

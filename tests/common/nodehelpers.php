@@ -83,13 +83,11 @@ class TracingVisitor
 
 class ModifyingVisitor
 {
-	private array $returns;
 	private int $pos = 0;
 
 
-	public function __construct(array $returns = [])
+	public function __construct(private readonly array $returns = [])
 	{
-		$this->returns = $returns;
 	}
 
 

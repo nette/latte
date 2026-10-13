@@ -20,7 +20,7 @@ function compileWith(Closure $parser, string $template): void
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->addExtension(new class ($parser) extends Latte\Extension {
 		public function __construct(
-			private \Closure $parser,
+			private readonly \Closure $parser,
 		) {
 		}
 
