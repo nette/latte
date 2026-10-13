@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
 use Latte\Compiler\Nodes\TextNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\Range;
+use Latte\Compiler\{Position, Range};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

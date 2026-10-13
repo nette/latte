@@ -7,9 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Html;
 
-use Latte\Compiler\Nodes;
+use Latte\Compiler\{Nodes, PrintContext};
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\PrintContext;
 use Latte\ContentType;
 
 

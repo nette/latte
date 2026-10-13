@@ -6,8 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Essential\Nodes\ForeachNode;
-use Latte\Essential\Nodes\TryNode;
+use Latte\Essential\Nodes\{ForeachNode, TryNode};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

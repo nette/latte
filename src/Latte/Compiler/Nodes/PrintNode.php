@@ -8,11 +8,8 @@
 namespace Latte\Compiler\Nodes;
 
 use Latte;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\TemplateParser;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
+use Latte\Compiler\{PrintContext, Tag, TemplateParser};
 
 
 /**

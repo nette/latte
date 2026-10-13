@@ -10,10 +10,7 @@ namespace Latte\Compiler;
 use Latte;
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Php as Node;
-use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\NameNode;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{Expression, ExpressionNode, NameNode, Scalar};
 use function count, strlen;
 
 

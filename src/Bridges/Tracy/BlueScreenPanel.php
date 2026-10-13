@@ -9,8 +9,7 @@ namespace Latte\Bridges\Tracy;
 
 use Latte;
 use Tracy;
-use Tracy\BlueScreen;
-use Tracy\Helpers;
+use Tracy\{BlueScreen, Helpers};
 
 
 /**

@@ -8,13 +8,8 @@
 namespace Latte\Compiler;
 
 use Latte;
-use Latte\CompileException;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\FragmentNode;
-use Latte\Compiler\Nodes\Html;
-use Latte\ContentType;
-use Latte\Helpers;
-use Latte\SecurityViolationException;
+use Latte\{CompileException, ContentType, Helpers, SecurityViolationException};
+use Latte\Compiler\Nodes\{AreaNode, FragmentNode, Html};
 use function strlen;
 
 

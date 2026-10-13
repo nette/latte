@@ -4,8 +4,7 @@
  * Test: Latte\Helpers::sortBeforeAfter()
  */
 
-use Latte\Extension;
-use Latte\Helpers;
+use Latte\{Extension, Helpers};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

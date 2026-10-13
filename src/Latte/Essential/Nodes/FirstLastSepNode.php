@@ -7,14 +7,9 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes\AreaNode;
+use Latte\Compiler\{Node, NodeTraverser, PrintContext, Tag};
+use Latte\Compiler\Nodes\{AreaNode, StatementNode, TemplateNode};
 use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\Nodes\TemplateNode;
-use Latte\Compiler\NodeTraverser;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
 
 
 /**

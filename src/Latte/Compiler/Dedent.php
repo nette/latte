@@ -8,8 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\FragmentNode;
+use Latte\Compiler\Nodes\{AreaNode, FragmentNode};
 use function count, strlen;
 
 

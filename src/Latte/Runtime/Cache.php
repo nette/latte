@@ -7,8 +7,7 @@
 
 namespace Latte\Runtime;
 
-use Latte\Engine;
-use Latte\RuntimeException;
+use Latte\{Engine, RuntimeException};
 use function defined, function_exists, strlen;
 
 

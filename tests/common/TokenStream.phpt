@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
 use Latte\CompileException;
-use Latte\Compiler\Token;
-use Latte\Compiler\TokenStream;
+use Latte\Compiler\{Token, TokenStream};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

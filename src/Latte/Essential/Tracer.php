@@ -8,8 +8,7 @@
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Engine;
-use Latte\Helpers;
+use Latte\{Engine, Helpers};
 use Latte\Runtime\Template;
 use function count, is_string;
 

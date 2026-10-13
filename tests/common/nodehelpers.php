@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Node;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\{Node, PrintContext};
 
 
 class LeafNode extends Node

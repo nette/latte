@@ -7,8 +7,7 @@
 
 namespace Latte\Compiler\Nodes;
 
-use Latte\Compiler\Node;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\{Node, PrintContext};
 
 
 /**

@@ -7,15 +7,9 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\NodeHelpers;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\NopNode;
-use Latte\Compiler\Nodes\Php;
+use Latte\Compiler\{NodeHelpers, PrintContext, Tag};
+use Latte\Compiler\Nodes\{AreaNode, NopNode, Php, StatementNode, TextNode};
 use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\Nodes\TextNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
 use Latte\Essential\TranslatorExtension;
 use function is_array, is_string;
 

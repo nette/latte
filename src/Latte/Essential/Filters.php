@@ -9,8 +9,7 @@ namespace Latte\Essential;
 
 use Latte;
 use Latte\ContentType;
-use Latte\Runtime\FilterInfo;
-use Latte\Runtime\Html;
+use Latte\Runtime\{FilterInfo, Html};
 use Stringable;
 use function count, extension_loaded, func_num_args, is_array, is_int, is_string, strlen;
 use const ENT_NOQUOTES, ENT_SUBSTITUTE;

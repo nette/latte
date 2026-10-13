@@ -10,8 +10,7 @@ namespace Latte\Compiler;
 use Latte;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
-use Latte\Runtime\Helpers;
-use Latte\Runtime\HtmlHelpers;
+use Latte\Runtime\{Helpers, HtmlHelpers};
 use function is_string;
 
 

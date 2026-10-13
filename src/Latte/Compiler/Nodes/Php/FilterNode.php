@@ -7,11 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Php;
 
-use Latte\CompileException;
-use Latte\Compiler\Node;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
-use Latte\Helpers;
+use Latte\{CompileException, Helpers};
+use Latte\Compiler\{Node, Position, PrintContext};
 
 
 /**

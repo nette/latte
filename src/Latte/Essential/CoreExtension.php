@@ -10,10 +10,8 @@ namespace Latte\Essential;
 use Latte;
 use Latte\Compiler\Nodes\Php\Scalar;
 use Latte\Compiler\Nodes\TextNode;
-use Latte\Compiler\Tag;
-use Latte\Compiler\TemplateParser;
-use Latte\Runtime;
-use Latte\RuntimeException;
+use Latte\Compiler\{Tag, TemplateParser};
+use Latte\{Runtime, RuntimeException};
 use Nette;
 use function extension_loaded;
 

@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Nodes\FragmentNode;
-use Latte\Compiler\Nodes\NopNode;
-use Latte\Compiler\Nodes\TextNode;
+use Latte\Compiler\Nodes\{FragmentNode, NopNode, TextNode};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

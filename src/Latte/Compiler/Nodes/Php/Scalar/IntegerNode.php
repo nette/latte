@@ -9,9 +9,7 @@ namespace Latte\Compiler\Nodes\Php\Scalar;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\ScalarNode;
-use Latte\Compiler\PhpHelpers;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\{PhpHelpers, Position, PrintContext};
 use const PHP_INT_MAX;
 
 

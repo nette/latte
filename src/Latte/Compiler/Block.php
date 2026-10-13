@@ -7,9 +7,7 @@
 
 namespace Latte\Compiler;
 
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ParameterNode;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, ParameterNode, Scalar};
 
 
 /** @internal */

@@ -7,11 +7,9 @@
 
 namespace Latte\Compiler\Nodes\Php\Expression;
 
-use Latte\CompileException;
+use Latte\{CompileException, Helpers};
 use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
-use Latte\Helpers;
+use Latte\Compiler\{Position, PrintContext};
 
 
 /**

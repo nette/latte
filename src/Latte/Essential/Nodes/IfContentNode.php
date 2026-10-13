@@ -8,13 +8,9 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\AuxiliaryNode;
+use Latte\Compiler\Nodes\{AreaNode, AuxiliaryNode, StatementNode};
 use Latte\Compiler\Nodes\Html\ElementNode;
-use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\TemplateParser;
+use Latte\Compiler\{PrintContext, Tag, TemplateParser};
 
 
 /**

@@ -1,12 +1,9 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Nodes\FragmentNode;
-use Latte\Compiler\Nodes\Html\AttributeNode;
-use Latte\Compiler\Nodes\Html\ElementNode;
-use Latte\Compiler\Nodes\Html\ExpressionAttributeNode;
+use Latte\Compiler\Nodes\{FragmentNode, TextNode};
+use Latte\Compiler\Nodes\Html\{AttributeNode, ElementNode, ExpressionAttributeNode};
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
 use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\TextNode;
 use Latte\ContentType;
 use Tester\Assert;
 

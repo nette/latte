@@ -5,9 +5,7 @@
  */
 
 use Latte\ContentType;
-use Latte\Runtime\FilterExecutor;
-use Latte\Runtime\FilterInfo;
-use Latte\Runtime\Html;
+use Latte\Runtime\{FilterExecutor, FilterInfo, Html};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

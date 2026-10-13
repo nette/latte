@@ -7,9 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Php\Expression;
 
-use Latte\Compiler\Node;
+use Latte\Compiler\{Node, PrintContext};
 use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\PrintContext;
 
 
 /**

@@ -7,12 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Php\Scalar;
 
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\InterpolatedStringPartNode;
-use Latte\Compiler\Nodes\Php\ScalarNode;
-use Latte\Compiler\PhpHelpers;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, InterpolatedStringPartNode, ScalarNode};
+use Latte\Compiler\{PhpHelpers, Position, PrintContext};
 use Latte\Helpers;
 
 

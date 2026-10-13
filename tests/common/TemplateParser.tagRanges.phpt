@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
-use Latte\Essential\Nodes\ForeachNode;
-use Latte\Essential\Nodes\IfNode;
+use Latte\Essential\Nodes\{ForeachNode, IfNode};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

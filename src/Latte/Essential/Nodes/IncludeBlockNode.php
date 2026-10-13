@@ -8,16 +8,10 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Block;
+use Latte\Compiler\{Block, PhpHelpers, PrintContext, Tag, TemplateParser};
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode, Scalar};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PhpHelpers;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\TemplateParser;
 use Latte\Runtime\Template;
 
 

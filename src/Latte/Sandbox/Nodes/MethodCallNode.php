@@ -7,8 +7,7 @@
 
 namespace Latte\Sandbox\Nodes;
 
-use Latte\Compiler\Nodes\Php\ArgumentNode;
-use Latte\Compiler\Nodes\Php\Expression;
+use Latte\Compiler\Nodes\Php\{ArgumentNode, Expression};
 use Latte\Compiler\PrintContext;
 
 

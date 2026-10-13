@@ -8,13 +8,9 @@
 namespace Latte\Compiler\Nodes\Html;
 
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
-use Latte\ContentType;
-use Latte\Feature;
-use Latte\Runtime as LR;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
+use Latte\Compiler\{Position, PrintContext};
+use Latte\{ContentType, Feature, Runtime as LR};
 
 
 /**

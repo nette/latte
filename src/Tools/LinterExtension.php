@@ -8,11 +8,9 @@
 namespace Latte\Tools;
 
 use Latte;
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes\Php;
+use Latte\Compiler\{Node, NodeTraverser};
+use Latte\Compiler\Nodes\{Php, TemplateNode};
 use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\TemplateNode;
-use Latte\Compiler\NodeTraverser;
 
 
 /**

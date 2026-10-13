@@ -6,8 +6,7 @@
 
 declare(strict_types=1);
 
-use Latte\Compiler\Nodes\AuxiliaryNode;
-use Latte\Compiler\Nodes\TemplateNode;
+use Latte\Compiler\Nodes\{AuxiliaryNode, TemplateNode};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

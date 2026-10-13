@@ -7,16 +7,10 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Nodes\Php\Expression\AssignNode;
-use Latte\Compiler\Nodes\Php\Expression\AssignOpNode;
-use Latte\Compiler\Nodes\Php\Expression\AuxiliaryNode;
-use Latte\Compiler\Nodes\Php\Expression\TernaryNode;
-use Latte\Compiler\Nodes\Php\Expression\VariableNode;
+use Latte\Compiler\Nodes\Php\Expression\{AssignNode, AssignOpNode, AuxiliaryNode, TernaryNode, VariableNode};
 use Latte\Compiler\Nodes\Php\Scalar\NullNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\Token;
+use Latte\Compiler\{PrintContext, Tag, Token};
 use Latte\Helpers;
 use function is_string;
 

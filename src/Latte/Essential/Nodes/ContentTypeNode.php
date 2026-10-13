@@ -7,12 +7,9 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\CompileException;
+use Latte\{CompileException, ContentType};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\TemplateParser;
-use Latte\ContentType;
+use Latte\Compiler\{PrintContext, Tag, TemplateParser};
 
 
 /**

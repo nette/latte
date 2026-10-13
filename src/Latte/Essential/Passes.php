@@ -7,20 +7,12 @@
 
 namespace Latte\Essential;
 
-use Latte\CompileException;
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes\Html\ElementNode;
-use Latte\Compiler\Nodes\Html\ExpressionAttributeNode;
-use Latte\Compiler\Nodes\Php;
+use Latte\{CompileException, ContentType, Engine, Feature};
+use Latte\Compiler\{Node, NodeTraverser};
+use Latte\Compiler\Nodes\Html\{ElementNode, ExpressionAttributeNode};
+use Latte\Compiler\Nodes\{Php, PrintNode, TemplateNode, TextNode};
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\PrintNode;
-use Latte\Compiler\Nodes\TemplateNode;
-use Latte\Compiler\Nodes\TextNode;
-use Latte\Compiler\NodeTraverser;
-use Latte\ContentType;
-use Latte\Engine;
-use Latte\Feature;
 use Latte\Runtime\HtmlHelpers;
 use function is_string;
 

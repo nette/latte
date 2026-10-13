@@ -8,15 +8,11 @@
 namespace Latte\Sandbox;
 
 use Latte;
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes\Php;
+use Latte\Compiler\{Node, NodeTraverser, PrintContext};
+use Latte\Compiler\Nodes\{Php, TemplateNode};
 use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\TemplateNode;
-use Latte\Compiler\NodeTraverser;
-use Latte\Compiler\PrintContext;
-use Latte\Engine;
+use Latte\{Engine, SecurityViolationException};
 use Latte\Runtime\Template;
-use Latte\SecurityViolationException;
 use function is_string;
 
 

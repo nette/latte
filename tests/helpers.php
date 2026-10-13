@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes;
-use Latte\Compiler\PhpHelpers;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Range;
-use Latte\Compiler\TagLexer;
-use Latte\Compiler\Token;
+use Latte\Compiler\{Node, Nodes, PhpHelpers, Position, PrintContext, Range, TagLexer, Token};
 use Tracy\Dumper;
 
 

@@ -7,11 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Html;
 
-use Latte\Compiler\NodeHelpers;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\TextNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\{NodeHelpers, Position, PrintContext};
+use Latte\Compiler\Nodes\{AreaNode, TextNode};
 
 
 /**

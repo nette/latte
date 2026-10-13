@@ -7,14 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Html;
 
-use Latte\Compiler\Node;
-use Latte\Compiler\NodeHelpers;
-use Latte\Compiler\Nodes;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\FragmentNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
+use Latte\Compiler\{Node, NodeHelpers, Nodes, Position, PrintContext, Tag};
+use Latte\Compiler\Nodes\{AreaNode, FragmentNode};
 use Latte\ContentType;
 
 
