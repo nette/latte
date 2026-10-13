@@ -14,7 +14,6 @@ use Latte\Compiler\NodeTraverser;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
-use function array_unshift;
 
 
 /**

@@ -7,7 +7,7 @@
 
 namespace Latte;
 
-use function array_filter, array_keys, array_unique, count, in_array, is_array, is_object, is_string, levenshtein, strlen, strpos;
+use function count, is_array, is_object, is_string, strlen;
 use const PHP_VERSION_ID;
 
 

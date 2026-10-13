@@ -15,7 +15,7 @@ use Latte\Compiler\Nodes\Html;
 use Latte\ContentType;
 use Latte\Helpers;
 use Latte\SecurityViolationException;
-use function array_keys, array_pop, end, implode, in_array, key, preg_replace, str_starts_with, strlen, substr;
+use function strlen;
 
 
 /**
@@ -96,7 +96,7 @@ final class TemplateParserHtml
 				return null; // go to parseElement() one level up to close the element
 			}
 			$stream->seek($save);
-			if (!in_array($endText, $this->elementData[$this->element]->unclosedTags ?? [], strict: true)) {
+			if (!in_array($endText, $this->elementData[$this->element]->unclosedTags ?? [], true)) {
 				return null; // go to parseElement() one level up to collapse
 			}
 		}

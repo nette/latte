@@ -11,7 +11,7 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
-use function count, in_array, strtolower;
+use function count;
 
 
 /**
@@ -30,7 +30,7 @@ class BinaryOpNode extends ExpressionNode implements OperatorNode
 		public ?Position $position = null,
 		public ?Position $end = null,
 	) {
-		if (!in_array(strtolower($this->operator), self::Ops, strict: true)) {
+		if (!in_array(strtolower($this->operator), self::Ops, true)) {
 			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");
 		}
 	}

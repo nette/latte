@@ -20,7 +20,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
 use Latte\Compiler\Token;
-use function array_pop, array_shift, count, end, preg_match;
+use function count;
 
 
 /**

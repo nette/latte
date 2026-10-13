@@ -12,8 +12,8 @@ use Latte\ContentType;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\Html;
 use Stringable;
-use function abs, addcslashes, array_combine, array_fill_keys, array_key_last, array_map, array_rand, array_reverse, array_search, array_slice, base64_encode, ceil, count, end, explode, extension_loaded, finfo_buffer, finfo_open, floor, func_num_args, htmlspecialchars, http_build_query, iconv, iconv_strlen, iconv_substr, implode, is_array, is_int, is_numeric, is_string, iterator_count, iterator_to_array, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, min, nl2br, number_format, preg_last_error, preg_last_error_msg, preg_match, preg_quote, preg_replace, preg_replace_callback, preg_split, reset, round, str_repeat, str_replace, strip_tags, strlen, strrev, strtr, uasort, uksort, urlencode, utf8_decode;
-use const ENT_NOQUOTES, ENT_SUBSTITUTE, FILEINFO_MIME_TYPE, MB_CASE_TITLE, PREG_SPLIT_NO_EMPTY;
+use function count, extension_loaded, func_num_args, is_array, is_int, is_string, strlen;
+use const ENT_NOQUOTES, ENT_SUBSTITUTE;
 
 
 /**

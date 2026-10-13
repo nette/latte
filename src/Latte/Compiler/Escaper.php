@@ -12,7 +12,7 @@ use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\Helpers;
 use Latte\Runtime\HtmlHelpers;
-use function in_array, is_string, str_starts_with, strtolower;
+use function is_string;
 
 
 /**
@@ -78,7 +78,7 @@ class Escaper
 	public function __construct(
 		private string $contentType,
 	) {
-		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], strict: true)
+		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], true)
 			? self::HtmlText
 			: $contentType;
 	}

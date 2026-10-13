@@ -8,7 +8,7 @@
 namespace Latte\Runtime;
 
 use Latte;
-use function get_debug_type, htmlspecialchars, is_float, is_int, is_string, ord, preg_match, preg_replace, preg_replace_callback;
+use function is_float, is_int, is_string;
 use const ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1;
 
 

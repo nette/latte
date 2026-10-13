@@ -7,7 +7,6 @@
 
 namespace Latte;
 
-use function get_defined_vars;
 
 
 /**

@@ -14,7 +14,6 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\ContentType;
-use function in_array;
 
 
 /**
@@ -39,7 +38,7 @@ class SpacelessNode extends StatementNode
 	{
 		$escaper = $context->getEscaper();
 		$allowed = [Escaper::HtmlText, Escaper::Text, Escaper::JavaScript, Escaper::Css, Escaper::ICal, ContentType::Xml];
-		if (!in_array($escaper->getState(), $allowed, strict: true)) {
+		if (!in_array($escaper->getState(), $allowed, true)) {
 			throw new Latte\CompileException('{spaceless} cannot be used in this context.', $this->position);
 		}
 

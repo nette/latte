@@ -22,7 +22,7 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TagParser;
 use Latte\Feature;
-use function array_map, array_unshift, implode, is_string, preg_match;
+use function is_string;
 
 
 /**

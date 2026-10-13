@@ -8,7 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use function array_map, count, implode, is_int, is_string, trim;
+use function count, is_int, is_string;
 
 
 /**

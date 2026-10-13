@@ -9,7 +9,7 @@ namespace Latte\Compiler;
 
 use Latte\ContentType;
 use Latte\Engine;
-use function array_filter, compact, implode, is_int, preg_match, str_contains, str_replace, trim;
+use function is_int;
 
 
 /**

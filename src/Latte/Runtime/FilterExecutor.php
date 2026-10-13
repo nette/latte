@@ -10,7 +10,6 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Latte\Helpers;
-use function array_column, array_combine, array_keys, array_unshift, strtoupper;
 
 
 /**

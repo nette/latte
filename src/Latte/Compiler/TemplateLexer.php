@@ -8,8 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use function array_merge, array_pop, array_shift, array_unshift, constant, dechex, is_int, ord, preg_last_error, preg_last_error_msg, preg_match, preg_quote, str_replace, str_starts_with, strlen, substr;
-use const PREG_UNMATCHED_AS_NULL;
+use function is_int, strlen;
 
 
 /**

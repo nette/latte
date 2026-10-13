@@ -15,7 +15,7 @@ use Latte\Helpers;
 use Latte\Policy;
 use Latte\Runtime\Template;
 use Latte\SecurityViolationException;
-use function array_keys, array_splice, count, end, in_array, preg_match, str_ends_with, str_starts_with, substr, trim, ucfirst;
+use function count;
 
 
 /**
@@ -191,7 +191,7 @@ final class TemplateParser
 	{
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		if ($this->stream->peek(1)->is(Token::Slash)
-			|| (isset($this->tag, $this->lookFor[$this->tag]) && in_array($this->stream->peek(1)->text, $this->lookFor[$this->tag], strict: true))
+			|| (isset($this->tag, $this->lookFor[$this->tag]) && in_array($this->stream->peek(1)->text, $this->lookFor[$this->tag], true))
 		) {
 			$this->lexer->popState();
 			return null; // go back to previous parseLatteStatement()
@@ -242,7 +242,7 @@ final class TemplateParser
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
 						break;
-					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], strict: true)) {
+					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], true)) {
 						$tagRanges[] = new Range($tag->position, $tag->end);
 						$this->pushTag($tag);
 						$res->send([$content, $tag]);
@@ -299,7 +299,7 @@ final class TemplateParser
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 
-		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], strict: true);
+		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], true);
 		$openToken = $stream->consume(Token::Latte_TagOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$closing = (bool) $stream->tryConsume(Token::Slash);

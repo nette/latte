@@ -8,8 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use function bindec, chr, count, explode, fclose, fwrite, hexdec, in_array, is_array, is_resource, max, octdec, preg_match, preg_replace, preg_replace_callback, proc_close, proc_open, str_repeat, str_replace, stream_get_contents, strip_tags, stripslashes, strlen, strpbrk, substr, substr_count, substr_replace, token_get_all, trim, var_export;
-use const T_CATCH, T_CLOSE_TAG, T_COMMENT, T_CONSTANT_ENCAPSED_STRING, T_CURLY_OPEN, T_DOC_COMMENT, T_DOLLAR_OPEN_CURLY_BRACES, T_ECHO, T_ELSE, T_ELSEIF, T_FINALLY, T_OBJECT_OPERATOR, T_OPEN_TAG, T_WHITESPACE;
+use function count, is_array, is_resource, strlen;
 
 
 /**
@@ -47,7 +46,7 @@ final class PhpHelpers
 				} elseif ($name === T_WHITESPACE) {
 					$prev = $tokens[$n - 1];
 					$lines = substr_count($token, "\n");
-					if ($prev === '}' && in_array($next[0], [T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY], strict: true)) {
+					if ($prev === '}' && in_array($next[0], [T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY], true)) {
 						$token = ' ';
 					} elseif ($prev === '{' || $prev === '}' || $prev === ';' || $lines) {
 						$token = str_repeat("\n", max(1, $lines)) . str_repeat("\t", $level); // indent last line
@@ -68,7 +67,7 @@ final class PhpHelpers
 					throw new \LogicException('Unexpected token');
 
 				} else {
-					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], strict: true)) {
+					if (in_array($name, [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true)) {
 						$level++;
 					}
 

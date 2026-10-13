@@ -7,7 +7,6 @@
 
 namespace Latte\Compiler;
 
-use function in_array;
 
 
 /**
@@ -250,8 +249,8 @@ final readonly class Token
 
 	public function is(int|string ...$kind): bool
 	{
-		return in_array($this->type, $kind, strict: true)
-			|| in_array($this->text, $kind, strict: true);
+		return in_array($this->type, $kind, true)
+			|| in_array($this->text, $kind, true);
 	}
 
 

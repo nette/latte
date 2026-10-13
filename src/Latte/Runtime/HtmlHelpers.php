@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Nette;
-use function get_debug_type, html_entity_decode, htmlspecialchars, in_array, is_array, is_bool, is_float, is_int, is_string, ord, preg_match, preg_replace, preg_replace_callback, str_replace, strip_tags, strtolower, strtr, trim;
+use function in_array, is_array, is_bool, is_float, is_int, is_string;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -338,7 +338,7 @@ final class HtmlHelpers
 	public static function isUrlAttribute(string $tag, string $attr): bool
 	{
 		$attr = strtolower($attr);
-		return in_array($attr, ['href', 'src', 'action', 'formaction', 'xlink:href'], strict: true)
+		return in_array($attr, ['href', 'src', 'action', 'formaction', 'xlink:href'], true)
 			|| ($attr === 'data' && strtolower($tag) === 'object');
 	}
 
@@ -373,7 +373,7 @@ final class HtmlHelpers
 			throw new Latte\RuntimeException("Invalid tag name '$name'");
 
 		} elseif (self::isVoidElement($name) !== self::isVoidElement($origName ?? 'div') // non-void is default
-			|| in_array(strtolower($name), ['style', 'script'], strict: true)) {
+			|| in_array(strtolower($name), ['style', 'script'], true)) {
 			throw new Latte\RuntimeException("Forbidden: Cannot change element to <$name>");
 		}
 		return $name;

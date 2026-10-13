@@ -8,7 +8,6 @@
 namespace Latte\Runtime;
 
 use Latte\Helpers;
-use function array_keys;
 
 
 /**

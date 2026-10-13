@@ -7,7 +7,7 @@
 
 namespace Latte\Compiler;
 
-use function strlen, strrpos, substr_count;
+use function strlen;
 
 
 /**

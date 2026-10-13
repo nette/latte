@@ -10,7 +10,7 @@ namespace Latte\Compiler;
 use Latte\CompileException;
 use Latte\Compiler\Nodes\AreaNode;
 use Latte\Compiler\Nodes\FragmentNode;
-use function count, explode, implode, preg_match, str_ends_with, str_starts_with, strlen, substr, trim;
+use function count, strlen;
 
 
 /**

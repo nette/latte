@@ -10,7 +10,6 @@ namespace Latte\Essential\Nodes;
 use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
-use function preg_match, trim;
 
 
 /**

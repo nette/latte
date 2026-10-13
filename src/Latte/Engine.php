@@ -8,7 +8,7 @@
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
-use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, preg_match, serialize, substr;
+use function extension_loaded;
 
 
 /**
@@ -219,7 +219,7 @@ class Engine
 	private function loadTemplate(string $name): string
 	{
 		$class = $this->getTemplateClass($name);
-		if (class_exists($class, autoload: false)) {
+		if (class_exists($class, false)) {
 			// nothing
 		} elseif ($this->cache->directory) {
 			$this->cache->loadOrCreate($this, $name);

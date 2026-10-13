@@ -12,7 +12,6 @@ use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\OperatorNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
-use function in_array;
 
 
 /**
@@ -30,7 +29,7 @@ class AssignOpNode extends ExpressionNode implements OperatorNode
 		public ?Position $position = null,
 		public ?Position $end = null,
 	) {
-		if (!in_array($this->operator, self::Ops, strict: true)) {
+		if (!in_array($this->operator, self::Ops, true)) {
 			throw new \InvalidArgumentException("Unexpected operator '$this->operator'");
 		}
 		$this->validate();

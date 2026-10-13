@@ -10,8 +10,7 @@ namespace Latte\Essential;
 use Latte;
 use Latte\ContentType;
 use Latte\Runtime\HtmlHelpers;
-use function ltrim, ob_end_flush, ob_get_level, ob_start, preg_last_error, preg_last_error_msg, preg_match, preg_replace, preg_replace_callback, rtrim, str_contains, str_ends_with, str_repeat, strcspn, strlen, strspn, strtolower, substr, substr_count;
-use const PHP_OUTPUT_HANDLER_FINAL, PREG_OFFSET_CAPTURE;
+use function strlen;
 
 
 /**

@@ -9,8 +9,7 @@ namespace Latte\Tools;
 
 use Latte;
 use Nette;
-use function in_array, strlen;
-use const DIRECTORY_SEPARATOR, PHP_BINARY, STDERR;
+use function function_exists, strlen;
 
 
 /**
@@ -98,7 +97,7 @@ final class Linter
 	public function lintLatte(string $file): bool
 	{
 		set_error_handler(function (int $severity, string $message, string $errFile = '', int $errLine = 0) use ($file): bool {
-			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], strict: true)) {
+			if (in_array($severity, [E_USER_DEPRECATED, E_USER_WARNING, E_USER_NOTICE], true)) {
 				$pos = preg_match('~on line (\d+)~', $message, $m) ? ':' . $m[1] : '';
 				$label = $severity === E_USER_DEPRECATED ? 'DEPRECATED' : 'WARNING';
 				$this->writeError($label, $file . $pos, $message);

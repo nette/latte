@@ -14,7 +14,6 @@ use Latte\Compiler\PhpHelpers;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
 use Latte\Helpers;
-use function substr;
 
 
 /**

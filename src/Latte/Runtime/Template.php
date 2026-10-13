@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\Compiler\Escaper;
 use Latte\Engine;
-use function array_keys, array_merge, array_pop, end, in_array, is_array, next, ob_end_clean, ob_get_clean, ob_start, prev, reset, sprintf, strtoupper;
+use function in_array, is_array;
 
 
 /**
@@ -193,7 +193,7 @@ class Template
 		$child->referenceType = $relation;
 		$child->global = $this->global;
 
-		if (in_array($relation, ['extends', 'includeblock', 'import', 'embed'], strict: true)) {
+		if (in_array($relation, ['extends', 'includeblock', 'import', 'embed'], true)) {
 			foreach ($child->blocks[self::LayerTop] as $nm => $block) {
 				$this->addBlock($nm, $block->contentType ?? static::ContentType, $block->functions);
 			}
