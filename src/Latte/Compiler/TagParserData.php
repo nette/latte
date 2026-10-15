@@ -642,781 +642,1070 @@ trait TagParserData
 
 	protected function reduce(int $rule, int $pos): void
 	{
-		(match ($rule) {
-			0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 28, 29, 57, 72, 74, 87,
-			107, 108, 113, 114, 183, 189, 190, 200, 202, 206, 207, 209, 210, 212, 223, 228, 229, 234, 235, 237,
-			238, 239, 240, 241, 243, 245, 246, 247, 249, 253, 254, 258, 262, 269, 271, 272, 274, 279, 297, 309 => fn() => $this->semValue = $this->semStack[$pos],
-			2 => fn() => $this->semValue = new Node\ModifierNode(
-				$this->semStack[$pos],
-				position: $this->startPos($pos),
-				end: $this->endPos($pos),
-			),
-			3 => fn() => $this->semValue = new Expression\ArrayNode(
-				$this->semStack[$pos],
-				position: $this->startPos($pos),
-				end: $this->endPos($pos),
-			),
-			22, 23, 24, 25, 26, 62, 63, 64
-				=> fn() => $this->semValue = new Node\IdentifierNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			27 => fn() => $this->semValue = new Expression\VariableNode(
-				substr($this->semStack[$pos], 1),
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			30, 40, 51, 95, 105, 106, 168, 169, 192, 193, 208, 236, 244, 270, 273, 305
-				=> fn() => $this->semValue = $this->semStack[$pos - 1],
-			31, 39, 52, 75, 79, 91, 104, 191, 211 => fn() => $this->semValue = [],
-			32, 41, 53, 77, 84, 97, 100, 194, 278, 293 => fn() => $this->semValue = [$this->semStack[$pos]],
-			33, 42, 54, 66, 68, 70, 78, 85, 96, 195, 277 => function () use ($pos) {
+		switch ($rule) {
+			case 0:
+			case 1:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 28:
+			case 29:
+			case 57:
+			case 72:
+			case 74:
+			case 87:
+			case 107:
+			case 108:
+			case 113:
+			case 114:
+			case 183:
+			case 189:
+			case 190:
+			case 200:
+			case 202:
+			case 206:
+			case 207:
+			case 209:
+			case 210:
+			case 212:
+			case 223:
+			case 228:
+			case 229:
+			case 234:
+			case 235:
+			case 237:
+			case 238:
+			case 239:
+			case 240:
+			case 241:
+			case 243:
+			case 245:
+			case 246:
+			case 247:
+			case 249:
+			case 253:
+			case 254:
+			case 258:
+			case 262:
+			case 269:
+			case 271:
+			case 272:
+			case 274:
+			case 279:
+			case 297:
+			case 309:
+				$this->semValue = $this->semStack[$pos];
+				break;
+			case 2:
+				$this->semValue = new Node\ModifierNode($this->semStack[$pos], position: $this->startPos($pos), end: $this->endPos($pos));
+				break;
+			case 3:
+				$this->semValue = new Expression\ArrayNode(
+					$this->semStack[$pos],
+					position: $this->startPos($pos),
+					end: $this->endPos($pos),
+				);
+				break;
+			case 22:
+			case 23:
+			case 24:
+			case 25:
+			case 26:
+			case 62:
+			case 63:
+			case 64:
+				$this->semValue = new Node\IdentifierNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 27:
+				$this->semValue = new Expression\VariableNode(substr($this->semStack[$pos], 1), $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 30:
+			case 40:
+			case 51:
+			case 95:
+			case 105:
+			case 106:
+			case 168:
+			case 169:
+			case 192:
+			case 193:
+			case 208:
+			case 236:
+			case 244:
+			case 270:
+			case 273:
+			case 305:
+				$this->semValue = $this->semStack[$pos - 1];
+				break;
+			case 31:
+			case 39:
+			case 52:
+			case 75:
+			case 79:
+			case 91:
+			case 104:
+			case 191:
+			case 211:
+				$this->semValue = [];
+				break;
+			case 32:
+			case 41:
+			case 53:
+			case 77:
+			case 84:
+			case 97:
+			case 100:
+			case 194:
+			case 278:
+			case 293:
+				$this->semValue = [$this->semStack[$pos]];
+				break;
+			case 33:
+			case 42:
+			case 54:
+			case 66:
+			case 68:
+			case 70:
+			case 78:
+			case 85:
+			case 96:
+			case 195:
+			case 277:
 				$this->semStack[$pos - 2][] = $this->semStack[$pos];
 				$this->semValue = $this->semStack[$pos - 2];
-			},
-			34, 36 => fn() => $this->semValue = false,
-			35, 37 => fn() => $this->semValue = true,
-			38 => fn() => $this->semValue = new Expression\MatchNode(
-				$this->semStack[$pos - 4],
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 6),
-				$this->endPos($pos),
-			),
-			43 => fn() => $this->semValue = new Node\MatchArmNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			44 => fn() => $this->semValue = new Node\MatchArmNode(
-				null,
-				$this->semStack[$pos],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			45 => fn() => $this->semValue = [null, ...$this->semStack[$pos]],
-			46 => fn() => $this->semValue = [$this->semStack[$pos - 2], ...$this->semStack[$pos]],
-			47, 49 => fn() => $this->semValue = [$this->semStack[$pos], false],
-			48 => fn() => $this->semValue = [$this->semStack[$pos], true],
-			50 => fn() => $this->semValue = [$this->convertArrayToList($this->semStack[$pos]), false],
-			55 => fn() => $this->semValue = new Node\ParameterNode(
-				$this->semStack[$pos],
-				null,
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			56 => fn() => $this->semValue = new Node\ParameterNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->semStack[$pos - 5],
-				$this->semStack[$pos - 4],
-				$this->semStack[$pos - 3],
-				$this->startPos($pos - 5),
-				$this->endPos($pos),
-			),
-			58 => fn() => $this->semValue = new Node\NullableTypeNode(
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			59 => fn() => $this->semValue = new Node\UnionTypeNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			60 => fn() => $this->semValue = new Node\IntersectionTypeNode(
-				$this->semStack[$pos],
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			61 => fn() => $this->semValue = TagParser::handleBuiltinTypes($this->semStack[$pos]),
-			65, 67, 69 => fn() => $this->semValue = [$this->semStack[$pos - 2], $this->semStack[$pos]],
-			71, 73, 233 => fn() => $this->semValue = null,
-			76, 80, 92 => fn() => $this->semValue = $this->semStack[$pos - 2],
-			81 => fn() => $this->semValue = [new Node\ArgumentNode(
-				$this->semStack[$pos - 2],
-				false,
-				false,
-				null,
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			)],
-			82, 93 => fn() => $this->semValue = [$this->semStack[$pos - 1]],
-			83 => fn() => $this->semValue = [
-				new Node\ArgumentNode($this->semStack[$pos - 2], false, false, null, $this->startPos($pos - 2), $this->endPos($pos)),
-				$this->semStack[$pos],
-			],
-			86 => fn() => $this->semValue = new Node\ArgumentNode(
-				$this->semStack[$pos],
-				false,
-				false,
-				null,
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			88 => fn() => $this->semValue = new Node\ArgumentNode(
-				$this->semStack[$pos],
-				true,
-				false,
-				null,
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			89 => fn() => $this->semValue = new Node\ArgumentNode(
-				$this->semStack[$pos],
-				false,
-				true,
-				null,
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			90 => fn() => $this->semValue = new Node\ArgumentNode(
-				$this->semStack[$pos],
-				false,
-				false,
-				$this->semStack[$pos - 2],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			94 => fn() => $this->semValue = new Node\VariadicPlaceholderNode($this->startPos($pos), $this->endPos($pos)),
-			98, 99 => fn() => $this->semValue = new Expression\FilterCallNode(
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			101, 291, 292 => function () use ($pos) {
+				break;
+			case 34:
+			case 36:
+				$this->semValue = false;
+				break;
+			case 35:
+			case 37:
+				$this->semValue = true;
+				break;
+			case 38:
+				$this->semValue = new Expression\MatchNode(
+					$this->semStack[$pos - 4],
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 6),
+					$this->endPos($pos),
+				);
+				break;
+			case 43:
+				$this->semValue = new Node\MatchArmNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 44:
+				$this->semValue = new Node\MatchArmNode(null, $this->semStack[$pos], $this->startPos($pos - 3), $this->endPos($pos));
+				break;
+			case 45:
+				$this->semValue = [null, ...$this->semStack[$pos]];
+				break;
+			case 46:
+				$this->semValue = [$this->semStack[$pos - 2], ...$this->semStack[$pos]];
+				break;
+			case 47:
+			case 49:
+				$this->semValue = [$this->semStack[$pos], false];
+				break;
+			case 48:
+				$this->semValue = [$this->semStack[$pos], true];
+				break;
+			case 50:
+				$this->semValue = [$this->convertArrayToList($this->semStack[$pos]), false];
+				break;
+			case 55:
+				$this->semValue = new Node\ParameterNode(
+					$this->semStack[$pos],
+					null,
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 56:
+				$this->semValue = new Node\ParameterNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->semStack[$pos - 5],
+					$this->semStack[$pos - 4],
+					$this->semStack[$pos - 3],
+					$this->startPos($pos - 5),
+					$this->endPos($pos),
+				);
+				break;
+			case 58:
+				$this->semValue = new Node\NullableTypeNode($this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 59:
+				$this->semValue = new Node\UnionTypeNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 60:
+				$this->semValue = new Node\IntersectionTypeNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 61:
+				$this->semValue = TagParser::handleBuiltinTypes($this->semStack[$pos]);
+				break;
+			case 65:
+			case 67:
+			case 69:
+				$this->semValue = [$this->semStack[$pos - 2], $this->semStack[$pos]];
+				break;
+			case 71:
+			case 73:
+			case 233:
+				$this->semValue = null;
+				break;
+			case 76:
+			case 80:
+			case 92:
+				$this->semValue = $this->semStack[$pos - 2];
+				break;
+			case 81:
+				$this->semValue = [new Node\ArgumentNode(
+					$this->semStack[$pos - 2],
+					false,
+					false,
+					null,
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				)];
+				break;
+			case 82:
+			case 93:
+				$this->semValue = [$this->semStack[$pos - 1]];
+				break;
+			case 83:
+				$this->semValue = [
+					new Node\ArgumentNode($this->semStack[$pos - 2], false, false, null, $this->startPos($pos - 2), $this->endPos($pos)),
+					$this->semStack[$pos],
+				];
+				break;
+			case 86:
+				$this->semValue = new Node\ArgumentNode(
+					$this->semStack[$pos],
+					false,
+					false,
+					null,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 88:
+				$this->semValue = new Node\ArgumentNode(
+					$this->semStack[$pos],
+					true,
+					false,
+					null,
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 89:
+				$this->semValue = new Node\ArgumentNode(
+					$this->semStack[$pos],
+					false,
+					true,
+					null,
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 90:
+				$this->semValue = new Node\ArgumentNode(
+					$this->semStack[$pos],
+					false,
+					false,
+					$this->semStack[$pos - 2],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 94:
+				$this->semValue = new Node\VariadicPlaceholderNode($this->startPos($pos), $this->endPos($pos));
+				break;
+			case 98:
+			case 99:
+				$this->semValue = new Expression\FilterCallNode(
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 101:
+			case 291:
+			case 292:
 				$this->semStack[$pos - 1][] = $this->semStack[$pos];
 				$this->semValue = $this->semStack[$pos - 1];
-			},
-			102 => fn() => $this->semValue = new Node\FilterNode(
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				false,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			103 => fn() => $this->semValue = new Node\FilterNode(
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				true,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			109, 111 => fn() => $this->semValue = new Expression\AssignNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				false,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			110 => fn() => $this->semValue = new Expression\AssignNode(
-				$this->convertArrayToList($this->semStack[$pos - 2]),
-				$this->semStack[$pos],
-				false,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			112 => fn() => $this->semValue = new Expression\AssignNode(
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos],
-				true,
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			115 => fn() => $this->semValue = new Expression\FunctionCallNode(
-				new Node\NameNode($this->semStack[$pos - 1], Node\NameNode::KindNormal, $this->startPos($pos - 1), $this->endPos($pos)),
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			116 => fn() => $this->semValue = new Expression\CloneNode(
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			117 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'+',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			118 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'-',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			119 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'*',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			120 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'/',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			121 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'.',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			122 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'%',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			123 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'&',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			124 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'|',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			125 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'^',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			126 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'<<',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			127 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'>>',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			128 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'**',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			129 => fn() => $this->semValue = new Expression\AssignOpNode(
-				$this->semStack[$pos - 2],
-				'??',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			130 => fn() => $this->semValue = new Expression\PostOpNode(
-				$this->semStack[$pos - 1],
-				'++',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			131 => fn() => $this->semValue = new Expression\PreOpNode(
-				$this->semStack[$pos],
-				'++',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			132 => fn() => $this->semValue = new Expression\PostOpNode(
-				$this->semStack[$pos - 1],
-				'--',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			133 => fn() => $this->semValue = new Expression\PreOpNode(
-				$this->semStack[$pos],
-				'--',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			134 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'||',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			135 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'&&',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			136 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'or',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			137 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'and',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			138 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'xor',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			139 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'|',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			140, 141 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'&',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			142 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'^',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			143 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'.',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			144 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'+',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			145 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'-',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			146 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'*',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			147 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'/',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			148 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'%',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			149 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'<<',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			150 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'>>',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			151 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'**',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			152 => fn() => $this->semValue = new Expression\InNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			153 => fn() => $this->semValue = new Expression\UnaryOpNode(
-				$this->semStack[$pos],
-				'+',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			154 => fn() => $this->semValue = new Expression\UnaryOpNode(
-				$this->semStack[$pos],
-				'-',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			155 => fn() => $this->semValue = new Expression\UnaryOpNode(
-				$this->semStack[$pos],
-				'!',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			156 => fn() => $this->semValue = new Expression\UnaryOpNode(
-				$this->semStack[$pos],
-				'~',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			157 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'===',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			158 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'!==',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			159 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'==',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			160 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'!=',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			161 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'<=>',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			162 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'<',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			163 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'<=',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			164 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'>',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			165 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'>=',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			166 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'|>',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			167 => fn() => $this->semValue = new Expression\InstanceofNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			170 => fn() => $this->semValue = new Expression\TernaryNode(
-				$this->semStack[$pos - 4],
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 4),
-				$this->endPos($pos),
-			),
-			171 => fn() => $this->semValue = new Expression\TernaryNode(
-				$this->semStack[$pos - 3],
-				null,
-				$this->semStack[$pos],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			172 => fn() => $this->semValue = new Expression\TernaryNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				null,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			173 => fn() => $this->semValue = new Expression\BinaryOpNode(
-				$this->semStack[$pos - 2],
-				'??',
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			174 => fn() => $this->semValue = new Expression\IssetNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			175 => fn() => $this->semValue = new Expression\EmptyNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			176 => fn() => $this->semValue = new Expression\CastNode(
-				'int',
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			177 => fn() => $this->semValue = new Expression\CastNode(
-				'float',
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			178 => fn() => $this->semValue = new Expression\CastNode(
-				'string',
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			179 => fn() => $this->semValue = new Expression\CastNode(
-				'array',
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			180 => fn() => $this->semValue = new Expression\CastNode(
-				'object',
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			181 => fn() => $this->semValue = new Expression\CastNode(
-				'bool',
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			182 => fn() => $this->semValue = new Expression\UnaryOpNode(
-				$this->semStack[$pos],
-				'@',
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			184 => fn() => $this->semValue = new Expression\ClosureNode(
-				(bool) $this->semStack[$pos - 6],
-				$this->semStack[$pos - 4],
-				[],
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 7),
-				$this->endPos($pos),
-			),
-			185 => fn() => $this->semValue = new Expression\ClosureNode(
-				(bool) $this->semStack[$pos - 10],
-				$this->semStack[$pos - 8],
-				$this->semStack[$pos - 6],
-				$this->semStack[$pos - 5],
-				$this->semStack[$pos - 2],
-				$this->startPos($pos - 11),
-				$this->endPos($pos),
-			),
-			186 => fn() => $this->semValue = new Expression\ClosureNode(
-				(bool) $this->semStack[$pos - 7],
-				$this->semStack[$pos - 5],
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos - 2],
-				null,
-				$this->startPos($pos - 8),
-				$this->endPos($pos),
-			),
-			187 => fn() => $this->semValue = new Expression\NewNode(
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			188 => fn() => $this->semValue = new Expression\NewNode(
-				$this->semStack[$pos],
-				[],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			196 => fn() => $this->semValue = new Node\ClosureUseNode(
-				$this->semStack[$pos],
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			197, 198 => fn() => $this->semValue = $this->checkFunctionName(new Expression\FunctionCallNode(
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			)),
-			199 => fn() => $this->semValue = new Expression\StaticMethodCallNode(
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			201, 204 => fn() => $this->semValue = new Node\NameNode(
-				$this->semStack[$pos],
-				Node\NameNode::KindNormal,
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			203 => fn() => $this->semValue = new Node\NameNode($this->semStack[$pos], -1, $this->startPos($pos), $this->endPos($pos)),
-			205 => fn() => $this->semValue = new Node\NameNode(
-				$this->semStack[$pos],
-				Node\NameNode::KindFullyQualified,
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			213 => fn() => $this->semValue = new Expression\ConstantFetchNode(
-				$this->semStack[$pos],
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			214 => fn() => $this->semValue = new Expression\ClassConstantFetchNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			215 => fn() => $this->semValue = new Expression\ClassConstantFetchNode(
-				$this->semStack[$pos - 4],
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 4),
-				$this->endPos($pos),
-			),
-			216 => fn() => $this->semValue = new Expression\ArrayNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			217 => fn() => $this->semValue = new Expression\ArrayNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			218 => function () use ($pos) {
+				break;
+			case 102:
+				$this->semValue = new Node\FilterNode(
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					false,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 103:
+				$this->semValue = new Node\FilterNode(
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					true,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 109:
+			case 111:
+				$this->semValue = new Expression\AssignNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					false,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 110:
+				$this->semValue = new Expression\AssignNode(
+					$this->convertArrayToList($this->semStack[$pos - 2]),
+					$this->semStack[$pos],
+					false,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 112:
+				$this->semValue = new Expression\AssignNode(
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos],
+					true,
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 115:
+				$this->semValue = new Expression\FunctionCallNode(
+					new Node\NameNode($this->semStack[$pos - 1], Node\NameNode::KindNormal, $this->startPos($pos - 1), $this->endPos($pos)),
+					$this->semStack[$pos],
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 116:
+				$this->semValue = new Expression\CloneNode($this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 117:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'+',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 118:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'-',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 119:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'*',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 120:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'/',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 121:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'.',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 122:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'%',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 123:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'&',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 124:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'|',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 125:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'^',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 126:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'<<',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 127:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'>>',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 128:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'**',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 129:
+				$this->semValue = new Expression\AssignOpNode(
+					$this->semStack[$pos - 2],
+					'??',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 130:
+				$this->semValue = new Expression\PostOpNode(
+					$this->semStack[$pos - 1],
+					'++',
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 131:
+				$this->semValue = new Expression\PreOpNode($this->semStack[$pos], '++', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 132:
+				$this->semValue = new Expression\PostOpNode(
+					$this->semStack[$pos - 1],
+					'--',
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 133:
+				$this->semValue = new Expression\PreOpNode($this->semStack[$pos], '--', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 134:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'||',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 135:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'&&',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 136:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'or',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 137:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'and',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 138:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'xor',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 139:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'|',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 140:
+			case 141:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'&',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 142:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'^',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 143:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'.',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 144:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'+',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 145:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'-',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 146:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'*',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 147:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'/',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 148:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'%',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 149:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'<<',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 150:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'>>',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 151:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'**',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 152:
+				$this->semValue = new Expression\InNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 153:
+				$this->semValue = new Expression\UnaryOpNode($this->semStack[$pos], '+', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 154:
+				$this->semValue = new Expression\UnaryOpNode($this->semStack[$pos], '-', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 155:
+				$this->semValue = new Expression\UnaryOpNode($this->semStack[$pos], '!', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 156:
+				$this->semValue = new Expression\UnaryOpNode($this->semStack[$pos], '~', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 157:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'===',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 158:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'!==',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 159:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'==',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 160:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'!=',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 161:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'<=>',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 162:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'<',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 163:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'<=',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 164:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'>',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 165:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'>=',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 166:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'|>',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 167:
+				$this->semValue = new Expression\InstanceofNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 170:
+				$this->semValue = new Expression\TernaryNode(
+					$this->semStack[$pos - 4],
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 4),
+					$this->endPos($pos),
+				);
+				break;
+			case 171:
+				$this->semValue = new Expression\TernaryNode(
+					$this->semStack[$pos - 3],
+					null,
+					$this->semStack[$pos],
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 172:
+				$this->semValue = new Expression\TernaryNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					null,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 173:
+				$this->semValue = new Expression\BinaryOpNode(
+					$this->semStack[$pos - 2],
+					'??',
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 174:
+				$this->semValue = new Expression\IssetNode($this->semStack[$pos - 1], $this->startPos($pos - 3), $this->endPos($pos));
+				break;
+			case 175:
+				$this->semValue = new Expression\EmptyNode($this->semStack[$pos - 1], $this->startPos($pos - 3), $this->endPos($pos));
+				break;
+			case 176:
+				$this->semValue = new Expression\CastNode('int', $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 177:
+				$this->semValue = new Expression\CastNode('float', $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 178:
+				$this->semValue = new Expression\CastNode('string', $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 179:
+				$this->semValue = new Expression\CastNode('array', $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 180:
+				$this->semValue = new Expression\CastNode('object', $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 181:
+				$this->semValue = new Expression\CastNode('bool', $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 182:
+				$this->semValue = new Expression\UnaryOpNode($this->semStack[$pos], '@', $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 184:
+				$this->semValue = new Expression\ClosureNode(
+					(bool) $this->semStack[$pos - 6],
+					$this->semStack[$pos - 4],
+					[],
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 7),
+					$this->endPos($pos),
+				);
+				break;
+			case 185:
+				$this->semValue = new Expression\ClosureNode(
+					(bool) $this->semStack[$pos - 10],
+					$this->semStack[$pos - 8],
+					$this->semStack[$pos - 6],
+					$this->semStack[$pos - 5],
+					$this->semStack[$pos - 2],
+					$this->startPos($pos - 11),
+					$this->endPos($pos),
+				);
+				break;
+			case 186:
+				$this->semValue = new Expression\ClosureNode(
+					(bool) $this->semStack[$pos - 7],
+					$this->semStack[$pos - 5],
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos - 2],
+					null,
+					$this->startPos($pos - 8),
+					$this->endPos($pos),
+				);
+				break;
+			case 187:
+				$this->semValue = new Expression\NewNode(
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 188:
+				$this->semValue = new Expression\NewNode($this->semStack[$pos], [], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+			case 196:
+				$this->semValue = new Node\ClosureUseNode(
+					$this->semStack[$pos],
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 197:
+			case 198:
+				$this->semValue = $this->checkFunctionName(new Expression\FunctionCallNode(
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				));
+				break;
+			case 199:
+				$this->semValue = new Expression\StaticMethodCallNode(
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 201:
+			case 204:
+				$this->semValue = new Node\NameNode(
+					$this->semStack[$pos],
+					Node\NameNode::KindNormal,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 203:
+				$this->semValue = new Node\NameNode($this->semStack[$pos], -1, $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 205:
+				$this->semValue = new Node\NameNode(
+					$this->semStack[$pos],
+					Node\NameNode::KindFullyQualified,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 213:
+				$this->semValue = new Expression\ConstantFetchNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 214:
+				$this->semValue = new Expression\ClassConstantFetchNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 215:
+				$this->semValue = new Expression\ClassConstantFetchNode(
+					$this->semStack[$pos - 4],
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 4),
+					$this->endPos($pos),
+				);
+				break;
+			case 216:
+				$this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startPos($pos - 2), $this->endPos($pos));
+				break;
+			case 217:
+				$this->semValue = new Expression\ArrayNode($this->semStack[$pos - 1], $this->startPos($pos - 3), $this->endPos($pos));
+				break;
+			case 218:
 				$this->semValue = $this->semStack[$pos];
 				$this->shortArrays->offsetSet($this->semValue);
-			},
-			219 => fn() => $this->semValue = Scalar\StringNode::parse($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			220 => fn() => $this->semValue = Scalar\InterpolatedStringNode::parse(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			221 => fn() => $this->semValue = Scalar\IntegerNode::parse($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			222 => fn() => $this->semValue = Scalar\FloatNode::parse($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			224, 306 => fn() => $this->semValue = new Scalar\StringNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			225 => fn() => $this->semValue = new Scalar\BooleanNode(true, $this->startPos($pos), $this->endPos($pos)),
-			226 => fn() => $this->semValue = new Scalar\BooleanNode(false, $this->startPos($pos), $this->endPos($pos)),
-			227 => fn() => $this->semValue = new Scalar\NullNode($this->startPos($pos), $this->endPos($pos)),
-			230 => fn() => $this->semValue = $this->parseDocString(
-				$this->semStack[$pos - 2],
-				[$this->semStack[$pos - 1]],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-				$this->startTokenStack[$pos]->position,
-			),
-			231 => fn() => $this->semValue = $this->parseDocString(
-				$this->semStack[$pos - 1],
-				[],
-				$this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-				$this->startTokenStack[$pos]->position,
-			),
-			232 => fn() => $this->semValue = $this->parseDocString(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-				$this->startTokenStack[$pos]->position,
-			),
-			242 => fn() => $this->semValue = new Expression\ConstantFetchNode(
-				new Node\NameNode($this->semStack[$pos], Node\NameNode::KindNormal, $this->startPos($pos), $this->endPos($pos)),
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			248, 263, 298 => fn() => $this->semValue = new Expression\ArrayAccessNode(
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			250 => fn() => $this->semValue = new Expression\MethodCallNode(
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				false,
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			251 => fn() => $this->semValue = new Expression\MethodCallNode(
-				$this->semStack[$pos - 3],
-				$this->semStack[$pos - 1],
-				$this->semStack[$pos],
-				true,
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			252 => function () use ($pos) {
+				break;
+			case 219:
+				$this->semValue = Scalar\StringNode::parse($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 220:
+				$this->semValue = Scalar\InterpolatedStringNode::parse(
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 221:
+				$this->semValue = Scalar\IntegerNode::parse($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 222:
+				$this->semValue = Scalar\FloatNode::parse($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 224:
+			case 306:
+				$this->semValue = new Scalar\StringNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 225:
+				$this->semValue = new Scalar\BooleanNode(true, $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 226:
+				$this->semValue = new Scalar\BooleanNode(false, $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 227:
+				$this->semValue = new Scalar\NullNode($this->startPos($pos), $this->endPos($pos));
+				break;
+			case 230:
+				$this->semValue = $this->parseDocString(
+					$this->semStack[$pos - 2],
+					[$this->semStack[$pos - 1]],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+					$this->startTokenStack[$pos]->position,
+				);
+				break;
+			case 231:
+				$this->semValue = $this->parseDocString(
+					$this->semStack[$pos - 1],
+					[],
+					$this->semStack[$pos],
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+					$this->startTokenStack[$pos]->position,
+				);
+				break;
+			case 232:
+				$this->semValue = $this->parseDocString(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+					$this->startTokenStack[$pos]->position,
+				);
+				break;
+			case 242:
+				$this->semValue = new Expression\ConstantFetchNode(
+					new Node\NameNode($this->semStack[$pos], Node\NameNode::KindNormal, $this->startPos($pos), $this->endPos($pos)),
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 248:
+			case 263:
+			case 298:
+				$this->semValue = new Expression\ArrayAccessNode(
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 250:
+				$this->semValue = new Expression\MethodCallNode(
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					false,
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 251:
+				$this->semValue = new Expression\MethodCallNode(
+					$this->semStack[$pos - 3],
+					$this->semStack[$pos - 1],
+					$this->semStack[$pos],
+					true,
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 252:
 				$this->semValue = new Expression\MethodCallNode(
 					new Expression\BinaryOpNode(
 						$this->semStack[$pos - 3],
@@ -1432,22 +1721,32 @@ trait TagParserData
 					$this->endPos($pos),
 				);
 				trigger_error('Latte: undefined-nullsafe operator ??-> is deprecated, used ' . $this->startPos($pos - 3));
-			},
-			255, 264, 299 => fn() => $this->semValue = new Expression\PropertyFetchNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				false,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			256, 265, 300 => fn() => $this->semValue = new Expression\PropertyFetchNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				true,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			257, 266, 301 => function () use ($pos) {
+				break;
+			case 255:
+			case 264:
+			case 299:
+				$this->semValue = new Expression\PropertyFetchNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					false,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 256:
+			case 265:
+			case 300:
+				$this->semValue = new Expression\PropertyFetchNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					true,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 257:
+			case 266:
+			case 301:
 				$this->semValue = new Expression\PropertyFetchNode(
 					new Expression\BinaryOpNode(
 						$this->semStack[$pos - 2],
@@ -1462,122 +1761,148 @@ trait TagParserData
 					$this->endPos($pos),
 				);
 				trigger_error('Latte: undefined-nullsafe operator ??-> is deprecated, used ' . $this->startPos($pos - 2));
-			},
-			259 => fn() => $this->semValue = new Expression\VariableNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			260 => function () use ($pos) {
+				break;
+			case 259:
+				$this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->startPos($pos - 3), $this->endPos($pos));
+				break;
+			case 260:
 				$var = $this->semStack[$pos]->name;
 				$this->semValue = is_string($var) ? new Node\VarLikeIdentifierNode($var, $this->startPos($pos), $this->endPos($pos)) : $var;
-			},
-			261, 267, 268 => fn() => $this->semValue = new Expression\StaticPropertyFetchNode(
-				$this->semStack[$pos - 2],
-				$this->semStack[$pos],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			275 => fn() => $this->semValue = $this->convertArrayToList(new Expression\ArrayNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			)),
-			276 => function () use ($pos) {
+				break;
+			case 261:
+			case 267:
+			case 268:
+				$this->semValue = new Expression\StaticPropertyFetchNode(
+					$this->semStack[$pos - 2],
+					$this->semStack[$pos],
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 275:
+				$this->semValue = $this->convertArrayToList(new Expression\ArrayNode(
+					$this->semStack[$pos - 1],
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				));
+				break;
+			case 276:
 				$this->semValue = $this->semStack[$pos];
 				$end = count($this->semValue) - 1;
 				if ($this->semValue[$end]->value instanceof Expression\TemporaryNode && !$this->semValue[$end]->value->value) {
 					array_pop($this->semValue);
 				}
-			},
-			280 => fn() => $this->semValue = new Node\ArrayItemNode(
-				new Expression\TemporaryNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-				null,
-				false,
-				false,
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			281 => fn() => $this->semValue = new Node\ArrayItemNode(
-				new Expression\TemporaryNode($this->semStack[$pos], $this->startPos($pos - 2), $this->endPos($pos)),
-				$this->semStack[$pos - 2],
-				false,
-				false,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			282 => fn() => $this->semValue = new Node\ArrayItemNode(
-				new Expression\TemporaryNode(null),
-				null,
-				false,
-				false,
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			283 => fn() => $this->semValue = new Node\ArrayItemNode(
-				$this->semStack[$pos],
-				null,
-				false,
-				false,
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			284 => fn() => $this->semValue = new Node\ArrayItemNode(
-				$this->semStack[$pos],
-				null,
-				true,
-				false,
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			285, 287 => fn() => $this->semValue = new Node\ArrayItemNode(
-				$this->semStack[$pos],
-				$this->semStack[$pos - 2],
-				false,
-				false,
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			286, 288 => fn() => $this->semValue = new Node\ArrayItemNode(
-				$this->semStack[$pos],
-				$this->semStack[$pos - 3],
-				true,
-				false,
-				$this->startPos($pos - 3),
-				$this->endPos($pos),
-			),
-			289, 290 => fn() => $this->semValue = new Node\ArrayItemNode(
-				$this->semStack[$pos],
-				null,
-				false,
-				true,
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-			294 => fn() => $this->semValue = [$this->semStack[$pos - 1], $this->semStack[$pos]],
-			295 => fn() => $this->semValue = new Node\InterpolatedStringPartNode(
-				$this->semStack[$pos],
-				$this->startPos($pos),
-				$this->endPos($pos),
-			),
-			296 => fn() => $this->semValue = new Expression\VariableNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			302, 303 => fn() => $this->semValue = new Expression\VariableNode(
-				$this->semStack[$pos - 1],
-				$this->startPos($pos - 2),
-				$this->endPos($pos),
-			),
-			304 => fn() => $this->semValue = new Expression\ArrayAccessNode(
-				$this->semStack[$pos - 4],
-				$this->semStack[$pos - 2],
-				$this->startPos($pos - 5),
-				$this->endPos($pos),
-			),
-			307 => fn() => $this->semValue = TagParser::parseOffset($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
-			308 => fn() => $this->semValue = TagParser::parseOffset(
-				'-' . $this->semStack[$pos],
-				$this->startPos($pos - 1),
-				$this->endPos($pos),
-			),
-		})();
+				break;
+			case 280:
+				$this->semValue = new Node\ArrayItemNode(
+					new Expression\TemporaryNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos)),
+					null,
+					false,
+					false,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 281:
+				$this->semValue = new Node\ArrayItemNode(
+					new Expression\TemporaryNode($this->semStack[$pos], $this->startPos($pos - 2), $this->endPos($pos)),
+					$this->semStack[$pos - 2],
+					false,
+					false,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 282:
+				$this->semValue = new Node\ArrayItemNode(
+					new Expression\TemporaryNode(null),
+					null,
+					false,
+					false,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 283:
+				$this->semValue = new Node\ArrayItemNode(
+					$this->semStack[$pos],
+					null,
+					false,
+					false,
+					$this->startPos($pos),
+					$this->endPos($pos),
+				);
+				break;
+			case 284:
+				$this->semValue = new Node\ArrayItemNode(
+					$this->semStack[$pos],
+					null,
+					true,
+					false,
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 285:
+			case 287:
+				$this->semValue = new Node\ArrayItemNode(
+					$this->semStack[$pos],
+					$this->semStack[$pos - 2],
+					false,
+					false,
+					$this->startPos($pos - 2),
+					$this->endPos($pos),
+				);
+				break;
+			case 286:
+			case 288:
+				$this->semValue = new Node\ArrayItemNode(
+					$this->semStack[$pos],
+					$this->semStack[$pos - 3],
+					true,
+					false,
+					$this->startPos($pos - 3),
+					$this->endPos($pos),
+				);
+				break;
+			case 289:
+			case 290:
+				$this->semValue = new Node\ArrayItemNode(
+					$this->semStack[$pos],
+					null,
+					false,
+					true,
+					$this->startPos($pos - 1),
+					$this->endPos($pos),
+				);
+				break;
+			case 294:
+				$this->semValue = [$this->semStack[$pos - 1], $this->semStack[$pos]];
+				break;
+			case 295:
+				$this->semValue = new Node\InterpolatedStringPartNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 296:
+				$this->semValue = new Expression\VariableNode($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 302:
+			case 303:
+				$this->semValue = new Expression\VariableNode($this->semStack[$pos - 1], $this->startPos($pos - 2), $this->endPos($pos));
+				break;
+			case 304:
+				$this->semValue = new Expression\ArrayAccessNode(
+					$this->semStack[$pos - 4],
+					$this->semStack[$pos - 2],
+					$this->startPos($pos - 5),
+					$this->endPos($pos),
+				);
+				break;
+			case 307:
+				$this->semValue = TagParser::parseOffset($this->semStack[$pos], $this->startPos($pos), $this->endPos($pos));
+				break;
+			case 308:
+				$this->semValue = TagParser::parseOffset('-' . $this->semStack[$pos], $this->startPos($pos - 1), $this->endPos($pos));
+				break;
+		}
 	}
 }
