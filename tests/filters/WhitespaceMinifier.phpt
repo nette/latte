@@ -142,7 +142,7 @@ test('exception inside the region restores the buffer level', function () {
 	try {
 		WhitespaceMinifier::start(ContentType::Html);
 		throw new Exception('inside');
-	} catch (Throwable $e) {
+	} catch (Throwable) {
 		WhitespaceMinifier::end();
 	}
 

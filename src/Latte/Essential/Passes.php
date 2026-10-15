@@ -40,7 +40,10 @@ final readonly class Passes
 				&& isset($functions[$node->name->name])
 			) {
 				if ($node->isPartialFunction()) {
-					throw new CompileException("Custom function '{$node->name->name}' cannot be used as partial function.", $node->position);
+					throw new CompileException(
+						"Custom function '{$node->name->name}' cannot be used as partial function.",
+						$node->position,
+					);
 				}
 
 				/** @var array<Php\ArgumentNode> $args */
@@ -89,7 +92,10 @@ final readonly class Passes
 					foreach ($node->content ?? [] as $child) {
 						if ($prev instanceof PrintNode && $child instanceof TextNode) {
 							if (preg_match('/^["\']/', $child->content)) {
-								throw new CompileException('Do not place print statement {...} inside quotes in JavaScript.', $prev->position);
+								throw new CompileException(
+									'Do not place print statement {...} inside quotes in JavaScript.',
+									$prev->position,
+								);
 							}
 						}
 						$prev = $child;

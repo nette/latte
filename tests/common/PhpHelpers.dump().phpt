@@ -27,5 +27,5 @@ Assert::same("['a']", PhpHelpers::dump(['a']));
 Assert::same("[2 => 'a', 3 => 'b']", PhpHelpers::dump([2 => 'a', 'b']));
 Assert::same("['k1' => 'a', 'k2' => [1, 2]]", PhpHelpers::dump(['k1' => 'a', 'k2' => [1, 2]]));
 
-Assert::same("[\n\t1,\n\t2,\n\t3,\n]", PhpHelpers::dump([1, 2, 3], true));
-Assert::same("[\n\t'a',\n]", PhpHelpers::dump(['a'], true));
+Assert::same("[\n\t1,\n\t2,\n\t3,\n]", PhpHelpers::dump([1, 2, 3], multiline: true));
+Assert::same("[\n\t'a',\n]", PhpHelpers::dump(['a'], multiline: true));

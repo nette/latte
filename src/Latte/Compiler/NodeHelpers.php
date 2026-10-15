@@ -89,7 +89,7 @@ final class NodeHelpers
 					$res[$key] = $value;
 
 				} elseif ($item->unpack) {
-					$res = array_merge($res, $value);
+					$res = [...$res, ...$value];
 
 				} else {
 					$res[] = $value;

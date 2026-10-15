@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Pinned extents of a few minimal templates, each aimed at one trap: the span up to
  * the closing tag, the tree/source inversion of an n:attribute, the offset shift of
  * an unquoted attribute value, and the ranges in an expression subtree.
  */
-
-declare(strict_types=1);
 
 use Latte\Compiler\Node;
 use Latte\Compiler\Nodes\TextNode;

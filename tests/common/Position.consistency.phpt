@@ -1,11 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Invariants of node source extents: every node the parser produces carries a truthful
  * $position/$end pair. No expected files, nothing to regenerate.
  */
-
-declare(strict_types=1);
 
 use Latte\Compiler\Node;
 use Latte\Compiler\Nodes\{FragmentNode, TextNode};

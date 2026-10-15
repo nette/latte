@@ -36,7 +36,7 @@ final class FragmentNode extends AreaNode
 	public function append(AreaNode $node): static
 	{
 		if ($node instanceof self) {
-			$this->children = array_merge($this->children, $node->children);
+			$this->children = [...$this->children, ...$node->children];
 		} elseif (!$node instanceof NopNode) {
 			$this->children[] = $node;
 		}

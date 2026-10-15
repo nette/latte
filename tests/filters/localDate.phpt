@@ -60,7 +60,7 @@ test('skeleton pattern', function () {
 	$filters->locale = 'cs_CZ';
 
 	Assert::same('květen', $filters->localDate('1978-05-05', 'MMMM'));
-	Assert::same('5. května', $filters->localDate('1978-05-05', 'd MMMM'));
+	Assert::same("5.\u{a0}května", $filters->localDate('1978-05-05', 'd MMMM'));
 	Assert::same('květen 78', $filters->localDate('1978-05-05', 'MMMM yy'));
 });
 

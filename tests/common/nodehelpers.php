@@ -86,8 +86,9 @@ class ModifyingVisitor
 	private int $pos = 0;
 
 
-	public function __construct(private readonly array $returns = [])
-	{
+	public function __construct(
+		private readonly array $returns = [],
+	) {
 	}
 
 

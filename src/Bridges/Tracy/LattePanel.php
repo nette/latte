@@ -70,7 +70,7 @@ class LattePanel implements Tracy\IBarPanel
 	public function addTemplate(Template $template): void
 	{
 		$this->templates[] = $template;
-		$this->started[spl_object_id($template)] = hrtime(true);
+		$this->started[spl_object_id($template)] = hrtime(as_number: true);
 	}
 
 
@@ -81,7 +81,7 @@ class LattePanel implements Tracy\IBarPanel
 	{
 		$id = spl_object_id($template);
 		if (isset($this->started[$id])) {
-			$this->elapsed[$id] = (hrtime(true) - $this->started[$id]) / 1e9;
+			$this->elapsed[$id] = (hrtime(as_number: true) - $this->started[$id]) / 1e9;
 			unset($this->started[$id]);
 		}
 	}
@@ -136,7 +136,7 @@ class LattePanel implements Tracy\IBarPanel
 		$groups = [];
 		foreach ($instances as $instance) {
 			foreach ($children[spl_object_id($instance)] ?? [] as $name => $templates) {
-				$groups[$name] = array_merge($groups[$name] ?? [], $templates);
+				$groups[$name] = [...$groups[$name] ?? [], ...$templates];
 			}
 		}
 

@@ -8,7 +8,6 @@
 namespace Latte;
 
 
-
 /**
  * Latte extension.
  */

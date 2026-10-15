@@ -76,7 +76,8 @@ final class XmlHelpers
 			HtmlHelpers::triggerMigrationWarning(trim($namePart), $value);
 		}
 		return match (true) {
-			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart . '="' . self::escapeAttr($value) . '"',
+			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart
+				. '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
 			default => HtmlHelpers::triggerInvalidValue(trim($namePart), $value) ?? '',
 		};

@@ -11,7 +11,7 @@ namespace Latte;
 /**
  * Content type constants for context-aware escaping.
  */
-/*enum*/ final class ContentType
+/* enum */ final class ContentType
 {
 	public const
 		Text = 'text',

@@ -24,7 +24,7 @@ Assert::same(['menu'], $template->getBlockNames());
 test('clearCache: false works as the very first call', function () {
 	$latte = new Latte\Engine;
 	$latte->setLoader(new Latte\Loaders\StringLoader(['main' => 'ok']));
-	$template = $latte->createTemplate('main', [], clearCache: false);
+	$template = $latte->createTemplate('main', clearCache: false);
 	Assert::type(Latte\Runtime\Template::class, $template);
 });
 

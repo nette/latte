@@ -23,19 +23,19 @@ Assert::match(<<<'EOD'
 			side
 		</div> <!-- /main -->
 	EOD, $latte->renderToString(<<<'EOD'
-		{block main}
-		<div id="main">
-			{block sidebar}side{/block}
-		</div> <!-- /main -->
-		{/block}
+			{block main}
+			<div id="main">
+				{block sidebar}side{/block}
+			</div> <!-- /main -->
+			{/block}
 
-		{include sidebar}
+			{include sidebar}
 
-		{block true}true{/block}
-		{include true}
+			{block true}true{/block}
+			{include true}
 
-	{include main}
-	EOD));
+		{include main}
+		EOD));
 
 
 $node = $latte->parse('{block main |trim}...{/block}');

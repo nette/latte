@@ -28,15 +28,15 @@ test('arrays', function () {
 test('arrays & preserveKeys', function () {
 	$arr = ['a', 'b', 10 => 'd', 'e'];
 
-	Assert::same([], Filters::slice([], 0, null, true));
-	Assert::same([], Filters::slice([], -1, null, true));
-	Assert::same([], Filters::slice([], 1, null, true));
-	Assert::same([11 => 'e'], Filters::slice($arr, -1, null, true));
-	Assert::same($arr, Filters::slice($arr, 0, null, true));
-	Assert::same($arr, Filters::slice($arr, 0, 99, true));
-	Assert::same([1 => 'b', 10 => 'd', 'e'], Filters::slice($arr, 1, null, true));
-	Assert::same([], Filters::slice($arr, 4, 1, true));
-	Assert::same(['a', 'b'], Filters::slice($arr, 0, -2, true));
+	Assert::same([], Filters::slice([], 0, preserveKeys: true));
+	Assert::same([], Filters::slice([], -1, preserveKeys: true));
+	Assert::same([], Filters::slice([], 1, preserveKeys: true));
+	Assert::same([11 => 'e'], Filters::slice($arr, -1, preserveKeys: true));
+	Assert::same($arr, Filters::slice($arr, 0, preserveKeys: true));
+	Assert::same($arr, Filters::slice($arr, 0, 99, preserveKeys: true));
+	Assert::same([1 => 'b', 10 => 'd', 'e'], Filters::slice($arr, 1, preserveKeys: true));
+	Assert::same([], Filters::slice($arr, 4, 1, preserveKeys: true));
+	Assert::same(['a', 'b'], Filters::slice($arr, 0, -2, preserveKeys: true));
 });
 
 
@@ -72,7 +72,7 @@ test('iterators & preserveKeys', function () {
 
 	Assert::same(['a' => 1, 'b' => 2, 'c' => 3], iterator_to_array(Filters::slice($gen(), 0, 3, preserveKeys: true)));
 	Assert::same(['c' => 3, 'd' => 4], iterator_to_array(Filters::slice($gen(), 2, 2, preserveKeys: true)));
-	Assert::same(['b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], iterator_to_array(Filters::slice($gen(), 1, null, preserveKeys: true)));
+	Assert::same(['b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], iterator_to_array(Filters::slice($gen(), 1, preserveKeys: true)));
 });
 
 

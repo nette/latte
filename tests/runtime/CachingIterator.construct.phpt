@@ -83,7 +83,7 @@ test('object', function () {
 	Assert::exception(function () {
 		$arr = dir('.');
 		foreach (new CachingIterator($arr) as $k => $v);
-	}, InvalidArgumentException::class, null);
+	}, InvalidArgumentException::class);
 });
 
 

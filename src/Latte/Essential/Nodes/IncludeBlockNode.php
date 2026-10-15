@@ -97,7 +97,9 @@ class IncludeBlockNode extends StatementNode
 	{
 		if ($this->name instanceof Scalar\StringNode || $this->name instanceof Scalar\IntegerNode) {
 			$staticName = (string) $this->name->value;
-			$block = ($this->layer !== null ? $this->blocks[$this->layer][$staticName] ?? null : null) ?? $this->blocks[Template::LayerLocal][$staticName] ?? null;
+			$block = ($this->layer !== null
+				? $this->blocks[$this->layer][$staticName] ?? null
+				: null) ?? $this->blocks[Template::LayerLocal][$staticName] ?? null;
 		}
 
 		return $context->format(

@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Latte\Bridges\Tracy\LattePanel builds the template tree and measures render times.
  */
-
-declare(strict_types=1);
 
 use Latte\Bridges\Tracy\LattePanel;
 use Latte\Extension;

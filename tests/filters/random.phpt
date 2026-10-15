@@ -21,4 +21,4 @@ Assert::true($item === 'ž' || $item === 'ý');
 
 // iterables
 Assert::same(7, Filters::random(new ArrayIterator([7])));
-Assert::null(Filters::random(new ArrayIterator([])));
+Assert::null(Filters::random(new ArrayIterator));

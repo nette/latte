@@ -193,7 +193,10 @@ final class TagParser
 			} else {
 				if ($symbol === self::SymbolNone) {
 					$recovery = $recovery
-						? [$this->stream->getIndex(), $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack, $this->endTokenStack]
+						? [
+							$this->stream->getIndex(), $state, $stateStack, $stackPos, $this->semValue,
+							$this->semStack, $this->startTokenStack, $this->endTokenStack,
+						]
 						: null;
 
 
@@ -220,7 +223,7 @@ final class TagParser
 					= -YYUNEXPECTED: error
 					*/
 					if ($action > 0) { // shift
-						++$stackPos;
+						$stackPos++;
 						$stateStack[$stackPos] = $state = $action;
 						$this->semStack[$stackPos] = $token->text;
 						$this->startTokenStack[$stackPos] = $token;
@@ -231,6 +234,7 @@ final class TagParser
 						}
 
 						$rule = $action - self::NumNonLeafStates; // shift-and-reduce
+
 					} else {
 						$rule = -$action;
 					}
@@ -253,13 +257,11 @@ final class TagParser
 					$stackPos -= $ruleLength;
 					$nonTerminal = self::RuleToNonTerminal[$rule];
 					$idx = self::GotoBase[$nonTerminal] + $stateStack[$stackPos];
-					if ($idx >= 0 && $idx < count(self::Goto) && self::GotoCheck[$idx] === $nonTerminal) {
-						$state = self::Goto[$idx];
-					} else {
-						$state = self::GotoDefault[$nonTerminal];
-					}
+					$state = $idx >= 0 && $idx < count(self::Goto) && self::GotoCheck[$idx] === $nonTerminal
+						? self::Goto[$idx]
+						: self::GotoDefault[$nonTerminal];
 
-					++$stackPos;
+					$stackPos++;
 					$stateStack[$stackPos] = $state;
 					$this->semStack[$stackPos] = $this->semValue;
 					$this->endTokenStack[$stackPos] = $lastEndToken;
@@ -268,7 +270,9 @@ final class TagParser
 					}
 
 				} elseif ($recovery && $this->isExpectedEof($state)) { // recoverable error
-					[, $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack, $this->endTokenStack] = $recovery;
+					[
+						, $state, $stateStack, $stackPos, $this->semValue, $this->semStack, $this->startTokenStack, $this->endTokenStack,
+					] = $recovery;
 					$this->stream->seek($recovery[0]);
 					$token = new Token(Token::End, '');
 					goto recovery;
@@ -294,10 +298,10 @@ final class TagParser
 	{
 		foreach (self::SymbolToName as $symbol => $name) {
 			$idx = self::ActionBase[$state] + $symbol;
-			if (($idx >= 0 && $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol
-					|| $state < self::Yy2Tblstate
+			if ((($idx >= 0 && $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol)
+				|| ($state < self::Yy2Tblstate
 					&& ($idx = self::ActionBase[$state + self::NumNonLeafStates] + $symbol) >= 0
-					&& $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol)
+					&& $idx < count(self::Action) && self::ActionCheck[$idx] === $symbol))
 				&& self::Action[$idx] !== self::UnexpectedTokenRule
 				&& self::Action[$idx] !== self::DefaultAction
 				&& $symbol === 0
@@ -445,8 +449,8 @@ final class TagParser
 					throw new CompileException('Invalid indentation - tabs and spaces cannot be mixed', $position);
 				} elseif (strlen($prefix) < $indentLen && !isset($matches[2])) {
 					throw new CompileException(
-						'Invalid body indentation level ' .
-						'(expecting an indentation level of at least ' . $indentLen . ')',
+						'Invalid body indentation level '
+						. '(expecting an indentation level of at least ' . $indentLen . ')',
 						$position,
 					);
 				}

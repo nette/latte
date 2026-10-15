@@ -23,5 +23,5 @@ interface OperatorNode
 	 * Returns [precedence, associativity] for this operator.
 	 * @return array{int, self::AssocLeft|self::AssocNone|self::AssocRight}
 	 */
-	public function getOperatorPrecedence(): array;
+	function getOperatorPrecedence(): array;
 }

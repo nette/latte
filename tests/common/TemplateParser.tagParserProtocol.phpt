@@ -1,11 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: violations of the tag parser generator protocol are reported the same way
  * for {tags} and n:attributes.
  */
-
-declare(strict_types=1);
 
 use Latte\Compiler\Nodes\NopNode;
 use Latte\Compiler\Tag;
@@ -20,7 +18,7 @@ function compileWith(Closure $parser, string $template): void
 	$latte->setLoader(new Latte\Loaders\StringLoader);
 	$latte->addExtension(new class ($parser) extends Latte\Extension {
 		public function __construct(
-			private readonly \Closure $parser,
+			private readonly Closure $parser,
 		) {
 		}
 

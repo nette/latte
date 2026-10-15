@@ -179,7 +179,7 @@ class Engine
 	{
 		$passes = [];
 		foreach ($this->extensions as $extension) {
-			$passes = array_merge($passes, $extension->getPasses());
+			$passes = [...$passes, ...$extension->getPasses()];
 		}
 
 		$passes = Helpers::sortBeforeAfter($passes);

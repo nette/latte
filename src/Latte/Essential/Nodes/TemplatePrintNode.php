@@ -23,7 +23,11 @@ class TemplatePrintNode extends StatementNode
 	public static function create(Tag $tag): static
 	{
 		$node = new static;
-		$node->template = $tag->parser->stream->tryConsume(Token::Php_Identifier, Token::Php_NameFullyQualified, Token::Php_NameQualified)?->text;
+		$node->template = $tag->parser->stream->tryConsume(
+			Token::Php_Identifier,
+			Token::Php_NameFullyQualified,
+			Token::Php_NameQualified,
+		)?->text;
 		return $node;
 	}
 

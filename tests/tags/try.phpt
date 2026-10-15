@@ -9,7 +9,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-function error()
+function error(): never
 {
 	throw new Exception;
 }

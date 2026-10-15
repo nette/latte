@@ -112,6 +112,7 @@ final class PhpHelpers
 			}
 
 			return '[' . $s . ']';
+
 		} elseif ($value === null) {
 			return 'null';
 		} else {

@@ -2,7 +2,6 @@
 
 use Tester\{Assert, Expect};
 
-
 require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/Policy.Logger.php';
 require __DIR__ . '/Policy.fixtures.php';

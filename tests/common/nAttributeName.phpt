@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: names of custom n:attributes containing 'tag-' or 'inner-' inside the name are not mangled.
  */
-
-declare(strict_types=1);
 
 use Latte\Compiler\Nodes\NopNode;
 use Latte\Compiler\Tag;

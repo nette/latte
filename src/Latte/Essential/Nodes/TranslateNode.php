@@ -58,8 +58,8 @@ class TranslateNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		if ($this->content instanceof TextNode) {
-			return $context->format(
+		return $this->content instanceof TextNode
+			? $context->format(
 				<<<'XX'
 					$ʟ_fi = new LR\FilterInfo(%dump);
 					echo %modifyContent(%dump) %line;
@@ -68,10 +68,8 @@ class TranslateNode extends StatementNode
 				$this->modifier,
 				$this->content->content,
 				$this->position,
-			);
-
-		} else {
-			return $context->format(
+			)
+			: $context->format(
 				<<<'XX'
 					ob_start(fn() => ''); try {
 						%node
@@ -86,7 +84,6 @@ class TranslateNode extends StatementNode
 				$this->modifier,
 				$this->position,
 			);
-		}
 	}
 
 

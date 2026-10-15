@@ -25,5 +25,5 @@ test('with locale', function () {
 
 	Assert::same('0 B', $filters->bytes(0.1));
 	Assert::same('-1,03 GB', $filters->bytes(-1024 * 1024 * 1050));
-	Assert::same('8 881,78 PB', $filters->bytes(1e19));
+	Assert::same("8\u{00A0}881,78 PB", $filters->bytes(1e19));
 });

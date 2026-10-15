@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: ParseError in compiled template is converted to CompileException.
  */
-
-declare(strict_types=1);
 
 use Latte\Compiler\Nodes\{AuxiliaryNode, TemplateNode};
 use Tester\Assert;

@@ -122,7 +122,7 @@ final class TemplateGenerator
 				$body,
 				'array $ʟ_args',
 				'void',
-				$block->tag->getNotation(true) . ' on line ' . $block->tag->position->line,
+				$block->tag->getNotation(withArgs: true) . ' on line ' . $block->tag->position->line,
 			);
 		}
 

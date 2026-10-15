@@ -82,7 +82,8 @@ final class PrintContext
 					'dump' => PhpHelpers::dump($arg),
 					'node' => match (true) {
 						!$arg => '',
-						$arg instanceof OperatorNode && $arg->getOperatorPrecedence() < Expression\AssignNode::Precedence => '(' . $arg->print($this) . ')',
+						$arg instanceof OperatorNode && $arg->getOperatorPrecedence() < Expression\AssignNode::Precedence => '('
+							. $arg->print($this) . ')',
 						default => $arg->print($this),
 					},
 					'raw' => (string) $arg,
@@ -223,11 +224,7 @@ final class PrintContext
 	{
 		$pNodes = [];
 		foreach ($nodes as $node) {
-			if ($node === null) {
-				$pNodes[] = '';
-			} else {
-				$pNodes[] = $node->print($this);
-			}
+			$pNodes[] = $node === null ? '' : $node->print($this);
 		}
 
 		return implode($glue, $pNodes);

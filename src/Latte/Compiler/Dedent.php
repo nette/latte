@@ -130,7 +130,10 @@ final class Dedent
 					$line = substr($line, 0, $tagIndentLen) . substr($line, strlen($baseIndent));
 					$modified = true;
 				} elseif (trim($line) !== '') {
-					throw new CompileException('Inconsistent indentation.', $node->position ? new Position($node->position->line + $j, 1) : null);
+					throw new CompileException(
+						'Inconsistent indentation.',
+						$node->position ? new Position($node->position->line + $j) : null,
+					);
 				}
 			}
 

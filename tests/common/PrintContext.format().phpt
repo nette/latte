@@ -141,7 +141,7 @@ test('%line', function () {
 
 	Assert::same(
 		'test() /* pos 1:1 */;',
-		format('test() %line;', new Position(1, 1)),
+		format('test() %line;', new Position),
 	);
 
 	// a Range is accepted too and reports its start (BC: nodes pass tag ranges here)
@@ -160,7 +160,10 @@ test('%modify', function () {
 
 	Assert::same(
 		'test1(($this->filters->a)(($this->filters->b)(test())))',
-		format('test1(%modify(test()))', new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))])),
+		format(
+			'test1(%modify(test()))',
+			new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))]),
+		),
 	);
 });
 
@@ -173,7 +176,10 @@ test('%modifyContent', function () {
 
 	Assert::same(
 		'test1($this->filters->filterContent(\'a\', $ʟ_fi, $this->filters->filterContent(\'b\', $ʟ_fi, test())))',
-		format('test1(%modifyContent(test()))', new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))])),
+		format(
+			'test1(%modifyContent(test()))',
+			new ModifierNode([new FilterNode(new IdentifierNode('b')), new FilterNode(new IdentifierNode('a'))]),
+		),
 	);
 });
 

@@ -14,7 +14,7 @@ class CustomException extends Exception
 }
 
 
-function error()
+function error(): never
 {
 	throw new CustomException;
 }

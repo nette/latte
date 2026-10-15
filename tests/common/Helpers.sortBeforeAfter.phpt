@@ -22,13 +22,13 @@ Assert::same(['a', 'b', 'c'], array_keys(Helpers::sortBeforeAfter($list)));
 // Test: Simple before constraint (c before a)
 $list = ['a' => fn() => 1, 'b' => fn() => 2, 'c' => $order(before: 'a')];
 $result = array_keys(Helpers::sortBeforeAfter($list));
-Assert::true(array_search('c', $result, true) < array_search('a', $result, true), 'c should be before a');
+Assert::true(array_search('c', $result, strict: true) < array_search('a', $result, strict: true), 'c should be before a');
 
 
 // Test: Simple after constraint (a after c)
 $list = ['a' => $order(after: 'c'), 'b' => fn() => 2, 'c' => fn() => 3];
 $result = array_keys(Helpers::sortBeforeAfter($list));
-Assert::true(array_search('a', $result, true) > array_search('c', $result, true), 'a should be after c');
+Assert::true(array_search('a', $result, strict: true) > array_search('c', $result, strict: true), 'a should be after c');
 
 
 // Test: before: '*' (move to start)

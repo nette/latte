@@ -44,8 +44,11 @@ test('inline modifiers', function () {
 });
 
 test('FilterInfo aware modifiers', function () {
-	Assert::same('$this->filters->filterContent(\'mod\', $ʟ_fi, @)', format('|mod', true));
-	Assert::same('$this->filters->filterContent(\'mod3\', $ʟ_fi, $this->filters->filterContent(\'mod2\', $ʟ_fi, $this->filters->filterContent(\'mod1\', $ʟ_fi, @)))', format('|mod1|mod2|mod3', true));
+	Assert::same('$this->filters->filterContent(\'mod\', $ʟ_fi, @)', format('|mod', content: true));
+	Assert::same(
+		'$this->filters->filterContent(\'mod3\', $ʟ_fi, $this->filters->filterContent(\'mod2\', $ʟ_fi, $this->filters->filterContent(\'mod1\', $ʟ_fi, @)))',
+		format('|mod1|mod2|mod3', content: true),
+	);
 });
 
 test('depth', function () {

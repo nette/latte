@@ -101,11 +101,21 @@ class ForeachNode extends StatementNode
 		if (
 			$context->hasFeature(Feature::ScopedLoopVariables)
 			&& !$this->byRef
-			&& ($vars = array_merge($this->key ? $this->collectVariables($this->key) : [], $this->collectVariables($this->value)))
+			&& ($vars = [...$this->key ? $this->collectVariables($this->key) : [], ...$this->collectVariables($this->value)])
 		) {
 			$backup = '$ʟ_fe_' . $context->generateId();
 			$unsetList = implode(', ', array_map(fn($var) => $var->print($context), $vars));
-			$restoreCode = implode('', array_map(fn($var) => $context->format("if (array_key_exists(%dump, $backup)) { %node = &{$backup}[%0.dump]; }\n", $var->name, $var), $vars));
+			$restoreCode = implode(
+				'',
+				array_map(
+					fn($var) => $context->format(
+						"if (array_key_exists(%dump, $backup)) { %node = &{$backup}[%0.dump]; }\n",
+						$var->name,
+						$var,
+					),
+					$vars,
+				),
+			);
 			$code = <<<XX
 				try {
 					$backup = get_defined_vars();
@@ -144,7 +154,7 @@ class ForeachNode extends StatementNode
 			$res[] = $node;
 		} elseif ($node instanceof ListNode) {
 			foreach ($node->items as $item) {
-				$res = array_merge($res, $item ? $this->collectVariables($item->value) : []);
+				$res = [...$res, ...$item ? $this->collectVariables($item->value) : []];
 			}
 		}
 		return $res;

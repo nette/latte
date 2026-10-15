@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Extension::afterRender() is called even on early exit or exception.
  */
-
-declare(strict_types=1);
 
 use Latte\Runtime\Template;
 use Tester\Assert;

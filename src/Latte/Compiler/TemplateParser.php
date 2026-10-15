@@ -111,6 +111,7 @@ final class TemplateParser
 			}
 
 			return $res;
+
 		} finally {
 			[$this->lastResolver, $this->tag] = $save;
 		}
@@ -177,7 +178,8 @@ final class TemplateParser
 		$openToken = $this->stream->consume(Token::Latte_CommentOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteComment);
 		$this->stream->tryConsume(Token::Text);
-		$this->stream->tryConsume(Token::Latte_CommentClose) || $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
+		$this->stream->tryConsume(Token::Latte_CommentClose)
+			|| $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
 		return new Nodes\NopNode;
 	}
@@ -245,7 +247,10 @@ final class TemplateParser
 						$this->ensureIsConsumed($tag);
 						$this->popTag();
 					} else {
-						throw new CompileException('Unexpected tag ' . substr($tag->getNotation(withArgs: true), 0, -1) . '}', $tag->position);
+						throw new CompileException(
+							'Unexpected tag ' . substr($tag->getNotation(withArgs: true), 0, -1) . '}',
+							$tag->position,
+						);
 					}
 				}
 			}
@@ -257,7 +262,10 @@ final class TemplateParser
 			$node = $res->getReturn();
 
 		} elseif ($startTag->void) {
-			throw new CompileException('Unexpected /} in tag ' . substr($startTag->getNotation(withArgs: true), 0, -1) . '/}', $startTag->position);
+			throw new CompileException(
+				'Unexpected /} in tag ' . substr($startTag->getNotation(withArgs: true), 0, -1) . '/}',
+				$startTag->position,
+			);
 
 		} else {
 			$this->ensureIsConsumed($startTag);
@@ -295,14 +303,26 @@ final class TemplateParser
 			$this->lastIndentation ??= new Nodes\TextNode('');
 		}
 
-		$inTag = in_array($this->lexer->getState(), [TemplateLexer::StateHtmlTag, TemplateLexer::StateHtmlQuotedValue, TemplateLexer::StateHtmlComment, TemplateLexer::StateHtmlBogus], true);
+		$inTag = in_array(
+			$this->lexer->getState(),
+			[
+				TemplateLexer::StateHtmlTag,
+				TemplateLexer::StateHtmlQuotedValue,
+				TemplateLexer::StateHtmlComment,
+				TemplateLexer::StateHtmlBogus,
+			],
+			true,
+		);
 		$openToken = $stream->consume(Token::Latte_TagOpen);
 		$this->lexer->pushState(TemplateLexer::StateLatteTag);
 		$closing = (bool) $stream->tryConsume(Token::Slash);
 		$nameToken = $stream->tryConsume(Token::Latte_Name);
 		$tokens = $this->consumeTag();
 		$void = (bool) $stream->tryConsume(Token::Slash);
-		$closeToken = $stream->tryConsume(Token::Latte_TagClose) ?? $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
+		$closeToken = $stream->tryConsume(Token::Latte_TagClose) ?? $stream->throwUnexpectedException(
+			[Token::Latte_TagClose],
+			addendum: " started $openToken->position",
+		);
 		$tag = new Tag(
 			position: $openToken->position,
 			end: $closeToken->end,
@@ -424,7 +444,10 @@ final class TemplateParser
 	public function checkBlockIsUnique(Block $block): void
 	{
 		if ($block->isDynamic() || !preg_match('#^[a-z]#iD', $name = (string) $block->name->value)) {
-			throw new CompileException(ucfirst($block->tag->name) . " name must start with letter a-z, '$name' given.", $block->tag->position);
+			throw new CompileException(
+				ucfirst($block->tag->name) . " name must start with letter a-z, '$name' given.",
+				$block->tag->position,
+			);
 		}
 
 		if ($block->layer === Template::LayerSnippet

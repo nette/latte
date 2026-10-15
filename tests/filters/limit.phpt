@@ -9,7 +9,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-function limit(string|iterable $value, int $length): string|array|\Generator
+function limit(string|iterable $value, int $length): string|array|Generator
 {
 	return Latte\Essential\Filters::slice($value, 0, $length, preserveKeys: true);
 }

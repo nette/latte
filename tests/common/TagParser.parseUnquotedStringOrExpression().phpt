@@ -67,5 +67,5 @@ Assert::same('true ? false : null', format('true ? false'));
 Assert::same('true . false', format('true . false'));
 
 // no colon
-Assert::same("'Foo'", format('Foo:CONST', false));
-Assert::same("'../'", format('../:xx', false));
+Assert::same("'Foo'", format('Foo:CONST', acceptColon: false));
+Assert::same("'../'", format('../:xx', acceptColon: false));

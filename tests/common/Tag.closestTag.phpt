@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: Tag::closestTag() matches subclasses of the given node classes.
  */
-
-declare(strict_types=1);
 
 use Latte\Essential\Nodes\{ForeachNode, TryNode};
 use Tester\Assert;

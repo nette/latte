@@ -41,7 +41,7 @@ class ContentTypeNode extends StatementNode
 			str_contains($type, 'javascript') => ContentType::JavaScript,
 			str_contains($type, 'css') => ContentType::Css,
 			str_contains($type, 'calendar') => ContentType::ICal,
-			default => ContentType::Text
+			default => ContentType::Text,
 		};
 		$parser->setContentType($node->contentType);
 

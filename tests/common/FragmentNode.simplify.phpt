@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+// dresscode:disable hygiene.defaultArgument -- the named arguments say what the call does
+
 use Latte\Compiler\Nodes\{FragmentNode, TextNode};
 use Tester\Assert;
 

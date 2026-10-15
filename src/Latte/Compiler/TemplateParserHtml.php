@@ -415,7 +415,11 @@ final class TemplateParserHtml
 			$lexer->pushState(TemplateLexer::StateHtmlQuotedValue, $quoteToken->text);
 			$value = $this->parser->parseFragment($this->parser->inTextResolve(...))->simplify(allowsNull: false);
 			assert($value !== null);
-			$stream->tryConsume(Token::Quote) || $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of HTML attribute started $quoteToken->position");
+			$stream->tryConsume(Token::Quote)
+				|| $stream->throwUnexpectedException(
+					[$quoteToken->text],
+					addendum: ", end of HTML attribute started $quoteToken->position",
+				);
 			$lexer->popState();
 			return [$value, $quoteToken->text];
 		}
@@ -457,14 +461,20 @@ final class TemplateParserHtml
 				$lexer->pushState(TemplateLexer::StateHtmlQuotedNAttrValue, $quoteToken->text);
 				$valueToken = $stream->tryConsume(Token::Text);
 				$pos = $stream->peek()->position;
-				$endToken = $stream->tryConsume(Token::Quote) ?? $stream->throwUnexpectedException([$quoteToken->text], addendum: ", end of n:attribute started $quoteToken->position");
+				$endToken = $stream->tryConsume(Token::Quote) ?? $stream->throwUnexpectedException(
+					[$quoteToken->text],
+					addendum: ", end of n:attribute started $quoteToken->position",
+				);
 				$lexer->popState();
 				$tokens = $valueToken ? (new TagLexer)->tokenize($valueToken->text, $valueToken->position) : null;
 
 			} elseif ($openToken = $stream->tryConsume(Token::Latte_TagOpen)) {
 				$lexer->pushState(TemplateLexer::StateLatteContent);
 				$tokens = $this->parser->consumeTag();
-				$endToken = $stream->tryConsume(Token::Latte_TagClose) ?? $stream->throwUnexpectedException([Token::Latte_TagClose], addendum: " started $openToken->position");
+				$endToken = $stream->tryConsume(Token::Latte_TagClose) ?? $stream->throwUnexpectedException(
+					[Token::Latte_TagClose],
+					addendum: " started $openToken->position",
+				);
 				$lexer->popState();
 
 			} else {
@@ -502,7 +512,10 @@ final class TemplateParserHtml
 			position: $openToken->position,
 			content: $this->parser->parseFragment($this->parser->inTextResolve(...)),
 		);
-		$closeToken = $stream->tryConsume(Token::Html_CommentClose) ?? $stream->throwUnexpectedException([Token::Html_CommentClose], addendum: " started $openToken->position");
+		$closeToken = $stream->tryConsume(Token::Html_CommentClose) ?? $stream->throwUnexpectedException(
+			[Token::Html_CommentClose],
+			addendum: " started $openToken->position",
+		);
 		$node->end = $closeToken->end;
 		$lexer->popState();
 		return $node;
@@ -596,7 +609,8 @@ final class TemplateParserHtml
 	{
 		while ([$gen, $tag] = array_pop($toClose)) {
 			$gen->send([$node, null]);
-			$gen->valid() && throw new \LogicException("Incorrect behavior of {$tag->getNotation()} parser, more yield calls than expected (on line {$tag->position->line})");
+			$gen->valid()
+				&& throw new \LogicException("Incorrect behavior of {$tag->getNotation()} parser, more yield calls than expected (on line {$tag->position->line})");
 			$node = $gen->getReturn();
 			if (!$node instanceof AreaNode) {
 				throw new CompileException("Unexpected value returned by {$tag->getNotation()} parser.", $tag->position);

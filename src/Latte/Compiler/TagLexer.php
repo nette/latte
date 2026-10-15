@@ -220,13 +220,18 @@ final class TagLexer
 			} elseif (isset($m['Php_Identifier'])) {
 				$lower = strtolower($m['Php_Identifier']);
 				$this->addToken(
-					self::Keywords[$lower] ?? (preg_match('~[A-Z_][A-Z0-9_]{2,}$~DA', $m['Php_Identifier']) ? Token::Php_Constant : Token::Php_Identifier),
+					self::Keywords[$lower] ?? (preg_match('~[A-Z_][A-Z0-9_]{2,}$~DA', $m['Php_Identifier'])
+						? Token::Php_Constant
+						: Token::Php_Identifier),
 					$m['Php_Identifier'],
 				);
 
 			} elseif (isset($m['Php_IdentifierFollowed'])) {
 				$lower = strtolower($m['Php_IdentifierFollowed']);
-				$this->addToken(self::KeywordsFollowed[$lower] ?? self::Keywords[$lower] ?? Token::Php_Identifier, $m['Php_IdentifierFollowed']);
+				$this->addToken(
+					self::KeywordsFollowed[$lower] ?? self::Keywords[$lower] ?? Token::Php_Identifier,
+					$m['Php_IdentifierFollowed'],
+				);
 
 			} elseif (isset($m['Php_ConstantEncapsedString'])) {
 				isset($m['rest'])
@@ -244,7 +249,12 @@ final class TagLexer
 					count($this->tokens) <= $count + 2
 					&& (!$token || $token->type === Token::Php_EncapsedAndWhitespace)
 				) {
-					array_splice($this->tokens, $count - 1, null, [new Token(Token::Php_ConstantEncapsedString, '"' . $token?->text . '"', $pos)]);
+					array_splice(
+						$this->tokens,
+						$count - 1,
+						null,
+						[new Token(Token::Php_ConstantEncapsedString, '"' . $token?->text . '"', $pos)],
+					);
 				}
 				goto matchRE;
 

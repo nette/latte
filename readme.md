@@ -38,7 +38,7 @@ Editor Integration
 - PhpStorm ([Latte](https://plugins.jetbrains.com/plugin/24218-latte-support) or [Latte Pro](https://plugins.jetbrains.com/plugin/19661-latte-pro))
 - Visual Studio Code ([Nette Latte + Neon](https://marketplace.visualstudio.com/items?itemName=Kasik96.latte) or [Nette for VS Code](https://marketplace.visualstudio.com/items?itemName=franken-ui.nette-for-vscode))
 
- <!---->
+ <!---->
 
 Do you like Latte? Are you looking forward to the new features?
 

@@ -64,8 +64,8 @@ Assert::same('abc', ($filters['spaceless'])(new FilterInfo('html'), 'abc'));
 Assert::same(['a', 'b'], ($filters['split'])('a,b', ','));
 Assert::type(Latte\Essential\AuxiliaryIterator::class, ($filters['group'])([], fn($a) => $a * 10));
 Assert::same(1, ($filters['clamp'])(1, 1, 1));
-Assert::same('11. 6. 2025', ($filters['date'])(1_749_596_689));
+Assert::same("11.\u{00A0}6.\u{00A0}2025", ($filters['date'])(1_749_596_689));
 Assert::type(Generator::class, ($filters['batch'])(['abc'], 1));
-if (class_exists('Nette\Utils\Strings')) {
+if (class_exists(Nette\Utils\Strings::class)) {
 	Assert::same('abc', ($filters['webalize'])('abc'));
 }

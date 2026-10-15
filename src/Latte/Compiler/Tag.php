@@ -82,7 +82,7 @@ final class Tag
 				. ($this->closing ? '/' : '')
 				. $this->name
 				. ($withArgs ? $this->parser->text : '')
-			. '}';
+				. '}';
 	}
 
 
@@ -97,7 +97,8 @@ final class Tag
 		while ($tag && (
 			!array_filter($classes, fn($class) => $tag->node instanceof $class)
 			|| ($condition && !$condition($tag))
-		)) {
+		)
+		) {
 			$tag = $tag->parent;
 		}
 

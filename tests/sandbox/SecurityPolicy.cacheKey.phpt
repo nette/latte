@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Test: sandbox policy rules are part of the template cache key.
  */
-
-declare(strict_types=1);
 
 use Latte\Sandbox\SecurityPolicy;
 use Tester\Assert;

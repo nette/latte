@@ -72,7 +72,10 @@ final class NAttrNode extends StatementNode
 		} elseif ($value === true && $type === '') {
 			return $name;
 		} elseif ($migrationWarnings && is_array($value) && $type === 'data') {
-			LR\HtmlHelpers::triggerMigrationWarning($name, "array value: previously it rendered as $name=\"val1 val2 ...\", now the attribute is JSON-encoded");
+			LR\HtmlHelpers::triggerMigrationWarning(
+				$name,
+				"array value: previously it rendered as $name=\"val1 val2 ...\", now the attribute is JSON-encoded",
+			);
 		}
 		return LR\HtmlHelpers::{"format{$type}Attribute"}($name, $value, $migrationWarnings);
 	}

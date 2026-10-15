@@ -335,7 +335,7 @@ class Template
 			));
 		}
 
-		$block->functions = array_merge($block->functions, $functions);
+		$block->functions = [...$block->functions, ...$functions];
 	}
 
 

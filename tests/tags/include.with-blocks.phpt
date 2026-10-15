@@ -11,7 +11,10 @@ require __DIR__ . '/../bootstrap.php';
 
 
 $latte = new Latte\Engine;
-$latte->addFunction('info', fn(Template $template) => basename($template->getReferringTemplate()->getName()) . '/' . $template->getReferenceType());
+$latte->addFunction(
+	'info',
+	fn(Template $template) => basename($template->getReferringTemplate()->getName()) . '/' . $template->getReferenceType(),
+);
 $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main' => <<<'XX'
 

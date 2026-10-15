@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /**
  * Regenerates the catalog tables in docs/reference/*.md from the source code.
@@ -50,10 +48,30 @@ function buildCatalogs(): array
 
 	return [
 		['file' => __DIR__ . '/tags.md', 'marker' => 'tags', 'header' => ['Tag', 'Implementation', 'Notes'], 'rows' => $tags],
-		['file' => __DIR__ . '/tags.md', 'marker' => 'tags-optional', 'header' => ['Tag', 'Extension', 'Implementation', 'Notes'], 'rows' => $optTags],
-		['file' => __DIR__ . '/filters.md', 'marker' => 'filters', 'header' => ['Filter', 'Implementation', 'Contextual', 'Notes'], 'rows' => $filters],
-		['file' => __DIR__ . '/filters.md', 'marker' => 'filters-optional', 'header' => ['Filter', 'Extension', 'Implementation', 'Contextual', 'Notes'], 'rows' => $optFilters],
-		['file' => __DIR__ . '/filters.md', 'marker' => 'functions', 'header' => ['Function', 'Implementation', 'Notes'], 'rows' => $functions],
+		[
+			'file' => __DIR__ . '/tags.md',
+			'marker' => 'tags-optional',
+			'header' => ['Tag', 'Extension', 'Implementation', 'Notes'],
+			'rows' => $optTags,
+		],
+		[
+			'file' => __DIR__ . '/filters.md',
+			'marker' => 'filters',
+			'header' => ['Filter', 'Implementation', 'Contextual', 'Notes'],
+			'rows' => $filters,
+		],
+		[
+			'file' => __DIR__ . '/filters.md',
+			'marker' => 'filters-optional',
+			'header' => ['Filter', 'Extension', 'Implementation', 'Contextual', 'Notes'],
+			'rows' => $optFilters,
+		],
+		[
+			'file' => __DIR__ . '/filters.md',
+			'marker' => 'functions',
+			'header' => ['Function', 'Implementation', 'Notes'],
+			'rows' => $functions,
+		],
 	];
 }
 

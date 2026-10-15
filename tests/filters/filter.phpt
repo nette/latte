@@ -69,7 +69,7 @@ Assert::same(
 Assert::same(
 	[],
 	iterator_to_array(Filters::filter(
-		new ArrayIterator([]),
+		new ArrayIterator,
 		fn() => true,
 	)),
 );

@@ -8,7 +8,6 @@
 namespace Latte\Compiler;
 
 
-
 /**
  * Token produced by lexers.
  */

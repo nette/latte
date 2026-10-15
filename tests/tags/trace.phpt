@@ -25,8 +25,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 			{/embed}
 		{/define}
 
-		X
-	,
+		X,
 
 	'main' => <<<'X'
 
@@ -40,8 +39,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 			{include parent, var2: 456}
 		{/block}
 
-		X
-	,
+		X,
 	'embed' => '{block foo}{/block}',
 ]));
 

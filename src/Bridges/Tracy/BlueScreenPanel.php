@@ -37,8 +37,8 @@ class BlueScreenPanel
 		) {
 			Tracy\Debugger::addSourceMapper(self::mapLatteSourceCode(...));
 			$blueScreen->addFileGenerator(fn(string $file) => str_ends_with($file, '.latte')
-					? "{block content}\n\$END\$"
-					: null);
+				? "{block content}\n\$END\$"
+				: null);
 		}
 	}
 
@@ -50,14 +50,19 @@ class BlueScreenPanel
 			return [
 				'tab' => 'Template',
 				'panel' => (preg_match('#[\n?]#', $e->sourceName)
-						? ''
-						: '<p>'
-							. (@is_file($e->sourceName) // @ - may trigger error
-								? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->position?->line)
-								: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
-							. '</p>')
+					? ''
+					: '<p>'
+						. (@is_file($e->sourceName) // @ - may trigger error
+							? '<b>File:</b> ' . Helpers::editorLink($e->sourceName, $e->position?->line)
+							: '<b>' . htmlspecialchars($e->sourceName . ($e->position?->line ? ':' . $e->position->line : '')) . '</b>')
+						. '</p>')
 					. '<pre class="code tracy-code"><div>'
-					. BlueScreen::highlightLine(htmlspecialchars($e->sourceCode ?? '', ENT_IGNORE, 'UTF-8'), $e->position->line ?? 0, 15, $e->position->column ?? 0)
+					. BlueScreen::highlightLine(
+						htmlspecialchars($e->sourceCode ?? '', ENT_IGNORE, 'UTF-8'),
+						$e->position->line ?? 0,
+						15,
+						$e->position->column ?? 0,
+					)
 					. '</div></pre>',
 			];
 		}
@@ -90,7 +95,13 @@ class BlueScreenPanel
 	public static function mapLatteSourceCode(string $file, int $line): ?array
 	{
 		return ($source = Latte\Helpers::mapCompiledToSource($file, $line)) && $source['name'] !== null && @is_file($source['name']) // @ - may trigger error
-			? ['file' => $source['name'], 'line' => $source['line'] ?? 0, 'column' => $source['column'] ?? 0, 'label' => 'Latte', 'active' => true]
+			? [
+				'file' => $source['name'],
+				'line' => $source['line'] ?? 0,
+				'column' => $source['column'] ?? 0,
+				'label' => 'Latte',
+				'active' => true,
+			]
 			: null;
 	}
 }

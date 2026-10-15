@@ -7,7 +7,6 @@
 use Latte\Runtime\FilterInfo;
 use Tester\Assert;
 
-
 require __DIR__ . '/../bootstrap.php';
 
 
