@@ -1,17 +1,13 @@
 {
 	"name": "latte/latte",
-	"description": "☕ Latte: the intuitive and fast template engine for those who want the most secure PHP sites. Introduces context-sensitive escaping.",
-	"keywords": ["template", "nette", "security", "engine", "html", "twig", "context-sensitive", "escaping"],
+	"description": "☕ Latte: the safest template engine for PHP. Context-sensitive escaping stops XSS, tags speak PHP, and n:attributes keep the HTML clean.",
+	"keywords": ["latte", "nette", "template engine", "templating", "xss", "escaping", "context-sensitive", "twig", "blade"],
 	"homepage": "https://latte.nette.org",
 	"license": ["BSD-3-Clause", "GPL-2.0-only", "GPL-3.0-only"],
 	"authors": [
 		{
 			"name": "David Grudl",
 			"homepage": "https://davidgrudl.com"
-		},
-		{
-			"name": "Nette Community",
-			"homepage": "https://nette.org/contributors"
 		}
 	],
 	"require": {
