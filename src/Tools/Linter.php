@@ -193,6 +193,6 @@ final class Linter
 
 	private function writeError(string $label, string $file, string $message): void
 	{
-		fwrite(STDERR, str_pad("[$label]", 13) . ' ' . $file . '    ' . $message . "\n");
+		file_put_contents('php://stderr', str_pad("[$label]", 13) . ' ' . $file . '    ' . $message . "\n");
 	}
 }
