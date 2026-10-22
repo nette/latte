@@ -17,7 +17,7 @@ use Latte\Compiler\Nodes\TextNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\TemplateParser;
-use function count, preg_match;
+use function count;
 
 
 /**

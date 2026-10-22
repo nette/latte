@@ -14,7 +14,7 @@ use Latte\Compiler\Nodes\PrintNode;
 use Latte\Compiler\Tag;
 use Latte\Engine;
 use Nette\Localization\Translator;
-use function array_unshift, is_array, is_string;
+use function is_array, is_string;
 
 
 /**

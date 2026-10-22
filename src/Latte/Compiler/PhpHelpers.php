@@ -8,8 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\CompileException;
-use function array_keys, bindec, chr, count, explode, fclose, fwrite, hexdec, in_array, is_array, is_resource, max, octdec, preg_match, preg_replace, preg_replace_callback, proc_close, proc_open, range, str_repeat, str_replace, stream_get_contents, strip_tags, stripslashes, strlen, strpbrk, substr, substr_count, substr_replace, token_get_all, trim, var_export;
-use const T_CATCH, T_CLOSE_TAG, T_COMMENT, T_CONSTANT_ENCAPSED_STRING, T_CURLY_OPEN, T_DOC_COMMENT, T_DOLLAR_OPEN_CURLY_BRACES, T_ECHO, T_ELSE, T_ELSEIF, T_FINALLY, T_OBJECT_OPERATOR, T_OPEN_TAG, T_WHITESPACE;
+use function count, is_array, is_resource, strlen;
 
 
 /**

@@ -11,7 +11,6 @@ use Latte;
 use Tracy;
 use Tracy\BlueScreen;
 use Tracy\Helpers;
-use const ENT_IGNORE;
 
 
 /**

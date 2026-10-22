@@ -9,7 +9,6 @@ namespace Latte\Compiler\Nodes;
 
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
-use function trim, var_export;
 
 
 class TextNode extends AreaNode

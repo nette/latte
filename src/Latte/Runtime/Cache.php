@@ -9,8 +9,7 @@ namespace Latte\Runtime;
 
 use Latte\Engine;
 use Latte\RuntimeException;
-use function array_map, defined, dirname, file_put_contents, filemtime, flock, fopen, fseek, ftell, ftruncate, function_exists, fwrite, is_dir, is_file, md5, mkdir, preg_match, preg_replace, rename, serialize, stream_get_contents, strlen, substr, unlink;
-use const LOCK_EX, LOCK_SH, LOCK_UN;
+use function defined, function_exists, strlen;
 
 
 /**

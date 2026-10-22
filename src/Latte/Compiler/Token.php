@@ -7,9 +7,6 @@
 
 namespace Latte\Compiler;
 
-use function in_array;
-
-
 final class Token
 {
 	public const

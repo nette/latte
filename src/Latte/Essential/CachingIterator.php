@@ -7,7 +7,7 @@
 
 namespace Latte\Essential;
 
-use function get_debug_type, is_array, max, method_exists, sprintf;
+use function is_array, sprintf;
 
 
 /**

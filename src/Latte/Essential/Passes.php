@@ -23,7 +23,7 @@ use Latte\Compiler\PrintContext;
 use Latte\ContentType;
 use Latte\Engine;
 use Latte\Runtime\HtmlHelpers;
-use function array_combine, array_keys, array_map, in_array, is_string, str_starts_with, strtolower;
+use function is_string;
 
 
 final class Passes

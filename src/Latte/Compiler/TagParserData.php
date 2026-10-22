@@ -10,7 +10,7 @@ namespace Latte\Compiler;
 use Latte\Compiler\Nodes\Php as Node;
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Scalar;
-use function array_pop, count, is_string, substr;
+use function count, is_string;
 
 
 /** @internal generated trait used by TagParser */

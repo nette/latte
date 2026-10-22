@@ -15,7 +15,7 @@ use Latte\Compiler\TemplateParser;
 use Latte\Runtime;
 use Latte\RuntimeException;
 use Nette;
-use function array_keys, class_exists, extension_loaded, preg_match;
+use function extension_loaded;
 
 
 /**

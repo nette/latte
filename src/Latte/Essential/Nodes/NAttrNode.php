@@ -13,7 +13,7 @@ use Latte\Compiler\Nodes\StatementNode;
 use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Runtime\Filters;
-use function implode, is_array, is_string, strncmp;
+use function is_array, is_string;
 
 
 /**

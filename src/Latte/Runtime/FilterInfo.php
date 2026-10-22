@@ -8,7 +8,6 @@
 namespace Latte\Runtime;
 
 use Latte;
-use function in_array, strtoupper;
 
 
 /**

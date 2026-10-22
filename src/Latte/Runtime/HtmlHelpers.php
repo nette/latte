@@ -9,7 +9,7 @@ namespace Latte\Runtime;
 
 use Latte;
 use Latte\ContentType;
-use function get_debug_type, in_array, is_string, preg_match, strtolower;
+use function in_array, is_string;
 
 
 /**

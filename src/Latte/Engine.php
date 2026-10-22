@@ -8,7 +8,7 @@
 namespace Latte;
 
 use Latte\Compiler\Nodes\TemplateNode;
-use function array_map, array_merge, class_exists, extension_loaded, get_debug_type, get_object_vars, is_array, md5, preg_match, serialize, strpos, substr;
+use function extension_loaded, is_array;
 use const PHP_VERSION_ID;
 
 

@@ -8,7 +8,7 @@
 namespace Latte\Sandbox;
 
 use Latte;
-use function array_flip, array_map, assert, is_a, is_bool, strtolower;
+use function is_bool;
 
 
 /**

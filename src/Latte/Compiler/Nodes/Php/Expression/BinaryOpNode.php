@@ -10,7 +10,7 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Position;
 use Latte\Compiler\PrintContext;
-use function count, in_array, strtolower;
+use function count;
 
 
 class BinaryOpNode extends ExpressionNode

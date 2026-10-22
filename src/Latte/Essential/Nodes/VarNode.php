@@ -18,7 +18,6 @@ use Latte\Compiler\PrintContext;
 use Latte\Compiler\Tag;
 use Latte\Compiler\Token;
 use Latte\Helpers;
-use function assert, implode;
 
 
 /**

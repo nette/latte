@@ -12,6 +12,7 @@ use Latte\Engine;
 use Latte\Helpers;
 use Latte\Runtime\Template;
 use function count, is_string;
+use const PHP_VERSION_ID;
 
 
 /**
