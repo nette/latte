@@ -447,6 +447,44 @@ final class Filters
 
 		return $s;
 	}
+	
+	
+	/**
+	 * Strip whitespace (or other characters) from the beginning of a string.
+	 */
+	public static function ltrim(FilterInfo $info, string $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
+	{
+	    if ($charlist === "") {
+		return $s;
+	    }
+	    
+	    $charlist = preg_quote($charlist, '#');
+	    $s = preg_replace('#^[' . $charlist . ']+#Du', '', $s);
+	    if (preg_last_error() || $s === null) {
+		throw new Latte\RuntimeException(preg_last_error_msg());
+	    }
+
+	    return $s;
+	}
+	
+	
+	/**
+	 * Strip whitespace (or other characters) from the end of a string.
+	 */
+	public static function rtrim(FilterInfo $info, string $s, string $charlist = " \t\n\r\0\x0B\u{A0}"): string
+	{
+	    if ($charlist === "") {
+		return $s;
+	    }
+	    
+	    $charlist = preg_quote($charlist, '#');
+	    $s = preg_replace('#[' . $charlist . ']+$#Du', '', $s);
+	    if (preg_last_error() || $s === null) {
+		throw new Latte\RuntimeException(preg_last_error_msg());
+	    }
+
+	    return $s;
+	}
 
 
 	/**
