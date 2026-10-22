@@ -165,15 +165,15 @@ final class PhpHelpers
 			return $str + 0;
 		} elseif ($str[1] === 'x' || $str[1] === 'X') {
 			$base = 16;
-			return hexdec($str);
+			return @hexdec($str); // @ a number above PHP_INT_MAX triggers a notice in PHP 8.6
 		} elseif ($str[1] === 'b' || $str[1] === 'B') {
 			$base = 2;
-			return bindec($str);
+			return @bindec($str); // @ a number above PHP_INT_MAX triggers a notice in PHP 8.6
 		} elseif (strpbrk($str, '89')) {
 			return null;
 		} else {
 			$base = 8;
-			return octdec($str);
+			return @octdec($str); // @ a number above PHP_INT_MAX triggers a notice in PHP 8.6
 		}
 	}
 
