@@ -1,0 +1,55 @@
+use:
+	- nette
+	- modernizations
+
+typeAnalysis: phpstan
+
+paths:
+	- src
+	- tests
+	- bin/latte-lint
+
+excludePaths:
+	- tests/**/expected
+
+fileExtensions:
+	- php
+	- phpt
+
+imports: {grouping: {class: grouped}}
+
+overrides:
+	-
+		paths: [src]
+		nameResolution: certain
+		use:
+			- compilerOptimizations
+			- deprecations
+
+	- # token names, a deprecated alias and the constant under test are part of the API or the test data
+		paths: [src/Latte/Compiler/Token.php, src/Latte/Sandbox/SecurityPolicy.php, 'tests/common/NodeHelpers.toValue().phpt']
+		naming: {constant: keep}
+
+	- # the underscore keeps the properties apart from the dynamic ones named after filters and functions
+		paths: [src/Latte/Runtime/FilterExecutor.php, src/Latte/Runtime/FunctionExecutor.php]
+		naming: {property: keep}
+
+	- # the deprecated members are declared and kept working here
+		paths: [src/Latte/exceptions.php, src/Latte/Loaders/FileLoader.php, src/Latte/Essential/Filters.php]
+		upgrading: {declarations: {deprecatedMember: keep}}
+
+	- # strftime() serves the deprecated % format, utf8_decode() runs only without mbstring
+		paths: [src/Latte/Essential/Filters.php]
+		upgrading: {php: {deprecatedApi: keep}}
+
+	- # setAccessible() is still needed in PHP 8.0
+		paths: [src/Latte/Essential/Tracer.php]
+		upgrading: {php: {deprecatedApi: keep}, declarations: {deprecatedMember: keep}}
+
+	- # renaming the parameters breaks named arguments
+		paths: [src/Latte/Loaders/FileLoader.php]
+		classes: {overridingMethod: {parameterName: keep}}
+
+	- # a stub of the Xdebug function
+		paths: [tests/tags/debugbreak.phpt]
+		naming: {function: keep}
