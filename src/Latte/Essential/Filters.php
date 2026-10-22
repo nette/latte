@@ -186,7 +186,7 @@ final class Filters
 				trigger_error("Function strftime() used by filter |date is deprecated since PHP 8.1, use format without % characters like 'Y-m-d'.");
 			}
 
-			return @strftime($format, $time->format('U') + 0);
+			return @strftime($format, $time->format('U') + 0); // @ strftime() is deprecated
 		}
 
 		return $time->format($format);
@@ -449,7 +449,7 @@ final class Filters
 		return match (true) {
 			extension_loaded('mbstring') => mb_strlen($s, 'UTF-8'),
 			extension_loaded('iconv') => iconv_strlen($s, 'UTF-8'),
-			default => strlen(@utf8_decode($s)), // deprecated
+			default => strlen(@utf8_decode($s)), // @ utf8_decode() is deprecated
 		};
 	}
 

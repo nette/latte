@@ -25,7 +25,7 @@ test('text', function () {
 	Assert::same('', format(''));
 	Assert::same('0', format('0'));
 	Assert::same('%a %b', format('%a %b'));
-	Assert::exception(fn() => @format('%foo %bar'), UnhandledMatchError::class);
+	Assert::exception(fn() => @format('%foo %bar'), UnhandledMatchError::class); // @ the missing argument triggers a warning
 });
 
 

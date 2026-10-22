@@ -35,6 +35,7 @@ test('text attributes', function () {
 
 			<span title="123 -- one&amp;two&apos;&quot; -- 1 --  --  -- one&amp; -- one&amp;&lt;br&gt; &quot;&apos;"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span title={=0}></span>
 			<span title={=123}></span>
@@ -92,6 +93,7 @@ test('style attribute', function () {
 			<span style="Array"></span>
 			<span style="Array"></span>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			<span style={=0}></span>
 			<span style={=123}></span>
@@ -171,6 +173,7 @@ test('XML', function () {
 			<bar foo=""></bar>
 			<bar foo="Array"></bar>
 			XX,
+		// @ invalid values trigger a warning
 		@$latte->renderToString(<<<'XX'
 			{contentType xml}
 			<bar foo={=0}></bar>

@@ -37,7 +37,7 @@ class FileLoader implements Latte\Loader
 			throw new Latte\TemplateNotFoundException("Missing template file '$file'.");
 
 		} elseif ($this->isExpired($fileName, time())) {
-			if (@touch($file) === false) {
+			if (@touch($file) === false) { // @ is escalated to warning
 				trigger_error("File's modification time is in the future. Cannot update it: " . error_get_last()['message'], E_USER_WARNING);
 			}
 		}

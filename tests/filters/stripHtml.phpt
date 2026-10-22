@@ -36,11 +36,11 @@ test('empty HTML content type transition', function () {
 });
 
 
-test('HTML stripping with entities and error suppression', function () {
+test('HTML stripping with entities', function () {
 	$info = new FilterInfo(ContentType::Html);
-	Assert::same('', @Filters::stripHtml(clone $info, ''));
-	Assert::same('abc', @Filters::stripHtml(clone $info, 'abc'));
-	Assert::same("<  c '", @Filters::stripHtml(clone $info, '&lt; <b> c &apos;'));
+	Assert::same('', Filters::stripHtml(clone $info, ''));
+	Assert::same('abc', Filters::stripHtml(clone $info, 'abc'));
+	Assert::same("<  c '", Filters::stripHtml(clone $info, '&lt; <b> c &apos;'));
 });
 
 

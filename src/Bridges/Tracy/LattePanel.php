@@ -109,7 +109,7 @@ class LattePanel implements Tracy\IBarPanel
 		foreach ($this->templates as $t) {
 			if ($t->getReferringTemplate() === $template) {
 				$children[$t->getName()] = $t;
-				@$counter[$t->getName()]++;
+				@$counter[$t->getName()]++; // @ the key may not exist yet
 			}
 		}
 
