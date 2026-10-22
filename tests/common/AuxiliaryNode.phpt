@@ -1,11 +1,8 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes;
+use Latte\Compiler\{Node, Nodes, NodeTraverser, PrintContext};
 use Latte\Compiler\Nodes\Php\Expression;
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
-use Latte\Compiler\NodeTraverser;
-use Latte\Compiler\PrintContext;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

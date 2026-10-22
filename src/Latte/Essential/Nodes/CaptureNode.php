@@ -8,13 +8,9 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Escaper;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
+use Latte\Compiler\{Escaper, PrintContext, Tag};
+use Latte\Compiler\Nodes\{AreaNode, StatementNode};
+use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
 
 
 /**

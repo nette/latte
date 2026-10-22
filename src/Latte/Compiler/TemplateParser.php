@@ -8,13 +8,9 @@
 namespace Latte\Compiler;
 
 use Latte;
-use Latte\CompileException;
+use Latte\{CompileException, ContentType, Helpers, Policy, SecurityViolationException};
 use Latte\Compiler\Nodes\FragmentNode;
-use Latte\ContentType;
-use Latte\Helpers;
-use Latte\Policy;
 use Latte\Runtime\Template;
-use Latte\SecurityViolationException;
 use function count;
 
 

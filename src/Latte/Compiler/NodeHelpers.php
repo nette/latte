@@ -8,9 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\Compiler\Nodes\Php;
-use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{Expression, ExpressionNode, Scalar};
 
 
 final class NodeHelpers

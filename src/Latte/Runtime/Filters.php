@@ -8,8 +8,7 @@
 namespace Latte\Runtime;
 
 use Latte;
-use Latte\ContentType;
-use Latte\RuntimeException;
+use Latte\{ContentType, RuntimeException};
 use Nette;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 

@@ -8,12 +8,9 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PhpHelpers;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
+use Latte\Compiler\{PhpHelpers, PrintContext, Tag};
 use function count;
 
 

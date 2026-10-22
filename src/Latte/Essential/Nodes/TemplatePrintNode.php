@@ -7,13 +7,8 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\Compiler\Node;
-use Latte\Compiler\Nodes;
+use Latte\Compiler\{Node, Nodes, NodeTraverser, PrintContext, Tag, Token};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\NodeTraverser;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\Token;
 
 
 /**

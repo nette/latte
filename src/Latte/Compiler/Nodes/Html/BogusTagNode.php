@@ -8,8 +8,7 @@
 namespace Latte\Compiler\Nodes\Html;
 
 use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\{Position, PrintContext};
 
 
 /**

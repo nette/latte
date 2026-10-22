@@ -1,16 +1,9 @@
 <?php declare(strict_types=1);
 
 use Latte\Compiler\ExpressionBuilder;
-use Latte\Compiler\Nodes\Php\ArgumentNode;
-use Latte\Compiler\Nodes\Php\Expression\FunctionCallNode;
-use Latte\Compiler\Nodes\Php\Expression\MethodCallNode;
-use Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode;
-use Latte\Compiler\Nodes\Php\Expression\StaticMethodCallNode;
-use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
-use Latte\Compiler\Nodes\Php\NameNode;
-use Latte\Compiler\Nodes\Php\Scalar\BooleanNode;
-use Latte\Compiler\Nodes\Php\Scalar\IntegerNode;
+use Latte\Compiler\Nodes\Php\{ArgumentNode, IdentifierNode, NameNode};
+use Latte\Compiler\Nodes\Php\Expression\{FunctionCallNode, MethodCallNode, PropertyFetchNode, StaticMethodCallNode, VariableNode};
+use Latte\Compiler\Nodes\Php\Scalar\{BooleanNode, IntegerNode};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

@@ -1,15 +1,9 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Nodes\Php\ArrayItemNode;
-use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
-use Latte\Compiler\Nodes\Php\Expression\BinaryOpNode;
-use Latte\Compiler\Nodes\Php\FilterNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\Php\Scalar\IntegerNode;
-use Latte\Compiler\Nodes\Php\Scalar\StringNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\Nodes\Php\{ArrayItemNode, FilterNode, IdentifierNode, ModifierNode};
+use Latte\Compiler\Nodes\Php\Expression\{ArrayNode, BinaryOpNode};
+use Latte\Compiler\Nodes\Php\Scalar\{IntegerNode, StringNode};
+use Latte\Compiler\{Position, PrintContext};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

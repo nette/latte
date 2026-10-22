@@ -8,16 +8,9 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\Block;
-use Latte\Compiler\Escaper;
-use Latte\Compiler\Nodes\AreaNode;
-use Latte\Compiler\Nodes\Php\ModifierNode;
-use Latte\Compiler\Nodes\Php\Scalar;
-use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
-use Latte\Compiler\TemplateParser;
-use Latte\Compiler\Token;
+use Latte\Compiler\{Block, Escaper, PrintContext, Tag, TemplateParser, Token};
+use Latte\Compiler\Nodes\{AreaNode, StatementNode};
+use Latte\Compiler\Nodes\Php\{ModifierNode, Scalar};
 use Latte\Runtime\Template;
 use function count;
 

@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\TagLexer;
-use Latte\Compiler\TagParser;
+use Latte\Compiler\{PrintContext, TagLexer, TagParser};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

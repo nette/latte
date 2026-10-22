@@ -8,8 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\Compiler\Nodes\Php as Nodes;
-use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{Expression, Scalar};
 use Latte\ContentType;
 
 

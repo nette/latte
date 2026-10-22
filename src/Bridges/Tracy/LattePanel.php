@@ -7,8 +7,7 @@
 
 namespace Latte\Bridges\Tracy;
 
-use Latte\Engine;
-use Latte\Extension;
+use Latte\{Engine, Extension};
 use Latte\Runtime\Template;
 use Tracy;
 

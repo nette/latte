@@ -9,8 +9,7 @@ namespace Latte\Compiler\Nodes\Php\Expression;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
+use Latte\Compiler\{Position, PrintContext};
 
 
 class PreOpNode extends ExpressionNode

@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
-use Latte\Compiler\Node;
-use Latte\Compiler\NodeHelpers;
+use Latte\Compiler\{Node, NodeHelpers};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';

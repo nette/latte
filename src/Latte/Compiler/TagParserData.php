@@ -8,8 +8,7 @@
 namespace Latte\Compiler;
 
 use Latte\Compiler\Nodes\Php as Node;
-use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{Expression, Scalar};
 use function count, is_string;
 
 

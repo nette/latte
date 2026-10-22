@@ -10,8 +10,7 @@ namespace Latte\Essential\Nodes;
 use Latte;
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
+use Latte\Compiler\{PrintContext, Tag};
 use Latte\Runtime\Filters;
 use function is_array, is_string;
 

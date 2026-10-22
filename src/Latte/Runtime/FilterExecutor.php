@@ -8,8 +8,7 @@
 namespace Latte\Runtime;
 
 use Latte;
-use Latte\ContentType;
-use Latte\Helpers;
+use Latte\{ContentType, Helpers};
 
 
 /**

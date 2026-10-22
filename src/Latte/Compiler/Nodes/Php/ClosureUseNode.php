@@ -7,10 +7,8 @@
 
 namespace Latte\Compiler\Nodes\Php;
 
-use Latte\Compiler\Node;
+use Latte\Compiler\{Node, Position, PrintContext};
 use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Position;
-use Latte\Compiler\PrintContext;
 
 
 class ClosureUseNode extends Node

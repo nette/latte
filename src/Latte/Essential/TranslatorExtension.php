@@ -8,10 +8,8 @@
 namespace Latte\Essential;
 
 use Latte;
-use Latte\Compiler\NodeHelpers;
-use Latte\Compiler\Nodes\Php;
-use Latte\Compiler\Nodes\PrintNode;
-use Latte\Compiler\Tag;
+use Latte\Compiler\{NodeHelpers, Tag};
+use Latte\Compiler\Nodes\{Php, PrintNode};
 use Latte\Engine;
 use Nette\Localization\Translator;
 use function is_array, is_string;

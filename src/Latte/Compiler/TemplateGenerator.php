@@ -7,8 +7,7 @@
 
 namespace Latte\Compiler;
 
-use Latte\ContentType;
-use Latte\Engine;
+use Latte\{ContentType, Engine};
 use function is_int;
 
 

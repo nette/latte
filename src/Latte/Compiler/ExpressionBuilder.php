@@ -7,12 +7,7 @@
 
 namespace Latte\Compiler;
 
-use Latte\Compiler\Nodes\Php\ArgumentNode;
-use Latte\Compiler\Nodes\Php\Expression;
-use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
-use Latte\Compiler\Nodes\Php\NameNode;
-use Latte\Compiler\Nodes\Php\Scalar;
+use Latte\Compiler\Nodes\Php\{ArgumentNode, Expression, ExpressionNode, IdentifierNode, NameNode, Scalar};
 use function is_array, is_bool, is_float, is_int, is_string;
 
 

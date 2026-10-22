@@ -2,12 +2,8 @@
 
 // Interpolated strings
 
-use Latte\Compiler\Nodes\Php\Expression\FunctionCallNode;
-use Latte\Compiler\Nodes\Php\Expression\PropertyFetchNode;
-use Latte\Compiler\Nodes\Php\Expression\VariableNode;
-use Latte\Compiler\Nodes\Php\IdentifierNode;
-use Latte\Compiler\Nodes\Php\InterpolatedStringPartNode;
-use Latte\Compiler\Nodes\Php\NameNode;
+use Latte\Compiler\Nodes\Php\Expression\{FunctionCallNode, PropertyFetchNode, VariableNode};
+use Latte\Compiler\Nodes\Php\{IdentifierNode, InterpolatedStringPartNode, NameNode};
 use Latte\Compiler\Nodes\Php\Scalar\InterpolatedStringNode;
 use Latte\Compiler\PrintContext;
 use Tester\Assert;

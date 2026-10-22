@@ -9,11 +9,9 @@ namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
-use Latte\Compiler\Nodes\Php\Scalar\BooleanNode;
-use Latte\Compiler\Nodes\Php\Scalar\NullNode;
+use Latte\Compiler\Nodes\Php\Scalar\{BooleanNode, NullNode};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\PrintContext;
-use Latte\Compiler\Tag;
+use Latte\Compiler\{PrintContext, Tag};
 
 
 /**
