@@ -13,7 +13,7 @@ jobs:
 
         name: PHP ${{ matrix.php }} tests
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
@@ -23,7 +23,7 @@ jobs:
             - run: composer install --no-progress --prefer-dist
             - run: vendor/bin/tester tests -s -C
             - if: failure()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: output-${{ matrix.php }}
                   path: tests/**/output
@@ -33,16 +33,17 @@ jobs:
         name: Code Coverage
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: 8.3
                   extensions: json, mbstring, tokenizer, fileinfo
-                  coverage: none
+                  coverage: pcov
 
             - run: composer install --no-progress --prefer-dist
-            - run: vendor/bin/tester -p phpdbg tests -s -C --coverage ./coverage.xml --coverage-src ./src
-            - run: wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.3/php-coveralls.phar
-            - env:
-                  COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: php php-coveralls.phar --verbose --config tests/.coveralls.yml
+            - run: vendor/bin/tester tests -s -C --coverage ./coverage.xml --coverage-src ./src
+              continue-on-error: true
+            - uses: coverallsapp/github-action@v2
+              with:
+                  file: coverage.xml
+                  format: clover
