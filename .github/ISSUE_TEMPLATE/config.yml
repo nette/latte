@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Question & Support
+  - name: 🤗 Question
     url: https://forum.nette.org/en/f47-latte
-    about: If you have a question or are looking for advice, please post on our discussions forum.
-  - name: ❗ PhpStorm Latte plugin issues report here ❗
+    about: If you have a question or are looking for advice, please post on our discussion forum 💬
+  - name: ❗ Report issues with the PhpStorm Latte plugin here ❗
     url: https://github.com/nette-intellij/intellij-latte/issues
     about: Thanks 🙏
