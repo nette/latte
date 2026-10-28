@@ -78,7 +78,7 @@ Assert::same(
 
 // blocks
 Assert::same(
-	'<iframe srcdoc="&lt;i&gt;&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;&lt;/i&gt;"></iframe>',
+	'<iframe srcdoc="&lt;i&gt;&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;&lt;/i&gt;"></iframe>',
 	$latte->renderToString('{define doc}<i>{$x}</i>{/define}<iframe srcdoc="{include doc}"></iframe>', $params),
 );
 
