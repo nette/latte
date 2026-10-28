@@ -34,6 +34,23 @@ class ArrayNode extends ExpressionNode
 	}
 
 
+	/**
+	 * Checks that the items can be passed to parameters, i.e. no positional item follows a named one.
+	 */
+	public function validateArguments(): void
+	{
+		$named = false;
+		foreach ($this->items as $item) {
+			if ($item->key) {
+				$named = true;
+			} elseif ($named) {
+				trigger_error("Positional argument after a named argument is deprecated ($item->position)", E_USER_DEPRECATED);
+				return;
+			}
+		}
+	}
+
+
 	public function print(PrintContext $context): string
 	{
 		return '[' . $context->implode($this->items) . ']';

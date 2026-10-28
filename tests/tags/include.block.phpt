@@ -62,3 +62,14 @@ Assert::exception(
 	InvalidArgumentException::class,
 	'Block name must be a string, null given.',
 );
+
+Assert::error(
+	fn() => $latte->renderToString('{define block, $name, $value}{/define} {include block, name: 1, 2}'),
+	E_USER_DEPRECATED,
+	'Positional argument after a named argument is deprecated (on line 1 at column 65)',
+);
+
+Assert::match(
+	' [1|2]',
+	$latte->renderToString('{define block, $name, $value}[{$name}|{$value}]{/define} {include block, 1, value: 2}'),
+);
