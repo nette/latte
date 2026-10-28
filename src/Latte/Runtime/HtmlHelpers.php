@@ -51,9 +51,7 @@ final class HtmlHelpers
 			return $s->__toString();
 		}
 
-		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
-		$s = strtr($s, ['{{' => '{<!-- -->{', '{' => '&#123;']);
-		return $s;
+		return self::separateBraces(htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8'));
 	}
 
 
@@ -124,7 +122,20 @@ final class HtmlHelpers
 			return self::convertHtmlToRawText($s->__toString());
 		}
 
-		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8');
+		return self::separateBraces(htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8'));
+	}
+
+
+	/**
+	 * Separates braces by an empty comment so that {{ cannot form, not even with the adjacent output.
+	 */
+	private static function separateBraces(string $s): string
+	{
+		if (str_contains($s, '{')) {
+			$s = preg_replace('~\{(?=\{|$)~D', '{<!-- -->', $s);
+			$s = $s[0] === '{' ? '<!-- -->' . $s : $s;
+		}
+		return $s;
 	}
 
 

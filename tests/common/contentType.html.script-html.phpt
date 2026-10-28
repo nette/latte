@@ -18,6 +18,12 @@ Assert::match(
 	$latte->renderToString('<script type="text/html"> <div title=\'{="\' </script>"}\'>  {="</script>"} </div> </script>'),
 );
 
+// separated braces for client-side template engines
+Assert::match(
+	'<script type="text/template"><p><!-- -->{<!-- -->{7*7}}</p><p><!-- -->{<!-- --></p></script><p>after</p>',
+	$latte->renderToString('<script type="text/template"><p>{$x}</p><p>{$y}</p></script><p>after</p>', ['x' => '{{7*7}}', 'y' => '{']),
+);
+
 // escaping of Html object
 Assert::match(
 	'<script type="text/html"> <div title=\'</x-script>\'></div> </script>',

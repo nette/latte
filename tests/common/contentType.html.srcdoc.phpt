@@ -18,17 +18,17 @@ $params = [
 
 // text is escaped for HTML and then for the attribute
 Assert::same(
-	'<iframe srcdoc="<p>&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;</p>"></iframe>',
+	'<iframe srcdoc="<p>&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;</p>"></iframe>',
 	$latte->renderToString('<iframe srcdoc="<p>{$x}</p>"></iframe>', $params),
 );
 
 Assert::same(
-	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
+	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
 	$latte->renderToString("<iframe srcdoc='{\$x}'></iframe>", $params),
 );
 
 Assert::same(
-	'<iframe SRCDOC="a&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
+	'<iframe SRCDOC="a&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
 	$latte->renderToString('<iframe SRCDOC=a{$x}></iframe>', $params),
 );
 
@@ -46,7 +46,7 @@ Assert::same(
 
 // dynamic attribute
 Assert::same(
-	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
+	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
 	$latte->renderToString('<iframe srcdoc={$x}></iframe>', $params),
 );
 
@@ -62,7 +62,7 @@ Assert::same(
 
 // n:attr
 Assert::same(
-	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
+	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
 	$latte->renderToString('<iframe n:attr="srcdoc => $x"></iframe>', $params),
 );
 
@@ -73,7 +73,7 @@ Assert::same(
 
 // blocks
 Assert::same(
-	'<iframe srcdoc="&lt;i&gt;&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;&lt;/i&gt;"></iframe>',
+	'<iframe srcdoc="&lt;i&gt;&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;&lt;/i&gt;"></iframe>',
 	$latte->renderToString('{define doc}<i>{$x}</i>{/define}<iframe srcdoc="{include doc}"></iframe>', $params),
 );
 
