@@ -59,7 +59,7 @@ like `srcdoc="<p>{$x}</p>"` is escaped by code `Escaper::escape()` emits, and
 
 Frameworks that compile templates from the DOM (Vue, petite-vue, AngularJS) read the
 text after the browser has decoded entities, so `&#123;&#123;` is no protection against
-`{{ }}` injection. `escapeText` (and `convertAttrToHtml`) insert
+`{{ }}` injection. `escapeText` (and `convertAttrToHtml`, `convertRcDataToHtml`) insert
 `<!-- -->` after each `{` followed by another one or ending the string, and before a
 leading one, so `{{` cannot form even from two adjacent outputs. An attribute cannot hold
 a comment: the `&#123;` of `escapeAttr` does not stop AngularJS, which interpolates
@@ -67,6 +67,12 @@ attributes. Where Latte cannot tell text from an attribute (the content of
 `<script type="text/template">` and of `srcdoc`), the value is escaped as an attribute:
 Vue 3 compiles a template string before decoding entities, so `&#123;` protects there,
 while Vue 2 decodes them first.
+
+Inside `<textarea>` and `<title>` (`html/rcdata`) a comment is displayed as text and would
+corrupt the value, so `escapeRcData` leaves braces alone. A block defined there is
+`html/rcdata` too: filters see that type, and `convertRcDataToHtml` separates the braces
+when such a block is included into ordinary text. A block from ordinary text included
+there keeps its separators, since its output was escaped elsewhere.
 
 ## How nodes obtain the context: the `PrintContext` escaper stack
 

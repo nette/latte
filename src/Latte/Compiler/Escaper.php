@@ -41,7 +41,7 @@ class Escaper
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
-			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeText',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			'xml' => 'XmlHelpers::escapeText',
 			'xml/attr' => 'XmlHelpers::escapeAttr',
@@ -51,7 +51,7 @@ class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
-			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeText',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlRawText . '/' . self::JavaScript => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
@@ -60,7 +60,7 @@ class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
-			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeText',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlRawText . '/' . self::Css => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
@@ -78,7 +78,7 @@ class Escaper
 			self::HtmlText => 'HtmlHelpers::convertAttrToHtml',
 		],
 		self::HtmlText . '/' . self::RcData => [
-			self::HtmlText => 'Helpers::nop',
+			self::HtmlText => 'HtmlHelpers::convertRcDataToHtml',
 		],
 	];
 
@@ -189,7 +189,10 @@ class Escaper
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
-				self::HtmlText => 'LR\HtmlHelpers::escapeText(' . $str . ')',
+				self::HtmlText => match ($this->subType) {
+					'' => 'LR\HtmlHelpers::escapeText(' . $str . ')',
+					self::RcData => 'LR\HtmlHelpers::escapeRcData(' . $str . ')',
+				},
 				self::HtmlTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
 					'' => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
