@@ -178,6 +178,7 @@ final class TemplateParserHtml
 		if ($this->parser->lastIndentation) {
 			$dolly = clone $this->parser->lastIndentation;
 			$this->parser->lastIndentation->clear();
+			$this->parser->lastIndentation = null;
 			return $dolly;
 		} else {
 			return new Nodes\NopNode;

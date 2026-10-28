@@ -138,6 +138,21 @@ Assert::match(<<<'EOD'
 ));
 
 
+// indented end tag followed by a Latte tag keeps the newline
+Assert::match(<<<'EOD'
+	<ul>
+	  </ul>
+	World
+	EOD, $latte->renderToString(
+	<<<'EOD'
+		{if true}
+		<ul>
+		  </ul>{/if}
+		World
+		EOD,
+));
+
+
 // empty comment
 Assert::match('ab', $latte->renderToString('a{**}b'));
 Assert::match('ab', $latte->renderToString('a{* *}b'));
