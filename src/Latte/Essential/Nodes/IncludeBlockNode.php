@@ -48,7 +48,7 @@ class IncludeBlockNode extends StatementNode
 		}
 
 		$stream->tryConsume(',');
-		$node->args = $tag->parser->parseArguments();
+		$node->args = $tag->parser->parseCallArguments();
 		$node->modifier = $tag->parser->parseModifier();
 
 		$node->parent = $tokenName->is('parent');

@@ -16,6 +16,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'main2' => 'before {sandbox inc1.latte, var => 1} after',
 	'main3' => 'before {sandbox inc2.latte} after',
 	'main4' => 'before {sandbox inc3.latte, obj => new stdClass} after',
+	'main5' => '{sandbox inc1.latte, var: 1, 2}',
 
 	'inc1.latte' => '<b>included {$var}</b>',
 	'inc2.latte' => '<b>{var $var}</b>',
@@ -50,4 +51,10 @@ Assert::exception(
 	fn() => $latte->renderToString('main4'),
 	Latte\SecurityViolationException::class,
 	"Access to 'item' property on a stdClass object is not allowed.",
+);
+
+Assert::error(
+	fn() => $latte->compile('main5'),
+	E_USER_DEPRECATED,
+	'Positional argument after a named argument is deprecated (on line 1 at column 30)',
 );
