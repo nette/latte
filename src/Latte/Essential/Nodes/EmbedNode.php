@@ -44,6 +44,7 @@ class EmbedNode extends StatementNode
 		$node->mode = $mode ?? ($node->name instanceof StringNode && preg_match('~[\w-]+$~DA', $node->name->value) ? 'block' : 'file');
 		$tag->parser->stream->tryConsume(',');
 		$node->args = $tag->parser->parseArguments();
+		$node->args->validateArguments();
 
 		$prevIndex = $parser->blockLayer;
 		$layer = $parser->blockLayer = $node->layer = count($parser->blocks);

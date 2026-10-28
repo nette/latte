@@ -40,6 +40,7 @@ class ExtendsNode extends StatementNode
 		}
 		$tag->parser->consumeCommaBeforeArguments();
 		$node->args = $tag->parser->parseArguments();
+		$node->args->validateArguments();
 		if ($node->args->items && $node->extends instanceof BooleanNode) {
 			throw new CompileException("{{$tag->name} none} cannot have arguments.", $tag->position);
 		}

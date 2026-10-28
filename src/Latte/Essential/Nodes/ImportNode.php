@@ -30,6 +30,7 @@ class ImportNode extends StatementNode
 		$node->file = $tag->parser->parseUnquotedStringOrExpression();
 		$tag->parser->stream->tryConsume(',');
 		$node->args = $tag->parser->parseArguments();
+		$node->args->validateArguments();
 		return $node;
 	}
 

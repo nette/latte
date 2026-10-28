@@ -71,14 +71,19 @@ $template = <<<'XX'
 	d) {include test, var2 => 1, 2} // invalid
 	XX;
 
-Assert::matchFile(
-	__DIR__ . '/expected/define.args2.php',
-	$latte->compile($template),
-);
-Assert::matchFile(
-	__DIR__ . '/expected/define.args2.html',
-	$latte->renderToString($template, ['var3' => 'outer']),
-);
+Assert::error(function () use ($latte, $template) {
+	Assert::matchFile(
+		__DIR__ . '/expected/define.args2.php',
+		$latte->compile($template),
+	);
+	Assert::matchFile(
+		__DIR__ . '/expected/define.args2.html',
+		$latte->renderToString($template, ['var3' => 'outer']),
+	);
+}, [
+	[E_USER_DEPRECATED, 'Positional argument after a named argument is deprecated (on line 13 at column 30)'],
+	[E_USER_DEPRECATED, 'Positional argument after a named argument is deprecated (on line 13 at column 30)'],
+]);
 
 
 // named arguments (order dependent)
