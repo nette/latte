@@ -56,6 +56,17 @@ final class HtmlHelpers
 
 
 	/**
+	 * Escapes string for use inside <textarea> and <title>, whose content is kept intact.
+	 */
+	public static function escapeRcData(mixed $s): string
+	{
+		return $s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable
+			? $s->__toString()
+			: htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	}
+
+
+	/**
 	 * Escapes string for use inside HTML attribute value.
 	 */
 	public static function escapeAttr(mixed $s): string
@@ -181,6 +192,15 @@ final class HtmlHelpers
 	public static function convertAttrToHtml(string $s): string
 	{
 		return self::escapeAttr(html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+	}
+
+
+	/**
+	 * Converts content of <textarea> or <title> to HTML text.
+	 */
+	public static function convertRcDataToHtml(string $s): string
+	{
+		return self::separateBraces($s);
 	}
 
 
