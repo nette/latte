@@ -32,6 +32,7 @@ final class Cache
 		// so on Linux we include the file directly without shared lock, therefore, the file must be created atomically by renaming.
 		// 2) On Windows file cannot be renamed-to while is open (ie by include), so we have to acquire a lock.
 		$file = $this->generateFilePath($engine, $name);
+		$class = $engine->getTemplateClass($name);
 		$signature = $this->autoRefresh
 			? hash('xxh128', serialize($this->generateRefreshSignature($engine, $name)))
 			: null;
@@ -40,8 +41,9 @@ final class Cache
 			: null;
 
 		if (
-			!($signature && $lock && $signature !== stream_get_contents($lock))
-			&& (@include $file) !== false // @ - file may not exist
+			class_exists($class, false) // another coroutine or fiber may have declared it while we waited for the lock
+			|| (!($signature && $lock && $signature !== stream_get_contents($lock))
+				&& (@include $file) !== false) // @ - file may not exist
 		) {
 			return;
 		}
@@ -73,7 +75,7 @@ final class Cache
 			}
 		}
 
-		if ((include $file) === false) {
+		if (!class_exists($class, false) && (include $file) === false) {
 			throw new RuntimeException("Unable to load '$file'.");
 		}
 
