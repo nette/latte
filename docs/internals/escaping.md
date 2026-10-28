@@ -14,7 +14,8 @@ layers that must stay in sync**.
   plain-text output goes through the `escape` filter instead). The subType is not
   purely state-derived: `enterHtmlAttribute` infers `js` for `on*`, `css` for
   `style` and `html` for `srcdoc` attributes, and `enterHtmlText` classifies a
-  `<script>` by its `type` attribute. `export()` serializes the state as a composite string
+  `<script>` by its `type` attribute and gives the content of `<textarea>` and `<title>`
+  (also nested elements in them, but not `<title>` in SVG) the subType `rcdata`. `export()` serializes the state as a composite string
   (`'html/attr/js'`) — the key format used for block escaping and the convertor
   table below.
 - **Runtime** — the actual escaping functions live in `Runtime\Helpers` (JS / CSS /
@@ -62,6 +63,12 @@ insert `<!-- -->` after each `{` followed by another one or ending the string, a
 a leading one, so `{{` cannot form even from two adjacent outputs. An attribute cannot hold
 a comment: the `&#123;` of `escapeAttr` does not stop AngularJS, which interpolates
 attributes.
+
+Inside `<textarea>` and `<title>` (`html/rcdata`) a comment is displayed as text and would
+corrupt the value, so `escapeRcData` leaves braces alone. A block defined there is
+`html/rcdata` too: filters see that type, and `convertRcDataToHtml` separates the braces
+when such a block is included into ordinary text. A block from ordinary text included
+there keeps its separators, since its output was escaped elsewhere.
 
 ## How nodes obtain the context: the `PrintContext` escaper stack
 
