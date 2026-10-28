@@ -3,7 +3,7 @@
 final class Template%a% extends Latte\Runtime\Template
 {
 	public const Blocks = [
-		['title' => 'blockTitle', 'sidebar' => 'blockSidebar'],
+		['title' => ['blockTitle', 'html/rcdata'], 'sidebar' => 'blockSidebar'],
 	];
 
 
@@ -17,7 +17,7 @@ final class Template%a% extends Latte\Runtime\Template
 	<title>';
 		$this->renderBlock('title', get_defined_vars(), function ($s, $type) {
 			$ʟ_fi = new LR\FilterInfo($type);
-			return LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
+			return LR\Helpers::convertTo($ʟ_fi, 'html/rcdata', $this->filters->filterContent('upper', $ʟ_fi, $this->filters->filterContent('stripHtml', $ʟ_fi, $s)));
 		}) /* pos %d%:%d% */;
 		echo '</title>
 </head>

@@ -14,7 +14,8 @@ layers that must stay in sync**.
   plain-text output goes through the `escape` filter instead). The subType is not
   purely state-derived: `enterHtmlAttribute` infers `js` for `on*`, `css` for
   `style` and `html` for `srcdoc` attributes, and `enterHtmlText` classifies a
-  `<script>` by its `type` attribute. `export()` serializes the state as a composite string
+  `<script>` by its `type` attribute and gives the content of `<textarea>` and `<title>`
+  (also nested elements in them, but not `<title>` in SVG) the subType `rcdata`. `export()` serializes the state as a composite string
   (`'html/attr/js'`) — the key format used for block escaping and the convertor
   table below.
 - **Runtime** — the actual escaping functions live in `Runtime\Helpers` (JS / CSS /
