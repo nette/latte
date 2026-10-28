@@ -53,6 +53,16 @@ i.e. one that used to render as markup. Only the formatter paths warn: a mixed v
 like `srcdoc="<p>{$x}</p>"` is escaped by code `Escaper::escape()` emits, and
 `Escaper` has no access to feature flags.
 
+## Braces are separated by a comment
+
+Frameworks that compile templates from the DOM (Vue, petite-vue, AngularJS) read the
+text after the browser has decoded entities, so `&#123;&#123;` is no protection against
+`{{ }}` injection. `escapeText` and `escapeRawHtml` (`<script type="text/template">`)
+insert `<!-- -->` after each `{` followed by another one or ending the string, and before
+a leading one, so `{{` cannot form even from two adjacent outputs. An attribute cannot hold
+a comment: the `&#123;` of `escapeAttr` does not stop AngularJS, which interpolates
+attributes.
+
 ## How nodes obtain the context: the `PrintContext` escaper stack
 
 At print time the current escaping context lives in a **stack of `Escaper`s inside
