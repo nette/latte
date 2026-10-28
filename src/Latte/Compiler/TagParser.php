@@ -66,6 +66,25 @@ final class TagParser
 
 
 	/**
+	 * Parses optional list of arguments passed to parameters, where no positional argument may follow a named one.
+	 */
+	public function parseCallArguments(): Expression\ArrayNode
+	{
+		$args = $this->parseArguments();
+		$named = false;
+		foreach ($args->items as $item) {
+			if ($item->key) {
+				$named = true;
+			} elseif ($named) {
+				trigger_error("Positional argument after a named argument is deprecated ($item->position)", E_USER_DEPRECATED);
+				break;
+			}
+		}
+		return $args;
+	}
+
+
+	/**
 	 * Parses optional list of filters.
 	 */
 	public function parseModifier(): Node\ModifierNode

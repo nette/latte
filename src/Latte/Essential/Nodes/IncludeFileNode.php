@@ -41,7 +41,7 @@ class IncludeFileNode extends StatementNode
 		}
 
 		$stream->tryConsume(',');
-		$node->args = $tag->parser->parseArguments();
+		$node->args = $tag->parser->parseCallArguments();
 		$node->modifier = $tag->parser->parseModifier();
 		$node->modifier->escape = !$node->modifier->removeFilter('noescape');
 		return $node;
