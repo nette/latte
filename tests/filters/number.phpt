@@ -68,3 +68,15 @@ test('disabled locale', function () {
 	Assert::same('1 234.56', $filters->number(1234.56, 2, '.', ' '));
 	Assert::same('1.234,56', $filters->number(1234.56, 2, ',', '.'));
 });
+
+
+test('changed locale', function () {
+	$filters = new Filters;
+	$filters->locale = 'cs_CZ';
+	Assert::same('1,50', $filters->number(1.5, 2));
+	Assert::same('2', $filters->number(1.5, '0'));
+
+	$filters->locale = 'en_US';
+	Assert::same('1.50', $filters->number(1.5, 2));
+	Assert::same('1.50', $filters->number(1.5, '0.00'));
+});

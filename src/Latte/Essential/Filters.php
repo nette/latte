@@ -23,6 +23,9 @@ final class Filters
 {
 	public ?string $locale = null;
 
+	/** @var array<string, \NumberFormatter> */
+	private array $numberFormatters = [];
+
 
 	/**
 	 * Converts HTML to plain text.
@@ -222,14 +225,7 @@ final class Filters
 			return number_format($number, $patternOrDecimals, $decimalSeparator, $thousandsSeparator);
 		}
 
-		$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
-		$formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
-		if (is_string($patternOrDecimals)) {
-			$formatter->setPattern($patternOrDecimals);
-		} else {
-			$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $patternOrDecimals);
-		}
-		return $formatter->format($number);
+		return $this->getNumberFormatter($this->locale, $patternOrDecimals)->format($number);
 	}
 
 
@@ -251,13 +247,34 @@ final class Filters
 		if ($this->locale === null) {
 			$bytes = (string) round($bytes, $precision);
 		} else {
-			$formatter = new \NumberFormatter($this->locale, \NumberFormatter::DECIMAL);
-			$formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
-			$formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
-			$bytes = $formatter->format($bytes);
+			$bytes = $this->getNumberFormatter($this->locale, $precision, \NumberFormatter::MAX_FRACTION_DIGITS)->format($bytes);
 		}
 
 		return $bytes . ' ' . $unit;
+	}
+
+
+	/**
+	 * Returns a formatter that rounds half up like round() and number_format().
+	 */
+	private function getNumberFormatter(
+		string $locale,
+		string|int $patternOrDigits,
+		int $digitsAttribute = \NumberFormatter::FRACTION_DIGITS,
+	): \NumberFormatter
+	{
+		$key = $locale . (is_string($patternOrDigits) ? " p$patternOrDigits" : " $digitsAttribute:$patternOrDigits");
+		if (!isset($this->numberFormatters[$key])) {
+			$formatter = new \NumberFormatter($locale, \NumberFormatter::DECIMAL);
+			$formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
+			if (is_string($patternOrDigits)) {
+				$formatter->setPattern($patternOrDigits);
+			} else {
+				$formatter->setAttribute($digitsAttribute, $patternOrDigits);
+			}
+			$this->numberFormatters[$key] = $formatter;
+		}
+		return $this->numberFormatters[$key];
 	}
 
 
