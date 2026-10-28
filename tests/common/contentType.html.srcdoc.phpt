@@ -78,7 +78,7 @@ Assert::same(
 
 // blocks
 Assert::same(
-	'<iframe srcdoc="&lt;i&gt;&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;&lt;/i&gt;"></iframe>',
+	'<iframe srcdoc="&lt;i&gt;&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;&lt;/i&gt;"></iframe>',
 	$latte->renderToString('{define doc}<i>{$x}</i>{/define}<iframe srcdoc="{include doc}"></iframe>', $params),
 );
 
@@ -105,8 +105,12 @@ Assert::same(
 test('blocks', function () use ($params) {
 	$latte = createLatte();
 	Assert::same( // included elsewhere
-		'<iframe srcdoc="<p>&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;</p>"></iframe><div><p>&lt;script&gt;alert(&quot;1&quot;)&lt;/script&gt; &amp; &#123;</p></div>',
+		'<iframe srcdoc="<p>&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;</p>"></iframe><div><p>&lt;script&gt;alert(&quot;1&quot;)&lt;/script&gt; &amp; {</p></div>',
 		$latte->renderToString('<iframe srcdoc="{block doc}<p>{$x}</p>{/block}"></iframe><div>{include doc}</div>', $params),
+	);
+	Assert::same( // {{ cannot form in the text
+		'<iframe srcdoc="&amp;#123;&amp;#123;x}}"></iframe><!-- -->{<!-- -->{x}}',
+		$latte->renderToString('<iframe srcdoc="{block doc}{$y}{/block}"></iframe>{include doc}', ['y' => '{{x}}']),
 	);
 	Assert::same(
 		'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',

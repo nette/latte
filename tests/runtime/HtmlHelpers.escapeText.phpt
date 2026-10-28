@@ -35,4 +35,11 @@ Assert::same("foo \u{FFFD}\" bar", HtmlHelpers::escapeText("foo \xE3\x80\x22 bar
 
 // JS
 Assert::same('hello {<!-- -->{ worlds }}', HtmlHelpers::escapeText('hello {{ worlds }}'));
-Assert::same('hello &#123; worlds }', HtmlHelpers::escapeText('hello { worlds }'));
+Assert::same('hello { worlds }', HtmlHelpers::escapeText('hello { worlds }'));
+Assert::same('<!-- -->{<!-- -->{<!-- -->{ x }}}', HtmlHelpers::escapeText('{{{ x }}}'));
+
+// a brace at the edge can form {{ with the adjacent output
+Assert::same('<!-- -->{<!-- -->', HtmlHelpers::escapeText('{'));
+Assert::same('a{<!-- -->', HtmlHelpers::escapeText('a{'));
+Assert::same('<!-- -->{a', HtmlHelpers::escapeText('{a'));
+Assert::same('<!-- -->{"a":1}', HtmlHelpers::escapeText('{"a":1}'));

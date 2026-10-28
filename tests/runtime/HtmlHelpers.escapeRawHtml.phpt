@@ -30,6 +30,9 @@ Assert::same('<br>', HtmlHelpers::escapeRawHtml(new Test));
 Assert::same('<p></p>', HtmlHelpers::escapeRawHtml(new Latte\Runtime\Html('<p></p>')));
 Assert::same('<x-script></x-script>', HtmlHelpers::escapeRawHtml(new Latte\Runtime\Html('<script></script>')));
 
+// JS
+Assert::same('hello &#123;&#123; worlds }}', HtmlHelpers::escapeRawHtml('hello {{ worlds }}'));
+
 // invalid UTF-8
 Assert::same("foo \u{FFFD} bar", HtmlHelpers::escapeRawHtml("foo \u{D800} bar")); // invalid codepoint high surrogates
 Assert::same("foo \u{FFFD}&quot; bar", HtmlHelpers::escapeRawHtml("foo \xE3\x80\x22 bar")); // stripped UTF
