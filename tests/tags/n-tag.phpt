@@ -150,6 +150,21 @@ Assert::exception(
 
 
 Assert::exception(
+	fn() => $latte->renderToString('<textarea n:tag="div"></textarea>'),
+	Latte\RuntimeException::class,
+	'Forbidden: Cannot change element to <div>',
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('<div n:tag="textarea"></div>'),
+	Latte\RuntimeException::class,
+	'Forbidden: Cannot change element to <textarea>',
+);
+
+Assert::same('<title></title>', $latte->renderToString('<textarea n:tag="title"></textarea>'));
+
+
+Assert::exception(
 	fn() => $latte->renderToString('<span n:tag="br"></span>'),
 	Latte\RuntimeException::class,
 	'Forbidden: Cannot change element to <br>',

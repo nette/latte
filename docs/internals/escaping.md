@@ -14,7 +14,8 @@ layers that must stay in sync**.
   plain-text output goes through the `escape` filter instead). The subType is not
   purely state-derived: `enterHtmlAttribute` infers `js` for `on*`, `css` for
   `style` and `html` for `srcdoc` attributes, and `enterHtmlText` classifies a
-  `<script>` by its `type` attribute. `export()` serializes the state as a composite string
+  `<script>` by its `type` attribute and gives the content of `<textarea>` and `<title>`
+  (also nested elements in them, but not `<title>` in SVG) the subType `rcdata`. `export()` serializes the state as a composite string
   (`'html/attr/js'`) — the key format used for block escaping and the convertor
   table below.
 - **Runtime** — the actual escaping functions live in `Runtime\Helpers` (JS / CSS /
@@ -61,7 +62,7 @@ like `srcdoc="<p>{$x}</p>"` is escaped by code `Escaper::escape()` emits, and
 
 Frameworks that compile templates from the DOM (Vue, petite-vue, AngularJS) read the
 text after the browser has decoded entities, so `&#123;&#123;` is no protection against
-`{{ }}` injection. `escapeText` (and `convertAttrToHtml`, `convertHtmlAttrToHtml`) insert
+`{{ }}` injection. `escapeText` (and `convertAttrToHtml`, `convertHtmlAttrToHtml`, `convertRcDataToHtml`) insert
 `<!-- -->` after each `{` followed by another one or ending the string, and before a
 leading one, so `{{` cannot form even from two adjacent outputs. An attribute cannot hold
 a comment: the `&#123;` of `escapeAttr` does not stop AngularJS, which interpolates
@@ -69,6 +70,18 @@ attributes. Where Latte cannot tell text from an attribute (the content of
 `<script type="text/template">` and of `srcdoc`), the value is escaped as an attribute:
 Vue 3 compiles a template string before decoding entities, so `&#123;` protects there,
 while Vue 2 decodes them first.
+
+Inside `<textarea>` and `<title>` (`html/rcdata`) a comment is displayed as text and would
+corrupt the value, so `escapeRcData` leaves braces alone. A block defined there is
+`html/rcdata` too: filters see that type, and `Escaper::getConvertor()` converts it like
+HTML text after `convertRcDataToHtml` has separated the braces, so it can be included
+anywhere HTML can. A block from ordinary text included there keeps its separators, since
+its output was escaped elsewhere. HTML printed or included there stays HTML, so filters
+of the block still see its tags; `convertHtmlToRcData` only neutralizes `</textarea` and
+`</title`, which would end the element, also in a value printed with `|noescape`.
+The content is escaped for the element it was written in, so `validateTagChange()`
+refuses `n:tag` and a dynamic tag name that would turn an element into `<textarea>` or
+`<title>`, or one of them into another element.
 
 ## How nodes obtain the context: the `PrintContext` escaper stack
 

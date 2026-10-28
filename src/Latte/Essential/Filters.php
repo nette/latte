@@ -32,7 +32,7 @@ final class Filters
 	 */
 	public static function stripHtml(FilterInfo $info, string|Stringable|null $s): string
 	{
-		$info->validate([null, 'html', 'html/attr', 'html/attr/html', 'xml', 'xml/attr'], __FUNCTION__);
+		$info->validate([null, 'html', 'html/attr', 'html/attr/html', 'html/rcdata', 'xml', 'xml/attr'], __FUNCTION__);
 		$s = $info->contentType === 'html/attr/html'
 			? Latte\Runtime\HtmlHelpers::convertHtmlAttrToHtml((string) $s)
 			: (string) $s;
@@ -47,7 +47,7 @@ final class Filters
 	public static function stripTags(FilterInfo $info, string|Stringable|null $s): string
 	{
 		$info->contentType ??= ContentType::Html;
-		$info->validate(['html', 'html/attr', 'html/attr/html', 'xml', 'xml/attr'], __FUNCTION__);
+		$info->validate(['html', 'html/attr', 'html/attr/html', 'html/rcdata', 'xml', 'xml/attr'], __FUNCTION__);
 		return $info->contentType === 'html/attr/html'
 			? Latte\Runtime\HtmlHelpers::escapeAttr(strip_tags(Latte\Runtime\HtmlHelpers::convertHtmlAttrToHtml((string) $s)))
 			: strip_tags((string) $s);

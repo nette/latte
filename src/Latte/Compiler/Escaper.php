@@ -23,7 +23,8 @@ class Escaper
 		Text = 'text',
 		JavaScript = 'js',
 		Css = 'css',
-		ICal = 'ical';
+		ICal = 'ical',
+		RcData = 'rcdata';
 
 	public const
 		HtmlText = 'html',
@@ -40,6 +41,7 @@ class Escaper
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			'xml' => 'XmlHelpers::escapeText',
 			'xml/attr' => 'XmlHelpers::escapeAttr',
@@ -49,6 +51,7 @@ class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlRawText . '/' . self::JavaScript => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
@@ -57,6 +60,7 @@ class Escaper
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlRawText . '/' . self::Css => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 		],
@@ -66,6 +70,7 @@ class Escaper
 			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeAttr',
+			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::convertHtmlToRcData',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
 			self::HtmlRawText . '/' . self::HtmlText => 'HtmlHelpers::convertHtmlToRawText',
 		],
@@ -133,7 +138,7 @@ class Escaper
 
 		} else {
 			$this->state = self::HtmlText;
-			$this->subType = '';
+			$this->subType = $this->contentType === ContentType::Html && self::isRcData($el) ? self::RcData : '';
 		}
 	}
 
@@ -185,7 +190,10 @@ class Escaper
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
-				self::HtmlText => 'LR\HtmlHelpers::escapeText(' . $str . ')',
+				self::HtmlText => match ($this->subType) {
+					'' => 'LR\HtmlHelpers::escapeText(' . $str . ')',
+					self::RcData => 'LR\HtmlHelpers::escapeRcData(' . $str . ')',
+				},
 				self::HtmlTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
 					'' => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
@@ -228,6 +236,10 @@ class Escaper
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
+				self::HtmlText => match ($this->subType) {
+					self::RcData => "LR\\HtmlHelpers::convertHtmlToRcData((string) $str)",
+					default => $str,
+				},
 				self::HtmlAttribute => match ($this->subType) {
 					self::HtmlText => "LR\\HtmlHelpers::escapeAttr((string) $str)",
 					default => "LR\\HtmlHelpers::escapeQuotes($str)",
@@ -272,7 +284,26 @@ class Escaper
 			$source === self::HtmlAttribute . '/' . self::HtmlText => ($convertor = self::getConvertor(self::HtmlText, $dest))
 				? fn(string $s): string => $convertor(HtmlHelpers::convertHtmlAttrToHtml($s))
 				: null,
+			$source === self::HtmlText . '/' . self::RcData => ($convertor = self::getConvertor(self::HtmlText, $dest))
+				? fn(string $s): string => $convertor(HtmlHelpers::convertRcDataToHtml($s))
+				: null,
 			default => null,
 		};
+	}
+
+
+	/**
+	 * Is the element inside <textarea> or <title>, whose content the browser does not parse as HTML?
+	 */
+	private static function isRcData(ElementNode $el): bool
+	{
+		$res = false;
+		for (; $el; $el = $el->parent) {
+			if ($el->is('svg') || $el->is('math')) {
+				return false; // <title> in SVG is an ordinary element
+			}
+			$res = $res || $el->is('textarea') || $el->is('title');
+		}
+		return $res;
 	}
 }

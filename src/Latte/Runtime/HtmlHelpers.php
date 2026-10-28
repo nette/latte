@@ -61,6 +61,17 @@ final class HtmlHelpers
 
 
 	/**
+	 * Escapes string for use inside <textarea> and <title>, whose content is kept intact.
+	 */
+	public static function escapeRcData(mixed $s): string
+	{
+		return $s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable
+			? self::convertHtmlToRcData($s->__toString())
+			: htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	}
+
+
+	/**
 	 * Escapes string for use inside HTML attribute value.
 	 */
 	public static function escapeAttr(mixed $s): string
@@ -195,6 +206,24 @@ final class HtmlHelpers
 	{
 		$s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 		return self::separateBraces(str_replace('&#123;', '{', $s)); // a brace of an escaped value is still an entity
+	}
+
+
+	/**
+	 * Converts HTML to content of <textarea> or <title>.
+	 */
+	public static function convertHtmlToRcData(string $s): string
+	{
+		return preg_replace('#</(textarea|title)#i', '&lt;/$1', $s);
+	}
+
+
+	/**
+	 * Converts content of <textarea> or <title> to HTML text.
+	 */
+	public static function convertRcDataToHtml(string $s): string
+	{
+		return self::separateBraces($s);
 	}
 
 
@@ -441,6 +470,15 @@ final class HtmlHelpers
 
 
 	/**
+	 * Checks if the browser does not parse the content of the element as HTML, only decodes entities in it.
+	 */
+	public static function isRcDataElement(string $name): bool
+	{
+		return in_array(strtolower($name), ['textarea', 'title'], true);
+	}
+
+
+	/**
 	 * Determines if the given HTML attribute is a URL attribute that requires special handling.
 	 */
 	public static function isUrlAttribute(string $tag, string $attr): bool
@@ -486,6 +524,7 @@ final class HtmlHelpers
 
 		} elseif (self::isVoidElement($name) !== self::isVoidElement($origName ?? 'div') // non-void is default
 			|| in_array(strtolower($name), ['style', 'script'], true)
+			|| self::isRcDataElement($name) !== self::isRcDataElement($origName ?? 'div') // their content is escaped differently
 		) {
 			throw new Latte\RuntimeException("Forbidden: Cannot change element to <$name>");
 		}
