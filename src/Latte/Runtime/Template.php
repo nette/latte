@@ -64,9 +64,10 @@ class Template
 
 	/**
 	 * Renders template.
+	 * @param  string|\Closure|null  $mod  content-type name or modifier closure, applied like in {include}
 	 * @internal
 	 */
-	public function render(?string $block = null): void
+	public function render(?string $block = null, string|\Closure|null $mod = null): void
 	{
 		$extensions = $this->engine->getExtensions();
 		try {
@@ -87,13 +88,13 @@ class Template
 
 			} elseif ($this->parentName) { // extends
 				$this->params = $params;
-				$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
+				$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block, $mod);
 
 			} elseif ($block !== null) { // single block rendering
-				$this->renderBlock($block, $this->params);
+				$this->renderBlock($block, $this->params, $mod);
 
 			} else {
-				$this->main($params);
+				$this->filter(fn() => $this->main($params), $mod, static::ContentType, "'$this->name'");
 			}
 		} finally {
 			foreach ($extensions as $extension) {
