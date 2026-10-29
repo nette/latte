@@ -83,3 +83,23 @@ function testGetBlockNames(Template $template): void
 {
 	assertType('list<string>', $template->getBlockNames());
 }
+
+
+function testHtmlContentType(Latte\Runtime\Html $html): void
+{
+	assertType("'html'", $html->contentType);
+}
+
+
+function testContentType(): void
+{
+	assertType("Latte\\Runtime\\Content<'js'>", new Latte\Runtime\Content('', Latte\ContentType::JavaScript));
+}
+
+
+function testRenderToContent(Latte\Engine $latte): void
+{
+	assertType('Latte\Runtime\Content<string>', $latte->renderToContent('file'));
+	assertType('Latte\Runtime\Html', $latte->renderToContent('file', contentType: Latte\ContentType::Html));
+	assertType("Latte\\Runtime\\Content<'xml'>", $latte->renderToContent('file', contentType: Latte\ContentType::Xml));
+}

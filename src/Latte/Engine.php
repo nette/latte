@@ -100,6 +100,36 @@ class Engine
 
 
 	/**
+	 * Renders template to Content of its content type. With $contentType, converts the output to it
+	 * like {include} does, and throws if it cannot.
+	 * @template T of string
+	 * @param  object|mixed[]  $params
+	 * @param  ?T  $contentType
+	 * @return ($contentType is ContentType::Html ? Runtime\Html : ($contentType is null ? Runtime\Content<string> : Runtime\Content<T>))
+	 */
+	public function renderToContent(
+		string $name,
+		object|array $params = [],
+		?string $block = null,
+		?string $contentType = null,
+	): Runtime\Content
+	{
+		$template = $this->createTemplate($name, Helpers::resolveParams($this, $params));
+		$template->global->coreCaptured = true;
+		$type = $contentType;
+		$mod = $contentType ?? function (string $s, string $actual) use (&$type): string {
+			$type = $actual;
+			return $s;
+		};
+		$s = $template->capture(fn() => $template->render($block, $mod));
+		assert($type !== null); // render() always applies $mod
+		return $type === ContentType::Html
+			? new Runtime\Html($s)
+			: new Runtime\Content($s, $type);
+	}
+
+
+	/**
 	 * Creates template object.
 	 * @param  mixed[]  $params
 	 */

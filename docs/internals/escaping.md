@@ -104,6 +104,31 @@ tests falsiness **before** treating the value as a keyword — narrowing that to
 `is_string($value)` looks tidier but renders `hidden="0"` for a `'0'` coming from a
 database, and the element silently disappears.
 
+## Trusted values: `Content` and `Html`
+
+`Runtime\Content` is a string tagged with its content type, e.g. the result of
+`Engine::renderToContent()`. `Html` is `Content` of type HTML and also implements
+`HtmlStringable`, which is what the HTML and XML escapers check; a plain `Content` of type
+HTML is not trusted. Every other type is trusted only by the escaper of its own context,
+through `Helpers::contentOfType()`:
+
+- `escapeJs` prints JS, and `html/raw/js` (the type of a block in `<script>`), through
+  `convertJSToRawText`; `escapeCss` does the same for CSS. The compiler emits
+  `escapeAttr(escapeJs(...))` for a print inside `on*` and `style`, so the trusted value is
+  still attribute-encoded there.
+- `XmlHelpers::escapeText` trusts XML (`escapeAttr` converts it to text) and `escapeICal`
+  trusts iCal.
+- Any other `Content` is escaped as text.
+
+The escapers cannot ask `Escaper::getConvertor()` instead: `escapeJs` serves `js`,
+`html/raw/js` and `html/attr/js` without knowing which, so each lists the types it accepts.
+A block from an attribute (`html/attr/js`) is not trusted as JS, because its output is
+already attribute-encoded. A whole-value attribute (`onclick={$x}`) goes through
+`formatAttribute` and never reaches `escapeJs`, so a plain string is code there as much as a
+`Content` is. A block of an XML template has the type `html` (XML reuses the HTML states),
+so `renderToContent()` returns it as `Html`. `FilterExecutor::filterContent` passes a
+`Content` of the filtered type to the filter as a string.
+
 ## `ContentType` and contextual filters
 
 `ContentType` is **not a PHP enum** — it is a `final class` of string constants

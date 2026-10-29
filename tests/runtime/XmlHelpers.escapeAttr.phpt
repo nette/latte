@@ -30,3 +30,8 @@ Assert::same(
 // invalid UTF-8
 Assert::same("foo \u{FFFD} bar", XmlHelpers::escapeAttr("foo \u{D800} bar")); // invalid codepoint high surrogates
 Assert::same("foo \u{FFFD}&quot; bar", XmlHelpers::escapeAttr("foo \xE3\x80\x22 bar")); // stripped UTF
+
+
+// Content
+Assert::same('a &amp; b', XmlHelpers::escapeAttr(new Latte\Runtime\Content('<i>a &amp; b</i>', Latte\ContentType::Xml)));
+Assert::same('&lt;i&gt;', XmlHelpers::escapeAttr(new Latte\Runtime\Content('<i>', Latte\ContentType::Text)));

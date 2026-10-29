@@ -28,3 +28,8 @@ Assert::same(
 // invalid UTF-8
 Assert::same("foo \u{D800} bar", Helpers::escapeICal("foo \u{D800} bar")); // invalid codepoint high surrogates
 Assert::same("foo \xE3\x80\\\x22 bar", Helpers::escapeICal("foo \xE3\x80\x22 bar")); // stripped UTF
+
+
+// Content
+Assert::same('a;b', Helpers::escapeICal(new Latte\Runtime\Content('a;b', Latte\ContentType::ICal)));
+Assert::same('a\;b', Helpers::escapeICal(new Latte\Runtime\Content('a;b', Latte\ContentType::Text)));

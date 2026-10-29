@@ -8,6 +8,7 @@
 namespace Latte\Runtime;
 
 use Latte;
+use Latte\Compiler\Escaper;
 use Latte\{ContentType, RuntimeException};
 use Nette;
 use function is_string;
@@ -35,6 +36,11 @@ class Helpers
 	 */
 	public static function escapeCss(mixed $s): string
 	{
+		$css = self::contentOfType($s, ContentType::Css, Escaper::HtmlRawText . '/' . Escaper::Css);
+		if ($css !== null) {
+			return HtmlHelpers::convertJSToRawText($css);
+		}
+
 		// http://www.w3.org/TR/2006/WD-CSS21-20060411/syndata.html#q6
 		return addcslashes((string) $s, "\x00..\x1F!\"#$%&'()*+,./:;<=>?@[\\]^`{|}~");
 	}
@@ -45,6 +51,11 @@ class Helpers
 	 */
 	public static function escapeJs(mixed $s): string
 	{
+		$js = self::contentOfType($s, ContentType::JavaScript, Escaper::HtmlRawText . '/' . Escaper::JavaScript);
+		if ($js !== null) {
+			return HtmlHelpers::convertJSToRawText($js);
+		}
+
 		if ($s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable) {
 			$s = $s->__toString();
 		}
@@ -55,10 +66,26 @@ class Helpers
 
 
 	/**
+	 * Returns the string of Content of one of the given types, which needs no escaping, null for any other value.
+	 */
+	public static function contentOfType(mixed $s, string ...$types): ?string
+	{
+		return $s instanceof Content && in_array($s->contentType, $types, true)
+			? $s->__toString()
+			: null;
+	}
+
+
+	/**
 	 * Escapes string for use inside iCal template.
 	 */
 	public static function escapeICal(mixed $s): string
 	{
+		$ical = self::contentOfType($s, ContentType::ICal);
+		if ($ical !== null) {
+			return $ical;
+		}
+
 		// https://www.ietf.org/rfc/rfc5545.txt
 		$s = str_replace("\r", '', (string) $s);
 		$s = preg_replace('#[\x00-\x08\x0B-\x1F]#', "\u{FFFD}", (string) $s);

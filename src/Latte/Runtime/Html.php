@@ -7,23 +7,17 @@
 
 namespace Latte\Runtime;
 
+use Latte\ContentType;
+
 
 /**
  * Wraps a pre-escaped HTML string so it is not escaped again when rendered.
+ * @extends Content<ContentType::Html>
  */
-class Html implements HtmlStringable
+class Html extends Content implements HtmlStringable
 {
-	private readonly string $value;
-
-
 	public function __construct(string|\Stringable|null $value)
 	{
-		$this->value = (string) $value;
-	}
-
-
-	public function __toString(): string
-	{
-		return $this->value;
+		parent::__construct((string) $value, ContentType::Html);
 	}
 }
