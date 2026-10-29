@@ -88,8 +88,8 @@ class Escaper
 
 	public function __construct(
 		private string $contentType,
-		/** @var array<string, string> custom attribute contexts, see HtmlHelpers::matchAttributeContext() */
-		private readonly array $attributeContexts = [],
+		/** @var array<string, string> see HtmlHelpers::matchAttributeContext() */
+		private readonly array $attributeContexts = HtmlHelpers::AttributeContexts,
 	) {
 		$this->state = in_array($contentType, [ContentType::Html, ContentType::Xml], true)
 			? self::HtmlText
@@ -170,16 +170,8 @@ class Escaper
 		$this->subType = '';
 
 		if ($this->contentType === ContentType::Html && is_string($name)) {
-			$name = strtolower($name);
-			if (str_starts_with($name, 'on')) {
-				$this->subType = self::JavaScript;
-			} elseif ($name === 'style') {
-				$this->subType = self::Css;
-			} elseif ($name === 'srcdoc') {
-				$this->subType = self::HtmlText;
-			} elseif ($this->attributeContexts) {
-				$this->subType = HtmlHelpers::matchAttributeContext($name, $this->attributeContexts) ?? '';
-			}
+			// ContentType::JavaScript, Css and Html equal the subTypes JavaScript, Css and HtmlText
+			$this->subType = HtmlHelpers::matchAttributeContext($name, $this->attributeContexts) ?? '';
 		}
 	}
 

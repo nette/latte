@@ -36,7 +36,7 @@ final class NAttrNode extends StatementNode
 	{
 		$escaper = $context->getEscaper();
 		$xml = $escaper->getContentType() === Latte\ContentType::Xml;
-		$contexts = $xml ? [] : $escaper->getAttributeContexts();
+		$contexts = $escaper->getAttributeContexts();
 		return $context->format(
 			'$ʟ_tmp = %node;
 			echo %raw::attrs($ʟ_tmp, %dump, %dump?%raw) %line;',
@@ -44,14 +44,19 @@ final class NAttrNode extends StatementNode
 			self::class,
 			$xml,
 			$context->hasFeature(Latte\Feature::MigrationWarnings) ?: null,
-			$contexts ? ', contexts: ' . PhpHelpers::dump($contexts) : '',
+			!$xml && $contexts !== LR\HtmlHelpers::AttributeContexts ? ', contexts: ' . PhpHelpers::dump($contexts) : '',
 			$this->position,
 		);
 	}
 
 
-	/** @param  array<string, string>  $contexts  custom attribute contexts, see HtmlHelpers::matchAttributeContext() */
-	public static function attrs(mixed $attrs, bool $xml, bool $migrationWarnings = false, array $contexts = []): string
+	/** @param  array<string, string>  $contexts  see HtmlHelpers::matchAttributeContext() */
+	public static function attrs(
+		mixed $attrs,
+		bool $xml,
+		bool $migrationWarnings = false,
+		array $contexts = LR\HtmlHelpers::AttributeContexts,
+	): string
 	{
 		$attrs = $attrs === [$attrs[0] ?? null] ? $attrs[0] : $attrs; // checks if the value is an array, e.g. n:attr="$attrs"
 		if (!is_array($attrs)) {
@@ -71,7 +76,12 @@ final class NAttrNode extends StatementNode
 
 
 	/** @param  array<string, string>  $contexts */
-	public static function formatHtmlAttribute(mixed $name, mixed $value, bool $migrationWarnings = false, array $contexts = []): string
+	public static function formatHtmlAttribute(
+		mixed $name,
+		mixed $value,
+		bool $migrationWarnings = false,
+		array $contexts = LR\HtmlHelpers::AttributeContexts,
+	): string
 	{
 		LR\HtmlHelpers::validateAttributeName($name);
 		$type = LR\HtmlHelpers::classifyAttributeType($name, $contexts);

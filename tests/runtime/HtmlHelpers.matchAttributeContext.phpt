@@ -23,6 +23,15 @@ Assert::null(HtmlHelpers::matchAttributeContext('data-tippy', $contexts));
 Assert::null(HtmlHelpers::matchAttributeContext('data-tippy-content-x', $contexts));
 Assert::null(HtmlHelpers::matchAttributeContext('x-on:click', []));
 
+// built-in contexts are the default table
+Assert::same('js', HtmlHelpers::matchAttributeContext('on'));
+Assert::same('js', HtmlHelpers::matchAttributeContext('OnClick'));
+Assert::same('css', HtmlHelpers::matchAttributeContext('style'));
+Assert::same('html', HtmlHelpers::matchAttributeContext('SrcDoc'));
+Assert::null(HtmlHelpers::matchAttributeContext('styles'));
+Assert::null(HtmlHelpers::matchAttributeContext('x-on:click'));
+Assert::same('js', HtmlHelpers::matchAttributeContext('onclick', ['x-on:*' => 'js'] + HtmlHelpers::AttributeContexts));
+
 // classification
 Assert::same('srcdoc', HtmlHelpers::classifyAttributeType('data-tippy-content', $contexts));
 Assert::same('', HtmlHelpers::classifyAttributeType('x-on:keyup', $contexts));
@@ -30,6 +39,9 @@ Assert::same('style', HtmlHelpers::classifyAttributeType('x-on:click.prevent', $
 Assert::same('', HtmlHelpers::classifyAttributeType('hidden', $contexts)); // overrides built-in type
 Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('hidden'));
 Assert::same('data', HtmlHelpers::classifyAttributeType('data-tippy-content'));
+Assert::same('', HtmlHelpers::classifyAttributeType('onclick'));
+Assert::same('style', HtmlHelpers::classifyAttributeType('Style'));
+Assert::same('', HtmlHelpers::classifyAttributeType('style', [])); // the table decides, no hard-coded names
 
 Assert::exception(
 	fn() => HtmlHelpers::classifyAttributeType('data-x', ['data-x' => 'text']),

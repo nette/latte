@@ -288,12 +288,13 @@ class Engine
 
 
 	/**
-	 * Returns escaping contexts of custom HTML attributes registered by extensions.
+	 * Returns escaping contexts of HTML attributes: the built-in ones and those registered by extensions.
 	 * @return array<string, string>
 	 */
 	private function getAttributeContexts(): array
 	{
-		$res = [];
+		$res = Runtime\HtmlHelpers::AttributeContexts;
+		$builtins = array_keys($res);
 		foreach ($this->extensions as $extension) {
 			foreach ($extension->getAttributeContexts() as $name => $context) {
 				$name = strtolower((string) $name);
@@ -302,12 +303,8 @@ class Engine
 					throw new \LogicException("Invalid context for attribute '$name', expected ContentType::JavaScript, Css or Html.");
 				} elseif (!preg_match('~' . Compiler\TemplateLexer::ReAttrName . '+$~DAu', $name)) {
 					throw new \LogicException("Invalid attribute name '$name'.");
-				} elseif ($prefix === null
-					? str_starts_with($name, 'on') || $name === 'style' || $name === 'srcdoc'
-					: str_starts_with($prefix, 'on')
-						|| str_starts_with('on', $prefix)
-						|| str_starts_with('style', $prefix)
-						|| str_starts_with('srcdoc', $prefix)
+				} elseif (Runtime\HtmlHelpers::matchAttributeContext($prefix ?? $name) !== null // a built-in applies to it
+					|| ($prefix !== null && array_filter($builtins, fn($key) => str_starts_with($key, $prefix))) // it applies to a built-in
 				) {
 					throw new \LogicException("Attribute '$name' would override the built-in context of on*, style or srcdoc.");
 				}

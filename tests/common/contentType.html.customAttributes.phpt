@@ -75,9 +75,10 @@ Assert::same(
 );
 
 Assert::contains(
-	"NAttrNode::attrs(\$ʟ_tmp, false, contexts: ['data-tippy-content' => 'html', 'x-on:*' => 'js', 'x-style' => 'css'])",
+	"NAttrNode::attrs(\$ʟ_tmp, false, contexts: ['on*' => 'js', 'style' => 'css', 'srcdoc' => 'html', 'data-tippy-content' => 'html', 'x-on:*' => 'js', 'x-style' => 'css'])",
 	$latte->compile('<a n:attr="a => 1">'),
 );
+Assert::contains('NAttrNode::attrs($ʟ_tmp, false)', createLatte()->compile('<a n:attr="a => 1">')); // built-in contexts are the default
 
 // blocks
 Assert::same(
