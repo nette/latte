@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Nette;
-use function in_array, is_array, is_bool, is_float, is_int, is_string;
+use function in_array, is_array, is_bool, is_float, is_int, is_string, strlen;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -20,6 +20,16 @@ use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8
  */
 final class HtmlHelpers
 {
+	/**
+	 * Escaping contexts of built-in HTML attributes, the default entries of every attribute context table.
+	 * Lowercase name or prefix with trailing * => ContentType::JavaScript, Css or Html.
+	 */
+	public const AttributeContexts = [
+		'on*' => ContentType::JavaScript,
+		'style' => ContentType::Css,
+		'srcdoc' => ContentType::Html,
+	];
+
 	private const BooleanAttributes = [
 		'allowfullscreen' => 1, 'async' => 1, 'autofocus' => 1, 'autoplay' => 1, 'checked' => 1, 'controls' => 1,
 		'default' => 1, 'defer' => 1, 'disabled' => 1, 'formnovalidate' => 1, 'inert' => 1, 'ismap' => 1,
@@ -215,20 +225,47 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * Returns the escaping context of an HTML attribute (exact name first, then the longest prefix), or null if there is none.
+	 * @param  array<string, string>  $contexts  lowercase name or prefix with trailing * => context, see AttributeContexts
 	 */
-	public static function classifyAttributeType(string $name): string
+	public static function matchAttributeContext(string $name, array $contexts = self::AttributeContexts): ?string
 	{
 		$name = strtolower($name);
+		if (isset($contexts[$name])) {
+			return $contexts[$name];
+		}
+
+		$res = null;
+		$len = 0;
+		foreach ($contexts as $key => $context) {
+			if (str_ends_with($key, '*') && strlen($key) > $len && str_starts_with($name, substr($key, 0, -1))) {
+				$res = $context;
+				$len = strlen($key);
+			}
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * @param  array<string, string>  $contexts  attribute contexts, see matchAttributeContext()
+	 */
+	public static function classifyAttributeType(string $name, array $contexts = self::AttributeContexts): string
+	{
+		$name = strtolower($name);
+		$context = self::matchAttributeContext($name, $contexts);
 		return match (true) {
+			$context === ContentType::JavaScript => '',
+			$context === ContentType::Css => 'style',
+			$context === ContentType::Html => 'srcdoc',
+			$context !== null => throw new \LogicException("Unknown context '$context' for attribute '$name'."),
 			isset(self::BooleanAttributes[$name]) => 'bool',
 			isset(self::TristateAttributes[$name]) => 'tristate',
 			isset(self::ValuedBooleanAttributes[$name]) => 'valuedBool',
 			isset(self::SpaceSeparatedAttributes[$name]) => 'list',
 			str_starts_with($name, 'data-') => 'data',
 			str_starts_with($name, 'aria-') => 'aria',
-			$name === 'style' => 'style',
-			$name === 'srcdoc' => 'srcdoc',
 			default => '',
 		};
 	}
