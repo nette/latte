@@ -37,6 +37,21 @@ type or a changed escaping rule must be reflected in *both* `Compiler\Escaper` a
 `Runtime\*` helpers, or generated templates will call an escaper that behaves
 differently than the compiler assumed.
 
+## XML shares the HTML states but not their names
+
+The XML escaper runs the same state machine as HTML (`$state` is `HtmlText`,
+`HtmlAttribute`, …), but `export()` names those states after XML: `xml`, `xml/attr`,
+`xml/comment`. Anything comparing an exported type against `html` therefore misses XML;
+code that means "markup" (`FilterExecutor` unwrapping `HtmlStringable`, `{capture}`
+wrapping its output back into `Html`, `|indent`) accepts both, and `{capture}` compares
+against `Escaper::getContentType()` rather than a constant.
+
+Exporting XML as `html` used to make XML and HTML convert into each other like HTML into
+HTML (and XML into XML failed). `getConvertor` keeps those conversions working through
+`getXmlHtmlConvertor`, which maps the XML side to its HTML twin and triggers
+`E_USER_DEPRECATED` when it converts. Conversions within XML, and from text, JS or CSS into
+XML, have their own `Convertors` entries and use the XML escapers.
+
 ## `srcdoc` is escaped twice
 
 The value of `srcdoc` is an HTML document: the browser attribute-decodes it and then

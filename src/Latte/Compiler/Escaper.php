@@ -11,7 +11,7 @@ use Latte;
 use Latte\Compiler\Nodes\Html\ElementNode;
 use Latte\ContentType;
 use Latte\Runtime\{Helpers, HtmlHelpers};
-use function is_string;
+use function is_string, sprintf, strlen;
 
 
 /**
@@ -34,6 +34,12 @@ class Escaper
 		HtmlTag = 'html/tag',
 		HtmlAttribute = 'html/attr';
 
+	/** XML uses the HTML states, export() names them after XML */
+	public const
+		XmlText = 'xml',
+		XmlComment = 'xml/comment',
+		XmlAttribute = 'xml/attr';
+
 	private const Convertors = [
 		self::Text => [
 			self::HtmlText => 'HtmlHelpers::escapeText',
@@ -43,8 +49,9 @@ class Escaper
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
 			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
-			'xml' => 'XmlHelpers::escapeText',
-			'xml/attr' => 'XmlHelpers::escapeAttr',
+			self::XmlText => 'XmlHelpers::escapeText',
+			self::XmlAttribute => 'XmlHelpers::escapeAttr',
+			self::XmlComment => 'HtmlHelpers::escapeComment',
 		],
 		self::JavaScript => [
 			self::HtmlText => 'HtmlHelpers::escapeText',
@@ -54,6 +61,9 @@ class Escaper
 			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlRawText . '/' . self::JavaScript => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
+			self::XmlText => 'XmlHelpers::escapeText',
+			self::XmlAttribute => 'XmlHelpers::escapeAttr',
+			self::XmlComment => 'HtmlHelpers::escapeComment',
 		],
 		self::Css => [
 			self::HtmlText => 'HtmlHelpers::escapeText',
@@ -63,6 +73,9 @@ class Escaper
 			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlRawText . '/' . self::Css => 'HtmlHelpers::convertJSToRawText',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
+			self::XmlText => 'XmlHelpers::escapeText',
+			self::XmlAttribute => 'XmlHelpers::escapeAttr',
+			self::XmlComment => 'HtmlHelpers::escapeComment',
 		],
 		self::HtmlText => [
 			self::Text => 'HtmlHelpers::convertHtmlToText',
@@ -79,6 +92,14 @@ class Escaper
 		],
 		self::HtmlText . '/' . self::RcData => [
 			self::HtmlText => 'HtmlHelpers::convertRcDataToHtml',
+		],
+		self::XmlText => [
+			self::Text => 'HtmlHelpers::convertHtmlToText',
+			self::XmlAttribute => 'XmlHelpers::convertXmlToAttr',
+			self::XmlComment => 'HtmlHelpers::escapeComment',
+		],
+		self::XmlAttribute => [
+			self::XmlText => 'Helpers::nop', // XML escapes attribute values and text alike
 		],
 	];
 
@@ -108,11 +129,14 @@ class Escaper
 
 
 	/**
-	 * Returns the current escaping state as a string (e.g. "html/attr/js").
+	 * Returns the current escaping state as a string (e.g. "html/attr/js", "xml/attr").
 	 */
 	public function export(): string
 	{
-		return $this->state . ($this->subType ? '/' . $this->subType : '');
+		$state = $this->contentType === ContentType::Xml && str_starts_with($this->state, self::HtmlText)
+			? self::XmlText . substr($this->state, strlen(self::HtmlText))
+			: $this->state;
+		return $state . ($this->subType ? '/' . $this->subType : '');
 	}
 
 
@@ -273,7 +297,32 @@ class Escaper
 		return match (true) {
 			$source === $dest => Helpers::nop(...),
 			isset(self::Convertors[$source][$dest]) => 'Latte\Runtime\\' . self::Convertors[$source][$dest],
-			default => null,
+			default => self::getXmlHtmlConvertor($source, $dest),
+		};
+	}
+
+
+	/**
+	 * XML contexts used to be exported as HTML ones, so XML and HTML converted into each other
+	 * like HTML into HTML. Keeps that working, with a deprecation when it converts.
+	 */
+	private static function getXmlHtmlConvertor(string $source, string $dest): ?callable
+	{
+		$isXml = fn(string $type): bool => $type === self::XmlText || str_starts_with($type, self::XmlText . '/');
+		$isHtml = fn(string $type): bool => $type === self::HtmlText || str_starts_with($type, self::HtmlText . '/');
+		if (!($isXml($source) && $isHtml($dest)) && !($isHtml($source) && $isXml($dest))) {
+			return null;
+		}
+
+		$toHtml = fn(string $type): string => $isXml($type) ? self::HtmlText . substr($type, strlen(self::XmlText)) : $type;
+		$convertor = self::getConvertor($toHtml($source), $toHtml($dest));
+		return $convertor === null ? null : function (string $s) use ($convertor, $source, $dest): string {
+			trigger_error(sprintf(
+				'Converting content type %s into %s is deprecated, XML and HTML will be incompatible.',
+				strtoupper($source),
+				strtoupper($dest),
+			), E_USER_DEPRECATED);
+			return $convertor($s);
 		};
 	}
 
