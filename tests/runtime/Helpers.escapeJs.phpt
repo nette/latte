@@ -30,3 +30,8 @@ Assert::same('"<br>"', Helpers::escapeJs(new Latte\Runtime\Html('<br>')));
 // invalid UTF-8
 Assert::same("\"foo \u{FFFD} bar\"", Helpers::escapeJs("foo \u{D800} bar")); // invalid codepoint high surrogates
 Assert::same("\"foo \u{FFFD}\\\" bar\"", Helpers::escapeJs("foo \xE3\x80\x22 bar")); // stripped UTF
+
+
+// Content
+Assert::same('alert("<\/script>")', Helpers::escapeJs(new Latte\Runtime\Content('alert("</script>")', Latte\ContentType::JavaScript)));
+Assert::same('alert(1)', Helpers::escapeJs(new Latte\Runtime\Content('alert(1)', 'html/raw/js')));

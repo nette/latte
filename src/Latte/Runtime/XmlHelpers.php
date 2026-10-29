@@ -8,6 +8,7 @@
 namespace Latte\Runtime;
 
 use Latte;
+use Latte\ContentType;
 use function is_float, is_int, is_string;
 use const ENT_QUOTES, ENT_SUBSTITUTE, ENT_XML1;
 
@@ -33,6 +34,11 @@ final class XmlHelpers
 			return $s->__toString();
 		}
 
+		$xml = Helpers::contentOfType($s, ContentType::Xml);
+		if ($xml !== null) {
+			return $xml;
+		}
+
 		// XML 1.0: \x09 \x0A \x0D and C1 allowed directly, C0 forbidden
 		// XML 1.1: \x00 forbidden directly and as a character reference,
 		//   \x09 \x0A \x0D \x85 allowed directly, C0, C1 and \x7F allowed as character references
@@ -46,8 +52,8 @@ final class XmlHelpers
 	 */
 	public static function escapeAttr(mixed $s): string
 	{
-		if ($s instanceof HtmlStringable) {
-			$s = HtmlHelpers::convertHtmlToText($s->__toString());
+		if ($s instanceof HtmlStringable || Helpers::contentOfType($s, ContentType::Xml) !== null) {
+			$s = HtmlHelpers::convertHtmlToText((string) $s);
 		}
 		return self::escapeText($s);
 	}

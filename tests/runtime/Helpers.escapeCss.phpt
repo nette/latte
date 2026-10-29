@@ -20,3 +20,12 @@ Assert::same('\!\"\#\$\%\&\\\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\[\\\\\]\^\`\{\|\}\~',
 // invalid UTF-8
 Assert::same("foo \u{D800} bar", Helpers::escapeCss("foo \u{D800} bar")); // invalid codepoint high surrogates
 Assert::same("foo \xE3\x80\\\x22 bar", Helpers::escapeCss("foo \xE3\x80\x22 bar")); // stripped UTF
+
+
+// Content
+Assert::same(
+	'a { content: "<\/style>" }',
+	Helpers::escapeCss(new Latte\Runtime\Content('a { content: "</style>" }', Latte\ContentType::Css)),
+);
+Assert::same('a {}', Helpers::escapeCss(new Latte\Runtime\Content('a {}', 'html/raw/css')));
+Assert::same('alert\(1\)', Helpers::escapeCss(new Latte\Runtime\Content('alert(1)', Latte\ContentType::JavaScript)));

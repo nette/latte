@@ -5,7 +5,7 @@
  */
 
 use Latte\ContentType;
-use Latte\Runtime\{FilterExecutor, FilterInfo, Html};
+use Latte\Runtime\{Content, FilterExecutor, FilterInfo, Html};
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -117,6 +117,24 @@ test('content type handling in filters', function () {
 	$info = new FilterInfo(ContentType::Html);
 	Assert::same('html,aa', $filters->filterContent('f3', $info, 'aA'));
 	Assert::same(ContentType::Css, $info->contentType);
+});
+
+
+test('Content of the filtered type is passed as string', function () {
+	$filters = new FilterExecutor;
+	$filters->add('type', fn(FilterInfo $info, mixed $val) => get_debug_type($val), true);
+	$filters->add('lower', fn(string $val) => strtolower($val));
+
+	Assert::same(
+		'string',
+		$filters->filterContent('type', new FilterInfo(ContentType::JavaScript), new Content('a', ContentType::JavaScript)),
+	);
+	Assert::same('string', $filters->filterContent('type', new FilterInfo(ContentType::Html), new Html('a')));
+	Assert::same(
+		Content::class,
+		$filters->filterContent('type', new FilterInfo(ContentType::Html), new Content('a', ContentType::JavaScript)),
+	);
+	Assert::same('ab', $filters->filterContent('lower', new FilterInfo(ContentType::Text), new Content('aB', ContentType::Text)));
 });
 
 

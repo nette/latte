@@ -68,7 +68,10 @@ class FilterExecutor
 	 */
 	public function filterContent(string $name, FilterInfo $info, mixed ...$args): mixed
 	{
-		if ($info->contentType === ContentType::Html && $args[0] instanceof HtmlStringable) {
+		if (
+			($info->contentType === ContentType::Html && $args[0] instanceof HtmlStringable)
+			|| ($args[0] instanceof Content && $args[0]->contentType === $info->contentType)
+		) {
 			$args[0] = $args[0]->__toString();
 		}
 
