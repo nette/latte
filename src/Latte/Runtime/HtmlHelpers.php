@@ -86,7 +86,10 @@ final class HtmlHelpers
 	 */
 	public static function escapeHtmlAttr(mixed $s): string
 	{
-		return self::escapeAttr(self::escapeText($s));
+		$document = $s instanceof HtmlStringable || $s instanceof Nette\HtmlStringable
+			? $s->__toString()
+			: self::escapeAttr($s); // the value can land in the text as well as in an attribute of the document
+		return self::escapeAttr($document);
 	}
 
 
@@ -133,20 +136,7 @@ final class HtmlHelpers
 			return self::convertHtmlToRawText($s->__toString());
 		}
 
-		return self::separateBraces(htmlspecialchars((string) $s, ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, 'UTF-8'));
-	}
-
-
-	/**
-	 * Separates braces by an empty comment so that {{ cannot form, not even with the adjacent output.
-	 */
-	private static function separateBraces(string $s): string
-	{
-		if (str_contains($s, '{')) {
-			$s = preg_replace('~\{(?=\{|$)~D', '{<!-- -->', $s);
-			$s = $s[0] === '{' ? '<!-- -->' . $s : $s;
-		}
-		return $s;
+		return self::escapeAttr($s); // the value can land in the text as well as in an attribute of the template
 	}
 
 
@@ -191,7 +181,7 @@ final class HtmlHelpers
 	 */
 	public static function convertAttrToHtml(string $s): string
 	{
-		return self::escapeAttr(html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+		return self::escapeText(html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 	}
 
 
@@ -211,6 +201,19 @@ final class HtmlHelpers
 	{
 		$s = strip_tags($s);
 		return html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+	}
+
+
+	/**
+	 * Separates braces by an empty comment so that {{ cannot form, not even with the adjacent output.
+	 */
+	private static function separateBraces(string $s): string
+	{
+		if (str_contains($s, '{')) {
+			$s = preg_replace('~\{(?=\{|$)~D', '{<!-- -->', $s);
+			$s = $s[0] === '{' ? '<!-- -->' . $s : $s;
+		}
+		return $s;
 	}
 
 

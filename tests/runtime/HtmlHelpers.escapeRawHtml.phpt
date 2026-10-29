@@ -31,9 +31,7 @@ Assert::same('<p></p>', HtmlHelpers::escapeRawHtml(new Latte\Runtime\Html('<p></
 Assert::same('<x-script></x-script>', HtmlHelpers::escapeRawHtml(new Latte\Runtime\Html('<script></script>')));
 
 // JS
-Assert::same('hello {<!-- -->{ worlds }}', HtmlHelpers::escapeRawHtml('hello {{ worlds }}'));
-Assert::same('a{<!-- -->', HtmlHelpers::escapeRawHtml('a{'));
-Assert::same('<!-- -->{a', HtmlHelpers::escapeRawHtml('{a'));
+Assert::same('hello &#123;&#123; worlds }}', HtmlHelpers::escapeRawHtml('hello {{ worlds }}'));
 
 // invalid UTF-8
 Assert::same("foo \u{FFFD} bar", HtmlHelpers::escapeRawHtml("foo \u{D800} bar")); // invalid codepoint high surrogates

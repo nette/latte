@@ -42,9 +42,10 @@ differently than the compiler assumed.
 The value of `srcdoc` is an HTML document: the browser attribute-decodes it and then
 parses the result as HTML. Escaping it only as an attribute is therefore an XSS —
 `&lt;script&gt;` decodes to a live `<script>`, and an iframe without `sandbox` shares
-the parent's origin. `HtmlHelpers::escapeHtmlAttr` escapes a value as HTML text first
-and as an attribute second; an `Html` object passes through `escapeText` as markup
-and is encoded only once, so trusted HTML keeps its tags. All three places route
+the parent's origin. `HtmlHelpers::escapeHtmlAttr` escapes a value twice as an attribute
+value: Latte does not parse the document, so the value may land in its text as well as in
+one of its attributes, where an unescaped quote would let it add an event handler. An
+`Html` object is markup and is encoded only once, so trusted HTML keeps its tags. All three places route
 `srcdoc` through it: the `html/attr/html` state in `escape()` and in the
 `Convertors`, and `formatSrcdocAttribute` for dynamic attributes and `n:attr`.
 
@@ -58,11 +59,14 @@ like `srcdoc="<p>{$x}</p>"` is escaped by code `Escaper::escape()` emits, and
 
 Frameworks that compile templates from the DOM (Vue, petite-vue, AngularJS) read the
 text after the browser has decoded entities, so `&#123;&#123;` is no protection against
-`{{ }}` injection. `escapeText` and `escapeRawHtml` (`<script type="text/template">`)
-insert `<!-- -->` after each `{` followed by another one or ending the string, and before
-a leading one, so `{{` cannot form even from two adjacent outputs. An attribute cannot hold
+`{{ }}` injection. `escapeText` (and `convertAttrToHtml`, `convertRcDataToHtml`) insert
+`<!-- -->` after each `{` followed by another one or ending the string, and before a
+leading one, so `{{` cannot form even from two adjacent outputs. An attribute cannot hold
 a comment: the `&#123;` of `escapeAttr` does not stop AngularJS, which interpolates
-attributes.
+attributes. Where Latte cannot tell text from an attribute (the content of
+`<script type="text/template">` and of `srcdoc`), the value is escaped as an attribute:
+Vue 3 compiles a template string before decoding entities, so `&#123;` protects there,
+while Vue 2 decodes them first.
 
 Inside `<textarea>` and `<title>` (`html/rcdata`) a comment is displayed as text and would
 corrupt the value, so `escapeRcData` leaves braces alone. A block defined there is

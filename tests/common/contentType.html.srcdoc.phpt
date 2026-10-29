@@ -16,19 +16,24 @@ $params = [
 	'html' => new Html('<b title="a&amp;b">bold</b>'),
 ];
 
-// text is escaped for HTML and then for the attribute
+// text is escaped for an attribute of the document and then for the srcdoc attribute
 Assert::same(
-	'<iframe srcdoc="<p>&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;</p>"></iframe>',
+	'<iframe srcdoc="<p title=&quot;&amp;quot; onmouseover=&amp;quot;alert(1)&quot;>a</p>"></iframe>',
+	$latte->renderToString('<iframe srcdoc="<p title=&quot;{$x}&quot;>a</p>"></iframe>', ['x' => '" onmouseover="alert(1)']),
+);
+
+Assert::same(
+	'<iframe srcdoc="<p>&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;</p>"></iframe>',
 	$latte->renderToString('<iframe srcdoc="<p>{$x}</p>"></iframe>', $params),
 );
 
 Assert::same(
-	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
+	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
 	$latte->renderToString("<iframe srcdoc='{\$x}'></iframe>", $params),
 );
 
 Assert::same(
-	'<iframe SRCDOC="a&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
+	'<iframe SRCDOC="a&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
 	$latte->renderToString('<iframe SRCDOC=a{$x}></iframe>', $params),
 );
 
@@ -46,7 +51,7 @@ Assert::same(
 
 // dynamic attribute
 Assert::same(
-	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
+	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
 	$latte->renderToString('<iframe srcdoc={$x}></iframe>', $params),
 );
 
@@ -62,7 +67,7 @@ Assert::same(
 
 // n:attr
 Assert::same(
-	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&quot;1&quot;)&amp;lt;/script&amp;gt; &amp;amp; &#123;&lt;!-- --&gt;"></iframe>',
+	'<iframe srcdoc="&amp;lt;script&amp;gt;alert(&amp;quot;1&amp;quot;)&amp;lt;/script&amp;gt; &amp;amp; &amp;#123;"></iframe>',
 	$latte->renderToString('<iframe n:attr="srcdoc => $x"></iframe>', $params),
 );
 
@@ -85,7 +90,7 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 ]));
 
 Assert::same(
-	'<iframe srcdoc="&lt;i&gt; &amp;amp; &lt;/i&gt;"></iframe> <iframe srcdoc="&amp;lt;i&amp;gt; &amp;amp; &quot;"></iframe> <iframe srcdoc="a &amp;lt; b"></iframe>',
+	'<iframe srcdoc="&lt;i&gt; &amp;amp; &lt;/i&gt;"></iframe> <iframe srcdoc="&amp;lt;i&amp;gt; &amp;amp; &amp;quot;"></iframe> <iframe srcdoc="a &amp;lt; b"></iframe>',
 	$latte->renderToString('main'),
 );
 
