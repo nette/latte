@@ -66,7 +66,7 @@ final class Filters
 		$indent = str_repeat(addcslashes($chars, '$\\'), max(0, $level));
 		if ($level < 1) {
 			// do nothing
-		} elseif ($info->contentType === ContentType::Html) {
+		} elseif (in_array($info->contentType, [ContentType::Html, ContentType::Xml], true)) {
 			$s = preg_replace_callback('#<(textarea|pre).*?</\1#si', fn($m) => strtr($m[0], " \t\r\n", "\x1F\x1E\x1D\x1A"), $s);
 			if (preg_last_error()) {
 				throw new Latte\RuntimeException(preg_last_error_msg());

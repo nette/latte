@@ -7,7 +7,7 @@
 
 namespace Latte\Essential\Nodes;
 
-use Latte\{CompileException, ContentType};
+use Latte\CompileException;
 use Latte\Compiler\{Escaper, PrintContext, Tag};
 use Latte\Compiler\Nodes\{AreaNode, StatementNode};
 use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
@@ -57,7 +57,7 @@ class CaptureNode extends StatementNode
 			$value = $context->format(
 				'($ʟ_tmp = %raw) !== \'\' && $ʟ_fi->contentType === %dump ? new LR\Html($ʟ_tmp) : $ʟ_tmp',
 				$value,
-				ContentType::Html,
+				$escaper->getContentType(), // html or xml
 			);
 		}
 

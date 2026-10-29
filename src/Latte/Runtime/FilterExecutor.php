@@ -68,7 +68,8 @@ class FilterExecutor
 	 */
 	public function filterContent(string $name, FilterInfo $info, mixed ...$args): mixed
 	{
-		if ($info->contentType === ContentType::Html && $args[0] instanceof HtmlStringable) {
+		$markup = in_array($info->contentType, [ContentType::Html, ContentType::Xml], true);
+		if ($markup && $args[0] instanceof HtmlStringable) {
 			$args[0] = $args[0]->__toString();
 		}
 
@@ -81,7 +82,7 @@ class FilterExecutor
 		// classic filter
 		if ($info->contentType !== ContentType::Text) {
 			throw new Latte\RuntimeException("Filter |$name is called with incompatible content type " . strtoupper($info->contentType ?? 'NULL')
-				. ($info->contentType === ContentType::Html ? ', try to prepend |stripHtml.' : '.'));
+				. ($markup ? ', try to prepend |stripHtml.' : '.'));
 		}
 
 		$res = $callback(...$args);

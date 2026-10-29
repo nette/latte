@@ -54,6 +54,15 @@ final class XmlHelpers
 
 
 	/**
+	 * Converts XML text to quoted attribute.
+	 */
+	public static function convertXmlToAttr(string $s): string
+	{
+		return self::escapeText(HtmlHelpers::convertHtmlToText($s));
+	}
+
+
+	/**
 	 * Escapes string for use inside XML tag.
 	 */
 	public static function escapeTag(mixed $s): string
