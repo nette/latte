@@ -68,7 +68,7 @@ class FilterExecutor
 	 */
 	public function filterContent(string $name, FilterInfo $info, mixed ...$args): mixed
 	{
-		$markup = in_array($info->contentType, [ContentType::Html, 'html/attr/html', 'html/rcdata'], true);
+		$markup = in_array($info->contentType, [ContentType::Html, 'html/attr/html', 'html/rcdata', ContentType::Xml], true);
 		if ($markup && $args[0] instanceof HtmlStringable) {
 			$args[0] = $args[0]->__toString();
 		}
