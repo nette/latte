@@ -108,13 +108,7 @@ class Engine
 		$this->configurationHash = $clearCache ? null : $this->configurationHash;
 		$class = $this->loadTemplate($name);
 		$this->providers->fn = $this->functions;
-		return new $class(
-			$this,
-			$params,
-			$this->filters,
-			$this->providers,
-			$name,
-		);
+		return new $class($this, $params, $this->filters, $this->providers, $name);
 	}
 
 

@@ -24,9 +24,7 @@ class TemplatePrintNode extends StatementNode
 	{
 		$node = new static;
 		$node->template = $tag->parser->stream->tryConsume(
-			Token::Php_Identifier,
-			Token::Php_NameFullyQualified,
-			Token::Php_NameQualified,
+			Token::Php_Identifier, Token::Php_NameFullyQualified, Token::Php_NameQualified,
 		)?->text;
 		return $node;
 	}
