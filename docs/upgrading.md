@@ -1,5 +1,22 @@
 # Upgrading latte/latte
 
+## 3.1.9
+
+- **Deprecated** a positional argument after a named one in `{include}`, `{embed}`, `{extends}`, `{layout}`, `{import}` and `{sandbox}`: put positional arguments before the named ones; using it triggers E_USER_DEPRECATED at compile time (44330b59)
+- **Deprecated** converting between the XML and HTML content types, i.e. including an XML template into an HTML one or vice versa and a block of an HTML template overriding a block of an XML layout: keep XML and HTML templates apart; using it triggers E_USER_DEPRECATED (0355b12c)
+- **Changed** `Latte\Runtime\FilterInfo::$contentType` in an XML template, including blocks and `{capture}`, is `xml` and `Latte\Compiler\Escaper::export()` returns `xml`, `xml/attr` and `xml/comment` there; previously `html`, `html/attr` and `html/comment`; a contextual filter comparing the type with `Latte\ContentType::Html` must also accept `Latte\ContentType::Xml` (0355b12c)
+- **Changed** `Latte\Runtime\FilterInfo::$contentType` of a block inside `<textarea>` or `<title>` is `html/rcdata`; previously `html`; a contextual filter comparing the type with `Latte\ContentType::Html` no longer matches there (b380f431)
+- **Changed** the `srcdoc` attribute is escaped as an HTML document; previously as an ordinary attribute; trusted HTML passed as a plain string is displayed as text, wrap it in `Latte\Runtime\Html` or use `|noescape` (608688b6, b8348208)
+- **Changed** an HTML block or template included by `{include}` into an `on*` attribute or another JavaScript attribute is printed as a JavaScript string literal; previously its tags were stripped and its text became JavaScript code; write the code directly into the attribute (e8ed7e49)
+- **Changed** a text template, or HTML turned into text by a filter such as `{include b|stripHtml}`, included into an `on*` attribute, `<script>` or a JavaScript template is printed as a JavaScript string literal; previously it was inserted unescaped as code (57d76c26)
+- **Changed** including a text or HTML block or template into a `style` attribute throws `Latte\RuntimeException`; previously it was inserted into the attribute (57d76c26)
+- **Changed** `{include}` with `|noescape` applies the mandatory escaping of a print with `|noescape`: quotes are escaped in an attribute and `|noescape` inside an HTML comment throws `Latte\CompileException`; previously the content was printed as it was (3d337ee0)
+- **Changed** a URL attribute such as `<a href={$url}>` with a null value is omitted like other attributes; previously it rendered `href=""` (fe36f58b)
+- **Changed** URL attributes set by `n:attr` (`href`, `src`, `action`, `formaction`, `xlink:href` and `data` of `<object>`) are checked by `|checkUrl` like `href={$url}`, so an unsafe URL such as `javascript:...` renders as an empty value; previously they were printed as they were; there is no opt-out in `n:attr`, write a trusted URL as `href={$url|nocheck}` (c2f27fff)
+- **Changed** a brace in HTML text output outside `<textarea>` and `<title>` that is followed by another brace, ends the value or starts it is separated by an empty comment `<!-- -->`, other braces are printed as they are; previously a single brace was printed as `&#123;`; braces in a value printed inside `<script type="text/template">` are escaped as entities (c3965386, b380f431)
+- **Changed** `|number` with a locale set rounds half up like without a locale; previously half to even (d62a44af)
+- **Changed** `|bytes` with a locale set rounds half up like without a locale; previously half to even (d62a44af)
+
 ## 3.1.7
 
 - **Renamed** `Latte\Compiler\Nodes\Php\Expression\FunctionCallNode::isPartialFunction()` → `Latte\Compiler\Nodes\Php\Expression\FunctionCallNode::isPartialApplication()`; the old name was removed (ee40c170)
