@@ -1,5 +1,17 @@
 # Upgrading latte/latte
 
+## 3.1.8
+
+- **Deprecated** a positional argument after a named one in `{include}`, `{embed}`, `{extends}`, `{layout}`, `{import}` and `{sandbox}`: put positional arguments before the named ones; using it triggers E_USER_DEPRECATED at compile time (611e18c9)
+- **Deprecated** converting between the XML and HTML content types, i.e. including an XML template into an HTML one or vice versa and a block of an HTML template overriding a block of an XML layout: keep XML and HTML templates apart; using it triggers E_USER_DEPRECATED (87cbf613)
+- **Changed** `Latte\Runtime\FilterInfo::$contentType` in an XML template, including blocks and `{capture}`, is `xml` and `Latte\Compiler\Escaper::export()` returns `xml`, `xml/attr` and `xml/comment` there; previously `html`, `html/attr` and `html/comment`; a contextual filter comparing the type with `Latte\ContentType::Html` must also accept `Latte\ContentType::Xml` (87cbf613)
+- **Changed** `Latte\Runtime\FilterInfo::$contentType` of a block inside `<textarea>` or `<title>` is `html/rcdata`; previously `html`; a contextual filter comparing the type with `Latte\ContentType::Html` no longer matches there (ba2bc192)
+- **Changed** the `srcdoc` attribute is escaped as an HTML document; previously as an ordinary attribute; trusted HTML passed as a plain string is displayed as text, wrap it in `Latte\Runtime\Html` or use `|noescape` (fbbed6a5, ef1996c6)
+- **Changed** a URL attribute such as `<a href={$url}>` with a null value is omitted like other attributes; previously it rendered `href=""` (ab9a7d85)
+- **Changed** a brace in HTML text output that is followed by another brace, ends the value or starts it is separated by an empty comment `<!-- -->`, other braces are printed as they are; previously a single brace was printed as `&#123;`; braces in a value printed inside `<script type="text/template">` are escaped as entities (ad808649)
+- **Changed** `|number` with a locale set rounds half up like without a locale; previously half to even (bf21371a)
+- **Changed** `|bytes` with a locale set rounds half up like without a locale; previously half to even (bf21371a)
+
 ## 3.1.7
 
 - **Renamed** `Latte\Compiler\Nodes\Php\Expression\FunctionCallNode::isPartialFunction()` → `Latte\Compiler\Nodes\Php\Expression\FunctionCallNode::isPartialApplication()`; the old name was removed (ee40c170)
