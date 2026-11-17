@@ -3,9 +3,9 @@
 		echo 'read-write
 
 ';
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop($obj, 'bar')->bar++) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($obj, 'bar')->bar++) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop($obj, 'static')::$static++) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($obj, 'static')::$static++) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%

@@ -186,7 +186,7 @@ test('%modifyContent', function () {
 
 test('%escape', function () {
 	Assert::same(
-		'test1(LR\HtmlHelpers::escapeText(test()), 123)',
+		'test1(((is_object($ʟ_val = test()) ? LR\Helpers::convertTrusted($ʟ_val, \'html\') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)), 123)',
 		format('test1(%escape(test()), %dump)', 123),
 	);
 });

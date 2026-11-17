@@ -16,16 +16,16 @@ PRODID:-//example.org//iCal 4.0.3//CS
 METHOD:PUBLISH
 BEGIN:VEVENT
 DTSTAMP:';
-		echo LR\Helpers::escapeIcal(($this->filters->date)($start, 'Ymd\\THis')) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->date)($start, 'Ymd\\THis')) ? LR\Helpers::convertTrusted($ʟ_val, 'ical') : null) ?? LR\Helpers::escapeIcal($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 DTSTART;TZID=Europe/Prague:';
-		echo LR\Helpers::escapeIcal(($this->filters->date)($start, 'Ymd\\THis')) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->date)($start, 'Ymd\\THis')) ? LR\Helpers::convertTrusted($ʟ_val, 'ical') : null) ?? LR\Helpers::escapeIcal($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 DTEND;TZID=Europe/Prague:';
-		echo LR\Helpers::escapeIcal(($this->filters->date)($end, 'Ymd\\THis')) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->date)($end, 'Ymd\\THis')) ? LR\Helpers::convertTrusted($ʟ_val, 'ical') : null) ?? LR\Helpers::escapeIcal($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 SUMMARY;LANGUAGE=cs:';
-		echo LR\Helpers::escapeIcal($info) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $info) ? LR\Helpers::convertTrusted($ʟ_val, 'ical') : null) ?? LR\Helpers::escapeIcal($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 DESCRIPTION:
 CLASS:PUBLIC

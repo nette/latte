@@ -291,7 +291,8 @@ final class HtmlHelpers
 
 
 	/**
-	 * Returns the type category of an HTML attribute: 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'style', 'srcdoc', or ''.
+	 * Returns the type category of an HTML attribute:
+	 * 'bool', 'tristate', 'valuedBool', 'list', 'data', 'aria', 'js', 'style', 'srcdoc', or ''.
 	 * @param  array<string, string>  $contentTypes  see matchAttributeContentType()
 	 */
 	public static function classifyAttributeType(string $name, array $contentTypes = self::AttributeContentTypes): string
@@ -307,7 +308,7 @@ final class HtmlHelpers
 		$name = strtolower($name);
 		$contentType = self::matchAttributeContentType($name, $contentTypes);
 		$type = match (true) {
-			$contentType === ContentType::JavaScript => '',
+			$contentType === ContentType::JavaScript => 'js',
 			$contentType === ContentType::Css => 'style',
 			$contentType === ContentType::Html => 'srcdoc',
 			$contentType !== null => throw new \LogicException("Unknown content type '$contentType' of attribute '$name'."),
@@ -327,7 +328,12 @@ final class HtmlHelpers
 	/**
 	 * Formats common HTML attribute.
 	 */
-	public static function formatAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
+	public static function formatAttribute(
+		string $namePart,
+		mixed $value,
+		bool $migrationWarnings = false,
+		string $context = 'html/attr',
+	): string
 	{
 		if ($migrationWarnings) {
 			if ($value === null) {
@@ -337,6 +343,7 @@ final class HtmlHelpers
 			}
 		}
 		return match (true) {
+			$value instanceof \Stringable && ($s = Helpers::convertTrusted($value, $context)) !== null => $namePart . '="' . $s . '"',
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart
 				. '="' . self::escapeAttr($value) . '"',
 			$value === null => '',
@@ -395,13 +402,22 @@ final class HtmlHelpers
 
 
 	/**
+	 * Formats HTML attribute holding JavaScript code, e.g. 'onclick'.
+	 */
+	public static function formatJsAttribute(string $namePart, mixed $value, bool $migrationWarnings = false): string
+	{
+		return self::formatAttribute($namePart, $value, $migrationWarnings, 'html/attr/js');
+	}
+
+
+	/**
 	 * Formats HTML attribute 'style'.
 	 */
 	public static function formatStyleAttribute(string $namePart, mixed $value): string
 	{
 		return match (true) {
 			is_array($value) => self::formatArrayAttribute($namePart, $value, fn($v, $k) => is_string($k) ? $k . ': ' . $v : $v, '; '),
-			default => self::formatAttribute($namePart, $value),
+			default => self::formatAttribute($namePart, $value, context: 'html/attr/css'),
 		};
 	}
 
@@ -413,6 +429,8 @@ final class HtmlHelpers
 	{
 		if (!is_string($value) && !is_int($value) && !is_float($value) && !$value instanceof \Stringable) {
 			return self::formatAttribute($namePart, $value, $migrationWarnings);
+		} elseif ($value instanceof \Stringable && ($s = Helpers::convertTrusted($value, 'html/attr/html')) !== null) {
+			return $namePart . '="' . $s . '"';
 		}
 
 		if ($migrationWarnings

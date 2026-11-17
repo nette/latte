@@ -12,7 +12,7 @@ final class Template%a% extends Latte\Runtime\Template
 
 		echo '<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="';
-		echo LR\XmlHelpers::escapeTag($id) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $id) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/bogus') : null) ?? LR\XmlHelpers::escapeTag($ʟ_val)) /* pos %d%:%d% */;
 		echo '"?>
 
 <script>';
@@ -24,29 +24,29 @@ final class Template%a% extends Latte\Runtime\Template
 
 <ul>
 	<li>Escaped: ';
-		echo LR\XmlHelpers::escapeText($hello) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $hello) ? LR\Helpers::convertTrusted($ʟ_val, 'xml') : null) ?? LR\XmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>Non-escaped: ';
 		echo $hello /* pos %d%:%d% */;
 		echo '</li>
 	<li>Escaped expression: ';
-		echo LR\XmlHelpers::escapeText('<' . 'b' . '>hello' . '</b>') /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = '<' . 'b' . '>hello' . '</b>') ? LR\Helpers::convertTrusted($ʟ_val, 'xml') : null) ?? LR\XmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>Non-escaped expression: ';
 		echo '<' . 'b' . '>hello' . '</b>' /* pos %d%:%d% */;
 		echo '</li>
 	<li>Array access: ';
-		echo LR\XmlHelpers::escapeText($people[1]) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $people[1]) ? LR\Helpers::convertTrusted($ʟ_val, 'xml') : null) ?? LR\XmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>Html: ';
-		echo LR\XmlHelpers::escapeText($el) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'xml') : null) ?? LR\XmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 </ul>
 
 <style type="text/css">
 <!--
 #';
-		echo LR\HtmlHelpers::escapeComment($id) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $id) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/comment') : null) ?? LR\HtmlHelpers::escapeComment($ʟ_val)) /* pos %d%:%d% */;
 		echo ' {
 	background: blue;
 }
@@ -57,32 +57,32 @@ final class Template%a% extends Latte\Runtime\Template
 <script>
 <!--
 var html = ';
-		echo LR\HtmlHelpers::escapeComment($el) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/comment') : null) ?? LR\HtmlHelpers::escapeComment($ʟ_val)) /* pos %d%:%d% */;
 		echo ';
 -->
 </script>
 
 
 <p onclick=\'alert(';
-		echo LR\XmlHelpers::escapeAttr($id) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $id) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/attr') : null) ?? LR\XmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 		echo ');alert("hello");\'
  title=\'';
-		echo LR\XmlHelpers::escapeAttr($id) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $id) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/attr') : null) ?? LR\XmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 		echo '"\'
  style="color:';
-		echo LR\XmlHelpers::escapeAttr($id) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $id) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/attr') : null) ?? LR\XmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 		echo ';\'"';
 		echo LR\XmlHelpers::formatAttribute('
  alt', $el) /* pos %d%:%d% */;
 		echo '
  onfocus="alert(';
-		echo LR\XmlHelpers::escapeAttr($el) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/attr') : null) ?? LR\XmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 		echo ')"
 >click on me</p>
 
 
 <!-- ';
-		echo LR\HtmlHelpers::escapeComment($comment) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $comment) ? LR\Helpers::convertTrusted($ʟ_val, 'xml/comment') : null) ?? LR\HtmlHelpers::escapeComment($ʟ_val)) /* pos %d%:%d% */;
 		echo ' -->
 
 
@@ -93,7 +93,7 @@ var html = ';
 ';
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '	<li>';
-			echo LR\XmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'xml') : null) ?? LR\XmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '</li>
 ';
 

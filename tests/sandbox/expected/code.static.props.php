@@ -3,13 +3,13 @@
 		echo 'static props
 
 ';
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop($this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop, 'x')->x) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop, 'x')->x) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop[1]) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop[1]) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop($this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop[1], 'x')->x) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop('Name\\MyClass', 'prop')::$prop[1], 'x')->x) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%

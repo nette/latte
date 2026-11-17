@@ -97,7 +97,7 @@ final class NAttrNode extends StatementNode
 		$type = LR\HtmlHelpers::classifyAttributeType($name, $contentTypes);
 		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria' && $type !== 'tristate')) {
 			return '';
-		} elseif ($value === true && $type === '') {
+		} elseif ($value === true && ($type === '' || $type === 'js')) {
 			return $name;
 		} elseif ($migrationWarnings && is_array($value) && $type === 'data') {
 			LR\HtmlHelpers::triggerMigrationWarning(

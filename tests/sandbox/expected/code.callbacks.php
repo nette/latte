@@ -3,13 +3,13 @@
 		echo 'callbacks
 
 ';
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call($var, [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call($var, [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call($var, [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call($var, [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(['a', 'b'], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(['a', 'b'], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(['trim'][0], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(['trim'][0], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%
