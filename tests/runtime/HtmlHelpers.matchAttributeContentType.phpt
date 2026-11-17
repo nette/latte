@@ -34,18 +34,19 @@ Assert::same('js', HtmlHelpers::matchAttributeContentType('onclick', ['x-on:*' =
 
 // classification
 Assert::same('srcdoc', HtmlHelpers::classifyAttributeType('data-tippy-content', $contentTypes));
-Assert::same('', HtmlHelpers::classifyAttributeType('x-on:keyup', $contentTypes));
+Assert::same('js', HtmlHelpers::classifyAttributeType('x-on:keyup', $contentTypes));
 Assert::same('style', HtmlHelpers::classifyAttributeType('x-on:click.prevent', $contentTypes));
-Assert::same('', HtmlHelpers::classifyAttributeType('hidden', $contentTypes)); // overrides built-in type
+Assert::same('js', HtmlHelpers::classifyAttributeType('hidden', $contentTypes)); // overrides built-in type
 Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('hidden'));
 Assert::same('data', HtmlHelpers::classifyAttributeType('data-tippy-content'));
-Assert::same('', HtmlHelpers::classifyAttributeType('onclick'));
+Assert::same('js', HtmlHelpers::classifyAttributeType('onclick'));
+Assert::same('', HtmlHelpers::classifyAttributeType('title'));
 Assert::same('style', HtmlHelpers::classifyAttributeType('Style'));
 Assert::same('', HtmlHelpers::classifyAttributeType('style', [])); // the table decides, no hard-coded names
 
 // cached result belongs to the name and the table
 for ($i = 0; $i < 3; $i++) {
-	Assert::same('', HtmlHelpers::classifyAttributeType('hidden', $contentTypes));
+	Assert::same('js', HtmlHelpers::classifyAttributeType('hidden', $contentTypes));
 	Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('hidden'));
 	Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('HIDDEN'));
 }

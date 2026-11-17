@@ -85,6 +85,7 @@ final class XmlHelpers
 			HtmlHelpers::triggerMigrationWarning(trim($namePart), $value);
 		}
 		return match (true) {
+			$value instanceof \Stringable && ($s = Helpers::convertTrusted($value, 'xml/attr')) !== null => $namePart . '="' . $s . '"',
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart
 				. '="' . self::escapeAttr($value) . '"',
 			$value === null => '',

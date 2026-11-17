@@ -3,13 +3,13 @@
 		echo 'static methods
 
 ';
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(['MyClass', 'method'], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(['MyClass', 'method'], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(['Name\\MyClass', 'method'], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(['Name\\MyClass', 'method'], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(['Name\\MyClass', 'method'], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(['Name\\MyClass', 'method'], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(['Name\\MyClass', $method], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(['Name\\MyClass', $method], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%

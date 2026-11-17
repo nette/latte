@@ -5,7 +5,7 @@
 			if (($ʟ_loc[0] ?? null) !== ($ʟ_tmp = [$i])) {
 				$ʟ_loc[0] = $ʟ_tmp;
 				echo ' ';
-				echo LR\HtmlHelpers::escapeText($i) /* pos 2:51 */;
+				echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 2:51 */;
 				echo ' ';
 
 			}
@@ -31,7 +31,7 @@
 			if (($ʟ_loc[2] ?? null) !== ($ʟ_tmp = [$i])) {
 				$ʟ_loc[2] = $ʟ_tmp;
 				echo ' ';
-				echo LR\HtmlHelpers::escapeText($i) /* pos 6:51 */;
+				echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 6:51 */;
 				echo ' ';
 
 			} else /* pos 6:56 */ {
@@ -53,7 +53,7 @@
 			ob_start(fn() => '');
 			try /* pos 10:36 */ {
 				echo ' -';
-				echo LR\HtmlHelpers::escapeText($i) /* pos 10:49 */;
+				echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 10:49 */;
 				echo '- ';
 
 			} finally {
@@ -77,7 +77,7 @@
 			ob_start(fn() => '');
 			try /* pos 14:36 */ {
 				echo ' -';
-				echo LR\HtmlHelpers::escapeText($i) /* pos 14:49 */;
+				echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 14:49 */;
 				echo '- ';
 
 			} finally {
@@ -104,7 +104,7 @@
 			ob_start(fn() => '');
 			try /* pos 18:42 */ {
 				echo '<span>';
-				echo LR\HtmlHelpers::escapeText($i) /* pos 18:54 */;
+				echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 18:54 */;
 				echo '</span>';
 			} finally {
 				$ʟ_tmp = ob_get_clean();

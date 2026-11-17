@@ -18,7 +18,7 @@ pre
 </textarea>
 
 Parent: ';
-		echo LR\HtmlHelpers::escapeText(($this->global->fn->info)($this, )) /* pos 11:9 */;
+		echo ((is_object($ʟ_val = ($this->global->fn->info)($this, )) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 11:9 */;
 		echo "\n";
 	}
 }

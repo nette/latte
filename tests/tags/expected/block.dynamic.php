@@ -70,7 +70,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '	Static block #';
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 	}
 
@@ -82,7 +82,7 @@ final class Template%a% extends Latte\Runtime\Template
 		unset($ʟ_args);
 
 		echo '		Dynamic block #';
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 	}
 

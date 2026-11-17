@@ -21,7 +21,7 @@ Assert::contains('<?xml version="3.0"?>', $latte->compile('<?xml version="3.0"?>
 Assert::match(<<<'XX'
 	%A%
 			echo '<?xml version="';
-			echo LR\HtmlHelpers::escapeTag($var) /* pos 1:16 */;
+			echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html/bogus') : null) ?? LR\HtmlHelpers::escapeTag($ʟ_val)) /* pos 1:16 */;
 			echo '"?>';
 	%A%
 	XX, $latte->compile('<?xml version="{$var}"?>'));

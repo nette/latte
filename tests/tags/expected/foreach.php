@@ -12,13 +12,13 @@
 ';
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator(['a', 'b'], $ʟ_it ?? null) as $item) /* pos 8:1 */ {
 			echo '	';
-			echo LR\HtmlHelpers::escapeText($iterator->counter) /* pos 9:2 */;
+			echo ((is_object($ʟ_val = $iterator->counter) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 9:2 */;
 			echo "\n";
 
 		}
 		$iterator = $ʟ_it = $ʟ_it->getParent();
 
-		echo LR\HtmlHelpers::escapeText($iterator === null ? 'is null' : null) /* pos 11:1 */;
+		echo ((is_object($ʟ_val = $iterator === null ? 'is null' : null) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 11:1 */;
 		echo '
 
 ---

@@ -1,25 +1,25 @@
 %A%
-		echo LR\HtmlHelpers::escapeText($el) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($el2) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el2) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 
 <p';
 		echo LR\HtmlHelpers::formatAttribute(' val', $xss) /* pos %d%:%d% */;
 		echo ' > </p>
 <p';
-		echo LR\HtmlHelpers::formatAttribute(' onclick', $xss) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::formatJsAttribute(' onclick', $xss) /* pos %d%:%d% */;
 		echo '> </p>
 <p';
-		echo LR\HtmlHelpers::formatAttribute(' ONCLICK', $xss) /* pos %d%:%d% */;
+		echo LR\HtmlHelpers::formatJsAttribute(' ONCLICK', $xss) /* pos %d%:%d% */;
 		echo ' ';
-		echo LR\HtmlHelpers::escapeTag($xss) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html/tag') : null) ?? LR\HtmlHelpers::escapeTag($ʟ_val)) /* pos %d%:%d% */;
 		echo '> </p>
 
 <STYLE type="text/css">
 <!--
 #';
-		echo LR\Helpers::escapeCss($xss) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/css') : null) ?? LR\Helpers::escapeCss($ʟ_val)) /* pos %d%:%d% */;
 		echo ' {
 	background: blue;
 }
@@ -31,17 +31,17 @@
 alert(\'</div>\');
 
 var prop = ';
-		echo LR\Helpers::escapeJs($people) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $people) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/js') : null) ?? LR\Helpers::escapeJs($ʟ_val)) /* pos %d%:%d% */;
 		echo ';
 
 document.getElementById(';
-		echo LR\Helpers::escapeJs($xss) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/js') : null) ?? LR\Helpers::escapeJs($ʟ_val)) /* pos %d%:%d% */;
 		echo ').style.backgroundColor = \'red\';
 
 var html = ';
-		echo LR\Helpers::escapeJs($el) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/js') : null) ?? LR\Helpers::escapeJs($ʟ_val)) /* pos %d%:%d% */;
 		echo ' || ';
-		echo LR\Helpers::escapeJs($el2) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el2) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/js') : null) ?? LR\Helpers::escapeJs($ʟ_val)) /* pos %d%:%d% */;
 		echo ';
 -->
 </script>
@@ -50,36 +50,36 @@ var html = ';
 /* <![CDATA[ */
 
 var prop2 = ';
-		echo LR\Helpers::escapeJs($people) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $people) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/js') : null) ?? LR\Helpers::escapeJs($ʟ_val)) /* pos %d%:%d% */;
 		echo ';
 
 /* ]]> */
 </SCRIPT>
 
 <p onclick=\'alert(';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr/js') : null) ?? LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($ʟ_val))) /* pos %d%:%d% */;
 		echo ');alert("hello");\'';
 		echo LR\HtmlHelpers::formatAttribute('
  title', $xss) /* pos %d%:%d% */;
 		echo '
  STYLE="color:';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss($xss)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr/css') : null) ?? LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss($ʟ_val))) /* pos %d%:%d% */;
 		echo ';"';
 		echo LR\HtmlHelpers::formatListAttribute('
  rel', $xss) /* pos %d%:%d% */;
 		echo '
  onblur="alert(';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($xss)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr/js') : null) ?? LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($ʟ_val))) /* pos %d%:%d% */;
 		echo ')"
  alt=\'';
-		echo LR\HtmlHelpers::escapeAttr($el) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr') : null) ?? LR\HtmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 		echo ' ';
-		echo LR\HtmlHelpers::escapeAttr($el2) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el2) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr') : null) ?? LR\HtmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 		echo '\'
  onfocus="alert(';
-		echo LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($el)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $el) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr/js') : null) ?? LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs($ʟ_val))) /* pos %d%:%d% */;
 		echo ')"
 >click on me ';
-		echo LR\HtmlHelpers::escapeText($xss) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $xss) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</p>';
 %A%

@@ -28,7 +28,7 @@ final class Template%a% extends Latte\Runtime\Template
 { test} {"test} {\'test}
 
 ';
-		echo LR\HtmlHelpers::escapeText((string) (bool) (float) (int) (array) 10) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = (string) (bool) (float) (int) (array) 10) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 
 
@@ -40,11 +40,11 @@ final class Template%a% extends Latte\Runtime\Template
 				}
 				echo '
 	<li id="item-';
-				echo LR\HtmlHelpers::escapeAttr($iterator->getCounter()) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $iterator->getCounter()) ? LR\Helpers::convertTrusted($ʟ_val, 'html/attr') : null) ?? LR\HtmlHelpers::escapeAttr($ʟ_val)) /* pos %d%:%d% */;
 				echo '"';
 				echo LR\HtmlHelpers::formatListAttribute(' class', $iterator->isOdd() ? 'odd' : 'even') /* pos %d%:%d% */;
 				echo '>';
-				echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				echo '</li>
 	';
 				if ($iterator->isLast()) /* pos %d%:%d% */ {
@@ -91,14 +91,14 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($iterator = $ʟ_it = new Latte\Essential\CachingIterator($menu, $ʟ_it ?? null) as $item) /* pos %d%:%d% */ {
 			echo '	<li>';
-			echo LR\HtmlHelpers::escapeText($counter++) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $counter++) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo ' ';
 			if (is_array($item)) /* pos %d%:%d% */ {
 				echo ' ';
 				$this->renderBlock('menu', ['menu' => $item] + get_defined_vars(), 'html') /* pos %d%:%d% */;
 				echo ' ';
 			} else /* pos %d%:%d% */ {
-				echo LR\HtmlHelpers::escapeText($item) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $item) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			}
 			echo '</li>
 ';

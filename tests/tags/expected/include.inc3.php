@@ -7,9 +7,9 @@ final class Template%a% extends Latte\Runtime\Template
 	{
 %A%
 		echo '<p>Included file #3 (';
-		echo LR\HtmlHelpers::escapeText($localvar) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $localvar) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\HtmlHelpers::escapeText($hello) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $hello) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo ')</p>
 ';
 	}

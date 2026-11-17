@@ -40,7 +40,7 @@ final class Template%a% extends Latte\Runtime\Template
 </body>
 </html>
 Parent: ';
-		echo LR\HtmlHelpers::escapeText(($this->global->fn->info)($this, )) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->global->fn->info)($this, )) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 	}
 

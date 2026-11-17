@@ -46,7 +46,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '		<li>';
-			echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '</li>
 ';
 

@@ -36,7 +36,7 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '<p';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\HtmlHelpers::escapeAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* pos %d%:%d% */;
 			echo '>';
-			echo LR\HtmlHelpers::escapeText($foo) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $foo) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '</p>
 ';
 
@@ -67,7 +67,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '	<li>';
-			echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '</li>
 ';
 
@@ -80,7 +80,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '	<li>
 		';
-			echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '
 	</li>
 ';
@@ -94,7 +94,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '		';
-			echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo "\n";
 
 		}
@@ -112,7 +112,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$ʟ_tags[0] = $ʟ_tag;
 		echo '
 		';
-		echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 	';
 		echo $ʟ_tags[0];
@@ -125,7 +125,7 @@ final class Template%a% extends Latte\Runtime\Template
 		$i < 3;
 		$i++) /* pos %d%:%d% */ {
 			echo '	<li>';
-			echo LR\HtmlHelpers::escapeText($i) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '</li>
 ';
 
@@ -136,7 +136,7 @@ final class Template%a% extends Latte\Runtime\Template
 ';
 		while (--$i > 0) /* pos %d%:%d% */ {
 			echo '	<li>';
-			echo LR\HtmlHelpers::escapeText($i) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			echo '</li>
 ';
 
@@ -182,7 +182,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			if (strlen($person) === 4) /* pos %d%:%d% */ {
 				echo '	<li>';
-				echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				echo '</li>
 ';
 			}
@@ -197,7 +197,7 @@ final class Template%a% extends Latte\Runtime\Template
 			echo '	<li>';
 			foreach ($people as $person) /* pos %d%:%d% */ {
 				if (strlen($person) === 4) /* pos %d%:%d% */ {
-					echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+					echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				}
 
 			}
@@ -212,7 +212,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			if (strlen($person) === 4) /* pos %d%:%d% */ {
 				echo '	<li>';
-				echo LR\HtmlHelpers::escapeText(($this->filters->lower)($person)) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = ($this->filters->lower)($person)) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				echo '</li>
 ';
 			}
@@ -332,7 +332,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '	<li>';
 			try {
-				echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				if (true) /* pos %d%:%d% */ break;
 			} finally {
 				echo '</li>';
@@ -348,7 +348,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			echo '	<li>';
 			try {
-				echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				if (true) /* pos %d%:%d% */ continue;
 			} finally {
 				echo '</li>';
@@ -363,7 +363,7 @@ final class Template%a% extends Latte\Runtime\Template
 <ul title="inner foreach break">
 	<li>';
 		foreach ($people as $person) /* pos %d%:%d% */ {
-			echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			if (true) /* pos %d%:%d% */ break;
 
 		}
@@ -374,7 +374,7 @@ final class Template%a% extends Latte\Runtime\Template
 <ul title="inner foreach continue">
 	<li>';
 		foreach ($people as $person) /* pos %d%:%d% */ {
-			echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+			echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 			if (true) /* pos %d%:%d% */ continue;
 
 		}
@@ -486,7 +486,7 @@ final class Template%a% extends Latte\Runtime\Template
 		foreach ($people as $person) /* pos %d%:%d% */ {
 			if (strlen($person) === 4) /* pos %d%:%d% */ {
 				echo '	<li>';
-				echo LR\HtmlHelpers::escapeText($person) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $person) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				echo '</li>
 ';
 			}

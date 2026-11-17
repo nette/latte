@@ -8,17 +8,17 @@ require __DIR__ . '/../bootstrap.php';
 $latte = createLatte();
 
 Assert::match(
-	'%A%echo LR\HtmlHelpers::escapeText(test(fn() => 1)) /* pos 1:1 */;%A%',
+	'%A%echo ((is_object($ʟ_val = test(fn() => 1)) ? LR\Helpers::convertTrusted($ʟ_val, \'html\') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 1:1 */;%A%',
 	$latte->compile('{test(function () { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\HtmlHelpers::escapeText(test(fn() => 1)) /* pos 1:1 */;%A%',
+	'%A%echo ((is_object($ʟ_val = test(fn() => 1)) ? LR\Helpers::convertTrusted($ʟ_val, \'html\') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 1:1 */;%A%',
 	$latte->compile('{test(function () use ($a) { return 1;})}'),
 );
 
 Assert::match(
-	'%A%echo LR\HtmlHelpers::escapeText(test(fn() => 1)) /* pos 1:1 */;%A%',
+	'%A%echo ((is_object($ʟ_val = test(fn() => 1)) ? LR\Helpers::convertTrusted($ʟ_val, \'html\') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 1:1 */;%A%',
 	$latte->compile('{test(fn () => 1)}'),
 );
 
@@ -87,22 +87,22 @@ Assert::match(
 
 // tag name vs content
 Assert::contains(
-	"HtmlHelpers::escapeText(trim('a'))",
+	'is_object($ʟ_val = trim(\'a\'))',
 	$latte->compile('{trim("a")}'),
 );
 
 Assert::contains(
-	"HtmlHelpers::escapeText(\\trim('a'))",
+	'is_object($ʟ_val = \trim(\'a\'))',
 	$latte->compile('{\trim("a")}'),
 );
 
 Assert::contains(
-	'HtmlHelpers::escapeText(MyClass::foo)',
+	'is_object($ʟ_val = MyClass::foo)',
 	$latte->compile('{MyClass::foo}'),
 );
 
 Assert::contains(
-	'HtmlHelpers::escapeText(My\Class::foo)',
+	'is_object($ʟ_val = My\Class::foo)',
 	$latte->compile('{My\Class::foo}'),
 );
 

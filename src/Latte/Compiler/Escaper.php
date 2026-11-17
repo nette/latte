@@ -216,7 +216,21 @@ class Escaper
 	}
 
 
+	/**
+	 * Generates code that converts trusted content into the current context and escapes anything else.
+	 */
 	public function escape(string $str): string
+	{
+		return '((is_object($ʟ_val = ' . $str . ') ? LR\Helpers::convertTrusted($ʟ_val, '
+			. var_export($this->export(), return: true) . ') : null) ?? '
+			. $this->callEscaper('$ʟ_val') . ')';
+	}
+
+
+	/**
+	 * Generates code that calls the escaper of the current context.
+	 */
+	private function callEscaper(string $str): string
 	{
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {

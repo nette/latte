@@ -29,10 +29,10 @@ layers that must stay in sync**.
   runtime content-type conversion (`Helpers::convertTo`) and serves
   `Runtime\Template` both when including into an incompatible target type and as
   the block content-type compatibility predicate (`Escaper::canBeOverridden()`, which
-  leaves out the `JsLiterals` table of convertors into a JS string literal) — `escape()` does not consult
-  `getConvertor`. The two tables even use **different key spaces** (state constants
-  vs. `export()`-style composite strings), which is exactly how they can silently
-  diverge.
+  leaves out the `JsLiterals` table of convertors into a JS string literal) — `escape()`
+  consults `getConvertor` only for trusted objects (see below), never for strings. The two
+  tables even use **different key spaces** (state constants vs. `export()`-style composite
+  strings), which is exactly how they can silently diverge.
 
 **Therefore: changing escaping in only one layer is a silent hole.** A new content
 type or a changed escaping rule must be reflected in *both* `Compiler\Escaper` and the
@@ -42,6 +42,35 @@ a JS template) becomes a JS string literal, never code, like a value printed ins
 (`f({$x})`). The whole value of a dynamic attribute (`onclick={$x}`) is code by design,
 but `{include}` cannot tell it forms one. CSS has no such literal, so text and HTML
 cannot be included into `<style>` or `style` at all.
+
+## Printing converts from the content type of the value
+
+Every printed value has a content type: a plain string is `text`, a `TrustedJavaScript`,
+`TrustedCss` or `TrustedXml` (subclasses included) has the type of its class. Printing a
+trusted object behaves exactly like `{include}` of a template of that type: the convertor
+comes from `Escaper::getConvertor()` (with `JsLiterals` and the deprecated XML/HTML
+bridge), the same type passes unchanged, and a missing convertor throws instead of falling
+back to escaping. The `Convertors` table is the only place of these rules; no escaper keeps
+its own list of accepted types. `HtmlStringable` objects (`TrustedHtml`) do not take this
+route, the escapers recognize them themselves.
+
+- `Escaper::escape()` puts the type test into the generated code, so that a string pays
+  one `is_object()` and no extra call:
+  `((is_object($ʟ_val = EXPR) ? LR\Helpers::convertTrusted($ʟ_val, 'html/raw/js') : null) ?? LR\Helpers::escapeJs($ʟ_val))`.
+  `EXPR` is evaluated once; a print nested in it is safe, since the outer one reads
+  `$ʟ_val` only after it has finished. The whole is parenthesized because the result is
+  spliced into larger expressions (`%escape()`).
+- The context is `export()`, so **a state `escape()` handles must export a name the table
+  knows**, otherwise every trusted object printed there throws.
+- `Helpers::convertTrusted()` returns null for any other object, which falls through to
+  the escaper. `escapeMandatory()` (`|noescape`) does not convert, it casts to a string.
+- The formatters of dynamic attributes and `n:attr` get the raw value, so they convert
+  inside, after branching on null, bool and array and instead of escaping; converting
+  in front of them would escape twice. The context follows the attribute type:
+  `formatJsAttribute` uses `html/attr/js`, `formatStyleAttribute` `html/attr/css`,
+  `formatSrcdocAttribute` `html/attr/html`, `XmlHelpers::formatAttribute` `xml/attr` and
+  the rest `html/attr`. A plain string as the whole value of a code attribute is still code.
+- Values nested in arrays (class lists, style arrays, JSON) are not converted.
 
 ## XML shares the HTML states but not their names
 
@@ -161,7 +190,7 @@ element's `restoreEscape()` and leak the context past the element.
 A whole HTML attribute generated from an expression (`Html\ExpressionAttributeNode`)
 is not escaped via `Escaper` at all. The node picks a
 `Runtime\HtmlHelpers::format*Attribute` method at compile time — the attribute *type*
-(`bool`/`tristate`/`valuedBool`/`list`/`data`/`aria`/`style`/`srcdoc`) comes from the attribute name via
+(`bool`/`tristate`/`valuedBool`/`list`/`data`/`aria`/`js`/`style`/`srcdoc`) comes from the attribute name via
 `classifyAttributeType`, or is forced by an attribute modifier: `|toggle` anywhere in
 the chain, `|json` only as the **last** modifier (`json` never comes from the
 attribute name). Any non-HTML content type falls back to

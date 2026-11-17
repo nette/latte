@@ -3,11 +3,11 @@
 		echo 'firstclass callable
 
 ';
-		echo LR\HtmlHelpers::escapeText(trim(...)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = trim(...)) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->closure([$obj, 'foo'])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->closure([$obj, 'foo'])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->closure([$obj, 'foo'])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->closure([$obj, 'foo'])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%

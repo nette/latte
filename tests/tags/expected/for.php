@@ -4,7 +4,7 @@
 		$i < 10;
 		$i++) /* pos 2:1 */ {
 			echo '	';
-			echo LR\HtmlHelpers::escapeText($i) /* pos 3:2 */;
+			echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 3:2 */;
 			echo "\n";
 
 		}
@@ -15,7 +15,7 @@
 		;
 		) /* pos 7:1 */ {
 			echo '	';
-			echo LR\HtmlHelpers::escapeText($i) /* pos 8:2 */;
+			echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 8:2 */;
 			echo "\n";
 
 		}
@@ -26,7 +26,7 @@
 		$i < 10;
 		$i++, $a++) /* pos 12:1 */ {
 			echo '	';
-			echo LR\HtmlHelpers::escapeText($i) /* pos 13:2 */;
+			echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 13:2 */;
 			echo "\n";
 
 		}
@@ -39,7 +39,7 @@
 			if (true) /* pos 18:2 */ break;
 			if (true) /* pos 19:2 */ continue;
 			echo '	';
-			echo LR\HtmlHelpers::escapeText($i) /* pos 20:2 */;
+			echo ((is_object($ʟ_val = $i) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 20:2 */;
 			echo "\n";
 
 		}

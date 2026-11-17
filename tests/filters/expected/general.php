@@ -8,31 +8,31 @@ final class Template%a% extends Latte\Runtime\Template
 %A%
 		echo '<ul>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->h2)(($this->filters->h1)($hello))) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->h2)(($this->filters->h1)($hello))) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
 		echo ($this->filters->h2)(($this->filters->h1)($hello)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->h1)(($this->filters->h2)($hello))) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->h1)(($this->filters->h2)($hello))) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 </ul>
 
 <ul>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->types)((int) $hello * 0, 0, 0.0, '0')) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->types)((int) $hello * 0, 0, 0.0, '0')) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->types)((int) $hello * 1, 1, '1')) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->types)((int) $hello * 1, 1, '1')) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->types)($hello, true, null, false)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->types)($hello, true, null, false)) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->types)($hello, true, null, false)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->types)($hello, true, null, false)) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 	<li>';
-		echo LR\HtmlHelpers::escapeText(($this->filters->types)($hello, '', '', "{$hello}")) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->types)($hello, '', '', "{$hello}")) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '</li>
 </ul>
 
@@ -90,8 +90,8 @@ Nested blocks: ';
 </p>
 
 Breaklines: ';
-		echo LR\HtmlHelpers::escapeText(($this->filters->breakLines)('hello
-bar')) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ($this->filters->breakLines)('hello
+bar')) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 	}
 }

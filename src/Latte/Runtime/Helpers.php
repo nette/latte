@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\{ContentType, RuntimeException};
 use Nette;
-use function is_string;
+use function is_string, sprintf;
 use const JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -80,6 +80,31 @@ class Helpers
 		} else {
 			throw new RuntimeException('Filters: unable to convert content type ' . strtoupper($source) . ' to ' . strtoupper($dest));
 		}
+	}
+
+
+	/**
+	 * Converts trusted JavaScript, CSS or XML into the context, or returns null for any other value.
+	 */
+	public static function convertTrusted(object $value, string $context): ?string
+	{
+		$type = match (true) {
+			$value instanceof TrustedJavaScript => ContentType::JavaScript,
+			$value instanceof TrustedCss => ContentType::Css,
+			$value instanceof TrustedXml => ContentType::Xml,
+			default => null,
+		};
+		if ($type === null) {
+			return null;
+		}
+
+		$convertor = Latte\Compiler\Escaper::getConvertor($type, $context) ?? throw new RuntimeException(sprintf(
+			'Cannot print %s in context %s, content type %s cannot be converted to it.',
+			get_debug_type($value),
+			strtoupper($context),
+			strtoupper($type),
+		));
+		return $convertor((string) $value);
 	}
 
 

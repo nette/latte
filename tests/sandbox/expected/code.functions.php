@@ -3,26 +3,26 @@
 		echo 'functions
 
 ';
-		echo LR\HtmlHelpers::escapeText(func()) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = func()) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 ';
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call('func', [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call('func', [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call('fu' . 'nc', [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call('fu' . 'nc', [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText(\func()) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = \func()) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 ';
-		echo LR\HtmlHelpers::escapeText(ns\func()) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = ns\func()) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 ';
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->prop(func(), 'prop')->prop) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop(func(), 'prop')->prop) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(func(), [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(func(), [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(func(...$this->global->sandbox->args($this->global->sandbox->prop($a, 'prop')->prop)), [func()])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(func(...$this->global->sandbox->args($this->global->sandbox->prop($a, 'prop')->prop)), [func()])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($this->global->sandbox->call(func()['x'], [])) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->call(func()['x'], [])) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%

@@ -43,11 +43,11 @@ d) ';
 		unset($ʟ_args);
 
 		echo '	Variables ';
-		echo LR\HtmlHelpers::escapeText($var1) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var1) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\HtmlHelpers::escapeText($var2) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var2) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo ', ';
-		echo LR\HtmlHelpers::escapeText($var3) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var3) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 	}
 }

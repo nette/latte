@@ -13,7 +13,7 @@
 			echo '<p';
 			echo ($ʟ_tmp = array_filter([$iterator->even ? 'even' : null])) ? ' class="' . LR\HtmlHelpers::escapeAttr(implode(" ", array_unique($ʟ_tmp))) . '"' : "" /* pos 6:34 */;
 			echo '>';
-			echo LR\HtmlHelpers::escapeText($foo) /* pos 6:67 */;
+			echo ((is_object($ʟ_val = $foo) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos 6:67 */;
 			echo '</p>
 ';
 

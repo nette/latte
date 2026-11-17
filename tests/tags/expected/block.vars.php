@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 %A%
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 
 
 ';
 		$this->renderBlock('b', get_defined_vars()) /* pos %d%:%d% */;
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 
 
@@ -17,7 +17,7 @@
 			(function () {
 				extract(func_get_arg(0));
 				echo '	';
-				echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				echo "\n";
 				$var = 'blockmod' /* pos %d%:%d% */;
 			})(get_defined_vars());
@@ -26,7 +26,7 @@
 			echo LR\Helpers::convertTo($ʟ_fi, 'html', $this->filters->filterContent('trim', $ʟ_fi, ob_get_clean()));
 		}
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 
 
@@ -36,7 +36,7 @@
 			(function () {
 				extract(func_get_arg(0));
 				echo '	';
-				echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+				echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 				echo "\n";
 				$var = 'block' /* pos %d%:%d% */;
 			})(get_defined_vars());
@@ -45,7 +45,7 @@
 			echo ob_get_clean();
 		}
 		echo "\n";
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 	}
 
 
@@ -66,7 +66,7 @@
 		unset($ʟ_args);
 
 		echo '	';
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 		$var = 'define' /* pos %d%:%d% */;
 	}
@@ -80,7 +80,7 @@
 		unset($ʟ_args);
 
 		echo '	';
-		echo LR\HtmlHelpers::escapeText($var) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $var) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 		$var = 'blocknamed' /* pos %d%:%d% */;
 	}
