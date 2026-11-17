@@ -13,7 +13,7 @@ final class Template%a% extends Latte\Runtime\Template
 		try {
 			$this->renderBlock('bar', get_defined_vars()) /* pos %d%:%d% */;
 		} finally {
-			$ʟ_tmp = ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean();
+			$ʟ_tmp = ob_get_length() ? new LR\TrustedHtml(ob_get_clean()) : ob_get_clean();
 		}
 		$ʟ_fi = new LR\FilterInfo('html');
 		$foo = $ʟ_tmp;

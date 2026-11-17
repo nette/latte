@@ -22,7 +22,7 @@ Assert::match(
 );
 
 Assert::match(
-	Latte\Runtime\Html::class,
+	Latte\Runtime\TrustedHtml::class,
 	$latte->renderToString('{capture $var}<html>{/capture}{=get_class($var)}'),
 );
 
@@ -49,7 +49,7 @@ Assert::match( // filter must not strip the HTML-ness of captured content
 );
 
 Assert::match(
-	Latte\Runtime\Html::class,
+	Latte\Runtime\TrustedHtml::class,
 	$latte->renderToString('{capture $var|trim}<html>{/capture}{=get_class($var)}'),
 );
 

@@ -8,6 +8,7 @@ parameters:
 	excludePaths:
 		analyse:
 			- src/Latte/Compiler/TagParserData.php
+			- src/Latte/Runtime/Html.php
 
 	fileExtensions:
 		- php

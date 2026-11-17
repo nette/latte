@@ -48,7 +48,7 @@ Assert::error(
 Assert::error(
 	fn() => $latte->renderToString('<iframe srcdoc="{=\'<b>x</b>\'}">'),
 	E_USER_WARNING,
-	'Behavior change for attribute \'srcdoc\' with string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\Html) (on line 1 at column 19)',
+	'Behavior change for attribute \'srcdoc\' with string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\TrustedHtml) (on line 1 at column 19)',
 );
 
 // |accept

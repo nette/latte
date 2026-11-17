@@ -9,7 +9,7 @@ namespace Latte\Essential;
 
 use Latte;
 use Latte\ContentType;
-use Latte\Runtime\{FilterInfo, Html};
+use Latte\Runtime\{FilterInfo, TrustedHtml};
 use Stringable;
 use function array_key_exists, count, extension_loaded, func_num_args, is_array, is_int, is_string, strlen;
 use const ENT_NOQUOTES, ENT_SUBSTITUTE;
@@ -341,10 +341,10 @@ final class Filters
 	/**
 	 * Converts newlines to HTML <br> tags.
 	 */
-	public static function breaklines(string|Stringable|null $s): Html
+	public static function breaklines(string|Stringable|null $s): TrustedHtml
 	{
 		$s = htmlspecialchars((string) $s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
-		return new Html(nl2br($s, use_xhtml: false));
+		return new TrustedHtml(nl2br($s, use_xhtml: false));
 	}
 
 

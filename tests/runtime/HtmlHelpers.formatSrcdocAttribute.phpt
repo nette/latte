@@ -29,7 +29,7 @@ foreach ([
 	Assert::error(
 		fn() => HtmlHelpers::formatSrcdocAttribute('srcdoc', $value, migrationWarnings: true),
 		E_USER_WARNING,
-		"Behavior change for attribute 'srcdoc' with string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\\Runtime\\Html).",
+		"Behavior change for attribute 'srcdoc' with string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\\Runtime\\TrustedHtml).",
 	);
 }
 
