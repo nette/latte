@@ -153,6 +153,15 @@ Assert::match(<<<'EOD'
 ));
 
 
+// indentation of a closing Latte tag followed by an HTML tag stays in the content
+Assert::same('<p>hello</p>', $latte->renderToString("<p>{block|strip}\n\t\thello\n\t{/block}</p>"));
+Assert::same('<p></p>', $latte->renderToString("<p>{if false}\n\t\thello\n\t{/if}</p>"));
+Assert::same("<b>[\t\thello\n\t]</b>", $latte->renderToString("{capture \$c}\n\t\thello\n\t{/capture}<b>[{\$c}]</b>"));
+Assert::same('<p></p>', $latte->renderToString("<p>{if false}\n\t\thello\n\t{/if}{var \$a = 1}</p>"));
+Assert::same('<p></p>', $latte->renderToString("<p>{if false}\n\t\thello\n\t{/if}{* comment *}</p>"));
+Assert::same('<p><b>bye</b></p>', $latte->renderToString("<p>{if false}\n\t\thello\n\t{else}<b>bye</b>{/if}</p>"));
+
+
 // empty comment
 Assert::match('ab', $latte->renderToString('a{**}b'));
 Assert::match('ab', $latte->renderToString('a{* *}b'));

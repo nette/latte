@@ -181,6 +181,7 @@ final class TemplateParser
 		$this->stream->tryConsume(Token::Latte_CommentClose)
 			|| $this->stream->throwUnexpectedException([Token::Latte_CommentClose], addendum: " started $openToken->position");
 		$this->lexer->popState();
+		$this->detachIndentation();
 		return new Nodes\NopNode;
 	}
 
@@ -245,6 +246,7 @@ final class TemplateParser
 						$this->pushTag($tag);
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
+						$this->detachIndentation();
 						$this->popTag();
 					} else {
 						throw new CompileException(
@@ -280,6 +282,7 @@ final class TemplateParser
 		}
 
 		$this->inHead = $this->inHead && $startTag->outputMode === $startTag::OutputNone;
+		$this->detachIndentation();
 
 		$this->popTag();
 
@@ -293,6 +296,17 @@ final class TemplateParser
 		}
 
 		return $node;
+	}
+
+
+	/**
+	 * Indentation in front of a Latte tag stays there, the HTML tag following the Latte tag does not take it.
+	 */
+	private function detachIndentation(): void
+	{
+		if ($this->stream->is(Token::Html_TagOpen)) {
+			$this->lastIndentation = null;
+		}
 	}
 
 
