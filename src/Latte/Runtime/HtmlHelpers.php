@@ -230,7 +230,8 @@ final class HtmlHelpers
 	 */
 	public static function convertHtmlToRcData(string $s): string
 	{
-		return preg_replace('#</(textarea|title)#i', '&lt;/$1', $s);
+		// also a trailing start of the end tag, which the next output could complete
+		return preg_replace('#<(?=/(?:textarea|title)|(?:/(?:t(?:e(?:x(?:t(?:a(?:r(?:e)?)?)?)?)?|i(?:t(?:l)?)?)?)?)?\z)#i', '&lt;', $s);
 	}
 
 

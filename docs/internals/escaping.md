@@ -100,8 +100,14 @@ corrupt the value, so `escapeRcData` leaves braces alone. A block defined there 
 HTML text after `convertRcDataToHtml` has separated the braces, so it can be included
 anywhere HTML can. A block from ordinary text included there keeps its separators, since
 its output was escaped elsewhere. HTML printed or included there stays HTML, so filters
-of the block still see its tags; `convertHtmlToRcData` only neutralizes `</textarea` and
-`</title`, which would end the element, also in a value printed with `|noescape`.
+of the block still see its tags and the block included into ordinary text renders them;
+`convertHtmlToRcData` therefore only neutralizes `</textarea` and `</title`, which would
+end the element, also in a value printed with `|noescape`. Encoding every `<`
+(`htmlspecialchars` without double encoding) would display the same in the element, but
+the tags would be gone for the filters and the inclusion. Like braces, the end tag must
+not form from adjacent outputs, so a `<` at the end of a value followed only by a start
+of `/textarea` or `/title` is neutralized too: the `<` of an end tag split between
+outputs is always in the first one.
 The content is escaped for the element it was written in, so `validateTagChange()`
 refuses `n:tag` and a dynamic tag name that would turn an element into `<textarea>` or
 `<title>`, or one of them into another element.

@@ -22,6 +22,15 @@ Assert::same(
 	'<textarea><i>&lt;/textarea><script></textarea>',
 	$latte->renderToString('<textarea>{$v|noescape}</textarea>', ['v' => '<i></textarea><script>']),
 );
+Assert::same( // the end tag cannot form from adjacent outputs
+	'<textarea>&lt;/textarea><script>&lt;/textarea></textarea>',
+	$latte->renderToString('<textarea>{$a}{$b}{$c}{$d}</textarea>', [
+		'a' => new Html('</text'),
+		'b' => new Html('area><script>'),
+		'c' => '<',
+		'd' => new Html('/textarea>'),
+	]),
+);
 
 // elsewhere braces are separated
 Assert::same('<p>a {<!-- -->{b}} &lt;c&gt;</p>', $latte->renderToString('<p>{$v}</p>', $params));
