@@ -10,7 +10,7 @@ namespace Latte\Runtime;
 use Latte;
 use Latte\ContentType;
 use Nette;
-use function in_array, is_array, is_bool, is_float, is_int, is_string, strlen;
+use function count, in_array, is_array, is_bool, is_float, is_int, is_string, strlen;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES, ENT_SUBSTITUTE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_THROW_ON_ERROR, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 
 
@@ -258,9 +258,17 @@ final class HtmlHelpers
 	 */
 	public static function classifyAttributeType(string $name, array $contentTypes = self::AttributeContentTypes): string
 	{
+		static $cache = [];
+		if (isset($cache[$name]) && $cache[$name][0] === $contentTypes) {
+			return $cache[$name][1];
+		} elseif (count($cache) >= 1000) { // names in n:attr may come from data
+			$cache = [];
+		}
+
+		$key = $name;
 		$name = strtolower($name);
 		$contentType = self::matchAttributeContentType($name, $contentTypes);
-		return match (true) {
+		$type = match (true) {
 			$contentType === ContentType::JavaScript => '',
 			$contentType === ContentType::Css => 'style',
 			$contentType === ContentType::Html => 'srcdoc',
@@ -273,6 +281,8 @@ final class HtmlHelpers
 			str_starts_with($name, 'aria-') => 'aria',
 			default => '',
 		};
+		$cache[$key] = [$contentTypes, $type];
+		return $type;
 	}
 
 
