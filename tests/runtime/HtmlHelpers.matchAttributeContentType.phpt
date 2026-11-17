@@ -43,6 +43,18 @@ Assert::same('', HtmlHelpers::classifyAttributeType('onclick'));
 Assert::same('style', HtmlHelpers::classifyAttributeType('Style'));
 Assert::same('', HtmlHelpers::classifyAttributeType('style', [])); // the table decides, no hard-coded names
 
+// cached result belongs to the name and the table
+for ($i = 0; $i < 3; $i++) {
+	Assert::same('', HtmlHelpers::classifyAttributeType('hidden', $contentTypes));
+	Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('hidden'));
+	Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('HIDDEN'));
+}
+
+for ($i = 0; $i < 3000; $i++) { // more names than the cache holds
+	Assert::same('data', HtmlHelpers::classifyAttributeType("data-$i"));
+}
+Assert::same('valuedBool', HtmlHelpers::classifyAttributeType('hidden'));
+
 Assert::exception(
 	fn() => HtmlHelpers::classifyAttributeType('data-x', ['data-x' => 'text']),
 	LogicException::class,
