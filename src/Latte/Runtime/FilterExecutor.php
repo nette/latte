@@ -136,7 +136,7 @@ class FilterExecutor
 
 		$res = $filter(...$args);
 		return $info->contentType === ContentType::Html
-			? new Html($res)
+			? new TrustedHtml($res)
 			: $res;
 	}
 }

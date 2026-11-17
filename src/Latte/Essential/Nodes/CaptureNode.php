@@ -55,7 +55,7 @@ class CaptureNode extends StatementNode
 			// filters returned a plain string, wrap it back unless they changed the content type,
 			// empty string stays plain like in the unfiltered branch
 			$value = $context->format(
-				'($ʟ_tmp = %raw) !== \'\' && $ʟ_fi->contentType === %dump ? new LR\Html($ʟ_tmp) : $ʟ_tmp',
+				'($ʟ_tmp = %raw) !== \'\' && $ʟ_fi->contentType === %dump ? new LR\TrustedHtml($ʟ_tmp) : $ʟ_tmp',
 				$value,
 				$escaper->getContentType(), // html or xml
 			);
@@ -76,7 +76,7 @@ class CaptureNode extends StatementNode
 			$this->position,
 			$this->content,
 			$inHtmlText
-				? 'ob_get_length() ? new LR\Html(ob_get_clean()) : ob_get_clean()'
+				? 'ob_get_length() ? new LR\TrustedHtml(ob_get_clean()) : ob_get_clean()'
 				: 'ob_get_clean()',
 			$escaper->export(),
 			$this->variable,

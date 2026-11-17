@@ -423,7 +423,7 @@ final class HtmlHelpers
 		) {
 			self::triggerMigrationWarning(
 				trim($namePart),
-				'string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\Html)',
+				'string value: previously it was rendered as HTML, now it is escaped as text (wrap trusted HTML in Latte\Runtime\TrustedHtml)',
 			);
 		}
 		return $namePart . '="' . self::escapeHtmlAttr($value) . '"';

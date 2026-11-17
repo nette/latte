@@ -7,23 +7,10 @@
 
 namespace Latte\Runtime;
 
-
-/**
- * Wraps a pre-escaped HTML string so it is not escaped again when rendered.
- */
-class Html implements HtmlStringable
-{
-	private readonly string $value;
-
-
-	public function __construct(string|\Stringable|null $value)
+if (false) {
+	class Html extends TrustedHtml
 	{
-		$this->value = (string) $value;
 	}
-
-
-	public function __toString(): string
-	{
-		return $this->value;
-	}
+} elseif (!class_exists(Html::class)) {
+	class_alias(TrustedHtml::class, Html::class);
 }
