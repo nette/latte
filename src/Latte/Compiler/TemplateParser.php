@@ -239,6 +239,9 @@ final class TemplateParser
 						$tagRanges[] = new Range($tag->position, $tag->end);
 						$res->send([$content, $tag]);
 						$this->ensureIsConsumed($tag);
+						if ($this->stream->is(Token::Html_TagOpen)) {
+							$this->lastIndentation = null;
+						}
 						break;
 					} elseif (in_array($tag->name, $this->lookFor[$startTag] ?? [], true)) {
 						$tagRanges[] = new Range($tag->position, $tag->end);
