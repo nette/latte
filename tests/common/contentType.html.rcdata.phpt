@@ -50,7 +50,7 @@ test('block defined there is included elsewhere', function () {
 		'layout' => '<title>{block title}A &amp; {$v}{/block}</title><meta content="{include title}"><p onclick="f({include title})"><!-- {include title} -->',
 	]));
 	Assert::same(
-		'<title>A &amp; &lt;c&gt; {{d}}</title><meta content="A &amp; &lt;c&gt; &#123;&#123;d}}"><p onclick="f(A &amp; &lt;c&gt; &#123;&#123;d}})"><!-- A &amp; &lt;c&gt; {<!- -  - - >{d}} -->',
+		'<title>A &amp; &lt;c&gt; {{d}}</title><meta content="A &amp; &lt;c&gt; &#123;&#123;d}}"><p onclick="f(&quot;A &amp;amp; &amp;lt;c&amp;gt; &#123;\u003C!-- --&gt;&#123;d}}&quot;)"><!-- A &amp; &lt;c&gt; {<!- -  - - >{d}} -->',
 		$latte->renderToString('layout', ['v' => '<c> {{d}}']),
 	);
 });

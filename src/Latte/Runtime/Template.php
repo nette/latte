@@ -333,7 +333,7 @@ class Template
 		if ($block->contentType === null) {
 			$block->contentType = $contentType;
 
-		} elseif (!Escaper::getConvertor($contentType, $block->contentType)) {
+		} elseif (!Escaper::canBeOverridden($contentType, $block->contentType)) {
 			throw new Latte\RuntimeException(sprintf(
 				"Overridden block $name with content type %s by incompatible type %s.",
 				strtoupper($contentType),

@@ -28,7 +28,8 @@ layers that must stay in sync**.
   the separate `Convertors` constant behind `Escaper::getConvertor` drives the
   runtime content-type conversion (`Helpers::convertTo`) and serves
   `Runtime\Template` both when including into an incompatible target type and as
-  the block content-type compatibility predicate — `escape()` does not consult
+  the block content-type compatibility predicate (`Escaper::canBeOverridden()`, which
+  leaves out the `JsLiterals` table of convertors into a JS string literal) — `escape()` does not consult
   `getConvertor`. The two tables even use **different key spaces** (state constants
   vs. `export()`-style composite strings), which is exactly how they can silently
   diverge.
@@ -36,7 +37,10 @@ layers that must stay in sync**.
 **Therefore: changing escaping in only one layer is a silent hole.** A new content
 type or a changed escaping rule must be reflected in *both* `Compiler\Escaper` and the
 `Runtime\*` helpers, or generated templates will call an escaper that behaves
-differently than the compiler assumed.
+differently than the compiler assumed. HTML included into JS (`<script>`, `on*`, a JS
+template) becomes a JS string literal, never code, like a value printed inside it
+(`f({$x})`). The whole value of a dynamic attribute (`onclick={$x}`) is code by design,
+but `{include}` cannot tell it forms one.
 
 ## XML shares the HTML states but not their names
 

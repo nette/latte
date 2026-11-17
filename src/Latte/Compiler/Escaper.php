@@ -80,7 +80,6 @@ class Escaper
 		self::HtmlText => [
 			self::Text => 'HtmlHelpers::convertHtmlToText',
 			self::HtmlAttribute => 'HtmlHelpers::convertHtmlToAttr',
-			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeAttr',
 			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::convertHtmlToRcData',
@@ -102,6 +101,13 @@ class Escaper
 		self::XmlAttribute => [
 			self::XmlText => 'Helpers::nop', // XML escapes attribute values and text alike
 		],
+	];
+
+	/** JS contexts where included HTML becomes a string literal, which makes no block types compatible */
+	private const JsLiterals = [
+		self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeJsAttr',
+		self::HtmlRawText . '/' . self::JavaScript => 'Helpers::escapeJs',
+		self::JavaScript => 'Helpers::escapeJs',
 	];
 
 	private string $state = '';
@@ -305,16 +311,32 @@ class Escaper
 	 */
 	public static function getConvertor(string $source, string $dest): ?callable
 	{
+		return self::findConvertor($source, $dest, literals: true);
+	}
+
+
+	/**
+	 * Can a block of content type $type be overridden by a block of type $by?
+	 */
+	public static function canBeOverridden(string $type, string $by): bool
+	{
+		return self::findConvertor($type, $by, literals: false) !== null;
+	}
+
+
+	private static function findConvertor(string $source, string $dest, bool $literals): ?callable
+	{
 		return match (true) {
 			$source === $dest => Helpers::nop(...),
 			isset(self::Convertors[$source][$dest]) => 'Latte\Runtime\\' . self::Convertors[$source][$dest],
-			$source === self::HtmlAttribute . '/' . self::HtmlText => ($convertor = self::getConvertor(self::HtmlText, $dest))
+			$literals && $source === self::HtmlText && isset(self::JsLiterals[$dest]) => 'Latte\Runtime\\' . self::JsLiterals[$dest],
+			$source === self::HtmlAttribute . '/' . self::HtmlText => ($convertor = self::findConvertor(self::HtmlText, $dest, $literals))
 				? fn(string $s): string => $convertor(HtmlHelpers::convertHtmlAttrToHtml($s))
 				: null,
-			$source === self::HtmlText . '/' . self::RcData => ($convertor = self::getConvertor(self::HtmlText, $dest))
+			$source === self::HtmlText . '/' . self::RcData => ($convertor = self::findConvertor(self::HtmlText, $dest, $literals))
 				? fn(string $s): string => $convertor(HtmlHelpers::convertRcDataToHtml($s))
 				: null,
-			default => self::getXmlHtmlConvertor($source, $dest),
+			default => self::getXmlHtmlConvertor($source, $dest, $literals),
 		};
 	}
 
@@ -322,7 +344,7 @@ class Escaper
 	/**
 	 * Converts XML and HTML into each other like HTML into HTML, which is deprecated.
 	 */
-	private static function getXmlHtmlConvertor(string $source, string $dest): ?callable
+	private static function getXmlHtmlConvertor(string $source, string $dest, bool $literals): ?callable
 	{
 		$isXml = fn(string $type): bool => $type === self::XmlText || str_starts_with($type, self::XmlText . '/');
 		$isHtml = fn(string $type): bool => $type === self::HtmlText || str_starts_with($type, self::HtmlText . '/');
@@ -334,7 +356,7 @@ class Escaper
 		$twin = $source === self::XmlText
 			? self::HtmlText . '/' . self::RcData // XML text does not separate braces, like the content of <textarea>
 			: $toHtml($source);
-		$convertor = self::getConvertor($twin, $toHtml($dest));
+		$convertor = self::findConvertor($twin, $toHtml($dest), $literals);
 		if ($convertor !== null) {
 			trigger_error(sprintf(
 				'Converting content type %s into %s is deprecated, XML and HTML will be incompatible.',

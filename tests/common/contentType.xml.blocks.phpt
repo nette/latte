@@ -125,9 +125,9 @@ test('XML and HTML into each other are deprecated', function () use ($latte) {
 		E_USER_DEPRECATED,
 		'Converting content type XML into HTML is deprecated, XML and HTML will be incompatible.',
 	);
-	Assert::exception(
-		fn() => $latte->renderToString('xmlIntoScript', ['v' => 'a<']),
-		Latte\RuntimeException::class,
-		'Including block d with content type XML into incompatible type HTML/RAW/JS.',
+	Assert::error(
+		fn() => Assert::same('<script>"<i>a&lt;<\/i>"</script>', $latte->renderToString('xmlIntoScript', ['v' => 'a<'])),
+		E_USER_DEPRECATED,
+		'Converting content type XML into HTML/RAW/JS is deprecated, XML and HTML will be incompatible.',
 	);
 });

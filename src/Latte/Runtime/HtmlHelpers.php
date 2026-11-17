@@ -106,6 +106,15 @@ final class HtmlHelpers
 
 
 	/**
+	 * Escapes string for use as JavaScript string inside HTML attribute value.
+	 */
+	public static function escapeJsAttr(mixed $s): string
+	{
+		return self::escapeAttr(Helpers::escapeJs($s));
+	}
+
+
+	/**
 	 * Escapes string for use inside HTML tag.
 	 */
 	public static function escapeTag(mixed $s): string

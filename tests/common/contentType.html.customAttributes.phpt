@@ -82,7 +82,7 @@ Assert::contains('NAttrNode::attrs($ʟ_tmp, false)', createLatte()->compile('<a 
 
 // blocks
 Assert::same(
-	'<a onclick="f(&lt;b&gt;&quot;a&quot; &amp; &#123;&lt;/b&gt;)" x-on:click="f(&lt;b&gt;&quot;a&quot; &amp; &#123;&lt;/b&gt;)" data-tippy-content="<p>&lt;i&gt;&amp;lt;b&amp;gt;&quot;a&quot; &amp;amp; &#123;&amp;lt;/b&amp;gt;&lt;/i&gt;">',
+	'<a onclick="f(&quot;&lt;i&gt;&amp;lt;b&amp;gt;\&quot;a\&quot; &amp;amp; &#123;&amp;lt;/b&amp;gt;&lt;\/i&gt;&quot;)" x-on:click="f(&quot;&lt;i&gt;&amp;lt;b&amp;gt;\&quot;a\&quot; &amp;amp; &#123;&amp;lt;/b&amp;gt;&lt;\/i&gt;&quot;)" data-tippy-content="<p>&lt;i&gt;&amp;lt;b&amp;gt;&quot;a&quot; &amp;amp; &#123;&amp;lt;/b&amp;gt;&lt;/i&gt;">',
 	$latte->renderToString(
 		'{define b}<i>{$x}</i>{/define}<a onclick="f({include b})" x-on:click="f({include b})" data-tippy-content="<p>{include b}">',
 		$params,

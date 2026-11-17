@@ -21,8 +21,8 @@ place, `{define}` only registers.
 
 When a template `{extends}` a parent, `createTemplate` copies the **parent's**
 `LayerTop` blocks into the child's registry (`addBlock`, appending to `functions` so
-the child's override stays first, checking content-type compatibility via the
-convertor) and then **binds the parent's `LayerTop` by reference to the child's**, so
+the child's override stays first, checking content-type compatibility via
+`Escaper::canBeOverridden()`) and then **binds the parent's `LayerTop` by reference to the child's**, so
 the whole chain shares one top-block registry. The same branch merges and binds
 `LayerSnippet` too, and it runs for the `extends`/`includeblock`/`import`/`embed`
 relations — notably **not** for a plain `include`. `LayerLocal` is **not** merged up.
