@@ -217,13 +217,23 @@ test('ARIA attribute', function () {
 
 test('href attribute', function () {
 	$latte = createLatte();
-	// not checked
+	// checked like href={...}
 	Assert::match(
 		<<<'XX'
-			<a href="javascript:foo"></a>
+			<a href=""></a>
+			<a HREF="https://nette.org"></a>
+			<a></a>
+			<a title="javascript:foo"></a>
+			<a data="javascript:foo"></a>
+			<object data=""></object>
 			XX,
 		$latte->renderToString(<<<'XX'
 			<a n:attr="href => 'javascript:foo'"></a>
+			<a n:attr="HREF => 'https://nette.org'"></a>
+			<a n:attr="href => null"></a>
+			<a n:attr="title => 'javascript:foo'"></a>
+			<a n:attr="data => 'javascript:foo'"></a>
+			<object n:attr="data => 'javascript:foo'"></object>
 			XX),
 	);
 });

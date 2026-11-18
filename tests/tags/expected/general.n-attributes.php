@@ -13,12 +13,12 @@ final class Template%a% extends Latte\Runtime\Template
 		echo '
 <p';
 		$ʟ_tmp = ['title' => 'hello', 'lang' => isset($lang) ? $lang : null];
-		echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* pos %d%:%d% */;
+		echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false, tag: 'p') /* pos %d%:%d% */;
 		echo '> </p>
 
 <p';
 		$ʟ_tmp = [['title' => 'hello']];
-		echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false) /* pos %d%:%d% */;
+		echo Latte\Essential\Nodes\NAttrNode::attrs($ʟ_tmp, false, tag: 'p') /* pos %d%:%d% */;
 		echo '> </p>
 
 ';

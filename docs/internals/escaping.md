@@ -171,6 +171,12 @@ tests falsiness **before** treating the value as a keyword — narrowing that to
 `is_string($value)` looks tidier but renders `hidden="0"` for a `'0'` coming from a
 database, and the element silently disappears.
 
+URL attributes are checked in two places as well. The `checkUrls` pass appends
+`|checkUrl` to an `ExpressionAttributeNode`, whose name is known at compile time. Names
+in `n:attr` come at runtime, so `NAttrNode::formatHtmlAttribute()` calls `checkUrl()`
+itself, and the compiled call carries the element name (`tag: 'a'`), because `data` is
+a URL only in `<object>`. `n:attr` has no counterpart of `|nocheck`.
+
 ## `ContentType` and contextual filters
 
 `ContentType` is **not a PHP enum** — it is a `final class` of string constants

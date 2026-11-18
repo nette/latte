@@ -75,10 +75,10 @@ Assert::same(
 );
 
 Assert::contains(
-	"NAttrNode::attrs(\$ʟ_tmp, false, contentTypes: ['on*' => 'js', 'style' => 'css', 'srcdoc' => 'html', 'data-tippy-content' => 'html', 'x-on:*' => 'js', 'x-style' => 'css'])",
+	"NAttrNode::attrs(\$ʟ_tmp, false, contentTypes: ['on*' => 'js', 'style' => 'css', 'srcdoc' => 'html', 'data-tippy-content' => 'html', 'x-on:*' => 'js', 'x-style' => 'css'], tag: 'a')",
 	$latte->compile('<a n:attr="a => 1">'),
 );
-Assert::contains('NAttrNode::attrs($ʟ_tmp, false)', createLatte()->compile('<a n:attr="a => 1">')); // built-in content types are the default
+Assert::contains('NAttrNode::attrs($ʟ_tmp, false, tag: \'a\')', createLatte()->compile('<a n:attr="a => 1">')); // built-in content types are the default
 
 // blocks
 Assert::same(
