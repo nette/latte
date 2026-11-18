@@ -82,6 +82,19 @@ route yet, the escapers recognize them themselves.
   `Nette\HtmlStringable` is checked too, except where `escapeAttr()` and the XML escapers treat
   it as a plain string.
 
+## Rendering to a trusted object
+
+`Engine::renderToTrusted()` wraps the output in the trusted class of the content type the
+output really has, which is known only at runtime: `Template::render()` returns it. The type
+comes from the template that printed the output, i.e. the last one of the `{extends}`
+chain, not the one the engine was given; a single block has the `Block::$contentType` of the
+block found there, which for an overridden block is the type of the overriding one, as its
+function is the one that runs. A subtype maps to its main type: `html/raw/js` and
+`html/raw/css` are valid code as they are, any other `html/*` or `xml/*` goes through
+`getConvertor(type, 'html' or 'xml')` and throws where there is none (a comment, an `on*` or
+`style` attribute, `<script>` of another type). `text` and `ical` throw, their output is no
+trusted content.
+
 ## XML shares the HTML states but not their names
 
 The XML escaper runs the same state machine as HTML (`$state` is `HtmlText`,

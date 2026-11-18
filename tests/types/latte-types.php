@@ -4,6 +4,7 @@
  * PHPStan type tests.
  */
 
+use Latte\Engine;
 use Latte\Essential\Filters;
 use Latte\Runtime\Template;
 use function PHPStan\Testing\assertType;
@@ -70,6 +71,15 @@ function testReverseArray(array $arr): void
 function testSliceString(string $s): void
 {
 	assertType('string', Filters::slice($s, 0, 5));
+}
+
+
+function testRenderToTrusted(Engine $latte): void
+{
+	assertType(
+		'Latte\Runtime\TrustedCss|Latte\Runtime\TrustedHtml|Latte\Runtime\TrustedJavaScript|Latte\Runtime\TrustedXml',
+		$latte->renderToTrusted('template.latte'),
+	);
 }
 
 

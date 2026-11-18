@@ -100,6 +100,65 @@ class Engine
 
 
 	/**
+	 * Renders template to a trusted object of the content type its output really has.
+	 * @param  object|mixed[]  $params
+	 */
+	public function renderToTrusted(
+		string $name,
+		object|array $params = [],
+		?string $block = null,
+	): Runtime\TrustedHtml|Runtime\TrustedJavaScript|Runtime\TrustedCss|Runtime\TrustedXml
+	{
+		$template = $this->createTemplate($name, Helpers::resolveParams($this, $params));
+		$template->global->coreCaptured = true;
+		ob_start(fn() => '');
+		try {
+			$type = $template->render($block);
+		} finally {
+			$output = ob_get_clean();
+		}
+		return self::createTrusted($output, $type, $block === null ? "'$name'" : "block $block");
+	}
+
+
+	/**
+	 * Converts output of a content type, including a subtype of a block, to the trusted object of its main type.
+	 */
+	private static function createTrusted(
+		string $output,
+		string $type,
+		string $name,
+	): Runtime\TrustedHtml|Runtime\TrustedJavaScript|Runtime\TrustedCss|Runtime\TrustedXml
+	{
+		if ($type === Compiler\Escaper::HtmlRawText . '/' . Compiler\Escaper::JavaScript) {
+			$mainType = ContentType::JavaScript; // the content of <script> is valid code, a neutralized </script does not change its meaning
+		} elseif ($type === Compiler\Escaper::HtmlRawText . '/' . Compiler\Escaper::Css) {
+			$mainType = ContentType::Css;
+		} else {
+			$mainType = explode('/', $type)[0];
+			$convertor = Compiler\Escaper::getConvertor($type, $mainType) ?? throw new RuntimeException(sprintf(
+				"Cannot render $name with content type %s as %s.",
+				strtoupper($type),
+				strtoupper($mainType),
+			));
+			$output = $convertor($output);
+		}
+
+		$class = match ($mainType) {
+			ContentType::Html => Runtime\TrustedHtml::class,
+			ContentType::Xml => Runtime\TrustedXml::class,
+			ContentType::JavaScript => Runtime\TrustedJavaScript::class,
+			ContentType::Css => Runtime\TrustedCss::class,
+			default => throw new RuntimeException(sprintf(
+				"Cannot render $name with content type %s as trusted content, use renderToString().",
+				strtoupper($type),
+			)),
+		};
+		return new $class($output);
+	}
+
+
+	/**
 	 * Creates template object.
 	 * @param  mixed[]  $params
 	 */

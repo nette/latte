@@ -63,10 +63,10 @@ class Template
 
 
 	/**
-	 * Renders template.
+	 * Renders template and returns the content type of its output.
 	 * @internal
 	 */
-	public function render(?string $block = null): void
+	public function render(?string $block = null): string
 	{
 		$extensions = $this->engine->getExtensions();
 		try {
@@ -87,14 +87,18 @@ class Template
 
 			} elseif ($this->parentName) { // extends
 				$this->params = $params;
-				$this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
+				return $this->createTemplate($this->parentName, $this->parentArgs + $params, 'extends')->render($block);
 
 			} elseif ($block !== null) { // single block rendering
 				$this->renderBlock($block, $this->params);
+				return ($this->blocks[self::LayerLocal][$block] ?? $this->blocks[self::LayerTop][$block])->contentType ?? static::ContentType;
 
 			} else {
 				$this->main($params);
 			}
+
+			return static::ContentType;
+
 		} finally {
 			foreach ($extensions as $extension) {
 				$extension->afterRender($this);
