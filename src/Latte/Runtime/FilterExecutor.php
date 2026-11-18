@@ -69,8 +69,9 @@ class FilterExecutor
 	public function filterContent(string $name, FilterInfo $info, mixed ...$args): mixed
 	{
 		$markup = in_array($info->contentType, [ContentType::Html, 'html/attr/html', 'html/rcdata', ContentType::Xml], true);
-		if ($markup && $args[0] instanceof HtmlStringable) {
-			$args[0] = $args[0]->__toString();
+		$type = $args[0] instanceof \Stringable ? Latte\Runtime\Helpers::getTrustedType($args[0]) : null;
+		if ($type === ContentType::Html ? $markup : $type !== null && $type === $info->contentType) {
+			$args[0] = (string) $args[0];
 		}
 
 		[$callback, $infoAware] = $this->prepareFilter($name);
@@ -126,17 +127,18 @@ class FilterExecutor
 	}
 
 
+	/**
+	 * Passes trusted content as a string of its content type and wraps the result in the class of the resulting type.
+	 */
 	private function callInfoAwareAsClassic(callable $filter, mixed ...$args): mixed
 	{
-		array_unshift($args, $info = new FilterInfo);
-		if ($args[1] instanceof HtmlStringable) {
-			$args[1] = $args[1]->__toString();
-			$info->contentType = ContentType::Html;
+		$info = new FilterInfo($args[0] instanceof \Stringable ? Latte\Runtime\Helpers::getTrustedType($args[0]) : null);
+		if ($info->contentType !== null) {
+			$args[0] = (string) $args[0];
 		}
 
-		$res = $filter(...$args);
-		return $info->contentType === ContentType::Html
-			? new TrustedHtml($res)
-			: $res;
+		$res = $filter($info, ...$args);
+		$class = Latte\Runtime\Helpers::getTrustedClass($info->contentType);
+		return $class ? new $class($res) : $res;
 	}
 }
