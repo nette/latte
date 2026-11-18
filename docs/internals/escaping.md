@@ -233,7 +233,10 @@ URL attributes are checked in two places as well. The `checkUrls` pass appends
 `|checkUrl` to an `ExpressionAttributeNode`, whose name is known at compile time. Names
 in `n:attr` come at runtime, so `NAttrNode::formatHtmlAttribute()` calls `checkUrl()`
 itself, and the compiled call carries the element name (`tag: 'a'`), because `data` is
-a URL only in `<object>`. `n:attr` has no counterpart of `|nocheck`.
+a URL only in `<object>`. `n:attr` has no counterpart of `|nocheck`. A `TrustedUrl`
+passes `checkUrl()` unchecked, which moves the decision to the PHP code that creates the
+URL. It is not a content type: everywhere else it is an ordinary `Stringable` and is
+escaped as one.
 
 ## `ContentType` and contextual filters
 

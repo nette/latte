@@ -5,6 +5,7 @@
  */
 
 use Latte\Essential\Filters;
+use Latte\Runtime\TrustedUrl;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -28,3 +29,14 @@ Assert::same('', Filters::checkUrl(' javascript:'));
 Assert::same('javascript', Filters::checkUrl('javascript'));
 Assert::same('', Filters::checkUrl(null));
 Assert::same('1', Filters::checkUrl(1));
+
+
+// TrustedUrl is not checked
+Assert::same('javascript:alert(1)', Filters::checkUrl(new TrustedUrl('javascript:alert(1)')));
+Assert::same('data:text/html,<b>', Filters::checkUrl(new TrustedUrl('data:text/html,<b>')));
+Assert::same('app://x', Filters::checkUrl(new TrustedUrl('app://x')));
+Assert::same('', Filters::checkUrl(new TrustedUrl(null)));
+
+Assert::same('', Filters::checkUrl('javascript:alert(1)'));
+Assert::same('', Filters::checkUrl('data:text/html,<b>'));
+Assert::same('', Filters::checkUrl('app://x'));

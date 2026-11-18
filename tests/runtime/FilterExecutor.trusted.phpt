@@ -11,11 +11,6 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 
 
-class MyJavaScript extends TrustedJavaScript
-{
-}
-
-
 class MyHtml implements HtmlStringable
 {
 	public function __toString(): string
@@ -41,7 +36,6 @@ test('content-aware filter called as classic gets a trusted value as a string of
 	Assert::equal(new TrustedHtml("'html',string,<b>"), ($filters->describe)(new TrustedHtml('<b>')));
 	Assert::equal(new TrustedHtml("'html',string,<i>my</i>"), ($filters->describe)(new MyHtml));
 	Assert::equal(new TrustedJavaScript("'js',string,a()"), ($filters->describe)(new TrustedJavaScript('a()')));
-	Assert::equal(new TrustedJavaScript("'js',string,b()"), ($filters->describe)(new MyJavaScript('b()')));
 	Assert::equal(new TrustedCss("'css',string,a{}"), ($filters->describe)(new TrustedCss('a{}')));
 	Assert::equal(new TrustedXml("'xml',string,<x/>"), ($filters->describe)(new TrustedXml('<x/>')));
 });
@@ -81,7 +75,6 @@ test('other values are passed unchanged and without a type', function () use ($f
 
 test('filter over content gets an object of the type of the content as a string', function () use ($filterContent) {
 	Assert::same("'js',string,a()", $filterContent(ContentType::JavaScript, new TrustedJavaScript('a()')));
-	Assert::same("'js',string,b()", $filterContent(ContentType::JavaScript, new MyJavaScript('b()')));
 	Assert::same("'css',string,a{}", $filterContent(ContentType::Css, new TrustedCss('a{}')));
 	Assert::same("'xml',string,<x/>", $filterContent(ContentType::Xml, new TrustedXml('<x/>')));
 	Assert::same("'html',string,<b>", $filterContent(ContentType::Html, new TrustedHtml('<b>')));

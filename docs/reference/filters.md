@@ -24,7 +24,7 @@ survives regeneration.
 | `bytes` | `Filters::bytes` |  |  |
 | `capitalize` | `Filters::capitalize` |  | needs ext-mbstring |
 | `ceil` | `Filters::ceil` |  |  |
-| `checkUrl` | `Filters::checkUrl` |  | appended automatically to URL attributes by the `checkUrls` pass as nullsafe `?\|checkUrl`, so null still drops the attribute; opt out with `nocheck`. `n:attr` calls it for URL attributes too, with no opt-out |
+| `checkUrl` | `Filters::checkUrl` |  | appended automatically to URL attributes by the `checkUrls` pass as nullsafe `?\|checkUrl`, so null still drops the attribute; opt out with `nocheck`. `n:attr` calls it for URL attributes too, with no opt-out; a `Latte\Runtime\TrustedUrl` value passes unchecked |
 | `clamp` | `Filters::clamp` |  |  |
 | `column` | `Filters::column` |  |  |
 | `commas` | `Filters::commas` |  |  |
