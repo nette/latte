@@ -875,6 +875,10 @@ final class Filters
 	 */
 	public static function checkUrl(mixed $s): string
 	{
+		if ($s instanceof Latte\Runtime\TrustedUrl) {
+			return (string) $s;
+		}
+
 		$s = $s instanceof Latte\Runtime\HtmlStringable
 			? Latte\Runtime\HtmlHelpers::convertHtmlToText((string) $s)
 			: (string) $s;
