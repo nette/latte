@@ -162,6 +162,8 @@ test('block of JS code cannot override a block of HTML', function () {
 		'embed' => '{embed file "parent"}<script>{block foo}f({$foo}){/block}</script>{/embed}',
 		'rcdataParent' => '<textarea>{block foo}{/block}</textarea>',
 		'rcdataScript' => '{extends "rcdataParent"}<script>{block foo}f({$foo}){/block}</script>',
+		'textParent' => '{contentType text}{block foo}{/block}',
+		'textScript' => '{extends "textParent"}<script>{block foo}f({$foo}){/block}</script>',
 	]));
 
 	Assert::exception(
@@ -192,6 +194,12 @@ test('block of JS code cannot override a block of HTML', function () {
 		fn() => $latte->renderToString('rcdataScript', ['foo' => '<b>']),
 		Latte\RuntimeException::class,
 		'Overridden block foo with content type HTML/RCDATA by incompatible type HTML/RAW/JS.',
+	);
+
+	Assert::exception(
+		fn() => $latte->renderToString('textScript', ['foo' => '<b>']),
+		Latte\RuntimeException::class,
+		'Overridden block foo with content type TEXT by incompatible type HTML/RAW/JS.',
 	);
 });
 
@@ -315,6 +323,29 @@ Assert::same(' * hello & *', $latte->renderToString('context1'));
 
 $latte = new Latte\Engine;
 $latte->setLoader(new Latte\Loaders\StringLoader([
+	'text.latte' => '{contentType text}alert("</script>") {$x}',
+	'context1' => '<p onclick="{include text.latte}"></p>',
+	'context2' => '<script>{include text.latte}</script>',
+	'context3' => '{contentType javascript}x = {include text.latte};',
+	'context4' => '<p style="{include text.latte}"></p>',
+]));
+
+Assert::same(
+	'<p onclick="&quot;alert(\&quot;&lt;\/script&gt;\&quot;) &amp;lt;&quot;"></p>',
+	$latte->renderToString('context1', ['x' => '&lt;']),
+);
+Assert::same('<script>"alert(\"<\/script>\") &lt;"</script>', $latte->renderToString('context2', ['x' => '&lt;']));
+Assert::same('x = "alert(\"<\/script>\") &lt;";', $latte->renderToString('context3', ['x' => '&lt;']));
+Assert::exception(
+	fn() => $latte->renderToString('context4', ['x' => '&lt;']),
+	Latte\RuntimeException::class,
+	"Including 'text.latte' with content type TEXT into incompatible type HTML/ATTR/CSS.",
+);
+
+
+
+$latte = new Latte\Engine;
+$latte->setLoader(new Latte\Loaders\StringLoader([
 	'html.latte' => '<hr><script></script> " &quot; &lt;',
 
 	'context1' => '<p>{include html.latte}</p>',
@@ -330,7 +361,10 @@ $latte->setLoader(new Latte\Loaders\StringLoader([
 	'context4a' => '<script type="text/html">{include html.latte}</script>',
 	'context4b' => '<p onclick="x = {include html.latte}"></p>',
 	'context4c' => '{contentType javascript}x = {include html.latte};',
+	'context4d' => '<p onclick="x = {include html.latte|stripHtml}"></p>',
 	'context5' => '<style>{include html.latte}</style>',
+	'context5a' => '<p style="{include html.latte}"></p>',
+	'context5b' => '<p style="{include html.latte|stripHtml}"></p>',
 	'context6' => '<!--{include html.latte}-->',
 ]));
 
@@ -354,6 +388,7 @@ Assert::same(
 	$latte->renderToString('context4b'),
 );
 Assert::same('x = "<hr><script><\/script> \" &quot; &lt;";', $latte->renderToString('context4c'));
+Assert::same('<p onclick="x = &quot; \&quot; \&quot; &lt;&quot;"></p>', $latte->renderToString('context4d'));
 
 Assert::same('<script type="text/html"><hr><x-script></x-script> " &quot; &lt;</script>', $latte->renderToString('context4a'));
 
@@ -361,6 +396,18 @@ Assert::exception(
 	fn() => $latte->renderToString('context5'),
 	Latte\RuntimeException::class,
 	"Including 'html.latte' with content type HTML into incompatible type HTML/RAW/CSS.",
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('context5a'),
+	Latte\RuntimeException::class,
+	"Including 'html.latte' with content type HTML into incompatible type HTML/ATTR/CSS.",
+);
+
+Assert::exception(
+	fn() => $latte->renderToString('context5b'),
+	Latte\RuntimeException::class,
+	'Filters: unable to convert content type TEXT to HTML/ATTR/CSS',
 );
 
 Assert::same('<!--<hr><script></script> " &quot; &lt;-->', $latte->renderToString('context6'));

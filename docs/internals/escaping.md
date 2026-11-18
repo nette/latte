@@ -37,10 +37,11 @@ layers that must stay in sync**.
 **Therefore: changing escaping in only one layer is a silent hole.** A new content
 type or a changed escaping rule must be reflected in *both* `Compiler\Escaper` and the
 `Runtime\*` helpers, or generated templates will call an escaper that behaves
-differently than the compiler assumed. HTML included into JS (`<script>`, `on*`, a JS
-template) becomes a JS string literal, never code, like a value printed inside it
+differently than the compiler assumed. HTML or text included into JS (`<script>`, `on*`,
+a JS template) becomes a JS string literal, never code, like a value printed inside it
 (`f({$x})`). The whole value of a dynamic attribute (`onclick={$x}`) is code by design,
-but `{include}` cannot tell it forms one.
+but `{include}` cannot tell it forms one. CSS has no such literal, so text and HTML
+cannot be included into `<style>` or `style` at all.
 
 ## XML shares the HTML states but not their names
 

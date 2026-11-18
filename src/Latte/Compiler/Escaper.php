@@ -44,8 +44,6 @@ class Escaper
 		self::Text => [
 			self::HtmlText => 'HtmlHelpers::escapeText',
 			self::HtmlAttribute => 'HtmlHelpers::escapeAttr',
-			self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeAttr',
-			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::escapeAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeHtmlAttr',
 			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::escapeRcData',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
@@ -80,7 +78,6 @@ class Escaper
 		self::HtmlText => [
 			self::Text => 'HtmlHelpers::convertHtmlToText',
 			self::HtmlAttribute => 'HtmlHelpers::convertHtmlToAttr',
-			self::HtmlAttribute . '/' . self::Css => 'HtmlHelpers::convertHtmlToAttr',
 			self::HtmlAttribute . '/' . self::HtmlText => 'HtmlHelpers::escapeAttr',
 			self::HtmlText . '/' . self::RcData => 'HtmlHelpers::convertHtmlToRcData',
 			self::HtmlComment => 'HtmlHelpers::escapeComment',
@@ -103,7 +100,7 @@ class Escaper
 		],
 	];
 
-	/** JS contexts where included HTML becomes a string literal, which makes no block types compatible */
+	/** JS contexts where included text or HTML becomes a string literal, which makes no block types compatible */
 	private const JsLiterals = [
 		self::HtmlAttribute . '/' . self::JavaScript => 'HtmlHelpers::escapeJsAttr',
 		self::HtmlRawText . '/' . self::JavaScript => 'Helpers::escapeJs',
@@ -329,7 +326,8 @@ class Escaper
 		return match (true) {
 			$source === $dest => Helpers::nop(...),
 			isset(self::Convertors[$source][$dest]) => 'Latte\Runtime\\' . self::Convertors[$source][$dest],
-			$literals && $source === self::HtmlText && isset(self::JsLiterals[$dest]) => 'Latte\Runtime\\' . self::JsLiterals[$dest],
+			$literals && in_array($source, [self::Text, self::HtmlText], true) && isset(self::JsLiterals[$dest])
+				=> 'Latte\Runtime\\' . self::JsLiterals[$dest],
 			$source === self::HtmlAttribute . '/' . self::HtmlText => ($convertor = self::findConvertor(self::HtmlText, $dest, $literals))
 				? fn(string $s): string => $convertor(HtmlHelpers::convertHtmlAttrToHtml($s))
 				: null,
