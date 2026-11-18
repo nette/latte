@@ -54,6 +54,7 @@ survives regeneration.
 | `limit` | `closure in CoreExtension` |  | wrapper over `Filters::slice` |
 | `localDate` | `Filters::localDate` |  |  |
 | `lower` | `Filters::lower` |  | needs ext-mbstring |
+| `map` | `Filters::map` |  |  |
 | `number` | `Filters::number` |  |  |
 | `padLeft` | `Filters::padLeft` |  |  |
 | `padRight` | `Filters::padRight` |  |  |
