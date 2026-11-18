@@ -343,7 +343,8 @@ final class HtmlHelpers
 			}
 		}
 		return match (true) {
-			$value instanceof \Stringable && ($s = Helpers::convertTrusted($value, $context)) !== null => $namePart . '="' . $s . '"',
+			$value instanceof \Stringable && ($s = Helpers::convertTrusted($value, $context, htmlEscapedAs: 'html/attr')) !== null
+				=> $namePart . '="' . $s . '"',
 			is_string($value), is_int($value), is_float($value), $value instanceof \Stringable => $namePart
 				. '="' . self::escapeAttr($value) . '"',
 			$value === null => '',

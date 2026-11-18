@@ -19,12 +19,16 @@ Assert::match(
 );
 
 // escaping of Html object
-Assert::match(
-	'<script type="text/foo"> <div title=\'<\/script>\'></div> </script>',
-	$latte->renderToString(
-		'<script type="text/foo"> {$foo} </script>',
-		['foo' => new Html("<div title='</script>'></div>")],
+Assert::error(
+	fn() => Assert::match(
+		'<script type="text/foo"> <div title=\'<\/script>\'></div> </script>',
+		$latte->renderToString(
+			'<script type="text/foo"> {$foo} </script>',
+			['foo' => new Html("<div title='</script>'></div>")],
+		),
 	),
+	E_USER_DEPRECATED,
+	'Printing Latte\Runtime\TrustedHtml in context HTML/RAW/TEXT is deprecated, it will throw an exception because content type HTML cannot be converted to it.',
 );
 
 // include

@@ -117,11 +117,27 @@ Assert::same(
 
 
 // other objects are escaped as before
-Assert::same(
-	'<p onclick="&quot;x&quot;" style="&quot;x&quot;" title="&quot;x&quot;"></p>',
-	$latte->renderToString('<p onclick={$html} style={$html} title={$html}></p>', $params),
+Assert::error(
+	fn() => Assert::same(
+		'<p onclick="&quot;x&quot;" style="&quot;x&quot;" title="&quot;x&quot;"></p>',
+		$latte->renderToString('<p onclick={$html} style={$html} title={$html}></p>', $params),
+	),
+	[
+		[
+			E_USER_DEPRECATED,
+			'Printing Latte\Runtime\TrustedHtml in context HTML/ATTR/JS is deprecated, it will be converted from content type HTML, which changes the output.',
+		],
+		[
+			E_USER_DEPRECATED,
+			'Printing Latte\Runtime\TrustedHtml in context HTML/ATTR/CSS is deprecated, it will throw an exception because content type HTML cannot be converted to it.',
+		],
+	],
 );
-Assert::same(
-	'<p onclick="&quot;x&quot;" title="&quot;x&quot;"></p>',
-	$latte->renderToString('<p n:attr="onclick => $html, title => $html"></p>', $params),
+Assert::error(
+	fn() => Assert::same(
+		'<p onclick="&quot;x&quot;" title="&quot;x&quot;"></p>',
+		$latte->renderToString('<p n:attr="onclick => $html, title => $html"></p>', $params),
+	),
+	E_USER_DEPRECATED,
+	'Printing Latte\Runtime\TrustedHtml in context HTML/ATTR/JS is deprecated, it will be converted from content type HTML, which changes the output.',
 );
