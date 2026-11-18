@@ -180,7 +180,7 @@ final class PrintContext
 	}
 
 
-	#[\Deprecated]
+	#[\Deprecated(since: '3.1.1')]
 	public function infixOp(Node $node, Node $leftNode, string $operatorString, Node $rightNode): string
 	{
 		return $this->parenthesize($node, $leftNode, OperatorNode::AssocLeft)
@@ -189,14 +189,14 @@ final class PrintContext
 	}
 
 
-	#[\Deprecated]
+	#[\Deprecated(since: '3.1.1')]
 	public function prefixOp(Node $node, string $operatorString, Node $expr): string
 	{
 		return $operatorString . $this->parenthesize($node, $expr, OperatorNode::AssocRight);
 	}
 
 
-	#[\Deprecated]
+	#[\Deprecated(since: '3.1.1')]
 	public function postfixOp(Node $node, Node $var, string $operatorString): string
 	{
 		return $this->parenthesize($node, $var, OperatorNode::AssocLeft) . $operatorString;

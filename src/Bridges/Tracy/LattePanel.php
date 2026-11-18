@@ -35,7 +35,7 @@ class LattePanel implements Tracy\IBarPanel
 	private ?string $name = null;
 
 
-	#[\Deprecated('use TracyExtension see https://bit.ly/46flfDi')]
+	#[\Deprecated('use TracyExtension see https://bit.ly/46flfDi', since: '3.0.5')]
 	public static function initialize(Engine $latte, ?string $name = null, ?Tracy\Bar $bar = null): void
 	{
 		$bar ??= Tracy\Debugger::getBar();

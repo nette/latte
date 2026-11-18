@@ -24,22 +24,22 @@ class Engine
 		VERSION = self::Version,
 		VERSION_ID = self::VersionId;
 
-	#[\Deprecated('use Latte\ContentType::Html')]
+	#[\Deprecated('use Latte\ContentType::Html', since: '3.0')]
 	public const CONTENT_HTML = ContentType::Html;
 
-	#[\Deprecated('use Latte\ContentType::Xml')]
+	#[\Deprecated('use Latte\ContentType::Xml', since: '3.0')]
 	public const CONTENT_XML = ContentType::Xml;
 
-	#[\Deprecated('use Latte\ContentType::JavaScript')]
+	#[\Deprecated('use Latte\ContentType::JavaScript', since: '3.0')]
 	public const CONTENT_JS = ContentType::JavaScript;
 
-	#[\Deprecated('use Latte\ContentType::Css')]
+	#[\Deprecated('use Latte\ContentType::Css', since: '3.0')]
 	public const CONTENT_CSS = ContentType::Css;
 
-	#[\Deprecated('use Latte\ContentType::ICal')]
+	#[\Deprecated('use Latte\ContentType::ICal', since: '3.0')]
 	public const CONTENT_ICAL = ContentType::ICal;
 
-	#[\Deprecated('use Latte\ContentType::Text')]
+	#[\Deprecated('use Latte\ContentType::Text', since: '3.0')]
 	public const CONTENT_TEXT = ContentType::Text;
 
 	private ?Loader $loader = null;
@@ -295,7 +295,7 @@ class Engine
 	}
 
 
-	#[\Deprecated('Use addFilter() instead.')]
+	#[\Deprecated('Use addFilter() instead.', since: '3.1')]
 	public function addFilterLoader(callable $loader): static
 	{
 		trigger_error('Filter loader is deprecated, use addFilter() instead.', E_USER_DEPRECATED);
