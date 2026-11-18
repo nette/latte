@@ -50,17 +50,17 @@ class IncludeFileNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
+		$escaper = $context->getEscaper();
+		$content = $this->modifier->filters ? $context->format('%modifyContent($s)', $this->modifier) : '$s';
+		$content = $this->modifier->escape ? $content : $escaper->escapeMandatory($content, $this->position);
 		return $context->format(
 			'$this->createTemplate(%raw, %node? + $this->params, %dump)->renderToContentType(%raw) %line;',
 			$context->ensureString($this->file, 'Template name'),
 			$this->args,
 			$this->mode,
-			$this->modifier->filters
-				? $context->format(
-					'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-					$this->modifier,
-				)
-				: PhpHelpers::dump($this->modifier->escape ? $context->getEscaper()->export() : null),
+			$content !== '$s'
+				? $context->format('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %raw; }', $content)
+				: PhpHelpers::dump($this->modifier->escape ? $escaper->export() : null),
 			$this->position,
 		);
 	}

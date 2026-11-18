@@ -80,12 +80,14 @@ class IncludeBlockNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
-		$contentFilter = $this->modifier->filters
-			? $context->format(
-				'function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %modifyContent($s); }',
-				$this->modifier,
-			)
-			: ($this->modifier->escape ? PhpHelpers::dump($context->getEscaper()->export()) : '');
+		$escaper = $context->getEscaper();
+		$content = $this->modifier->filters ? $context->format('%modifyContent($s)', $this->modifier) : '$s';
+		$content = $this->modifier->escape ? $content : $escaper->escapeMandatory($content, $this->position);
+		$contentFilter = match (true) {
+			$content !== '$s' => $context->format('function ($s, $type) { $ʟ_fi = new LR\FilterInfo($type); return %raw; }', $content),
+			$this->modifier->escape => PhpHelpers::dump($escaper->export()),
+			default => '',
+		};
 
 		return $this->from
 			? $this->printBlockFrom($context, $contentFilter)

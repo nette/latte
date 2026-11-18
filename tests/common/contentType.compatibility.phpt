@@ -22,8 +22,8 @@ test('block type compatibility in HTML contexts', function () {
 		$latte->renderToString('<meta content={include foo}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
 	);
 
-	Assert::same(
-		'<meta content="b"ar">b"ar',
+	Assert::same( // |noescape keeps the mandatory escaping of quotes, like {$value|noescape}
+		'<meta content="b&quot;ar">b"ar',
 		$latte->renderToString('<meta content={include foo|noescape}>{block foo}{$value}{/block}', ['value' => 'b"ar']),
 	);
 
@@ -376,9 +376,9 @@ Assert::same('<p> " " <</p>', $latte->renderToString('context1c'));
 
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2'));
 
-Assert::same('<p title="<hr><script></script> " &quot; &lt;"></p>', $latte->renderToString('context2a'));
+Assert::same('<p title="<hr><script></script> &quot; &quot; &lt;"></p>', $latte->renderToString('context2a'));
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context2b'));
-Assert::same('<p title=" " " <"></p>', $latte->renderToString('context2c'));
+Assert::same('<p title=" &quot; &quot; <"></p>', $latte->renderToString('context2c'));
 
 Assert::same('<p title=" &quot; &quot; &lt;"></p>', $latte->renderToString('context3'));
 
@@ -411,6 +411,12 @@ Assert::exception(
 );
 
 Assert::same('<!--<hr><script></script> " &quot; &lt;-->', $latte->renderToString('context6'));
+
+Assert::exception( // like {$x|noescape}
+	fn() => createLatte()->compile('<!--{include html.latte|noescape}-->'),
+	Latte\CompileException::class,
+	'Using |noescape is not allowed in this context (on line 1 at column 5)',
+);
 
 
 
