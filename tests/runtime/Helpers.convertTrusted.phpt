@@ -69,7 +69,11 @@ Assert::error(
 );
 
 // other objects are left to the escaper
-Assert::null(Helpers::convertTrusted(new TrustedHtml('<b>'), 'html/attr/css'));
+Assert::error(
+	fn() => Assert::null(Helpers::convertTrusted(new TrustedHtml('<b>'), 'html/attr/css')),
+	E_USER_DEPRECATED,
+	'Printing Latte\Runtime\TrustedHtml in context HTML/ATTR/CSS is deprecated, it will throw an exception because content type HTML cannot be converted to it.',
+);
 Assert::null(Helpers::convertTrusted(new Html('<b>'), 'js'));
 Assert::null(Helpers::convertTrusted(new Nette\Utils\Html, 'html'));
 Assert::null(Helpers::convertTrusted(new ArrayObject, 'html'));

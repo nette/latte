@@ -85,9 +85,18 @@ class Helpers
 
 	/**
 	 * Converts trusted JavaScript, CSS or XML into the context, or returns null for any other value.
+	 * An HTML object is left to the escaper (which prints it as if into $htmlEscapedAs, when given);
+	 * printing it is deprecated where that differs from converting it.
 	 */
-	public static function convertTrusted(object $value, string $context): ?string
+	public static function convertTrusted(object $value, string $context, ?string $htmlEscapedAs = null): ?string
 	{
+		if ($value instanceof HtmlStringable || $value instanceof Nette\HtmlStringable) {
+			if ($context !== 'html') {
+				self::deprecateHtmlPrint($value, $context, $htmlEscapedAs);
+			}
+			return null;
+		}
+
 		$type = match (true) {
 			$value instanceof TrustedJavaScript => ContentType::JavaScript,
 			$value instanceof TrustedCss => ContentType::Css,
@@ -105,6 +114,40 @@ class Helpers
 			strtoupper($type),
 		));
 		return $convertor((string) $value);
+	}
+
+
+	/**
+	 * Deprecates printing an HTML object where the escaper prints it otherwise than converting it into the context would.
+	 */
+	private static function deprecateHtmlPrint(
+		HtmlStringable|Nette\HtmlStringable $value,
+		string $context,
+		?string $escapedAs,
+	): void
+	{
+		$escapedAs ??= $context === 'text' ? 'html' : $context; // the text escaper prints it unchanged
+		if (!$value instanceof HtmlStringable && $escapedAs === 'html/attr') {
+			return; // escapeAttr() prints Nette\HtmlStringable as a plain string
+		}
+
+		$type = str_starts_with($context, 'xml')
+			? ContentType::Xml // the XML escapers print it as XML, which {capture} in XML relies on
+			: ContentType::Html;
+		$outcome = match (true) {
+			Latte\Compiler\Escaper::getConvertor($type, $context) === null
+				=> 'throw an exception because content type HTML cannot be converted to it',
+			$escapedAs !== $context => 'be converted from content type HTML, which changes the output',
+			default => null,
+		};
+		if ($outcome !== null) {
+			trigger_error(sprintf(
+				'Printing %s in context %s is deprecated, it will %s.',
+				get_debug_type($value),
+				strtoupper($context),
+				$outcome,
+			), E_USER_DEPRECATED);
+		}
 	}
 
 

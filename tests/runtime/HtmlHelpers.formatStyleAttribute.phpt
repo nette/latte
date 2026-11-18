@@ -25,7 +25,11 @@ Assert::same(
 	HtmlHelpers::formatStyleAttribute('style', '"Hello" & \'Welcome\''),
 );
 Assert::same('style=""', HtmlHelpers::formatStyleAttribute('style', ''));
-Assert::same('style="one&amp;"', HtmlHelpers::formatStyleAttribute('style', new Latte\Runtime\Html('one&amp;<br>')));
+Assert::error(
+	fn() => Assert::same('style="one&amp;"', HtmlHelpers::formatStyleAttribute('style', new Latte\Runtime\Html('one&amp;<br>'))),
+	E_USER_DEPRECATED,
+	'Printing Latte\Runtime\TrustedHtml in context HTML/ATTR/CSS is deprecated, it will throw an exception because content type HTML cannot be converted to it.',
+);
 Assert::same('style="one&amp;&lt;br&gt;"', HtmlHelpers::formatStyleAttribute('style', new StringObject));
 Assert::same('style="1"', HtmlHelpers::formatStyleAttribute('style', 1));
 

@@ -52,7 +52,7 @@ comes from `Escaper::getConvertor()` (with `JsLiterals` and the deprecated XML/H
 bridge), the same type passes unchanged, and a missing convertor throws instead of falling
 back to escaping. The `Convertors` table is the only place of these rules; no escaper keeps
 its own list of accepted types. `HtmlStringable` objects (`TrustedHtml`) do not take this
-route, the escapers recognize them themselves.
+route yet, the escapers recognize them themselves.
 
 - `Escaper::escape()` puts the type test into the generated code, so that a string pays
   one `is_object()` and no extra call:
@@ -71,6 +71,16 @@ route, the escapers recognize them themselves.
   `formatSrcdocAttribute` `html/attr/html`, `XmlHelpers::formatAttribute` `xml/attr` and
   the rest `html/attr`. A plain string as the whole value of a code attribute is still code.
 - Values nested in arrays (class lists, style arrays, JSON) are not converted.
+- For an HTML object `convertTrusted()` returns null and only checks the escaper against the
+  rule: where no convertor from `html` exists (CSS, iCal, inside a tag, `<script>` of an
+  unknown type) or the escaper prints it otherwise (a `text` template keeps the markup), it
+  triggers `E_USER_DEPRECATED` and the output stays. `HtmlHelpers::formatAttribute()` escapes
+  it with `escapeAttr()` whatever the attribute type, so it passes `htmlEscapedAs: 'html/attr'`;
+  this is what tells the deprecated `onclick={$h}` from `onclick="f({$h})"`, which shares its
+  context and agrees with the rule. In XML the escapers print it as XML, which `{capture}`
+  relies on, so the check uses the `xml` convertors and never the XML/HTML bridge.
+  `Nette\HtmlStringable` is checked too, except where `escapeAttr()` and the XML escapers treat
+  it as a plain string.
 
 ## XML shares the HTML states but not their names
 

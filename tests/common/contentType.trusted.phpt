@@ -178,15 +178,27 @@ Assert::same(
 	'<script>{}</script><p>&lt;/script&gt;&lt;b title="x"&gt;{<!-- -->{x}}&lt;/b&gt;</p>',
 	$latte->renderToString('<script>{$obj}</script><p>{$obj}</p>', $params),
 );
-Assert::same(
-	'<p><b title="&quot;">{{x}}</b></p>'
-	. '<script>"<b title=\"&quot;\">{{x}}<\/b>"</script>'
-	. '<style>\<b title\=\"\&quot\;\"\>\{\{x\}\}\<\/b\></style>'
-	. '<p title="a &#123;&#123;x}}" style="a: \&lt;b title\=\&quot;\&amp;quot\;\&quot;\&gt;\&#123;\&#123;x\}\}\&lt;\/b\&gt;"'
-	. ' onclick="f(&quot;&lt;b title=\&quot;&amp;quot;\&quot;&gt;&#123;&#123;x}}&lt;\/b&gt;&quot;)"></p>',
-	$latte->renderToString(
-		'<p>{$html}</p><script>{$html}</script><style>{$html}</style>'
-		. '<p title="a {$html}" style="a: {$html}" onclick="f({$html})"></p>',
-		$params,
+Assert::error(
+	fn() => Assert::same(
+		'<p><b title="&quot;">{{x}}</b></p>'
+		. '<script>"<b title=\"&quot;\">{{x}}<\/b>"</script>'
+		. '<style>\<b title\=\"\&quot\;\"\>\{\{x\}\}\<\/b\></style>'
+		. '<p title="a &#123;&#123;x}}" style="a: \&lt;b title\=\&quot;\&amp;quot\;\&quot;\&gt;\&#123;\&#123;x\}\}\&lt;\/b\&gt;"'
+		. ' onclick="f(&quot;&lt;b title=\&quot;&amp;quot;\&quot;&gt;&#123;&#123;x}}&lt;\/b&gt;&quot;)"></p>',
+		$latte->renderToString(
+			'<p>{$html}</p><script>{$html}</script><style>{$html}</style>'
+			. '<p title="a {$html}" style="a: {$html}" onclick="f({$html})"></p>',
+			$params,
+		),
 	),
+	[
+		[
+			E_USER_DEPRECATED,
+			'Printing Latte\Runtime\TrustedHtml in context HTML/RAW/CSS is deprecated, it will throw an exception because content type HTML cannot be converted to it.',
+		],
+		[
+			E_USER_DEPRECATED,
+			'Printing Latte\Runtime\TrustedHtml in context HTML/ATTR/CSS is deprecated, it will throw an exception because content type HTML cannot be converted to it.',
+		],
+	],
 );
