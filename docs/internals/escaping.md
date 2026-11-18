@@ -246,3 +246,19 @@ or asserts what input type it accepts (`FilterInfo::validate`). Filters applied 
 `{block}` should be contextual so the block's content type flows through them — but
 the enforcement is **runtime, not compile time**: a classic filter is accepted when
 the incoming content type is `text`, and throws only otherwise.
+
+A trusted value printed with a contextual filter (`{$js|trim}`) reaches it as a string
+with `$info->contentType` set to its type, and the result is wrapped in the trusted class
+of the type the filter left, so a filter that sets `html` on a plain string returns
+`TrustedHtml` too; a type without a class (`text`, a subtype) leaves a plain string. A
+classic filter gets the object itself and its result is an ordinary value. A filter over
+content gets an object returned by the previous filter as a string only when its type is
+the content type, an HTML object in any markup (`{capture}` creates one in XML too), so a
+`TrustedJavaScript` in `<script>` (`html/raw/js`) stays an object. Filters recognize only
+Latte's `HtmlStringable` as HTML, `Nette\HtmlStringable` is an ordinary object to them.
+
+The class ⇔ type mapping lives only in `Runtime\Helpers::getTrustedType()` (an object to
+its type, any `HtmlStringable` to `html`) and `getTrustedClass()` (a type to its class);
+`convertTrusted()`, `FilterExecutor` and `Engine::renderToTrusted()` call them.
+`convertTrusted()` tests HTML objects of both interfaces before it, since it does not
+convert them yet.

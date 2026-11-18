@@ -97,12 +97,7 @@ class Helpers
 			return null;
 		}
 
-		$type = match (true) {
-			$value instanceof TrustedJavaScript => ContentType::JavaScript,
-			$value instanceof TrustedCss => ContentType::Css,
-			$value instanceof TrustedXml => ContentType::Xml,
-			default => null,
-		};
+		$type = $value instanceof \Stringable ? self::getTrustedType($value) : null;
 		if ($type === null) {
 			return null;
 		}
@@ -148,6 +143,37 @@ class Helpers
 				$outcome,
 			), E_USER_DEPRECATED);
 		}
+	}
+
+
+	/**
+	 * Returns the content type of trusted content (Latte's HtmlStringable included), or null for any other value.
+	 */
+	public static function getTrustedType(\Stringable $value): ?string
+	{
+		return match (true) {
+			$value instanceof HtmlStringable => ContentType::Html,
+			$value instanceof TrustedJavaScript => ContentType::JavaScript,
+			$value instanceof TrustedCss => ContentType::Css,
+			$value instanceof TrustedXml => ContentType::Xml,
+			default => null,
+		};
+	}
+
+
+	/**
+	 * Returns the trusted class of the content type, or null if the type has none.
+	 * @return ?class-string<TrustedHtml|TrustedJavaScript|TrustedCss|TrustedXml>
+	 */
+	public static function getTrustedClass(?string $type): ?string
+	{
+		return match ($type) {
+			ContentType::Html => TrustedHtml::class,
+			ContentType::JavaScript => TrustedJavaScript::class,
+			ContentType::Css => TrustedCss::class,
+			ContentType::Xml => TrustedXml::class,
+			default => null,
+		};
 	}
 
 

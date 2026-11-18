@@ -144,16 +144,10 @@ class Engine
 			$output = $convertor($output);
 		}
 
-		$class = match ($mainType) {
-			ContentType::Html => Runtime\TrustedHtml::class,
-			ContentType::Xml => Runtime\TrustedXml::class,
-			ContentType::JavaScript => Runtime\TrustedJavaScript::class,
-			ContentType::Css => Runtime\TrustedCss::class,
-			default => throw new RuntimeException(sprintf(
-				"Cannot render $name with content type %s as trusted content, use renderToString().",
-				strtoupper($type),
-			)),
-		};
+		$class = Runtime\Helpers::getTrustedClass($mainType) ?? throw new RuntimeException(sprintf(
+			"Cannot render $name with content type %s as trusted content, use renderToString().",
+			strtoupper($type),
+		));
 		return new $class($output);
 	}
 
