@@ -13,6 +13,9 @@ jobs:
                   php-version: 8.4
                   coverage: none
 
+            - run: composer install --no-progress --prefer-dist
+            - run: composer config allow-plugins.phpstan/extension-installer true
+            - run: composer require --dev --no-progress nette/phpstan-rules phpstan/extension-installer
             - run: composer create-project dresscode/dresscode temp/dresscode ^1.1 --no-progress
             - run: php temp/dresscode/bin/dresscode check
 

@@ -84,7 +84,7 @@ class Helpers
 
 			$list = array_slice($list, 0, $best, true)
 				+ [$name => $info]
-				+ array_slice($list, $best, null, true);
+				+ array_slice($list, $best ?? 0, null, true);
 		}
 
 		return $list;

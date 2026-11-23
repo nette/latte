@@ -57,7 +57,7 @@ class BlueScreenPanel
 						. '</p>')
 					. '<pre class="code tracy-code"><div>'
 					. BlueScreen::highlightLine(
-						htmlspecialchars($e->sourceCode, ENT_IGNORE, 'UTF-8'),
+						htmlspecialchars($e->sourceCode ?? '', ENT_IGNORE, 'UTF-8'),
 						$e->position->line ?? 0,
 						15,
 						$e->position->column ?? 0,
