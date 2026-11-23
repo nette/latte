@@ -117,4 +117,22 @@ final class NodeHelpers
 			default => null,
 		};
 	}
+
+
+	/**
+	 * Checks that no positional argument follows a named one, as the arguments are bound to parameters
+	 * by position and by name. Unpacking may stand anywhere.
+	 */
+	public static function checkArgumentOrder(Nodes\Php\Expression\ArrayNode $args): void
+	{
+		$named = false;
+		foreach ($args->items as $item) {
+			if ($item->key) {
+				$named = true;
+			} elseif ($named && !$item->unpack) {
+				trigger_error("Positional argument after a named argument is deprecated ($item->position)", E_USER_DEPRECATED);
+				return;
+			}
+		}
+	}
 }

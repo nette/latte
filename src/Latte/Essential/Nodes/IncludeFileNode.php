@@ -7,10 +7,10 @@
 
 namespace Latte\Essential\Nodes;
 
+use Latte\Compiler\{NodeHelpers, PhpHelpers, PrintContext, Tag};
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\{PhpHelpers, PrintContext, Tag};
 
 
 /**
@@ -41,7 +41,8 @@ class IncludeFileNode extends StatementNode
 		}
 
 		$stream->tryConsume(',');
-		$node->args = $tag->parser->parseCallArguments();
+		$node->args = $tag->parser->parseArguments();
+		NodeHelpers::checkArgumentOrder($node->args);
 		$node->modifier = $tag->parser->parseModifier();
 		$node->modifier->escape = !$node->modifier->removeFilter('noescape');
 		return $node;

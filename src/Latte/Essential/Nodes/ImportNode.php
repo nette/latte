@@ -7,10 +7,10 @@
 
 namespace Latte\Essential\Nodes;
 
+use Latte\Compiler\{NodeHelpers, PrintContext, Tag};
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\{PrintContext, Tag};
 
 
 /**
@@ -29,7 +29,8 @@ class ImportNode extends StatementNode
 		$node = new static;
 		$node->file = $tag->parser->parseUnquotedStringOrExpression();
 		$tag->parser->stream->tryConsume(',');
-		$node->args = $tag->parser->parseCallArguments();
+		$node->args = $tag->parser->parseArguments();
+		NodeHelpers::checkArgumentOrder($node->args);
 		return $node;
 	}
 

@@ -8,11 +8,11 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
+use Latte\Compiler\{NodeHelpers, PrintContext, Tag};
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\Nodes\Php\Scalar\{BooleanNode, NullNode};
 use Latte\Compiler\Nodes\StatementNode;
-use Latte\Compiler\{PrintContext, Tag};
 
 
 /**
@@ -39,7 +39,8 @@ class ExtendsNode extends StatementNode
 			$node->extends = $tag->parser->parseUnquotedStringOrExpression();
 		}
 		$tag->parser->consumeCommaBeforeArguments();
-		$node->args = $tag->parser->parseCallArguments();
+		$node->args = $tag->parser->parseArguments();
+		NodeHelpers::checkArgumentOrder($node->args);
 		if ($node->args->items && $node->extends instanceof BooleanNode) {
 			throw new CompileException("{{$tag->name} none} cannot have arguments.", $tag->position);
 		}

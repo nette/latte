@@ -8,7 +8,7 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\{Block, PrintContext, Tag, TemplateParser, Token};
+use Latte\Compiler\{Block, NodeHelpers, PrintContext, Tag, TemplateParser, Token};
 use Latte\Compiler\Nodes\{FragmentNode, StatementNode, TextNode};
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode};
@@ -43,7 +43,8 @@ class EmbedNode extends StatementNode
 		$node->name = $tag->parser->parseUnquotedStringOrExpression();
 		$node->mode = $mode ?? ($node->name instanceof StringNode && preg_match('~[\w-]+$~DA', $node->name->value) ? 'block' : 'file');
 		$tag->parser->stream->tryConsume(',');
-		$node->args = $tag->parser->parseCallArguments();
+		$node->args = $tag->parser->parseArguments();
+		NodeHelpers::checkArgumentOrder($node->args);
 
 		$prevIndex = $parser->blockLayer;
 		$layer = $parser->blockLayer = $node->layer = count($parser->blocks);

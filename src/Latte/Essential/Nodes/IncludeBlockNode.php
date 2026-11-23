@@ -8,7 +8,7 @@
 namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
-use Latte\Compiler\{Block, PhpHelpers, PrintContext, Tag, TemplateParser};
+use Latte\Compiler\{Block, NodeHelpers, PhpHelpers, PrintContext, Tag, TemplateParser};
 use Latte\Compiler\Nodes\Php\Expression\ArrayNode;
 use Latte\Compiler\Nodes\Php\{ExpressionNode, ModifierNode, Scalar};
 use Latte\Compiler\Nodes\StatementNode;
@@ -48,7 +48,8 @@ class IncludeBlockNode extends StatementNode
 		}
 
 		$stream->tryConsume(',');
-		$node->args = $tag->parser->parseCallArguments();
+		$node->args = $tag->parser->parseArguments();
+		NodeHelpers::checkArgumentOrder($node->args);
 		$node->modifier = $tag->parser->parseModifier();
 
 		$node->parent = $tokenName->is('parent');
