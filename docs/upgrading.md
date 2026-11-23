@@ -1,5 +1,9 @@
 # Upgrading latte/latte
 
+## 3.1.10
+
+- **Changed** an unpacked argument (`...$args` or `(expand) $args`) after a named one in `{include}`, `{embed}`, `{extends}`, `{layout}`, `{import}` and `{sandbox}` is no longer deprecated and is supported again (deprecated since 3.1.9) (7e43fd6f)
+
 ## 3.1.9
 
 - **Deprecated** a positional argument after a named one in `{include}`, `{embed}`, `{extends}`, `{layout}`, `{import}` and `{sandbox}`: put positional arguments before the named ones; using it triggers E_USER_DEPRECATED at compile time (44330b59)
@@ -151,6 +155,12 @@
 - **Changed** a custom template function is matched case-sensitively; previously a name differing in case was found and only a warning was reported (969af0bc)
 - **Changed** `|escapeHtml` does not entity-encode quotes and understands `Latte\Runtime\HtmlStringable`; previously it was plain `htmlspecialchars()` with `ENT_QUOTES` (9a68cc32)
 - **Changed** `Latte\Engine::getCacheFile()` is not consulted when a cached template is loaded or created; overriding it in a subclass has no effect (6d3c3176)
+
+## 3.0.28
+
+- **Changed** using a superglobal (`$_GET`, `$_POST`, `$_COOKIE`, `$_FILES`, `$_SERVER`, `$_ENV`, `$_REQUEST`, `$_SESSION`) in a sandboxed template throws `Latte\SecurityViolationException` at compile time; previously it was accessible; pass the values the template needs as parameters; also in 3.1.10 (530c14b6)
+- **Changed** the callable on the right side of the pipe operator `|>` in a sandboxed template on PHP 8.5+ is checked against the policy and a callable the policy does not allow throws `Latte\SecurityViolationException`; previously it was called unchecked; allow the functions and methods the templates pipe into; also in 3.1.10 (e40d6617)
+- **Changed** the sandbox policy rules are part of the template cache key; a custom `Latte\Policy` whose rules vary at runtime must implement a method `getCacheSignature(): mixed` like `Latte\Sandbox\SecurityPolicy::getCacheSignature()`, otherwise a template compiled under one rule set is reused under another (7b18ca47)
 
 ## 3.0.26
 
