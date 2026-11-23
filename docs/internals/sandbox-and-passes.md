@@ -7,7 +7,8 @@
 registers a pass **only when a policy is set**, ordered `before: '*'` (before every
 other pass), that traverses the AST in the **`leave`** phase and:
 
-- statically forbids `$this` / variable-variables, `|noescape`, and `new`;
+- statically forbids `$this`, the superglobals (`$_GET`, `$_SESSION`, …) and
+  variable-variables, `|noescape`, and `new`;
 - statically checks function and filter names against the policy — but even
   *allowed* functions and filters get their arguments rewritten through a runtime
   `args()` guard (wrapped in an `AuxiliaryNode`);

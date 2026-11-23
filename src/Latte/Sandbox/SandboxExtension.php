@@ -21,6 +21,8 @@ use function is_string;
  */
 final class SandboxExtension extends Latte\Extension
 {
+	private const ForbiddenVariables = ['this', '_GET', '_POST', '_COOKIE', '_FILES', '_SERVER', '_ENV', '_REQUEST', '_SESSION'];
+
 	private ?Latte\Policy $policy;
 
 
@@ -83,10 +85,10 @@ final class SandboxExtension extends Latte\Extension
 	{
 		assert($this->policy !== null);
 		if ($node instanceof Expression\VariableNode) {
-			if ($node->name === 'this') {
-				throw new SecurityViolationException("Forbidden variable \${$node->name}.", $node->position);
-			} elseif (!is_string($node->name)) {
+			if (!is_string($node->name)) {
 				throw new SecurityViolationException('Forbidden variable variables.', $node->position);
+			} elseif (in_array($node->name, self::ForbiddenVariables, true)) {
+				throw new SecurityViolationException("Forbidden variable \${$node->name}.", $node->position);
 			}
 
 			return $node;
