@@ -76,7 +76,7 @@ final class TagParser
 		foreach ($args->items as $item) {
 			if ($item->key) {
 				$named = true;
-			} elseif ($named) {
+			} elseif ($named && !$item->unpack) {
 				trigger_error("Positional argument after a named argument is deprecated ($item->position)", E_USER_DEPRECATED);
 				break;
 			}

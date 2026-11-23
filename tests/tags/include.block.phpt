@@ -70,6 +70,14 @@ Assert::error(
 );
 
 Assert::match(
+	' [1|3]',
+	$latte->renderToString(
+		'{define block, $name, $value}[{$name}|{$value}]{/define} {include block, name: 1, value: 2, ...$args}',
+		['args' => ['value' => 3]],
+	),
+);
+
+Assert::match(
 	' [1|2]',
 	$latte->renderToString('{define block, $name, $value}[{$name}|{$value}]{/define} {include block, 1, value: 2}'),
 );
