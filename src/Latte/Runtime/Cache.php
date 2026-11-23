@@ -129,13 +129,12 @@ final class Cache
 
 	/**
 	 * Returns values used to detect if cached template needs recompilation when autoRefresh is enabled.
-	 * Triggers recompilation when template code, Latte engine, or any extension changes.
+	 * Triggers recompilation when template code or any extension changes.
 	 * @return list<mixed>
 	 */
 	protected function generateRefreshSignature(Engine $engine, string $name): array
 	{
 		return [
-			Engine::Version,
 			$engine->getLoader()->getContent($name),
 			array_map(
 				fn($extension) => @filemtime((string) (new \ReflectionObject($extension))->getFileName()), // @ file may not exist

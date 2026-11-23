@@ -109,13 +109,14 @@ automatically compiles into a different cache file — no manual invalidation ne
 `Runtime/Cache.php` + `Engine` implement caching with **two separate signatures**;
 confusing them is the main trap:
 
-- The **configuration hash** (`Engine::generateConfigurationSignature`: contentType,
-  features, syntax, and each extension's `getCacheKey`) is baked into the template
-  **class name and cache file path**. Different configurations therefore coexist as
-  different files. **An extension that changes generated code must reflect that in
-  `getCacheKey`**, or a stale cache silently survives the configuration change.
-- The **refresh signature** (`Cache::generateRefreshSignature`: Latte version, the
-  template's *source content*, and the mtimes of extension class files) is checked
+- The **configuration hash** (`Engine::generateConfigurationSignature`: Latte version,
+  contentType, features, syntax, and each extension's `getCacheKey`) is baked into the
+  template **class name and cache file path**. Different configurations therefore coexist
+  as different files, and an upgrade of Latte never runs code compiled by the previous
+  version, even with `autoRefresh` off. **An extension that changes generated code must
+  reflect that in `getCacheKey`**, or a stale cache silently survives the configuration change.
+- The **refresh signature** (`Cache::generateRefreshSignature`: the template's
+  *source content* and the mtimes of extension class files) is checked
   only when `autoRefresh` is on — and it is stored **inside the `.lock` file**, which
   is a data carrier, not just a lock.
 

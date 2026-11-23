@@ -269,6 +269,7 @@ class Engine
 	protected function generateConfigurationSignature(): array
 	{
 		return [
+			self::Version,
 			$this->contentType,
 			$this->features,
 			$this->syntax,
