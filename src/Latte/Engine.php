@@ -262,6 +262,7 @@ class Engine
 	protected function getCacheKey(): array
 	{
 		return [
+			self::Version,
 			$this->contentType,
 			$this->features,
 			$this->syntax,
