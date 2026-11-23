@@ -143,6 +143,20 @@ Assert::exception(
 	'Forbidden variable $this (on line 1 at column 2)',
 );
 
+foreach (['_GET', '_POST', '_COOKIE', '_FILES', '_SERVER', '_ENV', '_REQUEST', '_SESSION'] as $name) {
+	Assert::exception(
+		fn() => $latte->compile('{$' . $name . '["x"]}'),
+		Latte\SecurityViolationException::class,
+		"Forbidden variable \$$name (on line 1 at column 2)",
+	);
+}
+
+Assert::exception(
+	fn() => $latte->compile("{do \$_SESSION['role'] = 'admin'}"),
+	Latte\SecurityViolationException::class,
+	'Forbidden variable $_SESSION (on line 1 at column 5)',
+);
+
 Assert::exception(
 	fn() => $latte->compile('{${"this"}}'),
 	Latte\SecurityViolationException::class,
