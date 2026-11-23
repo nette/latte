@@ -163,7 +163,7 @@ parameters:
 			path: src/Latte/Engine.php
 
 		-
-			message: '#^Method Latte\\Essential\\Tracer\:\:generateTrace\(\) should return array\<array\{function\: string, file\: string, line\: int, args\: array\<mixed\>\}\> but returns array\<int\<\-1, max\>, array\<.+\>\>\.$#'
+			message: '#^Method Latte\\Essential\\Tracer\:\:generateTrace\(\) should return array\<array\{function\: string, file\: string, line\: int, args\: array\<mixed\>\}\> but returns array\<int\<\-1, max\>, array.+\>\.$#'
 			identifier: return.type
 			count: 1
 			path: src/Latte/Essential/Tracer.php
