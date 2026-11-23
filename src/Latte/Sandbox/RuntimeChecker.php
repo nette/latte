@@ -28,6 +28,12 @@ final class RuntimeChecker
 	}
 
 
+	public function pipe(mixed $value, mixed $callable): mixed
+	{
+		return $this->call($callable, [$value]);
+	}
+
+
 	public function callMethod(mixed $object, mixed $method, array $args, bool $nullsafe = false): mixed
 	{
 		if ($object === null) {
