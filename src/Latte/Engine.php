@@ -16,8 +16,8 @@ use function extension_loaded;
  */
 class Engine
 {
-	public const Version = '3.1.9';
-	public const VersionId = 30109;
+	public const Version = '3.1.10';
+	public const VersionId = 30110;
 
 	/** @deprecated use Engine::Version */
 	public const
