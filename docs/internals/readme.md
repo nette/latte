@@ -14,6 +14,6 @@ their own non-local invariants, split by seam:
 - **[blocks.md](blocks.md)** — template inheritance, the block layers, and the exact
   runtime availability model.
 - **[sandbox-and-passes.md](sandbox-and-passes.md)** — the sandbox pass, its known
-  `__toString` gap, and how extensions/passes are ordered.
+  `__toString` gap and other boundaries, and how extensions/passes are ordered.
 - **[whitespace-minifier.md](whitespace-minifier.md)** — the streaming minifier and
   its chunk-safety invariant.

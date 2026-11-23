@@ -53,6 +53,26 @@ to a filter, and the surface shifts with `Feature::StrictTypes`. The protection 
 the host rule "do not expose a dangerous `__toString`", not code. Do not "fix" this by
 blanket-wrapping coerced operands.
 
+## Other boundaries of the sandbox
+
+Like `__toString`, these are outside the policy by design and documented in the manual;
+the protection is what the host passes to the template and what its policy allows:
+
+- **Methods PHP calls on its own** run without asking the policy: `__clone` (`clone`),
+  the `ArrayAccess` methods (`$obj['key']`, read or write), `getIterator`/`Iterator`
+  methods (`{foreach}` over a `Traversable`, which `iterable()` lets through) and
+  `Countable::count` (`|length`). Only `__get`/`__set` are covered, through the property
+  check of the accessed name.
+- **String callbacks inside allowed functions are not checked.** `args()` refuses only
+  array callables; a string is indistinguishable from data, so allowing `array_map` or
+  `usort` allows every function. `createSafePolicy()` therefore allows no function or
+  filter taking a callback (`|filter`, `|map`, `|group`; `|sort` accepts only a `Closure`).
+  Keep it that way when adding filters or functions to it.
+- **Every `Closure` passes `checkCallable()`.** A template cannot create one from a
+  forbidden callable (first-class callables go through `closure()`, `|>` through
+  `pipe()`), so a `Closure` it holds was handed over by the host and is treated as a
+  granted capability.
+
 ## Extension & pass ordering
 
 `Extension::order($subject, before:, after:)` returns a marker `{subject, before,
