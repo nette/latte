@@ -132,6 +132,12 @@ final class SandboxExtension extends Latte\Extension
 
 			return $node;
 
+		} elseif ($node instanceof Expression\BinaryOpNode && $node->operator === '|>') {
+			return new Expression\AuxiliaryNode(
+				fn(PrintContext $context, Node ...$args) => '$this->global->sandbox->pipe(' . $context->implode($args) . ')',
+				[$node->left, $node->right],
+			);
+
 		} elseif ($node instanceof Expression\CastNode && strtolower($node->type) === 'array') {
 			return new Expression\AuxiliaryNode(
 				fn(PrintContext $context, Node $expr) => '$this->global->sandbox->castToArray(' . $expr->print($context) . ')',

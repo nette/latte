@@ -33,6 +33,15 @@ final readonly class RuntimeChecker
 
 
 	/**
+	 * Pipe operator |> that calls the function after verifying it is allowed by the policy.
+	 */
+	public function pipe(mixed $value, mixed $callable): mixed
+	{
+		return $this->call($callable, [$value]);
+	}
+
+
+	/**
 	 * Validates that calling the method is allowed by the policy and returns the object.
 	 */
 	public function method(mixed $object, mixed $method): mixed

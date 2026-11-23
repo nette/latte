@@ -16,6 +16,7 @@ other pass), that traverses the AST in the **`leave`** phase and:
   application, first-class callable syntax included, emits `closure()` and applies
   the placeholders to the closure it returns, each bound argument passing through
   `args()`) — so method/property access is enforced at render time, not compile time;
+- rewrites the pipe `$a |> $b`, which calls any callable, to a runtime `pipe()`;
 - refuses `(array)` of an object at runtime and checks every public property of a
   non-Traversable object iterated by `{foreach}` (`castToArray`/`iterable`; a foreach
   by reference uses `iterableByRef`, which keeps the reference).
