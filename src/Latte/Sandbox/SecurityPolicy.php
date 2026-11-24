@@ -57,12 +57,12 @@ class SecurityPolicy implements Latte\Policy
 			'switch', 'templateType', 'translate', 'try', 'var', 'varType', 'while',
 		]);
 
-		// does not include: dataStream, noEscape, noCheck
+		// does not include: dataStream, escapeJs, noEscape, noCheck, query
 		$policy->allowFilters([
 			'batch', 'breaklines', 'breakLines', 'bytes', 'capitalize', 'ceil', 'clamp', 'date', 'escapeCss', 'escapeHtml',
-			'escapeHtmlComment', 'escapeICal', 'escapeJs', 'escapeUrl', 'escapeXml', 'explode', 'first',
+			'escapeHtmlComment', 'escapeICal', 'escapeUrl', 'escapeXml', 'explode', 'first',
 			'firstUpper', 'floor', 'checkUrl', 'implode', 'indent', 'join', 'last', 'length', 'lower',
-			'limit', 'number', 'padLeft', 'padRight', 'query', 'random', 'repeat', 'replace', 'replaceRe', 'reverse',
+			'limit', 'number', 'padLeft', 'padRight', 'random', 'repeat', 'replace', 'replaceRe', 'reverse',
 			'round', 'slice', 'sort', 'spaceless', 'split', 'strip', 'striphtml', 'stripHtml', 'striptags', 'stripTags', 'substr',
 			'trim', 'truncate', 'upper', 'webalize',
 		]);
