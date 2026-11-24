@@ -26,7 +26,7 @@ class StaticPropertyFetchNode extends Expression\StaticPropertyFetchNode
 
 	public function print(PrintContext $context): string
 	{
-		[$name, $member] = $this->printName($context, $this->name);
+		[$name, $member] = $this->printName($context, $this->name, toString: true);
 		return '$this->global->sandbox->prop('
 			. $context->memberAsString($this->class) . ', '
 			. $name . ')'

@@ -7,9 +7,10 @@
 
 namespace Latte\Sandbox\Nodes;
 
-use Latte\Compiler\{Node, PrintContext};
-use Latte\Compiler\Nodes\Php\{IdentifierNode, NameNode};
+use Latte\Compiler\Nodes\Php\Expression\CastNode;
+use Latte\Compiler\Nodes\Php\{ExpressionNode, IdentifierNode, NameNode};
 use Latte\Compiler\Nodes\Php\Scalar\StringNode;
+use Latte\Compiler\PrintContext;
 
 
 /**
@@ -19,10 +20,15 @@ use Latte\Compiler\Nodes\Php\Scalar\StringNode;
 trait MemberAccess
 {
 	/**
-	 * Prints the name for the check and for the access, so that a dynamic name is evaluated once.
+	 * Prints the name for the check and for the access, so that a dynamic name is evaluated
+	 * and, with $toString, converted to string once.
 	 * @return array{string, string}
 	 */
-	private function printName(PrintContext $context, Node $name): array
+	private function printName(
+		PrintContext $context,
+		IdentifierNode|NameNode|ExpressionNode $name,
+		bool $toString = false,
+	): array
 	{
 		if ($name instanceof IdentifierNode || $name instanceof NameNode) {
 			return [$context->encodeString((string) $name), (string) $name];
@@ -31,7 +37,7 @@ trait MemberAccess
 		}
 
 		$var = '$ʟ_name' . $context->generateId();
-		return [$context->format("$var = %node", $name), '{' . $var . '}'];
+		return [$context->format("$var = %node", $toString ? new CastNode('string', $name) : $name), '{' . $var . '}'];
 	}
 
 

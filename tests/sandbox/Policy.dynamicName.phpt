@@ -18,6 +18,25 @@ class Record
 }
 
 
+class ChangingName
+{
+	public int $calls = 0;
+
+
+	public function __construct(
+		private string $first,
+		private string $next,
+	) {
+	}
+
+
+	public function __toString(): string
+	{
+		return $this->calls++ ? $this->next : $this->first;
+	}
+}
+
+
 $policy = new Latte\Sandbox\SecurityPolicy;
 $policy->allowTags($policy::All);
 $policy->allowProperties(Record::class, ['visible', 'staticVisible']);
@@ -35,6 +54,17 @@ test('name is evaluated once', function () use ($latte) {
 		'visible',
 		$latte->renderToString('{var $i = 0}{=Record::${["staticVisible", "staticSecret"][$i++]}}'),
 	);
+});
+
+
+test('name is converted to string once', function () use ($latte) {
+	$name = new ChangingName('visible', 'secret');
+	Assert::same('visible', $latte->renderToString('{$obj->$name}', ['obj' => new Record, 'name' => $name]));
+	Assert::same(1, $name->calls);
+
+	$name = new ChangingName('staticVisible', 'staticSecret');
+	Assert::same('visible', $latte->renderToString('{=Record::${$name}}', ['name' => $name]));
+	Assert::same(1, $name->calls);
 });
 
 

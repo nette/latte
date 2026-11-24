@@ -7,7 +7,7 @@
 		echo "\n";
 		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop, 'prop')->prop) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop, $ʟ_name0 = $prop)->{$ʟ_name0}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop, $ʟ_name0 = (string) $prop)->{$ʟ_name0}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop, 'prop')->{'prop'}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
@@ -17,7 +17,7 @@
 		echo "\n";
 		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop[$x], 'prop')->prop) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop['x'], $ʟ_name1 = $prop)->{$ʟ_name1}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop['x'], $ʟ_name1 = (string) $prop)->{$ʟ_name1}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
 		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->prop['x'], 'prop')->{'prop'}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
@@ -29,9 +29,9 @@
 		echo "\n";
 		echo ((is_object($ʟ_val = $this->global->sandbox->prop($this->global->sandbox->prop($obj, 'prop')->{'prop'}, 'prop')->prop) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo ((is_object($ʟ_val = $this->global->sandbox->prop($obj, $ʟ_name2 = $prop)->{$ʟ_name2}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($obj, $ʟ_name2 = (string) $prop)->{$ʟ_name2}) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo "\n";
-		echo ((is_object($ʟ_val = $this->global->sandbox->prop($obj, $ʟ_name3 = $prop)->{$ʟ_name3}[$x]) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
+		echo ((is_object($ʟ_val = $this->global->sandbox->prop($obj, $ʟ_name3 = (string) $prop)->{$ʟ_name3}[$x]) ? LR\Helpers::convertTrusted($ʟ_val, 'html') : null) ?? LR\HtmlHelpers::escapeText($ʟ_val)) /* pos %d%:%d% */;
 		echo '
 -';
 %A%

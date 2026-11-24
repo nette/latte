@@ -26,7 +26,7 @@ class PropertyFetchNode extends Expression\PropertyFetchNode
 
 	public function print(PrintContext $context): string
 	{
-		[$name, $member] = $this->printName($context, $this->name);
+		[$name, $member] = $this->printName($context, $this->name, toString: true);
 		return '$this->global->sandbox->prop('
 			. $this->object->print($context) . ', '
 			. $name . ')'
