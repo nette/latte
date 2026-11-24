@@ -253,6 +253,14 @@ Assert::match(
 	),
 );
 
+foreach (['n:if=1', 'n:ifcontent'] as $attr) {
+	Assert::exception(
+		fn() => $latte->compile('<div ' . $attr . '>{$a}</div><script n:else>var a = "{$a}";</script>'),
+		Latte\CompileException::class,
+		'Do not place print statement {...} inside quotes in JavaScript %a%',
+	);
+}
+
 
 // n:try & n:else
 Assert::match(

@@ -78,5 +78,8 @@ class IfContentNode extends StatementNode
 	public function &getIterator(): \Generator
 	{
 		yield $this->content;
+		if ($this->else) {
+			yield $this->else;
+		}
 	}
 }
