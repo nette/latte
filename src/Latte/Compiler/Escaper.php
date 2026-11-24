@@ -219,19 +219,20 @@ class Escaper
 	/**
 	 * Generates code that converts trusted content into the current context and escapes anything else.
 	 */
-	public function escape(string $str): string
+	public function escape(string $str, bool $sandboxed = false): string
 	{
 		return '((is_object($ʟ_val = ' . $str . ') ? LR\Helpers::convertTrusted($ʟ_val, '
 			. var_export($this->export(), return: true) . ') : null) ?? '
-			. $this->callEscaper('$ʟ_val') . ')';
+			. $this->callEscaper('$ʟ_val', $sandboxed) . ')';
 	}
 
 
 	/**
 	 * Generates code that calls the escaper of the current context.
 	 */
-	private function callEscaper(string $str): string
+	private function callEscaper(string $str, bool $sandboxed): string
 	{
+		$json = $sandboxed ? '$this->global->sandbox->json(' . $str . ')' : $str;
 		return match ($this->contentType) {
 			ContentType::Html => match ($this->state) {
 				self::HtmlText => match ($this->subType) {
@@ -241,7 +242,7 @@ class Escaper
 				self::HtmlTag => 'LR\HtmlHelpers::escapeTag(' . $str . ')',
 				self::HtmlAttribute => match ($this->subType) {
 					'' => 'LR\HtmlHelpers::escapeAttr(' . $str . ')',
-					self::JavaScript => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs(' . $str . '))',
+					self::JavaScript => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeJs(' . $json . '))',
 					self::Css => 'LR\HtmlHelpers::escapeAttr(LR\Helpers::escapeCss(' . $str . '))',
 					self::HtmlText => 'LR\HtmlHelpers::escapeHtmlAttr(' . $str . ')',
 				},
@@ -250,7 +251,7 @@ class Escaper
 				self::HtmlRawText => match ($this->subType) {
 					self::Text => 'LR\HtmlHelpers::convertJSToRawText(' . $str . ')', // sanitization, escaping is not possible
 					self::HtmlText => 'LR\HtmlHelpers::escapeRawHtml(' . $str . ')',
-					self::JavaScript => 'LR\Helpers::escapeJs(' . $str . ')',
+					self::JavaScript => 'LR\Helpers::escapeJs(' . $json . ')',
 					self::Css => 'LR\Helpers::escapeCss(' . $str . ')',
 					default => throw new \LogicException("Unknown raw text subtype '$this->subType'."),
 				},
@@ -264,7 +265,7 @@ class Escaper
 				self::HtmlTag => 'LR\XmlHelpers::escapeTag(' . $str . ')',
 				default => throw new \LogicException("Unknown context $this->contentType, $this->state."),
 			},
-			ContentType::JavaScript => 'LR\Helpers::escapeJs(' . $str . ')',
+			ContentType::JavaScript => 'LR\Helpers::escapeJs(' . $json . ')',
 			ContentType::Css => 'LR\Helpers::escapeCss(' . $str . ')',
 			ContentType::ICal => 'LR\Helpers::escapeIcal(' . $str . ')',
 			ContentType::Text => '($this->filters->escape)(' . $str . ')',

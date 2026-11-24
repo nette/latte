@@ -33,6 +33,7 @@ class ExpressionAttributeNode extends AreaNode
 	{
 		$modifier = clone $this->modifier;
 		$escaper = $context->getEscaper();
+		$expr = '%modify(%node)';
 		if ($escaper->getContentType() === ContentType::Html) {
 			$type = match (true) {
 				$modifier->removeFilter('toggle') !== null => 'bool',
@@ -40,11 +41,14 @@ class ExpressionAttributeNode extends AreaNode
 				default => LR\HtmlHelpers::classifyAttributeType($this->name, $escaper->getAttributeContentTypes()),
 			};
 			$method = 'LR\HtmlHelpers::format' . ucfirst($type) . 'Attribute';
+			if ($context->isSandboxed() && ($type === 'json' || $type === 'data')) {
+				$expr = '$this->global->sandbox->json(' . $expr . ')';
+			}
 		} else {
 			$method = 'LR\XmlHelpers::formatAttribute';
 		}
 		return $context->format(
-			'echo %raw(%dump, %modify(%node), %dump?) %line;',
+			'echo %raw(%dump, ' . $expr . ', %dump?) %line;',
 			$method,
 			$this->indentation . $this->name,
 			$modifier,

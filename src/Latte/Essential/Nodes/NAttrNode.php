@@ -42,13 +42,14 @@ final class NAttrNode extends StatementNode
 		$contentTypes = $escaper->getAttributeContentTypes();
 		return $context->format(
 			'$ʟ_tmp = %node;
-			echo %raw::attrs($ʟ_tmp, %dump, %dump?%raw%raw) %line;',
+			echo %raw::attrs($ʟ_tmp, %dump, %dump?%raw%raw%raw) %line;',
 			$this->args,
 			self::class,
 			$xml,
 			$context->hasFeature(Latte\Feature::MigrationWarnings) ?: null,
 			!$xml && $contentTypes !== LR\HtmlHelpers::AttributeContentTypes ? ', contentTypes: ' . PhpHelpers::dump($contentTypes) : '',
 			$xml ? '' : ', tag: ' . PhpHelpers::dump($this->elementName),
+			!$xml && $context->isSandboxed() ? ', checkJson: $this->global->sandbox->json(...)' : '',
 			$this->position,
 		);
 	}
@@ -61,6 +62,7 @@ final class NAttrNode extends StatementNode
 		bool $migrationWarnings = false,
 		array $contentTypes = LR\HtmlHelpers::AttributeContentTypes,
 		string $tag = '',
+		?\Closure $checkJson = null,
 	): string
 	{
 		$attrs = $attrs === [$attrs[0] ?? null] ? $attrs[0] : $attrs; // checks if the value is an array, e.g. n:attr="$attrs"
@@ -72,7 +74,7 @@ final class NAttrNode extends StatementNode
 		foreach ($attrs as $name => $value) {
 			$attr = $xml
 				? self::formatXmlAttribute($name, $value)
-				: self::formatHtmlAttribute($name, $value, $migrationWarnings, $contentTypes, $tag);
+				: self::formatHtmlAttribute($name, $value, $migrationWarnings, $contentTypes, $tag, $checkJson);
 			$res .= $attr ? ' ' . $attr : '';
 		}
 
@@ -87,6 +89,7 @@ final class NAttrNode extends StatementNode
 		bool $migrationWarnings = false,
 		array $contentTypes = LR\HtmlHelpers::AttributeContentTypes,
 		string $tag = '',
+		?\Closure $checkJson = null,
 	): string
 	{
 		LR\HtmlHelpers::validateAttributeName($name);
@@ -95,6 +98,10 @@ final class NAttrNode extends StatementNode
 		}
 
 		$type = LR\HtmlHelpers::classifyAttributeType($name, $contentTypes);
+		if ($checkJson && $type === 'data') {
+			$value = $checkJson($value);
+		}
+
 		if ($value === null || ($value === false && $type !== 'data' && $type !== 'aria' && $type !== 'tristate')) {
 			return '';
 		} elseif ($value === true && ($type === '' || $type === 'js')) {

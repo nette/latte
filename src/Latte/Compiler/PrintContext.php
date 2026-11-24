@@ -61,7 +61,7 @@ final class PrintContext
 				[, $pos, $fn, $var] = $m;
 				$var = substr($var, 1, -1);
 				if ($fn === 'escape') {
-					return $this->getEscaper()->escape($var);
+					return $this->getEscaper()->escape($var, $this->sandboxed);
 				}
 
 				$arg = $args[$pos];

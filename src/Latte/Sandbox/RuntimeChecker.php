@@ -8,6 +8,7 @@
 namespace Latte\Sandbox;
 
 use Latte;
+use Nette;
 use function count, is_array, is_object, is_string;
 
 
@@ -115,6 +116,28 @@ final readonly class RuntimeChecker
 		}
 
 		return (array) $value;
+	}
+
+
+	/**
+	 * Validates that no object would be encoded to JSON and returns the value. HTML and trusted content is printed as string.
+	 */
+	public function json(mixed $value): mixed
+	{
+		if (
+			$value instanceof Nette\HtmlStringable
+			|| ($value instanceof \Stringable && Latte\Runtime\Helpers::getTrustedType($value) !== null)
+		) {
+			return $value;
+		}
+
+		$items = [$value];
+		array_walk_recursive($items, function (mixed $item): void {
+			if (is_object($item)) {
+				throw new Latte\SecurityViolationException('Encoding a ' . $item::class . ' object to JSON is not allowed.');
+			}
+		});
+		return $value;
 	}
 
 
