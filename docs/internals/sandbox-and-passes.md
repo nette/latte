@@ -20,14 +20,44 @@ other pass), that traverses the AST in the **`leave`** phase and:
 - rewrites the pipe `$a |> $b`, which calls any callable, to a runtime `pipe()`;
 - refuses `(array)` of an object at runtime and checks every public property of a
   non-Traversable object iterated by `{foreach}` (`castToArray`/`iterable`; a foreach
-  by reference uses `iterableByRef`, which keeps the reference).
+  by reference uses `iterableByRef`, which keeps the reference);
+- routes the arguments of `|sort` and `|group` through `filterArgs()`: a property name
+  in `by`/`byKey` would be read inside the filter, unseen, so it becomes a closure that
+  reads the property through `prop()`. `RuntimeChecker::FilterPropertyParams` is the one
+  place that knows these filters.
+
+The pass can guard only what is a node, and only by replacing it. `getIterator()` of
+every node must therefore yield each child **by reference to its slot**: a child that is
+not yielded, yielded by value (a `readonly` property is, silently) or kept as a copy in
+another node is printed as the parser left it, unchecked. `tests/common/Node.getIterator.phpt`
+verifies it for every node class.
 
 `method()` and `prop()` only check and return the receiver; the access itself stays a
 native `->` or `?->`, so null handling and errors are PHP's own. Two traps follow, both
 handled in `Nodes\MemberAccess`. A dynamic name is evaluated once into a temporary:
 PHP reads the name of a write only after the right-hand side, so a second evaluation
-would check one name and write another. And PHP ends nullsafe short-circuiting at the
+would check one name and write another. The name of a property is also converted to
+string there, once: `prop()` checks the string, and a `Stringable` name converted again
+for the access could name another property. And PHP ends nullsafe short-circuiting at the
 argument of the check, so every link after a `?->` is printed as `?->` too.
+
+## Checks placed when printing
+
+Two things the pass cannot guard, because they are not nodes: code a tag generates by
+itself, and the escaping context, which is known only when printing.
+`PrintContext::isSandboxed()` tells a node that it prints for the sandbox, and the node
+emits the runtime check itself:
+
+- **`iterator()`**: `{first}`, `{last}`, `{sep}`, `{skipIf}`, `{iterateWhile}` and `{else}`
+  of `{foreach}` call methods of `$iterator`, an ordinary variable a template can
+  overwrite with a host object. Each call goes through `ForeachNode::printIterator()`,
+  which lets only a `CachingIterator` through. A tag that calls a method of a template
+  variable must do the same.
+- **`json()`**: `json_encode()` prints every public property of an object. Where a value
+  is encoded to JSON (`Escaper` in the JavaScript contexts, the `data-*` and `|json`
+  attributes, `n:attr`), no object may reach it, not even one nested in an array, a
+  `JsonSerializable` or a `stdClass`. HTML and trusted content, printed as a string, is
+  let through. The check wraps the value after its filters, the one that is encoded.
 
 `Essential\CachingIterator` defines `__call` for the same reason the policy exists:
 SPL would otherwise forward an unknown method called on `$iterator` to the inner
@@ -72,6 +102,13 @@ the protection is what the host passes to the template and what its policy allow
   forbidden callable (first-class callables go through `closure()`, `|>` through
   `pipe()`), so a `Closure` it holds was handed over by the host and is treated as a
   granted capability.
+- **A filter or function that reads the state of an object by itself is not checked.**
+  `|query`, `|escapeJs` and `|json` serialize an object with all its public properties,
+  `|column` and the function `group()` read a property by its name. `createSafePolicy()`
+  allows none of them; only `|sort` and the filter `|group` are guarded, through
+  `filterArgs()`. Keep it that way when adding filters or functions to it.
+- **Constants are not checked.** A template reads any global or class constant, enum
+  cases included; the policy has no notion of them.
 
 ## Extension & pass ordering
 
