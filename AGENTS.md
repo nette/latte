@@ -64,8 +64,13 @@ The pipeline is lexer -> `TemplateParser` -> AST nodes -> passes -> `TemplateGen
 -> PHP class (cached). The traps are non-local:
 
 - **`getIterator()` MUST yield child nodes by reference (`&`).** If it doesn't,
-  replace/remove passes - including the **sandbox** - silently skip that child. This
-  is the easiest way to introduce a security hole; verify it on every node class.
+  replace/remove passes - including the **sandbox** - silently skip that child (a
+  `readonly` property is yielded by value without a warning). This is the easiest
+  way to introduce a security hole; `tests/common/Node.getIterator.phpt` checks every
+  node class, so give a new node a template there.
+- **The sandbox pass sees only nodes.** Code a tag generates by itself (a method call
+  on a template variable, JSON encoding) must emit its own runtime check when
+  `PrintContext::isSandboxed()`. See `docs/internals/sandbox-and-passes.md`.
 - **Escaping lives in TWO places** - `Compiler/Escaper.php` (compile time) and
   the `Runtime\Helpers`/`HtmlHelpers`/`XmlHelpers` classes (runtime). Changing
   only one leaves a silent gap. See `docs/internals/escaping.md`.

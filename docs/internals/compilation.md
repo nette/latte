@@ -59,6 +59,12 @@ reference. **A node that yields by value makes every replace/remove pass silentl
 no-op on its children** — including the sandbox pass. This is the single easiest way
 to introduce a security-relevant hole while writing a custom tag.
 
+PHP yields a `readonly` property holding a node by value, silently, even one of another
+object (`Block::$name`), so a child must not live in one. A node that refers to another
+node (`IterateWhileNode` to its `ForeachNode`) does not yield it and reads its children
+only when printing; a copy taken at parse time would print what the passes never saw.
+`tests/common/Node.getIterator.phpt` checks every node class, given a template using it.
+
 ## `AuxiliaryNode` hides generated code from passes
 
 `AuxiliaryNode` (area and expression variants) carries a **closure** as its

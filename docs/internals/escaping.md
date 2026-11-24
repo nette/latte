@@ -43,6 +43,14 @@ a JS template) becomes a JS string literal, never code, like a value printed ins
 but `{include}` cannot tell it forms one. CSS has no such literal, so text and HTML
 cannot be included into `<style>` or `style` at all.
 
+In the sandbox no object may reach `json_encode()` (see
+[sandbox-and-passes.md](sandbox-and-passes.md)), so every place that encodes a value to
+JSON passes it through `RuntimeChecker::json()` first: the JavaScript escapers of
+`Escaper::escape()`, the `data` and `json` formatters chosen by `ExpressionAttributeNode`,
+and `data-*` in `NAttrNode`. `escape()` learns it from its `$sandboxed` argument, which
+`%escape` and `ModifierNode` take from `PrintContext::isSandboxed()`; a call without it
+emits no check.
+
 ## Printing converts from the content type of the value
 
 Every printed value has a content type: a plain string is `text`, a `TrustedJavaScript`,

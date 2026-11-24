@@ -103,7 +103,7 @@ the protection is what the host passes to the template and what its policy allow
   `pipe()`), so a `Closure` it holds was handed over by the host and is treated as a
   granted capability.
 - **A filter or function that reads the state of an object by itself is not checked.**
-  `|query`, `|escapeJs` and `|json` serialize an object with all its public properties,
+  `|query` and `|escapeJs` serialize an object with all its public properties,
   `|column` and the function `group()` read a property by its name. `createSafePolicy()`
   allows none of them; only `|sort` and the filter `|group` are guarded, through
   `filterArgs()`. Keep it that way when adding filters or functions to it.
