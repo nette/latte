@@ -9,7 +9,7 @@ namespace Latte\Essential\Nodes;
 
 use Latte\CompileException;
 use Latte\Compiler\Nodes\{AreaNode, StatementNode};
-use Latte\Compiler\Nodes\Php\{ExpressionNode, ListNode};
+use Latte\Compiler\Nodes\Php\ExpressionNode;
 use Latte\Compiler\{PrintContext, Tag};
 
 
@@ -21,9 +21,8 @@ class IterateWhileNode extends StatementNode
 {
 	public ExpressionNode $condition;
 	public AreaNode $content;
-	public ?ExpressionNode $key;
-	public ExpressionNode|ListNode $value;
 	public bool $postTest;
+	private ForeachNode $foreach;
 
 
 	/** @return \Generator<int, ?list<string>, array{AreaNode, ?Tag}, static> */
@@ -40,8 +39,7 @@ class IterateWhileNode extends StatementNode
 			$node->condition = $tag->parser->parseExpression();
 		}
 
-		$node->key = $foreach->key;
-		$node->value = $foreach->value;
+		$node->foreach = $foreach;
 		[$node->content, $nextTag] = yield;
 		if ($node->postTest) {
 			assert($nextTag !== null);
@@ -64,8 +62,8 @@ class IterateWhileNode extends StatementNode
 				[%node, %node] = [$iterator->key(), $iterator->current()];
 				XX,
 			$this->condition,
-			$this->key,
-			$this->value,
+			$this->foreach->key,
+			$this->foreach->value,
 		);
 
 		$stmt = $this->postTest
