@@ -76,3 +76,15 @@ Assert::exception(
 	LogicException::class,
 	"Function 'unknown' is not defined.",
 );
+
+
+// in the name of a dynamic block
+$latte->addFunction('blockName', fn() => 'dyn');
+Assert::same(
+	'x',
+	$latte->renderToString('{block blockName()}x{/block}'),
+);
+Assert::same(
+	'y',
+	$latte->renderToString('{define blockName()}y{/define}{include dyn}'),
+);
