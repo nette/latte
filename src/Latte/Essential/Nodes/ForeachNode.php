@@ -88,7 +88,7 @@ class ForeachNode extends StatementNode
 		if ($this->else) {
 			$code .= $context->format(
 				"if (%raw) %line { %node\n}\n",
-				$useIterator ? '$iterator->isEmpty()' : $context->format('empty(%node)', $this->expression),
+				$useIterator ? self::printIterator($context) . '->isEmpty()' : $context->format('empty(%node)', $this->expression),
 				$this->tagRanges[1] ?? null,
 				$this->else,
 			);
@@ -140,6 +140,18 @@ class ForeachNode extends StatementNode
 		return ($this->key ? $this->key->print($context) . ' => ' : '')
 			. ($this->byRef ? '&' : '')
 			. $this->value->print($context);
+	}
+
+
+	/**
+	 * Prints the variable $iterator, checked by the sandbox to be the iterator of {foreach}.
+	 * @internal
+	 */
+	public static function printIterator(PrintContext $context): string
+	{
+		return $context->isSandboxed()
+			? '$this->global->sandbox->iterator($iterator)'
+			: '$iterator';
 	}
 
 

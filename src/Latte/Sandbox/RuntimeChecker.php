@@ -143,6 +143,19 @@ final readonly class RuntimeChecker
 	}
 
 
+	/**
+	 * Validates that the value is the iterator of {foreach} and returns it.
+	 */
+	public function iterator(mixed $iterator): Latte\Essential\CachingIterator
+	{
+		if (!$iterator instanceof Latte\Essential\CachingIterator) {
+			throw new Latte\SecurityViolationException('Variable $iterator is not the iterator of {foreach}.');
+		}
+
+		return $iterator;
+	}
+
+
 	private function checkCallable(mixed $callable): void
 	{
 		if (!is_callable($callable)) {

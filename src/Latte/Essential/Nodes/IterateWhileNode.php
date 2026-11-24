@@ -55,15 +55,16 @@ class IterateWhileNode extends StatementNode
 	{
 		$stmt = $context->format(
 			<<<'XX'
-				if (!$iterator->hasNext() || !(%node)) {
+				if (!%3.raw->hasNext() || !(%node)) {
 					break;
 				}
-				$iterator->next();
-				[%node, %node] = [$iterator->key(), $iterator->current()];
+				%3.raw->next();
+				[%node, %node] = [%3.raw->key(), %3.raw->current()];
 				XX,
 			$this->condition,
 			$this->foreach->key,
 			$this->foreach->value,
+			ForeachNode::printIterator($context),
 		);
 
 		$stmt = $this->postTest

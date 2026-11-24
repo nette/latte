@@ -36,9 +36,10 @@ final class TemplateGenerator
 		Nodes\TemplateNode $node,
 		array $features = [],
 		array $attributeContentTypes = HtmlHelpers::AttributeContentTypes,
+		bool $sandboxed = false,
 	): void
 	{
-		$context = new PrintContext($node->contentType, $features, new Escaper($node->contentType, $attributeContentTypes));
+		$context = new PrintContext($node->contentType, $features, new Escaper($node->contentType, $attributeContentTypes), $sandboxed);
 		$this->generateBase($node, $context);
 		$this->generateBlocks($context);
 	}

@@ -243,7 +243,7 @@ class Engine
 	public function generate(TemplateNode $node, string $name): string
 	{
 		$generator = new Compiler\TemplateGenerator;
-		$generator->buildClass($node, $this->features, $this->getAttributeContentTypes());
+		$generator->buildClass($node, $this->features, $this->getAttributeContentTypes(), (bool) $this->getPolicy(effective: true));
 		return $generator->generateCode($this->getTemplateClass($name), $name, $this->hasFeature(Feature::StrictTypes));
 	}
 

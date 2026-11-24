@@ -69,7 +69,7 @@ class JumpNode extends StatementNode
 			match ($this->type) {
 				'breakIf' => 'break;',
 				'continueIf' => 'continue;',
-				'skipIf' => '{ $iterator->skipRound(); continue; }',
+				'skipIf' => '{ ' . ForeachNode::printIterator($context) . '->skipRound(); continue; }',
 				'exitIf' => 'return;',
 			},
 		);

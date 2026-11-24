@@ -42,10 +42,11 @@ class FirstLastSepNode extends StatementNode
 
 	public function print(PrintContext $context): string
 	{
+		$iterator = ForeachNode::printIterator($context);
 		$cond = match ($this->name) {
-			'first' => '$iterator->isFirst',
-			'last' => '$iterator->isLast',
-			'sep' => '!$iterator->isLast',
+			'first' => $iterator . '->isFirst',
+			'last' => $iterator . '->isLast',
+			'sep' => '!' . $iterator . '->isLast',
 		};
 		return $context->format(
 			$this->else

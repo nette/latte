@@ -33,6 +33,7 @@ final class PrintContext
 		/** @var array<string, bool> */
 		private readonly array $features = [],
 		?Escaper $escaper = null,
+		private readonly bool $sandboxed = false,
 	) {
 		$this->escaperStack[] = $escaper ?? new Escaper($contentType);
 	}
@@ -163,6 +164,12 @@ final class PrintContext
 	public function hasFeature(Feature $feature): bool
 	{
 		return $this->features[$feature->name] ?? false;
+	}
+
+
+	public function isSandboxed(): bool
+	{
+		return $this->sandboxed;
 	}
 
 
