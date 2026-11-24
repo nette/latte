@@ -129,6 +129,16 @@ final class SandboxExtension extends Latte\Extension
 					fn(PrintContext $context, ...$args) => '$this->global->sandbox->args(' . $context->implode($args) . ')',
 					$node->args,
 				);
+				if (isset(RuntimeChecker::FilterPropertyParams[$name])) {
+					$arg = new Expression\AuxiliaryNode(
+						fn(PrintContext $context, Node $args) => $context->format(
+							'$this->global->sandbox->filterArgs(%dump, %node)',
+							$name,
+							$args,
+						),
+						[$arg],
+					);
+				}
 				$node->args = [new Php\ArgumentNode($arg, unpack: true)];
 			}
 

@@ -9,12 +9,19 @@ namespace Latte\Sandbox;
 
 use Latte;
 use Nette;
-use function count, is_array, is_object, is_string;
+use function array_key_exists, count, is_array, is_int, is_object, is_string;
 
 
 /** @internal */
 final readonly class RuntimeChecker
 {
+	/** filter => [position => parameter] of parameters naming the property the filter reads */
+	public const FilterPropertyParams = [
+		'sort' => [1 => 'by', 2 => 'byKey'],
+		'group' => [0 => 'by'],
+	];
+
+
 	public function __construct(
 		public Latte\Policy $policy,
 	) {
@@ -84,6 +91,25 @@ final readonly class RuntimeChecker
 				&& !$this->policy->isMethodAllowed(is_object($arg[0]) ? $arg[0]::class : $arg[0], $arg[1])
 			) {
 				throw new Latte\SecurityViolationException("Calling $text() is not allowed.");
+			}
+		}
+
+		return $args;
+	}
+
+
+	/**
+	 * Replaces the property name in arguments of the filter with a closure that reads the property allowed by the policy.
+	 * @param  mixed[]  $args
+	 * @return mixed[]
+	 */
+	public function filterArgs(string $filter, array $args): array
+	{
+		foreach (self::FilterPropertyParams[$filter] as $pos => $param) {
+			$key = array_key_exists($param, $args) ? $param : $pos;
+			$by = $args[$key] ?? null;
+			if (is_string($by) || is_int($by)) {
+				$args[$key] = fn(mixed $item): mixed => is_array($item) ? $item[$by] : $this->prop($item, $by)->$by;
 			}
 		}
 
